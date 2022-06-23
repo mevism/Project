@@ -1,0 +1,13 @@
+{
+    "name": "Dean",
+    "alias": "dean",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Dean\\Providers\\DeanServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

@@ -1,0 +1,151 @@
+.cod{
+    height : 150px;
+    margin : 1%;
+    background-color : #fff;
+    width : 98%;
+}
+#time-out img{
+    width : 40%;
+    float : left;
+}
+#time-out{
+    width : 50%;
+    background : #fff;
+    margin : 15%;
+}
+.footer-list div{
+    width : 50%;
+}
+.footer-list{
+    display : flex;
+}
+#graph-cod{
+    display : flex;
+    flex-direction : column;
+    width : 100%;
+}
+#graph-cod canvas{
+    width : 98% !important;
+    height : 50% !important;
+    background : #fff;
+    margin : 1%;
+}
+#preview-cod section:hover{
+    margin-left : 0 10px;
+    transform: scale(1.2);
+    cursor: pointer;
+}
+#preview-cod section{
+    margin : 2%;
+    width : 96%;
+    border : none;
+    box-shadow : 2px 3px 3px 2px #ccc;
+    height : 96%;
+    border-radius : 5px;
+}
+#name-preview a{
+    color : rgba(0,0,0,0.7);
+}
+#name-preview{
+    height : 10%;
+    text-align : center;
+}
+.card-build img{
+    margin-left : 35%;
+}
+.card-build{
+    width : 100%;
+    color : #fff;
+    background-image : url('/Images/application.png');
+    height : 90%;
+}
+#preview-cod{
+    display : flex;
+    flex-direction : column;
+    width : 98%;
+    background-color : #fff;
+    margin : 1%;
+}
+.image-headers{
+    float : left;
+    width : 20%;
+}
+.content-force{
+    width : 100%;
+    height : 100%;
+}
+#content-force{
+    width : 100%;
+    height : 100%;
+}
+#inner-fill-modal{
+    background:rgba(255,255,255,0.7);
+    width:50%;
+    margin-left:20%;
+    margin-top:10%;
+}
+#fill-modal{
+    position:fixed;
+    background:rgba(0,0,0,0.7);
+    width:100%;
+    height:100%;
+    text-align:center;
+    top:-1%;
+}
+.message-area{
+    width : 60%;
+    height : 15%;
+    border : 1px solid #ccc;
+}
+.button-area{
+    width : 60%;
+    border : none;
+    height : 40px;
+
+}
+#application-list section{
+    width : 100%;
+}
+#application-list{
+    width : 98%;
+    background : #fff;
+    text-align : left;
+    margin-left : 1%;
+    margin-top : 2%;
+    text-align : center;
+    border-radius: 5px;
+}
+#view-application-list{
+    height: 40px;
+    width: 60%;
+    border: none;
+    border-radius: 5px;
+}
+.academics div{
+    margin : 1%;
+    width : 33%;
+    border : 1px solid #ccc;
+    border-radius: 5px;
+}
+.academics{
+    display : flex;
+    width : 100%;
+}
+@media(min-width:856px){
+    #preview-cod section{
+        width : 30%;
+    }
+    #preview-cod{
+        flex-direction : row;
+    }
+    #graph-cod canvas{
+        margin-top : 2%;
+        margin-left : 16%;
+        width : 68% !important;
+        height : 460px !important;
+    }
+    #application-list{
+        width : 80%;
+        margin-left : 10%;
+    }
+}
