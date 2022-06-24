@@ -49,9 +49,11 @@
                     </div>
                 </div>
             </div>
+            @if($app->finance_status < 1)
         <div class="d-flex justify-content-center py-1">
             <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('finance.acceptApplication', $app->id) }}">Approve</a>
             <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
+            @endif
             <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('finance.applications') }}">Close</a>
         </div>
         </div>

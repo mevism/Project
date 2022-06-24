@@ -1,5 +1,4 @@
-@extends('applications::layouts.backend')
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
@@ -26,48 +25,52 @@
             <div class="row">
                 <div class="col-lg-12">
                     <table class="table table-responsive-sm table-borderless table-striped js-dataTable-responsive">
-                        @if(count($apps)>0)
+                        <?php if(count($apps)>0): ?>
                             <thead>
                             <th>Applicant Name</th>
                             <th>Course Name</th>
-                            <th>Transaction code</th>
+                            <th>Department</th>
+
                             <th>Status</th>
                             <th colspan="2" class="text-center">Action</th>
                             </thead>
                             <tbody>
-                            @foreach($apps as $app)
+                            <?php $__currentLoopData = $apps; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $app): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
-                                <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</td>
-                                <td> {{ $app->course }}</td>
-                                <td> {{ $app->receipt }}</td>
+                                <td> <?php echo e($app->applicant->sname); ?> <?php echo e($app->applicant->fname); ?> <?php echo e($app->applicant->mname); ?></td>
+                                <td> <?php echo e($app->course); ?></td>
+                                <td> <?php echo e($app->department); ?></td>
+
                                 <td>
-                                    @if($app->finance_status === 0)
+                                    <?php if($app->cod_status === 0): ?>
                                         <span class="badge bg-primary">Awaiting</span>
-                                    @elseif($app->finance_status === 1)
+                                    <?php elseif($app->cod_status === 1): ?>
                                         <span class="badge bg-success">Approved</span>
-                                    @elseif($app->finance_status === 2)
+                                    <?php elseif($app->cod_status === 2): ?>
                                         <span class="badge bg-warning">Rejected</span>
-                                    @else
+                                    <?php else: ?>
                                         <span class="badge bg-primary">Awaiting</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
-                                <td> <a class="btn btn-sm btn-alt-secondary" href="{{ route('finance.viewApplication', $app->id) }}"> View </a> </td>
+                                <td> <a class="btn btn-sm btn-alt-secondary" href="<?php echo e(route('cod.viewApplication', $app->id)); ?>"> View </a> </td>
                                     <td>
-                                @if($app->finance_status > 0)
-                                    <a class="btn btn-sm btn-alt-info" href="{{ route('finance.viewApplication', $app->id) }}"> Edit </a>
-                                @endif
+                                <?php if($app->cod_status > 0): ?>
+                                    <a class="btn btn-sm btn-alt-info" href="<?php echo e(route('cod.viewApplication', $app->id)); ?>"> Edit </a>
+                                <?php endif; ?>
                                     </td>
                             </tr>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
-                        @else
+                        <?php else: ?>
                             <tr>
                                 <span class="text-muted text-center fs-sm">There are no new applications submitted</span>
                             </tr>
-                        @endif
+                        <?php endif; ?>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('cod::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\sims\application\Modules/COD\Resources/views/applications/index.blade.php ENDPATH**/ ?>

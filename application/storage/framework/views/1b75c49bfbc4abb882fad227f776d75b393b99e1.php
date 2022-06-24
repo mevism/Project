@@ -1,5 +1,4 @@
-@extends('cod::layouts.backend')
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
@@ -29,49 +28,49 @@
                     <div class="col-lg-7 mb-1">
                         <div class="row p-1">
                         <div class="col-md-4 fw-bolder text-start">Applicant Name </div>
-                        <div class="col-md-8"> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</div>
+                        <div class="col-md-8"> <?php echo e($app->applicant->sname); ?> <?php echo e($app->applicant->fname); ?> <?php echo e($app->applicant->mname); ?></div>
                         </div>
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Department</div>
-                            <div class="col-md-8"> {{ $app->department }} </div>
+                            <div class="col-md-8"> <?php echo e($app->department); ?> </div>
                         </div>
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Course Name</div>
-                            <div class="col-md-8"> {{ $app->course }} </div>
+                            <div class="col-md-8"> <?php echo e($app->course); ?> </div>
                         </div>
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Institution</div>
-                            <div class="col-md-8"> {{ $school->institution }} </div>
+                            <div class="col-md-8"> <?php echo e($school->institution); ?> </div>
                         </div>
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">KCSE Grade</div>
-                            <div class="col-md-8"> {{ $school->qualification }} </div>
+                            <div class="col-md-8"> <?php echo e($school->qualification); ?> </div>
                         </div>
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Cluster Subjects</div>
                             <div class="col-md-8">
-                               <p> ENGLISH {{ $app->subject_1 }}</p>
-                                <p> MATHEMATICS {{ $app->subject_2 }}</p>
-                                <p> BUSINESS {{ $app->subject_3 }}</p>
-                                <p> HISTORY {{ $app->subject_4 }}</p>
+                               <p> ENGLISH <?php echo e($app->subject_1); ?></p>
+                                <p> MATHEMATICS <?php echo e($app->subject_2); ?></p>
+                                <p> BUSINESS <?php echo e($app->subject_3); ?></p>
+                                <p> HISTORY <?php echo e($app->subject_4); ?></p>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-5 space-y-2">
                         <div class="d-flex justify-content-center">
                             <div class="card-img" style="margin: auto !important;">
-                                <img style="max-height: 60vh !important; width: auto !important;" src="{{ url('receipts/', $app->receipt_file) }}" alt="">
+                                <img style="max-height: 60vh !important; width: auto !important;" src="<?php echo e(url('receipts/', $app->receipt_file)); ?>" alt="">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         <div class="d-flex justify-content-center py-1">
-            @if($app->cod_status < 1)
-            <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('cod.acceptApplication', $app->id) }}">Approve</a>
+            <?php if($app->cod_status < 1): ?>
+            <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="<?php echo e(route('cod.acceptApplication', $app->id)); ?>">Approve</a>
             <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
-            @endif
-            <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('cod.applications') }}">Close</a>
+            <?php endif; ?>
+            <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="<?php echo e(route('cod.applications')); ?>">Close</a>
         </div>
         </div>
     </div>
@@ -89,11 +88,11 @@
                         </div>
                     </div>
                     <div class="block-content fs-sm">
-                        <form action="{{ route('cod.rejectApplication', $app->id) }}" method="post">
-                            @csrf
+                        <form action="<?php echo e(route('cod.rejectApplication', $app->id)); ?>" method="post">
+                            <?php echo csrf_field(); ?>
                             <div class="row col-md-12 mb-3">
                             <textarea class="form-control" placeholder="Write down the reasons for declining this application" name="comment" required></textarea>
-                            <input type="hidden" name="{{ $app->id }}">
+                            <input type="hidden" name="<?php echo e($app->id); ?>">
                             </div>
                             <div class="d-flex justify-content-center mb-2">
                             <button type="submit" class="btn btn-alt-danger btn-sm">Reject</button>
@@ -102,7 +101,7 @@
                     </div>
                     <div class="block-content block-content-full text-end bg-body">
                         <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>
-                        {{--                        <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Okay</button>--}}
+                        
                     </div>
                 </div>
             </div>
@@ -110,4 +109,6 @@
     </div>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('cod::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\sims\application\Modules/COD\Resources/views/applications/viewApplication.blade.php ENDPATH**/ ?>

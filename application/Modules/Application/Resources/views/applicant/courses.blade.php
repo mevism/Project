@@ -31,7 +31,6 @@
                         <th>Course name</th>
                         <th>Department</th>
                         <th>School</th>
-                        <th>Campus</th>
                         <th>Intake</th>
                         <th>Duration</th>
                         <th colspan="2">Action</th>

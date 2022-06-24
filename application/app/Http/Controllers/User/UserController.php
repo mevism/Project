@@ -82,7 +82,7 @@ class UserController extends Controller
            if (!Auth::guard('user')->check()){
                abort(403);
            } else{
-               return view('cod::cod.index');
+               return view('cod::COD.index');
            }
        }elseif (Auth::guard('user')->user()->role_id === 4){
            if (!Auth::guard('user')->check()){

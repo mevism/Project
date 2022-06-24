@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="" />
+    <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/courses.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/courses.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/viewcourse.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/viewcourse.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Database/Migrations/2022_06_23_093647_create_c_o_d_logs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Database/Migrations/2022_06_23_093647_create_c_o_d_logs_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/batch.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/batch.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/viewApplication.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/viewApplication.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/applications/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/applications/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/applications/viewApplication.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/applications/viewApplication.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/app/Http/Controllers/User/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Http/Controllers/User/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/VjFMSuWqaYOjXPZPQAP9b6vO5KGK3Mj5SEuGFIcv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/a5R8dpv4R0jNskT5QLpoBovILXQAUhqg4BnqVvsq" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -173,7 +187,7 @@
       <updated>1655749507444</updated>
       <workItem from="1655749517286" duration="59000" />
       <workItem from="1655892940428" duration="24803000" />
-      <workItem from="1655995721094" duration="1612000" />
+      <workItem from="1655995721094" duration="13484000" />
     </task>
     <servers />
   </component>

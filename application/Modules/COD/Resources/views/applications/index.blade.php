@@ -47,8 +47,10 @@
                                         <span class="badge bg-primary">Awaiting</span>
                                     @elseif($app->cod_status === 1)
                                         <span class="badge bg-success">Approved</span>
-                                    @else
+                                    @elseif($app->cod_status === 2)
                                         <span class="badge bg-warning">Rejected</span>
+                                    @else
+                                        <span class="badge bg-primary">Awaiting</span>
                                     @endif
                                 </td>
                                 <td> <a class="btn btn-sm btn-alt-secondary" href="{{ route('cod.viewApplication', $app->id) }}"> View </a> </td>

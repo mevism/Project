@@ -38,18 +38,22 @@
                     <div class="block-content">
                         <div class="h5 fw-bold mb-2">Cluster Subjects </div>
                         <div class="fs-sm py-2">
-                            <p>
-                                {{ $course->subject1 }}
-                            </p>
-                            <p>
-                                {{ $course->subject2 }}
-                            </p>
-                            <p>
-                                {{ $course->subject3 }}
-                            </p>
-                            <p>
-                                {{ $course->subject4 }}
-                            </p>
+                            <div class="row">
+                                <div class="col-md-6"> Subject 1</div>
+                                <div class="col-md-6">{{ $course->subject1 }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6"> Subject 2 </div>
+                                <div class="col-md-6">{{ $course->subject2 }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Subject 3 </div>
+                                <div class="col-md-6">{{ $course->subject3 }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Subject 4 </div>
+                                <div class="col-md-6">{{ $course->subject4 }}</div>
+                            </div>
                         </div>
                     </div>
                     <div class="block-content block-content-full bg-body-light text-center">

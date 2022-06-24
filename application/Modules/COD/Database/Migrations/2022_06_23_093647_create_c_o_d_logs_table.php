@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->integer('app_id');
             $table->string('user');
-            $table->string('role_id');
+            $table->string('user_role');
             $table->string('activity');
             $table->timestamps();
         });

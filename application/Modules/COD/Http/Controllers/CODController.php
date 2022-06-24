@@ -6,15 +6,18 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Application\Entities\Application;
+use Modules\Application\Entities\Education;
 use Modules\Finance\Entities\FinanceLog;
 use Modules\COD\Entities\CODLog;
+use Auth;
 
 class CODController extends Controller
 {
 
     public function applications(){
 
-        $applications = Application::where('cod_status', 0)
+        $applications = Application::where('cod_status', '>=', 0)
+            ->where('dean_status', null)
             ->orderby('id', 'DESC')
             ->get();
 
@@ -24,7 +27,8 @@ class CODController extends Controller
     public function viewApplication($id){
 
         $app = Application::find($id);
-        return view('cod::applications.viewApplication')->with('app', $app);
+        $school = Education::find($id)->first();
+        return view('cod::applications.viewApplication')->with(['app' => $app, 'school' => $school]);
     }
 
     public function acceptApplication($id){
@@ -60,8 +64,8 @@ class CODController extends Controller
     }
 
     public function batch(){
-        $apps = Application::where('finance_status', '>', 0)
-            ->where('cod_status', null)
+        $apps = Application::where('cod_status', '>', 0)
+            ->where('dean_status', null)
             ->get();
 
         return view('cod::applications.batch')->with('apps', $apps);
