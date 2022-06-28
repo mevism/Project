@@ -55,6 +55,24 @@
                                 <p> HISTORY <?php echo e($app->subject_4); ?></p>
                             </div>
                         </div>
+                        <div class="row p-1">
+                            <div class="col-md-4 fw-bolder text-start">COD Status</div>
+                            <div class="col-md-8">
+                                <?php if($app->cod_status === 0): ?>
+                                    <span class="badge bg-primary">Pending</span>
+                                <?php elseif($app->cod_status === 1): ?>
+                                    <span class="badge bg-success">Approved by COD</span>
+                                <?php else: ?>
+                                    <span class="badge bg-danger">Rejected by COD</span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <?php if($app->dean_status === 3): ?>
+                            <div class="row p-1">
+                                <div class="col-md-4 fw-bolder text-start">Dean Comments</div>
+                                <div class="col-md-8"> <?php echo e($app->dean_comments); ?> </div>
+                            </div>
+                        <?php endif; ?>
                     </div>
                     <div class="col-lg-5 space-y-2">
                         <div class="d-flex justify-content-center">
@@ -66,11 +84,21 @@
                 </div>
             </div>
         <div class="d-flex justify-content-center py-1">
-            <?php if($app->cod_status < 1): ?>
+            <?php if($app->cod_status === 0): ?>
             <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="<?php echo e(route('cod.acceptApplication', $app->id)); ?>">Approve</a>
             <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
-            <?php endif; ?>
             <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="<?php echo e(route('cod.applications')); ?>">Close</a>
+                <?php elseif($app->dean_status === 3): ?>
+                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="<?php echo e(route('cod.acceptApplication', $app->id)); ?>">Approve</a>
+                <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
+                <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="<?php echo e(route('cod.applications')); ?>">Close</a>
+            <?php elseif($app->cod_status === 1): ?>
+                <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
+                <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="<?php echo e(route('cod.applications')); ?>">Close</a>
+            <?php else: ?>
+                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="<?php echo e(route('cod.acceptApplication', $app->id)); ?>">Approve</a>
+                <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="<?php echo e(route('cod.applications')); ?>">Close</a>
+            <?php endif; ?>
         </div>
         </div>
     </div>

@@ -328,8 +328,6 @@ class ApplicationController extends Controller
                 }
             }
 
-//                $courses[] = Courses::paginate(4);
-
             return view('application::applicant.courses', compact('courses', 'active'));
 
         }

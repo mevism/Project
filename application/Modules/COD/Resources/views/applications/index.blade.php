@@ -31,34 +31,37 @@
                             <th>Applicant Name</th>
                             <th>Course Name</th>
                             <th>Department</th>
-{{--                            <th>Transaction code</th>--}}
                             <th>Status</th>
                             <th colspan="2" class="text-center">Action</th>
                             </thead>
                             <tbody>
                             @foreach($apps as $app)
                             <tr>
-                                <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</td>
+                                <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }} </td>
                                 <td> {{ $app->course }}</td>
-                                <td> {{ $app->department }}</td>
-{{--                                <td> {{ $app->receipt }}</td>--}}
-                                <td>
-                                    @if($app->cod_status === 0)
-                                        <span class="badge bg-primary">Awaiting</span>
-                                    @elseif($app->cod_status === 1)
-                                        <span class="badge bg-success">Approved</span>
-                                    @elseif($app->cod_status === 2)
-                                        <span class="badge bg-warning">Rejected</span>
-                                    @else
-                                        <span class="badge bg-primary">Awaiting</span>
-                                    @endif
+                                <td> {{ $app->department }}
+
                                 </td>
-                                <td> <a class="btn btn-sm btn-alt-secondary" href="{{ route('cod.viewApplication', $app->id) }}"> View </a> </td>
-                                    <td>
-                                @if($app->cod_status > 0)
-                                    <a class="btn btn-sm btn-alt-info" href="{{ route('cod.viewApplication', $app->id) }}"> Edit </a>
+                                <td>
+                                        @if($app->cod_status === 0)
+                                            <span class="badge bg-primary">Awaiting</span>
+                                        @elseif($app->cod_status === 1)
+                                            <span class="badge bg-success">Approved</span>
+                                        @elseif($app->cod_status === 2)
+                                            <span class="badge bg-warning">Rejected</span>
+                                        @elseif($app->cod_status === 4)
+                                            <span class="badge bg-success">Reviewed</span>
+                                        @else
+                                        <span class="badge bg-info">Review</span>
+                                        @endif
+
+                                </td>
+                                    @if($app->cod_status === 0)
+                                <td><a class="btn btn-sm btn-alt-secondary" href="{{ route('cod.viewApplication', $app->id) }}"> View </a></td>
+                                        @else
+                                <td><a class="btn btn-sm btn-alt-secondary" href="{{ route('cod.previewApplication', $app->id) }}"> View </a></td>
+                                <td><a class="btn btn-sm btn-alt-info" href="{{ route('cod.viewApplication', $app->id) }}"> Edit </a></td>
                                 @endif
-                                    </td>
                             </tr>
                             @endforeach
                             </tbody>

@@ -18,6 +18,7 @@ class CODController extends Controller
 
         $applications = Application::where('cod_status', '>=', 0)
             ->where('dean_status', null)
+            ->orWhere('dean_status', 3)
             ->orderby('id', 'DESC')
             ->get();
 
@@ -27,14 +28,23 @@ class CODController extends Controller
     public function viewApplication($id){
 
         $app = Application::find($id);
-        $school = Education::find($id)->first();
+            $school = Education::where('user_id', $app->applicant->id)->first();
+
         return view('cod::applications.viewApplication')->with(['app' => $app, 'school' => $school]);
+    }
+
+    public function previewApplication($id){
+
+        $app = Application::find($id);
+        $school = Education::where('user_id', $app->applicant->id)->first();
+        return view('cod::applications.preview')->with(['app' => $app, 'school' => $school]);
     }
 
     public function acceptApplication($id){
 
         $app = Application::find($id);
         $app->cod_status = 1;
+        $app->cod_comments = NULL;
         $app->save();
 
         $logs = new CODLog;
@@ -57,6 +67,9 @@ class CODController extends Controller
         $logs->app_id = $app->id;
         $logs->user = Auth::guard('user')->user()->name;
         $logs->user_role = Auth::guard('user')->user()->role_id;
+        if ($app->dean_status === 3){
+            $logs->activity = 'Application reviewed by COD';
+        }
         $logs->activity = 'Application rejected';
         $logs->save();
 
@@ -66,6 +79,7 @@ class CODController extends Controller
     public function batch(){
         $apps = Application::where('cod_status', '>', 0)
             ->where('dean_status', null)
+            ->orWhere('dean_status', 3)
             ->get();
 
         return view('cod::applications.batch')->with('apps', $apps);
@@ -86,7 +100,7 @@ class CODController extends Controller
         $logs->activity = 'Batch submitted';
         $logs->save();
 
-        return redirect()->route('cod.batch')->with('success', '1 Batch elevated for COD approval');
+        return redirect()->route('cod.batch')->with('success', '1 Batch elevated for Dean approval');
     }
 
     /**

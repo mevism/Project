@@ -30,34 +30,38 @@
                             <th>Applicant Name</th>
                             <th>Course Name</th>
                             <th>Department</th>
-
                             <th>Status</th>
                             <th colspan="2" class="text-center">Action</th>
                             </thead>
                             <tbody>
                             <?php $__currentLoopData = $apps; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $app): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
-                                <td> <?php echo e($app->applicant->sname); ?> <?php echo e($app->applicant->fname); ?> <?php echo e($app->applicant->mname); ?></td>
+                                <td> <?php echo e($app->applicant->sname); ?> <?php echo e($app->applicant->fname); ?> <?php echo e($app->applicant->mname); ?> </td>
                                 <td> <?php echo e($app->course); ?></td>
-                                <td> <?php echo e($app->department); ?></td>
+                                <td> <?php echo e($app->department); ?>
 
-                                <td>
-                                    <?php if($app->cod_status === 0): ?>
-                                        <span class="badge bg-primary">Awaiting</span>
-                                    <?php elseif($app->cod_status === 1): ?>
-                                        <span class="badge bg-success">Approved</span>
-                                    <?php elseif($app->cod_status === 2): ?>
-                                        <span class="badge bg-warning">Rejected</span>
-                                    <?php else: ?>
-                                        <span class="badge bg-primary">Awaiting</span>
-                                    <?php endif; ?>
+
                                 </td>
-                                <td> <a class="btn btn-sm btn-alt-secondary" href="<?php echo e(route('cod.viewApplication', $app->id)); ?>"> View </a> </td>
-                                    <td>
-                                <?php if($app->cod_status > 0): ?>
-                                    <a class="btn btn-sm btn-alt-info" href="<?php echo e(route('cod.viewApplication', $app->id)); ?>"> Edit </a>
+                                <td>
+                                        <?php if($app->cod_status === 0): ?>
+                                            <span class="badge bg-primary">Awaiting</span>
+                                        <?php elseif($app->cod_status === 1): ?>
+                                            <span class="badge bg-success">Approved</span>
+                                        <?php elseif($app->cod_status === 2): ?>
+                                            <span class="badge bg-warning">Rejected</span>
+                                        <?php elseif($app->cod_status === 4): ?>
+                                            <span class="badge bg-success">Reviewed</span>
+                                        <?php else: ?>
+                                        <span class="badge bg-info">Review</span>
+                                        <?php endif; ?>
+
+                                </td>
+                                    <?php if($app->cod_status === 0): ?>
+                                <td><a class="btn btn-sm btn-alt-secondary" href="<?php echo e(route('cod.viewApplication', $app->id)); ?>"> View </a></td>
+                                        <?php else: ?>
+                                <td><a class="btn btn-sm btn-alt-secondary" href="<?php echo e(route('cod.previewApplication', $app->id)); ?>"> View </a></td>
+                                <td><a class="btn btn-sm btn-alt-info" href="<?php echo e(route('cod.viewApplication', $app->id)); ?>"> Edit </a></td>
                                 <?php endif; ?>
-                                    </td>
                             </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>

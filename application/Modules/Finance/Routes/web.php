@@ -19,6 +19,7 @@ Route::prefix('applications')->group(function() {
         Route::get('/finance', [FinanceController::class, 'index'])->name('finance.dashboard');
         Route::get('/finance/applications', [FinanceController::class, 'applications'])->name('finance.applications');
         Route::get('/finance/viewApplication/{id}', [FinanceController::class, 'viewApplication'])->name('finance.viewApplication');
+        Route::get('/finance/previewApplication/{id}', [FinanceController::class, 'previewApplication'])->name('finance.previewApplication');
         Route::get('/finance/batch', [FinanceController::class, 'batch'])->name('finance.batch');
         Route::post('/finance/batchSubmit', [FinanceController::class, 'batchSubmit'])->name('finance.batchSubmit');
         Route::get('/finance/acceptApplication/{id}', [FinanceController::class, 'acceptApplication'])->name('finance.acceptApplication');

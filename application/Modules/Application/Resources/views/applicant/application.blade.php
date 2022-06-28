@@ -174,7 +174,6 @@
                             </div>
                             <div class="block-content block-content-full">
 
-                                @if($course->level == 1)
                                 <div class="row">
                                     <div class="col-md-2" style="padding: 7px !important;">
                                         <label class="form-check-label"> Secondary school</label>
@@ -201,34 +200,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @endif
                                 @if($course->level == 2)
-                                <div class="row">
-                                            <div class="col-md-2" style="padding: 7px !important;">
-                                                <label class="form-check-label"> Secondary school</label>
-                                            </div>
-                                            <div class="col-md-8" style="padding: 10px !important;">
-                                                <div style="padding: 7px !important;">
-                                                    <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('secondary') }}" name="secondary" placeholder="Institution name">
-                                                </div>
-                                                <div style="padding: 7px !important;">
-                                                    <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('secondaryqualification') }}" name="secondaryqualification" placeholder="Qualifications acquired">
-                                                </div>
-                                                <div class="row" style="padding: 7px !important;">
-                                                    <div class="col-6">
-                                                        <input type="month" class="form-control form-control-alt" value="{{ old('secstartdate') }}" name="secstartdate">
-                                                        <small class="text-muted">Starting year</small>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <input type="month" class="form-control form-control-alt" value="{{ old('secenddate') }}" name="secenddate">
-                                                        <small class="text-muted">Year Finished</small>
-                                                    </div>
-                                                </div><div style="padding: 7px !important;">
-                                                    <input type="file" class="form-control form-control-alt" value="{{ old('seccert') }}" name="seccert" placeholder="upload certificate">
-                                                    <small class="text-muted">Upload certificate</small>
-                                                </div>
-                                            </div>
-                                        </div>
                                 <div class="row">
                                     <div class="col-md-2" style="padding: 7px !important;">
                                         <label class="form-check-label"> Tertiary Institution</label>
@@ -259,32 +231,6 @@
                                     @if($course->level >= 3)
                                         <div class="row">
                                             <div class="col-md-2" style="padding: 7px !important;">
-                                                <label class="form-check-label"> Secondary Institution</label>
-                                            </div>
-                                            <div class="col-md-8" style="padding: 10px !important;">
-                                                <div style="padding: 7px !important;">
-                                                    <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('secondary') }}" name="secondary" placeholder="Institution name">
-                                                </div>
-                                                <div style="padding: 7px !important;">
-                                                    <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('secondaryqualification') }}" name="secondaryqualification" placeholder="Qualifications acquired">
-                                                </div>
-                                                <div class="row" style="padding: 7px !important;">
-                                                    <div class="col-6">
-                                                        <input type="month" class="form-control form-control-alt" value="{{ old('secstartdate') }}" name="secstartdate">
-                                                        <small class="text-muted">Starting year</small>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <input type="month" class="form-control form-control-alt" value="{{ old('secenddate') }}" name="secenddate">
-                                                        <small class="text-muted">Year Finished</small>
-                                                    </div>
-                                                </div><div style="padding: 7px !important;">
-                                                    <input type="file" class="form-control form-control-alt" value="{{ old('seccert') }}" name="seccert" placeholder="upload certificate">
-                                                    <small class="text-muted">Upload certificate</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-2" style="padding: 7px !important;">
                                                 <label class="form-check-label"> Tertiary Institution</label>
                                             </div>
                                             <div class="col-md-8" style="padding: 10px !important;">
@@ -309,7 +255,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                <div class="row">
+                                        <div class="row">
                                     <div class="col-md-2" style="padding: 7px !important;">
                                         <label class="form-check-label"> Tertiary Institution 2</label>
                                     </div>

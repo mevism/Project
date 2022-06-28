@@ -31,14 +31,14 @@
                             <th>✔</th>
                             <th>Applicant Name</th>
                             <th>Course Name</th>
-                            <th>Transaction code</th>
+                            <th>Department </th>
                             <th>Status</th>
                             </thead>
                             <tbody>
                             @foreach($apps as $app)
                                 <tr>
                                     <td>
-                                    @if($app->dean_status === null)
+                                    @if($app->dean_status === null || 3)
                                         <form action="{{ route('cod.batchSubmit') }}" method="post">
                                             @csrf
                                     <input class="batch" type="checkbox" name="submit[]" value="{{ $app->id }}" required>
@@ -48,7 +48,7 @@
                                     </td>
                                     <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</td>
                                     <td> {{ $app->course }}</td>
-                                    <td> {{ $app->receipt }}</td>
+                                    <td> {{ $app->department }}</td>
                                     <td>
                                         @if($app->cod_status === 0)
                                             <span class="badge bg-primary">Awaiting</span>

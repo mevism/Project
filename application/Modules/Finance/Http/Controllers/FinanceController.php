@@ -30,6 +30,12 @@ class FinanceController extends Controller
         return view('applications::applications.viewApplication')->with('app', $app);
     }
 
+    public function previewApplication($id){
+
+        $app = Application::find($id);
+        return view('applications::applications.preview')->with('app', $app);
+    }
+
     public function acceptApplication($id){
 
         $app = Application::find($id);
@@ -49,6 +55,7 @@ class FinanceController extends Controller
     public function rejectApplication(Request $request, $id){
         $app = Application::find($id);
         $app->finance_status = 2;
+        $app->registrar_status = 3;
         $app->finance_comments = $request->comment;
         $app->save();
 

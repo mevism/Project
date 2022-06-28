@@ -51,12 +51,13 @@
                                         <span class="badge bg-primary">Awaiting</span>
                                     @endif
                                 </td>
+                                @if($app->finance_status == null)
                                 <td> <a class="btn btn-sm btn-alt-secondary" href="{{ route('finance.viewApplication', $app->id) }}"> View </a> </td>
-                                    <td>
-                                @if($app->finance_status > 0)
-                                    <a class="btn btn-sm btn-alt-info" href="{{ route('finance.viewApplication', $app->id) }}"> Edit </a>
+                                        @else
+                                    <td> <a class="btn btn-sm btn-alt-secondary" href="{{ route('finance.previewApplication', $app->id) }}"> View </a> </td>
+                                    <td><a class="btn btn-sm btn-alt-info" href="{{ route('finance.viewApplication', $app->id) }}"> Edit </a></td>
                                 @endif
-                                    </td>
+
                             </tr>
                             @endforeach
                             </tbody>

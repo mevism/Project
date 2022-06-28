@@ -82,19 +82,26 @@ class UserController extends Controller
            if (!Auth::guard('user')->check()){
                abort(403);
            } else{
-               return view('cod::COD.index');
+           $apps_cod = Application::where('cod_status', 0)
+               ->orWhere('dean_status', 3)
+               ->count();
+               return view('cod::COD.index')->with('apps', $apps_cod);
            }
        }elseif (Auth::guard('user')->user()->role_id === 4){
            if (!Auth::guard('user')->check()){
                abort(403);
            } else{
-               return view('approval::dean.index');
+           $apps_dean = Application::where('dean_status', 0)->count();
+               return view('dean::dean.index')->with('apps', $apps_dean);
            }
        }elseif (Auth::guard('user')->user()->role_id === 3){
+            $apps_finance = Application::where('finance_status', 0)->count();
+
            if (!Auth::guard('user')->check()){
                abort(403);
            } else{
-               return view('applications::finance.index');
+
+               return view('applications::finance.index')->with('apps', $apps_finance);
            }
        }else{
            return redirect('application/applicant');

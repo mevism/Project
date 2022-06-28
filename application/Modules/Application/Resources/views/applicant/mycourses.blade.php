@@ -32,8 +32,6 @@
                                 <th>School</th>
                                 <th>Department</th>
                                 <th>Course</th>
-                                <th>Campus</th>
-                                <th>Payment</th>
                                 <th>Status</th>
                                 <th colspan="2">Action</th>
                             </tr>
@@ -44,9 +42,7 @@
                                     <td>{{ $course->school }}</td>
                                     <td>{{ $course->department }}</td>
                                     <td>{{ $course->course }}</td>
-                                    <td>{{ $course->campus }}</td>
-                                    <td> Paid </td>
-                                    <td>Pending</td>
+                                    <td><a class="btn btn-sm btn-alt-secondary" data-toggle="click-ripple" href="#">Track </a></td>
                                     <td><a class="btn btn-sm btn-alt-info" href="{{ route('application.edit', $course->id) }}">Edit</a> </td>
                                 </tr>
                             @endforeach

@@ -16,11 +16,12 @@ Route::prefix('department')->group(function() {
 //    Route::get('/', 'CODController@index');
     Route::group(['middleware' => 'is_cod'], function (){
         Route::get('/cod', [CODController::class, 'index'])->name('cod.dashboard');
-        Route::get('/cod/applications', [CODController::class, 'applications'])->name('cod.applications');
-        Route::get('/cod/viewApplication/{id}', [CODController::class, 'viewApplication'])->name('cod.viewApplication');
-        Route::get('/cod/batch', [CODController::class, 'batch'])->name('cod.batch');
-        Route::post('/cod/batchSubmit', [CODController::class, 'batchSubmit'])->name('cod.batchSubmit');
-        Route::get('/cod/acceptApplication/{id}', [CODController::class, 'acceptApplication'])->name('cod.acceptApplication');
-        Route::post('/cod/rejectApplication/{id}', [CODController::class, 'rejectApplication'])->name('cod.rejectApplication');
+        Route::get('/applications', [CODController::class, 'applications'])->name('cod.applications');
+        Route::get('/viewApplication/{id}', [CODController::class, 'viewApplication'])->name('cod.viewApplication');
+        Route::get('/previewApplication/{id}', [CODController::class, 'previewApplication'])->name('cod.previewApplication');
+        Route::get('/batch', [CODController::class, 'batch'])->name('cod.batch');
+        Route::post('/batchSubmit', [CODController::class, 'batchSubmit'])->name('cod.batchSubmit');
+        Route::get('/acceptApplication/{id}', [CODController::class, 'acceptApplication'])->name('cod.acceptApplication');
+        Route::post('/rejectApplication/{id}', [CODController::class, 'rejectApplication'])->name('cod.rejectApplication');
     });
 });

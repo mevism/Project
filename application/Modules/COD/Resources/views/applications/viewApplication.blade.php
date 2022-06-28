@@ -56,6 +56,24 @@
                                 <p> HISTORY {{ $app->subject_4 }}</p>
                             </div>
                         </div>
+                        <div class="row p-1">
+                            <div class="col-md-4 fw-bolder text-start">COD Status</div>
+                            <div class="col-md-8">
+                                @if($app->cod_status === 0)
+                                    <span class="badge bg-primary">Pending</span>
+                                @elseif($app->cod_status === 1)
+                                    <span class="badge bg-success">Approved by COD</span>
+                                @else
+                                    <span class="badge bg-danger">Rejected by COD</span>
+                                @endif
+                            </div>
+                        </div>
+                        @if($app->dean_status === 3)
+                            <div class="row p-1">
+                                <div class="col-md-4 fw-bolder text-start">Dean Comments</div>
+                                <div class="col-md-8"> {{ $app->dean_comments }} </div>
+                            </div>
+                        @endif
                     </div>
                     <div class="col-lg-5 space-y-2">
                         <div class="d-flex justify-content-center">
@@ -67,11 +85,21 @@
                 </div>
             </div>
         <div class="d-flex justify-content-center py-1">
-            @if($app->cod_status < 1)
+            @if($app->cod_status === 0)
             <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('cod.acceptApplication', $app->id) }}">Approve</a>
             <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
-            @endif
             <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('cod.applications') }}">Close</a>
+                @elseif($app->dean_status === 3)
+                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('cod.acceptApplication', $app->id) }}">Approve</a>
+                <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
+                <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('cod.applications') }}">Close</a>
+            @elseif($app->cod_status === 1)
+                <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
+                <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('cod.applications') }}">Close</a>
+            @else
+                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('cod.acceptApplication', $app->id) }}">Approve</a>
+                <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('cod.applications') }}">Close</a>
+            @endif
         </div>
         </div>
     </div>

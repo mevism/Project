@@ -30,14 +30,14 @@
                             <th>✔</th>
                             <th>Applicant Name</th>
                             <th>Course Name</th>
-                            <th>Transaction code</th>
+                            <th>Department </th>
                             <th>Status</th>
                             </thead>
                             <tbody>
                             <?php $__currentLoopData = $apps; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $app): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
                                     <td>
-                                    <?php if($app->dean_status === null): ?>
+                                    <?php if($app->dean_status === null || 3): ?>
                                         <form action="<?php echo e(route('cod.batchSubmit')); ?>" method="post">
                                             <?php echo csrf_field(); ?>
                                     <input class="batch" type="checkbox" name="submit[]" value="<?php echo e($app->id); ?>" required>
@@ -47,7 +47,7 @@
                                     </td>
                                     <td> <?php echo e($app->applicant->sname); ?> <?php echo e($app->applicant->fname); ?> <?php echo e($app->applicant->mname); ?></td>
                                     <td> <?php echo e($app->course); ?></td>
-                                    <td> <?php echo e($app->receipt); ?></td>
+                                    <td> <?php echo e($app->department); ?></td>
                                     <td>
                                         <?php if($app->cod_status === 0): ?>
                                             <span class="badge bg-primary">Awaiting</span>

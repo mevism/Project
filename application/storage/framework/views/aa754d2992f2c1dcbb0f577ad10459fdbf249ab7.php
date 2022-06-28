@@ -50,12 +50,13 @@
                                         <span class="badge bg-primary">Awaiting</span>
                                     <?php endif; ?>
                                 </td>
+                                <?php if($app->finance_status == null): ?>
                                 <td> <a class="btn btn-sm btn-alt-secondary" href="<?php echo e(route('finance.viewApplication', $app->id)); ?>"> View </a> </td>
-                                    <td>
-                                <?php if($app->finance_status > 0): ?>
-                                    <a class="btn btn-sm btn-alt-info" href="<?php echo e(route('finance.viewApplication', $app->id)); ?>"> Edit </a>
+                                        <?php else: ?>
+                                    <td> <a class="btn btn-sm btn-alt-secondary" href="<?php echo e(route('finance.previewApplication', $app->id)); ?>"> View </a> </td>
+                                    <td><a class="btn btn-sm btn-alt-info" href="<?php echo e(route('finance.viewApplication', $app->id)); ?>"> Edit </a></td>
                                 <?php endif; ?>
-                                    </td>
+
                             </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>

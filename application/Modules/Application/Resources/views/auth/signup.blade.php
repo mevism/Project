@@ -105,7 +105,7 @@
                                 <strong>TUM</strong> &copy; <span data-toggle="year-copy"></span>
                             </p>
                             <ul class="list list-inline mb-0 py-2">
-                                <img src="{{ url('media/tum-logo/iso.png') }}" alt="iso image" style="height: 50px !important; width: 200px !important;">
+                                <img src="{{ url('media/tum-logo/iso.PNG') }}" alt="iso image" style="height: 50px !important; width: 200px !important;">
                             </ul>
                         </div>
                     </div>
