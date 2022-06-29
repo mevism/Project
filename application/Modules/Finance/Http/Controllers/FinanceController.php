@@ -18,7 +18,8 @@ class FinanceController extends Controller
     public function applications(){
 
         $applications = Application::where('cod_status', null )
-            ->orderby('id', 'DESC')
+            ->orWhere('finance_status', '!=', 3)
+            ->orderBy('id', 'DESC')
             ->get();
 
         return view('applications::applications.index')->with('apps', $applications);
@@ -71,7 +72,8 @@ class FinanceController extends Controller
 
     public function batch(){
         $apps = Application::where('finance_status', '>', 0)
-                ->where('cod_status', null)
+                ->orWhere('finance_status', '!=', 3)
+                ->orWhere('cod_status', null)
                 ->get();
 
         return view('applications::applications.batch')->with('apps', $apps);

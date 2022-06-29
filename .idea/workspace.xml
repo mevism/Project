@@ -3,30 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/application.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/application.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/mycourses.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/mycourses.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/auth/signup.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/auth/signup.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/COD/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/COD/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/batch.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/batch.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/viewApplication.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/viewApplication.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Http/Controllers/DeanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Http/Controllers/DeanController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Routes/web.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/applications/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/applications/index.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/applications/viewApplication.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/applications/viewApplication.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/finance/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/finance/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Routes/web.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/app/Http/Controllers/User/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Http/Controllers/User/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/zmZEtFc71azQUoMJetQBSS2cJCySrHmOS3YWyyIr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/1b75c49bfbc4abb882fad227f776d75b393b99e1.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/views/1b75c49bfbc4abb882fad227f776d75b393b99e1.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/789bfaa84d48909fcaa2bffa28382913fb497a08.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/views/789bfaa84d48909fcaa2bffa28382913fb497a08.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/aa754d2992f2c1dcbb0f577ad10459fdbf249ab7.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/views/aa754d2992f2c1dcbb0f577ad10459fdbf249ab7.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/e7b9cc1270490f08bfbe538302d4ebf7bf01ec8a.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/views/e7b9cc1270490f08bfbe538302d4ebf7bf01ec8a.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/e8ccaf1a74d2b9dc9110756fed3640e4c434b825.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -213,7 +192,8 @@
       <workItem from="1655995721094" duration="21921000" />
       <workItem from="1656307973812" duration="532000" />
       <workItem from="1656311067894" duration="10246000" />
-      <workItem from="1656400189670" duration="19413000" />
+      <workItem from="1656400189670" duration="20008000" />
+      <workItem from="1656496417968" duration="1078000" />
     </task>
     <servers />
   </component>
