@@ -71,9 +71,8 @@ class FinanceController extends Controller
     }
 
     public function batch(){
-        $apps = Application::where('finance_status', '>', 0)
-                ->where('finance_status', '!=', 3)
-                ->orWhere('cod_status', null)
+        $apps = Application::where('finance_status', '>', 0, '&&', '!=', 3)
+                ->where('cod_status', null)
                 ->get();
 
         return view('applications::applications.batch')->with('apps', $apps);
@@ -82,11 +81,15 @@ class FinanceController extends Controller
     public function batchSubmit(Request $request){
 
         foreach ($request->submit as $id){
+
             $app = Application::find($id);
+
                 if ($app->finance_status === 2){
+
                     $app = Application::find($id);
                     $app->finance_status = 3;
                     $app->save();
+
                 }else{
                     $app = Application::find($id);
                     $app->cod_status = 0;
