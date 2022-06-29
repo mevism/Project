@@ -81,11 +81,18 @@ class FinanceController extends Controller
 
     public function batchSubmit(Request $request){
 
-        foreach ($request->submit as $item){
-            $app = Application::find($item);
-            $app->cod_status = 0;
-            $app->save();
+        foreach ($request->submit as $id){
+            $app = Application::find($id);
+                if ($app->finance_status === 2){
+                    $app = Application::find($id);
+                    $app->finance_status = 3;
+                    $app->save();
+                }else{
+                    $app = Application::find($id);
+                    $app->cod_status = 3;
+                    $app->save();
                 }
+        }
 
             $logs = new FinanceLog;
             $logs->app_id = $app->id;
