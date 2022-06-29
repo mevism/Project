@@ -87,9 +87,7 @@ class FinanceController extends Controller
 
                 if ($app->finance_status === 2){
 
-                    $app = Application::find($id);
-                    $app->finance_status = 3;
-                    $app->save();
+                    $app = Application::find($id)->delete();
 
                 }else{
                     $app = Application::find($id);

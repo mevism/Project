@@ -72,6 +72,7 @@ class DeanController extends Controller
     public function batch(){
         $apps = Application::where('dean_status', '>', 0)
             ->where('registrar_status', null)
+            ->where('dean_status', '!=', 3)
             ->get();
 
         return view('dean::applications.batch')->with('apps', $apps);

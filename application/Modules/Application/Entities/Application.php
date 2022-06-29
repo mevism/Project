@@ -4,10 +4,11 @@ namespace Modules\Application\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Application extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'amount', 'receipt', 'user_id', 'telephone', 'status', 'intake_name', 'attendance', 'year', 'academic_program', 'course', 'created_at', 'updated_at'
