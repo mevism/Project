@@ -64,7 +64,7 @@
                                 @elseif($app->cod_status === 1)
                                     <span class="badge bg-success">Approved by COD</span>
                                 @else
-                                    <span class="badge bg-danger">Rejected by COD</span>
+                                    <span class="badge bg-danger"> Awaiting COD review</span>
                                 @endif
                             </div>
                         </div>
