@@ -72,7 +72,7 @@ class FinanceController extends Controller
 
     public function batch(){
         $apps = Application::where('finance_status', '>', 0)
-                ->orWhere('finance_status', '!=', 3)
+                ->where('finance_status', '!=', 3)
                 ->orWhere('cod_status', null)
                 ->get();
 
@@ -89,7 +89,7 @@ class FinanceController extends Controller
                     $app->save();
                 }else{
                     $app = Application::find($id);
-                    $app->cod_status = 3;
+                    $app->cod_status = 0;
                     $app->save();
                 }
         }
