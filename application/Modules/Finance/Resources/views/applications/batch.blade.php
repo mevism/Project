@@ -1,4 +1,29 @@
 @extends('applications::layouts.backend')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.2.0/css/rowGroup.dataTables.min.css">
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable( {
+            responsive: true,
+            order: [[2, 'desc']],
+            rowGroup: {
+                dataSrc: 2
+            }
+        } );
+    } );
+</script>
+
 @section('content')
     <div class="bg-body-light">
         <div class="content content-full">
@@ -23,9 +48,9 @@
     </div>
     <div class="block block-rounded">
         <div class="block-content block-content-full">
-            <div class="row">
-                <div class="col-lg-12">
-                    <table class="table table-responsive-sm table-borderless table-striped js-dataTable-responsive">
+            <form id="batchForm" action="{{ route('finance.batchSubmit') }}" method="POST">
+                @csrf
+                    <table id="example" class="table table-responsive-sm table-bordered table-striped">
                         @if(count($apps)>0)
                             <thead>
                             <th>✔</th>
@@ -39,8 +64,6 @@
                                 <tr>
                                     <td>
                                     @if($app->cod_status === null)
-                                        <form action="{{ route('finance.batchSubmit') }}" method="post">
-                                            @csrf
                                     <input class="batch" type="checkbox" name="submit[]" value="{{ $app->id }}" required>
                                         @else
                                         ✔
@@ -72,12 +95,10 @@
                             <input type="checkbox" onclick="for(c in document.getElementsByClassName('batch')) document.getElementsByClassName('batch').item(c).checked = this.checked"> Select all
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-sm btn-alt-primary" data-toggle="click-ripple">Submit batch</button>
+                            <button id="submit" type="submit" class="btn btn-sm btn-alt-primary" data-toggle="click-ripple">Submit batch</button>
                         </div>
                         @endif
                 </form>
-                </div>
-            </div>
         </div>
     </div>
 @endsection

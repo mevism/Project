@@ -1,4 +1,4 @@
-@extends('layouts.backend')
+@extends('layouts.simple')
 
 @section('css_before')
   <!-- Page JS Plugins CSS -->
@@ -8,7 +8,7 @@
 
 @section('js_after')
   <!-- jQuery (required for DataTables plugin) -->
-  <script src="{{ asset('js/lib/jquery.min.js') }}"></script>
+  <script src="{{ url('js/lib/jquery.min.js') }}"></script>
 
   <!-- Page JS Plugins -->
   <script src="{{ asset('js/plugins/datatables/jquery.dataTables.min.js') }}"></script>

@@ -315,6 +315,30 @@
     <!-- Main Container -->
     <main id="main-container">
       @yield('content')
+      @section('css_before')
+          <!-- Page JS Plugins CSS -->
+              <link rel="stylesheet" href="{{ url('js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
+              <link rel="stylesheet" href="{{ url('js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css') }}">
+      @endsection
+
+      @section('js_after')
+          <!-- jQuery (required for DataTables plugin) -->
+              <script src="{{ url('js/lib/jquery.min.js') }}"></script>
+
+              <!-- Page JS Plugins -->
+              <script src="{{ url('js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+              <script src="{{ url('js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
+              <script src="{{ url('js/plugins/datatables-buttons/dataTables.buttons.min.js') }}"></script>
+              <script src="{{ url('js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
+              <script src="{{ url('js/plugins/datatables-buttons-jszip/jszip.min.js') }}"></script>
+              <script src="{{ url('js/plugins/datatables-buttons-pdfmake/pdfmake.min.js') }}"></script>
+              <script src="{{ url('js/plugins/datatables-buttons-pdfmake/vfs_fonts.js') }}"></script>
+              <script src="{{ url('js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
+              <script src="{{ url('js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
+
+              <!-- Page JS Code -->
+              <script src="{{ url('js/pages/tables_datatables.js') }}"></script>
+          @endsection
         @include('application::messages.notification')
     </main>
     <!-- END Main Container -->

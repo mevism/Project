@@ -43,7 +43,8 @@
             Route::post('/submitApplication', 'ApplicationController@application')->name('application.save');
             Route::get('/profile', 'ApplicationController@myProfile')->name('applicant.profile');
             Route::post('/submit/Application', 'ApplicationController@application')->name('application.submit');
-            Route::get('/application/edit/{id}', 'ApplicationController@applicationEdit')->name('application.edit');
+            Route::get('/edit/{id}', 'ApplicationController@applicationEdit')->name('application.edit');
+            Route::get('/progress/{id}', 'ApplicationController@applicationProgress')->name('application.progress');
         });
 
     });

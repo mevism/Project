@@ -28,6 +28,9 @@ use Modules\Courses\Entities\Intake;
 use Session;
 use Auth;
 use Illuminate\Support\Facades\Mail;
+use Modules\COD\Entities\CODLog;
+use Modules\Dean\Entities\DeanLog;
+use Modules\Finance\Entities\FinanceLog;
 
 
 class ApplicationController extends Controller
@@ -364,22 +367,22 @@ class ApplicationController extends Controller
             'secondaryqualification' => 'string|required',
             'secstartdate' => 'string|required',
             'secenddate' => 'string|required',
-            'seccert' => 'mimes:image,pdf|required|max:2048',
+            'seccert' => 'mimes:jpeg,jpg,png,pdf|required|max:2048',
             'tertiary' => 'string|nullable',
             'tertiaryqualification' => 'string|nullable',
             'terstartdate' => 'string|nullable',
             'terenddate' => 'string|nullable',
-            'tercert' => 'mimes:image,pdf|nullable|max:2048',
+            'tercert' => 'mimes:jpeg,jpg,png,pdf|nullable|max:2048',
             'tertiary2' => 'string|nullable',
             'tertiary2qualification' => 'string|nullable',
             'ter2startdate' => 'string|nullable',
             'ter2enddate' => 'string|nullable',
-            'ter2cert' => 'mimes:image,pdf|nullable|max:2048',
+            'ter2cert' => 'mimes:jpeg,jpg,png,pdf|nullable|max:2048',
             'tertiary3' => 'string|nullable',
             'tertiary3qualification' => 'string|nullable',
             'ter3startdate' => 'string|nullable',
             'ter3enddate' => 'string|nullable',
-            'ter3cert' => 'mimes:image,pdf|nullable|max:2048',
+            'ter3cert' => 'mimes:jpeg,jpg,png,|nullable|max:2048',
             'org1' => 'string|nullable',
             'org1post' => 'string|nullable',
             'org1startdate' => 'string|nullable',
@@ -569,6 +572,17 @@ class ApplicationController extends Controller
             ->with(['course' => $course, 'schools' => $schools, 'departments' => $departments, 'courses' => $courses]);
     }
 
+    public function applicationProgress($id){
+        $course = Application::find($id);
+        $finance = FinanceLog::where('app_id', $id)->orderBy('updated_at', 'ASC')->get();
+        $cod = CODLog::where('app_id', $id)->orderBy('updated_at', 'ASC')->get();
+        $dean = DeanLog::where('app_id', $id)->orderBy('updated_at', 'ASC')->get();
+
+            $logs = $cod->merge($dean)->merge($finance)->sortBy(function ($log){
+                return $log->updated_at;
+            });
+        return view('application::applicant.progress')->with(['logs' => $logs, 'course' => $course]);
+    }
     public function myProfile(){
         return view('application::applicant.profilepage');
     }

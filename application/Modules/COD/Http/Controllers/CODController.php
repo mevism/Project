@@ -79,7 +79,8 @@ class CODController extends Controller
     public function batch(){
         $apps = Application::where('cod_status', '>', 0)
             ->where('dean_status', null)
-            ->where('dean_status', '!=', 3)
+            ->orWhere('dean_status', 3)
+            ->where('cod_status', '!=', 3)
             ->get();
 
         return view('cod::applications.batch')->with('apps', $apps);
