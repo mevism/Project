@@ -26,7 +26,7 @@
     
     <p>
        
-        Thank you for your application at Technical University of Mombasa. However we are sorry to inform you that you did not meet the minimum requirements for the course applied. You can visit the <a href="{{ route('login') }}"> TUM Course Application Portal </a> to apply for a new course which you meet the requirements. For any queries you can contact our support at tumsupport@tum.ac.ke. 
+        Thank you for your application at Technical University of Mombasa. However we are sorry to inform you that you did not meet the minimum requirements for the course applied. You can visit the <a href="{{ route('root') }}"> TUM Course Application Portal </a> to apply for a new course which you meet the requirements. For any queries you can contact our support at tumsupport@tum.ac.ke. 
       
  
     </p>
