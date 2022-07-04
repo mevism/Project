@@ -35,13 +35,12 @@
                     @csrf
 
                     <div class="col-12 col-xl-12">
-                      <select name="attendance" value="{{ old('attendance') }}" class="form-control form-control-alt">
+                      <select name="attendance"  class="form-control form-control-alt">
                         <option selected disabled> Select Attendance</option>
 
                           @foreach($attendances as $attend)
-                              <option value="{{ $attend->attendance_name }}">{{ $attend->attendance_name }}</option>
+                              <option value="{{ $attend->attendance_code }}">{{ $attend->attendance_name }}</option>
                           @endforeach
-                          <input type="hidden" name="attendance_code" value="{{ $attend->attendance_code }}">
                       </select>
                     </div>
                     <div class="col-12 col-xl-12">
@@ -56,16 +55,11 @@
                       <select name="course" id="course" class="form-control form-control-alt">
                         <option selected disabled> Select Course</option>
                         @foreach ($courses as $item)
-                          <option value="{{ $item->course_name }}">{{ $item->course_name }}</option>
-                              <input type="hidden" name="course_code" value="{{ $item->course_code }}">
-                              <input type="hidden" name="course_id" value="{{ $item->id }}">
+                          <option value="{{ $item->course_code }}">{{ $item->course_name }}</option>
                         @endforeach
+                      
                       </select>
                     </div>
-
-                    {{-- <div class="col-12 col-xl-12">
-                      <input type="text" value="{{ old('name') }}" class="form-control form-control-alt text-uppercase" id="name" name="name" placeholder="Class">
-                    </div> --}}
                     <div class="col-12 text-center p-3">
                       <button type="submit" class="btn btn-alt-success" data-toggle="click-ripple">Create Class</button>
                     </div>

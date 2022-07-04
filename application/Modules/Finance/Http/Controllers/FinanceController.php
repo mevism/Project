@@ -17,7 +17,7 @@ class FinanceController extends Controller
 
     public function applications(){
 
-        $applications = Application::where('cod_status', null )
+        $applications = Application::where('cod_status', NULL )
             ->where('finance_status', '!=', 3)
             ->orderBy('id', 'DESC')
             ->get();
