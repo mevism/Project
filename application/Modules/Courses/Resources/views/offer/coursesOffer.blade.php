@@ -1,4 +1,16 @@
 @extends('layouts.backend')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+
+<link rel="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css">
+<link rel="https://cdn.datatables.net/rowgroup/1.2.0/css/rowGroup.dataTables.min.css">
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script>
+
 @section('content')
     <div class="bg-body-light">
         <div class="content content-full">
@@ -25,18 +37,20 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-lg-12">
-            <table class="table table-borderless table-striped js-dataTable-responsive">
+            <table id="example" class="table table-bordered table-striped js-dataTable-responsive">
                 @csrf
-    @method('delete') 
+                @method('delete') 
                 @if(count($availables)>0)
-                    <tr>
+                    <thead>
+                       
                         <th>Course name</th>
                         <th>Department</th>
                         <th>School</th>
                         <th>Intake</th>
                         <th>Duration</th>
-                        <th colspan="2" class="text-center">Action</th>
-                    </tr>
+                        <th>Action</th>
+                    </thead>
+                    <tbody>
                     @foreach($availables as $course)
 
                         @foreach($course as $item)
@@ -46,22 +60,33 @@
                                 <td> {{ $item->school_id }}</td>
                                 <td> {{ $item->$intake }}</td>
                                 <td> {{ $item->course_duration }}</td>
-                                {{-- <td nowrap=""> <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.viewOne', $item->id) }}">view </a> </td> --}}
-                                {{-- <td nowrap=""> <a class="btn btn-sm btn-alt-info" href="{{ route('courses.apply', $item->id) }}">edit </a> </td> --}}
                                 <td nowrap=""> <a class="btn btn-sm btn-alt-danger" href="{{ route('courses.destroyCoursesAvailable', $item->id) }}">delete </a> </td>
                             </tr>
                         @endforeach
                     @endforeach
+                </tbody>
                 @else
                 <tr>
                     <small class="text-center text-muted">There are no courses on offer</small>
                 </tr>
                 @endif
         </table>
-        {{-- {{ $course_id->links('pagination::bootstrap-5') }} --}}
         </div>
             </div>
         </div>
     </div>
 @endsection
+
+
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable( {
+            responsive: true,
+            order: [[2, 'asc']],
+            rowGroup: {
+                dataSrc: 2
+            }
+        } );
+    } );
+</script>
 

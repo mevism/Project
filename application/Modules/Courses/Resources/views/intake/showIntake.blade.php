@@ -1,5 +1,29 @@
 @extends('layouts.backend')
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+
+<link rel="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css">
+<link rel="https://cdn.datatables.net/rowgroup/1.2.0/css/rowGroup.dataTables.min.css">
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+      $('#example').DataTable( {
+          responsive: true,
+          order: [[2, 'asc']],
+          rowGroup: {
+              dataSrc: 2
+          }
+      } );
+  } );
+</script>
+
 @section('content')
     <div class="bg-body-light">
         <div class="content content-full">
@@ -22,38 +46,30 @@
             </div>
         </div>
     </div>
-   {{-- <div class="car-body">
-     <form action="">
-       <div class="form-group">
-         <input type="text" class="form-control typeahead" placeholder="search ..."/>
-       </div>
-     </form>
-   </div> --}}
-    <main id="main-container">
-        <!-- Page Content -->
-
-          <!-- Dynamic Table Responsive -->
-          <div class="block block-rounded">
+ 
+    <div class="block block-rounded">
 
             <div class="block-content block-content-full">
               <div class="row">
                 <div class="col-12">
-              <table class="table table-borderless table-striped table-vcenter js-dataTable-responsive">
+              <table id="example" class="table table-borderless table-striped table-vcenter js-dataTable-responsive">
                 <span class="d-flex justify-content-end">
                     <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addIntake') }}">Create</a>
                 </span>
                 <thead>
 
                   <tr>
-                    <th tyle="text-transform: uppercase">Intakes</th>
-                    {{-- <th tyle="text-transform: uppercase">courses</th> --}}
+                    <th>Intakes</th>
+                    <th>Status</th>
+                    <th>Action</th>
                   </tr>
 
                 </thead>
-                <tbody>@foreach ($data as $intake)
+                <tbody>
+                  @foreach ($data as $intake)
                   <tr>
                     <td style="text-transform: uppercase" class="fw-semibold fs-sm">{{ Carbon\carbon::parse($intake->intake_from)->format('M-Y')}} - {{ Carbon\carbon::parse($intake->intake_to)->format('M-Y') }}</td>
-                    <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ ($intake->course_id)}}</td>
+                    {{-- <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ ($intake->course_id)}}</td> --}}
                     <td>
                     @if ($intake->status === 0)
                     <a  class="btn btn-sm btn-alt-primary" href="{{ route('courses.editstatusIntake', $intake->id) }}">Pending</a>
@@ -68,32 +84,19 @@
                     <a  class="btn btn-sm btn-alt-danger" href="{{ route('courses.editstatusIntake', $intake->id) }}">Suspended</a>
                     @endif
                      </td>
-                    <td> <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.viewIntake', $intake->id) }}">view</a> </td>
+                    <td> 
+                      <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.viewIntake', $intake->id) }}">view</a> 
                    {{-- <td> <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editIntake', $intake->id) }}">edit</a> </td> --}}
-                    <td> <a class="btn btn-sm btn-alt-danger" href="{{ route('courses.destroyIntake', $intake->id) }}">delete</a> </td>
+                      <a class="btn btn-sm btn-alt-danger" href="{{ route('courses.destroyIntake', $intake->id) }}">delete</a> 
+                    </td>
                   </tr>
                   @endforeach
 
                 </tbody>
               </table>
-              {{ $data->links('pagination::bootstrap-5') }}
                 </div>
             </div>
           </div>
           <!-- Dynamic Table Responsive -->
         </div>
-        <!-- END Page Content -->
-    </main>
 @endsection
-
-<script>
-  var path={{ route('courses.autocomplete') }};
-
-  $('input.typeahead').typeahead({
-    source: function(terms,process){
-      return $.get(path,{terms:terms},function(datas){
-        return process(datas);
-      });
-    }
-  });
-</script>

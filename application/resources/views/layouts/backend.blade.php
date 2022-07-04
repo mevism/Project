@@ -82,14 +82,8 @@
 
               </a>
             </li>
-{{--            <li class="nav-main-item">--}}
-{{--              <i class="nav-main-link-icon"></i>--}}
-{{--              <a class="nav-main-link {{ request()->is('approve/approveIndex') ? ' active' : '' }}" href="{{ route('courses.approveIndex') }}">--}}
-{{--                <i class="nav-main-link-icon si si-user"></i>--}}
-{{--                <span class="nav-main-link-name">Review</span>--}}
+           
 
-{{--              </a>--}}
-{{--            </li>--}}
             <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                 <i class="nav-main-link-icon si si-graduation"></i>
@@ -136,6 +130,36 @@
                             <span class="nav-main-link-name">Classes</span>
                           </a>
                         </li>
+              </ul>
+            </li>
+
+            <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                <i class="nav-main-link-icon si si-user"></i>
+                <span class="nav-main-link-name">Applications</span>
+              </a>
+              <ul class="nav-main-submenu">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('courses.applications') }}">
+                    <i class="nav-main-link-icon si si-user"></i>
+                    <span class="nav-main-link-name">
+                       Applications
+                    </span>
+    
+                  </a>
+                </li>
+
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('archived') ? ' active' : '' }}" href="{{ route('courses.archived') }}">
+                    <i class="nav-main-link-icon si si-user"></i>
+                    <span class="nav-main-link-name">
+                       Archived
+                    </span>
+    
+                  </a>
+                </li>
+
+                    
               </ul>
             </li>
           </ul>
@@ -339,6 +363,32 @@
 
     <!-- Main Container -->
     <main id="main-container">
+
+      @section('css_before')
+        <!-- Page JS Plugins CSS -->
+            <link rel="stylesheet" href="{{ url('js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
+            <link rel="stylesheet" href="{{ url('js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css') }}">
+    @endsection
+
+    @section('js_after')
+        <!-- jQuery (required for DataTables plugin) -->
+            <script src="{{ url('js/lib/jquery.min.js') }}"></script>
+
+            <!-- Page JS Plugins -->
+            <script src="{{ url('js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+            <script src="{{ url('js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
+            <script src="{{ url('js/plugins/datatables-buttons/dataTables.buttons.min.js') }}"></script>
+            <script src="{{ url('js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
+            <script src="{{ url('js/plugins/datatables-buttons-jszip/jszip.min.js') }}"></script>
+            <script src="{{ url('js/plugins/datatables-buttons-pdfmake/pdfmake.min.js') }}"></script>
+            <script src="{{ url('js/plugins/datatables-buttons-pdfmake/vfs_fonts.js') }}"></script>
+            <script src="{{ url('js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
+            <script src="{{ url('js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
+
+            <!-- Page JS Code -->
+            <script src="{{ url('js/pages/tables_datatables.js') }}"></script>
+        @endsection
+
       @yield('content')
         @include('application::messages.notification')
     </main>
