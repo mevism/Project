@@ -23,7 +23,7 @@
 <div class="email-container">
     <h5>Dear {{ $applicant->fname }} {{ $applicant->mname }} {{ $applicant->sname }}, </h5>
     <p>
-        Congratulations for being approved as successfull applicant of <b> Technical Univerisity of Mombasa</b>. Please visit the <a href="{{ route('login') }}"> TUM Course Application Portal </a> to download your admission documents. For any queries reach use via our email tumsupport@tum.ac.ke
+        Congratulations for being approved as successfull applicant of <b> Technical Univerisity of Mombasa</b>. Please visit the <a href="{{ route('root') }}"> TUM Course Application Portal </a> to download your admission documents. For any queries reach use via our email tumsupport@tum.ac.ke
     </p>
     <div>
         <p>
