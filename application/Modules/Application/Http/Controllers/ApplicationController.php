@@ -308,7 +308,7 @@ class ApplicationController extends Controller
     }
 
     public function myCourses(){
-        $mycourses = Application::where('user_id', Auth::user()->id)->paginate(5);
+        $mycourses = Application::where('user_id', Auth::user()->id)->get();
         return view('application::applicant.mycourses')->with('courses', $mycourses);
     }
 
@@ -325,10 +325,9 @@ class ApplicationController extends Controller
 
             foreach ($active as $intake){
 
-                $available = AvailableCourse::where('intake_id', $intake->id)->get();
-                foreach ($available as $item){
-                    $courses [] = Courses::where('id', '=', $item->course_id)->paginate(7);
-                }
+                $courses[] = AvailableCourse::where('intake_id', $intake->id)->get();
+
+//                return $courses;
             }
 
             return view('application::applicant.courses', compact('courses', 'active'));
@@ -340,7 +339,9 @@ class ApplicationController extends Controller
         $schools = School::all();
         $departments = Department::all();
         $courses = Course::all();
-        $course = Course::find($id);
+        $course = AvailableCourse::find($id);
+
+//        return $course->openCourse;
 
         return view('application::applicant.application')
             ->with(['course' => $course, 'schools' => $schools, 'departments' => $departments, 'courses' => $courses]);
@@ -348,13 +349,144 @@ class ApplicationController extends Controller
 
     public function applicationEdit($id){
         $application = Application::find($id);
-
         $education = Education::where('user_id', Auth::user()->id)->get();
-        $work = WorkExperience::where('user_id', Auth::user()->id)->get();
-        $parent = Guardian::where('user_id', Auth::user()->id)->get();
-        $sponsor = Sponsor::where('user_id', Auth::user()->id)->get();
+//        $work = WorkExperience::where('user_id', Auth::user()->id)->get();
+//        $parent = Guardian::where('app_id', $id)->first();
+//        $sponsor = Sponsor::where('app_id', Auth::user()->id)->first();
 
-            return $application."education".$education."work".$work."sponsor".$sponsor."guardian".$parent;
+
+            return view('application::applicant.edit')->with(['app' => $application, 'edu' => $education]);
+    }
+
+    public function updateApp(Request $request, $id){
+
+        $request->validate([
+            'subject1' => 'required|string',
+            'subject2' => 'string|required',
+            'subject3' => 'string|required',
+            'subject4' => 'string|required',
+            'secondary' => 'string|required',
+            'secondaryqualification' => 'string|required',
+            'secstartdate' => 'string|required',
+            'secenddate' => 'string|required',
+            'seccert' => 'mimes:jpeg,jpg,png,pdf|required|max:5000',
+            'tertiary' => 'string|nullable',
+            'tertiaryqualification' => 'string|nullable',
+            'terstartdate' => 'string|nullable',
+            'terenddate' => 'string|nullable',
+            'tercert' => 'mimes:jpeg,jpg,png,pdf|nullable|max:5000',
+            'tertiary2' => 'string|nullable',
+            'tertiary2qualification' => 'string|nullable',
+            'ter2startdate' => 'string|nullable',
+            'ter2enddate' => 'string|nullable',
+            'ter2cert' => 'mimes:jpeg,jpg,png,pdf|nullable|max:5000',
+            'tertiary3' => 'string|nullable',
+            'tertiary3qualification' => 'string|nullable',
+            'ter3startdate' => 'string|nullable',
+            'ter3enddate' => 'string|nullable',
+            'ter3cert' => 'mimes:jpeg,jpg,png,pdf|nullable|max:5000',
+            'receipt' => 'string|required',
+            'receipt_file' => 'mimes:jpeg,jpg,png,pdf|required|max:5000',
+        ]);
+
+//                return $request->all();
+
+                $app = Application::find($id);
+                $app->user_id = Auth::user()->id;
+                $app->intake_id = $request->intake;
+                $app->course_id = $request->course_id;
+                $app->subject_1 = $request->subject1;
+                $app->subject_2 = $request->subject2;
+                $app->subject_3 = $request->subject3;
+                $app->subject_4 = $request->subject4;
+                $app->receipt = $request->receipt;
+                $app->finance_status = 0;
+
+                if ($request->hasFile('receipt_file')){
+                    $file = $request->receipt_file;
+                    $fileName = 'receipt'.time().'.'.$file->getClientOriginalExtension();
+                    $request->receipt_file->move('receipts', $fileName);
+                    $app->receipt_file = $fileName;
+                }
+
+                $app->save();
+
+
+
+                $edu = Education::find(Auth::user()->id);
+                $edu->user_id = Auth::user()->id;
+                $edu->institution = $request->secondary;
+                $edu->qualification = $request->secondaryqualification;
+                $edu->start_date = $request->secstartdate;
+                $edu->exit_date = $request->secenddate;
+
+                if ($request->hasFile('seccert')){
+                    $file = $request->seccert;
+                    $fileName = 'seccert'.time().'.'.$file->getClientOriginalExtension();
+                    $request->seccert->move('certs', $fileName);
+                    $edu->certificate = $fileName;
+                }
+
+                $edu->save();
+
+                if ($request->filled(['tertiary', 'teriaryqualification', 'terstartdate', 'terenddate'])){
+
+                    $edu = Education::find(Auth::user()->id);
+                    $edu->user_id = Auth::user()->id;
+                    $edu->institution = $request->tertiary;
+                    $edu->qualification = $request->teriaryqualification;
+                    $edu->start_date = $request->terstartdate;
+                    $edu->exit_date = $request->terenddate;
+
+                    if ($request->hasFile('tercert')){
+                        $file = $request->tercert;
+                        $fileName = 'tercert'.time().'.'.$file->getClientOriginalExtension();
+                        $request->tercert->move('certs', $fileName);
+                        $edu->certificate = $fileName;
+                    }
+                    $edu->save();
+                }
+
+                if ($request->filled(['tertiary2', 'teriary2qualification', 'ter2startdate', 'ter2enddate'])) {
+
+                    $edu = Education::find(Auth::user()->id);
+                    $edu->user_id = Auth::user()->id;
+                    $edu->institution = $request->tertiary2;
+                    $edu->qualification = $request->teriary2qualification;
+                    $edu->start_date = $request->ter2startdate;
+                    $edu->exit_date = $request->ter2enddate;
+
+                    if ($request->hasFile('ter2cert')) {
+                        $file = $request->ter2cert;
+                        $fileName = 'ter2cert' . time() . '.' . $file->getClientOriginalExtension();
+                        $request->ter2cert->move('certs', $fileName);
+                        $edu->certificate = $fileName;
+                    }
+                    $edu->save();
+                }
+
+                if ($request->filled(['tertiary3', 'ter3iaryqualification', 'ter3startdate', 'ter3enddate'])) {
+
+                    $edu = Education::find(Auth::user()->id);
+                    $edu->user_id = Auth::user()->id;
+                    $edu->institution = $request->tertiary3;
+                    $edu->qualification = $request->ter3iaryqualification;
+                    $edu->start_date = $request->ter3startdate;
+                    $edu->exit_date = $request->ter3enddate;
+
+                    if ($request->hasFile('ter3cert')) {
+                        $file = $request->ter3cert;
+                        $fileName = 'ter3cert' . time() . '.' . $file->getClientOriginalExtension();
+                        $request->ter3cert->move('certs', $fileName);
+                        $edu->certificate = $fileName;
+                    }
+
+                    $edu->save();
+                }
+
+        return redirect()->route('applicant.course')->with('success', 'You update your application successfully');
+
+
     }
 
     public function application(Request $request){
@@ -414,6 +546,8 @@ class ApplicationController extends Controller
         $application->school = $request->school;
         $application->department = $request->department;
         $application->course = $request->course;
+        $application->intake_id = $request->intake;
+        $application->course_id = $request->course_id;
         $application->subject_1 = $request->subject1;
         $application->subject_2 = $request->subject2;
         $application->subject_3 = $request->subject3;
@@ -557,7 +691,8 @@ class ApplicationController extends Controller
     }
 
     public function viewCourse($id){
-        $course = Courses::find($id);
+
+        $course = AvailableCourse::find($id);
 
         return view('application::applicant.viewcourse')->with('course', $course);
     }
@@ -585,6 +720,13 @@ class ApplicationController extends Controller
     }
     public function myProfile(){
         return view('application::applicant.profilepage');
+    }
+
+    public function downloadLetter($id){
+
+        $letter = Application::find($id);
+
+        return response()->file(storage_path($letter->adm_letter));
     }
 
     /**

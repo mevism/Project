@@ -50,7 +50,7 @@
         <div class="block-content block-content-full">
             <form id="batchForm" action="{{ route('finance.batchSubmit') }}" method="POST">
                 @csrf
-                    <table id="example" class="table table-responsive-sm table-bordered table-striped">
+                    <table id="example" class="table table-responsive-sm table-bordered table-striped fs-sm">
                         @if(count($apps)>0)
                             <thead>
                             <th>✔</th>
@@ -64,13 +64,13 @@
                                 <tr>
                                     <td>
                                     @if($app->cod_status === null)
-                                    <input class="batch" type="checkbox" name="submit[]" value="{{ $app->id }}" required>
+                                    <input class="batch" type="checkbox" name="submit[]" value="{{ $app->id }}">
                                         @else
                                         ✔
                                     @endif
                                     </td>
                                     <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</td>
-                                    <td> {{ $app->course }}</td>
+                                    <td> {{ $app->courses->course_name }}</td>
                                     <td> {{ $app->receipt }}</td>
                                     <td>
                                         @if($app->finance_status === 0)

@@ -96,7 +96,7 @@ class DeanController extends Controller
         $logs->app_id = $app->id;
         $logs->user = Auth::guard('user')->user()->name;
         $logs->user_role = Auth::guard('user')->user()->role_id;
-        $logs->activity = 'Batch submitted';
+        $logs->activity = 'Your Application has been forwarded to registry office';
         $logs->save();
 
         return redirect()->route('dean.batch')->with('success', '1 Batch send to next level of approval');

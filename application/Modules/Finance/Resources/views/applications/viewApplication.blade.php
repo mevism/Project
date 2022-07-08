@@ -26,24 +26,32 @@
         <div class="block block-rounded">
             <div class="block-content block-content-full">
                 <div class="row">
-                    <div class="col-lg-7 mb-1">
+                    <div class="col-lg-6 mb-0 fs-sm">
                         <div class="row p-1">
                         <div class="col-md-4 fw-bolder text-start">Applicant Name </div>
                         <div class="col-md-8"> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</div>
                         </div>
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Course Name</div>
-                            <div class="col-md-8"> {{ $app->course }} </div>
+                            <div class="col-md-8"> {{ $app->courses->course_name }} </div>
                         </div>
+{{--                        <div class="row p-1">--}}
+{{--                            <div class="col-md-4 fw-bolder text-start">Course Level</div>--}}
+{{--                            <div class="col-md-8"> {{ $app->level }} </div>--}}
+{{--                        </div>--}}
+{{--                        <div class="row p-1">--}}
+{{--                            <div class="col-md-4 fw-bolder text-start">Application Fee</div>--}}
+{{--                            <div class="col-md-8"> {{ $app->receipt }} </div>--}}
+{{--                        </div>--}}
                         <div class="row p-1">
-                            <div class="col-md-4 fw-bolder text-start">Course Name</div>
+                            <div class="col-md-4 fw-bolder text-start">Transaction Code</div>
                             <div class="col-md-8"> {{ $app->receipt }} </div>
                         </div>
                     </div>
-                    <div class="col-lg-5 space-y-2">
+                    <div class="col-lg-6 space-y-1">
                         <div class="d-flex justify-content-center">
                             <div class="card-img" style="margin: auto !important;">
-                                <img style="max-height: 60vh !important; width: auto !important;" src="{{ url('receipts/', $app->receipt_file) }}" alt="">
+                                <img style="margin: auto !important; max-height: 80vh !important; width: 100% !important;" src="{{ url('receipts/', $app->receipt_file) }}" alt="">
                             </div>
                         </div>
                     </div>

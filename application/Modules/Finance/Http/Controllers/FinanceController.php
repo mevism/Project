@@ -54,9 +54,9 @@ class FinanceController extends Controller
     }
 
     public function rejectApplication(Request $request, $id){
+
         $app = Application::find($id);
         $app->finance_status = 2;
-        $app->registrar_status = 3;
         $app->finance_comments = $request->comment;
         $app->save();
 
@@ -87,7 +87,10 @@ class FinanceController extends Controller
 
                 if ($app->finance_status === 2){
 
-                    $app = Application::find($id)->delete();
+                    $app = Application::find($id);
+                    $app->finance_status = 3;
+                    $app->registrar_status = 0;
+                    $app->save();
 
                 }else{
                     $app = Application::find($id);
@@ -100,7 +103,7 @@ class FinanceController extends Controller
             $logs->app_id = $app->id;
             $logs->user = Auth::guard('user')->user()->name;
             $logs->user_role = Auth::guard('user')->user()->role_id;
-            $logs->activity = 'Batch submitted';
+            $logs->activity = 'Your application has been forwarded to COD for review';
             $logs->save();
 
         return redirect()->route('finance.batch')->with('success', '1 Batch elevated for COD approval');

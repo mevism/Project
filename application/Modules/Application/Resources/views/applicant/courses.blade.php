@@ -48,11 +48,15 @@
         <tbody>
         @foreach($courses as $course)
             @foreach($course as $item)
+
+{{--                @dd($item)--}}
                 <tr>
-                    <td> {{ $item->course_name }}</td>
-                    <td> {{ $item->department_id }}</td>
-                    <td> {{ $item->course_duration }}</td>
-                    <td></td>
+                    <td> {{ $item->mainCourses->course_name }}</td>
+                    <td> {{ $item->mainCourses->department_id }}</td>
+                    <td> {{ $item->mainCourses->course_duration }}</td>
+                    <td nowrap="">
+                        {{ Carbon\carbon::parse($item->openCourse->intake_from)->format('M')}} - {{ Carbon\carbon::parse($item->openCourse->intake_to)->format('M Y') }}
+                    </td>
                     <td nowrap=""> <a class="btn btn-sm btn-alt-secondary" href="{{ route('application.viewOne', $item->id) }}">View </a> </td>
                     <td nowrap=""> <a class="btn btn-sm btn-alt-info" href="{{ route('application.apply', $item->id) }}">Apply now </a> </td>
                 </tr>

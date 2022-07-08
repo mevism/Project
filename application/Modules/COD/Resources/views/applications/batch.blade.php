@@ -30,13 +30,13 @@
         <div class="block-content block-content-full">
             <form action="{{ route('cod.batchSubmit') }}" method="post">
                 @csrf
-                    <table id="example" class="table table-responsive-sm table-bordered table-striped js-dataTable-responsive">
+                    <table id="example" class="table table-responsive-sm table-bordered table-striped js-dataTable-responsive fs-sm">
                         @if(count($apps)>0)
                             <thead>
                             <th>✔</th>
                             <th>Applicant Name</th>
-                            <th>Course Name</th>
                             <th>Department </th>
+                            <th>Course Name</th>
                             <th>Status</th>
                             </thead>
                             <tbody>
@@ -50,8 +50,8 @@
                                     @endif
                                     </td>
                                     <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</td>
-                                    <td> {{ $app->course }}</td>
-                                    <td> {{ $app->department }}</td>
+                                    <td> {{ $app->courses->department_id }}</td>
+                                    <td> {{ $app->courses->course_name }}</td>
                                     <td>
                                         @if($app->cod_status === 0)
                                             <span class="badge bg-primary">Awaiting</span>

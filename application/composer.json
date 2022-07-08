@@ -13,7 +13,8 @@
         "laravel/tinker": "^2.7",
         "laravelcollective/html": "^6.3",
         "mews/captcha": "^3.2",
-        "nwidart/laravel-modules": "^9.0"
+        "nwidart/laravel-modules": "^9.0",
+        "phpoffice/phpword": "^0.18.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

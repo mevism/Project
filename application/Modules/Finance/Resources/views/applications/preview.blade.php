@@ -33,7 +33,7 @@
                         </div>
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Course Name</div>
-                            <div class="col-md-8"> {{ $app->course }} </div>
+                            <div class="col-md-8"> {{ $app->courses->course_name }} </div>
                         </div>
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Course Name</div>
@@ -53,7 +53,7 @@
                     <div class="col-lg-5 space-y-2">
                         <div class="d-flex justify-content-center">
                             <div class="card-img" style="margin: auto !important;">
-                                <img style="max-height: 60vh !important; width: auto !important;" src="{{ url('receipts/', $app->receipt_file) }}" alt="">
+                                <img style="margin: auto !important; max-height: 80vh !important; width: 100% !important;" src="{{ url('receipts/', $app->receipt_file) }}" alt="">
                             </div>
                         </div>
                     </div>

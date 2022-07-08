@@ -5,19 +5,37 @@ namespace Modules\Application\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Courses\Entities\Courses;
+use Modules\Courses\Entities\Intake;
 
 class Application extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [
-        'amount', 'receipt', 'user_id', 'telephone', 'status', 'intake_name', 'attendance', 'year', 'academic_program', 'course', 'created_at', 'updated_at'
-    ];
+    protected $fillable = [];
+
+//    relationship between an applicant and a course
 
     public function applicant(){
 
        return $this->belongsTo(Applicant::class, 'user_id');
     }
+
+//    relationship between an application and course
+
+    public function courses(){
+
+        return $this->belongsTo(Courses::class, 'course_id');
+
+    }
+
+//    application/intake relationship
+
+        public function app_intake(){
+
+            return $this->belongsTo(Intake::class, 'intake_id');
+
+        }
 
     protected static function newFactory()
     {

@@ -47,7 +47,7 @@
                             @foreach($apps as $app)
                             <tr>
                                 <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</td>
-                                <td> {{ $app->course }}</td>
+                                <td> {{ $app->courses->course_name }}</td>
                                 <td> {{ $app->receipt }}</td>
                                 <td>
                                     @if($app->finance_status === 0)

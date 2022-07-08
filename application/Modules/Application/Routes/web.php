@@ -41,10 +41,12 @@
             Route::get('/applyNow/{course}', 'ApplicationController@applyNow')->name('application.apply');;
             Route::get('/viewCourse/{course}', 'ApplicationController@viewCourse')->name('application.viewOne');;
             Route::post('/submitApplication', 'ApplicationController@application')->name('application.save');
+            Route::post('/updateApplication{id}', 'ApplicationController@updateApp')->name('application.update');
             Route::get('/profile', 'ApplicationController@myProfile')->name('applicant.profile');
             Route::post('/submit/Application', 'ApplicationController@application')->name('application.submit');
             Route::get('/edit/{id}', 'ApplicationController@applicationEdit')->name('application.edit');
             Route::get('/progress/{id}', 'ApplicationController@applicationProgress')->name('application.progress');
+            Route::get('/dowload/{id}', 'ApplicationController@downloadLetter')->name('application.download');
         });
 
     });

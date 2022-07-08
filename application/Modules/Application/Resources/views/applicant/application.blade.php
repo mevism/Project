@@ -46,21 +46,23 @@
                                 <div class="row" style="padding: 5px !important;">
                                     <label class="col-sm-2 col-form-label" for="example-hf-email">School</label>
                                     <div class="col-sm-8 text-uppercase" style="padding: 5px !important;">
-                                        <input type="text" class="form-control form-control-alt" name="school" value="{{ $course->school_id }}" readonly>
+                                        <input type="text" class="form-control form-control-alt" name="school" value="{{ $course->mainCourses->school_id }}" readonly>
+                                        <input type="hidden" name="intake" value="{{ $course->openCourse->id }}">
+                                        <input type="hidden" name="course_id" value="{{ $course->mainCourses->id }}">
                                     </div>
                                 </div>
 
                                 <div class="row" style="padding: 5px !important;">
                                     <label class="col-sm-2 col-form-label" for="example-hf-email">Department</label>
                                     <div class="col-sm-8 text-uppercase" style="padding: 5px !important;">
-                                        <input type="text" class="form-control form-control-alt" name="department" value="{{ $course->department_id }}" readonly>
+                                        <input type="text" class="form-control form-control-alt" name="department" value="{{ $course->mainCourses->department_id }}" readonly>
                                     </div>
                                 </div>
 
                                 <div class="row" style="padding: 5px !important;">
                                     <label class="col-sm-2 col-form-label" for="example-hf-password">Course</label>
                                     <div class="col-sm-8 text-uppercase" style="padding: 5px !important;">
-                                        <input type="text" class="form-control form-control-alt" name="course" value="{{ $course->course_name }}" readonly>
+                                        <input type="text" class="form-control form-control-alt" name="course" value="{{ $course->mainCourses->course_name }}" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -84,7 +86,7 @@
                                     <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 1</label>
                                     <div class="col-sm-8 text-uppercase" style="padding: 5px !important;">
                                         <div class="input-group">
-                                            <span class="input-group-text input-group-text-alt">{{ Str::limit( $course->subject1, $limit = 3 , $end='' )  }}</span>
+                                            <span class="input-group-text input-group-text-alt">{{ Str::limit( $course->mainCourses->subject1, $limit = 3 , $end='' )  }}</span>
                                             <input type="text" class="form-control form-control-alt" name="subject1" value="{{ old('subject1') }}">
                                         </div>
                                     </div>
@@ -94,7 +96,7 @@
                                     <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 2</label>
                                     <div class="col-sm-8 text-uppercase" style="padding: 5px !important;">
                                         <div class="input-group">
-                                            <span class="input-group-text input-group-text-alt">{{ Str::limit( $course->subject2, $limit = 3 , $end='' )  }}</span>
+                                            <span class="input-group-text input-group-text-alt">{{ Str::limit( $course->mainCourses->subject2, $limit = 3 , $end='' )  }}</span>
                                             <input type="text" class="form-control form-control-alt" name="subject2" value="{{ old('subject2') }}">
                                         </div>
                                     </div>
@@ -104,7 +106,7 @@
                                     <label class="col-sm-2 col-form-label" for="example-hf-password">Subject 3</label>
                                     <div class="col-sm-8 text-uppercase" style="padding: 5px !important;">
                                         <div class="input-group">
-                                            <span class="input-group-text input-group-text-alt">{{ Str::limit( $course->subject3, $limit = 8 , $end='' )  }}</span>
+                                            <span class="input-group-text input-group-text-alt">{{ Str::limit( $course->mainCourses->subject3, $limit = 8 , $end='' )  }}</span>
                                             <input type="text" class="form-control form-control-alt" name="subject3" value="{{ old('subject3') }}">
                                         </div>
                                     </div>
@@ -114,7 +116,7 @@
                                     <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 4 </label>
                                     <div class="col-sm-8 text-uppercase" style="padding: 5px !important;">
                                         <div class="input-group">
-                                            <span class="input-group-text input-group-text-alt">{{ Str::limit( $course->subject4, $limit = 8 , $end='' )  }}</span>
+                                            <span class="input-group-text input-group-text-alt">{{ Str::limit( $course->mainCourses->subject4, $limit = 8 , $end='' )  }}</span>
                                             <input type="text" class="form-control form-control-alt" name="subject4" value="{{ old('subject4') }}">
                                         </div>
                                     </div>
@@ -144,7 +146,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="py-2 mb-0">
-                                        You are required to pay <span class="fw-bold">Ksh. {{ $course->fee }} </span> to complete this application.
+                                        You are required to pay <span class="fw-bold">Ksh. {{ $course->mainCourses->fee }} </span> to complete this application.
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> How do I pay?</a>
 
                                         </div>

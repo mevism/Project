@@ -40,21 +40,29 @@
                         @if(count($courses)>0)
                             <thead>
                             <tr>
-                                <th>School</th>
                                 <th>Department</th>
                                 <th>Course</th>
-                                <th>Progress</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($courses as $course)
                                 <tr>
-                                    <td>{{ $course->school }}</td>
-                                    <td>{{ $course->department }}</td>
-                                    <td>{{ $course->course }}</td>
-                                    <td><a class="btn btn-sm btn-alt-secondary" data-toggle="click-ripple" href="{{ route('application.progress', $course->id) }}">Track </a></td>
-                                    <td><a class="btn btn-sm btn-alt-info" href="{{ route('application.edit', $course->id) }}">Edit</a> </td>
+                                    <td>{{ $course->courses->department_id }}</td>
+                                    <td>{{ $course->courses->course_name }}</td>
+                                    <td nowrap="">
+                                        @if($course->registrar_status === 1 && $course->cod_status === 1)
+                                        <a class="btn btn-sm btn-alt-success" target="_top" href="{{ route('application.download', $course->id) }}"><i class="fa fa-file-pdf"></i> download</a>
+                                        @elseif($course->registrar_status === NULL && $course->finance_status === NULL)
+                                        <a class="btn btn-sm btn-alt-info" href="{{ route('application.edit', $course->id) }}">
+                                            <i class="fa fa-pen-to-square"></i> update</a>
+                                        @elseif($course->registrar_status === 1 && $course->cod_status === 2)
+                                            <a class="btn btn-sm btn-alt-danger" href="#">
+                                                <i class="fa fa-ban"></i> rejected</a>
+                                        @else
+                                            <a class="btn btn-sm btn-alt-secondary" href="{{ route('application.progress', $course->id) }}"> <i class="fa fa-spinner"></i> in progress</a>
+                                    @endif
+                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -62,7 +70,6 @@
                             <small class="text-center text-muted"> You have not submitted any applications</small>
                         @endif
                     </table>
-                    {{ $courses->links('pagination::bootstrap-5') }}
         </div>
     </div>
 @endsection

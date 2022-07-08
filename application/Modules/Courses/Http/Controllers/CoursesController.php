@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Support\Renderable;
 use Modules\Application\Entities\Application;
 use Modules\Courses\Entities\AvailableCourse;
+use PhpOffice\PhpWord\TemplateProcessor;
+use Carbon;
 
 class CoursesController extends Controller
 
@@ -34,11 +36,16 @@ class CoursesController extends Controller
 
     public function applications(){
 
+
+//        $i = Application::find(1);
+
+//        return $i->courses;
+
         $accepted      =     Application::where('registrar_status', 0)->get();
 
         return view('courses::offer.applications')->with('accepted',$accepted);
     }
-    
+
     public function offer(){
 
         $course_id     =     AvailableCourse::select('course_id')->get();
@@ -63,7 +70,7 @@ class CoursesController extends Controller
         return view('courses::profilepage');
     }
 
-    public function acceptedMail(Request $request){ 
+    public function acceptedMail(Request $request){
 
         foreach($request->submit as $id){
 
@@ -71,22 +78,54 @@ class CoursesController extends Controller
 
             if($app->dean_status === 1){
 
+                $domPdfPath = base_path('vendor/dompdf/dompdf');
+                    \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
+                    \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+
+                     $my_template = new TemplateProcessor(storage_path('adm_template.docx'));
+
+                     $my_template->setValue('name', strtoupper($app->applicant->sname." ".$app->applicant->mname." ".$app->applicant->fname));
+                     $my_template->setValue('address', strtoupper($app->applicant->address));
+                     $my_template->setValue('town', strtoupper($app->applicant->town));
+                     $my_template->setValue('course', $app->courses->course_name);
+                     $my_template->setValue('department', $app->courses->department_id);
+                     $my_template->setValue('duration', $app->courses->course_duration);
+                     $my_template->setValue('from', Carbon\carbon::parse($app->app_intake->intake_from)->format('d - m - Y'));
+                     $my_template->setValue('to', Carbon\carbon::parse($app->app_intake->intake_to)->format('d-m-Y'));
+                     $my_template->setValue('reg_number', $app->courses->course_code."/".str_pad(0000 + $app->id, 4, "0", STR_PAD_LEFT)."/".date('Y'));
+                     $my_template->setValue('ref_number', 'APP/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT));
+                     $my_template->setValue('date',  date('d-M-Y'));
+
+                     $docPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx");
+                     $my_template->saveAs($docPath);
+
             Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails($app->applicant));
-            
+
             $app->find($id);
             $app->registrar_status = 1;
+            $app->status = 1;
+            $app->ref_number = 'APP/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT);
+            $app->reg_number = $app->courses->course_code."/".str_pad(0000 + $app->id, 4, "0", STR_PAD_LEFT)."/".date('Y');
+            $app->adm_letter = 'APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx";
             $app->save();
+
+            }elseif($app->dean_status === 2){
+                Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails1($app->applicant));
+
+                $app->find($id);
+                $app->registrar_status = 1;
+                $app->save();
 
             }else{
-            Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails1($app->applicant));
 
-            $app->find($id);
-            $app->registrar_status = 1;
-            $app->save();
+                $app = Application::find($id);
+                $app->finance_status = NULL;
+                $app->registrar_status = NULL;
+                $app->save();
             }
 
         }
-        return redirect()->back()->with('success', 'Email sent');        
+        return redirect()->back()->with('success', 'Email sent');
     }
 
 
@@ -111,9 +150,9 @@ class CoursesController extends Controller
     }
 
     public function statusIntake(Request $request, $id){
-       
+
         $data             =       Intake::find($id);
-       
+
         $data->status     =       $request->input('status');
         $data->update();
 
@@ -185,7 +224,7 @@ class CoursesController extends Controller
         $courses        =         Course::all();
         $data           =         Intake::find($id);
         $course[]       =         AvailableCourse::find($id);
-      
+
         return view('courses::intake.editIntake')->with(['data'=>$data,'courses'=>$courses,'course'=>$course]);
     }
 
@@ -365,6 +404,7 @@ class CoursesController extends Controller
 
         $departments              =       new Department;
         $departments->name        =       $request->input('name');
+        $departments->dept_code        =       'Dept';
         $departments->school_id   =       $request->input('school');
         $departments->save();
 
@@ -411,7 +451,7 @@ class CoursesController extends Controller
     }
 
     public function storeCourse(Request $request){
-        
+
       $vz = $request->validate([
           'school'                    =>  'required',
           'department'                =>  'required',
@@ -449,7 +489,7 @@ class CoursesController extends Controller
 
     public function showCourse(){
 
-        $data = Course::latest()->paginate(5);
+        $data = Course::latest();
 
         return view('courses::course.showCourse')->with('data',$data);
     }
@@ -496,7 +536,7 @@ class CoursesController extends Controller
         $archived   =  Application::where('registrar_status',1)->get();
 
         return view('courses::offer.archived')->with('archived',$archived);
-    
+
     }
 
     /**
@@ -536,7 +576,7 @@ class CoursesController extends Controller
     }
 
     public function showClasses(){
-        
+
         $data = Classes::latest()->paginate(5);
 
         return view('courses::class.showClasses')->with('data',$data);

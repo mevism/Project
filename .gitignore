@@ -1,0 +1,7 @@
+certs
+Images
+media
+receipts
+application/node_modules
+application/.env
+application/vendor

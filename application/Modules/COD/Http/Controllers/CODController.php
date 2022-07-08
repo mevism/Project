@@ -28,7 +28,7 @@ class CODController extends Controller
     public function viewApplication($id){
 
         $app = Application::find($id);
-            $school = Education::where('user_id', $app->applicant->id)->first();
+        $school = Education::where('user_id', $app->applicant->id)->first();
 
         return view('cod::applications.viewApplication')->with(['app' => $app, 'school' => $school]);
     }
@@ -98,7 +98,7 @@ class CODController extends Controller
         $logs->app_id = $app->id;
         $logs->user = Auth::guard('user')->user()->name;
         $logs->user_role = Auth::guard('user')->user()->role_id;
-        $logs->activity = 'Batch submitted';
+        $logs->activity = "Application awaiting Dean's Verification";
         $logs->save();
 
         return redirect()->route('cod.batch')->with('success', '1 Batch elevated for Dean approval');

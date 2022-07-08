@@ -117,6 +117,8 @@
       <path value="$PROJECT_DIR$/application/vendor/symfony/event-dispatcher" />
       <path value="$PROJECT_DIR$/application/vendor/symfony/var-dumper" />
       <path value="$PROJECT_DIR$/application/vendor/symfony/http-foundation" />
+      <path value="$PROJECT_DIR$/application/vendor/phpoffice/phpword" />
+      <path value="$PROJECT_DIR$/application/vendor/laminas/laminas-escaper" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0" />

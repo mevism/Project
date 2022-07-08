@@ -39,6 +39,8 @@ return new class extends Migration
             $table->string('town')->nullable();
             $table->string('address')->nullable();
             $table->string('remember_token')->nullable();
+            $table->string('app_number')->nullable();
+            $table->string('reg_number')->nullable();
             $table->tinyInteger('user_status')->default(0);
             $table->timestamps();
             $table->softDeletes();

@@ -53,10 +53,10 @@
                     <form action="{{ route('courses.acceptedMail') }}" method="post">
                         @csrf
 
-            <table id="example" class="table table-borderless table-striped js-dataTable-responsive">
+            <table id="example" class="table table-borderless table-striped js-dataTable-responsive fs-sm">
                 @if(count($accepted)>0)
                     <thead>
-                    <tr> 
+                    <tr>
                         <th>✔</th>
                         <th>Applicant Name</th>
                         {{-- <th class="text-uppercase">school</th> --}}
@@ -70,24 +70,24 @@
                             <tr>
                                 <td>
                                     @if($item->dean_status === 1 || 2)
-                                    <input class="accepted" type="checkbox" name="submit[]" value="{{ $item->id }}" required>
+                                    <input class="accepted" type="checkbox" name="submit[]" value="{{ $item->id }}">
                                         @else
                                         ✔
                                     @endif
                                     </td>
                                 <td> {{ $item->applicant->sname }} {{ $item->applicant->fname }} {{ $item->applicant->mname }}</td>
                                 {{-- <td> {{ $item->school }}</td> --}}
-                                <td> {{ $item->department }}</td>
-                                <td> {{ $item->course }}</td>
+                                <td> {{ $item->courses->department_id }}</td>
+                                <td> {{ $item->courses->course_name }}</td>
                                 <td> @if ($item->dean_status ===1)
                                     <a  class="badge badge bg-success" >Approved</a>
                                     @else
                                     <a  class="badge badge bg-danger" >Rejected</a>
                                     @endif
                                 </td>
-                                
+
                             </tr>
-                        
+
                     @endforeach
                     </tbody>
                 @else
@@ -105,13 +105,13 @@
             </div>
             @endif
     </form>
-    
-        
+
+
         </div>
             </div>
         </div>
     </div>
-   
+
 
 @endsection
 

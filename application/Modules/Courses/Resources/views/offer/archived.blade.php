@@ -34,34 +34,36 @@
             </div>
         </div>
     </div>
-  
+
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-lg-12">
                     {{-- <table id="example" class="display"> --}}
         <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
             @csrf
-            @method('delete') 
+            @method('delete')
             @if(count($archived)>0)
                 <thead>
                     <th>Applicant Name</th>
-                    <th>department</th>
-                    <th>course</th>
+                    <th>Department</th>
+                    <th>Course</th>
+                    <th>Ref. number</th>
                     <th>Status</th>
-                   
+
                 </thead>
                 <tbody>
                 @foreach($archived as $item)
                         <tr>
                             <td> {{ $item->applicant->sname }} {{ $item->applicant->fname }} {{ $item->applicant->mname }}</td>
-                            <td> {{ $item->department }}</td>
-                            <td> {{ $item->course }}</td>
+                            <td> {{ $item->courses->department_id }}</td>
+                            <td> {{ $item->courses->course_name }}</td>
+                            <td> {{ $item->ref_number }}</td>
                             <td> @if ($item->registrar_status ==1)<a  class="badge badge-sm bg-info" >Archived</a>
                                 @endif
                             </td>
-                         
+
                           </tr>
-                    
+
                 @endforeach
                 </tbody>
             @else
@@ -71,7 +73,7 @@
             @endif
     </table>
             </div>
-           
+
         </div>
     </div>
 

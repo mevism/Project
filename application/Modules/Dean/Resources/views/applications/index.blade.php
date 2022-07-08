@@ -34,8 +34,8 @@
                         @if(count($apps)>0)
                             <thead>
                             <th nowrap="">Applicant Name</th>
-                            <th>Course Name</th>
                             <th>Department</th>
+                            <th>Course Name</th>
                             <th>COD Status</th>
                             <th>COD Comments</th>
                             <th style="white-space: nowrap !important;">Action</th>
@@ -44,8 +44,8 @@
                             @foreach($apps as $app)
                             <tr>
                                 <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</td>
-                                <td> {{ $app->course }}</td>
-                                <td> {{ $app->department }}</td>
+                                <td> {{ $app->courses->department_id }}</td>
+                                <td> {{ $app->courses->course_name }}</td>
                                 <td>
                                     @if($app->cod_status === 1)
                                         <span class="badge bg-success">Approved</span>
@@ -54,7 +54,7 @@
                                     @endif
                                 </td>
                                 <td> {{ $app->cod_comments }}</td>
-                                <td>
+                                <td nowrap="">
                                 @if($app->dean_status === 0)
                                     <a class="btn btn-sm btn-alt-secondary" href="{{ route('dean.viewApplication', $app->id) }}"> View </a>
                                 @else

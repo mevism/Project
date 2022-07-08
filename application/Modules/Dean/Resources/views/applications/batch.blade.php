@@ -30,14 +30,15 @@
         <div class="block-content block-content-full">
             <form action="{{ route('dean.batchSubmit') }}" method="post">
                 @csrf
-                    <table id="example" class="table table-responsive-sm table-bordered table-striped js-dataTable-responsive">
+                    <table id="example" class="table table-responsive-sm table-bordered table-striped js-dataTable-responsive fs-sm">
                         @if(count($apps)>0)
                             <thead>
                             <th>✔</th>
                             <th>Applicant Name</th>
                             <th>Course Name</th>
                             <th>Department </th>
-                            <th>Status</th>
+                            <th>COD</th>
+                            <th>Dean</th>
                             </thead>
                             <tbody>
                             @foreach($apps as $app)
@@ -50,14 +51,25 @@
                                         @endif
                                     </td>
                                     <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</td>
-                                    <td> {{ $app->course }}</td>
-                                    <td> {{ $app->department }}</td>
+                                    <td> {{ $app->courses->department_id }}</td>
+                                    <td> {{ $app->courses->course_name }}</td>
                                     <td>
                                         @if($app->cod_status === 0)
                                             <span class="badge bg-primary">Awaiting</span>
                                         @elseif($app->cod_status === 1)
                                             <span class="badge bg-success">Approved</span>
                                         @elseif($app->cod_status === 2)
+                                            <span class="badge bg-warning">Rejected</span>
+                                        @else
+                                            <span class="badge bg-primary">Awaiting</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($app->dean_status === 0)
+                                            <span class="badge bg-primary">Awaiting</span>
+                                        @elseif($app->dean_status === 1)
+                                            <span class="badge bg-success">Approved</span>
+                                        @elseif($app->dean_status === 2)
                                             <span class="badge bg-warning">Rejected</span>
                                         @else
                                             <span class="badge bg-primary">Awaiting</span>

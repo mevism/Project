@@ -17,6 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('school_id');
             $table->string('name')->unique();
+            $table->string('dept_code');
             $table->timestamps();
             $table->softDeletes();
         });

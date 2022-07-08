@@ -29,6 +29,6 @@ class VerifyEmails extends Mailable
      */
     public function build()
     {
-        return $this->view('application::emails.verification-email');
+        return $this->subject('Technical University of Mombasa')->view('application::emails.verification-email');
     }
 }

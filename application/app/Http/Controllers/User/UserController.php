@@ -95,7 +95,8 @@ class UserController extends Controller
                return view('dean::dean.index')->with('apps', $apps_dean);
            }
        }elseif (Auth::guard('user')->user()->role_id === 3){
-            $apps_finance = Application::where('cod_status', null)->count();
+            $apps_finance = Application::where('cod_status', null)
+                ->where('finance_status', '!=', 3)->count();
 
            if (!Auth::guard('user')->check()){
                abort(403);
