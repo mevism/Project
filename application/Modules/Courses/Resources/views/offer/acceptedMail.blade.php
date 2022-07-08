@@ -22,29 +22,9 @@
 <div class="email-body">
 <div class="email-container">
     <h5>Dear {{ $applicant->fname }} {{ $applicant->mname }} {{ $applicant->sname }}, </h5>
-    
     <p>
-
-On behalf of everyone at Technical University of Mombasa, I am pleased to congratulate 
-you on our acceptance of your application. We were very impressed by your academic history 
-and achievements and feel that you would make an excellent addition to the Technical University of Mombasa
- alumni. As you know, Technical University of Mombasa is the oldest Institution in the area and we are 
- known for accepting only the best students. After careful review of your application, we are delighted to 
- say that we believe you meet our criteria for acceptance.
-
-Please visit your portal to find the necessary enrollment letter. We appreciate your filling them out and 
-returning them to us by August 15, 2022, in order to ensure your enrollment at Technical University of Mombasa
- and facilitate the acceptance process for our program. If you have any questions or problems, please feel free
-  to contact us through our website <a href="https://www.tum.ac.ke/">tum.ac.ke</a> We look forward to hearing from you.
-
-We encourage your prompt attention to the enrollment forms in order to ensure your place in Technical University
- of Mombasa’s program. We are very pleased to accept you into Technical University of Mombasa
- and hope that you find it a fulfilling and helpful experience that gets you on the road to achieving your dreams.
-  We wish you all the best and thank you for choosing Technical University of Mombasa.<br>
-
-
-
-    </p><br>
+        Congratulations for being approved as successfull applicant of <b> Technical Univerisity of Mombasa</b>. Please visit the <a href="{{ route('root') }}"> TUM Course Application Portal </a> to download your admission documents. For any queries reach use via our email tumsupport@tum.ac.ke
+    </p>
     <div>
         <p>
             <b>

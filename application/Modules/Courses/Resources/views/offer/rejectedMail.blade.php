@@ -26,21 +26,10 @@
     
     <p>
        
-        Thank you for your application at Technical University of Mombasa. <br> We really appreciate your interest
-         in joining our institution and we want to thank you for the time and energy you invested in applying 
-         for our vacancy opening.
-        We received a large number of applications, and after carefully reviewing all of them, unfortunately, 
-        we have to inform you that this time we won’t be able to invite you to the next phase of our admission
-         process. Though your qualifications are impressive, we have decided to move forward with a candidate 
-         whose experiences better meet our needs for this particular vacancy. However, we really do appreciate
-          your interest in our institution. We hope you’ll keep us in mind and apply again in the future should
-           you see a vacancy opening for which you qualify.If you have any questions or need additional 
-           information, please don’t hesitate to contact us through our website <a href="https://www.tum.ac.ke/">
-            tum.ac.ke</a> We wish you every personal and academic success in your future endeavors. Once again, 
-            thank you for your interest in working with us.
+        Thank you for your application at Technical University of Mombasa. However we are sorry to inform you that you did not meet the minimum requirements for the course applied. You can visit the <a href="{{ route('root') }}"> TUM Course Application Portal </a> to apply for a new course which you meet the requirements. For any queries you can contact our support at tumsupport@tum.ac.ke. 
       
  
-    </p><br>
+    </p>
     <div>
         <p>
             <b>
