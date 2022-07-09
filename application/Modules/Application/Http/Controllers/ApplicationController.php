@@ -725,7 +725,7 @@ class ApplicationController extends Controller
 
         $letter = Application::find($id);
 
-        return response()->file(storage_path($letter->adm_letter));
+        return response()->download(storage_path($letter->adm_letter));
     }
 
     /**
