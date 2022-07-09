@@ -71,16 +71,15 @@
               <td style="text-transform: uppercase" >{{ $courses->school_id }}</td>
               <td style="text-transform: uppercase" >{{ $courses->department_id }}</td>
               <td style="text-transform: uppercase" >{{ $courses->course_name }}</td>
-              <td nowrap=""> 
+              <td nowrap="">
                 <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editCourse', $courses->id) }}">edit</a>
-                <a class="btn btn-sm btn-alt-danger" href="{{ route('courses.destroyCourse', $courses->id) }}">delete</a> 
+                <a class="btn btn-sm btn-alt-danger" href="{{ route('courses.destroyCourse', $courses->id) }}">delete</a>
               </td>
             </tr>
             @endforeach
           </tbody>
 
         </table>
-        {{ $data->links('pagination::bootstrap-5') }}
         </div>
       </div>
     </div>

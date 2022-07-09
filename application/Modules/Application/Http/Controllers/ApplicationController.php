@@ -175,6 +175,7 @@ class ApplicationController extends Controller
         $courses = Intake::where('status', 1)->get();
 
             if (count($courses) === 0 ){
+
           $mycourses = Application::where('user_id', Auth::user()->id)->count();
 
         if (Auth::check()) {
@@ -317,9 +318,10 @@ class ApplicationController extends Controller
         $active = Intake::where('status', 1)->get();
 
         if (count($active) === 0){
-            $active = [];
 
-            return view('application::applicant.courses', compact('active'));
+            $courses = $active;
+
+            return view('application::applicant.courses', compact('courses'));
 
         }else{
 

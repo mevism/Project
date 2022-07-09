@@ -2,65 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/.env" beforeDir="false" afterPath="$PROJECT_DIR$/application/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2022_05_10_085436_create_applicants_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2022_05_10_085436_create_applicants_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2022_06_02_162154_create_applications_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2022_06_02_162154_create_applications_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Emails/VerifyEmails.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Emails/VerifyEmails.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Entities/Application.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Entities/Application.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/application.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/apply.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/cap.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/clientlogo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/clipboard.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/counter.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/error-tick.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/question.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/students.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Images/success-tick.gif" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/application.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/application.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/courses.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/courses.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/mycourses.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/mycourses.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/batch.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/batch.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/preview.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/preview.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/viewApplication.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/applications/viewApplication.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Courses/Database/Migrations/2022_06_04_184954_create_departments_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Courses/Database/Migrations/2022_06_04_184954_create_departments_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Courses/Entities/AvailableCourse.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Courses/Entities/AvailableCourse.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Courses/Entities/Courses.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Courses/Entities/Courses.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Courses/Entities/Intake.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Courses/Entities/Intake.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Courses/Http/Controllers/CoursesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Courses/Http/Controllers/CoursesController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Courses/Resources/views/offer/applications.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Courses/Resources/views/offer/applications.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Courses/Resources/views/offer/archived.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Courses/Resources/views/offer/archived.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Http/Controllers/DeanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Http/Controllers/DeanController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/applications/batch.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/applications/batch.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/applications/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/applications/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/applications/preview.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/applications/preview.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/applications/viewApplication.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/applications/viewApplication.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/applications/batch.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/applications/batch.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/applications/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/applications/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/applications/preview.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/applications/preview.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/applications/viewApplication.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/applications/viewApplication.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/app/Http/Controllers/User/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Http/Controllers/User/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/application/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/application/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/config/app.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/config/app.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/database/seeders/UserSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/database/seeders/UserSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/1UuYDsCt5RIvWJLWjHythAvflkVsPmIqJ6OjgVmm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/HpJkzfMIqejy97q3Jd7nEHx88ItvyXZxHbKOlJdp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/KmSu6Qg1uS8wmmUHN9l66Lt6bwB9Um5BI5t5pHSr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/Q3MGnJQ8N1xVLckaEG8pGPvyDfzMJANJDrLvZ0pg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/RsxjUSvo6jAFv7ujcT9KJPgIL9xWQ7qYEiUkql3q" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/dwpAnppbISMwQowSsOkN2mHRcXZPtnWKeNceM3fZ" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/vendor/autoload.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/vendor/autoload.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/vendor/composer/ClassLoader.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/vendor/composer/ClassLoader.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/vendor/composer/InstalledVersions.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/vendor/composer/InstalledVersions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/vendor/composer/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/application/vendor/composer/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/vendor/composer/autoload_classmap.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/vendor/composer/autoload_classmap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/vendor/composer/autoload_files.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/vendor/composer/autoload_files.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/vendor/composer/autoload_namespaces.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/vendor/composer/autoload_namespaces.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/vendor/composer/autoload_psr4.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/vendor/composer/autoload_psr4.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/vendor/composer/autoload_real.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/vendor/composer/autoload_real.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/vendor/composer/autoload_static.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/vendor/composer/autoload_static.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/vendor/composer/installed.json" beforeDir="false" afterPath="$PROJECT_DIR$/application/vendor/composer/installed.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/vendor/composer/installed.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/vendor/composer/installed.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/vendor/composer/platform_check.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/vendor/composer/platform_check.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Courses/Resources/views/class/showClasses.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Courses/Resources/views/class/showClasses.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Courses/Resources/views/course/showCourse.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Courses/Resources/views/course/showCourse.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/rzcIOYVjf1n6nP0UlMQFepHjF8U1PiGmLzHbjxvS" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/0d3e77e51cbf2d69d0665486b07fa8b15c798403.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/views/0d3e77e51cbf2d69d0665486b07fa8b15c798403.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -215,6 +172,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_MARK_IGNORED_FILES_AS_EXCLUDED" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -255,6 +213,7 @@
       <workItem from="1657181980466" duration="21598000" />
       <workItem from="1657284114536" duration="1057000" />
       <workItem from="1657285999134" duration="24125000" />
+      <workItem from="1657356045971" duration="1923000" />
     </task>
     <servers />
   </component>

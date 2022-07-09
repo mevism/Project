@@ -3,8 +3,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
 
-<link rel="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css">
-<link rel="https://cdn.datatables.net/rowgroup/1.2.0/css/rowGroup.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.2.0/css/rowGroup.dataTables.min.css">
 
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
@@ -70,9 +70,9 @@
                 <td class="fw-semibold fs-sm text-uppercase">{{ $class->name }}</td>
                 <td class="fw-semibold fs-sm">{{ $class->attendance_id }}</td>
                 <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ $class->course_id }}</td>
-                <td> 
+                <td>
                   <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editClasses', $class->id) }}">edit</a>
-                <a class="btn btn-sm btn-alt-danger" href="{{ route('courses.destroyClasses', $class->id) }}">delete</a> 
+                <a class="btn btn-sm btn-alt-danger" href="{{ route('courses.destroyClasses', $class->id) }}">delete</a>
               </td>
               </tr>
               @endforeach
@@ -86,14 +86,14 @@
       <!-- Dynamic Table Responsive -->
     </div>
 @endsection
-<script>
-  $(document).ready(function() {
-      $('#example').DataTable( {
-          responsive: true,
-          order: [[2, 'asc']],
-          rowGroup: {
-              dataSrc: 2
-          }
-      } );
-  } );
-</script>
+{{--<script>--}}
+{{--  $(document).ready(function() {--}}
+{{--      $('#example').DataTable( {--}}
+{{--          responsive: true,--}}
+{{--          order: [[2, 'asc']],--}}
+{{--          rowGroup: {--}}
+{{--              dataSrc: 2--}}
+{{--          }--}}
+{{--      } );--}}
+{{--  } );--}}
+{{--</script>--}}
