@@ -3,21 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Images/application.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Images/apply.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Images/cap.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Images/clientlogo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Images/clipboard.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Images/counter.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Images/error-tick.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Images/question.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Images/students.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Images/success-tick.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Courses/Resources/views/class/showClasses.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Courses/Resources/views/class/showClasses.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Courses/Http/Controllers/CoursesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Courses/Http/Controllers/CoursesController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Courses/Resources/views/course/showCourse.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Courses/Resources/views/course/showCourse.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/rzcIOYVjf1n6nP0UlMQFepHjF8U1PiGmLzHbjxvS" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/0d3e77e51cbf2d69d0665486b07fa8b15c798403.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/views/0d3e77e51cbf2d69d0665486b07fa8b15c798403.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/s7Pt7eG8cz07WIA0KwUxT4AOnoDvzQBuJuwYfK3B" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/sessions/s7Pt7eG8cz07WIA0KwUxT4AOnoDvzQBuJuwYfK3B" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

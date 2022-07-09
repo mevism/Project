@@ -489,7 +489,7 @@ class CoursesController extends Controller
 
     public function showCourse(){
 
-        $data = Course::latest();
+        $data = Course::orderBy('id', 'desc')->get();
 
         return view('courses::course.showCourse')->with('data',$data);
     }

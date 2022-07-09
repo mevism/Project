@@ -3,8 +3,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
 
-<link rel="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css">
-<link rel="https://cdn.datatables.net/rowgroup/1.2.0/css/rowGroup.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.2.0/css/rowGroup.dataTables.min.css">
 
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
@@ -52,8 +52,7 @@
       <div class="block-content block-content-full">
         <div class="row">
           <div class="col-12">
-        <!-- DataTables init on table by adding .js-dataTable-responsive class, functionality is initialized in js/pages/be_tables_datatables.min.js which was auto compiled from _js/pages/be_tables_datatables.js -->
-        <table id="example" class="table table-borderless table-striped table-vcenter js-dataTable-responsive">
+        <table id="example" class="table table-borderless table-striped table-vcenter js-dataTable-responsive fs-sm">
           <span class="d-flex justify-content-end">
             <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addCourse') }}">Create</a>
         </span><br>
