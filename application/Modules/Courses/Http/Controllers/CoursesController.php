@@ -96,8 +96,30 @@ class CoursesController extends Controller
                      $my_template->setValue('ref_number', 'APP/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT));
                      $my_template->setValue('date',  date('d-M-Y'));
 
-                     $docPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx");
-                     $my_template->saveAs($docPath);
+
+                       $docPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx");
+
+                                $my_template->saveAs($docPath);
+
+                                $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
+
+                                $pdfPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf");
+
+                                if(file_exists($pdfPath)){
+                                    unlink($pdfPath);
+                                }
+
+                                $converter = new OfficeConverter(storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
+                                $converter->convertTo('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).'.pdf');
+
+
+
+
+//                     $docPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx");
+//                     $my_template->saveAs($docPath);
+//
+//                $converter = new OfficeConverter($docPath, storage_path());
+//                $converter->convertTo('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf");
 
             Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails($app->applicant));
 
