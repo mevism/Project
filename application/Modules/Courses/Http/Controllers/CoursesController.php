@@ -19,6 +19,7 @@ use Modules\Application\Entities\Application;
 use Modules\Courses\Entities\AvailableCourse;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Carbon;
+use NcJoes\OfficeConverter\OfficeConverter;
 
 class CoursesController extends Controller
 
