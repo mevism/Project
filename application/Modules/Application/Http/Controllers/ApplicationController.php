@@ -545,9 +545,6 @@ class ApplicationController extends Controller
 
         $application = new Application;
         $application->user_id = Auth::user()->id;
-        $application->school = $request->school;
-        $application->department = $request->department;
-        $application->course = $request->course;
         $application->intake_id = $request->intake;
         $application->course_id = $request->course_id;
         $application->subject_1 = $request->subject1;
