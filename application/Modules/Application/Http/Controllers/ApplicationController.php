@@ -708,13 +708,13 @@ class ApplicationController extends Controller
 
     public function applicationProgress($id){
         $course = Application::find($id);
-        $finance = FinanceLog::where('app_id', $id)->orderBy('updated_at', 'ASC')->get();
-        $cod = CODLog::where('app_id', $id)->orderBy('updated_at', 'ASC')->get();
-        $dean = DeanLog::where('app_id', $id)->orderBy('updated_at', 'ASC')->get();
 
-            $logs = $cod->merge($dean)->merge($finance)->sortBy(function ($log){
-                return $log->updated_at;
-            });
+        $finance = FinanceLog::where('app_id', $id)->orderBy('created_at', 'desc')->get();
+        $cod = CODLog::where('app_id', $id)->orderBy('created_at', 'desc')->get();
+        $dean = DeanLog::where('app_id', $id)->orderBy('created_at', 'desc')->get();
+
+        $logs = $cod->concat($finance)->concat($dean)->sortByDesc('created_at');
+
         return view('application::applicant.progress')->with(['logs' => $logs, 'course' => $course]);
     }
     public function myProfile(){

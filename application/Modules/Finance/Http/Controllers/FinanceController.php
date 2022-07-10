@@ -64,6 +64,7 @@ class FinanceController extends Controller
         $logs->app_id = $app->id;
         $logs->user = Auth::guard('user')->user()->name;
         $logs->user_role = Auth::guard('user')->user()->role_id;
+        $logs->comments = $request->comment;
         $logs->activity = 'Application rejected';
         $logs->save();
 
@@ -97,14 +98,14 @@ class FinanceController extends Controller
                     $app->cod_status = 0;
                     $app->save();
                 }
-        }
 
-            $logs = new FinanceLog;
-            $logs->app_id = $app->id;
-            $logs->user = Auth::guard('user')->user()->name;
-            $logs->user_role = Auth::guard('user')->user()->role_id;
-            $logs->activity = 'Your application has been forwarded to COD for review';
-            $logs->save();
+                $logs = new FinanceLog;
+                $logs->app_id = $app->id;
+                $logs->user = Auth::guard('user')->user()->name;
+                $logs->user_role = Auth::guard('user')->user()->role_id;
+                $logs->activity = 'Your application has been forwarded to COD for review';
+                $logs->save();
+        }
 
         return redirect()->route('finance.batch')->with('success', '1 Batch elevated for COD approval');
     }

@@ -6,7 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Courses\Entities\Courses;
+use Modules\COD\Entities\CODLog;
 use Modules\Courses\Entities\Intake;
+use Modules\Dean\Entities\DeanLog;
+use Modules\Finance\Entities\FinanceLog;
 
 class Application extends Model
 {
@@ -36,6 +39,20 @@ class Application extends Model
             return $this->belongsTo(Intake::class, 'intake_id');
 
         }
+
+//        application and logs relationship
+
+//        public function Clogs(){
+//            return $this->hasMany(CODLog::class, 'app_id');
+//        }
+//
+//        public function Flogs(){
+//            return $this->hasMany(FinanceLog::class, 'app_id');
+//        }
+//
+//        public function Dlogs(){
+//            return $this->hasMany(DeanLog::class, 'app_id');
+//        }
 
     protected static function newFactory()
     {

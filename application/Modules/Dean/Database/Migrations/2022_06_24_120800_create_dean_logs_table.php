@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('user');
             $table->string('user_role');
             $table->string('activity');
+            $table->string('comment')->nullable();
             $table->timestamps();
         });
     }

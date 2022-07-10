@@ -64,6 +64,7 @@ class DeanController extends Controller
         $logs->user = Auth::guard('user')->user()->name;
         $logs->user_role = Auth::guard('user')->user()->role_id;
         $logs->activity = 'Application rejected';
+        $logs->comments = $request->comment;
         $logs->save();
 
         return redirect()->route('dean.applications')->with('success', 'Application declined');
@@ -90,14 +91,21 @@ class DeanController extends Controller
                 $app->registrar_status = 0;
             }
             $app->save();
-        }
 
-        $logs = new DeanLog;
-        $logs->app_id = $app->id;
-        $logs->user = Auth::guard('user')->user()->name;
-        $logs->user_role = Auth::guard('user')->user()->role_id;
-        $logs->activity = 'Your Application has been forwarded to registry office';
-        $logs->save();
+            $logs = new DeanLog;
+            $logs->app_id = $app->id;
+            $logs->user = Auth::guard('user')->user()->name;
+            $logs->user_role = Auth::guard('user')->user()->role_id;
+
+            if ($app->dean_status === 3){
+
+                $logs->activity = 'Your application has been reverted to COD office for review';
+            }else{
+                $logs->activity = 'Your Application has been forwarded to registry office';
+            }
+
+            $logs->save();
+        }
 
         return redirect()->route('dean.batch')->with('success', '1 Batch send to next level of approval');
     }

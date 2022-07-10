@@ -17,8 +17,9 @@ return new class extends Migration
             $table->id();
             $table->integer('app_id');
             $table->string('user');
-            $table->string('activity');
             $table->string('user_role');
+            $table->string('activity');
+            $table->string('comments')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -352,6 +352,11 @@
 
   <!-- OneUI Core JS -->
   <script src="{{ url('js/oneui.app.js') }}"></script>
+  <script src="{{ url('js/plugins/ckeditor5-classic/build/ckeditor.js') }}"></script>
+
+  <!-- Page JS Helpers (CKEditor 5 plugins) -->
+  <script>One.helpersOnLoad(['js-ckeditor5']);</script>
+
 
   <!-- Laravel Scaffolding JS -->
   <!-- <script src="{{ mix('/js/laravel.app.js') }}"></script> -->

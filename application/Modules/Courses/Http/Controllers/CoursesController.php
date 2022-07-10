@@ -117,15 +117,6 @@ class CoursesController extends Controller
                             unlink($docPath);
                         }
 
-
-
-
-//                     $docPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx");
-//                     $my_template->saveAs($docPath);
-//
-//                $converter = new OfficeConverter($docPath, storage_path());
-//                $converter->convertTo('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf");
-
             Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails($app->applicant));
 
             $app->find($id);

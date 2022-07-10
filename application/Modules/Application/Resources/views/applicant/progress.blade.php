@@ -29,17 +29,16 @@
                 <a class="block block-rounded block-link-shadow text-center" href="javascript:void(0)">
                     <div class="block-header">
                         <h2 class="block-title fw-bold">
-                            {{ $course->course }}
+                            {{ $course->courses->course_name }} <span class="text-primary fs-sm fw-normal text-lowercase"> -> logs</span>
                         </h2>
-                    </div>
-                    <div class="block-content bg-body-light">
-                        <div class="py-2">
-                            <p class="mb-2">Logs</p>
-                        </div>
                     </div>
                     <div class="block-content text-start">
                         @foreach($logs as $log)
-                            <p class="fs-sm text-success">{{ $log->created_at->format('Y-M-d') }} - {{ $log->activity }} by {{ $log->user }}</p>
+                            <p class="fs-sm text-success">{{ $log->created_at->format('Y-M-d') }} - {{ $log->activity }} by {{ $log->user }}
+                                @if($log->comments != NULL)
+                                <span class="text-danger"> : Reason(s) - {{ $log->comments }} </span>
+                                @endif
+                            </p>
                         @endforeach
 
                     </div>

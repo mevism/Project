@@ -202,7 +202,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if($course->level == 2)
+                                @if($course->mainCourses->level == 2)
                                 <div class="row">
                                     <div class="col-md-2" style="padding: 7px !important;">
                                         <label class="form-check-label"> Tertiary Institution</label>
@@ -230,7 +230,7 @@
                                     </div>
                                 </div>
                                     @endif
-                                    @if($course->level >= 3)
+                                    @if($course->mainCourses->level >= 3)
                                         <div class="row">
                                             <div class="col-md-2" style="padding: 7px !important;">
                                                 <label class="form-check-label"> Tertiary Institution</label>
@@ -287,7 +287,7 @@
                             </div>
                         </div>
                     </li>
-                    @if($course->level > 3)
+                    @if($course->mainCourses->level > 3)
                     <li class="timeline-event">
                         <div class="timeline-event-icon bg-info">
                             <i class="fa fa-briefcase-clock"></i>

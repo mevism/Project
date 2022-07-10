@@ -56,6 +56,7 @@ return array(
     'PhpOffice\\PhpWord\\' => array($vendorDir . '/phpoffice/phpword/src/PhpWord'),
     'Nwidart\\Modules\\' => array($vendorDir . '/nwidart/laravel-modules/src'),
     'NunoMaduro\\Collision\\' => array($vendorDir . '/nunomaduro/collision/src'),
+    'NcJoes\\OfficeConverter\\' => array($vendorDir . '/ncjoes/office-converter/src/OfficeConverter'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Modules\\' => array($baseDir . '/Modules'),
     'Mews\\Captcha\\' => array($vendorDir . '/mews/captcha/src'),

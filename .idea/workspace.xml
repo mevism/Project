@@ -3,6 +3,21 @@
   <component name="ChangeListManager">
     <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Entities/Application.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Entities/Application.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/application.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/application.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/progress.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/progress.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Database/Migrations/2022_06_23_093647_create_c_o_d_logs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Database/Migrations/2022_06_23_093647_create_c_o_d_logs_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Entities/CODLog.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Entities/CODLog.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Courses/Http/Controllers/CoursesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Courses/Http/Controllers/CoursesController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Database/Migrations/2022_06_24_120800_create_dean_logs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Database/Migrations/2022_06_24_120800_create_dean_logs_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Entities/DeanLog.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Entities/DeanLog.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Http/Controllers/DeanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Http/Controllers/DeanController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Database/Migrations/2022_06_21_161838_create_finance_logs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Database/Migrations/2022_06_21_161838_create_finance_logs_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Entities/FinanceLog.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Entities/FinanceLog.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -199,6 +214,7 @@
       <workItem from="1657284114536" duration="1057000" />
       <workItem from="1657285999134" duration="24125000" />
       <workItem from="1657356045971" duration="1923000" />
+      <workItem from="1657431795543" duration="20953000" />
     </task>
     <servers />
   </component>

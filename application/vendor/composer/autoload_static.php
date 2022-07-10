@@ -111,6 +111,7 @@ class ComposerStaticInitaa094eb44816527c6d0c4f53f191d4ad
         array (
             'Nwidart\\Modules\\' => 16,
             'NunoMaduro\\Collision\\' => 21,
+            'NcJoes\\OfficeConverter\\' => 23,
         ),
         'M' => 
         array (
@@ -384,6 +385,10 @@ class ComposerStaticInitaa094eb44816527c6d0c4f53f191d4ad
         'NunoMaduro\\Collision\\' => 
         array (
             0 => __DIR__ . '/..' . '/nunomaduro/collision/src',
+        ),
+        'NcJoes\\OfficeConverter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ncjoes/office-converter/src/OfficeConverter',
         ),
         'Monolog\\' => 
         array (
@@ -3405,6 +3410,8 @@ class ComposerStaticInitaa094eb44816527c6d0c4f53f191d4ad
         'Monolog\\SignalHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/SignalHandler.php',
         'Monolog\\Test\\TestCase' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Test/TestCase.php',
         'Monolog\\Utils' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Utils.php',
+        'NcJoes\\OfficeConverter\\OfficeConverter' => __DIR__ . '/..' . '/ncjoes/office-converter/src/OfficeConverter/OfficeConverter.php',
+        'NcJoes\\OfficeConverter\\OfficeConverterException' => __DIR__ . '/..' . '/ncjoes/office-converter/src/OfficeConverter/OfficeConverterException.php',
         'Nette\\ArgumentOutOfRangeException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
         'Nette\\DeprecatedException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
         'Nette\\DirectoryNotFoundException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',

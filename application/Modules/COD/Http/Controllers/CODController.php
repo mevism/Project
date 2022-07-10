@@ -58,6 +58,11 @@ class CODController extends Controller
     }
 
     public function rejectApplication(Request $request, $id){
+
+
+            $request->validate([
+                'comment' => 'required|string'
+            ]);
         $app = Application::find($id);
         $app->cod_status = 2;
         $app->cod_comments = $request->comment;
@@ -67,6 +72,7 @@ class CODController extends Controller
         $logs->app_id = $app->id;
         $logs->user = Auth::guard('user')->user()->name;
         $logs->user_role = Auth::guard('user')->user()->role_id;
+        $logs->comments = $request->comment;
         if ($app->dean_status === 3){
             $logs->activity = 'Application reviewed by COD';
         }
@@ -92,14 +98,15 @@ class CODController extends Controller
             $app = Application::find($item);
             $app->dean_status = 0;
             $app->save();
-        }
 
-        $logs = new CODLog;
-        $logs->app_id = $app->id;
-        $logs->user = Auth::guard('user')->user()->name;
-        $logs->user_role = Auth::guard('user')->user()->role_id;
-        $logs->activity = "Application awaiting Dean's Verification";
-        $logs->save();
+            $logs = new CODLog;
+            $logs->app_id = $app->id;
+            $logs->user = Auth::guard('user')->user()->name;
+            $logs->user_role = Auth::guard('user')->user()->role_id;
+            $logs->activity = "Application awaiting Dean's Verification";
+            $logs->save();
+
+        }
 
         return redirect()->route('cod.batch')->with('success', '1 Batch elevated for Dean approval');
     }

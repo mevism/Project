@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '47dbed590f5fac7c0fc757762149a05df9f190d8',
+        'reference' => '5be90b7e8c580b1908cf43eb715370e7d4369ca7',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -412,7 +412,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '47dbed590f5fac7c0fc757762149a05df9f190d8',
+            'reference' => '5be90b7e8c580b1908cf43eb715370e7d4369ca7',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -540,6 +540,15 @@
             'install_path' => __DIR__ . '/../myclabs/deep-copy',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'ncjoes/office-converter' => array(
+            'pretty_version' => 'v1.0.3',
+            'version' => '1.0.3.0',
+            'reference' => 'b0e549388380572e1cb1864283d83b819578e813',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../ncjoes/office-converter',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'nesbot/carbon' => array(
             'pretty_version' => '2.58.0',
