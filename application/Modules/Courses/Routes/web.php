@@ -77,4 +77,7 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
     Route::get('/editClasses/{id}', 'CoursesController@editClasses')->name('courses.editClasses');
     Route::put('/updateClasses/{id}', 'CoursesController@updateClasses')->name('courses.updateClasses');
     Route::get('/destroyClasses/{id}', 'CoursesController@destroyClasses')->name('courses.destroyClasses');
+
+
+    Route::get('admissions', [\Modules\Courses\Http\Controllers\CoursesController::class, 'admissions'])->name('courses.admissions');
 });

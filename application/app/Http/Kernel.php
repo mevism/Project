@@ -14,6 +14,7 @@ use App\Http\Middleware\SuperAdmin;
 use App\Http\Middleware\User\Twofactorverification;
 use App\Http\Middleware\User\Updatedprofile;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Modules\Medical\Http\Middleware\Medical;
 
 class Kernel extends HttpKernel
 {
@@ -84,6 +85,7 @@ class Kernel extends HttpKernel
         'user_updated' => Updatedprofile::class,
         'is_verified' => Isverified::class,
         'finance' => Finance::class,
+        'medical' => Medical::class,
     ];
 
 }

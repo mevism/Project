@@ -28,30 +28,44 @@ class UserController extends Controller
         if (Auth::guard('user')->attempt($logins)){
 
             $name = Auth::guard('user')->user()->name;
-            if (Auth::guard('user')->user()->role_id === 6){
+
+            if (Auth::guard('user')->user()){
                 return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
             }
 
-            if (Auth::guard('user')->user()->role_id === 1){
+//            if (Auth::guard('user')->user()->role_id === 1){
+//
+//                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
+//            }
+//
+//            if (Auth::guard('user')->user()->role_id === 2){
+//                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
+//            }
+//
+//            if (Auth::guard('user')->user()->role_id === 3){
+//                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
+//            }
+//
+//            if (Auth::guard('user')->user()->role_id === 4){
+//                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
+//            }
+//
+//            if (Auth::guard('user')->user()->role_id === 5){
+//                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
+//            }
+//
+//            if (Auth::guard('user')->user()->role_id === 6){
+//                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
+//            }
+//
+//            if (Auth::guard('user')->user()->role_id === 7){
+//                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
+//            }
+//
+//            if (Auth::guard('user')->user()->role_id === 0){
+//                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
+//            }
 
-                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
-            }
-
-            if (Auth::guard('user')->user()->role_id === 2){
-                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
-            }
-
-            if (Auth::guard('user')->user()->role_id === 4){
-                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
-            }
-
-            if (Auth::guard('user')->user()->role_id === 7){
-                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
-            }
-
-            if (Auth::guard('user')->user()->role_id === 3){
-                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
-            }
         }
         if(Auth::guard('web')->attempt($logins, true)){
             if (Auth::guard('user'))
@@ -64,49 +78,70 @@ class UserController extends Controller
     }
     public function dashboard(){
 
-       if (Auth::guard('user')->user()->role_id === 1){
-        $courses = AvailableCourse::count();
-        $applications = Application::count();
-           if (!Auth::guard('user')->check()){
-               abort(403);
-           } else{
-               return view('admin.index')->with(['courses'=>$courses,'applications'=>$applications]);
-           }
+        if (Auth::guard('user')->user()->role_id === 0){
+            $courses = AvailableCourse::count();
+            $applications = Application::count();
+
+                if (!Auth::guard('user')->check()){
+                    abort(403)->with('error', 'Please login again');
+                } else{
+                    return view('admin.index')->with(['courses'=>$courses,'applications'=>$applications]);
+                }
+        }elseif (Auth::guard('user')->user()->role_id === 1){
+            $courses = AvailableCourse::count();
+            $applications = Application::count();
+
+               if (!Auth::guard('user')->check()){
+                   abort(403)->with('error', 'Please login again');
+               } else{
+                   return view('admin.index')->with(['courses'=>$courses,'applications'=>$applications]);
+               }
        }elseif (Auth::guard('user')->user()->role_id === 6){
-           if (!Auth::guard('user')->check()){
-               abort(403);
-           } else{
-               return view('student.index');
-           }
+
+               if (!Auth::guard('user')->check()){
+                   abort(403)->with('error', 'Please login again');;
+               } else{
+                   return view('student.index');
+               }
        }elseif (Auth::guard('user')->user()->role_id === 2){
-           if (!Auth::guard('user')->check()){
-               abort(403);
-           } else{
-           $apps_cod = Application::where('cod_status', 0)
-               ->orWhere('dean_status', 3)
-               ->count();
-               return view('cod::COD.index')->with('apps', $apps_cod);
-           }
+
+               if (!Auth::guard('user')->check()){
+                   abort(403)->with('error', 'Please login again');;
+               } else{
+                   $apps_cod = Application::where('cod_status', 0)
+                       ->orWhere('dean_status', 3)
+                       ->count();
+                       return view('cod::COD.index')->with('apps', $apps_cod);
+               }
        }elseif (Auth::guard('user')->user()->role_id === 4){
-           if (!Auth::guard('user')->check()){
-               abort(403);
-           } else{
-           $apps_dean = Application::where('dean_status', 0)->count();
-               return view('dean::dean.index')->with('apps', $apps_dean);
-           }
+
+               if (!Auth::guard('user')->check()){
+                   abort(403)->with('error', 'Please login again');;
+               } else{
+                   $apps_dean = Application::where('dean_status', 0)->count();
+                       return view('dean::dean.index')->with('apps', $apps_dean);
+               }
        }elseif (Auth::guard('user')->user()->role_id === 3){
-            $apps_finance = Application::where('cod_status', null)
-                ->where('finance_status', '!=', 3)->count();
+                $apps_finance = Application::where('cod_status', null)
+                    ->where('finance_status', '!=', 3)->count();
 
-           if (!Auth::guard('user')->check()){
-               abort(403);
-           } else{
+               if (!Auth::guard('user')->check()){
+                   abort(403)->with('error', 'Please login again');;
+               } else{
 
-               return view('applications::finance.index')->with('apps', $apps_finance);
-           }
-       }else{
-           return redirect('application/applicant');
-       }
+                   return view('applications::finance.index')->with('apps', $apps_finance);
+               }
+       }elseif (Auth::guard('user')->user()->role_id === 8){
+
+                if (!Auth::guard('user')->check()){
+                abort(403)->with('error', 'Please login again');;
+                } else{
+
+                    return view('medical::medical.index');
+                }
+        }else{
+                   return redirect('application/applicant');
+               }
     }
 
 

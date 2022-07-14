@@ -23,5 +23,11 @@ Route::prefix('department')->group(function() {
         Route::post('/batchSubmit', [CODController::class, 'batchSubmit'])->name('cod.batchSubmit');
         Route::get('/acceptApplication/{id}', [CODController::class, 'acceptApplication'])->name('cod.acceptApplication');
         Route::post('/rejectApplication/{id}', [CODController::class, 'rejectApplication'])->name('cod.rejectApplication');
+
+        Route::get('/admission', [CODController::class, 'admissions'])->name('cod.admissions');
+        Route::get('/review{id}', [CODController::class, 'reviewAdmission'])->name('cod.reviewAdmission');
+        Route::get('/accept{id}', [CODController::class, 'acceptAdmission'])->name('cod.acceptAdmission');
+        Route::post('/reject{id}', [CODController::class, 'rejectAdmission'])->name('cod.rejectAdmission');
+        Route::get('/submit{id}', [CODController::class, 'submitAdmission'])->name('cod.submitAdmission');
     });
 });

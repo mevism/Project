@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Modules\Approval\Entities\Application
+use Modules\Approval\Entities\Application;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Application>

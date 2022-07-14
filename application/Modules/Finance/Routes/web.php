@@ -24,5 +24,12 @@ Route::prefix('applications')->group(function() {
         Route::post('/finance/batchSubmit', [FinanceController::class, 'batchSubmit'])->name('finance.batchSubmit');
         Route::get('/finance/acceptApplication/{id}', [FinanceController::class, 'acceptApplication'])->name('finance.acceptApplication');
         Route::post('/finance/rejectApplication/{id}', [FinanceController::class, 'rejectApplication'])->name('finance.rejectApplication');
+
+
+        Route::get('/admission', [FinanceController::class, 'admissions'])->name('finance.admissions');
+        Route::get('/review{id}', [FinanceController::class, 'reviewAdmission'])->name('finance.reviewAdmission');
+        Route::get('/accept{id}', [FinanceController::class, 'acceptAdmission'])->name('finance.acceptAdmission');
+        Route::post('/reject{id}', [FinanceController::class, 'rejectAdmission'])->name('finance.rejectAdmission');
+        Route::get('/submit{id}', [FinanceController::class, 'submitAdmission'])->name('finance.submitAdmission');
     });
 });

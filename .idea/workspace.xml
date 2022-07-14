@@ -4,20 +4,25 @@
     <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Application/Entities/Application.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Entities/Application.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/application.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/application.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/progress.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/progress.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Database/Migrations/2022_06_23_093647_create_c_o_d_logs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Database/Migrations/2022_06_23_093647_create_c_o_d_logs_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Entities/CODLog.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Entities/CODLog.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/courses.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/courses.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Courses/Http/Controllers/CoursesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Courses/Http/Controllers/CoursesController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Database/Migrations/2022_06_24_120800_create_dean_logs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Database/Migrations/2022_06_24_120800_create_dean_logs_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Entities/DeanLog.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Entities/DeanLog.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Http/Controllers/DeanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Http/Controllers/DeanController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Database/Migrations/2022_06_21_161838_create_finance_logs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Database/Migrations/2022_06_21_161838_create_finance_logs_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Entities/FinanceLog.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Entities/FinanceLog.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Courses/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Courses/Routes/web.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/layouts/backend.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/app/Http/Controllers/User/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Http/Controllers/User/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Http/Kernel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/database/factories/ApplicationFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/database/factories/ApplicationFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/database/seeders/UserSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/database/seeders/UserSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/modules_statuses.json" beforeDir="false" afterPath="$PROJECT_DIR$/application/modules_statuses.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/resources/views/layouts/backend.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/APP_2022_000001.docx" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/APP_2022_000001.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/2XVKc3ltqCIbz3JoBu0GHGhRljK4OPw5c78XMapV" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/R1N2eO2MCLaEKRllR1a6fnhVjcYuqorP3B8O81Rd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/bFAfBRKeoSoDBIMAicegSoRJunbGyaN4agURQwEq" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,6 +166,7 @@
       <path value="$PROJECT_DIR$/application/vendor/symfony/http-foundation" />
       <path value="$PROJECT_DIR$/application/vendor/phpoffice/phpword" />
       <path value="$PROJECT_DIR$/application/vendor/laminas/laminas-escaper" />
+      <path value="$PROJECT_DIR$/application/vendor/ncjoes/office-converter" />
     </include_path>
   </component>
   <component name="ProjectId" id="2AquZJPWMmgrJd7y8P0dGZN71WX" />
@@ -176,18 +182,18 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/application/storage" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/application/Modules/Medical/Resources/views/layouts" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\sims\application\Modules\Medical\Resources\views\layouts" />
+      <recent name="C:\xampp\htdocs\sims\application\Modules\Finance\Resources\views\admissions" />
+      <recent name="C:\xampp\htdocs\sims\application\Modules\Finance\Resources\views" />
       <recent name="C:\xampp\htdocs\sims\application\storage" />
       <recent name="C:\xampp\htdocs\sims\application\Modules\Dean\Resources\views\applications" />
-      <recent name="C:\xampp\htdocs\sims\application\Modules\Dean\Resources\views\layouts" />
-      <recent name="C:\xampp\htdocs\sims\application\Modules\Dean" />
-      <recent name="C:\xampp\htdocs\sims\application\Modules\COD\Resources\views\applications" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\sims\application\Modules\Dean\Resources\views" />
@@ -214,7 +220,12 @@
       <workItem from="1657284114536" duration="1057000" />
       <workItem from="1657285999134" duration="24125000" />
       <workItem from="1657356045971" duration="1923000" />
-      <workItem from="1657431795543" duration="20953000" />
+      <workItem from="1657431795543" duration="24146000" />
+      <workItem from="1657609718674" duration="8949000" />
+      <workItem from="1657622712330" duration="11803000" />
+      <workItem from="1657701133689" duration="678000" />
+      <workItem from="1657704192530" duration="10329000" />
+      <workItem from="1657781643133" duration="16617000" />
     </task>
     <servers />
   </component>

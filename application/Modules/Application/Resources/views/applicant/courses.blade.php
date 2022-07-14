@@ -33,8 +33,8 @@
             </div>
         </div>
         <div class="block block-rounded">
-                    <div class="block-content block-content-full">
-    <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
+            <div class="block-content block-content-full">
+                <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
         <thead>
         <tr>
             <th>Course Name</th>
@@ -64,8 +64,12 @@
         @endforeach
         </tbody>
     </table>
-  </div>
+            </div>
         </div>
+
+{{--        <script src="{{ url("js/oneui.app.js") }}"></script>--}}
+
+{{--        <script src="{{ url("js/pages/tables_datatables.js")}}"></script>--}}
     <script>
         $(document).ready(function() {
             $('#example').DataTable( {

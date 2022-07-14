@@ -6,6 +6,7 @@ use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Mail;
+use Modules\Application\Entities\AdmissionApproval;
 use Modules\Courses\Entities\Campus;
 use Modules\Courses\Entities\Intake;
 use Modules\Courses\Entities\School;
@@ -36,11 +37,6 @@ class CoursesController extends Controller
     }
 
     public function applications(){
-
-
-//        $i = Application::find(1);
-
-//        return $i->courses;
 
         $accepted      =     Application::where('registrar_status', 0)->get();
 
@@ -102,26 +98,26 @@ class CoursesController extends Controller
 
                                 $my_template->saveAs($docPath);
 
-                                $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
-
-                                $pdfPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf");
-
-                                if(file_exists($pdfPath)){
-                                    unlink($pdfPath);
-                                }
-
-                                $converter = new OfficeConverter(storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
-                                $converter->convertTo('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).'.pdf');
-
-                        if(file_exists($docPath)){
-                            unlink($docPath);
-                        }
+//                                $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
+//
+//                                $pdfPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf");
+//
+//                                if(file_exists($pdfPath)){
+//                                    unlink($pdfPath);
+//                                }
+//
+//                                $converter = new OfficeConverter(storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
+//                                $converter->convertTo('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).'.pdf');
+//
+//                        if(file_exists($docPath)){
+//                            unlink($docPath);
+//                        }
 
             Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails($app->applicant));
 
             $app->find($id);
             $app->registrar_status = 1;
-            $app->status = 1;
+            $app->status = 0;
             $app->ref_number = 'APP/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT);
             $app->reg_number = $app->courses->course_code."/".str_pad(0000 + $app->id, 4, "0", STR_PAD_LEFT)."/".date('Y');
             $app->adm_letter = 'APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf";
@@ -643,5 +639,16 @@ class CoursesController extends Controller
         return redirect()->route('courses.offer');
     }
 
+    public function admissions(){
+
+            $admission = AdmissionApproval::where('medical_status', 1)
+                ->where('status', NULL)
+                ->get();
+
+        return view('courses::admissions.index')->with('admission', $admission);
+    }
+
 
 }
+
+

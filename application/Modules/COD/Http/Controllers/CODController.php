@@ -5,6 +5,7 @@ namespace Modules\COD\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Application\Entities\AdmissionApproval;
 use Modules\Application\Entities\Application;
 use Modules\Application\Entities\Education;
 use Modules\Finance\Entities\FinanceLog;
@@ -111,6 +112,62 @@ class CODController extends Controller
         return redirect()->route('cod.batch')->with('success', '1 Batch elevated for Dean approval');
     }
 
+
+    public function admissions(){
+
+        $applicant = Application::where('cod_status', 1)
+            ->where('registrar_status', 1)
+            ->where('status', 0)
+            ->get();
+
+        return view('cod::admissions.index')->with('applicant', $applicant);
+    }
+
+    public function reviewAdmission($id){
+        $app = Application::find($id);
+        $school = Education::find($id);
+
+        return view('cod::admissions.review')->with(['app' => $app, 'school' => $school]);
+    }
+
+    public function acceptAdmission($id){
+
+        if(AdmissionApproval::where('app_id', $id)->exists()){
+                AdmissionApproval::where('app_id', $id)->update(['app_id' => $id, 'cod_status' => 1]);
+            }else{
+                $adm = new AdmissionApproval;
+                $adm->app_id = $id;
+                $adm->cod_status = 1;
+                $adm->save();
+            }
+
+
+        return redirect()->route('cod.admissions')->with('success', 'New student admitted successfully');
+    }
+
+    public function rejectAdmission(Request $request, $id){
+
+        if (AdmissionApproval::where('app_id', $id)->exists()) {
+            AdmissionApproval::where('app_id', $id)->update(['cod_status' => 2, 'cod_comments' => $request->comment]);
+        }else{
+            $adm = new AdmissionApproval;
+            $adm->app_id = $id;
+            $adm->cod_status = 2;
+            $adm->cod_comments = $request->comment;
+            $adm->save();
+        }
+
+        return redirect()->route('cod.admissions')->with('warning', 'Admission request rejected');
+    }
+
+    public function submitAdmission($id){
+
+        AdmissionApproval::where('app_id', $id)->update(['finance_status' => 0]);
+
+        Application::where('id', $id)->update(['status' => 1]);
+
+        return redirect(route('cod.admissions'))->with('success', 'Record submitted to finance');
+    }
     /**
      * Display a listing of the resource.
      * @return Renderable

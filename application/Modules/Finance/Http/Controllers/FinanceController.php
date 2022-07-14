@@ -5,7 +5,9 @@ namespace Modules\Finance\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Application\Entities\AdmissionApproval;
 use Modules\Application\Entities\Application;
+use Modules\Application\Entities\Education;
 use Modules\Finance\Entities\FinanceLog;
 use Auth;
 class FinanceController extends Controller
@@ -108,6 +110,40 @@ class FinanceController extends Controller
         }
 
         return redirect()->route('finance.batch')->with('success', '1 Batch elevated for COD approval');
+    }
+
+    public function admissions(){
+
+        $applicant = AdmissionApproval::where('cod_status', 1)
+            ->where('medical_status', NULL)
+            ->get();
+
+        return view('applications::admissions.index')->with('applicant', $applicant);
+    }
+
+    public function reviewAdmission($id){
+
+        $app = AdmissionApproval::where('app_id', $id)->first();
+
+        return view('applications::admissions.review')->with(['app' => $app]);
+    }
+
+    public function acceptAdmission($id){
+            AdmissionApproval::where('app_id', $id)->update(['finance_status' => 1]);
+
+        return redirect()->route('finance.admissions')->with('success', 'New student verified successfully');
+    }
+
+    public function rejectAdmission(Request $request, $id){
+
+        AdmissionApproval::where('app_id', $id)->update(['finance_status' => 2, 'finance_comments' => $request->comment]);
+
+        return redirect()->route('finance.admissions')->with('warning', 'Admission request rejected');
+    }
+
+    public function submitAdmission($id){
+        AdmissionApproval::where('app_id', $id)->update(['medical_status' => 0]);
+        return redirect(route('finance.admissions'))->with('success', 'Record submitted to Registrar');
     }
 
     public function index()

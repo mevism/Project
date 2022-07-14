@@ -40,19 +40,16 @@ class Application extends Model
 
         }
 
-//        application and logs relationship
+//        application-admission relationship
 
-//        public function Clogs(){
-//            return $this->hasMany(CODLog::class, 'app_id');
-//        }
-//
-//        public function Flogs(){
-//            return $this->hasMany(FinanceLog::class, 'app_id');
-//        }
-//
-//        public function Dlogs(){
-//            return $this->hasMany(DeanLog::class, 'app_id');
-//        }
+    public function admApproval(){
+
+        return $this->hasOne(AdmissionApproval::class, 'app_id');
+    }
+
+//    public function admitApproval(){
+//        return $this->hasMany(AdmissionApproval::class, )
+//    }
 
     protected static function newFactory()
     {
