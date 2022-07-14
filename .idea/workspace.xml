@@ -1,29 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Entities/Application.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Entities/Application.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/courses.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/courses.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Courses/Http/Controllers/CoursesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Courses/Http/Controllers/CoursesController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Courses/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Courses/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/app/Http/Controllers/User/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Http/Controllers/User/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Http/Kernel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/database/factories/ApplicationFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/database/factories/ApplicationFactory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/database/seeders/UserSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/database/seeders/UserSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/modules_statuses.json" beforeDir="false" afterPath="$PROJECT_DIR$/application/modules_statuses.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/APP_2022_000001.docx" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/APP_2022_000001.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/2XVKc3ltqCIbz3JoBu0GHGhRljK4OPw5c78XMapV" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/R1N2eO2MCLaEKRllR1a6fnhVjcYuqorP3B8O81Rd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/bFAfBRKeoSoDBIMAicegSoRJunbGyaN4agURQwEq" beforeDir="false" />
-    </list>
+    <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
