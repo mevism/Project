@@ -5,9 +5,9 @@ namespace Modules\Application\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Courses\Entities\Courses;
+use Modules\Registrar\Entities\Courses;
 use Modules\COD\Entities\CODLog;
-use Modules\Courses\Entities\Intake;
+use Modules\Registrar\Entities\Intake;
 use Modules\Dean\Entities\DeanLog;
 use Modules\Finance\Entities\FinanceLog;
 

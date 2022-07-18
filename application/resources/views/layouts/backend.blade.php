@@ -75,6 +75,8 @@
                         COD
                     @elseif(auth()->guard('user')->user()->id === 4)
                         DEAN
+                    @elseif(Auth::guard('student')->check())
+                        Student
                     @else
                     Admins
                     @endif
@@ -240,6 +242,8 @@
                 <p class="mb-0 text-muted fs-sm fw-medium">
                     @if(Auth::guard('user')->check())
                         {{ Auth::guard('user')->user()->role_id }}
+                    @elseif(Auth::guard('student')->check())
+                        Student
                     @else
                         Applicant
                     @endif</p>

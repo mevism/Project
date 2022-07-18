@@ -14,7 +14,9 @@ use App\Http\Middleware\SuperAdmin;
 use App\Http\Middleware\User\Twofactorverification;
 use App\Http\Middleware\User\Updatedprofile;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Modules\Hostel\Http\Middleware\Accommodation;
 use Modules\Medical\Http\Middleware\Medical;
+use Modules\Registrar\Http\Middleware\UseSSL;
 
 class Kernel extends HttpKernel
 {
@@ -80,12 +82,13 @@ class Kernel extends HttpKernel
         'student' => Student::class,
         'is_cod' => COD::class,
         'dean' => DEAN::class,
-        'student' => Student::class,
         'authenticate' => Authenticate::class,
         'user_updated' => Updatedprofile::class,
         'is_verified' => Isverified::class,
         'finance' => Finance::class,
         'medical' => Medical::class,
+        'ssl' => UseSSL::class,
+        'hostels' => Accommodation::class,
     ];
 
 }

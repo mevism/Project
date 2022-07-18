@@ -1,9 +1,11 @@
 {
     "Application": true,
-    "Courses": true,
+    "Registrar": true,
     "Approval": true,
     "Finance": true,
     "COD": true,
     "Dean": true,
-    "Medical": true
+    "Medical": true,
+    "Hostel": true,
+    "Student": true
 }

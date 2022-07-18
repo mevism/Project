@@ -4,6 +4,7 @@ namespace Modules\Application\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Registrar\Entities\Student;
 
 class AdmissionApproval extends Model
 {

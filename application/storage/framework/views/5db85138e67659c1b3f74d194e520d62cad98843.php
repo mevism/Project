@@ -75,6 +75,8 @@
                         COD
                     <?php elseif(auth()->guard('user')->user()->id === 4): ?>
                         DEAN
+                    <?php elseif(Auth::guard('student')->check()): ?>
+                        Student
                     <?php else: ?>
                     Admins
                     <?php endif; ?>
@@ -245,6 +247,8 @@
                     <?php if(Auth::guard('user')->check()): ?>
                         <?php echo e(Auth::guard('user')->user()->role_id); ?>
 
+                    <?php elseif(Auth::guard('student')->check()): ?>
+                        Student
                     <?php else: ?>
                         Applicant
                     <?php endif; ?></p>

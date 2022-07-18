@@ -16,62 +16,38 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Modules\Application\Entities\VerifyUser;
 use Modules\Application\Entities\Application;
-use Modules\Courses\Entities\AvailableCourse;
+use Modules\Registrar\Entities\AvailableCourse;
 
 class UserController extends Controller
 {
-    public function login(Request $request){
+    public function login(Request $request)
+    {
 
 //        return $request->all();
         $logins = $request->only('username', 'password');
 
-        if (Auth::guard('user')->attempt($logins)){
+        if (Auth::guard('user')->attempt($logins)) {
 
             $name = Auth::guard('user')->user()->name;
 
-            if (Auth::guard('user')->user()){
-                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
+            if (Auth::guard('user')->user()) {
+                return redirect()->intended('/dashboard')->with('success', 'Welcome' . " " . $name . " " . 'to' . " " . config('app.name') . ".");
             }
-
-//            if (Auth::guard('user')->user()->role_id === 1){
-//
-//                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
-//            }
-//
-//            if (Auth::guard('user')->user()->role_id === 2){
-//                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
-//            }
-//
-//            if (Auth::guard('user')->user()->role_id === 3){
-//                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
-//            }
-//
-//            if (Auth::guard('user')->user()->role_id === 4){
-//                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
-//            }
-//
-//            if (Auth::guard('user')->user()->role_id === 5){
-//                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
-//            }
-//
-//            if (Auth::guard('user')->user()->role_id === 6){
-//                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
-//            }
-//
-//            if (Auth::guard('user')->user()->role_id === 7){
-//                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
-//            }
-//
-//            if (Auth::guard('user')->user()->role_id === 0){
-//                return redirect()->intended('/dashboard')->with('success', 'Welcome'." ".$name." ".'to'." ".config('app.name').".");
-//            }
+        }
+        if (Auth::guard('web')->attempt($logins, true)) {
+            if (Auth::guard('web'))
+                return redirect()->route('application.applicant')->with('success', 'Welcome' . " " . Auth::user()->email . " " . Auth::user()->role_id . "  " . 'to' . " " . config('app.name') . ".");
 
         }
-        if(Auth::guard('web')->attempt($logins, true)){
-            if (Auth::guard('user'))
-                return redirect()->route('application.applicant')->with('success', 'Welcome'." ".Auth::user()->email." ".Auth::user()->role_id."  ".'to'." ".config('app.name').".");
+        if (Auth::guard('student')->attempt($logins, true)) {
 
-        }else{
+            if (Auth::guard('student')) {
+
+                return redirect()->route('student')->with('success', 'You have logged in');
+
+            }
+
+        } else {
             return redirect('/')->with('error', 'Your details did not match to any record in the database');
         }
 
@@ -139,18 +115,29 @@ class UserController extends Controller
 
                     return view('medical::medical.index');
                 }
+        }elseif (Auth::guard('user')->user()->role_id === 5){
+
+            if (!Auth::guard('user')->check()){
+                abort(403)->with('error', 'Please login again');;
+            } else{
+
+                return view('hostel::hostels.index');
+            }
+        }elseif (Auth::guard('student')){
+
+            if (!Auth::guard('student')->check()){
+
+                abort(403)->with('error', 'Please login again');
+
+            } else{
+
+                return redirect()->route('student')->with('success', 'You are now logged in');
+            }
         }else{
-                   return redirect('application/applicant');
+                   return redirect(route('student'))->with('success', 'You are now logged in');
                }
     }
 
-
-    //    public function logout(){
-    //        Session::flush();
-    //        Auth::logout();
-    //
-    //        return redirect( route('root'))->with('info', 'You have logged out');
-    //    }
 
     /**
      *

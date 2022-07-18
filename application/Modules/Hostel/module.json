@@ -1,0 +1,13 @@
+{
+    "name": "Hostel",
+    "alias": "hostel",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Hostel\\Providers\\HostelServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
