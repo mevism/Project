@@ -103,20 +103,20 @@ class CoursesController extends Controller
 
                                 $my_template->saveAs($docPath);
 
-//                                $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
-//
-//                                $pdfPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf");
-//
-//                                if(file_exists($pdfPath)){
-//                                    unlink($pdfPath);
-//                                }
-//
-//                                $converter = new OfficeConverter(storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
-//                                $converter->convertTo('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).'.pdf');
-//
-//                        if(file_exists($docPath)){
-//                            unlink($docPath);
-//                        }
+                                $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
+
+                                $pdfPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf");
+
+                                if(file_exists($pdfPath)){
+                                    unlink($pdfPath);
+                                }
+
+                                $converter = new OfficeConverter(storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
+                                $converter->convertTo('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).'.pdf');
+
+                        if(file_exists($docPath)){
+                            unlink($docPath);
+                        }
 
             Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails($app->applicant));
 
@@ -175,7 +175,7 @@ class CoursesController extends Controller
         $data->status     =       $request->input('status');
         $data->update();
 
-        return redirect()->route('registrar.showIntake')->with('status','Data Updated Successfully');
+        return redirect()->route('courses.showIntake')->with('status','Data Updated Successfully');
     }
 
     public function viewCourse($id){
@@ -227,7 +227,7 @@ class CoursesController extends Controller
             $intakes->save();
         }
 
-        return redirect()->route('registrar.showIntake')->with('success','Intake Created successfuly');
+        return redirect()->route('courses.showIntake')->with('success','Intake Created successfuly');
     }
 
     public function showIntake()
@@ -266,7 +266,7 @@ class CoursesController extends Controller
         $data->intake_to           =        $request->input('intake_name_to');
         $data->update();
 
-        return redirect()->route('registrar.showIntake')->with('status','Data Updated Successfully');
+        return redirect()->route('courses.showIntake')->with('status','Data Updated Successfully');
 
     }
 
@@ -276,7 +276,7 @@ class CoursesController extends Controller
         $data      =    Intake::find($id);
         $data->delete();
 
-        return redirect()->route('registrar.showIntake');
+        return redirect()->route('courses.showIntake');
     }
 
     /**
@@ -311,7 +311,7 @@ class CoursesController extends Controller
         $data->attendance_name    =     $request->input('attendance_name');
         $data->update();
 
-        return redirect()->route('registrar.showAttendance')->with('status','Data Updated Successfully');
+        return redirect()->route('courses.showAttendance')->with('status','Data Updated Successfully');
 
     }
 
@@ -327,7 +327,7 @@ class CoursesController extends Controller
         $attendances->attendance_name    =     $request->input('attendance_name');
         $attendances->save();
 
-        return redirect()->route('registrar.showAttendance')->with('success','Attendance Created');
+        return redirect()->route('courses.showAttendance')->with('success','Attendance Created');
     }
 
     public function destroyAttendance($id){
@@ -335,7 +335,7 @@ class CoursesController extends Controller
         $data      =    Attendance::find($id);
         $data->delete();
 
-        return redirect()->route('registrar.showAttendance');
+        return redirect()->route('courses.showAttendance');
 
     }
 
@@ -369,7 +369,7 @@ class CoursesController extends Controller
         $data->initials     =       $request->input('initials');
         $data->update();
 
-        return redirect()->route('registrar.showSchool')->with('status','Data Updated Successfully');
+        return redirect()->route('courses.showSchool')->with('status','Data Updated Successfully');
 
     }
 
@@ -384,7 +384,7 @@ class CoursesController extends Controller
         $schools->initials     =   $request->input('initials');
         $schools->save();
 
-        return redirect()->route('registrar.showSchool')->with('success','School Created');
+        return redirect()->route('courses.showSchool')->with('success','School Created');
     }
 
     public function destroySchool($id){
@@ -392,7 +392,7 @@ class CoursesController extends Controller
         $data      =     School::find($id);
         $data->delete();
 
-        return redirect()->route('registrar.showSchool');
+        return redirect()->route('courses.showSchool');
 
     }
 
@@ -427,7 +427,7 @@ class CoursesController extends Controller
         $departments->school_id   =       $request->input('school');
         $departments->save();
 
-        return redirect()->route('registrar.showDepartment')->with('success','Department Created');
+        return redirect()->route('courses.showDepartment')->with('success','Department Created');
     }
 
     public function editDepartment($id){
@@ -445,7 +445,7 @@ class CoursesController extends Controller
         $data->school_id    =       $request->input('school');
          $data->update();
 
-        return redirect()->route('registrar.showDepartment')->with('status','Data Updated Successfully');
+        return redirect()->route('courses.showDepartment')->with('status','Data Updated Successfully');
     }
 
      public function destroyDepartment($id){
@@ -453,7 +453,7 @@ class CoursesController extends Controller
         $data      =    Department::find($id);
         $data->delete();
 
-        return redirect()->route('registrar.showDepartment');
+        return redirect()->route('courses.showDepartment');
 
     }
 
@@ -503,7 +503,7 @@ class CoursesController extends Controller
         $courses->subject4            =    $request->input('subject4');
         $courses->save();
 
-        return redirect()->route('registrar.showCourse')->with('success','Course Created');
+        return redirect()->route('courses.showCourse')->with('success','Course Created');
     }
 
     public function showCourse(){
@@ -538,7 +538,7 @@ class CoursesController extends Controller
         $data->subject4            =    $request->input('subject4');
         $data->update();
 
-        return redirect()->route('registrar.showCourse')->with('status','Data Updated Successfully');
+        return redirect()->route('courses.showCourse')->with('status','Data Updated Successfully');
 
     }
 
