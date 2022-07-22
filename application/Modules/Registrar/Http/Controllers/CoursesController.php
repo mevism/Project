@@ -2,34 +2,97 @@
 
 namespace Modules\Registrar\Http\Controllers;
 
+use Carbon;
 use App\Models\Course;
 use Illuminate\Http\Request;
+use App\Imports\KuccpsImport;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Modules\Application\Entities\AdmissionApproval;
+use Maatwebsite\Excel\Facades\Excel;
 use Modules\Registrar\Entities\Campus;
 use Modules\Registrar\Entities\Intake;
 use Modules\Registrar\Entities\School;
+use Illuminate\Support\Facades\Storage;
 use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\Courses;
+use Modules\Registrar\Entities\Student;
+use PhpOffice\PhpWord\TemplateProcessor;
+use Illuminate\Support\Facades\Validator;
 use Modules\Registrar\Entities\Attendance;
 use Modules\Registrar\Entities\Department;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Contracts\Support\Renderable;
-use Modules\Application\Entities\Application;
-use Modules\Registrar\Entities\AvailableCourse;
-use Modules\Registrar\Entities\Student;
-use Modules\Registrar\Entities\StudentCourse;
-use Modules\Registrar\Entities\StudentLogin;
-use PhpOffice\PhpWord\TemplateProcessor;
-use Carbon;
 use NcJoes\OfficeConverter\OfficeConverter;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Support\Renderable;
+use Modules\Registrar\Entities\StudentLogin;
+use Modules\Application\Entities\Application;
+use Modules\Registrar\Entities\StudentCourse;
+use Modules\Registrar\Entities\AvailableCourse;
+use Modules\Application\Entities\AdmissionApproval;
+use Modules\Registrar\emails\KuccpsMails;
+use Modules\Registrar\Entities\KuccpsApplicant;
+use Modules\Registrar\Entities\KuccpsApplication;
 
 class CoursesController extends Controller
 
 {
+
+    public function accepted(){
+
+        $kuccps = KuccpsApplicant::where('email', '!=', NULL)->get();
+
+
+        foreach($kuccps  as $app){
+
+            $domPdfPath = base_path('vendor/dompdf/dompdf');
+            \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
+            \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+
+             $my_template = new TemplateProcessor(storage_path('adm_template.docx'));
+
+             $my_template->setValue('name', strtoupper($app->sname." ".$app->mname." ".$app->fname));
+             $my_template->setValue('address', strtoupper($app->address));
+             $my_template->setValue('town', strtoupper($app->town));
+             $my_template->setValue('course', $app->kuccpsApplication->course_name);
+            //  $my_template->setValue('department', $app->courses->department_id);
+            //  $my_template->setValue('duration', $app->courses->course_duration);
+            //  $my_template->setValue('from', Carbon\carbon::parse($app->app_intake->intake_from)->format('d - m - Y'));
+            //  $my_template->setValue('to', Carbon\carbon::parse($app->app_intake->intake_to)->format('d-m-Y'));
+             $my_template->setValue('reg_number', $app->kuccpsApplication->course_code."/".str_pad(0000 + count($app->kuccpsApplication->course_code), 3, "0", STR_PAD_LEFT)."J"."/".date('Y'));
+             $my_template->setValue('ref_number', 'APP/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT));
+             $my_template->setValue('date',  date('d-M-Y'));
+
+
+               $docPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx");
+
+                        $my_template->saveAs($docPath);
+
+                        $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
+
+                        $pdfPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf");
+
+                        if(file_exists($pdfPath)){
+                            unlink($pdfPath);
+                        }
+
+                        $converter = new OfficeConverter(storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
+                        $converter->convertTo('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).'.pdf');
+
+                if(file_exists($docPath)){
+                    unlink($docPath);
+                }
+
+            sleep(2);
+
+            if($app->kuccpsApplication->status === null){
+
+                Mail::to($app->email)->send(new KuccpsMails($app));
+
+            }
+        
+        }
+
+    
+    }
 
     public function index(){
 
@@ -41,11 +104,41 @@ class CoursesController extends Controller
         return view('registrar::approval.approveIndex');
     }
 
+    public function importExportViewkuccps(){
+        $intakes = Intake::where('status',1)->get(); 
+
+        $newstudents = KuccpsApplication::where('status', null)->get();
+
+        return view('registrar::offer.kuccps')->with(['intakes' => $intakes, 'new' => $newstudents]);
+ 
+     }
+
+     public function importkuccps(Request $request) {
+        $vz = $request->validate([
+            'excel_file'   =>    'required|mimes:xlsx'
+        ]);
+        // return $request->intake;
+
+        
+        $excel_file  = $request->excel_file;
+        $intake_id = $request->intake; 
+
+        Excel::import(new KuccpsImport( $intake_id), $excel_file);
+
+        return back()->with('success' , 'Data Imported Successfully');
+    }
+
     public function applications(){
 
         $accepted      =     Application::where('registrar_status', 0)->get();
 
         return view('registrar::offer.applications')->with('accepted',$accepted);
+    }
+
+    public function showKuccps(){
+        $kuccps = KuccpsApplicant::orderBy('id', 'desc')->get();
+
+        return view('registrar::offer.showKuccps')->with(['kuccps' => $kuccps]);
     }
 
     public function offer(){
@@ -117,7 +210,7 @@ class CoursesController extends Controller
                         if(file_exists($docPath)){
                             unlink($docPath);
                         }
-
+                      
             Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails($app->applicant));
 
             $app->find($id);

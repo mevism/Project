@@ -1,4 +1,4 @@
-@extends('layouts.backend')
+@extends('registrar::layouts.backend')
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
@@ -53,13 +53,12 @@
                     <form action="{{ route('courses.acceptedMail') }}" method="post">
                         @csrf
 
-            <table id="example" class="table table-borderless table-striped js-dataTable-responsive fs-sm">
+            <table id="example" class="table table-bordered table-striped js-dataTable-responsive fs-sm">
                 @if(count($accepted)>0)
                     <thead>
                     <tr>
                         <th>✔</th>
                         <th>Applicant Name</th>
-                        {{-- <th class="text-uppercase">school</th> --}}
                         <th>department</th>
                         <th>course</th>
                         <th>Status</th>

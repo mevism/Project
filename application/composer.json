@@ -15,7 +15,9 @@
         "mews/captcha": "^3.2",
         "ncjoes/office-converter": "^1.0",
         "nwidart/laravel-modules": "^9.0",
-        "phpoffice/phpword": "^0.18.3"
+        "phpoffice/phpword": "^0.18.3",
+        "phpoffice/phpspreadsheet": "^1.24.1",
+        "maatwebsite/excel":"^3.1.36"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

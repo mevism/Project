@@ -1,4 +1,4 @@
-@extends('layouts.backend')
+@extends('registrar::layouts.backend')
 @section('content')
     <div class="bg-image" style="background-image: url({{ url('media/photos/photo33@2x.jpg') }});">
         <div class="bg-black-50">
