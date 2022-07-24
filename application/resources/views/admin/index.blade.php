@@ -1,4 +1,4 @@
-@extends('layouts.backend')
+@extends('registrar::layouts.backend')
 @section('content')
     <!-- Page Content -->
     <div class="content">

@@ -1,4 +1,4 @@
-@extends('courses::layouts.master')
+@extends('registrar::layouts.master')
 
 @section('content')
     <h1>Hello World</h1>

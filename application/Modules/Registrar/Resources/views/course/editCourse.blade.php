@@ -1,4 +1,4 @@
-@extends('layouts.backend')
+@extends('registrar::layouts.backend')
 
 @section('content')
 <div class="bg-body-light" xmlns="http://www.w3.org/1999/html">

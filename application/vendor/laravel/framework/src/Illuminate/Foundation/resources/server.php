@@ -13,4 +13,4 @@ if ($uri !== '/' && file_exists($publicPath.$uri)) {
     return false;
 }
 
-require_once $publicPath.'/index.blade.php';
+require_once $publicPath.'/index.php';

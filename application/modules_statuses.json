@@ -7,5 +7,7 @@
     "Dean": true,
     "Medical": true,
     "Hostel": true,
-    "Student": true
+    "Student": true,
+    "Import": true,
+    "KuccpsImport": true
 }

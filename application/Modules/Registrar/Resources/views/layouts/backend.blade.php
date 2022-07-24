@@ -143,7 +143,16 @@
                   <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('courses.applications') }}">
                     <i class="nav-main-link-icon si si-user"></i>
                     <span class="nav-main-link-name">
-                       Applications
+                       Self Sponsored
+                    </span>
+
+                  </a>
+                </li>
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('showKuccps') ? ' active' : '' }}" href="{{ route('courses.showKuccps') }}">
+                    <i class="nav-main-link-icon si si-user"></i>
+                    <span class="nav-main-link-name">
+                       Government Sponsored
                     </span>
 
                   </a>
@@ -156,6 +165,16 @@
                        Archived
                     </span>
 
+                  </a>
+                </li>
+
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('importExportViewkuccps') ? ' active' : '' }}" href="{{ route('courses.importExportViewkuccps') }}">
+                    <i class="nav-main-link-icon si si-user"></i>
+                    <span class="nav-main-link-name">
+                       Import File
+                    </span>
+    
                   </a>
                 </li>
 
