@@ -18,5 +18,11 @@ Route::prefix('student')->group(function() {
     Route::group(['middleware' => ['student']], function (){
 
         Route::get('/', [StudentController::class, 'index'])->name('student');
+        Route::get('/profile', [StudentController::class, 'profile'])->name('student_profile');
+        Route::get('/change_course', [StudentController::class, 'change_course'])->name('change_course');
+        Route::get('/student_profile', [StudentController::class, 'student_profile']);
+        Route::get('/checkName', [StudentController::class, 'checkName']);
+        Route::post('/platform_courses', [StudentController::class, 'platform_courses']);
+        Route::post('/selectCourses', [StudentController::class, 'selectCourses']);
     });
 });

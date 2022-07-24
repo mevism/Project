@@ -79,7 +79,7 @@ class CoursesController extends Controller
             $app = Application::find($id);
 
             if($app->dean_status === 1){
-
+/*
                 $domPdfPath = base_path('vendor/dompdf/dompdf');
                     \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
                     \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
@@ -119,7 +119,7 @@ class CoursesController extends Controller
                         }
 
             Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails($app->applicant));
-
+*/
             $app->find($id);
             $app->registrar_status = 1;
             $app->status = 0;
@@ -578,6 +578,7 @@ class CoursesController extends Controller
             'attendance'       =>          'required',
             'intake_from'      =>          'required',
             'course'           =>          'required',
+            'cut_off_class'           =>          'required',
 
         ]);
 
@@ -588,6 +589,7 @@ class CoursesController extends Controller
         $class->course_id        =        $request->input('course');
         $class->intake_from      =        $request->intake_from;
         $class->attendance_code  =        $request->input('attendance');
+        $class->cut_off  =        $request->input('cut_off_class');
         $class->name             =        $request->input('course')."/".$request->intake_from."/".$request->input('attendance');
         $class->save();
 
