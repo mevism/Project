@@ -17,6 +17,7 @@ class DeanController extends Controller
 
         $applications = Application::where('dean_status', '!=', 3)
             ->where('registrar_status', null)
+            ->orWhere('registrar_status', 4)
             ->orderBy('id', 'DESC')
             ->get();
 
@@ -73,6 +74,7 @@ class DeanController extends Controller
     public function batch(){
         $apps = Application::where('dean_status', '>', 0)
             ->where('registrar_status', null)
+            ->orwhere('registrar_status', 4)
             ->where('dean_status', '!=', 3)
             ->get();
 

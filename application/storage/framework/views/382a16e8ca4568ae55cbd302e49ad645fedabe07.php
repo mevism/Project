@@ -1,5 +1,3 @@
-@extends('registrar::layouts.backend')
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
 
@@ -12,7 +10,7 @@
 <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
 <script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
@@ -38,11 +36,11 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-lg-12">
-                    {{-- <table id="example" class="display"> --}}
+                    
         <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
-            @csrf
-            @method('delete')
-            @if(count($archived)>0)
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('delete'); ?>
+            <?php if(count($archived)>0): ?>
                 <thead>
                     <th>Applicant Name</th>
                     <th>Department</th>
@@ -52,32 +50,32 @@
 
                 </thead>
                 <tbody>
-                @foreach($archived as $item)
+                <?php $__currentLoopData = $archived; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            <td> {{ $item->applicant->sname }} {{ $item->applicant->fname }} {{ $item->applicant->mname }}</td>
-                            <td> {{ $item->courses->department_id }}</td>
-                            <td> {{ $item->courses->course_name }}</td>
-                            <td> {{ $item->ref_number }}</td>
-                            <td> @if ($item->registrar_status === 4 || 3)<a  class="badge badge-sm bg-info" >Completed</a>
-                                @endif
+                            <td> <?php echo e($item->applicant->sname); ?> <?php echo e($item->applicant->fname); ?> <?php echo e($item->applicant->mname); ?></td>
+                            <td> <?php echo e($item->courses->department_id); ?></td>
+                            <td> <?php echo e($item->courses->course_name); ?></td>
+                            <td> <?php echo e($item->ref_number); ?></td>
+                            <td> <?php if($item->registrar_status === 4 || 3): ?><a  class="badge badge-sm bg-info" >Completed</a>
+                                <?php endif; ?>
                             </td>
 
                           </tr>
 
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
-            @else
+            <?php else: ?>
             <tr>
                 <small class="text-center text-muted">There are no archived appications</small>
             </tr>
-            @endif
+            <?php endif; ?>
     </table>
             </div>
 
         </div>
     </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 <script>
     $(document).ready(function() {
@@ -91,3 +89,5 @@
     } );
 </script>
 
+
+<?php echo $__env->make('registrar::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/html/Finale/application/Modules/Registrar/Resources/views/offer/archived.blade.php ENDPATH**/ ?>

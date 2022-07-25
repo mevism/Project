@@ -1,5 +1,3 @@
-@extends('registrar::layouts.backend')
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
 
@@ -24,7 +22,7 @@
   } );
 </script>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
@@ -50,11 +48,11 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-lg-12">
-                    <form action="{{ route('courses.acceptedMail') }}" method="post">
-                        @csrf
+                    <form action="<?php echo e(route('courses.acceptedMail')); ?>" method="post">
+                        <?php echo csrf_field(); ?>
 
             <table id="example" class="table table-bordered table-striped js-dataTable-responsive fs-sm">
-                @if(count($accepted)>0)
+                <?php if(count($accepted)>0): ?>
                     <thead>
                     <tr>
                         <th>✔</th>
@@ -67,68 +65,68 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($accepted as $item)
+                    <?php $__currentLoopData = $accepted; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
                                 <td>
-                                    @if($item->registrar_status > 0 )
-                                    <input class="accepted" type="checkbox" name="submit[]" value="{{ $item->id }}">
-                                        @else
+                                    <?php if($item->registrar_status > 0 ): ?>
+                                    <input class="accepted" type="checkbox" name="submit[]" value="<?php echo e($item->id); ?>">
+                                        <?php else: ?>
                                         
-                                    @endif
+                                    <?php endif; ?>
                                     </td>
-                                <td> {{ $item->applicant->sname }} {{ $item->applicant->fname }} {{ $item->applicant->mname }}</td>
-                                {{-- <td> {{ $item->school }}</td> --}}
-                                <td> {{ $item->courses->department_id }}</td>
-                                <td> {{ $item->courses->course_name }}</td>
-                                <td> @if ($item->cod_status ===1)
+                                <td> <?php echo e($item->applicant->sname); ?> <?php echo e($item->applicant->fname); ?> <?php echo e($item->applicant->mname); ?></td>
+                                
+                                <td> <?php echo e($item->courses->department_id); ?></td>
+                                <td> <?php echo e($item->courses->course_name); ?></td>
+                                <td> <?php if($item->cod_status ===1): ?>
                                     <a  class="badge badge bg-success" >Approved</a>
-                                    @elseif($item->cod_status ===2)
+                                    <?php elseif($item->cod_status ===2): ?>
                                     <a  class="badge badge bg-danger" >Rejected</a>
-                                    @else
+                                    <?php else: ?>
                                     <a  class="badge badge bg-primary" >Review</a>
-                                    @endif
+                                    <?php endif; ?>
 
                                 </td>
                                 <td > 
-                                    @if ($item->registrar_status ===1)
+                                    <?php if($item->registrar_status ===1): ?>
                                     <a  class="badge bg-success" >Approved</a>
-                                    @elseif($item->registrar_status ===2)
+                                    <?php elseif($item->registrar_status ===2): ?>
                                     <a  class="badge bg-danger" >Rejected</a>
-                                    @else
+                                    <?php else: ?>
                                     <a  class="badge bg-primary" >Pending</a>
-                                    @endif
+                                    <?php endif; ?>
 
                                 </td>
                                 <td nowrap>
-                                    @if($item->registrar_status === 0)
+                                    <?php if($item->registrar_status === 0): ?>
 
-                                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.viewApplication', $item->id) }}">view</a> 
-                                    @else 
-                                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.preview', $item->id) }}">view</a>
-                                    <a class="btn btn-sm btn-alt-info" href="{{ route('courses.viewApplication', $item->id) }}">edit</a>
+                                    <a class="btn btn-sm btn-alt-secondary" href="<?php echo e(route('courses.viewApplication', $item->id)); ?>">view</a> 
+                                    <?php else: ?> 
+                                    <a class="btn btn-sm btn-alt-secondary" href="<?php echo e(route('courses.preview', $item->id)); ?>">view</a>
+                                    <a class="btn btn-sm btn-alt-info" href="<?php echo e(route('courses.viewApplication', $item->id)); ?>">edit</a>
 
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
                             </td>
 
                             </tr>
 
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
-                @else
+                <?php else: ?>
                 <tr>
                     <small class="text-center text-muted">There are no accepted appications</small>
                 </tr>
-                @endif
+                <?php endif; ?>
         </table>
-        @if(count($accepted)>0)
+        <?php if(count($accepted)>0): ?>
             <div>
                 <input type="checkbox" onclick="for(c in document.getElementsByClassName('accepted')) document.getElementsByClassName('accepted').item(c).checked = this.checked"> Select all
             </div>
             <div class="d-flex justify-content-center">
                 <button type="submit" class="btn btn-sm btn-alt-primary" href="route('courses.archived')" data-toggle="click-ripple">Submit batch</button>
             </div>
-            @endif
+            <?php endif; ?>
     </form>
 
 
@@ -138,5 +136,7 @@
     </div>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
+
+<?php echo $__env->make('registrar::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/html/Finale/application/Modules/Registrar/Resources/views/offer/applications.blade.php ENDPATH**/ ?>

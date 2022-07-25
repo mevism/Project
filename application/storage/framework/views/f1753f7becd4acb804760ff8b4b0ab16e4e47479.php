@@ -1,5 +1,3 @@
-
-@extends('application::layouts.backend')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
 
@@ -12,7 +10,7 @@
 <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
 <script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
@@ -37,7 +35,7 @@
     <div class="block block-rounded">
         <div class="block-content block-content-full">
             <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
-                        @if(count($courses)>0)
+                        <?php if(count($courses)>0): ?>
                             <thead>
                             <tr>
                                 <th>Department</th>
@@ -46,33 +44,33 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($courses as $course)
+                            <?php $__currentLoopData = $courses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $course): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
-                                    <td>{{ $course->courses->department_id }}</td>
-                                    <td>{{ $course->courses->course_name }}</td>
+                                    <td><?php echo e($course->courses->department_id); ?></td>
+                                    <td><?php echo e($course->courses->course_name); ?></td>
                                     <td nowrap="">
-                                        @if($course->registrar_status === 3 && $course->cod_status === 1)
-                                        <a class="btn btn-sm btn-alt-success" target="_top" href="{{ route('application.download', $course->id) }}"><i class="fa fa-file-pdf"></i> download</a>
-                                        @elseif($course->registrar_status === NULL && $course->finance_status === NULL)
-                                        <a class="btn btn-sm btn-alt-info" href="{{ route('application.edit', $course->id) }}">
+                                        <?php if($course->registrar_status === 3 && $course->cod_status === 1): ?>
+                                        <a class="btn btn-sm btn-alt-success" target="_top" href="<?php echo e(route('application.download', $course->id)); ?>"><i class="fa fa-file-pdf"></i> download</a>
+                                        <?php elseif($course->registrar_status === NULL && $course->finance_status === NULL): ?>
+                                        <a class="btn btn-sm btn-alt-info" href="<?php echo e(route('application.edit', $course->id)); ?>">
                                             <i class="fa fa-pen-to-square"></i> update</a>
-                                        @elseif($course->registrar_status === 1 && $course->cod_status === 2)
+                                        <?php elseif($course->registrar_status === 1 && $course->cod_status === 2): ?>
                                             <a class="btn btn-sm btn-alt-danger" href="#">
                                                 <i class="fa fa-ban"></i> rejected</a>
-                                        @else
-                                            <a class="btn btn-sm btn-alt-secondary" href="{{ route('application.progress', $course->id) }}"> <i class="fa fa-spinner"></i> in progress</a>
-                                    @endif
+                                        <?php else: ?>
+                                            <a class="btn btn-sm btn-alt-secondary" href="<?php echo e(route('application.progress', $course->id)); ?>"> <i class="fa fa-spinner"></i> in progress</a>
+                                    <?php endif; ?>
                                     </td>
                                 </tr>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
-                        @else
+                        <?php else: ?>
                             <small class="text-center text-muted"> You have not submitted any applications</small>
-                        @endif
+                        <?php endif; ?>
                     </table>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 <script>
     $(document).ready(function() {
         $('#example').DataTable( {
@@ -84,3 +82,5 @@
         } );
     } );
 </script>
+
+<?php echo $__env->make('application::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/html/Finale/application/Modules/Application/Resources/views/applicant/mycourses.blade.php ENDPATH**/ ?>
