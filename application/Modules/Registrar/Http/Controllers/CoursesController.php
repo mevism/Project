@@ -6,7 +6,9 @@ use Carbon;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Imports\KuccpsImport;
+use Illuminate\Contracts\Routing\Registrar;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
@@ -19,22 +21,68 @@ use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Student;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Facades\Validator;
+use Modules\Registrar\emails\KuccpsMails;
 use Modules\Registrar\Entities\Attendance;
 use Modules\Registrar\Entities\Department;
+use Modules\Application\Entities\Education;
 use NcJoes\OfficeConverter\OfficeConverter;
 use Illuminate\Contracts\Support\Renderable;
+use Modules\Registrar\Entities\RegistrarLog;
 use Modules\Registrar\Entities\StudentLogin;
 use Modules\Application\Entities\Application;
 use Modules\Registrar\Entities\StudentCourse;
 use Modules\Registrar\Entities\AvailableCourse;
-use Modules\Application\Entities\AdmissionApproval;
-use Modules\Registrar\emails\KuccpsMails;
 use Modules\Registrar\Entities\KuccpsApplicant;
 use Modules\Registrar\Entities\KuccpsApplication;
+use Modules\Application\Entities\AdmissionApproval;
 
 class CoursesController extends Controller
 
 {
+
+    public function acceptApplication($id){
+
+        $app = Application::find($id);
+        $app->registrar_status = 1;
+        $app->save();
+
+        $logs = new RegistrarLog;
+        $logs->app_id = $app->id;
+        $logs->user = Auth::guard('user')->user()->name;
+        $logs->user_role = Auth::guard('user')->user()->role_id;
+        $logs->activity = 'Application accepted';
+        $logs->save();
+
+        return redirect()->route('courses.applications')->with('success', '1 applicant approved');
+    }
+
+    public function rejectApplication(Request $request, $id){
+        $app = Application::find($id);
+        $app->registrar_status = 2;
+        $app->registrar_comments = $request->comment;
+        $app->save();
+
+        $logs = new RegistrarLog;
+        $logs->app_id = $app->id;
+        $logs->user = Auth::guard('user')->user()->name;
+        $logs->user_role = Auth::guard('user')->user()->role_id;
+        $logs->activity = 'Application rejected';
+        $logs->comments = $request->comment;
+        $logs->save();
+
+        return redirect()->route('courses.applications')->with('success', 'Application declined');
+    }
+
+    public function preview($id){
+        $app = Application::find($id);
+        $school = Education::where('user_id', $app->applicant->id)->first();
+        return view('registrar::offer.preview')->with(['app' => $app, 'school' => $school]);
+    }
+    public function viewApplication($id){
+        $app = Application::find($id);
+        $school = Education::where('user_id', $app->applicant->id)->first();
+        return view('registrar::offer.viewApplication')->with(['app' => $app, 'school' => $school]);
+    }
 
     public function accepted(){
 
@@ -43,6 +91,23 @@ class CoursesController extends Controller
 
         foreach($kuccps  as $app){
 
+            // return ;
+
+               
+
+            sleep(2);
+
+            if($app->kuccpsApplication->status === null){
+
+
+                $regNumber = KuccpsApplication::where('course_code', $app->kuccpsApplication->course_code)
+                ->where('status', '!=', NULL)->count();
+
+                $course  =  Courses::where('course_code', $app->kuccpsApplication->course_code)
+                ->select('department_id','course_duration')->first();
+
+                // return $course->course_duration;
+
             $domPdfPath = base_path('vendor/dompdf/dompdf');
             \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
             \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
@@ -50,14 +115,15 @@ class CoursesController extends Controller
              $my_template = new TemplateProcessor(storage_path('adm_template.docx'));
 
              $my_template->setValue('name', strtoupper($app->sname." ".$app->mname." ".$app->fname));
-             $my_template->setValue('address', strtoupper($app->address));
+             $my_template->setValue('box', strtoupper( $app->BOX));
+             $my_template->setValue('address', strtoupper($app->postal_code));
              $my_template->setValue('town', strtoupper($app->town));
              $my_template->setValue('course', $app->kuccpsApplication->course_name);
-            //  $my_template->setValue('department', $app->courses->department_id);
-            //  $my_template->setValue('duration', $app->courses->course_duration);
-            //  $my_template->setValue('from', Carbon\carbon::parse($app->app_intake->intake_from)->format('d - m - Y'));
-            //  $my_template->setValue('to', Carbon\carbon::parse($app->app_intake->intake_to)->format('d-m-Y'));
-             $my_template->setValue('reg_number', $app->kuccpsApplication->course_code."/".str_pad(0000 + count($app->kuccpsApplication->course_code), 3, "0", STR_PAD_LEFT)."J"."/".date('Y'));
+             $my_template->setValue('department', $course->department_id);
+             $my_template->setValue('duration', $course->course_duration);
+             $my_template->setValue('from', Carbon\carbon::parse($app->kuccpsApplication->kuccpsIntake->intake_from)->format('d-m-Y'));
+             $my_template->setValue('to', Carbon\carbon::parse($app->kuccpsApplication->kuccpsIntake->intake_to)->format('d-m-Y'));
+             $my_template->setValue('reg_number', $app->kuccpsApplication->course_code."/".str_pad(1 + $regNumber, 3, "0", STR_PAD_LEFT)."J"."/".Carbon\carbon::parse($app->kuccpsApplication->kuccpsIntake->intake_from)->format('Y'));
              $my_template->setValue('ref_number', 'APP/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT));
              $my_template->setValue('date',  date('d-M-Y'));
 
@@ -81,11 +147,12 @@ class CoursesController extends Controller
                     unlink($docPath);
                 }
 
-            sleep(2);
-
-            if($app->kuccpsApplication->status === null){
-
                 Mail::to($app->email)->send(new KuccpsMails($app));
+
+                // KuccpsApplication::where('user_id', $app->id)->update('status', 1);
+
+                $app->kuccpsApplication->status = 1;
+                $app->kuccpsApplication->save();
 
             }
         
@@ -130,7 +197,10 @@ class CoursesController extends Controller
 
     public function applications(){
 
-        $accepted      =     Application::where('registrar_status', 0)->get();
+        $accepted      =     Application::where('registrar_status', '>=', 0)
+        ->where('registrar_status', '!=', 3 )
+        ->where('registrar_status', '!=', 4 )
+        ->get();
 
         return view('registrar::offer.applications')->with('accepted',$accepted);
     }
@@ -167,10 +237,19 @@ class CoursesController extends Controller
 
     public function acceptedMail(Request $request){
 
+        $request->validate([
+            'submit' => 'required'
+        ]);
+
         foreach($request->submit as $id){
 
             $app = Application::find($id);
 
+            if($app->registrar_status === 2){
+                Application::where('id', $id)->update(['cod_status' => 3, 'dean_status' => 3, 'registrar_status' => 4]);
+            }else{
+
+            
             if($app->dean_status === 1){
 
                 $domPdfPath = base_path('vendor/dompdf/dompdf');
@@ -187,7 +266,7 @@ class CoursesController extends Controller
                      $my_template->setValue('duration', $app->courses->course_duration);
                      $my_template->setValue('from', Carbon\carbon::parse($app->app_intake->intake_from)->format('d - m - Y'));
                      $my_template->setValue('to', Carbon\carbon::parse($app->app_intake->intake_to)->format('d-m-Y'));
-                     $my_template->setValue('reg_number', $app->courses->course_code."/".str_pad(0000 + $app->id, 4, "0", STR_PAD_LEFT)."/".date('Y'));
+                     $my_template->setValue('reg_number', $app->courses->course_code."/".str_pad(0000 + $app->id, 4, "0", STR_PAD_LEFT)."/". Carbon\carbon::parse($app->app_intake->intake_from)->format('Y'));
                      $my_template->setValue('ref_number', 'APP/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT));
                      $my_template->setValue('date',  date('d-M-Y'));
 
@@ -211,21 +290,21 @@ class CoursesController extends Controller
                             unlink($docPath);
                         }
                       
-            Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails($app->applicant));
+                    Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails($app->applicant));
 
-            $app->find($id);
-            $app->registrar_status = 1;
-            $app->status = 0;
-            $app->ref_number = 'APP/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT);
-            $app->reg_number = $app->courses->course_code."/".str_pad(0000 + $app->id, 4, "0", STR_PAD_LEFT)."/".date('Y');
-            $app->adm_letter = 'APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf";
-            $app->save();
+                    $app->find($id);
+                    $app->registrar_status = 3;
+                    $app->status = 0;
+                    $app->ref_number = 'APP/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT);
+                    $app->reg_number = $app->courses->course_code."/".str_pad(0000 + $app->id, 4, "0", STR_PAD_LEFT)."/".date('Y');
+                    $app->adm_letter = 'APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf";
+                    $app->save();
 
             }elseif($app->dean_status === 2){
                 Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails1($app->applicant));
 
                 $app->find($id);
-                $app->registrar_status = 1;
+                $app->registrar_status = 3;
                 $app->save();
 
             }else{
@@ -237,8 +316,10 @@ class CoursesController extends Controller
             }
 
         }
-        return redirect()->back()->with('success', 'Email sent');
     }
+        return redirect()->back()->with('success', 'Email sent');
+    
+}
 
 
 
@@ -645,7 +726,7 @@ class CoursesController extends Controller
     }
     public function archived(){
 
-        $archived   =  Application::where('registrar_status',1)->get();
+        $archived   =  Application::where('registrar_status',3)->get();
 
         return view('registrar::offer.archived')->with('archived',$archived);
 
