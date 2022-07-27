@@ -18,6 +18,12 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
     Route::get('/exportkuccps', 'CoursesController@exportkuccps')->name('courses.exportkuccps');
     Route::get('/importExportViewkuccps','CoursesController@importExportViewkuccps')->name('courses.importExportViewkuccps');
     Route::post('/importkuccps','CoursesController@importkuccps')->name('courses.importkuccps');
+    Route::get('/preview/{id}', 'CoursesController@preview')->name('courses.preview');
+    Route::get('/viewApplication/{id}', 'CoursesController@viewApplication')->name('courses.viewApplication');
+    Route::get('/acceptApplication/{id}', 'CoursesController@acceptApplication')->name('courses.acceptApplication');
+    Route::post('/rejectApplication/{id}', 'CoursesController@rejectApplication')->name('courses.rejectApplication');
+
+
 
     // Route::get('/offer', 'CoursesController@offer')->name('courses.offer');registrar
     // Route::get('/profile', 'CoursesController@profile')->name('courses.profile');

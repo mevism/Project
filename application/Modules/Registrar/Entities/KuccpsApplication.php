@@ -20,6 +20,11 @@ class KuccpsApplication extends Model
 
         return $this->belongsTo(KuccpsApplicant::class, 'id');
     }
+
+    public function kuccpsIntake(){
+
+        return $this->belongsTo(Intake::class,'intake_id' );
+    }
     
     protected static function newFactory()
     {

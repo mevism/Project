@@ -20,6 +20,11 @@ class Intake extends Model
         return $this->hasMany(AvailableCourse::class, 'id');
     }
 
+    public function kuccpsApp(){
+        
+        return $this->hasOne(KuccpsApplication::class, 'id');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Courses\Database\factories\IntakeFactory::new();
