@@ -120,6 +120,14 @@
       <path value="$PROJECT_DIR$/application/vendor/phpoffice/phpword" />
       <path value="$PROJECT_DIR$/application/vendor/laminas/laminas-escaper" />
       <path value="$PROJECT_DIR$/application/vendor/ncjoes/office-converter" />
+      <path value="$PROJECT_DIR$/application/vendor/maatwebsite/excel" />
+      <path value="$PROJECT_DIR$/application/vendor/nunomaduro/termwind" />
+      <path value="$PROJECT_DIR$/application/vendor/markbaker/matrix" />
+      <path value="$PROJECT_DIR$/application/vendor/markbaker/complex" />
+      <path value="$PROJECT_DIR$/application/vendor/maennchen/zipstream-php" />
+      <path value="$PROJECT_DIR$/application/vendor/myclabs/php-enum" />
+      <path value="$PROJECT_DIR$/application/vendor/phpoffice/phpspreadsheet" />
+      <path value="$PROJECT_DIR$/application/vendor/ezyang/htmlpurifier" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0" />

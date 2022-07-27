@@ -58,14 +58,11 @@ class ApplicationController extends Controller
 
         $validated = $request->validate([
             'email' => 'required|email|unique:applicants',
-            'mobile' => 'required|regex:/(0)[0-9]{9}/|min:10|max:10',
+            'mobile' => 'required|regex:/(0)[0-9]{9}/|min:10|max:10|unique:applicants',
             'password' => 'required|confirmed',
             'password_confirmation' => 'required|string',
             'captcha' => 'required|captcha',
         ]);
-
-    //    return $request->all();
-
 
             $app = new Applicant;
             $app->mobile = $request->mobile;
@@ -276,6 +273,7 @@ class ApplicationController extends Controller
         $user->index_number = $request->index_number;
         $user->id_number = $request->id_number;
         $user->alt_mobile = $request->alt_number;
+        $user->alt_email = $request->alt_email;
         $user->dob = $request->dob;
         $user->disabled = $request->disabled;
         $user->disability = $request->disability;
@@ -285,6 +283,7 @@ class ApplicationController extends Controller
         $user->sub_county = $request->subcounty;
         $user->town = $request->town;
         $user->address = $request->address;
+        $user->postalcode = $request->postalcode;
         $user->user_status = 1;
         $user->title = $request->title;
         $user->marital_status = $request->status;

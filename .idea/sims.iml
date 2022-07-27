@@ -9,6 +9,14 @@
       <sourceFolder url="file://$MODULE_DIR$/application/tests" isTestSource="true" packagePrefix="Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/maatwebsite/excel" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/nunomaduro/termwind" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/markbaker/matrix" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/markbaker/complex" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/maennchen/zipstream-php" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/myclabs/php-enum" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/phpoffice/phpspreadsheet" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/ezyang/htmlpurifier" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

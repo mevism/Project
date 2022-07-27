@@ -3,6 +3,7 @@
 namespace Nwidart\Modules\Commands;
 
 use Illuminate\Support\Str;
+use Nwidart\Modules\Module;
 use Nwidart\Modules\Support\Config\GenerateConfigReader;
 use Nwidart\Modules\Support\Stub;
 use Nwidart\Modules\Traits\ModuleCommandTrait;
@@ -49,7 +50,7 @@ class ModelMakeCommand extends GeneratorCommand
     /**
      * Create a proper migration name:
      * ProductDetail: product_details
-     * Product: products
+     * Product: products.
      * @return string
      */
     private function createMigrationName()
@@ -58,8 +59,8 @@ class ModelMakeCommand extends GeneratorCommand
 
         $string = '';
         foreach ($pieces as $i => $piece) {
-            if ($i+1 < count($pieces)) {
-                $string .= strtolower($piece) . '_';
+            if ($i + 1 < count($pieces)) {
+                $string .= strtolower($piece).'_';
             } else {
                 $string .= Str::plural(strtolower($piece));
             }
@@ -96,18 +97,18 @@ class ModelMakeCommand extends GeneratorCommand
     }
 
     /**
-     * Create the migration file with the given model if migration flag was used
+     * Create the migration file with the given model if migration flag was used.
      */
     private function handleOptionalMigrationOption()
     {
         if ($this->option('migration') === true) {
-            $migrationName = 'create_' . $this->createMigrationName() . '_table';
+            $migrationName = 'create_'.$this->createMigrationName().'_table';
             $this->call('module:make-migration', ['name' => $migrationName, 'module' => $this->argument('module')]);
         }
     }
 
     /**
-     * Create the controller file for the given model if controller flag was used
+     * Create the controller file for the given model if controller flag was used.
      */
     private function handleOptionalControllerOption()
     {
@@ -116,7 +117,7 @@ class ModelMakeCommand extends GeneratorCommand
 
             $this->call('module:make-controller', array_filter([
                 'controller' => $controllerName,
-                'module' => $this->argument('module')
+                'module'     => $this->argument('module')
             ]));
         }
     }
@@ -126,17 +127,18 @@ class ModelMakeCommand extends GeneratorCommand
      */
     protected function getTemplateContents()
     {
+        /** @var Module $module */
         $module = $this->laravel['modules']->findOrFail($this->getModuleName());
 
         return (new Stub('/model.stub', [
-            'NAME'              => $this->getModelName(),
-            'FILLABLE'          => $this->getFillable(),
-            'NAMESPACE'         => $this->getClassNamespace($module),
-            'CLASS'             => $this->getClass(),
-            'LOWER_NAME'        => $module->getLowerName(),
-            'MODULE'            => $this->getModuleName(),
-            'STUDLY_NAME'       => $module->getStudlyName(),
-            'MODULE_NAMESPACE'  => $this->laravel['modules']->config('namespace'),
+            'NAME'                           => $this->getModelName(),
+            'FILLABLE'                       => $this->getFillable(),
+            'NAMESPACE'                      => $this->getClassNamespace($module),
+            'CLASS'                          => $this->getClass(),
+            'LOWER_NAME'                     => $module->getLowerName(),
+            'ONE_SLASH_SUB_MODULE_NAMESPACE' => $module->getSubModuleOneSlashNamespace(),
+            'STUDLY_NAME'                    => $module->getStudlyName(),
+            'MODULE_NAMESPACE'               => $this->laravel['modules']->config('namespace'),
         ]))->render();
     }
 
@@ -149,7 +151,7 @@ class ModelMakeCommand extends GeneratorCommand
 
         $modelPath = GenerateConfigReader::read('model');
 
-        return $path . $modelPath->getPath() . '/' . $this->getModelName() . '.php';
+        return $path.$modelPath->getPath().'/'.$this->getModelName().'.php';
     }
 
     /**
@@ -167,7 +169,7 @@ class ModelMakeCommand extends GeneratorCommand
     {
         $fillable = $this->option('fillable');
 
-        if (!is_null($fillable)) {
+        if (! is_null($fillable)) {
             $arrays = explode(',', $fillable);
 
             return json_encode($arrays);

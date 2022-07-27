@@ -294,11 +294,9 @@
       <change afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/offer/coursesOffer.blade.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/offer/rejectedMail.blade.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/profilepage.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/reviews.blade.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/school/addSchool.blade.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/school/editSchool.blade.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/school/showSchool.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/search.blade.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/Modules/Registrar/Routes/.gitkeep" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/Modules/Registrar/Routes/api.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/Modules/Registrar/Routes/web.php" afterDir="false" />
@@ -22745,14 +22743,9 @@
       <change afterPath="$PROJECT_DIR$/application/storage/framework/testing/.gitignore" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/.gitignore" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/389ea469018d0e8b836a8b6504de17ebcf02224d.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/51cac845d3a21918d74112721e87c802d3ef14b1.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/5db85138e67659c1b3f74d194e520d62cad98843.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/69ac5e5ee042655f2731eff7f34dedf435ff3e0e.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/7b0fb88292623f25fc815043004cfe85e5c10e4b.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/9c34d4208fa8a5cae28e39ccd495c127c798330e.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/a6448af40770a2f3b7c8e7e78f4901da1ee961a4.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/d6a68d6a5c2bd4713300f6fe06614f5992541fb2.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/db61d26d43540f299eff212e1c03ad961853d358.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/logs/.gitignore" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/~$P_2022_000001.docx" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/stubs/nwidart-stubs/assets/js/app.stub" afterDir="false" />
@@ -22821,7 +22814,6 @@
       <change afterPath="$PROJECT_DIR$/application/vendor/bin/psysh" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/bin/psysh.bat" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/bin/sail" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/bin/sail.bat" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/bin/var-dump-server" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/bin/var-dump-server.bat" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/brick/math/CHANGELOG.md" afterDir="false" />
@@ -23077,9 +23069,6 @@
       <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/src/Faker/Extension/BloodExtension.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/src/Faker/Extension/ColorExtension.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/src/Faker/Extension/CompanyExtension.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/src/Faker/Extension/Container.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/src/Faker/Extension/ContainerBuilder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/src/Faker/Extension/ContainerException.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/src/Faker/Extension/CountryExtension.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/src/Faker/Extension/Extension.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/src/Faker/Extension/ExtensionNotFound.php" afterDir="false" />
@@ -23087,7 +23076,6 @@
       <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/src/Faker/Extension/GeneratorAwareExtension.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/src/Faker/Extension/GeneratorAwareExtensionTrait.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/src/Faker/Extension/Helper.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/src/Faker/Extension/NotInContainerException.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/src/Faker/Extension/NumberExtension.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/src/Faker/Extension/PersonExtension.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/src/Faker/Extension/PhoneNumberExtension.php" afterDir="false" />
@@ -30649,6 +30637,8 @@
       <change afterPath="$PROJECT_DIR$/application/vendor/webmozart/assert/src/InvalidArgumentException.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/webmozart/assert/src/Mixin.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/webpack.mix.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sims.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sims.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -30794,6 +30784,14 @@
       <path value="$PROJECT_DIR$/application/vendor/phpoffice/phpword" />
       <path value="$PROJECT_DIR$/application/vendor/laminas/laminas-escaper" />
       <path value="$PROJECT_DIR$/application/vendor/ncjoes/office-converter" />
+      <path value="$PROJECT_DIR$/application/vendor/maatwebsite/excel" />
+      <path value="$PROJECT_DIR$/application/vendor/nunomaduro/termwind" />
+      <path value="$PROJECT_DIR$/application/vendor/markbaker/matrix" />
+      <path value="$PROJECT_DIR$/application/vendor/markbaker/complex" />
+      <path value="$PROJECT_DIR$/application/vendor/maennchen/zipstream-php" />
+      <path value="$PROJECT_DIR$/application/vendor/myclabs/php-enum" />
+      <path value="$PROJECT_DIR$/application/vendor/phpoffice/phpspreadsheet" />
+      <path value="$PROJECT_DIR$/application/vendor/ezyang/htmlpurifier" />
     </include_path>
   </component>
   <component name="ProjectId" id="2AquZJPWMmgrJd7y8P0dGZN71WX" />
