@@ -93,7 +93,7 @@ class CoursesController extends Controller
 
             // return ;
 
-               
+
 
             sleep(2);
 
@@ -155,10 +155,10 @@ class CoursesController extends Controller
                 $app->kuccpsApplication->save();
 
             }
-        
+
         }
 
-    
+
     }
 
     public function index(){
@@ -172,12 +172,12 @@ class CoursesController extends Controller
     }
 
     public function importExportViewkuccps(){
-        $intakes = Intake::where('status',1)->get(); 
+        $intakes = Intake::where('status',1)->get();
 
         $newstudents = KuccpsApplication::where('status', null)->get();
 
         return view('registrar::offer.kuccps')->with(['intakes' => $intakes, 'new' => $newstudents]);
- 
+
      }
 
      public function importkuccps(Request $request) {
@@ -186,9 +186,9 @@ class CoursesController extends Controller
         ]);
         // return $request->intake;
 
-        
+
         $excel_file  = $request->excel_file;
-        $intake_id = $request->intake; 
+        $intake_id = $request->intake;
 
         Excel::import(new KuccpsImport( $intake_id), $excel_file);
 
@@ -249,7 +249,7 @@ class CoursesController extends Controller
                 Application::where('id', $id)->update(['cod_status' => 3, 'dean_status' => 3, 'registrar_status' => 4]);
             }else{
 
-            
+
             if($app->dean_status === 1){
 
                 $domPdfPath = base_path('vendor/dompdf/dompdf');
@@ -289,7 +289,7 @@ class CoursesController extends Controller
                         if(file_exists($docPath)){
                             unlink($docPath);
                         }
-                      
+
                     Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails($app->applicant));
 
                     $app->find($id);
@@ -318,7 +318,7 @@ class CoursesController extends Controller
         }
     }
         return redirect()->back()->with('success', 'Email sent');
-    
+
 }
 
 
@@ -835,43 +835,43 @@ class CoursesController extends Controller
 
             $student = new Student;
 
-            $student->reg_number = $app->appApproval->reg_number;
-            $student->ref_number = $app->appApproval->ref_number;
-            $student->sname = $app->appApproval->applicant->sname;
-            $student->fname = $app->appApproval->applicant->fname;
-            $student->mname = $app->appApproval->applicant->mname;
-            $student->email = $app->appApproval->applicant->email;
-            $student->student_email = strtolower(str_replace('/', '', $app->appApproval->reg_number).'@students.tum.ac.ke');
-            $student->mobile = $app->appApproval->applicant->mobile;
-            $student->alt_mobile = $app->appApproval->applicant->alt_mobile;
-            $student->title = $app->appApproval->applicant->title;
-            $student->marital_status = $app->appApproval->applicant->marital_status;
-            $student->gender = $app->appApproval->applicant->gender;
-            $student->dob = $app->appApproval->applicant->DOB;
-            $student->id_number = $app->appApproval->applicant->id_number;
-            $student->citizen = $app->appApproval->applicant->nationality;
-            $student->county = $app->appApproval->applicant->county;
-            $student->sub_county = $app->appApproval->applicant->sub_county;
-            $student->town = $app->appApproval->applicant->town;
-            $student->address = $app->appApproval->applicant->address;
-            $student->postal_code = $app->appApproval->applicant->postal_code;
-            $student->disabled = $app->appApproval->applicant->disabled;
-            $student->disability = $app->appApproval->applicant->disability;
+            $student->reg_number = $app->appApprovals->reg_number;
+            $student->ref_number = $app->appApprovals->ref_number;
+            $student->sname = $app->appApprovals->applicant->sname;
+            $student->fname = $app->appApprovals->applicant->fname;
+            $student->mname = $app->appApprovals->applicant->mname;
+            $student->email = $app->appApprovals->applicant->email;
+            $student->student_email = strtolower(str_replace('/', '', $app->appApprovals->reg_number).'@students.tum.ac.ke');
+            $student->mobile = $app->appApprovals->applicant->mobile;
+            $student->alt_mobile = $app->appApprovals->applicant->alt_mobile;
+            $student->title = $app->appApprovals->applicant->title;
+            $student->marital_status = $app->appApprovals->applicant->marital_status;
+            $student->gender = $app->appApprovals->applicant->gender;
+            $student->dob = $app->appApprovals->applicant->DOB;
+            $student->id_number = $app->appApprovals->applicant->id_number;
+            $student->citizen = $app->appApprovals->applicant->nationality;
+            $student->county = $app->appApprovals->applicant->county;
+            $student->sub_county = $app->appApprovals->applicant->sub_county;
+            $student->town = $app->appApprovals->applicant->town;
+            $student->address = $app->appApprovals->applicant->address;
+            $student->postal_code = $app->appApprovals->applicant->postalcode;
+            $student->disabled = $app->appApprovals->applicant->disabled;
+            $student->disability = $app->appApprovals->applicant->disability;
             $student->save();
 
             $studCourse = new StudentCourse;
             $studCourse->student_id = $student->id;
-            $studCourse->department_id = $app->appApproval->courses->department_id;
-            $studCourse->course_id = $app->appApproval->course_id;
-            $studCourse->intake_id = $app->appApproval->intake_id;
-            $studCourse->class_code = strtoupper($app->appApproval->courses->course_code.'/'.Carbon\carbon::parse($app->appApproval->intake_from)->format('MY').'/J-FT');
-            $studCourse->class = strtoupper($app->appApproval->courses->course_code.'/'.Carbon\carbon::parse($app->appApproval->intake_from)->format('MY').'/J-FT');
-            $studCourse->course_duration = $app->appApproval->courses->course_duration;
+            $studCourse->department_id = $app->appApprovals->courses->department_id;
+            $studCourse->course_id = $app->appApprovals->course_id;
+            $studCourse->intake_id = $app->appApprovals->intake_id;
+            $studCourse->class_code = strtoupper($app->appApprovals->courses->course_code.'/'.Carbon\carbon::parse($app->appApprovals->intake_from)->format('MY').'/J-FT');
+            $studCourse->class = strtoupper($app->appApprovals->courses->course_code.'/'.Carbon\carbon::parse($app->appApprovals->intake_from)->format('MY').'/J-FT');
+            $studCourse->course_duration = $app->appApprovals->courses->course_duration;
             $studCourse->save();
 
             $studLogin = new StudentLogin;
-            $studLogin->username = $app->appApproval->reg_number;
-            $studLogin->password = Hash::make($app->appApproval->applicant->id_number);
+            $studLogin->username = $app->appApprovals->reg_number;
+            $studLogin->password = Hash::make($app->appApprovals->applicant->id_number);
             $studLogin->student_id = $student->id;
             $studLogin->save();
 

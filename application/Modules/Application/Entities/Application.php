@@ -47,6 +47,11 @@ class Application extends Model
         return $this->hasOne(AdmissionApproval::class, 'app_id');
     }
 
+    public function admApprovals(){
+
+        return $this->hasOne(AdmissionApproval::class, 'app_id');
+    }
+
 //    public function admitApproval(){
 //        return $this->hasMany(AdmissionApproval::class, )
 //    }

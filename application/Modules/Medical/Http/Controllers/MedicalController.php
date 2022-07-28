@@ -30,21 +30,21 @@ class MedicalController extends Controller
 
     public function acceptAdmission($id){
 
-            AdmissionApproval::where('app_id', $id)->update(['medical_status' => 1]);
+            AdmissionApproval::where('id', $id)->update(['medical_status' => 1]);
 
         return redirect()->route('medical.admissions')->with('success', 'New student successfully verified');
     }
 
     public function rejectAdmission(Request $request, $id){
 
-        AdmissionApproval::where('app_id', $id)->update(['medical_status' => 2, 'medical_comments' => $request->comment]);
+        AdmissionApproval::where('id', $id)->update(['medical_status' => 2, 'medical_comments' => $request->comment]);
 
         return redirect()->route('medical.admissions')->with('error', 'Admission request rejected');
     }
 
     public function submitAdmission($id){
 
-        AdmissionApproval::where('app_id', $id)->update(['registrar_status' => 0]);
+        AdmissionApproval::where('id', $id)->update(['registrar_status' => 0]);
 
         return redirect()->route('medical.admissions')->with('success', 'New student approved successfully');
 

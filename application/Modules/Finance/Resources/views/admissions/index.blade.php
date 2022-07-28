@@ -42,9 +42,9 @@
                             <tbody>
                             @foreach($applicant as $app)
                                 <tr>
-                                    <td>{{ $app->appApproval->applicant->sname }} {{ $app->appApproval->applicant->mname }} {{ $app->appApproval->applicant->fname }}</td>
-                                    <td>{{ $app->appApproval->courses->course_name }}</td>
-                                    <td>{{ $app->appApproval->receipt }}</td>
+                                    <td>{{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->mname }} {{ $app->appApprovals->applicant->fname }}</td>
+                                    <td>{{ $app->appApprovals->courses->course_name }}</td>
+                                    <td>{{ $app->appApprovals->receipt }}</td>
                                     <td>
                                         @if($app->finance_status === 0)
                                             <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>

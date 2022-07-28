@@ -17,6 +17,11 @@ class AdmissionApproval extends Model
         return $this->belongsTo(Application::class, 'id');
     }
 
+    public function appApprovals(){
+
+        return $this->belongsTo(Application::class, 'app_id');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Application\Database\factories\AdmissionApprovalFactory::new();

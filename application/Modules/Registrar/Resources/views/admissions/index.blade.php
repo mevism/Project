@@ -44,9 +44,9 @@
                             <tbody>
                             @foreach($admission as $app)
                                 <tr>
-                                    <td> {{ $app->appApproval->applicant->sname }} {{ $app->appApproval->applicant->fname }} {{ $app->appApproval->applicant->mname }} </td>
-                                    <td> {{ $app->appApproval->courses->department_id }}</td>
-                                    <td> {{ $app->appApproval->courses->course_name }}</td>
+                                    <td nowrap=""> {{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->fname }} {{ $app->appApprovals->applicant->mname }} </td>
+                                    <td> {{ $app->appApprovals->courses->department_id }}</td>
+                                    <td> {{ $app->appApprovals->courses->course_name }}</td>
                                     <td>
                                         @if($app->registrar_status === 0)
                                             <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>

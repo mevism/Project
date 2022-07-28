@@ -114,35 +114,41 @@ class FinanceController extends Controller
 
     public function admissions(){
 
-        $applicant = AdmissionApproval::where('cod_status', 1)
+        $apps = AdmissionApproval::where('cod_status', 1)
+            ->where('finance_status', '!=', NULL)
             ->where('medical_status', NULL)
             ->get();
 
-        return view('applications::admissions.index')->with('applicant', $applicant);
+//        return $apps->admApproval;
+
+        return view('applications::admissions.index')->with('applicant', $apps);
     }
 
     public function reviewAdmission($id){
 
-        $app = AdmissionApproval::where('app_id', $id)->first();
+        $app = AdmissionApproval::find($id);
+
+//        return $app->appApproval->applicant;
 
         return view('applications::admissions.review')->with(['app' => $app]);
     }
 
     public function acceptAdmission($id){
-            AdmissionApproval::where('app_id', $id)->update(['finance_status' => 1]);
+            AdmissionApproval::where('id', $id)->update(['finance_status' => 1]);
 
         return redirect()->route('finance.admissions')->with('success', 'New student verified successfully');
     }
 
     public function rejectAdmission(Request $request, $id){
 
-        AdmissionApproval::where('app_id', $id)->update(['finance_status' => 2, 'finance_comments' => $request->comment]);
+        AdmissionApproval::where('id', $id)->update(['finance_status' => 2, 'finance_comments' => $request->comment]);
 
         return redirect()->route('finance.admissions')->with('warning', 'Admission request rejected');
     }
 
     public function submitAdmission($id){
-        AdmissionApproval::where('app_id', $id)->update(['medical_status' => 0]);
+
+        AdmissionApproval::where('id', $id)->update(['medical_status' => 0]);
         return redirect(route('finance.admissions'))->with('success', 'Record submitted to Registrar');
     }
 
