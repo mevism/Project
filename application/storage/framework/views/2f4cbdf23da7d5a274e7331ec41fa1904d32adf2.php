@@ -1,5 +1,8 @@
 <?php $__env->startSection('content'); ?>
 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src = "<?php echo e(asset('js/select.js')); ?>" defer></script>
+
 <div class="bg-body-light">
     <div class="content content-full">
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-2">
@@ -22,13 +25,20 @@
     </div>
 </div>
 <div class="content-force">
-    <div id = 'cut_off'>
-        <input type = 'text' placeholder="Cut Off Points" id = 'cut_off_value' >
+    <div class="block block-rounded">
+        <div class="block-header block-header-default">
+            <h3 class="block-title">CHANGE COURSE</h3>
+        </div>
+        <div id = 'course_interaction' style = 'width:100%;'></div>
     </div>
-    <div id="cut_off_courses"></div>
+    <!-- <div id="cut_off_courses"></div> -->
 </div>
 <!-- END Page Content -->
 
+<script defer>
+    getCourses();
+</script>
 <?php $__env->stopSection(); ?>
+
 
 <?php echo $__env->make('student::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xamp\htdocs\courses\project\application\Modules/Student\Resources/views/student/course.blade.php ENDPATH**/ ?>

@@ -24,5 +24,8 @@ Route::prefix('student')->group(function() {
         Route::get('/checkName', [StudentController::class, 'checkName']);
         Route::post('/platform_courses', [StudentController::class, 'platform_courses']);
         Route::post('/selectCourses', [StudentController::class, 'selectCourses']);
+        Route::get('/getCourses', [StudentController::class, 'getCourses']);
+        Route::get('/checkChange', [StudentController::class, 'checkChange']);
+        Route::get('/getTransferLogs', [StudentController::class, 'getTransferLogs']);
     });
 });

@@ -582,6 +582,68 @@
         }
         $('#report-page').html(plot_string)
     }
+    const getCourses = async() => {
+
+        let checkProgress = await ServerData.bindAuth('GET',`./checkChange`,false)
+        if(checkProgress.response) {
+            let collect = await ServerData.bindAuth('GET',`./getTransferLogs`,false)
+            let transfers =
+                `
+                    <h4><i class="fa-solid fa-spinner"></i> Application Progress</h4>
+                    <section style = 'text-align:center;display:flex;flex-wrap:wrap;width:80%;margin-left:10%;background:rgba(234,234,234,0.6);border:1px solid #fff;'>
+                        <div style ='border:1px solid #fff;width:24%;margin:0.5%;'>
+                            <h4>USER</h4>
+                        </div>
+                        <div style ='border:1px solid #fff;width:24%;margin:0.5%;'>
+                            <h4>ACTION</h4>
+                        </div>
+                        <div style ='border:1px solid #fff;width:24%;margin:0.5%;'>
+                            <h4>DATE</h4>
+                        </div>
+                        <div style ='border:1px solid #fff;width:24%;margin:0.5%;'>
+                            <h4>REASON</h4>
+                        </div>
+                    </section>
+                `
+            transfers += collect.transfers.map( (t,k) =>
+                `
+                    <section style = 'text-align:center;width:80%;margin-left:10%;display:flex;flex-wrap:wrap;${ (k%2) ? 'background:rgba(234,234,234,0.6);border:1px solid #fff;' : 'background:#fff;border:1px solid rgba(234,234,234,0.6);' }'>
+                        <div style ='${ (k%2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' }width:24%;margin:0.5%;'>
+                            <p>${ t.level }</p>
+                        </div>
+                        <div style ='${ (k%2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' }width:24%;margin:0.5%;'>
+                            <p>${ (t.status == 0) ? 'PENDING COD ACTION' : (t.status == 1) ? 'COD APPROVED' : (t.status == 2) ? 'COD REJECTED' : (t.status == 3) ? 'APPROVED BY COD, PENDING DEAN APPROVAL' : (t.status == 4) ? 'COD AND DEAN APPROVED' : (t.status == 5) ? 'DEAN REJECTED' : (t.status == 6) ? 'APPROVED BY COD AND DEAN PENDING REGISTRAR' : (t.status == 7) ? 'REGISTRAR REJECTED' : (t.status == 8) ? 'APPROVED BY COD, DEAN AND REGISTRAR' : 'ERROR'}</p>
+                        </div>
+                        <div style ='${ (k%2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' }width:24%;margin:0.5%;'>
+                            <p>${ t.date }</p>
+                        </div>
+                        <div style ='${ (k%2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' }width:24%;margin:0.5%;'>
+                            <p>${ t.reason }</p>
+                        </div>                    
+                    </section>
+                `
+            )
+            $('#course_interaction').html(transfers)
+        }else{
+            $('#course_interaction').html(
+                `
+                <div class="col-12 col-xl-12">
+                    <div id = 'add-on-l_name' style = 'display:none;'><i class='fas fa-home'></i> Cut Off Points *</div>
+                    <input type = 'text' carry-index = '#add-on-l_name' placeholder="Cut Off Points *" id = 'cut_off_value' >
+                </div>
+                <div class="col-12 col-xl-12">
+                    <select class = 'select_approve' id = 'cut_off_approve' name = 'cut_off_approve' style = 'width:50%;margin-left:25%;'></select>
+                </div>
+                <div class="col-12 col-xl-12">
+                    <button id = 'check-course'  class = 'btn btn-sm btn-alt-info' data-ripple = ''>Submit</button>
+                </div>
+            `
+            )
+            let collect = await ServerData.bindAuth('GET',`./getCourses`,false)
+            console.log(collect)
+            ServerData.buildSelect({ 'id' : '#cut_off_approve', 'placeholder' : 'Courses Available', 'data' : collect.course })
+        }
+    }
     const plotCourses = async() => {
         const intake = $('#all_intake').val().split(',')[0]
         console.log(intake)
@@ -723,34 +785,44 @@
     }
     const plotProfile = async(e) => {
         let profile_data = await ServerData.bindAuth('GET',`./student_profile`,false)
+        if(!profile_data)
+            profile_data = await ServerData.bindAuth('GET',document.location.href + '/student_profile',false)
+        console.log(profile_data)
         let profile_string = profile_data.user.map( p =>
         `
-            <section>
-                <p>Name</p>
+            <section style = 'text-align:center;'>
+                <i class="fa-solid fa-user" style = 'font-size:150%;'></i>
+                <h3>Name</h3>
                 <p>${ p.fname + ',' + p.mname + ',' + p.sname }</p>
             </section>
-            <section>
-                <p>Registration Number</p>
+            <section style = 'text-align:center;'>
+                <i class="fa-solid fa-user" style = 'font-size:150%;'></i>
+                <h3>Registration Number</h3>
                 <p>${ p.reg_number }</p>
             </section>
-            <section>
-                <p>Gender</p>
+            <section style = 'text-align:center;'>
+                <i class="fa-solid fa-genderless" style = 'font-size:150%;'></i>
+                <h3>Gender</h3>
                 <p>${ p.gender }</p>
             </section>
-            <section>
-                <p>Email</p>
+            <section style = 'text-align:center;'>
+                <i class="fa-solid fa-at" style = 'font-size:150%;'></i>
+                <h3>Email</h3>
                 <p>${ p.email }</p>
             </section>
-            <section>
-                <p>Student Email</p>
+            <section style = 'text-align:center;'>
+                <i class="fa-solid fa-at" style = 'font-size:150%;'></i>
+                <h3>Student Email</h3>
                 <p>${ p.student_email }</p>
             </section>
-            <section>
-                <p>Mobile</p>
+            <section style = 'text-align:center;'>
+                <i class="fa-solid fa-phone" style = 'font-size:150%;'></i>
+                <h3>Mobile</h3>
                 <p>${ p.mobile }</p>
             </section>
-            <section>
-                <p>Citizen</p>
+            <section style = 'text-align:center;'>
+                <i class="fa-solid fa-user" style = 'font-size:150%;'></i>
+                <h3>Citizen</h3>
                 <p>${ p.citizen }</p>
             </section>        
         `)
@@ -775,6 +847,27 @@
 
     $(document).ready(function (qualifiedName, value){
 
+        $(document).on('click','#check-course',async(e) => {
+            const cutOff = $('#cut_off_value').val()
+            const courseId = $('#cut_off_approve').val().split(',')[0]
+
+            if(cutOff && courseId) {
+                let collect = await ServerData.bindAuth('POST', `./selectCourses`, true, {
+                    'selected': courseId,
+                    'cut_off': cutOff
+                })
+                if (!collect.feedback.includes(false)) {
+                    ServerData.modalMsg({'msg': '<h3>Please Wait For Processing!!</h3>', 'mode': true})
+                    document.location.assign('./change_course')
+                } else
+                    ServerData.modalMsg({'msg': '<h3>Error accessing record. Try again</h3>', 'mode': false})
+            }else{
+                if(!cutOff)
+                    ServerData.modalMsg({'msg': '<h3>Cut Off Points required</h3>', 'mode': false})
+                if(!courseId)
+                    ServerData.modalMsg({'msg': '<h3>Course required</h3>', 'mode': false})
+            }
+        });
         $(document).on('click','#view-sessions',async(e) => {
             e.preventDefault();
             if(e.currentTarget.attributes[2].value === 'false'){
@@ -787,6 +880,15 @@
                 e.currentTarget.innerHTML = "VIEW SESSIONS"
             }
         });
+        $(document).on('keyup','#cut_off_value',async(e) => {
+            e.preventDefault();
+            const index = e.currentTarget.attributes[1].value
+            if(e.currentTarget.value)
+                $(index).slideDown('slow')
+            else
+                $(index).slideUp('slow')
+        });
+        /*
         $(document).on('keyup','#cut_off_value',async(e) => {
             e.preventDefault()
             let cut_value = $('#cut_off_value').val()
@@ -842,6 +944,8 @@
             }else
                 ServerData.modalMsg({ 'msg' : '<h3>Your already have a pending application</h3>', 'mode' : false })
         });
+
+
         $(document).on('click','#select_course',async(e) => {
             e.preventDefault()
             const select_course = e.currentTarget.attributes[1].value
@@ -852,6 +956,8 @@
             }else
                 ServerData.modalMsg({ 'msg' : '<h3>Error accessing record. Try again</h3>', 'mode' : false })
         });
+
+         */
         $(document).on('click','#choose-all',async(e) => {
             e.preventDefault()
             const intake = $('#all_intake').val().split(',')[0]

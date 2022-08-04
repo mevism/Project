@@ -39,16 +39,59 @@ class StudentController extends Controller
         return view('student::student.course');
     }
 
+    public function getCourses(){
+        $courses = DB::table('courses')
+            ->get();
+
+        $courseSelect = [];
+        foreach ($courses as $oneCourse)
+            $courseSelect[] = [ 'id' => $oneCourse->id . "," . $oneCourse->course_name, 'text' => $oneCourse->course_name ];
+
+        print_r(json_encode(['course' => $courseSelect]));
+    }
+    public function getTransferLogs(){
+        $id = Auth::guard('student')->user()->student_id;
+        $transfers = DB::table('course_transfer_logs')
+            ->where('user_id', '=',  $id)
+            ->where('status', '<=',  8)
+            ->get();
+        print_r(json_encode(['transfers' => $transfers]));
+    }
+    public function checkChange(){
+        $id = Auth::guard('student')->user()->student_id;
+        $courses = DB::table('course_transfer')
+            ->where('user_id', '=',  $id)
+            ->where('status', '<=',  8)
+            ->get();
+
+        $response = false;
+        if(count($courses) > 0)
+            $response = true;
+
+        print_r(json_encode(['response' => $response]));
+    }
     public function selectCourses(Request $request){
         $data = $request->json()->all();
         $id = Auth::guard('student')->user()->student_id;
 
         $add_course = DB::table('course_transfer')->insert([
-            [ 'user_id' => $id, 'course_id' =>  $data['selected'], 'status' => '0' ]
+            [ 'user_id' => $id, 'course_id' =>  $data['selected'], 'status' => '0', 'cut_off' => $data['cut_off'] ]
         ]);
-        $feedback = false;
+
+        $add_transfer = DB::table('course_transfer_logs')->insert([
+            [ 'user_id' => $id, 'level' => 'COD', 'course_id' => $data['selected'], 'status' => '0', 'reason' => 'PENDING COD ACTION', 'date' => date('Y-m-d') ]
+        ]);
+
+        $feedback = [];
         if($add_course == 1)
-            $feedback = true;
+            $feedback []= true;
+        else
+            $feedback []= false;
+
+        if($add_transfer == 1)
+            $feedback []= true;
+        else
+            $feedback []= false;
 
         print_r(json_encode(['feedback' => $feedback]));
     }

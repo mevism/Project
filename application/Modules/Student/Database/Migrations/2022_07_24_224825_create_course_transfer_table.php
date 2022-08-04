@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('DEAN')->nullable();
             $table->integer('REGISTRAR')->nullable();
             $table->integer('status')->nullable();
+            $table->integer('cut_off')->nullable();
             $table->timestamps();
         });
     }
