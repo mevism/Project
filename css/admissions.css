@@ -28,13 +28,150 @@
     width : 100%;
     background : var(--bs-body-bg);
 }
+#course-page p{
+    width : 98%;
+    margin : 1%;
+    background : rgba(234,234,234,0.7);
+    border-radius : 3px;
+}
+.box-in p{
+    background : transparent !important;
+}
+.box-not p{
+    background : transparent !important;
+}
+.box-out p{
+    background : transparent !important;
+}
+#course-page section{
+    width : 98%;
+    margin : 1%;
+    display : flex;
+    flex-wrap : wrap;
+    flex-direction : row;
+    border-radius : 3px;
+    text-align : center;
+    height : auto;
+}
+#courses-section div{
+    width : 19.6%;
+    margin : 0.2%;
+}
+#courses-section button{
+    height : 40px;
+    margin : 1%;
+    width : 18%;
+}
+#courses-section{
+    width : 100%;
+    display : flex;
+    flex-wrap:wrap;
+}
+#attendance-section button{
+    width : 23%;
+    min-height : 50%;
+    border : 1px solid #ccc;
+    border-radius : 3px;
+    margin : 1%;
+}
+#attendance-build{
+    display : flex;
+    flex-wrap : wrap;
+    width: 100%;
+}
+#attendance-section{
+    width : 100%;
+    display : none;
+}
+#years-section button{
+    width : 18%;
+    min-height : 50%;
+    border : 1px solid #ccc;
+    border-radius : 5px;
+    margin : 1%;
+}
+#confirm-class-box{
+    width : 12%;
+}
+#years-section{
+    width : 100%;
+    display : none;
+}
+#course-page{
+    width : 100%;
+    height : 98%;
+    margin-top : 1%;
+    background : #fff;
+    display : flex;
+    flex-wrap : wrap;
+}
+#hold-info section{
+    width : 100%;
+    display : flex;
+    flex-wrap : wrap;
+}
+#hold-line:last-child{
+    border : none;
+}
+#hold-line{
+    width : 15%;
+    margin : 0.5%;
+    min-height : 20%;
+    border : 1px solid #ccc;
+    border-radius : 3px;
+}
+#hold-line-bar{
+    width : 15%;
+    margin : 0.5%;
+    min-height : 20%;
+    border : 1px solid #fff;
+    border-radius : 3px;
+}
+#hold-info{
+    width : 100%;
+    text-align : center;
+}
+#report-page section{
+    width : 98%;
+    height: auto;
+    min-height: 100% !important;
+    margin : 1%;
+    background : #fff;
+}
+#report-page{
+    width : 100%;
+    height : 98%;
+    margin-top : 1%;
+    background : rgb(234,234,234,0.7);
+    display : flex;
+    flex-wrap : wrap;
+    text-align : center;
+}
+#confirm-box{
+    width : 48%;
+    margin : 1%;
+    border-radius : 3px;
+}
+.box-in{
+    background : #097B3E;
+    border : 1px solid #fff;
+    color : #fff;
+}
+.box-not{
+    background : red;
+    border : 1px solid #fff;
+    color : #fff;
+}
+.box-out{
+    background : #fff;
+    border : 1px solid rgba(0,0,0,0.7);
+    color : rgb(0,0,0,0.7);
+}
 #approve-button{
     height : 40px;
     width : 80%;
     margin-left : 10%;
     border : none;
-    background : #48f1ab;
-    color : #fff;
     border-radius : 2px;
 }
 #reject-button{
@@ -42,29 +179,39 @@
     width : 80%;
     margin-left : 10%;
     border : none;
-    background : #8b0000;
-    color : #fff;
     border-radius : 2px;
 }
 #other-table div{
-    width : 23%
+    width : 23%;
     margin : 1%;
+    border : 1px solid #ccc;
+}
+#inner-part-level{
+    width: 98%;
+    margin: 1%;
+    text-align: center;
+    background: #fff;
+}
+#other-table section{
+    width : 98%;
+    margin : 1%;
+    display : flex;
 }
 #other-table{
     width : 98%;
     margin : 1%;
     display : flex;
+    flex-wrap : wrap;
 }
 .part-level div{
-    margin : 1%;
+    margin : 0.2%;
     width : 48%;
-    border : 2px solid var(--bs-body-bg);
+    border : 1px solid var(--bs-body-bg);
     text-align : center;
 }
 .part-level{
-    width : 96%;
-    margin : 2%;
-    margin-bottom : -0.8%;
+    width : 98%;
+    margin-left : 1%;
     background : #fff;
     display : flex;
     flex-wrap : wrap;
@@ -74,6 +221,8 @@
     margin : 2%;
     margin-top : 0.1%;
     background : #fff;
+    display : flex;
+    flex-direction : column;
 }
 #search-form{
     height : 50%;
@@ -106,8 +255,26 @@
 }
 #search-section{
     height : auto;
-    width : 100%;
+    width : 98%;
+    margin-left : 1%;
     background : #fff;
+}
+#course-section section{
+    width : 100%;
+}
+#course-section button{
+    border : none;
+    margin : 1%;
+    height : 40px;
+    width : 48%;
+    color : #fff;
+}
+#course-section{
+    height : auto;
+    width : 98%;
+    margin : 1%;
+    background : #fff;
+    display : flex;
 }
 .select_approve{
     width : 100%;
@@ -264,11 +431,18 @@
         height : 80px;
     }
     .part-level div{
-        width : 23%;
+        width : 19.6%;
     }
     #level-parent{
         flex-direction : row;
         width : 43%;
         height : 50px;
+    }
+    #confirm-box{
+        width : 23%;
+        margin : 1%;
+    }
+    #course-section button{
+        width : 18%;
     }
 }

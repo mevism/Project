@@ -1,5 +1,6 @@
     const ServerData = new (function(){
-        this.studies = ['Diploma','Certificate','Graduate','Non-standard','Post-Graduate','Under-Graduate'];
+        this.studies = ['Certificate','Diploma','Non-standard','Graduate','Post-Graduate','Under-Graduate','Masters','PHD'];
+        this.attendance_arr = ['REGULAR','FULL-TIME','PART-TIME','ONLINE-LEARNING','HOLIDAY-LEARNING','DISTANCE-LEARNING','EVENING']
         this.bindAuth = async function(r, h, c, m){
             let pop = { method : r }
             if(r == "POST")
@@ -42,7 +43,15 @@
                 if(id == "#attendance_search" || id == "#study_search" || id == "#stage_search" || id == "#course_search")
                     ServerData.beApproved(1,1)
                 if(id == "#page_approve")
-                    ServerData.beApproved(new_category,0)
+                    ServerData.beApproved($.trim(element.val().split(',')[0]),0)
+
+                if(id == "#all_intake")
+                    plotCourses()
+                if(id == "#all_course"){
+                    console.log('Hey')
+                    plotClasses()
+                }
+
             });
         };
         this.plotLegend = (e) => {
@@ -63,12 +72,12 @@
             return age;
         }
         this.beApproved = async(page,filter) => {
-            const attendance = $('#attendance_search').val().split(',')[0]
-            const course = $('#course_search').val().split(',')[0]
-            const year = $('#stage_search').val().split(',')[0]
+            const attendance = ($('#attendance_search').val()) ? $('#attendance_search').val().split(',')[1] : "PART-TIME";
+            const course = ($('#course_search').val()) ? $('#course_search').val().split(',')[1] : "bachellor of science in information technology";
+            const year = ($('#stage_search').val()) ? $('#stage_search').val().split(',')[0] : 1
             const status = (sessionStorage.getItem('status')) ? sessionStorage.getItem('status') : "0"
             const intake = (sessionStorage.getItem('appId')) ? sessionStorage.getItem('appId') : 1
-            const level = (sessionStorage.getItem('programId')) ? sessionStorage.getItem('programId') : 1
+            const level = (sessionStorage.getItem('programId')) ? sessionStorage.getItem('programId') : 0
             document.querySelectorAll('#search-button').forEach( (s,b) => {
                 if(b == status){
                     s.style.background = '#1f2937'
@@ -80,127 +89,161 @@
                     s.style.border = '1px solid #1f2937'
                 }
             })
+            console.log(page)
             let limit = (100 * page)
             let offset = (limit - 100)
             console.log({ 'course' : course, 'level' : level, 'attendance' : attendance, 'year' : year, 'status' : status, 'intake' : intake, 'limit' : limit, 'offset' : offset })
-            let applications = await this.bindAuth('POST',`/approval/getApplications`,true,{ 'course' : course, 'level' : level, 'attendance' : attendance, 'year' : year, 'status' : status, 'intake' : intake, 'limit' : limit, 'offset' : offset, filter })
-            console.log(applications.user)
+            let applications = await this.bindAuth('POST',`./getApplications`,true,{ 'course' : course, 'level' : level, 'attendance' : attendance, 'year' : year, 'status' : status, 'intake' : intake, 'limit' : limit, 'offset' : offset, filter })
+            console.log(applications)
             ServerData.Page = applications.page
             let pages = [];
             for(let x = 1;x <= ServerData.Page;x++)
                 pages.push(x)
 
             ServerData.buildSelect({'id' : '#page_approve', 'placeholder' : 'Select Page', 'data' : pages })
+            ServerData.records = []
             let approvals = 'Database Empty'
-            if(applications.user){
-                approvals = "<div id = 'time-out'><img src = '/Images/clipboard.svg'>Could not find data</div>"
-                if(applications.user.length > 0){
-                    approvals = applications.user.map(a =>
+            if(applications.application){
+                approvals = "<div id = 'time-out'><img src = './../Images/clipboard.svg'>Could not find data</div>"
+                if(applications.application.length > 0){
+                    ServerData.records = applications.application.map( a => a.id)
+                    approvals = `
+                        <section class = 'part-level'>
+                            <div>
+                                <h5>Name</h5>
+                            </div>     
+                            <div>
+                                <h5>Telephone</h5>
+                            </div>       
+                            <div>
+                                <h5>Status</h5>
+                            </div>        
+                            <div>
+                                <h5>Status</h5>
+                            </div>         
+                            <div>
+                                <h5>Details</h5>
+                            </div>                                               
+                        </section>
+                    `
+                        approvals += applications.application.map((a,k) =>
                         `
-                            <section class = 'part-level'>
-                                <div>
-                                    <p>Name</p>
-                                    ${ a.name }
+                            <section class = 'part-level' style= "${ (k%2)?'background:#fff':'background:rgba(234,234,234,0.7)' }">
+                                <div style= "${ (k%2)?'border:1px solid rgba(234,234,234,0.7)':'border:1px solid #fff' }">
+                                    ${ applications.user[k][0].fname + ' ' + applications.user[k][0].sname }
                                 </div>
-                                <div>
-                                    <p>Telephone</p>
-                                    ${ a.telephone }
-                                </div>
-                                <div>
-                                    <p>Fee</p>
-                                    ${ a.amount }
+                                <div style= "${ (k%2)?'border:1px solid rgba(234,234,234,0.7)':'border:1px solid #fff' }">
+                                    ${ applications.user[k][0].mobile }
                                 </div>
                                 ${
-                                    (applications.role === 2)
+                                    (applications.role == 2)
                                     ?
                                     `
-                                        <div>
-                                            ${ (a.final_status == 0)? `<button id = 'approve-button' index = '${ a.applications_id }'>Approve</button>` : (a.final_status == 1) ? `<p>COD Approved</p>` : (a.final_status == 2) ? `<p>COD Rejected</p>` : (a.final_status == 6) ? `COD PUSHED APPROVED APPLICATIONS`  : (a.final_status == 9) ? `COD PUSHED REJECTED APPLICATION`  : 'false'  }
+                                        <div style= "${ (k%2)?'border:1px solid rgba(234,234,234,0.7)':'border:1px solid #fff' }">
+                                            ${ (a.status == 0)? `<button id = 'approve-button' index = '${ a.id }' class = 'btn btn-sm btn-alt-success' data-toggle = 'click-ripple'>Approve</button>` : (a.status == 1) ? `<p>COD APPROVED</p>` : (a.status == 2) ? `<p>COD REJECTED</p>` : (a.status == 3) ? `<p>COD APPROVED & Dean APPROVED</p>` : (a.status == 4) ? `<p>COD APPROVED & DEAN REJECTED</p>` : (a.status == 5) ? `<p>COD REJECTED & DEAN APPROVED</p>` : (a.status == 6) ? `COD PUSHED APPROVED APPLICATION TO DEAN` : (a.status == 7) ? `DEAN PUSHED APPROVED APPLICATION FOR MAIL` : (a.status == 8) ? `COD & DEAN HAS REJECTED`   : (a.status == 9) ? `COD PUSHED REJECTED APPLICATION TO DEAN` : (a.status == 10) ? `DEAN PUSHED REJECTED APPLICATION TO MaIL`  : 'APPLICANT HAS NOT FINISHED APPLYING'  }
                                         </div>
-                                        <div>
-                                            ${ (a.final_status == 0)? `<button id = 'reject-button' index = '${ a.applications_id }'>Reject</button>` : (a.final_status == 1) ? `<button id = 'reject-button' index = '${ a.applications_id }'>Reject</button>` : (a.final_status == 2) ? `<button id = 'approve-button' index = '${ a.applications_id }'>Approve</button>` : (a.final_status == 6) ? `COD PUSHED APPROVED APPLICATIONS` : (a.final_status == 9) ? `COD PUSHED REJECTED APPLICATION` : 'false'  }
+                                        <div style= "${ (k%2)?'border:1px solid rgba(234,234,234,0.7)':'border:1px solid #fff' }">
+                                            ${ (a.status == 0)? `<button id = 'reject-button' index = '${ a.id }' class = 'btn btn-sm btn-alt-danger' data-toggle = 'click-ripple'>Reject</button>` : (a.status == 1) ? `<button id = 'reject-button' index = '${ a.id }' class = 'btn btn-sm btn-alt-danger' data-toggle = 'click-ripple'>Reject</button>` : (a.status == 2) ? `<button id = 'approve-button' index = '${ a.id }' class = 'btn btn-sm btn-alt-success' data-toggle = 'click-ripple'>Approve</button>` : (a.status == 3) ? `<p>COD APPROVED & DEAN APPROVED</p>` : (a.status == 4) ? `<p>COD APPROVED & DEAN REJECTED APPLICATION</p>` : (a.status == 5) ? `<p>COD REJECTED & DEAN APPROVED APPLICATION</p>` : (a.status == 6) ? `COD PUSHED APPROVED APPLICATION TO DEAN`  : (a.status == 7) ? `DEAN PUSHED ACCEPTED APPLICATION FOR MAIL` : (a.status == 8) ? `COD & DEAN HAS REJECTED APPLICATION` : (a.status == 9) ? `COD PUSHED REJECTED APPLICATION TO DEAN` : (a.status == 10) ? `DEAN PUSHED REJECTED APPLICATION TO MAIL` : 'APPLICANT HAS NOT FINISHED APPLYING'  }
                                         </div>
                                     `
                                     :
                                     `
-                                        <div>
-                                            ${ (a.final_status == 3) ? `<p>COD Approved & Dean Approved</p>` : (a.final_status == 4) ? `<p>COD Approved & Dean Rejected</p>` : (a.final_status == 5) ? `<p>COD Rejected & Dean Approve</p>` : (a.final_status == 6) ? `<button id = 'approve-button' index = '${ a.applications_id }'>Approve</button>` : (a.final_status == 7) ? `DEAN PUSHED ACCEPTED APPLICATION` : (a.final_status == 8) ? `COD & DEAN REJECTED`  : (a.final_status == 9) ? `<button id = 'approve-button' index = '${ a.applications_id }'>Approve</button>` : (a.final_status == 10) ? `DEAN PUSHED REJECTED APPLICATION`  : 'false'  }
+                                        <div style= "${ (k%2)?'border:1px solid rgba(234,234,234,0.7)':'border:1px solid #fff' }">
+                                            ${  (a.status == 0)? `PENDING COD ACTION` : (a.status == 1) ? `<p>COD APPROVED</p>` : (a.status == 2) ? `<p>COD REJECTED</p>` : (a.status == 3) ? `<p>COD APPROVED & DEAN APPROVED</p>` : (a.status == 4) ? `<p>COD APPROVED & DEAN REJECTED</p>` : (a.status == 5) ? `<p>COD REJECTED & DEAN APPROVED</p>` : (a.status == 6) ? `<button id = 'approve-button' index = '${ a.id }' class = 'btn btn-sm btn-alt-success' data-toggle = 'click-ripple'>Approve</button>` : (a.status == 7) ? `DEAN HAS PUSHED ACCEPTED APPLICATIONS` : (a.status == 8) ? `COD & DEAN HAS REJECTED` : (a.status == 9) ? `<button id = 'approve-button' index = '${ a.id }' class = 'btn btn-sm btn-alt-success' data-toggle = 'click-ripple'>Approve</button>` : (a.status == 10) ? `DEAN PUSHED REJECTED APPLICATION` : 'APPLICANT HAS NOT FINISHED APPLYING'  }
                                         </div>
-                                        <div>
-                                            ${  (a.final_status == 3) ? `<p>COD Approved & Dean Approved</p>` : (a.final_status == 4) ? `<p>COD Approved & Dean Rejected</p>` : (a.final_status == 5) ? `<p>COD Rejected & Dean Approve</p>` : (a.final_status == 6) ? `<button id = 'reject-button' index = '${ a.applications_id }'>Reject</button>` : (a.final_status == 7) ? `DEAN PUSHED ACCEPTED APPLICATION` : (a.final_status == 8) ? `COD & DEAN REJECTED`  : (a.final_status == 9) ? `<button id = 'reject-button' index = '${ a.applications_id }'>Reject</button>` : 'false'  }
+                                        <div style= "${ (k%2)?'border:1px solid rgba(234,234,234,0.7)':'border:1px solid #fff' }">
+                                            ${  (a.status == 0)? `PENDING COD ACTION` : (a.status == 1) ? `<p>COD APPROVED</p>` : (a.status == 2) ? `<p>COD REJECTED</p>` : (a.status == 3) ? `<p>COD APPROVED & DEAN APPROVED</p>` : (a.status == 4) ? `<p>COD APPROVED & DEAN REJECTED</p>` : (a.status == 5) ? `<p>COD REJECTED & DEAN APPROVED</p>` : (a.status == 6) ? `<button id = 'reject-button' index = '${ a.id }' class = 'btn btn-sm btn-alt-danger' data-toggle = 'click-ripple'>Reject</button>` : (a.status == 7) ? `DEAN HAS PUSHED ACCEPTED APPLICATIONS` : (a.status == 8) ? `COD & DEAN HAS REJECTED`  : (a.status == 9) ? `<button id = 'reject-button' index = '${ a.id }' class = 'btn btn-sm btn-alt-danger' data-toggle = 'click-ripple'>Reject</button>` : (a.status == 10) ? `DEAN PUSHED REJECTED APPLICATION` : 'APPLICANT HAS NOT FINISHED APPLYING'  }
                                         </div>
                                     `
                                 }
-
+                                <div style= "${ (k%2)?'border:1px solid rgba(234,234,234,0.7)':'border:1px solid #fff' }">
+                                    <button id = 'view-more-level' pin = 'false' key = '${ k }' class = 'btn btn-alt-info' data-toggle = 'click-ripple'>View More</button>
+                                </div>
                             </section>
-                            <section class = 'inner-part-level'>
+                            <section class = 'inner-part-level${ k }' id = 'inner-part-level' style = 'display:none;'>
+                                <h3>Academics Profile</h3>
+                                ${
+                                    (applications.education[k].length > 0)
+                                    ?
+                                        applications.education[k].map( (s,k) =>
+                                            `
+                                                <div id = 'other-table'>
+                                                    <div>
+                                                        <p>Institution</p>
+                                                        ${ s.institution }
+                                                    </div>
+                                                    <div>
+                                                        <p>Grade</p>
+                                                        ${ s.qualification }
+                                                    </div>
+                                                    <div>
+                                                        <p>Certificate</p>
+                                                        <a href = './../certs/${ s.certificate }' class = 'btn btn-sm btn-alt-success'>Download</a>
+                                                    </div>
+                                                </div>                              
+                                            `
+                                        ).join('')
+                                    :
+                                    `Applicant has no academic profile`
+                                }                                
+                                <h3>Work Profile</h3>
+                                ${
+                                    (applications.work[k].length > 0)
+                                    ?
+                                        applications.work[k].map( (s,k) =>
+                                            `
+                                                 <div id = 'other-table'>
+                                                    <div>
+                                                        <p>Institution</p>
+                                                        ${ s.organization }
+                                                    </div>
+                                                    <div>
+                                                        <p>Job</p>
+                                                        ${ s.post }
+                                                    </div>
+                                                </div>                                   
+                                            `
+                                        ).join('')
+                                    :
+                                    `Applicant has no work profile`
+                                }
+                                <h3>Application Process</h3>
                                 <div id = 'other-table'>
-                                    ${ (a.academics) ? $.parseJSON(a.academic).map( a =>
-                                        `<div>
-                                            <p>Grade</p>
-                                            ${ a.grade }
-                                        </div>
-                                        <div>
-                                            <p>Certificate</p>
-                                            ${ a.certificate }
-                                        </div>
-                                        <div>
-                                            <p>Start</p>
-                                            ${ a.start }
-                                        </div>
-                                        <div>
-                                            <p>End</p>
-                                            ${ a.end }
-                                        </div>
-
+                                    ${ 
+                                        (applications.logs[k].length > 0)
+                                        ?
+                                            applications.logs[k].map( (s,k) =>
+                                            `
+                                            <section style = '${ (k%2) ? 'background:rgba(234,234,234,0.7)' : 'background:#fff'}'>
+                                                <div id = 'number' style = '${ (k%2) ? 'border: 1px solid #fff' : 'border:1px solid rgba(@34,234,234,0.7)'}'>
+                                                    ${(k + 1)}
+                                                </div>
+                                                <div style = '${ (k%2) ? 'border: 1px solid #fff' : 'border:1px solid rgba(@34,234,234,0.7)'}'>
+                                                    <p>Action</p>
+                                                    ${(s.status == 1) ? `COD APPROVED` : (s.status == 2) ? `COD REJECTED` : (s.status == 3) ? `COD APPROVED & DEAN APPROVED` : (s.status == 4) ? `COD APPROVED & DEAN REJECTED` : (s.status == 5) ? `COD REJECTED & DEAN APPROVED` : (s.status == 6) ? `COD HAS APPROVED & PUSHED TO DEAN` : (s.status == 7) ? `DEAN HAS APPROVED & PUSHED FOR MAIL` : (s.status == 8) ? `COD REJECTED && DEAN REJECTED` : (s.status == 9) ? `COD REJECTED && PUSHED TO DEAN` : (s.status == 10) ? `DEAN HAS REJECTED && PUSHED TO MAIL` : `STILL PENDING`}
+                                                </div>
+                                                <div style = '${ (k%2) ? 'border: 1px solid #fff' : 'border:1px solid rgba(@34,234,234,0.7)'}'>
+                                                    <p>Reason</p>
+                                                    ${s.reason}
+                                                </div>
+                                                <div style = '${ (k%2) ? 'border: 1px solid #fff' : 'border:1px solid rgba(@34,234,234,0.7)'}'>
+                                                    <p>Designation</p>
+                                                    ${s.level}
+                                                </div>
+                                                <div style = '${ (k%2) ? 'border: 1px solid #fff' : 'border:1px solid rgba(@34,234,234,0.7)'}'>
+                                                    <p>Date</p>
+                                                    ${s.date}
+                                                </div>
+                                            </section>
                                         `
-                                    ) : '<p>No academic profile</p>'}
-                                </div>
-                                <div id = 'other-table'>
-                                    ${ (a.status) ? $.parseJSON(a.status).map( a =>
-                                        `<div>
-                                            <p>Action</p>
-                                            ${ (a.status == 1) ? `COD APPROVED` : (a.status == 2) ? `COD REJECTED` : (a.status == 3) ? `COD APPROVED & DEAN APPROVED` : (a.status == 4) ? `COD APPROVED & DEAN REJECTED` : (a.status == 5) ? `COD REJECTED & DEAN APPROVED` : (a.status == 6) ? `COD HAS APPROVED & PUSHED TO DEAN` : (a.status == 7) ? `DEAN HAS APPROVED & PUSHED FOR MAIL` : (a.status == 8) ? `COD REJECTED && DEAN REJECTED` : (a.status == 9) ? `COD REJECTED && PUSHED TO DEAN` : (a.status == 10) ? `DEAN HAS REJECTED && PUSHED TO MAIL` :  `STILL PENDING` }
-                                        </div>
-                                        <div>
-                                            <p>Reason</p>
-                                            ${ a.reason }
-                                        </div>
-                                        <div>
-                                            <p>Designation</p>
-                                            ${ a.level }
-                                        </div>
-                                        <div>
-                                            <p>Date</p>
-                                            ${ a.date }
-                                        </div>
-
-                                        `
-                                    ) : '<p>Not yet pushed</p>'
+                                    ).join('')
+                                    : '<p>PENDING COD ACTION</p>'
                                     }
-                                </div>
-                                <div id = 'other-table'>
-                                    ${ (a.work) ? $.parseJSON(a.work).map( a =>
-                                        `<div>
-                                            <p>Institution</p>
-                                            ${ a.institution }
-                                        </div>
-                                        <div>
-                                            <p>Start</p>
-                                            ${ a.start }
-                                        </div>
-                                        <div>
-                                            <p>End</p>
-                                            ${ a.end }
-                                        </div>
-
-                                        `
-                                    ) : '<p>No work profile</p>'}
                                 </div>
                             </section>
 
                         `
-                    )
+                    ).join('')
 
                 }
             }
@@ -235,34 +278,66 @@
             $('#rejected-preview').html(setRejected)
             $('#pending-preview').html(setPending)
 
-            var chartData = {
-				datasets: [{
-					data: [
-						approvalValue.reduce(ServerData.getSum, 0),
-						rejectedValue.reduce(ServerData.getSum, 0),
-						pendingValue.reduce(ServerData.getSum, 0)
-					],
-					backgroundColor: [
-						window.chartColors.green,
-						window.chartColors.red,
-						window.chartColors.yellow,
-					],
-					label: text
-				}],
-				labels: [
-					'Approved',
-					'Rejected',
-					'Pending',
-				]
+            let pieData = [
+                setApprove,
+                setRejected,
+                setPending
+            ]
+            let backgroundColor = [
+                '#097B3E', //tum
+                'rgb(255, 99, 132)', //red
+                '#d89837' //gold
+            ]
+            let labels = [
+                'Approved',
+                'Rejected',
+                'Pending'
+            ]
+            if(setPending == 0 && setRejected == 0 && setApprove == 0){
+                pieData = [100]
+                backgroundColor = ['#097B3E']
+                labels = ['No Data']
             }
+            var chartData = {
+				datasets : [{
+					data : pieData,
+					backgroundColor : backgroundColor,
+					label : text
+				}],
+				labels : labels
+            }
+            console.log(approvalValue)
+            console.log(rejectedValue)
+            console.log(pendingValue)
+            console.log(countValue)
+
             if(type == "bar"){
-                chartData = {
-                    labels: xValue,
-                    datasets: [
+                let xBind = ["One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten"]
+                let datasets = [
+                    {
+                        type: 'bar',
+                        label: "No Data",
+                        backgroundColor: '#097B3E',
+                        data:[1,2,3,4,5,6,7,8,9,10],
+                        borderColor: 'white',
+                        borderWidth: 2
+                    },
+                    {
+                        type : 'line',
+                        label : "No Data",
+                        borderColor : '#d89837',
+                        borderWidth : 2,
+                        fill : false,
+                        data : [1,2,3,4,5,6,7,8,9,10]
+                    }
+                ]
+                if(countValue.length > 0){
+                    xBind = xValue
+                    datasets = [
                         {
                             type: 'line',
                             label: "Total Applications",
-                            borderColor: window.chartColors.blue,
+                            borderColor: 'rgb(54, 162, 235)',
                             borderWidth: 2,
                             fill: false,
                             data: countValue
@@ -270,7 +345,7 @@
                         {
                             type: 'bar',
                             label: "Approved",
-                            backgroundColor: window.chartColors.red,
+                            backgroundColor: 'rgb(255, 99, 132)',
                             data:approvalValue,
                             borderColor: 'white',
                             borderWidth: 2
@@ -278,7 +353,7 @@
                         {
                             type: 'bar',
                             label: "Rejected",
-                            backgroundColor: window.chartColors.green,
+                            backgroundColor: '#097B3E',
                             data: rejectedValue,
                             borderColor: 'white',
                             borderWidth: 2
@@ -286,12 +361,16 @@
                         {
                             type: 'bar',
                             label: "Pending",
-                            backgroundColor: window.chartColors.yellow,
+                            backgroundColor: '#d89837',
                             data: pendingValue,
                             borderColor: 'white',
                             borderWidth: 2
                         }
                     ]
+                }
+                chartData = {
+                    labels : xBind,
+                    datasets
                 };
             }
             var ctx = document.getElementById(id).getContext('2d');
@@ -310,12 +389,53 @@
                     }
                 }
             });
-        }
+        };
+        this.modalMsg = (e) => {
+            const { msg, mode, callback } = e
+            let img = "<img src = './../Images/success-tick.gif'>"
+            if(!mode)
+                img = "<img src = './../Images/error-tick.jpg'>"
+            $('.content-force').append(`
+                            <div id = 'fill-modal'>
+                                <div id = 'inner-fill-modal'>
+                                    ${ img }
+                                    ${ msg }
+                                </div>
+                            </div>
+                        `)
+            setTimeout(
+                function(){
+                    $('#fill-modal').remove()
+                    const element = document.getElementById("fill-modal");
+                    if(element)
+                        element.remove();
+                }
+                ,2000)
+        };
+        this.generatePDF = (e) => {
+            const { file, body} = e
+            let opt = {
+                margin: 1,
+                filename: file,
+                image: {
+                    type: 'jpeg',
+                    quality: 0.98
+                },
+                html2canvas: {
+                    scale: 2
+                },
+                jsPDF: {
+                    unit: 'in',
+                    format: 'tabloid',
+                    orientation: 'landscape'
+                }
+            };
+            html2pdf().from(body).set(opt).save();
+        };
     })()
 
     const retrieveApplication = async(e) => {
         let { status, role } = e
-        let link = "/approval/fetchData"
         let type = "Pending"
         let id = "0"
         if(role == 4)
@@ -334,8 +454,9 @@
             if(role == 4)
                 id = "4,8,10"
         }
-        let list_data = await ServerData.bindAuth('POST',link,true,{ id })
-        let list_string = `<div id = 'time-out'><img src = '/Images/clipboard.svg'>No ${type} lists</div>`
+        let list_data = await ServerData.bindAuth('POST',`./fetchData`,true,{ id })
+        console.log(list_data)
+        let list_string = `<div id = 'time-out'><img src = './../Images/clipboard.svg'>No ${type} lists</div>`
         if(list_data.list.length > 0){
             list_string = list_data.list.map(p =>
                 `
@@ -343,9 +464,9 @@
                         <section>
                             <p> <i class="fa-solid fa-calendar" style = 'font-size:120%;'></i> <b style = 'font-size:120%;'>Intake List</b>  <i class='fas fa-caret-right' style = 'font-size:120%;'></i> ${ p.name }</p>
                         </section>
-                        <section class = 'academics'>
-                         ${ p.academic.map( a =>
-                                `
+                        ${ p.academic.map( a =>
+                            `
+                                <section class = 'academics'>
                                     <div>
                                         <h5>Academic Program</h5>
                                         <p>${ ServerData.studies[ a.program ] }</p>
@@ -355,21 +476,22 @@
                                         <p>${ a.number }</p>
                                     </div>
                                     <div>
-                                        <button id = 'view-application-list' app = '${ p.intake }' program = '${ a.program }' status = '${ id }'>
+                                        <button id = 'view-application-list' app = '${ p.intake }' program = '${ a.program }' status = '${ id }' name = '${ p.name }' class = 'btn btn-alt-info' data-toggle = 'click-ripple'>
                                             View
                                         </button>
                                     </div>
-                                `
-                            )
-                         }
-                        </section>
+                                </section>
+                            `
+                        )}
                         <section class = 'footer-list'>
                             <div>
-                                <p>${ p.sweet_date }</p>
-                                <p>${ (p.expire) ? "Intake in session" : "" }</p>
+                                <p>Start : ${ p.start }</p>
+                                <p>End : ${ p.end }</p>
+                                <p>${ (p.expire) ? "Intake in session" : "Intake Not in session" }</p>
                             </div>
                             <div>
-                                ${ ([10,9,7,6].includes(p.status)) ? "List Has Been Pushed By COD" : "<button id = 'push-list' list = '${ p.intake }' status = '${ p.status }'>Push List</button>" }
+                                ${ ([9,6].includes(p.status)) ? "List Has Been Pushed By COD" :([0].includes(p.status)) ? "No action taken on list" : ([7,10].includes(p.status)) ? "List Has Been Pushed By DEAN" : `<button id = 'push-list' list = '${ p.intake }' status = '${ p.status }' class = 'btn btn-alt-info' data-toggle = 'click-ripple'>Push List</button>` }
+                                <button id = 'print-approval' type = '${ id }' intake = '${ p.name }'  class = 'btn btn-info' ><i class="fa-solid fa-file-pdf" style="font-size:120%;"></i> Print</button>                            
                             </div>
                         </section>
                     </div>
@@ -379,50 +501,271 @@
         $('.content-force').html(list_string)
     }
 
+    const showCourses = async() => {
+        let collect = await ServerData.bindAuth('GET',`./getIntakes`,false)
+        console.log(collect)
+        ServerData.buildSelect({'id' : '#all_intake', 'placeholder' : 'Intakes', 'data' : collect.data })
+        plotCourses()
+    }
+
+    const showReport = async() => {
+        let collect = await ServerData.bindAuth('GET',`./allCourses`,false)
+        console.log(collect)
+        ServerData.buildSelect({'id' : '#all_course', 'placeholder' : 'Courses', 'data' : collect.course })
+        plotClasses()
+    }
+    const plotClasses = async() => {
+
+        const course = $('#all_course').val().split(',')[0]
+        let collect = await ServerData.bindAuth('POST',`./getReport`,true,{ course })
+        console.log(collect)
+        let plot_string = "<h5>There is no classes for this course</h5>"
+        if(!collect.report.includes(false)) {
+            plot_string = "There are no records"
+            if(collect.report.length > 0) {
+                plot_string = collect.report.map( (c,class_key) =>
+                    `
+                        <section>
+                            <i class='fas fa-screen-users' style = 'font-size:350%;'></i>
+                            <p>Class : ${ c.class }</p>
+                            <div id = 'hold-info'>
+                                <section>
+                                    <div id = 'hold-line'>
+                                        INTAKE
+                                    </div>
+                                    <div id = 'hold-line'>
+                                        FROM
+                                    </div>
+                                    <div id = 'hold-line'>
+                                        TO
+                                    </div>
+                                    <div id = 'hold-line'>
+                                        SEMESTER
+                                    </div>
+                                    <div id = 'hold-line'>
+                                        YEAR
+                                    </div>
+                                    <div id = 'hold-line'>
+                                        VIEW SESSION
+                                    </div>
+                                </section>
+                            </div>
+                            <div id = 'hold-info'>
+                            ${
+                                c.intake.map((i, k) =>
+                                    `
+                                        <section style = '${ (k%2) ? 'background::#fff':'background:rgba(234,234,234,0.7)' }'>
+                                             <p id = '${ (k%2) ? 'hold-line' : 'hold-line-bar'}'>${ i }</p>
+                                             <p id = '${ (k%2) ? 'hold-line' : 'hold-line-bar'}'>${ c.intakes_from[k] }</p>
+                                             <p id = '${ (k%2) ? 'hold-line' : 'hold-line-bar'}'>${ c.intakes_to[k] }</p>
+                                             <p id = '${ (k%2) ? 'hold-line' : 'hold-line-bar'}'>${ c.semester[k] }</p>
+                                             <p id = '${ (k%2) ? 'hold-line' : 'hold-line-bar'}'>${ c.year[k] }</p>
+                                             <div id = 'hold-line'>
+                                                <button id = 'view-sessions' index = '${ class_key }${ k }' status = 'false' class = 'btn btn-sm btn-alt-info' data-ripple = ''>VIEW SESSIONS</button>
+                                            </div>
+                                        </section>
+                                        <section id = 'session-add${ class_key }${ k }' style = 'display : none'>
+                                            ${
+                                                c.status[k].map( s => `<div id = 'remove-session' data-status = '${ s }' data-intake = '${ c.intake_id[k] }' data-class = '${ c.year[k] }' data-course = '${ course }' class = '${ (s == "IN SESSION")? 'btn btn-sm btn-alt-success' : (s == "ONLINE SESSION") ? 'btn btn-sm btn-alt-success' :  (s == "WORKSHOP") ? 'btn btn-sm btn-alt-success' : 'btn btn-sm btn-alt-danger'}' style = 'margin:1%;'>${ s }<p>Remove</p></div>`).join('')
+                                            }
+                                            <button id = 'confirm-class-box' data-class = '${ c.class_id }' data-intake = '${ c.intake_id[k] }' class = 'btn btn-sm btn-alt-info' data-ripple>ADD SESSION</button>                                           
+                                        </section>
+                                    `
+                                ).join('')
+                            }
+                            </div>
+                        </section>
+                        
+                    `
+                )
+            }
+        }
+        $('#report-page').html(plot_string)
+    }
+    const plotCourses = async() => {
+        const intake = $('#all_intake').val().split(',')[0]
+        console.log(intake)
+        let collect = await ServerData.bindAuth('POST',`./getCourses`,true,{ intake })
+        console.log(collect)
+        let plot_string = "No courses available for this department in the registrar database"
+        if(collect.course.length > 0) {
+            plot_string = `
+                <section id = 'courses-section'>
+                    <div style = 'border:1px solid #ccc'>
+                        <span>COURSE NAME</span>
+                    </div>
+                    <div style = 'border:1px solid #ccc'>
+                        <span>COURSE CODE</span>
+                    </div>
+                    <div style = 'border:1px solid #ccc'>
+                        <span>ADD/REMOVE COURSE</span>
+                    </div>
+                    <div style = 'border:1px solid #ccc'>
+                        <span>EDIT ATTENDANCE</span>
+                    </div>
+                    <div style = 'border:1px solid #ccc'>
+                        <span>EDIT CLASS</span>
+                    </div>
+                </section>
+            `
+            plot_string += collect.course.map( (c,key) =>
+                `
+                <section style = '${(key%2) ? 'background:#fff' : 'background:rgba(234,234,234,0.7)' }'>
+                    <div id = 'courses-section'>
+                        <div>                           
+                            <p>${ c.courses[0].name }</p>
+                        </div>
+                        <div>                            
+                            <p>${ c.courses[0].code }</p> 
+                        </div> 
+                        <button id = 'confirm-box' index = '${c.courses[0].id}' status = '${c.courses[0].status}' class = '${(c.courses[0].status) ? 'btn btn-sm btn-alt-success' : 'btn btn-sm btn-alt-danger'}'>
+                             ${ (c.courses[0].status) ? 'Remove Course' : 'Select Course' }
+                        </button> 
+                        <button id = 'view-attendance' iteration = '${ key }' chosen = 'false' class = 'btn btn-sm btn-alt-primary'>View Attendance</button>                                              
+                        <button id = 'view-class' iteration = '${ key }' chosen = 'false' class = 'btn btn-sm btn-alt-primary'>View Years</button>                                              
+                    </div>
+                    <div id = 'attendance-section' class = 'attendance-section${ key }'>
+                        <p>Attendances allowed in intake</p>
+                        <div = 'attendance-build'>
+                        ${
+                            (c.attendances.length > 0)
+                            ?
+                                `
+                                ${
+                                    c.attendances.map(a =>
+                                        `
+                                            <button id = '${(c.courses[0].status) ? 'confirm-attendance-box' : 'attendant-button'}' index = '${ a.id }' status = '${ a.status }' class = '${(a.status) ? 'box-in' : 'box-out'}' course = '${ a.course }'>
+                                                <i class='fas fa-users' style = 'font-size:350%;'></i>
+                                                <p>${ a.name }</p>
+                                                <p>${ a.code }</p>
+                                            </button>                                
+                                        `
+                                    ).join('')
+                                }
+                                `
+                            :
+                                `There are no attendances for this course`
+                        }
+                        </div>
+                    </div>
+                    
+                    <div id = 'years-section' class = 'class-section${ key }'>
+                        <p>Please select years allowed for the intake</p>
+                        <div id = 'attendance-build'>
+                            ${
+                            (c.years.length > 0)
+                            ?
+                                `
+                                ${
+                                    c.years.map(y =>
+                                        `
+                                            <button id = '${ (c.courses[0].status) ? 'confirm-years-box' : 'attendant-button'}' index = '${ y.id }' status = '${ y.status }' class = '${(!y.status) ? 'box-out' : 'box-in'}' course = '${ y.course }'>
+                                                <p>Year ${ y.name }</p>
+                                            </button>                               
+                                        `
+                                    ).join('')
+                                }
+                                `
+                            :
+                            `There are no years selected for this course`
+                        }
+                        </div>                    
+                    </div>    
+                </section>
+            `
+            ).join('')
+            plot_string += '</div>'
+        }
+
+        $('#course-page').html(plot_string)
+    }
     const retrievePost = async() => {
         const app = sessionStorage.getItem('appId')
         const program = sessionStorage.getItem('programId')
+        const name = sessionStorage.getItem('nameIntake')
 
-        let collect = await ServerData.bindAuth('POST',`/approval/getApplication`,true,{ 'app' : app })
-        ServerData.collect = collect.app[0]
-        console.log(ServerData.collect)
-        console.log(ServerData.collect.attendances)
-        ServerData.attendance_arr = [
-            'REGULAR','FULL-TIME','PART-TIME','ONLINE-LEARNING','HOLIDAY-LEARNING','DISTANCE-LEARNING','EVENING'
-        ]
+        let collect = await ServerData.bindAuth('POST',`./getApplication`,true,{ 'app' : app })
+        console.log(collect)
+        ServerData.collect = collect.app
+        let courses = collect.courses
+        let attendance = collect.attendances
+        let years = collect.years
 
-        let attendance_data = []
-        $.parseJSON(ServerData.collect.attendances).map( (data, key) => {
-            attendance_data.push({ 'id' : data + ',' + ServerData.attendance_arr[data], 'text' : ServerData.attendance_arr[data] })
-        })
-
-        let courses = await ServerData.bindAuth('POST',`/approval/getCourses`,true,{ 'courses' : ServerData.collect.courses })
-
-        console.log(courses)
-        let course_data = []
-        if(courses.length > 0){
-            courses.map( (data, key) => {
-                if(data.length > 0)
-                    course_data.push({ 'id' : Number(data[0].id) + ',' + data[0].name, 'text' : data[0].name })
-            })
-        }
-        ServerData.buildSelect({'id' : '#attendance_search', 'placeholder' : 'Preferred Attendance(Select)*', 'data' : attendance_data })
-        ServerData.buildSelect({'id' : '#course_search', 'placeholder' : 'Programme/Course(Select)*', 'data' : course_data })
+        $('#intake_name').html(name)
+        $('#intake_program').html(ServerData.studies[program])
 
         let stage_data = []
-        $.parseJSON(ServerData.collect.years).map( (data, key) => {
-            stage_data.push({ 'id' : data + ',' + data, 'text' : data })
-        })
+        if(years.length > 0){
+            if(years[0].length > 0){
+                years[0].map(data => {
+                    stage_data.push({ 'id' : Number(data.years) + ',' + data.years, 'text' : data.years })
+                })
+            }
+        }
 
+        let course_data = []
+        if(courses.length > 0){
+            courses.map((data, key) => {
+                course_data.push({ 'id' : Number(data[0].id) + ',' + data[0].course_name, 'text' : data[0].course_name })
+            })
+        }
+        let attendance_data = []
+        if(attendance.length > 0){
+            attendance.map((data) => {
+                attendance_data.push({ 'id' : data[0].id + ',' + data[0].attendance_name, 'text' : data[0].attendance_name })
+            })
+        }
+        console.log(attendance_data)
+        ServerData.buildSelect({ 'id' : '#attendance_search', 'placeholder' : 'Preferred Attendance(Select)*', 'data' : attendance_data })
+        ServerData.buildSelect({ 'id' : '#course_search', 'placeholder' : 'Programme/Course(Select)*', 'data' : course_data })
         ServerData.buildSelect({ 'id' : '#stage_search', 'placeholder' : 'Year of Study*', 'data' : stage_data })
         ServerData.beApproved(1,0);
     }
+    const plotProfile = async(e) => {
+        let profile_data = await ServerData.bindAuth('GET',`./student_profile`,false)
+        let profile_string = profile_data.user.map( p =>
+        `
+            <section>
+                <p>Name</p>
+                <p>${ p.fname + ',' + p.mname + ',' + p.sname }</p>
+            </section>
+            <section>
+                <p>Registration Number</p>
+                <p>${ p.reg_number }</p>
+            </section>
+            <section>
+                <p>Gender</p>
+                <p>${ p.gender }</p>
+            </section>
+            <section>
+                <p>Email</p>
+                <p>${ p.email }</p>
+            </section>
+            <section>
+                <p>Student Email</p>
+                <p>${ p.student_email }</p>
+            </section>
+            <section>
+                <p>Mobile</p>
+                <p>${ p.mobile }</p>
+            </section>
+            <section>
+                <p>Citizen</p>
+                <p>${ p.citizen }</p>
+            </section>        
+        `)
+        $('#student_profile').html(profile_string)
+    }
+    const plotName = async(e) => {
+        let user_data = await ServerData.bindAuth('GET',`./checkName`,false)
+        $('#plot-user').html(user_data.name)
+    }
     const buildGraph = async(e) => {
-        let graph_data = await ServerData.bindAuth('GET',`/approval/graph`,false)
+        let graph_data = await ServerData.bindAuth('GET',`./graph`,false)
         console.log(graph_data)
         let plot = [
-            {'go_id' : 'pie-cod','go_text' : 'Approved & Rejected Applications', 'type' : 'pie'},
-            {'go_id' : 'bar-cod','go_text' : 'Approved & Rejected Applications Over Intakes', 'type' : 'bar'}
+            { 'go_id' : 'pie-cod','go_text' : 'Approved & Rejected Applications', 'type' : 'pie' },
+            { 'go_id' : 'bar-cod','go_text' : 'Approved & Rejected Applications Over Intakes', 'type' : 'bar' }
         ]
         plot.map( p => {
             const { go_id, go_text, type } = p
@@ -430,15 +773,473 @@
         })
     }
 
+    $(document).ready(function (qualifiedName, value){
 
-    $(document).ready(function(){
+        $(document).on('click','#view-sessions',async(e) => {
+            e.preventDefault();
+            if(e.currentTarget.attributes[2].value === 'false'){
+                $('#session-add' + e.currentTarget.attributes[1].value).slideDown()
+                e.currentTarget.attributes[2].value = true
+                e.currentTarget.innerHTML = "VIEW LESS"
+            }else{
+                $('#session-add' + e.currentTarget.attributes[1].value).slideUp()
+                e.currentTarget.attributes[2].value = false
+                e.currentTarget.innerHTML = "VIEW SESSIONS"
+            }
+        });
+        $(document).on('keyup','#cut_off_value',async(e) => {
+            e.preventDefault()
+            let cut_value = $('#cut_off_value').val()
+            let allowed_courses = await ServerData.bindAuth('POST',`./platform_courses`,true,{ 'course' : cut_value })
 
+            if(allowed_courses) {
+                if (allowed_courses.group.length > 0) {
+                    let allowed_courses_string = `
+                <section style = 'width : 100%;display : flex;flex-wrap:wrap;background:#fff;'>
+                    <div style = 'border:1px solid #ccc;width : 15.6%;margin : 0.2%;'>
+                        <span>COURSE NAME</span>
+                    </div>
+                    <div style = 'border:1px solid #ccc;width : 15.6%;margin : 0.2%;'>
+                        <span>COURSE CODE</span>
+                    </div>
+                    <div style = 'border:1px solid #ccc;width : 15.6%;margin : 0.2%;'>
+                        <span>COURSE DURATION</span>
+                    </div>
+                    <div style = 'border:1px solid #ccc;width : 15.6%;margin : 0.2%;'>
+                        <span>COURSE REQUIREMENTS</span>
+                    </div>
+                    <div style = 'border:1px solid #ccc;width : 15.6%;margin : 0.2%;'>
+                        <span>CUT OFF POINTS</span>
+                    </div>
+                </section>
+            `
+                    allowed_courses_string += allowed_courses.group.map((c, k) =>
+                        `
+                    <section style = 'background:${(k % 2) ? '#fff' : 'rgba(234,234,234,0.7)'}width : 100%;display : flex;flex-wrap:wrap;'>
+                        <div style = 'width : 15.6%;margin : 0.2%;border:${(k % 2) ? '1px solid rgba(234,234,234,0.7)' : '1px solid #fff'}'>
+                            ${c.course_name}
+                        </div>
+                        <div style = 'width : 15.6%;margin : 0.2%;border:${(k % 2) ? '1px solid rgba(234,234,234,0.7)' : '1px solid #fff'}'>
+                            ${c.course_code}
+                        </div>
+                        <div style = 'width : 15.6%;margin : 0.2%;border:${(k % 2) ? '1px solid rgba(234,234,234,0.7)' : '1px solid #fff'}'>
+                            ${c.course_duration}
+                        </div>
+                        <div style = 'width : 15.6%;margin : 0.2%;border:${(k % 2) ? '1px solid rgba(234,234,234,0.7)' : '1px solid #fff'}'>
+                            ${c.course_requirements}
+                        </div>
+                        <div style = 'width : 15.6%;margin : 0.2%;border:${(k % 2) ? '1px solid rgba(234,234,234,0.7)' : '1px solid #fff'}'>
+                            ${c.cut_off}
+                        </div>
+                        <div style = 'width : 15.6%;margin : 0.2%;border:${(k % 2) ? '1px solid rgba(234,234,234,0.7)' : '1px solid #fff'}'>
+                            <button id = 'select_course' index = '${c.id}' class = 'btn btn-alt-info'  data-toggle = 'click-ripple'>Select</button>
+                        </div>
+                    </section>
+                `
+                    )
+                    $('#cut_off_courses').html(allowed_courses_string)
+                }
+            }else
+                ServerData.modalMsg({ 'msg' : '<h3>Your already have a pending application</h3>', 'mode' : false })
+        });
+        $(document).on('click','#select_course',async(e) => {
+            e.preventDefault()
+            const select_course = e.currentTarget.attributes[1].value
+            let collect = await ServerData.bindAuth('POST',`./selectCourses`,true,{ 'selected' : select_course })
+            if(collect){
+                ServerData.modalMsg({ 'msg' : '<h3>Changed!!</h3>', 'mode' : true })
+                document.location.assign('./change_course')
+            }else
+                ServerData.modalMsg({ 'msg' : '<h3>Error accessing record. Try again</h3>', 'mode' : false })
+        });
+        $(document).on('click','#choose-all',async(e) => {
+            e.preventDefault()
+            const intake = $('#all_intake').val().split(',')[0]
+            let collect = await ServerData.bindAuth('POST',`./getCourses`,true,{ intake })
+            let courses = collect.course.map( b => (!b.courses[0].status) ? Number(b.courses[0].id) : 0 );
+            console.log(courses)
+            let added = await ServerData.bindAuth('POST',`./addCourses`,true,{ intake, courses })
+            if(!added.feedback.includes(0)){
+                ServerData.modalMsg({ 'msg' : '<h3>Added All!!</h3>', 'mode' : true })
+                plotCourses()
+            }else
+                ServerData.modalMsg({ 'msg' : '<h3>Not all records were added</h3>', 'mode' : false })
+
+        })
+        $(document).on('click','#print-year',async(e) => {
+            e.preventDefault()
+            const course = $('#all_course').val().split(',')[0]
+            const course_name = $('#all_course').val().split(',')[1]
+            let collect = await ServerData.bindAuth('POST',`./getReport`,true,{ course })
+            if(!collect.report.includes(false)) {
+                if(collect.report.length > 0) {
+                    const invoice = document.createElement('div')
+                    invoice.setAttribute('id', 'print_pdf')
+                    invoice.setAttribute('style', 'width:98%;margin:1%;height:98%;')
+                    invoice.innerHTML = `
+                    <div style = 'width:100%;text-align:center;'>
+                        <img src = './../Images/clientlogo.png'>
+                        <p style = 'font-size:180%'>REPORT ON CLASSES FOR THE COURSE ${ course_name }</p>
+                        <p style = 'font-size:160%;background:rgba(234,234,234,0.7);height:40px;width:60%;'>DEPARTMENT : ${ collect.department }</p>
+                    </div>
+                    ${
+                        collect.report.map(c =>
+                        `
+                        <section style = 'font-size:130%;width:100%;text-align:center;border:1px solid #ccc;margin-top:4%;'>
+                            <p>Class : ${ c.class }</p>
+                            <div style = 'width:100%;text-align:center;'>
+                                <section style = 'width : 100%;display : flex;flex-wrap : wrap;'>
+                                    <div style = 'width : 15%;margin : 0.5%;min-height : 20%;border : 1px solid #ccc;border-radius : 3px;'>
+                                        INTAKE
+                                    </div>
+                                    <div style = 'width : 15%;margin : 0.5%;min-height : 20%;border : 1px solid #ccc;border-radius : 3px;'>
+                                        FROM
+                                    </div>
+                                    <div style = 'width : 15%;margin : 0.5%;min-height : 20%;border : 1px solid #ccc;border-radius : 3px;'>
+                                        TO
+                                    </div>
+                                    <div style = 'width : 15%;margin : 0.5%;min-height : 20%;border : 1px solid #ccc;border-radius : 3px;'>
+                                        SEMESTER
+                                    </div>
+                                    <div style = 'width : 15%;margin : 0.5%;min-height : 20%;border : 1px solid #ccc;border-radius : 3px;'>
+                                        YEAR
+                                    </div>
+                                </section>
+                            </div>
+                            <div style = 'width:100%;text-align:center;'>
+                            ${
+                                    c.intake.map((i, k) =>
+                                        `
+                                        <section style = 'width : 100%;display : flex;flex-wrap : wrap;${ (k%2) ? 'background::#fff':'background:rgba(234,234,234,0.7)' }'>
+                                             <p style = 'width : 15%;margin : 0.5%;min-height : 20%;border-radius : 3px;${ (k%2) ? 'border : 1px solid #ccc;' : 'border : 1px solid #fff;'}'>${ i }</p>
+                                             <p style = 'width : 15%;margin : 0.5%;min-height : 20%;border-radius : 3px;${ (k%2) ? 'border : 1px solid #ccc;' : 'border : 1px solid #fff;'}'>${ c.intakes_from[k] }</p>
+                                             <p style = 'width : 15%;margin : 0.5%;min-height : 20%;border-radius : 3px;${ (k%2) ? 'border : 1px solid #ccc;' : 'border : 1px solid #fff;'}'>${ c.intakes_to[k] }</p>
+                                             <p style = 'width : 15%;margin : 0.5%;min-height : 20%;border-radius : 3px;${ (k%2) ? 'border : 1px solid #ccc;' : 'border : 1px solid #fff;'}'>${ c.semester[k] }</p>
+                                             <p style = 'width : 15%;margin : 0.5%;min-height : 20%;border-radius : 3px;${ (k%2) ? 'border : 1px solid #ccc;' : 'border : 1px solid #fff;'}'>${ c.year[k] }</p>
+                                        </section>
+                                        <section style = 'width : 100%;display : flex;flex-wrap : wrap;${ (k%2) ? 'background::#fff':'background:rgba(234,234,234,0.7)' }'>
+                                            ${
+                                            c.status[k].map( s => `<div class = '${ (s == "IN SESSION")? 'btn btn-sm btn-alt-success' : (s == "ONLINE SESSION") ? 'btn btn-sm btn-alt-success' :  (s == "WORKSHOP") ? 'btn btn-sm btn-alt-success' : 'btn btn-sm btn-alt-danger'}' style = 'margin:1%;'>${ s }</div>`).join('')
+                                        }
+                                        </section>
+                                    `
+                                    ).join('')
+                                }
+                            </div>
+                        </section>
+                        
+                    `                            
+                        )
+                    }
+                    `
+                    ServerData.generatePDF({ 'body' : invoice, 'file' : 'DepartmentClasses.pdf' })
+                }else
+                    ServerData.modalMsg({ 'msg' : '<h3>There are no records</h3>', 'mode' : false })
+            }else
+                ServerData.modalMsg({ 'msg' : '<h3>There is no active intakes</h3>', 'mode' : false })
+        })
+        $(document).on('click','#print-report',async(e) => {
+            e.preventDefault()
+            const intake = $('#all_intake').val().split(',')[0]
+            const intake_name = $('#all_intake').val().split(',')[1]
+
+            let collect = await ServerData.bindAuth('POST',`./getCourses`,true,{ intake })
+            if(collect.course.length > 0) {
+                const invoice = document.createElement('div')
+                invoice.setAttribute('id', 'print_pdf')
+                invoice.setAttribute('style', 'width:98%;margin:1%;height:98%;')
+                invoice.innerHTML = `
+                <div style = 'width:100%;text-align:center;'>
+                    <img src = './../Images/clientlogo.png'>
+                    <p style = 'font-size:180%'>REPORT ON COURSES FOR THE INTAKE ${ intake_name }</p>
+                    <p style = 'font-size:160%;background:rgba(234,234,234,0.7);height:40px;width:60%;'>DEPARTMENT : ${ collect.department }</p>
+                </div>
+                <section style = 'width : 100%;display : flex;flex-wrap:wrap;'>
+                    <div style = 'border:1px solid #ccc;width : 19.6%;margin : 0.2%;'>
+                        <span>COURSE NAME</span>
+                    </div>
+                    <div style = 'border:1px solid #ccc;width : 19.6%;margin : 0.2%;'>
+                        <span>COURSE CODE</span>
+                    </div>
+                </section>
+                    ${
+                        collect.course.map((c, key) =>
+                            `
+                            <section style = 'width: 98%;margin: 1%;display: flex;flex-wrap: wrap;flex-direction: row;border-radius: 3px;text-align: center;${(key % 2) ? 'background:#fff;border:1px solid #ccc' : 'background:rgba(234,234,234,0.7)'}'>
+                                <div  style = 'width : 100%;display : flex;flex-wrap:wrap;'>
+                                    <div style = 'border:1px solid #ccc;width : 19.6%;margin : 0.2%;'>                           
+                                        <p>${c.courses[0].name}</p>
+                                    </div>
+                                    <div style = 'border:1px solid #ccc;width : 19.6%;margin : 0.2%;'>                            
+                                        <p>${c.courses[0].code}</p> 
+                                    </div> 
+                                </div>
+                                <div style = 'width : 100%;'>
+                                    <p>Attendances allowed in intake</p>
+                                    <div style = 'display : flex;flex-wrap : wrap;width: 100%;text-align:left;'>
+                                    ${
+                                        (c.attendances.length > 0)
+                                            ?
+                                            `
+                                                            ${
+                                                c.attendances.map(a =>
+                                                    `
+                                                        <button style = 'height:50px;${(a.status) ? 'background : #097B3E;border : 1px solid #fff;color : #fff;' : 'background : #fff;border : 1px solid rgba(0,0,0,0.7);color : rgb(0,0,0,0.7);'}'>
+                                                            <i class='fas fa-users' style = 'font-size:350%;'></i>
+                                                            <p>${a.name}</p>
+                                                            <p>${a.code}</p>
+                                                        </button>                                
+                                                    `
+                                                ).join('')
+                                            }
+                                                            `
+                                            :
+                                            `There are no attendances for this course`
+                                    }
+                                    </div>
+                                </div>
+                                
+                                <div style = 'width : 100%;text-align:left;'>
+                                    <p>Please select years allowed for the intake</p>
+                                    <div style = 'display : flex;flex-wrap : wrap;width: 100%;'>
+                                        ${
+                                            (c.years.length > 0)
+                                                ?
+                                                `
+                                                    ${
+                                                        c.years.map(y =>
+                                                            `
+                                                                <button style = '${(!y.status) ? 'background : #fff;border : 1px solid rgba(0,0,0,0.7);color : rgb(0,0,0,0.7);' : 'background : #097B3E;border : 1px solid #fff;color : #fff;'}'>
+                                                                    <p>Year ${y.name}</p>
+                                                                </button>                               
+                                                            `
+                                                        ).join('')
+                                                    }
+                                                        `
+                                                :
+                                                `There are no years selected for this course`
+                                        }
+                                    </div>                    
+                                </div>    
+                            </section>
+                            `
+                        ).join('')
+                    }
+                `
+                ServerData.generatePDF({ 'body' : invoice, 'file' : 'DepartmentIntake.pdf' })
+            }else
+                ServerData.modalMsg({ 'msg' : '<h3>There are no courses for the intake selected</h3>', 'mode' : false })
+
+        });
+        $(document).on('click','#reset-all',async(e) => {
+            e.preventDefault()
+            const intake = $('#all_intake').val().split(',')[0]
+            let collect = await ServerData.bindAuth('POST',`./getCourses`,true,{ intake })
+            let courses = collect.course.map( b => (b.courses[0].status) ? Number(b.courses[0].id) : 0 );
+            console.log(courses)
+            let removed = await ServerData.bindAuth('POST',`./removeCourses`,true,{ intake, courses })
+            if(!removed.feedback.includes(0)){
+                ServerData.modalMsg({ 'msg' : 'Removed All!!', 'mode' : true })
+                plotCourses()
+            }else
+                ServerData.modalMsg({ 'msg' : 'There was an error. Try again', 'mode' : false })
+        })
+        $(document).on('click','#confirm-box',async(e) => {
+            e.preventDefault()
+            const intake = $('#all_intake').val().split(',')[0]
+            const course = e.currentTarget.attributes[1].value
+
+            let status = 'Added!!'
+            if(e.currentTarget.attributes[2].value === "true")
+                status = "Removed!!"
+
+            let added = await ServerData.bindAuth('POST',`./addCourse`,true,{ intake, course })
+            if(added.feedback)
+                ServerData.modalMsg({ 'msg' : `${ status }`, 'mode' : true },plotCourses())
+            else
+                ServerData.modalMsg({ 'msg' : 'There was an error. Try again', 'mode' : false })
+
+        })
+        $(document).on('click','#attendant-button',async(e) => {
+            e.preventDefault();
+            ServerData.modalMsg({ 'msg' : '<h3>Please select the course first</h3>', 'mode' : false })
+        })
+        $(document).on('click','#confirm-attendance-box',async(e) => {
+            e.preventDefault()
+            const attendance = e.currentTarget.attributes[1].value
+            const course = e.currentTarget.attributes[4].value
+            const intake = $('#all_intake').val().split(',')[0]
+
+            let status = 'Added!!'
+            if(e.currentTarget.attributes[2].value === "true")
+                status = "Removed!!"
+
+            let added = await ServerData.bindAuth('POST',`./addAttendance`,true,{ attendance, course, intake })
+            if(added.feedback){
+                ServerData.modalMsg({ 'msg' : `${ status }`, 'mode' : true })
+                plotCourses()
+            }else
+                ServerData.modalMsg({ 'msg' : '<h3>There was an error. Try again</h3>', 'mode' : false })
+        })
+        $(document).on('click','#close-stamp',async(e) => {
+            e.preventDefault()
+            $('#fill-modal').remove()
+            const element = document.getElementById("fill-modal");
+                        if(element)
+                            element.remove();
+        })
+        $(document).on('click','#save-stamp',async(e) => {
+            e.preventDefault()
+            const year = e.currentTarget.attributes[1].value
+            const course = e.currentTarget.attributes[2].value
+            const intake = e.currentTarget.attributes[3].value
+
+            const sessionArr = []
+            const typeArr = []
+            document.querySelectorAll('#session-activity').forEach( s => {
+                if(s.checked) {
+                    sessionArr.push(s.value)
+                    typeArr.push(s.attributes[2].value)
+                }
+            })
+            let allow = true;
+            if(typeArr.includes("0") && typeArr.includes("1"))
+                allow = false
+            if(allow) {
+                let added = await ServerData.bindAuth('POST', `./classSession`, true, {
+                    course,
+                    year,
+                    intake,
+                    'session': sessionArr
+                })
+                if (!added.feedback.includes(false))
+                    ServerData.modalMsg({ 'msg' : `<h3>Updated</h3>`, 'mode' : true, 'callback' : plotClasses() })
+                else
+                    ServerData.modalMsg({ 'msg' : `<h3>There was an error. Try again</h3>`, 'mode' : false })
+            }else
+                ServerData.modalMsg({ 'msg' : `<h3>The two session types cannot be included together. Change one</h3>`, 'mode' : false })
+
+        })
+        $(document).on('click','#confirm-years-box',async(e) => {
+            e.preventDefault()
+            const year = e.currentTarget.attributes[1].value
+            const course = e.currentTarget.attributes[4].value
+            const intake = $('#all_intake').val().split(',')[0]
+
+            let status = 'Added!!'
+            if(e.currentTarget.attributes[2].value === "true")
+                status = "Removed!!"
+
+            let added = await ServerData.bindAuth('POST',`./addYears`,true,{ intake, course, year })
+            if(added.feedback){
+                ServerData.modalMsg({ 'msg' : `${ status }`, 'mode' : true, 'callback' :  plotCourses() })
+
+            }else
+                ServerData.modalMsg({ 'msg' : 'There was an error. Try again', 'mode' : false })
+        })
+        $(document).on('click','#remove-session',async(e) => {
+            e.preventDefault()
+            const year = e.currentTarget.attributes[3].value
+            const intake = e.currentTarget.attributes[2].value
+            const course = e.currentTarget.attributes[4].value
+            const status = e.currentTarget.attributes[1].value
+            console.log({ year, intake, course, status })
+            let remove = await ServerData.bindAuth('POST',`./removeSession`,true,{ intake, course, year, status })
+            if(remove.feedback)
+                ServerData.modalMsg({ 'msg' : `Removed!`, 'mode' : true, 'callback' :  plotClasses() })
+            else
+                ServerData.modalMsg({ 'msg' : 'There was an error. Try again', 'mode' : false })
+        })
+        $(document).on('click','#confirm-class-box',async(e) => {
+            e.preventDefault()
+            const year = e.currentTarget.attributes[1].value
+            const intake = e.currentTarget.attributes[2].value
+            const course = $('#all_course').val().split(',')[0]
+
+            $('.content-force').append(`
+                <div id = 'fill-modal'>
+                    <div id = 'inner-fill-modal-stamp'>
+                        <p>Please select the type of session</p>
+                        <div id = 'session-option'>
+                            <p style = 'background:rgba(234,234,234,0.7);width:100%;height:30px;'><input type = 'checkbox' id = 'session-activity' index = '1' value = 'IN SESSION'> IN SESSION</p>
+                            <p style = 'background:#fff;width:100%;height:30px;'><input type = 'checkbox' id = 'session-activity' index = '0' value = 'LONG HOLIDAY'> LONG HOLIDAY</p>
+                            <p style = 'background:rgba(234,234,234,0.7);width:100%;height:30px;'><input type = 'checkbox' id = 'session-activity' index = '0' value = 'SHORT HOLIDAY'> SHORT HOLIDAY</p>
+                            <p style = 'background:#fff;width:100%;height:30px;'><input type = 'checkbox' id = 'session-activity' index = '1' value = 'ONLINE SESSION'> ONLINE SESSION</p>
+                            <p style = 'background:rgba(234,234,234,0.7);width:100%;height:30px;'><input type = 'checkbox' id = 'session-activity' index = '1' value = 'WORKSHOP'> WORKSHOP</p>
+                        </div>
+                        <div id = 'make-buttons-section'>
+                            <button id="close-stamp" class = 'btn btn-sm btn-alt-danger' data-toggle = 'click-ripple'>Close</button>
+                            <button id="save-stamp" data-year = '${ year }' data-course = '${ course }' data-intake = '${ intake }' class = 'btn btn-sm btn-alt-success' data-toggle = 'click-ripple'>Save</button>
+                        </div>
+                    </div>
+                </div>
+            `)
+
+        })
+        $(document).on('click','#print-approval',async(e) =>{
+            e.preventDefault()
+            let applications = await ServerData.bindAuth('POST',`./printApplications`,true,{ 'status' : e.currentTarget.attributes[1].value })
+            const decision = e.currentTarget.attributes[1].value.split(',')
+            let operation = 'PENDING'
+            if(decision.includes(1) || decision.includes(6) || decision.includes(3) || decision.includes(5) || decision.includes(7))
+                operation = 'APPROVED'
+            if(decision.includes(2) || decision.includes(4) || decision.includes(8) || decision.includes(9) || decision.includes(10))
+                operation = 'REJECTED'
+            if(applications.application){
+                if(applications.application.length > 0){
+
+                    const invoice = document.createElement('div')
+                    invoice.setAttribute('id', 'print_pdf')
+                    invoice.setAttribute('style', 'width:98%;margin:1%;height:98%;')
+                    invoice.innerHTML = `
+                    <div style = 'width:100%;text-align:center;'>
+                        <img src = './../Images/clientlogo.png'>
+                        <p style = 'font-size:180%'>REPORT ON ${ operation} APPLICATION FOR THE INTAKE ${ e.currentTarget.attributes[2].value }</p>
+                        <p style = 'font-size:160%;background:rgba(234,234,234,0.7);height:40px;width:60%;'>DEPARTMENT : ${ applications.department }</p>
+                    </div>   
+                    ${
+                        applications.application.map(user =>
+                            `
+                            ${
+                                user.map((a, k) =>
+                                    `
+                                        <section style="font-size:120%width:98%;display:flex;text-align:center;margin:1%;${(k%2) ? 'background:rgba(234,234,234,0.7)' : 'background:#fff'}">
+                                            <div style = "width:23%;margin:1%;${ (k%2) ? 'border:1px solid #fff' : 'border:1px solid rgba(234,234,234,0.7)'}">
+                                                <p>Name</p>
+                                                ${a.fname + ' ' + a.sname}
+                                            </div>  
+                                            <div style = "width:23%;margin:1%;${ (k%2) ? 'border:1px solid #fff' : 'border:1px solid rgba(234,234,234,0.7)'}">
+                                                <p>Telephone</p>
+                                                ${a.mobile}
+                                            </div>  
+                                            <div style = "width:23%;margin:1%;${ (k%2) ? 'border:1px solid #fff' : 'border:1px solid rgba(234,234,234,0.7)'}">
+                                                <p>Course</p>
+                                                ${a.course}
+                                            </div> 
+                                            <div style = "width:23%;margin:1%;${ (k%2) ? 'border:1px solid #fff' : 'border:1px solid rgba(234,234,234,0.7)'}">
+                                                ${(a.status == 0) ? `WAITING FOR COD ACTION` : (a.status == 1) ? `<p>COD APPROVED</p>` : (a.status == 2) ? `<p>COD REJECTED</p>` : (a.status == 3) ? `<p>COD APPROVED & Dean APPROVED</p>` : (a.status == 4) ? `<p>COD APPROVED & DEAN REJECTED</p>` : (a.status == 5) ? `<p>COD REJECTED & DEAN APPROVED</p>` : (a.status == 6) ? `COD PUSHED APPROVED APPLICATION TO DEAN` : (a.status == 7) ? `DEAN PUSHED APPROVED APPLICATION FOR MAIL` : (a.status == 8) ? `COD & DEAN HAS REJECTED` : (a.status == 9) ? `COD PUSHED REJECTED APPLICATION TO DEAN` : (a.status == 10) ? `DEAN PUSHED REJECTED APPLICATION TO MaIL` : 'APPLICANT HAS NOT FINISHED APPLYING'}
+                                            </div>   
+                                        </section>                                                                            
+                                    `
+                                )
+                            }
+                        `
+                        )
+                    }
+                    `
+                    ServerData.generatePDF({ 'body' : invoice, 'file' : `${ applications.department }${ operation }.pdf` })
+                }else
+                    ServerData.modalMsg({'msg' : '<h3>Could not find data</h3>', 'mode' : false})
+            }else
+                ServerData.modalMsg({'msg' : '<h3>Database Empty</h3>', 'mode' : false})
+        })
         $(document).on('click','#view-application-list',function(e){
             e.preventDefault()
             sessionStorage.setItem('appId',e.currentTarget.attributes[1].value)
             sessionStorage.setItem('programId',e.currentTarget.attributes[2].value)
             sessionStorage.setItem('status',e.currentTarget.attributes[3].value)
-            document.location.assign(`/approval/pendingView`)
+            sessionStorage.setItem('nameIntake',e.currentTarget.attributes[4].value)
+            document.location.assign(`./pendingView`)
         })
         $(document).on('click','#prev',function(e){
             e.preventDefault();
@@ -458,229 +1259,366 @@
         $(document).on('click','#search-query-button', async(e) =>{
             e.preventDefault()
             const search = $('#search-input').val();
-            let search_query = await ServerData.bindAuth('POST',`/approval/getCandidate`,true,{ 'value' : search })
+            let search_query = await ServerData.bindAuth('POST',`./getCandidate`,true,{ 'value' : search })
             console.log(search_query)
-            let approvals = "<div id = 'time-out'><img src = '/Images/clipboard.svg'>Database Empty</div>"
+            let approvals = "<div id = 'time-out'><img src = './../Images/clipboard.svg'>Database Empty</div>"
             if(search_query.user){
-                approvals = "<div id = 'time-out'><img src = '/Images/clipboard.svg'>Could not find data</div>"
+                approvals = "<div id = 'time-out'><img src = './../Images/clipboard.svg'>Could not find data</div>"
                 if(search_query.user.length > 0){
-                    approvals = search_query.user.map( a =>
+                    approvals = search_query.user.map( (a,k) =>
                         `
-                            <section class = 'part-level'>
+                            <section class = 'part-level' style = '${ (k%2)? 'background:#fff':'background:rgba(234,234,234,0.7)' }'>
                                 <div>
                                     <p>Name</p>
-                                    ${ a.name }
+                                    ${ a.fname + ' ' + a.sname }
                                 </div>
                                 <div>
                                     <p>Telephone</p>
-                                    ${ a.telephone }
-                                </div>
-                                <div>
-                                    <p>Fee</p>
-                                    ${ a.amount }
+                                    ${ a.mobile }
                                 </div>
                                 ${
-                                    (search_query.role === 2)
+                                    (search_query.application.length > 0)
                                     ?
                                     `
+                                    ${
+                                        (search_query.role == 2)
+                                            ?
+                                            `
                                         <div>
-                                            ${ (a.final_status == 0)? `<button id = 'approve-button' index = '${ a.applications_id }'>Approve</button>` : (a.final_status == 1) ? `<p>COD Approved</p>` : (a.final_status == 2) ? `<p>COD Rejected</p>` : (a.final_status == 6) ? `COD PUSHED APPROVED APPLICATIONS`  : (a.final_status == 9) ? `COD PUSHED REJECTED APPLICATION`  : 'false'  }
+                                            ${(search_query.application[0][0].status == 0) ? `<button id = 'approve-button' index = '${a.id}' class = 'btn btn-sm btn-alt-success' data-toggle = 'click-ripple'>Approve</button>` : (search_query.application[0][0].status == 1) ? `<p>COD APPROVED</p>` : (search_query.application[0][0].status == 2) ? `<p>COD REJECTED</p>` : (search_query.application[0][0].status == 3) ? `<p>COD APPROVED & Dean APPROVED</p>` : (search_query.application[0][0].status == 4) ? `<p>COD APPROVED & DEAN REJECTED</p>` : (search_query.application[0][0].status == 5) ? `<p>COD REJECTED & DEAN APPROVED</p>` : (search_query.application[0][0].status == 6) ? `COD PUSHED APPROVED APPLICATION TO DEAN` : (search_query.application[0][0].status == 7) ? `DEAN PUSHED APPROVED APPLICATION FOR MAIL` : (search_query.application[0][0].status == 8) ? `COD & DEAN HAS REJECTED` : (search_query.application[0][0].status == 9) ? `COD PUSHED REJECTED APPLICATION TO DEAN` : (search_query.application[0][0].status == 10) ? `DEAN PUSHED REJECTED APPLICATION TO MaIL` : 'APPLICANT HAS NOT FINISHED APPLYING'}
                                         </div>
                                         <div>
-                                            ${ (a.final_status == 0)? `<button id = 'reject-button' index = '${ a.applications_id }'>Reject</button>` : (a.final_status == 1) ? `<button id = 'reject-button' index = '${ a.applications_id }'>Reject</button>` : (a.final_status == 2) ? `<button id = 'approve-button' index = '${ a.applications_id }'>Approve</button>` : (a.final_status == 6) ? `COD PUSHED APPROVED APPLICATIONS` : (a.final_status == 9) ? `COD PUSHED REJECTED APPLICATION` : 'false'  }
+                                            ${(search_query.application[0][0].status == 0) ? `<button id = 'reject-button' index = '${a.id}' class = 'btn btn-sm btn-alt-danger' data-toggle = 'click-ripple'>Reject</button>` : (search_query.application[0][0].status == 1) ? `<button id = 'reject-button' index = '${a.id}' class = 'btn btn-sm btn-alt-danger' data-toggle = 'click-ripple'>Reject</button>` : (search_query.application[0][0].status == 2) ? `<button id = 'approve-button' index = '${a.id}' class = 'btn btn-sm btn-alt-success' data-toggle = 'click-ripple'>Approve</button>` : (search_query.application[0][0].status == 3) ? `<p>COD APPROVED & DEAN APPROVED</p>` : (search_query.application[0][0].status == 4) ? `<p>COD APPROVED & DEAN REJECTED APPLICATION</p>` : (search_query.application[0][0].status == 5) ? `<p>COD REJECTED & DEAN APPROVED APPLICATION</p>` : (search_query.application[0][0].status == 6) ? `COD PUSHED APPROVED APPLICATION TO DEAN` : (search_query.application[0][0].status == 7) ? `DEAN PUSHED ACCEPTED APPLICATION FOR MAIL` : (search_query.application[0][0].status == 8) ? `COD & DEAN HAS REJECTED APPLICATION` : (search_query.application[0][0].status == 9) ? `COD PUSHED REJECTED APPLICATION TO DEAN` : (search_query.application[0][0].status == 10) ? `DEAN PUSHED REJECTED APPLICATION TO MAIL` : 'APPLICANT HAS NOT FINISHED APPLYING'}
                                         </div>
+                                        `
+                                            :
+                                            `
+                                        <div>
+                                            ${(search_query.application[0][0].status == 0) ? `PENDING COD ACTION` : (search_query.application[0][0].status == 1) ? `<p>COD APPROVED</p>` : (search_query.application[0][0].status == 2) ? `<p>COD REJECTED</p>` : (search_query.application[0][0].status == 3) ? `<p>COD APPROVED & DEAN APPROVED</p>` : (search_query.application[0][0].status == 4) ? `<p>COD APPROVED & DEAN REJECTED</p>` : (search_query.application[0][0].status == 5) ? `<p>COD REJECTED & DEAN APPROVED</p>` : (search_query.application[0][0].status == 6) ? `<button id = 'approve-button' index = '${a.id}' class = 'btn btn-sm btn-alt-success' data-toggle = 'click-ripple'>Approve</button>` : (search_query.application[0][0].status == 7) ? `DEAN HAS PUSHED ACCEPTED APPLICATIONS` : (search_query.application[0][0].status == 8) ? `COD & DEAN HAS REJECTED` : (search_query.application[0][0].status == 9) ? `<button id = 'approve-button' index = '${a.id}' class = 'btn btn-sm btn-alt-success' data-toggle = 'click-ripple'>Approve</button>` : (search_query.application[0][0].status == 10) ? `DEAN PUSHED REJECTED APPLICATION` : 'APPLICANT HAS NOT FINISHED APPLYING'}
+                                        </div>
+                                        <div>
+                                            ${(search_query.application[0][0].status == 0) ? `PENDING COD ACTION` : (search_query.application[0][0].status == 1) ? `<p>COD APPROVED</p>` : (search_query.application[0][0].status == 2) ? `<p>COD REJECTED</p>` : (search_query.application[0][0].status == 3) ? `<p>COD APPROVED & DEAN APPROVED</p>` : (search_query.application[0][0].status == 4) ? `<p>COD APPROVED & DEAN REJECTED</p>` : (search_query.application[0][0].status == 5) ? `<p>COD REJECTED & DEAN APPROVED</p>` : (search_query.application[0][0].status == 6) ? `<button id = 'reject-button' index = '${a.id}' class = 'btn btn-sm btn-alt-danger' data-toggle = 'click-ripple'>Reject</button>` : (search_query.application[0][0].status == 7) ? `DEAN HAS PUSHED ACCEPTED APPLICATIONS` : (search_query.application[0][0].status == 8) ? `COD & DEAN HAS REJECTED` : (search_query.application[0][0].status == 9) ? `<button id = 'reject-button' index = '${a.id}' class = 'btn btn-sm btn-alt-danger' data-toggle = 'click-ripple'>Reject</button>` : (search_query.application[0][0].status == 10) ? `DEAN PUSHED REJECTED APPLICATION` : 'APPLICANT HAS NOT FINISHED APPLYING'}
+                                        </div>
+                                        `
+                                    }
                                     `
                                     :
-                                    `
-                                        <div>
-                                            ${ (a.final_status == 3) ? `<p>COD Approved & Dean Approved</p>` : (a.final_status == 4) ? `<p>COD Approved & Dean Rejected</p>` : (a.final_status == 5) ? `<p>COD Rejected & Dean Approve</p>` : (a.final_status == 6) ? `<button id = 'approve-button' index = '${ a.applications_id }'>Approve</button>` : (a.final_status == 7) ? `DEAN PUSHED ACCEPTED APPLICATION` : (a.final_status == 8) ? `COD & DEAN REJECTED`  : (a.final_status == 9) ? `<button id = 'approve-button' index = '${ a.applications_id }'>Approve</button>` : (a.final_status == 10) ? `DEAN PUSHED REJECTED APPLICATION`  : 'false'  }
-                                        </div>
-                                        <div>
-                                            ${  (a.final_status == 3) ? `<p>COD Approved & Dean Approved</p>` : (a.final_status == 4) ? `<p>COD Approved & Dean Rejected</p>` : (a.final_status == 5) ? `<p>COD Rejected & Dean Approve</p>` : (a.final_status == 6) ? `<button id = 'reject-button' index = '${ a.applications_id }'>Reject</button>` : (a.final_status == 7) ? `DEAN PUSHED ACCEPTED APPLICATION` : (a.final_status == 8) ? `COD & DEAN REJECTED`  : (a.final_status == 9) ? `<button id = 'reject-button' index = '${ a.applications_id }'>Reject</button>` : 'false'  }
-                                        </div>
-                                    `
+                                    'NO APPLICATION'
                                 }
-                            </section>
-                            <section class = 'inner-part-level'>
-                                <div id = 'other-table'>
-                                    ${ (a.academics) ? $.parseJSON(a.academic).map( a =>
-                                        `<div>
-                                            <p>Grade</p>
-                                            ${ a.grade }
-                                        </div>
-                                        <div>
-                                            <p>Certificate</p>
-                                            ${ a.certificate }
-                                        </div>
-                                        <div>
-                                            <p>Start</p>
-                                            ${ a.start }
-                                        </div>
-                                        <div>
-                                            <p>End</p>
-                                            ${ a.end }
-                                        </div>
-
-                                        `
-                                    ) : '<p>No academic profile</p>'}
+                                <div>
+                                    <button id = 'view-more-level' pin = 'false' key = '${ k }' class = 'btn btn-alt-info' data-toggle = 'click-ripple'>View More</button>
                                 </div>
+                            </section>
+                            <section class = 'inner-part-level${ k }' id = 'inner-part-level' style = 'display:none;'>
+                                <h3>Academics Profile</h3>
+                                ${
+                                    (search_query.education.length > 0)
+                                    ?
+                                    `
+                                        <div id = 'other-table'>
+                                            <div>
+                                                <p>Institution</p>
+                                                ${ search_query.education[0].institution }
+                                            </div>
+                                            <div>
+                                                <p>Grade</p>
+                                                ${ search_query.education[0].qualification }
+                                            </div>
+                                            <div>
+                                                <p>Certificate</p>
+                                                <a href = './../certs/${ search_query.education[0].certificate }' target = '_blank' class = 'btn btn-sm btn-alt-success'>Download</a>
+                                            </div>
+                                        </div>                              
+                                    `
+                                :
+                                `Applicant has no academic profile`
+                                } 
+                                <h3>Work Profile</h3>
+                                ${
+                                    (search_query.work.length > 0)
+                                    ?
+                                    `
+                                         <div id = 'other-table'>
+                                            <div>
+                                                <p>Institution</p>
+                                                ${search_query.work[0].organization}
+                                            </div>
+                                            <div>
+                                                <p>Job</p>
+                                                ${search_query.work[0].post}
+                                            </div>
+                                        </div>                                   
+                                    `
+                                    :
+                                    `Applicant has no work profile`
+                                }
+                                <h3>Application Process</h3>
                                 <div id = 'other-table'>
-                                    ${ (a.status) ? $.parseJSON(a.status).map( a =>
-                                        `<div>
-                                            <p>Action</p>
-                                            ${ (a.status == 1) ? `COD APPROVED` : (a.status == 2) ? `COD REJECTED` : (a.status == 3) ? `COD APPROVED & DEAN APPROVED` : (a.status == 4) ? `COD APPROVED & DEAN REJECTED` : (a.status == 5) ? `COD REJECTED & DEAN APPROVED` : (a.status == 6) ? `COD HAS APPROVED & PUSHED TO DEAN` : (a.status == 7) ? `DEAN HAS APPROVED & PUSHED FOR MAIL` : (a.status == 8) ? `COD REJECTED && DEAN REJECTED` : (a.status == 9) ? `COD REJECTED && PUSHED TO DEAN` : (a.status == 10) ? `DEAN HAS REJECTED && PUSHED TO MAIL` :  `STILL PENDING` }
-                                        </div>
-                                        <div>
-                                            <p>Reason</p>
-                                            ${ a.reason }
-                                        </div>
-                                        <div>
-                                            <p>Designation</p>
-                                            ${ a.level }
-                                        </div>
-                                        <div>
-                                            <p>Date</p>
-                                            ${ a.date }
-                                        </div>
-
+                                    ${
+                                        (search_query.application.length > 0)
+                                        ?
                                         `
-                                    ) : '<p>Not yet pushed</p>'
+                                        ${
+                                            (search_query.application[0][0].process_status) ? $.parseJSON(search_query.application[0][0].process_status).map((s, k) =>
+                                                `
+                                            <section style = '${ (k%2) ? 'background:rgba(234,234,234,0.7)' : 'background:#fff'}'>
+                                                <div id = 'number' style = '${ (k%2) ? 'border: 1px solid #fff' : 'border:1px solid rgba(@34,234,234,0.7)'}'>
+                                                    ${(k + 1)}
+                                                </div>
+                                                <div style = '${ (k%2) ? 'border: 1px solid #fff' : 'border:1px solid rgba(@34,234,234,0.7)'}'>
+                                                    <p>Action</p>
+                                                    ${(s.status == 1) ? `COD APPROVED` : (s.status == 2) ? `COD REJECTED` : (s.status == 3) ? `COD APPROVED & DEAN APPROVED` : (s.status == 4) ? `COD APPROVED & DEAN REJECTED` : (s.status == 5) ? `COD REJECTED & DEAN APPROVED` : (s.status == 6) ? `COD HAS APPROVED & PUSHED TO DEAN` : (s.status == 7) ? `DEAN HAS APPROVED & PUSHED FOR MAIL` : (s.status == 8) ? `COD REJECTED && DEAN REJECTED` : (s.status == 9) ? `COD REJECTED && PUSHED TO DEAN` : (s.status == 10) ? `DEAN HAS REJECTED && PUSHED TO MAIL` : `STILL PENDING`}
+                                                </div>
+                                                <div style = '${ (k%2) ? 'border: 1px solid #fff' : 'border:1px solid rgba(@34,234,234,0.7)'}'>
+                                                    <p>Reason</p>
+                                                    ${s.reason}
+                                                </div>
+                                                <div style = '${ (k%2) ? 'border: 1px solid #fff' : 'border:1px solid rgba(@34,234,234,0.7)'}'>
+                                                    <p>Designation</p>
+                                                    ${s.level}
+                                                </div>
+                                                <div style = '${ (k%2) ? 'border: 1px solid #fff' : 'border:1px solid rgba(@34,234,234,0.7)'}'>
+                                                    <p>Date</p>
+                                                    ${s.date}
+                                                </div>
+                                            </section>
+                                            `
+                                            ).join('')
+                                            : '<p>PENDING COD ACTION</p>'
+                                        }
+                                        `
+                                        :
+                                        `NO APPLICATION`
                                     }
                                 </div>
-                                <div id = 'other-table'>
-                                    ${ (a.work) ? $.parseJSON(a.work).map( a =>
-                                        `<div>
-                                            <p>Institution</p>
-                                            ${ a.institution }
-                                        </div>
-                                        <div>
-                                            <p>Start</p>
-                                            ${ a.start }
-                                        </div>
-                                        <div>
-                                            <p>End</p>
-                                            ${ a.end }
-                                        </div>
-
-                                        `
-                                    ) : '<p>No work profile</p>'}
-                                </div>
                             </section>
-
-                        `
+                            `
                     )
 
                 }
             }
             $('#candidate-page').html(approvals)
         })
+        $(document).on('click','#view-attendance',function(e){
+            e.preventDefault();
+            if(e.currentTarget.attributes[2].value === 'false'){
+                $('.attendance-section' + e.currentTarget.attributes[1].value).slideDown()
+                e.currentTarget.attributes[2].value = true
+                e.currentTarget.innerHTML = "View Less"
+            }else{
+                $('.attendance-section' + e.currentTarget.attributes[1].value).slideUp()
+                e.currentTarget.attributes[2].value = false
+                e.currentTarget.innerHTML = "View Attendances"
+            }
+        })
+        $(document).on('click','#view-class',function(e){
+            e.preventDefault();
+            if(e.currentTarget.attributes[2].value === 'false'){
+                $('.class-section' + e.currentTarget.attributes[1].value).slideDown()
+                e.currentTarget.attributes[2].value = true
+                e.currentTarget.innerHTML = "View Less"
+            }else{
+                $('.class-section' + e.currentTarget.attributes[1].value).slideUp()
+                e.currentTarget.attributes[2].value = false
+                e.currentTarget.innerHTML = "View Years"
+            }
+        })
+        $(document).on('keyup','#courses-search',async(e) =>{
+            e.preventDefault()
+            const search = $('#courses-search').val()
+            const intake = $('#all_intake').val().split(',')[0]
+            console.log(intake)
+            let collect = await ServerData.bindAuth('POST',`./searchCourses`,true,{ intake, search })
+            console.log(collect)
+            let plot_string = "No courses available for this department in the registrar database"
+            if(collect.course.length > 0) {
+                plot_string = `
+                <section id = 'courses-section'>
+                    <div style = 'border:1px solid #ccc'>
+                        <span>COURSE NAME</span>
+                    </div>
+                    <div style = 'border:1px solid #ccc'>
+                        <span>COURSE CODE</span>
+                    </div>
+                    <div style = 'border:1px solid #ccc'>
+                        <span>ADD/REMOVE COURSE</span>
+                    </div>
+                    <div style = 'border:1px solid #ccc'>
+                        <span>EDIT ATTENDANCE</span>
+                    </div>
+                    <div style = 'border:1px solid #ccc'>
+                        <span>EDIT CLASS</span>
+                    </div>
+                </section>
+            `
+                plot_string += collect.course.map( (c,key) =>
+                    `
+                    <section style = '${(key%2) ? 'background:#fff' : 'background:rgba(234,234,234,0.7)' }'>
+                        <div id = 'courses-section'>
+                            <div>                           
+                                <p>${ c.courses[0].name }</p>
+                            </div>
+                            <div>                            
+                                <p>${ c.courses[0].code }</p> 
+                            </div> 
+                            <button id = 'confirm-box' index = '${c.courses[0].id}' status = '${c.courses[0].status}' class = '${(c.courses[0].status) ? 'btn btn-sm btn-alt-success' : 'btn btn-sm btn-alt-danger'}'>
+                                 ${ (c.courses[0].status) ? 'Remove Course' : 'Select Course' }
+                            </button> 
+                            <button id = 'view-attendance' iteration = '${ key }' chosen = 'false' class = 'btn btn-sm btn-alt-primary'>View Attendance</button>                                              
+                            <button id = 'view-class' iteration = '${ key }' chosen = 'false' class = 'btn btn-sm btn-alt-primary'>View Years</button>                                              
+                        </div>
+                        <div id = 'attendance-section' class = 'attendance-section${ key }'>
+                            <p>Attendances allowed in intake</p>
+                            <div = 'attendance-build'>
+                            ${
+                            (c.attendances.length > 0)
+                                ?
+                                `
+                                    ${
+                                    c.attendances.map(a =>
+                                        `
+                                                <button id = '${(c.courses[0].status) ? 'confirm-attendance-box' : 'attendant-button'}' index = '${ a.id }' status = '${ a.status }' class = '${(a.status) ? 'box-in' : 'box-out'}' course = '${ a.course }'>
+                                                    <i class='fas fa-users' style = 'font-size:350%;'></i>
+                                                    <p>${ a.name }</p>
+                                                    <p>${ a.code }</p>
+                                                </button>                                
+                                            `
+                                    ).join('')
+                                }
+                                    `
+                                :
+                                `There are no attendances for this course`
+                        }
+                            </div>
+                        </div>
+                        
+                        <div id = 'years-section' class = 'class-section${ key }'>
+                            <p>Please select years allowed for the intake</p>
+                            <div id = 'attendance-build'>
+                                ${
+                            (c.years.length > 0)
+                                ?
+                                `
+                                    ${
+                                    c.years.map(y =>
+                                        `
+                                                <button id = '${ (c.courses[0].status) ? 'confirm-years-box' : 'attendant-button'}' index = '${ y.id }' status = '${ y.status }' class = '${(!y.status) ? 'box-out' : 'box-in'}' course = '${ y.course }'>
+                                                    <p>Year ${ y.name }</p>
+                                                </button>                               
+                                            `
+                                    ).join('')
+                                }
+                                    `
+                                :
+                                `There are no years selected for this course`
+                        }
+                            </div>                    
+                        </div>    
+                    </section>
+                `
+                ).join('')
+                plot_string += '</div>'
+            }
+
+            $('#course-page').html(plot_string)
+        })
         $(document).on('click','#remove-modal',function(e){
             e.preventDefault();
             $('#fill-modal').remove();
+            const element = document.getElementById("fill-modal");
+            if(element)
+                element.remove();
         })
         $(document).on('click','#approve-button',async function(e){
             e.preventDefault()
             var check = confirm("Are you sure you want to approve?");
             if(check){
-                let application_approve = await ServerData.bindAuth('POST',`/approval/approveApplication`,true,{ 'application' : e.currentTarget.attributes[1].value, 'reason' : 'OK' })
+                let application_approve = await ServerData.bindAuth('POST',`./approveApplication`,true,{ 'application' : e.currentTarget.attributes[1].value, 'reason' : 'OK' })
                 if(application_approve.user){
-                    $('.content-force').append(`
-                        <div id = 'fill-modal'>
-                            <div id = 'inner-fill-modal'>
-                                <img src = '/Images/success-tick.gif'>
-                                <h3>Success!!</h3>
-                            </div>
-                        </div>
-                    `)
-                    setTimeout(
-                        function(){
-                            $('#fill-modal').remove()
-                            ServerData.beApproved(ServerData.Page,0)
-                        }
-                    ,2000)
-                }else{
-                    $('.content-force').append(`
-                        <div id = 'fill-modal'>
-                            <div id = 'inner-fill-modal'>
-                                <img src = '/Images/error-tick.jpg'>
-                                <h3>There was an error. Try again</h3>
-                            </div>
-                        </div>
-                    `)
-                    setTimeout(
-                        function(){
-                            $('#fill-modal').remove()
-                        }
-                    ,2000)
-                }
+                    ServerData.modalMsg({ 'msg' : `<h3>Success!!</h3>`, 'mode' : true })
+                    ServerData.beApproved(ServerData.Page,0)
+                }else
+                    ServerData.modalMsg({ 'msg' : `<h3>There was an error. Try again</h3>`, 'mode' : false })
+
             }
+        })
+        $(document).on('click','#approve-all',async function(e){
+            e.preventDefault()
+            if(ServerData.records.length > 0){
+                var check = confirm("Are you sure you want to approve all the records?");
+                if(check){
+                    let application_approve = await ServerData.bindAuth('POST',`./approveApplications`,true,{ 'application' : ServerData.records })
+                    console.log(application_approve)
+                    if(!application_approve.user.includes(false)){
+                        ServerData.modalMsg({ 'msg' : `<h3>Success!!</h3>`, 'mode' : true })
+                        ServerData.beApproved(ServerData.Page,0)
+                    }else{
+                        let recordKeys = []
+                        application_approve.user.map((f,k) => {
+                            if(f === "false")
+                                recordKeys.push(k)
+                        })
+                        ServerData.modalMsg({ 'msg' : `${
+                                recordKeys.map(v =>
+                                    `<h3>There was an error with record ${ v }</h3>`
+                                ).join('')
+                            }`, 'mode' : false })
+                    }
+                }
+            }else
+                ServerData.modalMsg({ 'msg' : `<h3>There are no records</h3>`, 'mode' : false })
+
         })
         $(document).on('click','#confirm-reject',async function(e){
             e.preventDefault()
             let reason = $('#rejection-reason').val()
             if(reason){
-                let application_reject = await ServerData.bindAuth('POST',`/approval/rejectApplication`,true,{ 'application' : e.currentTarget.attributes[1].value, 'reason' : reason })
+                let application_reject = await ServerData.bindAuth('POST',`./rejectApplication`,true,{ 'application' : e.currentTarget.attributes[1].value, 'reason' : reason })
                 if(application_reject.user){
                     $('#fill-modal').html(`
                         <div id = 'inner-fill-modal'>
-                            <img src = '/Images/success-tick.gif'>
+                            <img src = './../Images/success-tick.gif'>
                             <h3>Success!!</h3>
                         </div>
                     `)
                     setTimeout(
                         function(){
                             $('#fill-modal').remove()
+                            const element = document.getElementById("fill-modal");
+                                                    if(element)
+                            element.remove();
                             ServerData.beApproved(ServerData.Page,0)
                         }
                     ,2000)
                 }else{
                     $('#fill-modal').html(`
                         <div id = 'inner-fill-modal'>
-                            <img src = '/Images/error-tick.jpg'>
+                            <img src = './../Images/error-tick.jpg'>
                             <h3>There was an error. Try again</h3>
                         </div>
                     `)
-                    setTimeout(function(){ $('#fill-modal').remove() },2000)
+                    setTimeout(function(){
+                        $('#fill-modal').remove()
+                        const element = document.getElementById("fill-modal");
+                                                if(element)
+                            element.remove();
+                        },2000)
                 }
             }else
-                alert('Give a reason')
+                ServerData.modalMsg({ 'msg' : `<h3>Give a reason</h3>`, 'mode' : false })
+
         })
         $(document).on('click','#push-list',async function(e){
             var check = confirm("Are you sure you want to push?");
             if(check){
                 let status = e.currentTarget.attributes[2].value
-                let pushed = await ServerData.bindAuth('POST',`/approval/push`,true,{ 'intake' : e.currentTarget.attributes[1].value, status  })
+                let pushed = await ServerData.bindAuth('POST',`./push`,true,{ 'intake' : e.currentTarget.attributes[1].value, status  })
+                console.log(pushed)
                 if(pushed.now){
-                    $('.content-force').append(`
-                        <div id = 'fill-modal'>
-                            <div id = 'inner-fill-modal'>
-                                <img src = '/Images/success-tick.gif'>
-                                <h3>Success!!</h3>
-                            </div>
-                        </div>
-                    `)
-                    setTimeout(
-                        function(){
-                            $('#fill-modal').remove()
-                            retrieveApplication(status)
-                        }
-                    ,2000)
-                }else{
-                    $('.content-force').append(`
-                        <div id = 'fill-modal'>
-                            <div id = 'inner-fill-modal'>
-                                <img src = '/Images/error-tick.jpg'>
-                                <h3>There was an error. Try again</h3>
-                            </div>
-                        </div>
-                    `)
-                    setTimeout(
-                        function(){
-                            $('#fill-modal').remove()
-                        }
-                    ,2000)
-                }
-
+                    ServerData.modalMsg({ 'msg' : `<h3>Success!!</h3>`, 'mode' : true })
+                    retrieveApplication(status)
+                }else
+                    ServerData.modalMsg({ 'msg' : `<h3>There was an error. Try again</h3>`, 'mode' : false })
             }
         })
         $(document).on('click','#reject-button',async function(e){
@@ -690,11 +1628,11 @@
                 $('.content-force').append(`
                     <div id = 'fill-modal'>
                         <div id = 'inner-fill-modal'>
-                            <img src = '/Images/question.gif'>
+                            <img src = './../Images/question.gif'>
                             <p>Reason For Rejection</p>
                             <form accept-charset=utf8>
                                 <textarea id = 'rejection-reason' class = 'message-area'></textarea>
-                                <button id = 'confirm-reject' carry-id = '${ e.currentTarget.attributes[1].value }' type = 'submit' class = 'button-area'>Confirm</button>
+                                <button id = 'confirm-reject' carry-id = '${ e.currentTarget.attributes[1].value }' type = 'submit' class = 'button-area' class = 'btn btn-alt-info' data-toggle = 'click-ripple'>Confirm</button>
                             </form>
                         </div>
                     </div>
@@ -716,6 +1654,18 @@
             })
             $('#intake1').fadeIn('slow');
             $('#intake4').fadeOut('slow');
+        })
+        $(document).on('click','#view-more-level',function(e){
+            e.preventDefault();
+            if(e.currentTarget.attributes[1].value === 'false'){
+                $('.inner-part-level' + e.currentTarget.attributes[2].value).slideDown()
+                e.currentTarget.attributes[1].value = true
+                e.currentTarget.innerHTML = "View Less"
+            }else{
+                $('.inner-part-level' + e.currentTarget.attributes[2].value).slideUp()
+                e.currentTarget.attributes[1].value = false
+                e.currentTarget.innerHTML = "View More"
+            }
         })
         $(document).on('keyup','.personal_input',function(e){
             e.preventDefault();

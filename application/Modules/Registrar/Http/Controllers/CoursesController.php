@@ -577,9 +577,7 @@ class CoursesController extends Controller
         $vz                    =           $request->validate([
             'attendance'       =>          'required',
             'intake_from'      =>          'required',
-            'course'           =>          'required',
-            'cut_off_class'           =>          'required',
-
+            'course'           =>          'required'
         ]);
 
         $intake                  =        AvailableCourse::where('course_id', $request->course_id)->select('intake_id')->get();
@@ -589,7 +587,6 @@ class CoursesController extends Controller
         $class->course_id        =        $request->input('course');
         $class->intake_from      =        $request->intake_from;
         $class->attendance_code  =        $request->input('attendance');
-        $class->cut_off  =        $request->input('cut_off_class');
         $class->name             =        $request->input('course')."/".$request->intake_from."/".$request->input('attendance');
         $class->save();
 
