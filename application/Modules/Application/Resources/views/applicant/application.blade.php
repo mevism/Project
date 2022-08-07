@@ -1,4 +1,73 @@
 @extends('application::layouts.backend')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+
+<link rel="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css">
+<link rel="https://cdn.datatables.net/rowgroup/1.2.0/css/rowGroup.dataTables.min.css">
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable( {
+            responsive: true,
+            order: [[2, 'asc']],
+            rowGroup: {
+                dataSrc: 2
+            }
+        } );
+    } );
+
+    $(document).ready(function() {
+        $('#example1').DataTable( {
+            responsive: true,
+            order: [[2, 'asc']],
+            rowGroup: {
+                dataSrc: 2
+            }
+        } );
+    } );
+
+    function showoptios() {
+        var x = document.getElementById("institution");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+
+    function addwork(){
+        var x = document.getElementById('work');
+        if(x.style.display === 'none'){
+            x.style.display = 'block';
+        }else {
+            x.style.display = 'none';
+        }
+    }
+
+    $(document).ready(function (){
+        $('div.secondary').hide();
+        $('div.tertiary').hide();
+
+        $('input[name=institution]').on('click', function () {
+            var selectedValue = $('input[name=institution]:checked').val();
+
+            if(selectedValue == 'secondary') {
+                $('div.secondary').show();
+                $('div.tertiary').hide();
+            }else if(selectedValue == 'tertiary'){
+                $('div.tertiary').show();
+                $('div.secondary').hide();
+            }
+        });
+    });
+</script>
+
 @section('content')
     <div class="bg-body-light">
         <div class="content content-full">
@@ -24,470 +93,549 @@
 
     <div class="content content-boxed">
         <div class="row">
-            <div class="col-md-12 col-xl-12">
-                <!-- Updates -->
-                <form class="js-validation-signin" method="post" action="{{ route('application.submit') }}" enctype="multipart/form-data">
-                    @csrf
-                <ul class="timeline timeline-alt py-0">
-                    <li class="timeline-event">
-                        <div class="timeline-event-icon bg-default">
-                            <i class="fa fa-school"></i>
-                        </div>
-                        <div class="timeline-event-block block">
-                            <div class="block-header">
-                                <h3 class="block-title">Course Details</h3>
-                                <div class="block-options">
-                                    <div class="timeline-event-time block-options-item fs-sm">
-                                        <i class="fa fa-info" title="user information"></i>
+            <div class="col-sm-12">
+                <!-- Vertical Block Tabs Default Style -->
+                <div class="block block-rounded row g-0">
+                    <ul class="nav nav-tabs nav-tabs-block flex-md-column col-md-3" role="tablist">
+                        <li class="nav-item d-md-flex flex-md-column">
+                            <button class="nav-link text-md-start active" id="btabs-vertical-course-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-course" role="tab" aria-controls="btabs-vertical-course" aria-selected="true">
+                                <i class="fa fa-fw fa-book-atlas opacity-50 me-1 d-none d-sm-inline-block"></i> Course Details
+                                @if($mycourse != null)
+                                <span class="badge bg-success"><i class="fa fa-check-circle"></i> Complete </span>
+                                @endif
+                            </button>
+                        </li>
+                        <li class="nav-item d-md-flex flex-md-column">
+                            <button class="nav-link text-md-start" id="btabs-vertical-education-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-education" role="tab" aria-controls="btabs-vertical-education" aria-selected="false">
+                                <i class="fa fa-fw fa-school opacity-50 me-1 d-none d-sm-inline-block"></i> Education History
+                                @if(count($education) > 0)
+                                    <span class="badge bg-success"><i class="fa fa-check-circle"></i> Complete </span>
+                                @endif
+                            </button>
+                        </li>
+                        <li class="nav-item d-md-flex flex-md-column">
+                            <button class="nav-link text-md-start" id="btabs-vertical-work-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-work" role="tab" aria-controls="btabs-vertical-work" aria-selected="false">
+                                <i class="fa fa-fw fa-briefcase opacity-50 me-1 d-none d-sm-inline-block"></i> Working History
+                                @if(count($work) > 0)
+                                    <span class="badge bg-success"><i class="fa fa-check-circle"></i> Complete </span>
+                                @endif
+                            </button>
+                        </li>
+{{--                        {{ $mycourse->receipt }}--}}
+                        <li class="nav-item d-md-flex flex-md-column">
+                            <button class="nav-link text-md-start" id="btabs-vertical-fee-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-fee" role="tab" aria-controls="btabs-vertical-fee" aria-selected="false">
+                                <i class="fa fa-fw fa-money-bill opacity-50 me-1 d-none d-sm-inline-block"></i> Application Fees
+{{--                                @if($mycourse != null)--}}
+                                @if($mycourse != null && $mycourse->receipt != null)
+                                    <span class="badge bg-success"><i class="fa fa-check-circle"></i> Complete </span>
+                                @endif
+{{--                                @endif--}}
+                            </button>
+                        </li>
+                        <li class="nav-item d-md-flex flex-md-column">
+                            <button class="nav-link text-md-start" id="btabs-vertical-sponsor-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-sponsor" role="tab" aria-controls="btabs-vertical-sponsor" aria-selected="false">
+                                <i class="fa fa-fw fa-user-group opacity-50 me-1 d-none d-sm-inline-block"></i> Sponsor / Guardian
+                                @if(count($parent) > 0 && count($sponsor) > 0)
+                                    <span class="badge bg-success"><i class="fa fa-check-circle"></i> Complete </span>
+                                @endif
+                            </button>
+                        </li>
+                        <li class="nav-item d-md-flex flex-md-column">
+                            <button class="nav-link text-md-start" id="btabs-vertical-submit-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-submit" role="tab" aria-controls="btabs-vertical-submit" aria-selected="false">
+                                <i class="fa fa-fw fa-check-double opacity-50 me-1 d-none d-sm-inline-block"></i> Complete Application
+                                @if($mycourse != null && $mycourse->receipt != null && count($education) > 0)
+                                    <span class="badge bg-success"><i class="fa fa-check-circle"></i> Submit </span>
+                                @endif
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content col-md-9">
+                        <div class="block-content tab-pane active" id="btabs-vertical-course" role="tabpanel" aria-labelledby="btabs-vertical-home-course">
+                            <h4 class="fw-semibold">Course Details</h4>
+                            <form method="POST" action="{{ route('application.submitApp') }}">
+                                @csrf
+                            <div class="row my-2">
+                                <label class="col-sm-2 col-form-label" for="example-hf-password">Course</label>
+                                <div class="form-floating col-sm-8 text-uppercase py-1">
+                                    <input type="text" class="form-control form-control-sm" name="course" value="{{ $course->mainCourses->course_name }}" readonly>
+                                </div>
+                            </div>
+                            <div class="row my-2">
+                                <label class="col-sm-2 col-form-label" for="example-hf-email">Department</label>
+                                <div class="form-floating col-sm-8 text-uppercase py-1">
+                                    <input type="text" class="form-control form-control-sm" name="department" value="{{ $course->mainCourses->department_id }}" readonly>
+                                </div>
+                            </div>
+                            <div class="row my-2">
+                                <label class="col-sm-2 col-form-label" for="example-hf-email">School</label>
+                                <div class="form-floating col-sm-8 text-uppercase py-1">
+                                    <input type="text" class="form-control form-control-sm" name="school" value="{{ $course->mainCourses->school_id }}" readonly>
+                                    <input type="hidden" name="intake" value="{{ $course->openCourse->id }}">
+                                    <input type="hidden" name="course_id" value="{{ $course->mainCourses->id }}">
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 5px !important;">
+                                <label class="col-sm-2 col-form-label" for="example-hf-password">Campus</label>
+                                <div class="col-sm-8 text-uppercase mb-4" style="padding: 5px !important;">
+                                    <div class="space-x-1">
+                                        <sup class="fs-sm text-danger text-lowercase mt-2">*</sup>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="campus" value="Main"
+                                                   @if($mycourse != null) {{ ($mycourse->campus == 'Main')? "checked" : "" }}@endif
+                                                   @if(old('campus') === 'Main') checked @endif required>
+                                            <label class="form-check-label">Main</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="campus" value="Kwale"
+                                                   @if($mycourse != null) {{ ($mycourse->campus == 'Kwale')? "checked" : "" }}@endif
+                                                   @if(old('campus') === 'Kwale')  checked @endif required>
+                                            <label class="form-check-label">Kwale</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="campus" value="Lamu"
+                                                   @if($mycourse != null) {{ ($mycourse->campus == 'Lamu')? "checked" : "" }}@endif
+                                                   @if(old('campus') === 'Lamu') checked @endif required>
+                                            <label class="form-check-label">Lamu</label>
+                                        </div>
+                                        <span class="fs-sm text-danger text-lowercase mt-2"> choose which campus to join </span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="block-content">
-                                <div class="row" style="padding: 5px !important;">
-                                    <label class="col-sm-2 col-form-label" for="example-hf-email">School</label>
-                                    <div class="col-sm-8 text-uppercase" style="padding: 5px !important;">
-                                        <input type="text" class="form-control form-control-alt" name="school" value="{{ $course->mainCourses->school_id }}" readonly>
-                                        <input type="hidden" name="intake" value="{{ $course->openCourse->id }}">
-                                        <input type="hidden" name="course_id" value="{{ $course->mainCourses->id }}">
+                            <span class="h5 fw-semibold">Cluster Subject</span>
+                            <span class="fs-sm">
+                                <sup class="fs-sm text-danger text-lowercase mt-2">*</sup>
+                                provide your KCSE or equivalent grades for each cluster subject
+                            </span>
+                            <div class="row mt-2">
+                                <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 1</label>
+                                <div class="col-sm-8 text-uppercase py-1">
+                                    <div class="form-floating input-group">
+                                        <span class="input-group-text input-group-text-sm">{{ Str::limit( $course->mainCourses->subject1, $limit = 3 , $end='' )  }}</span>
+                                        <input type="text" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif name="subject1" value="{{ old('subject1') }} @if($mycourse != null) {{ $mycourse->subject_1 }} @endif ">
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="row" style="padding: 5px !important;">
-                                    <label class="col-sm-2 col-form-label" for="example-hf-email">Department</label>
-                                    <div class="col-sm-8 text-uppercase" style="padding: 5px !important;">
-                                        <input type="text" class="form-control form-control-alt" name="department" value="{{ $course->mainCourses->department_id }}" readonly>
+                            <div class="row my-2">
+                                <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 2</label>
+                                <div class="col-sm-8 text-uppercase py-1">
+                                    <div class="form-floating input-group">
+                                        <span class="input-group-text input-group-text-sm">{{ Str::limit( $course->mainCourses->subject2, $limit = 3 , $end='' )  }}</span>
+                                        <input type="text" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif name="subject2" value="{{ old('subject2') }} @if($mycourse != null) {{ $mycourse->subject_2 }} @endif">
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="row" style="padding: 5px !important;">
-                                    <label class="col-sm-2 col-form-label" for="example-hf-password">Course</label>
-                                    <div class="col-sm-8 text-uppercase" style="padding: 5px !important;">
-                                        <input type="text" class="form-control form-control-alt" name="course" value="{{ $course->mainCourses->course_name }}" readonly>
+                            <div class="row my-2">
+                                <label class="col-sm-2 col-form-label" for="example-hf-password">Subject 3</label>
+                                <div class="form-floating col-sm-8 text-uppercase py-1">
+                                    <div class="form-floating input-group">
+                                        <span class="input-group-text input-group-text-sm">{{ Str::limit( $course->mainCourses->subject3, $limit = 8 , $end='' )  }}</span>
+                                        <input type="text" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif  name="subject3" value="{{ old('subject3') }} @if($mycourse != null) {{ $mycourse->subject_3 }} @endif">
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
-                    <li class="timeline-event">
-                        <div class="timeline-event-icon bg-default">
-                            <i class="fa fa-book-open"></i>
-                        </div>
-                        <div class="timeline-event-block block">
-                            <div class="block-header">
-                                <h3 class="block-title">Cluster Subjects</h3>
-                                <div class="block-options">
-                                    <div class="timeline-event-time block-options-item fs-sm">
-                                        <i class="fa fa-info" title="user information"></i>
+
+                            <div class="row my-2">
+                                <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 4 </label>
+                                <div class="col-sm-8 text-uppercase py-1">
+                                    <div class="form-floating input-group">
+                                        <span class="input-group-text input-group-text-sm">{{ Str::limit( $course->mainCourses->subject4, $limit = 8 , $end='' )  }}</span>
+                                        <input type="text" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif name="subject4" value="{{ old('subject4') }} @if($mycourse != null) {{ $mycourse->subject_4 }} @endif">
                                     </div>
                                 </div>
                             </div>
-                            <div class="block-content">
-                                <div class="row" style="padding: 5px !important;">
-                                    <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 1</label>
-                                    <div class="col-sm-8 text-uppercase" style="padding: 5px !important;">
-                                        <div class="input-group">
-                                            <span class="input-group-text input-group-text-alt">{{ Str::limit( $course->mainCourses->subject1, $limit = 3 , $end='' )  }}</span>
-                                            <input type="text" class="form-control form-control-alt" name="subject1" value="{{ old('subject1') }}">
+                            <div class="d-flex justify-content-center mb-4 mt-4">
+                                @if($mycourse != null)
+                                    @if($mycourse != null && $mycourse->declaration === 1)
+                                        <button class="btn btn-sm btn-success" disabled data-toggle="click-ripple"><i class="fa fa-check-circle"></i> Course Details Updated </button>
+                                    @else
+                                        <button class="btn btn-sm btn-success" disabled data-toggle="click-ripple"><i class="fa fa-check-circle"></i> Course Details Updated </button>
+                                        <button class="btn btn-sm btn-alt-success" style="margin-left: 1rem; " data-toggle="click-ripple">
+                                            Update Course
+                                        </button>
+                                    @endif
+                                @else
+                                <button class="btn btn-sm btn-alt-success" data-toggle="click-ripple">Save Course</button>
+                                @endif
+                            </div>
+                            </form>
+                        </div>
+                        <div class="block-content tab-pane" id="btabs-vertical-work" role="tabpanel" aria-labelledby="btabs-vertical-work-tab">
+                            <h4 class="fw-semibold">Work History</h4>
+                            <table id="example1" class="table table-md table-striped table-bordered table-vcenter fs-sm">
+                                <thead>
+                                <th>Organization Name</th>
+                                <th>Post</th>
+                                <th>Start Date</th>
+                                <th>Exit Date</th>
+                                </thead>
+                                <tbody>
+                                @foreach($work as $row)
+                                    <tr>
+                                        <td>{{ $row->organization }}</td>
+                                        <td>{{ $row->post }}</td>
+                                        <td>{{ $row->start_date }}</td>
+                                        <td>{{ $row->exit_date }}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+
+                            <div class="justify-content-sm-between my-4">
+                                <button class="btn btn-sm btn-alt-info fs-sm" data-toggle="click-ripple" onclick="addwork()">Add new </button>
+                            </div>
+
+                            <div id="work" style="display: none;">
+                                <div class="content">
+                                    <form action="{{ route('application.addWork') }}" method="POST">
+                                        @csrf
+                                    <div class="col-md-12">
+                                        <div class="form-floating py-1">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('org1') }}" name="org1" placeholder="Organization name">
+                                            <label class="form-label">ORGANIZATION NAME</label>
+                                        </div>
+                                        <div class="form-floating py-1">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('org1post') }}" name="org1post" placeholder="Post held">
+                                            <label class="form-label">POST HELD</label>
+                                        </div>
+                                        <div class="row py-1">
+                                            <div class="form-floating col-6">
+                                                <input type="month" class="form-control form-control-sm" value="{{ old('org1startdate') }}" name="org1startdate">
+                                                <small class="text-muted">Starting year</small>
+                                            </div>
+                                            <div class="form-floating col-6">
+                                                <input type="month" class="form-control form-control-sm" value="{{ old('org1enddate') }}" name="org1enddate">
+                                                <small class="text-muted">Year Finished</small>
+                                            </div>
                                         </div>
                                     </div>
+                                <div class="d-flex justify-content-center my-4">
+                                    <button class="btn btn-sm btn-alt-success">Submit work experience </button>
                                 </div>
-
-                                <div class="row" style="padding: 5px !important;">
-                                    <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 2</label>
-                                    <div class="col-sm-8 text-uppercase" style="padding: 5px !important;">
-                                        <div class="input-group">
-                                            <span class="input-group-text input-group-text-alt">{{ Str::limit( $course->mainCourses->subject2, $limit = 3 , $end='' )  }}</span>
-                                            <input type="text" class="form-control form-control-alt" name="subject2" value="{{ old('subject2') }}">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row" style="padding: 5px !important;">
-                                    <label class="col-sm-2 col-form-label" for="example-hf-password">Subject 3</label>
-                                    <div class="col-sm-8 text-uppercase" style="padding: 5px !important;">
-                                        <div class="input-group">
-                                            <span class="input-group-text input-group-text-alt">{{ Str::limit( $course->mainCourses->subject3, $limit = 8 , $end='' )  }}</span>
-                                            <input type="text" class="form-control form-control-alt" name="subject3" value="{{ old('subject3') }}">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row" style="padding: 5px !important;">
-                                    <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 4 </label>
-                                    <div class="col-sm-8 text-uppercase" style="padding: 5px !important;">
-                                        <div class="input-group">
-                                            <span class="input-group-text input-group-text-alt">{{ Str::limit( $course->mainCourses->subject4, $limit = 8 , $end='' )  }}</span>
-                                            <input type="text" class="form-control form-control-alt" name="subject4" value="{{ old('subject4') }}">
-                                        </div>
-                                    </div>
-                                </div>
-                                humanity
-                                science
-                            </div>
-                        </div>
-                    </li>
-                    <li class="timeline-event">
-                        <div class="timeline-event-icon bg-dark">
-                            <i class="fa fa-money-bill"></i>
-                        </div>
-                        <div class="timeline-event-block block">
-                            <div class="block-header">
-                                <h3 class="block-title">Payment Details</h3>
-                                <div class="block-options">
-                                    <div class="timeline-event-time block-options-item fs-sm">
-                                        <i class="fa fa-info" title="user information"></i>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
-                            <div class="block-content">
-                                <div class="row">
+
+                        </div>
+                        <div class="block-content tab-pane" id="btabs-vertical-education" role="tabpanel" aria-labelledby="btabs-vertical-education-tab">
+                            <h4 class="fw-semibold">Education History</h4>
+                            <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
+                                <thead>
+                                    <th>Institution Name</th>
+                                    <th>Level</th>
+                                    <th>Qualifications</th>
+                                    <th>Start Date</th>
+                                    <th>Finish Date</th>
+                                </thead>
+                                <tbody>
+                                    @foreach($education as $row)
+                                        <tr>
+                                            <td>{{ $row->institution }}</td>
+                                            <td>{{ $row->level }}</td>
+                                            <td>{{ $row->qualification }}</td>
+                                            <td>{{ $row->start_date }}</td>
+                                            <td>{{ $row->exit_date }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+
+                            <div class="justify-content-sm-between my-4">
+                                <button class="btn btn-sm btn-alt-info fs-sm" data-toggle="click-ripple" onclick="showoptios()">Add new </button>
+                            </div>
+
+                            <div class="my-4" id="institution" style="display: none; ">
+                                <div class="space-x-1">
+                                    <sup class="fs-sm text-danger text-lowercase mt-2">*</sup>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="institution" value="secondary" required>
+                                        <label class="form-check-label">Secondary School</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="institution" value="tertiary" required>
+                                        <label class="form-check-label">Tertiary Institution</label>
+                                    </div>
+                                </div>
+
+                                <form method="POST" action="{{ route('application.secSch') }}" enctype="multipart/form-data">
+                                    @csrf
+                                <div class="row secondary my-4">
                                     <div class="col-md-2">
-                                        <p class="text-muted">To complete application you must pay and add payment details to this form</p>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="py-2 mb-0">
-                                        You are required to pay <span class="fw-bold">Ksh. {{ $course->mainCourses->fee }} </span> to complete this application.
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> How do I pay?</a>
-
-                                        </div>
-                                        <div class="text-uppercase" style="padding: 7px !important;">
-                                            <input type="text" class="form-control form-control-alt" required value="{{ old('receipt') }}" name="receipt" placeholder="Enter RECEIPT NUMBER">
-                                        </div>
-                                        <div class="text-uppercase" style="padding: 7px !important;">
-                                            <input type="file" class="form-control form-control-alt" required value="{{ old('receipt_file') }}" name="receipt_file">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="timeline-event">
-                        <div class="timeline-event-icon bg-modern">
-                            <i class="fa fa-book"></i>
-                        </div>
-                        <div class="timeline-event-block block">
-                            <div class="block-header">
-                                <h3 class="block-title">Education History</h3>
-                                <div class="block-options">
-                                    <div class="timeline-event-time block-options-item fs-sm">
-                                        <i class="fa fa-info" title="user information"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="block-content block-content-full">
-
-                                <div class="row">
-                                    <div class="col-md-2" style="padding: 7px !important;">
                                         <label class="form-check-label"> Secondary school</label>
                                     </div>
-                                    <div class="col-md-8" style="padding: 10px !important;">
-                                        <div style="padding: 7px !important;">
-                                            <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('secondary') }}" name="secondary" placeholder="Institution name">
+                                    <div class="col-md-8">
+                                        <div class="form-floating col-sm-12 py-1">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('secondary') }}" name="secondary" placeholder="Institution name">
+                                            <label class="form-label">SCHOOL NAME</label>
                                         </div>
-                                        <div style="padding: 7px !important;">
-                                            <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('secondaryqualification') }}" name="secondaryqualification" placeholder="Qualifications acquired">
+                                        <div class="form-floating col-sm-12 py-1">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('secondaryqualification') }}" name="secondaryqualification" placeholder="Qualifications acquired">
+                                            <label class="form-label">QUALIFICATION</label>
                                         </div>
-                                        <div class="row" style="padding: 7px !important;">
-                                            <div class="col-6">
-                                                <input type="month" class="form-control form-control-alt" value="{{ old('secstartdate') }}" name="secstartdate">
+                                        <input type="hidden" value="secondary" name="level">
+                                        <div class="row">
+                                            <div class="form-floating col-6">
+                                                <input type="month" class="form-control form-control-sm" value="{{ old('secstartdate') }}" name="secstartdate">
                                                 <small class="text-muted">Starting year</small>
                                             </div>
-                                            <div class="col-6">
-                                                <input type="month" class="form-control form-control-alt" value="{{ old('secenddate') }}" name="secenddate">
+                                            <div class="form-floating col-6">
+                                                <input type="month" class="form-control form-control-sm" value="{{ old('secenddate') }}" name="secenddate">
                                                 <small class="text-muted">Year Finished</small>
                                             </div>
-                                        </div><div style="padding: 7px !important;">
-                                            <input type="file" class="form-control form-control-alt" value="{{ old('seccert') }}" name="seccert" placeholder="upload certificate">
-                                            <small class="text-muted">Upload certificate</small>
+                                        </div>
+                                        <div class="form-floating col-sm-12 py-1">
+                                            <input type="file" class="form-control form-control-sm" value="{{ old('seccert') }}" name="seccert" placeholder="upload certificate">
+                                            <small class="text-muted">Upload certificate (format .pdf .pgn .jpeg .jpg)</small>
+                                        </div>
+                                    </div>
+                                    <div class="subbutton">
+                                        <div class="d-flex justify-content-center my-4">
+                                            <button class="btn btn-alt-success col-sm-auto fs-sm" data-toggle="click-ripple">Save record</button>
                                         </div>
                                     </div>
                                 </div>
-                                @if($course->mainCourses->level == 2)
-                                <div class="row">
-                                    <div class="col-md-2" style="padding: 7px !important;">
+                                </form>
+
+                                <form action="{{ route('application.terSch') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                <div class="row tertiary my-4">
+                                    <div class="col-md-2">
                                         <label class="form-check-label"> Tertiary Institution</label>
                                     </div>
-                                    <div class="col-md-8" style="padding: 10px !important;">
-                                        <div style="padding: 7px !important;">
-                                            <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('tertiary') }}" name="tertiary" placeholder="Institution name">
+                                    <div class="col-md-8">
+                                        <div class="form-floating col-sm-12 py-1">
+                                            <input type="text" class="form-control form-control-sm text-uppercase py-2" value="{{ old('tertiary') }}" name="tertiary" placeholder="INSTITUTION NAME">
+                                            <label class="form-label">INSTITUTION NAME</label>
                                         </div>
-                                        <div style="padding: 7px !important;">
-                                            <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('teriaryqualification') }}" name="teriaryqualification" placeholder="Qualifications acquired">
-                                        </div>
-                                        <div class="row" style="padding: 7px !important;">
-                                            <div class="col-6">
-                                                <input type="month" class="form-control form-control-alt" value="{{ old('terstartdate') }}" name="terstartdate">
-                                                <small class="text-muted">Starting year</small>
-                                            </div>
-                                            <div class="col-6">
-                                                <input type="month" class="form-control form-control-alt" value="{{ old('terenddate') }}" name="terenddate">
-                                                <small class="text-muted">Year Finished</small>
-                                            </div>
-                                        </div><div style="padding: 7px !important;">
-                                            <input type="file" class="form-control form-control-alt" value="{{ old('tercert')}}" name="tercert" placeholder="upload certificate">
-                                            <small class="text-muted">Upload certificate</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                    @endif
-                                    @if($course->mainCourses->level >= 3)
-                                        <div class="row">
-                                            <div class="col-md-2" style="padding: 7px !important;">
-                                                <label class="form-check-label"> Tertiary Institution</label>
-                                            </div>
-                                            <div class="col-md-8" style="padding: 10px !important;">
-                                                <div style="padding: 7px !important;">
-                                                    <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('tertiary') }}" name="tertiary" placeholder="Institution name">
-                                                </div>
-                                                <div style="padding: 7px !important;">
-                                                    <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('teriaryqualification') }}" name="teriaryqualification" placeholder="Qualifications acquired">
-                                                </div>
-                                                <div class="row" style="padding: 7px !important;">
-                                                    <div class="col-6">
-                                                        <input type="month" class="form-control form-control-alt" value="{{ old('terstartdate') }}" name="terstartdate">
-                                                        <small class="text-muted">Starting year</small>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <input type="month" class="form-control form-control-alt" value="{{ old('terenddate') }}" name="terenddate">
-                                                        <small class="text-muted">Year Finished</small>
-                                                    </div>
-                                                </div><div style="padding: 7px !important;">
-                                                    <input type="file" class="form-control form-control-alt" value="{{ old('tercert')}}" name="tercert" placeholder="upload certificate">
-                                                    <small class="text-muted">Upload certificate</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                    <div class="col-md-2" style="padding: 7px !important;">
-                                        <label class="form-check-label"> Tertiary Institution 2</label>
-                                    </div>
-                                    <div class="col-md-8" style="padding: 10px !important;">
-                                        <div style="padding: 7px !important;">
-                                            <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('tertiary2') }}" name="tertiary2" placeholder="Institution name">
-                                        </div>
-                                        <div style="padding: 7px !important;">
-                                            <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('teriary2qualification') }}" name="teriary2qualification" placeholder="Qualifications acquired">
-                                        </div>
-                                        <div class="row" style="padding: 7px !important;">
-                                            <div class="col-6">
-                                                <input type="month" class="form-control form-control-alt" value="{{ old('ter2startdate') }}" name="ter2startdate">
-                                                <small class="text-muted">Starting year</small>
-                                            </div>
-                                            <div class="col-6">
-                                                <input type="month" class="form-control form-control-alt" value="{{ old('ter2enddate') }}" name="ter2enddate">
-                                                <small class="text-muted">Year Finished</small>
-                                            </div>
-                                        </div><div style="padding: 7px !important;">
-                                            <input type="file" class="form-control form-control-alt" value="{{ old('ter2cert') }}" name="ter2cert" placeholder="upload certificate">
-                                            <small class="text-muted">Upload certificate</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                    @endif
-                            </div>
-                        </div>
-                    </li>
-                    @if($course->mainCourses->level > 3)
-                    <li class="timeline-event">
-                        <div class="timeline-event-icon bg-info">
-                            <i class="fa fa-briefcase-clock"></i>
-                        </div>
-                        <div class="timeline-event-block block">
-                            <div class="block-header">
-                                <h3 class="block-title">Working Experience</h3>
-                                <div class="block-options">
-                                    <div class="timeline-event-time block-options-item fs-sm">
-                                        <i class="fa fa-info" title="user information"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="block-content">
-                                <div class="row">
-                                    <div class="col-md-2" style="padding: 7px !important;">
-                                        <label class="form-check-label"> Organization 1</label>
-                                    </div>
-                                    <div class="col-md-8" style="padding: 10px !important;">
-                                        <div style="padding: 7px !important;">
-                                            <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('org1') }}" name="org1" placeholder="Organization name">
-                                        </div>
-                                        <div style="padding: 7px !important;">
-                                            <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('org1post') }}" name="org1post" placeholder="Post held">
-                                        </div>
-                                        <div class="row" style="padding: 7px !important;">
-                                            <div class="col-6">
-                                                <input type="month" class="form-control form-control-alt" value="{{ old('org1startdate') }}" name="org1startdate">
-                                                <small class="text-muted">Starting year</small>
-                                            </div>
-                                            <div class="col-6">
-                                                <input type="month" class="form-control form-control-alt" value="{{ old('org1enddate') }}" name="org1enddate">
-                                                <small class="text-muted">Year Finished</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="row">
-                                    <div class="col-md-2" style="padding: 7px !important;">
-                                        <label class="form-check-label"> Organization 2</label>
-                                    </div>
-                                    <div class="col-md-8" style="padding: 10px !important;">
-                                        <div style="padding: 7px !important;">
-                                            <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('org2') }}" name="org2" placeholder="Organization name">
+                                        <div class="form-floating col-sm-12 py-1">
+                                            <select name="level" class="form-control form-control-sm">
+                                                <option selected disabled> select level of study</option>
+                                                <option value="CERTIFICATE">CERTIFICATE</option>
+                                                <option value="DIPLOMA">DIPLOMA</option>
+                                                <option value="DEGREE">DEGREE</option>
+                                                <option value="MASTERS">MASTERS</option>
+                                                <option value="PhD">PhD</option>
+                                            </select>
+                                            <label class="form-label">LEVEL OF STUDY</label>
                                         </div>
-                                        <div style="padding: 7px !important;">
-                                            <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('org2post') }}" name="org2post" placeholder="Post held">
-                                        </div>
-                                        <div class="row" style="padding: 7px !important;">
-                                            <div class="col-6">
-                                                <input type="month" class="form-control form-control-alt" value="{{ old('org2startdate') }}" name="org2startdate">
-                                                <small class="text-muted">Starting year</small>
-                                            </div>
-                                            <div class="col-6">
-                                                <input type="month" class="form-control form-control-alt" value="{{ old('org2enddate') }}" name="org2enddate">
-                                                <small class="text-muted">Exit year </small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="row">
-                                    <div class="col-md-2" style="padding: 7px !important;">
-                                        <label class="form-check-label"> Organization 3</label>
-                                    </div>
-                                    <div class="col-md-8" style="padding: 10px !important;">
-                                        <div style="padding: 7px !important;">
-                                            <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('org3') }}" name="org3" placeholder="Organization name">
+                                        <div class="form-floating col-sm-12 py-1">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('teriaryqualification') }}" name="teriaryqualification" placeholder="Qualifications acquired">
+                                            <label class="form-label">QUALIFICATION</label>
                                         </div>
-                                        <div style="padding: 7px !important;">
-                                            <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('orgpost3') }}" name="orgpost3" placeholder="Post held">
-                                        </div>
-                                        <div class="row" style="padding: 7px !important;">
-                                            <div class="col-6">
-                                                <input type="month" class="form-control form-control-alt" value="{{ old('org3startdate') }}" name="org3startdate">
-                                                <small class="text-muted">Starting year</small>
+
+                                        <div class="row py-1">
+                                            <div class="form-floating col-sm-6">
+                                                <input type="month" class="form-control form-control-sm" value="{{ old('terstartdate') }}" name="terstartdate">
+                                                <small class="text-muted py-1">Starting year</small>
                                             </div>
-                                            <div class="col-6">
-                                                <input type="month" class="form-control form-control-alt" value="{{ old('org3enddate') }}" name="org3enddate">
-                                                <small class="text-muted">Exit year </small>
+                                            <div class="form-floating col-sm-6">
+                                                <input type="month" class="form-control form-control-sm" value="{{ old('terenddate') }}" name="terenddate">
+                                                <small class="text-muted py-1">Year Finished</small>
                                             </div>
                                         </div>
+                                        <div class="form-floating col-sm-12">
+                                            <input type="file" class="form-control form-control-sm" value="{{ old('tercert')}}" name="tercert">
+                                            <small class="text-muted py-1">Upload Certificate ( format.pdf .png .jpeg .jpg)</small>
+                                        </div>
+
                                     </div>
+                                        <div class="d-flex justify-content-center my-4">
+                                            <button class="btn btn-alt-success col-sm-auto fs-sm" data-toggle="click-ripple">Save record</button>
+                                        </div>
                                 </div>
+                            </form>
 
                             </div>
                         </div>
-                    </li>
-                    @endif
-                    <li class="timeline-event">
-                        <div class="timeline-event-icon bg-dark">
-                            <i class="fa fa-home-user"></i>
-                        </div>
-                        <div class="timeline-event-block block">
-                            <div class="block-header">
-                                <h3 class="block-title">Guardian Details</h3>
-                                <div class="block-options">
-                                    <div class="timeline-event-time block-options-item fs-sm">
-                                        <i class="fa fa-info" title="user information"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="block-content">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <p class="text-muted">Add the details of your parent or guardian here</p>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="text-uppercase" style="padding: 7px !important;">
-                                            <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('parentname') }}" name="parentname" placeholder="Parent/Guardian name">
-                                        </div>
-                                        <div class="text-uppercase" style="padding: 7px !important;">
-                                        <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('parentmobile') }}" name="parentmobile" placeholder="Parent/Guardian mobile number">
-                                        </div>
-                                        <div class="text-uppercase" style="padding: 7px !important;">
-                                        <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('parentcounty') }}" name="parentcounty" placeholder="Parent/Guardian county of residence">
-                                        </div>
-                                        <div class="" style="padding: 7px !important;">
-                                        <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('parenttown') }}" name="parenttown" placeholder="Parent/Guardian Home town">
-                                        </div>
-                                    </div>
-                                    </div>
-                                </div>
-                            </div>
-                    </li>
-                    <li class="timeline-event">
-                        <div class="timeline-event-icon bg-dark">
-                            <i class="fa fa-user-md"></i>
-                        </div>
-                        <div class="timeline-event-block block">
-                            <div class="block-header">
-                                <h3 class="block-title">Sponsor Details</h3>
-                                <div class="block-options">
-                                    <div class="timeline-event-time block-options-item fs-sm">
-                                        <i class="fa fa-info" title="user information"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="block-content">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <p class="text-muted">Add the details of your parent or guardian here</p>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="text-uppercase" style="padding: 7px !important;">
-                                            <input type="text" class="form-control form-control-alt" value="{{ old('sponsorname') }}" name="sponsorname" placeholder="Sponsor name">
-                                        </div>
-                                        <div class="text-uppercase" style="padding: 7px !important;">
-                                            <input type="text" class="form-control form-control-alt" value="{{ old('sponsormobile') }}" name="sponsormobile" placeholder="Sponsor mobile number">
-                                        </div>
-                                        <div class="text-uppercase" style="padding: 7px !important;">
-                                            <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('sponsorcounty') }}" name="sponsorcounty" placeholder="Sponsor county of residence">
-                                        </div>
-                                        <div class="" style="padding: 7px !important;">
-                                            <input type="text" class="form-control form-control-alt text-uppercase" value="{{ old('sponsortown') }}" name="sponsortown" placeholder="Sponsor Home town">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="timeline-event">
-                        <div class="timeline-event-icon bg-dark">
-                            <i class="fa fa-user-check"></i>
-                        </div>
-                        <div class="timeline-event-block block">
-                            <div class="block-header">
-                                <h3 class="block-title">Declaration</h3>
-                                <div class="block-options">
-                                    <div class="timeline-event-time block-options-item fs-sm">
-                                        <i class="fa fa-info" title="user information"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="block-content">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <p class="text-muted">Applicant declaration</p>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="" style="padding: 7px !important;">
-                                           <input type="checkbox" name="declare" required>
-                                            I <span class="text-decoration-underline"> {{ Auth::user()->sname }} {{ Auth::user()->mname }} {{ Auth::user()->fname }}</span> declare that the information given in this application form is correct. I further certify that I have read, understood and agreed to comply with the terms stipulated herein.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-center" style="padding: 15px !important;">
+                        <div class="block-content tab-pane" id="btabs-vertical-fee" role="tabpanel" aria-labelledby="btabs-vertical-fee-tab">
+                            <h4 class="fw-semibold">Application Fees</h4>
+                            <form action="{{ route('application.payment') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                            <div class="row">
                                 <div class="col-md-4">
-                                    <button type="submit" class="btn w-100 btn-alt-primary">
-                                        Submit application
-                                    </button>
+                                    <p class="text-muted">To complete application you must pay and add payment details to this form</p>
                                 </div>
+                                <div class="col-md-8">
+                                    <div class="py-2 mb-0">
+                                        You are required to pay <span class="fw-bold">Ksh. {{ $course->mainCourses->fee }} </span> to complete this application.
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> How do I pay?</a>
+                                    </div>
+                                    <div class="form-floating text-uppercase py-1">
+                                        <input type="text" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif required value="{{ old('receipt') }} @if($mycourse != null && $mycourse->receipt != null) {{ $mycourse->receipt }} @endif" name="receipt" placeholder="Enter RECEIPT NUMBER">
+                                        <label class="form-label">TRANSACTION CODE</label>
+                                    </div>
+                                    <div class="form-floating text-uppercase py-1">
+                                        <input type="file" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif required value="{{ old('receipt_file') }} " name="receipt_file">
+                                    </div>
+                                        <input type="hidden" value="{{ $course->mainCourses->id }}" name="course_id">
+                                    <small class="text-muted">upload your bank reciept (format .pdf .png .jpeg .jpg</small>
+                                    <div class="d-flex justify-content-center my-4">
+                                        @if($mycourse != null && $mycourse->receipt != null)
+                                            @if($mycourse != null && $mycourse->declaration === 1)
+                                        <button class="btn btn-sm btn-success" disabled data-toggle="click-ripple"><i class="fa fa-check-circle"></i>
+                                            Payments Details Updated
+                                        </button>
+                                            @else
+                                        <button class="btn btn-sm btn-success" disabled data-toggle="click-ripple"><i class="fa fa-check-circle"></i>  Payments Details Updated</button>
+                                        <button class="btn btn-sm btn-alt-success" style="margin-left: 1rem;" data-toggle="click-ripple">Update payments</button>
+                                            @endif
+                                        @else
+                                        <button class="btn btn-sm btn-alt-success" data-toggle="click-ripple">Submit payments</button>
+                                        @endif
+                                    </div>
+                                </div>
+                        </div>
+                            </form>
+                        </div>
+                        <div class="block-content tab-pane" id="btabs-vertical-sponsor" role="tabpanel" aria-labelledby="btabs-vertical-sponsor-tab">
+                            <h4 class="fw-semibold">Guardian & Sponsor Details</h4>
+                            <p class="fs-sm">
+                            <div class="content">
+                                <h5 class="fw-semibold">Parent / Next of kin</h5>
+                                <form method="POST" action="{{ route('application.addParent') }}">
+                                    @csrf
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <p class="text-muted">Add the details of your parent or guardian here</p>
+                                    </div>
+                                    <div class="col-md-8 my-4">
+                                        <div class="form-floating text-uppercase py-1">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('parentname') }}" name="parentname" placeholder="Parent/Guardian name">
+                                            <label class="form-label">PARENT NAME</label>
+                                        </div>
+                                        <div class="form-floating text-uppercase py-1">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('parentmobile') }}" name="parentmobile" placeholder="Parent/Guardian mobile number">
+                                            <label class="form-label">PARENT PHONE NUMBER</label>
+                                        </div>
+                                        <div class="form-floating text-uppercase py-1">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('parentcounty') }}" name="parentcounty" placeholder="Parent/Guardian county of residence">
+                                            <label class="form-label">PARENTS HOME COUNTY</label>
+                                        </div>
+                                        <div class="form-floating text-uppercase py-1">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('parenttown') }}" name="parenttown" placeholder="Parent/Guardian Home town">
+                                            <label class="form-label">PARENT HOME TOWN</label>
+                                        </div>
+                                    </div>
+                                </div>
+                           <h5 class="fw-semibold">Sponsor</h5>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <p class="text-muted">Add the details of the person or organization that will be paying your school fees</p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-floating text-uppercase py-1">
+                                            <input type="text" class="form-control form-control-sm" value="{{ old('sponsorname') }}" name="sponsorname" placeholder="Sponsor name">
+                                            <label class="form-label">SPONSOR NAME</label>
+                                        </div>
+                                        <div class="form-floating text-uppercase py-1">
+                                            <input type="text" class="form-control form-control-sm" value="{{ old('sponsormobile') }}" name="sponsormobile" placeholder="Sponsor mobile number">
+                                            <label class="form-label">SPONSOR PHONE NUMBER</label>
+                                        </div>
+                                        <div class="form-floating text-uppercase py-1">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('sponsorcounty') }}" name="sponsorcounty" placeholder="Sponsor county of residence">
+                                            <label class="form-label">SPONSOR HOME COUNTY</label>
+                                        </div>
+                                        <div class="form-floating text-uppercase py-1">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('sponsortown') }}" name="sponsortown" placeholder="Sponsor Home town">
+                                            <label class="form-label">SPONSOR HOME TOWN</label>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center my-4">
+                                        <button class="btn btn-sm btn-alt-success" data-toggle="click-ripple">Submit </button>
+                                    </div>
+                                </div>
+                                </form>
                             </div>
                         </div>
-                    </li>
-                </ul>
-                <!-- END Updates -->
-                </form>
+                        <div class="block-content tab-pane" id="btabs-vertical-submit" role="tabpanel" aria-labelledby="btabs-vertical-submit-tab">
+                            <h4 class="fw-semibold">Finish application</h4>
+                            <p class="fs-sm">
+                            <div class="block-content-full">
+                                    <div class="p-sm-2 p-xl-12">
+                                        <div class="row mb-2 text-center">
+                                            <span class="fw-semibold mb-2"> {{ $course->mainCourses->school_id }} </span>
+                                            <span class="fw-semibold mb-2"> {{ $course->mainCourses->department_id }}</span>
+                                            <span class="fw-semibold mb-2"> {{ $course->mainCourses->course_name }} </span>
+                                        </div>
+
+                                        <table class="table table-sm table-bordered table-striped table-responsive-md">
+                                            @if($mycourse != null && $mycourse->receipt != null)
+                                                <thead>
+                                                <th>Receipt Number</th>
+                                                <th>Status</th>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>{{ $mycourse->receipt }}</td>
+                                                    <td><span class="badge bg-success"><i class="fa fa-check-circle"> Paid </i> </span> </td>
+                                                </tr>
+                                                </tbody>
+                                            @endif
+                                                @if($mycourse != null)
+                                                    <thead>
+                                                        <th colspan="2">Course Requiremet</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <td colspan="2"> {{ $course->mainCourses->course_requirements }} </td>
+                                                    </tbody>
+                                                @endif
+                                            @if($mycourse != null)
+                                                        <thead>
+                                                        <th>Cluster subject</th>
+                                                        <th>Your Score</th>
+                                                        </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{{ $course->mainCourses->subject1 }}</td>
+                                                            <td>{{ $mycourse->subject_1 }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{ $course->mainCourses->subject2 }}</td>
+                                                            <td>{{ $mycourse->subject_2 }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{ $course->mainCourses->subject3 }}</td>
+                                                            <td>{{ $mycourse->subject_3 }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{ $course->mainCourses->subject4 }}</td>
+                                                            <td>{{ $mycourse->subject_4 }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                @endif
+
+                                        </table>
+
+                            <div class="row">
+                                @if($mycourse != null && $mycourse->receipt != null)
+                                <form action="{{ route('application.finish') }}" method="POST">
+                                    @csrf
+                                <div class="col-md-12">
+                                    <span>Applicant Declaration</span>
+                                    <div class="" style="padding: 7px !important;">
+                                        <input type="checkbox" name="declare" required @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                        <input hidden name="course_id" value="@if($mycourse != null) {{ $mycourse->id }} @endif">
+                                        I <span class="text-decoration-underline"> {{ Auth::user()->sname }} {{ Auth::user()->mname }} {{ Auth::user()->fname }}</span> declare that the information given in this application form is correct. I further certify that I have read, understood and agreed to comply with the terms stipulated herein.
+                                    </div>
+                                </div>
+                                    <div class="d-flex justify-content-center mb-1 mt-4">
+                                        @if($mycourse != null && $mycourse->declaration === 1)
+                                            <button class="btn btn-success" disabled> <i class="fa fa-check-circle"></i> Submitted </button>
+                                        @else
+                                        <button onclick='confirm("Once this application has been submitted cannot be changed. Are you sure you want to submit the application?")' class="btn btn-sm btn-alt-success">Submit Application</button>
+                                        @endif
+                                    </div>
+                                </form>
+                                @endif
+                            </div>
+                      </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Vertical Block Tabs Default Style -->
             </div>
         </div>
     </div>

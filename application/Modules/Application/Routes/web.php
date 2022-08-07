@@ -43,7 +43,13 @@
             Route::post('/submitApplication', 'ApplicationController@application')->name('application.save');
             Route::post('/updateApplication{id}', 'ApplicationController@updateApp')->name('application.update');
             Route::get('/profile', 'ApplicationController@myProfile')->name('applicant.profile');
-            Route::post('/submit/Application', 'ApplicationController@application')->name('application.submit');
+            Route::post('/application', 'ApplicationController@submitApp')->name('application.submitApp');
+            Route::post('/payment', 'ApplicationController@appPayment')->name('application.payment');
+            Route::post('/parent', 'ApplicationController@addParent')->name('application.addParent');
+            Route::post('/work', 'ApplicationController@addWork')->name('application.addWork');
+            Route::post('/secondary', 'ApplicationController@secSch')->name('application.secSch');
+            Route::post('/tertiary', 'ApplicationController@terSch')->name('application.terSch');
+            Route::post('/finish', 'ApplicationController@finish')->name('application.finish');
             Route::get('/edit/{id}', 'ApplicationController@applicationEdit')->name('application.edit');
             Route::get('/progress/{id}', 'ApplicationController@applicationProgress')->name('application.progress');
             Route::get('/dowload/{id}', 'ApplicationController@downloadLetter')->name('application.download');

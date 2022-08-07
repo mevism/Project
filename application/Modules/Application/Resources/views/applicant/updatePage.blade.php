@@ -39,15 +39,15 @@
                             @csrf
                             <div class="row row-cols-sm-3 g-2">
                                 <div class="form-floating col-12">
-                                    <input type="text" class="form-control text-uppercase" name="fname" required value="{{ old('fname') }}">
+                                    <input type="text" class="form-control text-uppercase" name="fname" required value="{{ old('fname') }}" placeholder="FIRST NAME">
                                     <label class="form-label" for="fname">FIRST NAME</label>
                                 </div>
                                 <div class="form-floating col-12">
-                                    <input type="text" class="form-control text-uppercase" name="mname" value="{{ old('mname') }}">
+                                    <input type="text" class="form-control text-uppercase" name="mname" value="{{ old('mname') }}" placeholder="MIDDLE NAME">
                                     <label class="form-label" for="mname">MIDDLE NAME</label>
                                 </div>
                                 <div class="form-floating col-12">
-                                    <input type="text" class="form-control" name="sname" value="{{ old('sname') }}" required>
+                                    <input type="text" class="form-control" name="sname" value="{{ old('sname') }}" required placeholder="SUR NAME">
                                     <label class="form-label" for="sname">SUR NAME</label>
                                 </div>
                                 <div class="form-floating col-12">
@@ -94,31 +94,31 @@
                                     </div>
                                 </div>
                             <div class="form-floating col-12">
-                                <input type="text" class="form-control text-uppercase" name="id_number" value="{{ old('id_number') }}" required>
+                                <input type="text" class="form-control text-uppercase" name="id_number" value="{{ old('id_number') }}" required placeholder="ID/PASSPORT/BIRTH CERT">
                                 <label class="form-label">ID/ BIRTH/ PASSPORT NUMBER</label>
                             </div>
                             <div class="form-floating col-12">
-                                    <input type="text" class="form-control text-uppercase" name="index_number" value="{{ old('index_number') }}" required>
+                                    <input type="text" class="form-control text-uppercase" name="index_number" value="{{ old('index_number') }}" required placeholder="INDEX">
                                     <label class="form-label" for="index_number">INDEX/REGISTRATION NUMBER</label>
                                 </div>
                                 <div class="form-floating col-12">
-                                    <input type="text" class="form-control text-uppercase" name="alt_number" value="{{ old('alt_number') }}" required>
+                                    <input type="text" class="form-control text-uppercase" name="alt_number" value="{{ old('alt_number') }}" required placeholder="PHONE">
                                     <label class="form-label">ALTERNATIVE MOBILE NUMBER</label>
                                 </div>
                                 <div class="form-floating col-12">
-                                    <input type="email" class="form-control text-uppercase" name="alt_email" value="{{ old('alt_email') }}" required>
+                                    <input type="email" class="form-control text-uppercase" name="alt_email" value="{{ old('alt_email') }}" required placeholder="EMAIL">
                                     <label class="form-label">ALTERNATIVE EMAIL ADDRESS</label>
                                 </div>
                                 <div class="form-floating col-12">
-                                    <input type="number" class="form-control text-uppercase" name="address" value="{{ old('address') }}" required>
+                                    <input type="number" class="form-control text-uppercase" name="address" value="{{ old('address') }}" required placeholder="BOX">
                                     <label class="form-label">P.O BOX</label>
                                 </div>
                                 <div class="form-floating col-12">
-                                    <input type="number" class="form-control text-uppercase" name="postalcode" value="{{ old('address') }}" required>
+                                    <input type="number" class="form-control text-uppercase" name="postalcode" value="{{ old('address') }}" required placeholder="POSTAL">
                                     <label class="form-label">POSTAL CODE</label>
                                 </div>
                                 <div class="form-floating col-12">
-                                    <select class="form-control text-muted" name="nationality" required>
+                                    <select class="form-control text-muted" name="nationality" required placeholder="FIRST NAME">
                                         <option value="" selected disabled class="text-center"> - select nationality -</option>
                                         <option value="KE">KENYAN</option>
                                         <option value="UG">UGANDAN</option>
@@ -127,15 +127,15 @@
                                     <label class="form-label">NATIONALITY</label>
                                 </div>
                                 <div class="form-floating col-12">
-                                    <input type="text" class="form-control text-uppercase" name="county" required value="{{ old('county') }}">
+                                    <input type="text" class="form-control text-uppercase" name="county" required value="{{ old('county') }}" placeholder="COUNTY">
                                     <label class="form-label">COUNTY</label>
                                 </div>
                                 <div class="form-floating col-12">
-                                    <input type="text" class="form-control text-uppercase" name="subcounty" value="{{ old('subcounty') }}">
+                                    <input type="text" class="form-control text-uppercase" name="subcounty" value="{{ old('subcounty') }}" placeholder="SUB COUNTY">
                                     <label class="form-label">SUB-COUNTY</label>
                                 </div>
                                 <div class="form-floating col-12">
-                                    <input type="text" class="form-control text-uppercase" name="town" required value="{{ old('town') }}">
+                                    <input type="text" class="form-control text-uppercase" name="town" required value="{{ old('town') }}" placeholder="TOWN">
                                     <label class="form-label">TOWN</label>
                                 </div>
                             <div class="col-12">

@@ -251,7 +251,7 @@ class ApplicationController extends Controller
             'gender' => 'required|string',
             'disabled' => 'required',
             'disability' => 'string|nullable',
-            'index_number' => 'required|string',
+            'index_number' => 'required|string|unique:applicants',
             'alt_number' => 'required|regex:/(0)[0-9]{9}/|min:10|max:10',
             'address' => 'required|string',
             'nationality' => 'required|string',
@@ -260,7 +260,7 @@ class ApplicationController extends Controller
             'town' => 'required|string',
             'title' => 'required|string',
             'status' => 'required|string',
-            'id_number' => 'required|alpha_num|min:7'
+            'id_number' => 'required|alpha_num|min:7|unique:applicants'
         ]);
 
 //        $request->all();
@@ -337,15 +337,16 @@ class ApplicationController extends Controller
     }
 
     public function applyNow($id){
-        $schools = School::all();
-        $departments = Department::all();
-        $courses = Course::all();
-        $course = AvailableCourse::find($id);
 
-//        return $course->openCourse;
+        $education = Education::where('user_id', Auth::user()->id)->get();
+        $work = WorkExperience::where('user_id', Auth::user()->id)->get();
+        $course = AvailableCourse::find($id);
+        $mycourse = Application::where('user_id', Auth::user()->id)->where('course_id', $course->course_id)->first();
+        $parent = Guardian::where('user_id', Auth::user()->id)->get();
+        $sponsor = Sponsor::where('user_id', Auth::user()->id)->get();
 
         return view('application::applicant.application')
-            ->with(['course' => $course, 'schools' => $schools, 'departments' => $departments, 'courses' => $courses]);
+            ->with(['course' => $course, 'education' => $education, 'work' => $work, 'mycourse' => $mycourse, 'sponsor' => $sponsor, 'parent' => $parent]);
     }
 
     public function applicationEdit($id){
@@ -490,6 +491,182 @@ class ApplicationController extends Controller
 
     }
 
+    public function submitApp(Request $request){
+        $request->validate([
+            'subject1' => 'required|string',
+            'subject2' => 'string|required',
+            'subject3' => 'string|required',
+            'subject4' => 'string|required',
+            ]);
+
+        if (Application::where('user_id', Auth::user()->id)->where('course_id', $request->course_id)->first()){
+            Application::where('user_id', Auth::user()->id)->where('course_id', $request->course_id)->update([
+
+                'subject_1' => $request->subject1,
+                'subject_2' => $request->subject2,
+                'subject_3' => $request->subject3,
+                'subject_4' => $request->subject4,
+                'campus' => $request->campus
+            ]);
+        }else {
+
+            $application = new Application;
+            $application->user_id = Auth::user()->id;
+            $application->intake_id = $request->intake;
+            $application->course_id = $request->course_id;
+            $application->subject_1 = $request->subject1;
+            $application->subject_2 = $request->subject2;
+            $application->subject_3 = $request->subject3;
+            $application->subject_4 = $request->subject4;
+            $application->campus = $request->campus;
+            $application->save();
+        }
+
+        return redirect()->back()->with('success', 'You course application details have been update successfully');
+
+    }
+
+    public function appPayment(Request $request){
+            $request->validate([
+            'receipt' => 'string|required|unique:applications',
+            'receipt_file' => 'mimes:jpeg,jpg,png,pdf|required|max:2048'
+                ]);
+
+        if ($request->hasFile('receipt_file')){
+            $file = $request->receipt_file;
+            $fileName = 'receipt'.time().'.'.$file->getClientOriginalExtension();
+            $request->receipt_file->move('receipts', $fileName);
+        }
+
+            Application::where('user_id', Auth::user()->id)
+                ->where('course_id', $request->course_id)->update(['receipt' => $request->receipt, 'receipt_file' => $fileName ]);
+
+        return redirect()->back()->with('success', 'You course payment details have been update successfully');
+    }
+
+    public function addParent(Request $request){
+
+        $request->validate([
+                'parentname' => 'string|required',
+                'parentmobile' => 'string|required|regex:/(0)[0-9]{9}/|min:10|max:10',
+                'parentcounty' => 'string|required',
+                'parenttown' => 'string|required',
+                'sponsorname' => 'string|required',
+                'sponsormobile' => 'string|required|regex:/(0)[0-9]{9}/|min:10|max:10',
+                'sponsorcounty' => 'string|required',
+                'sponsortown' => 'string|required',
+            ]);
+
+                $parent = new Guardian;
+                $parent->user_id = Auth::user()->id;
+                $parent->guardian_name = $request->parentname;
+                $parent->guardian_mobile = $request->parentmobile;
+                $parent->guardian_county = $request->parentcounty;
+                $parent->guardian_town = $request->parenttown;
+                $parent->save();
+
+                $sponsor = new Sponsor;
+                $sponsor->user_id = Auth::user()->id;
+                $sponsor->sponsor_name = $request->sponsorname;
+                $sponsor->sponsor_mobile = $request->sponsormobile;
+                $sponsor->sponsor_county = $request->sponsorcounty;
+                $sponsor->sponsor_town = $request->sponsortown;
+                $sponsor->save();
+
+        return redirect()->back()->with('success', 'You course application details have been update successfully');
+    }
+
+    public function addWork(Request $request){
+
+        $request->validate([
+            'org1' => 'string|required',
+            'org1post' => 'string|required',
+            'org1startdate' => 'string|required',
+            'org1enddate' => 'string|required',
+        ]);
+
+        $work = new WorkExperience;
+        $work->user_id = Auth::user()->id;
+        $work->organization = $request->org1;
+        $work->post = $request->org1post;
+        $work->start_date = $request->org1startdate;
+        $work->exit_date = $request->org1enddate;
+        $work->save();
+
+        return redirect()->back()->with('success', 'You work experience details have been update successfully');
+    }
+
+    public function secSch(Request $request){
+            $request->validate([
+                'secondaryqualification' => 'string|required',
+                'secstartdate' => 'string|required',
+                'secenddate' => 'string|required',
+                'seccert' => 'mimes:jpeg,jpg,png,pdf|required|max:2048',
+            ]);
+
+            $education = new Education;
+            $education->user_id = Auth::user()->id;
+            $education->institution = $request->secondary;
+            $education->qualification = $request->secondaryqualification;
+            $education->start_date = $request->secstartdate;
+            $education->exit_date = $request->secenddate;
+            $education->level = $request->level;
+
+            if ($request->hasFile('seccert')){
+                $file = $request->seccert;
+                $fileName = 'seccert'.time().'.'.$file->getClientOriginalExtension();
+                $request->seccert->move('certs', $fileName);
+                $education->certificate = $fileName;
+            }
+
+            $education->save();
+
+        return redirect()->back()->with('success', 'You work experience details have been update successfully');
+    }
+
+    public function terSch(Request $request){
+            $request->validate([
+                'tertiary' => 'string|required',
+                'teriaryqualification' => 'string|required',
+                'terstartdate' => 'string|required',
+                'level' => 'string|required',
+                'terenddate' => 'string|required',
+                'tercert' => 'mimes:jpeg,jpg,png,pdf|required|max:2048',
+            ]);
+
+//            return $request->all();
+
+            $education = new Education;
+            $education->user_id = Auth::user()->id;
+            $education->institution = $request->tertiary;
+            $education->qualification = $request->teriaryqualification;
+            $education->start_date = $request->terstartdate;
+            $education->exit_date = $request->terenddate;
+            $education->level = $request->level;
+
+            if ($request->hasFile('tercert')){
+                $file = $request->tercert;
+                $fileName = 'tercert'.time().'.'.$file->getClientOriginalExtension();
+                $request->tercert->move('certs', $fileName);
+                $education->certificate = $fileName;
+            }
+            $education->save();
+
+        return redirect()->back()->with('success', 'You education history added successfully');
+
+    }
+
+    public function finish(Request $request){
+        $request->validate([
+            'declare' => 'required'
+        ]);
+
+        Application::where('user_id', Auth::user()->id)->where('id', $request->course_id)->update(['declaration' => 1, 'finance_status' => 0, 'status' => 0]);
+
+        return redirect()->back()->with('success', 'Your application was submitted successfully');
+
+    }
+
     public function application(Request $request){
         $request->validate([
             'subject1' => 'required|string',
@@ -497,15 +674,8 @@ class ApplicationController extends Controller
             'subject3' => 'string|required',
             'subject4' => 'string|required',
             'secondary' => 'string|required',
-            'secondaryqualification' => 'string|required',
-            'secstartdate' => 'string|required',
-            'secenddate' => 'string|required',
-            'seccert' => 'mimes:jpeg,jpg,png,pdf|required|max:2048',
-            'tertiary' => 'string|nullable',
-            'tertiaryqualification' => 'string|nullable',
-            'terstartdate' => 'string|nullable',
-            'terenddate' => 'string|nullable',
-            'tercert' => 'mimes:jpeg,jpg,png,pdf|nullable|max:2048',
+
+
             'tertiary2' => 'string|nullable',
             'tertiary2qualification' => 'string|nullable',
             'ter2startdate' => 'string|nullable',
@@ -516,10 +686,7 @@ class ApplicationController extends Controller
             'ter3startdate' => 'string|nullable',
             'ter3enddate' => 'string|nullable',
             'ter3cert' => 'mimes:jpeg,jpg,png,|nullable|max:2048',
-            'org1' => 'string|nullable',
-            'org1post' => 'string|nullable',
-            'org1startdate' => 'string|nullable',
-            'org1enddate' => 'string|nullable',
+
             'org2' => 'string|nullable',
             'org2post' => 'string|nullable',
             'org2startdate' => 'string|nullable',
@@ -528,14 +695,7 @@ class ApplicationController extends Controller
             'org3post' => 'string|nullable',
             'org3startdate' => 'string|nullable',
             'org3enddate' => 'string|nullable',
-            'parentname' => 'string|required',
-            'parentmobile' => 'string|required|regex:/(0)[0-9]{9}/|min:10|max:10',
-            'parentcounty' => 'string|required',
-            'parenttown' => 'string|required',
-            'sponsorname' => 'string|required',
-            'sponsormobile' => 'string|required|regex:/(0)[0-9]{9}/|min:10|max:10',
-            'sponsorcounty' => 'string|required',
-            'sponsortown' => 'string|required',
+
             'receipt' => 'string|required|unique:applications',
             'receipt_file' => 'mimes:jpeg,jpg,png,pdf|required|max:2048'
         ]);
@@ -580,20 +740,7 @@ class ApplicationController extends Controller
 
         if ($request->filled(['tertiary', 'teriaryqualification', 'terstartdate', 'terenddate'])){
 
-            $education = new Education;
-            $education->user_id = Auth::user()->id;
-            $education->institution = $request->tertiary;
-            $education->qualification = $request->teriaryqualification;
-            $education->start_date = $request->terstartdate;
-            $education->exit_date = $request->terenddate;
 
-            if ($request->hasFile('tercert')){
-                $file = $request->tercert;
-                $fileName = 'tercert'.time().'.'.$file->getClientOriginalExtension();
-                $request->tercert->move('certs', $fileName);
-                $education->certificate = $fileName;
-            }
-            $education->save();
         }
 
         if ($request->filled(['tertiary2', 'teriary2qualification', 'ter2startdate', 'ter2enddate'])) {
@@ -635,14 +782,7 @@ class ApplicationController extends Controller
 
         if ($request->filled(['org1', 'org1post', 'org1startdate', 'org1enddate'])) {
 
-            $work = new WorkExperience;
 
-            $work->user_id = Auth::user()->id;
-            $work->organization = $request->org1;
-            $work->post = $request->org1post;
-            $work->start_date = $request->org1startdate;
-            $work->exit_date = $request->org1enddate;
-            $work->save();
 
         }
 

@@ -15,7 +15,7 @@ class Application extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [];
+    protected $fillable = ['subject_1', 'subject_2', 'subject_3', 'campus'];
 
 //    relationship between an applicant and a course
 

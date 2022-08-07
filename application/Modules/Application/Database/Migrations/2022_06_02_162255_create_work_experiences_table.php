@@ -18,8 +18,8 @@ return new class extends Migration
             $table->bigInteger('user_id');
             $table->string('organization')->nullable();
             $table->string('post')->nullable();
-            $table->date('start_date')->nullable();
-            $table->date('exit_date')->nullable();
+            $table->string('start_date')->nullable();
+            $table->string('exit_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -921,6 +921,20 @@ class CoursesController extends Controller
 
 
     }
+
+    public function fetchDept(Request $request){
+
+            $school_id = $request->school;
+
+            $departments = School::where('id',$school_id)
+                ->with('departments')
+                ->get();
+            return response()->json([
+                'subcategories' => $departments
+            ]);
+
+    }
+
 }
 
 
