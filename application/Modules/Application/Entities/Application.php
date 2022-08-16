@@ -15,7 +15,7 @@ class Application extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [];
+    protected $fillable = ['subject_1', 'subject_2', 'subject_3', 'campus'];
 
 //    relationship between an applicant and a course
 
@@ -43,6 +43,11 @@ class Application extends Model
 //        application-admission relationship
 
     public function admApproval(){
+
+        return $this->hasOne(AdmissionApproval::class, 'app_id');
+    }
+
+    public function admApprovals(){
 
         return $this->hasOne(AdmissionApproval::class, 'app_id');
     }

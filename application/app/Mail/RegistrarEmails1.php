@@ -28,6 +28,6 @@ class RegistrarEmails1 extends Mailable
      */
     public function build()
     {
-        return $this->subject('Technical University of Mombasa')->view('courses::offer.rejectedMail');
+        return $this->subject('Technical University of Mombasa')->view('registrar::offer.rejectedMail');
     }
 }

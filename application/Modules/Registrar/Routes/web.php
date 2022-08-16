@@ -15,11 +15,23 @@ use Modules\Registrar\Http\Controllers\CoursesController;
 
 Route::prefix('courses')->middleware(['admin'])->group(function() {
 
+    Route::get('/exportkuccps', 'CoursesController@exportkuccps')->name('courses.exportkuccps');
+    Route::get('/importExportViewkuccps','CoursesController@importExportViewkuccps')->name('courses.importExportViewkuccps');
+    Route::post('/importkuccps','CoursesController@importkuccps')->name('courses.importkuccps');
+    Route::get('/preview/{id}', 'CoursesController@preview')->name('courses.preview');
+    Route::get('/viewApplication/{id}', 'CoursesController@viewApplication')->name('courses.viewApplication');
+    Route::get('/acceptApplication/{id}', 'CoursesController@acceptApplication')->name('courses.acceptApplication');
+    Route::post('/rejectApplication/{id}', 'CoursesController@rejectApplication')->name('courses.rejectApplication');
+
+
+
     // Route::get('/offer', 'CoursesController@offer')->name('courses.offer');registrar
     // Route::get('/profile', 'CoursesController@profile')->name('courses.profile');
     // Route::get('/destroyCoursesAvailable/{id}', 'CoursesController@destroyCoursesAvailable')->name('courses.destroyCoursesAvailable');
+
     Route::get('/archived', 'CoursesController@archived')->name('courses.archived');
     Route::get('/applications', 'CoursesController@applications')->name('courses.applications');
+    Route::get('/showKuccps', 'CoursesController@showKuccps')->name('courses.showKuccps');
     Route::get('/offer', 'CoursesController@offer')->name('courses.offer');
     Route::get('/profile', 'CoursesController@profile')->name('courses.profile');
     Route::get('/destroyCoursesAvailable/{id}', 'CoursesController@destroyCoursesAvailable')->name('courses.destroyCoursesAvailable');
@@ -85,4 +97,8 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
     Route::get('admit/{id}', [CoursesController::class, 'admitStudent'])->name('courses.admitStudent');
     Route::get('studentId{id}', [CoursesController::class, 'studentID'])->name('courses.studentID');
     Route::post('storeStudentId{id}', [CoursesController::class, 'storeStudentId'])->name('courses.storeStudentId');
+
+
+
+    Route::get('/send', [CoursesController::class, 'accepted'])->name('courses.accepted');
 });

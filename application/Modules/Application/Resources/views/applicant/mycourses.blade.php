@@ -51,7 +51,7 @@
                                     <td>{{ $course->courses->department_id }}</td>
                                     <td>{{ $course->courses->course_name }}</td>
                                     <td nowrap="">
-                                        @if($course->registrar_status === 1 && $course->cod_status === 1)
+                                        @if($course->registrar_status === 3 && $course->cod_status === 1)
                                         <a class="btn btn-sm btn-alt-success" target="_top" href="{{ route('application.download', $course->id) }}"><i class="fa fa-file-pdf"></i> download</a>
                                         @elseif($course->registrar_status === NULL && $course->finance_status === NULL)
                                         <a class="btn btn-sm btn-alt-info" href="{{ route('application.edit', $course->id) }}">

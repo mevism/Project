@@ -1,4 +1,4 @@
-@extends('layouts.backend')
+@extends('registrar::layouts.backend')
 
 @section('content')
 <div class="bg-body-light">
@@ -57,11 +57,8 @@
                         @foreach ($courses as $item)
                           <option value="{{ $item->course_code }}">{{ $item->course_name }}</option>
                         @endforeach
-
+                      
                       </select>
-                    </div>
-                    <div class="col-12 col-xl-12">
-                      <input name = 'cut_off_class' placeholder="Cut Off Points" id = 'cut_off_class' class="form-control form-control-alt">
                     </div>
                     <div class="col-12 text-center p-3">
                       <button type="submit" class="btn btn-alt-success" data-toggle="click-ripple">Create Class</button>

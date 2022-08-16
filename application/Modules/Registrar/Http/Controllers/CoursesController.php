@@ -2,34 +2,164 @@
 
 namespace Modules\Registrar\Http\Controllers;
 
+use Carbon;
 use App\Models\Course;
 use Illuminate\Http\Request;
+use App\Imports\KuccpsImport;
+use Illuminate\Contracts\Routing\Registrar;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Modules\Application\Entities\AdmissionApproval;
+use Maatwebsite\Excel\Facades\Excel;
 use Modules\Registrar\Entities\Campus;
 use Modules\Registrar\Entities\Intake;
 use Modules\Registrar\Entities\School;
+use Illuminate\Support\Facades\Storage;
 use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\Courses;
+use Modules\Registrar\Entities\Student;
+use PhpOffice\PhpWord\TemplateProcessor;
+use Illuminate\Support\Facades\Validator;
+use Modules\Registrar\emails\KuccpsMails;
 use Modules\Registrar\Entities\Attendance;
 use Modules\Registrar\Entities\Department;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Contracts\Support\Renderable;
-use Modules\Application\Entities\Application;
-use Modules\Registrar\Entities\AvailableCourse;
-use Modules\Registrar\Entities\Student;
-use Modules\Registrar\Entities\StudentCourse;
-use Modules\Registrar\Entities\StudentLogin;
-use PhpOffice\PhpWord\TemplateProcessor;
-use Carbon;
+use Modules\Application\Entities\Education;
 use NcJoes\OfficeConverter\OfficeConverter;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Support\Renderable;
+use Modules\Registrar\Entities\RegistrarLog;
+use Modules\Registrar\Entities\StudentLogin;
+use Modules\Application\Entities\Application;
+use Modules\Registrar\Entities\StudentCourse;
+use Modules\Registrar\Entities\AvailableCourse;
+use Modules\Registrar\Entities\KuccpsApplicant;
+use Modules\Registrar\Entities\KuccpsApplication;
+use Modules\Application\Entities\AdmissionApproval;
 
 class CoursesController extends Controller
 
 {
+
+    public function acceptApplication($id){
+
+        $app = Application::find($id);
+        $app->registrar_status = 1;
+        $app->save();
+
+        $logs = new RegistrarLog;
+        $logs->app_id = $app->id;
+        $logs->user = Auth::guard('user')->user()->name;
+        $logs->user_role = Auth::guard('user')->user()->role_id;
+        $logs->activity = 'Application accepted';
+        $logs->save();
+
+        return redirect()->route('courses.applications')->with('success', '1 applicant approved');
+    }
+
+    public function rejectApplication(Request $request, $id){
+        $app = Application::find($id);
+        $app->registrar_status = 2;
+        $app->registrar_comments = $request->comment;
+        $app->save();
+
+        $logs = new RegistrarLog;
+        $logs->app_id = $app->id;
+        $logs->user = Auth::guard('user')->user()->name;
+        $logs->user_role = Auth::guard('user')->user()->role_id;
+        $logs->activity = 'Application rejected';
+        $logs->comments = $request->comment;
+        $logs->save();
+
+        return redirect()->route('courses.applications')->with('success', 'Application declined');
+    }
+
+    public function preview($id){
+        $app = Application::find($id);
+        $school = Education::where('user_id', $app->applicant->id)->first();
+        return view('registrar::offer.preview')->with(['app' => $app, 'school' => $school]);
+    }
+    public function viewApplication($id){
+        $app = Application::find($id);
+        $school = Education::where('user_id', $app->applicant->id)->first();
+        return view('registrar::offer.viewApplication')->with(['app' => $app, 'school' => $school]);
+    }
+
+    public function accepted(){
+
+        $kuccps = KuccpsApplicant::where('email', '!=', NULL)->get();
+
+
+        foreach($kuccps  as $app){
+
+            // return ;
+
+
+
+            sleep(2);
+
+            if($app->kuccpsApplication->status === null){
+
+
+                $regNumber = KuccpsApplication::where('course_code', $app->kuccpsApplication->course_code)
+                ->where('status', '!=', NULL)->count();
+
+                $course  =  Courses::where('course_code', $app->kuccpsApplication->course_code)
+                ->select('department_id','course_duration')->first();
+
+                // return $course->course_duration;
+
+            $domPdfPath = base_path('vendor/dompdf/dompdf');
+            \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
+            \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+
+             $my_template = new TemplateProcessor(storage_path('adm_template.docx'));
+
+             $my_template->setValue('name', strtoupper($app->sname." ".$app->mname." ".$app->fname));
+             $my_template->setValue('box', strtoupper( $app->BOX));
+             $my_template->setValue('address', strtoupper($app->postal_code));
+             $my_template->setValue('town', strtoupper($app->town));
+             $my_template->setValue('course', $app->kuccpsApplication->course_name);
+             $my_template->setValue('department', $course->department_id);
+             $my_template->setValue('duration', $course->course_duration);
+             $my_template->setValue('from', Carbon\carbon::parse($app->kuccpsApplication->kuccpsIntake->intake_from)->format('d-m-Y'));
+             $my_template->setValue('to', Carbon\carbon::parse($app->kuccpsApplication->kuccpsIntake->intake_to)->format('d-m-Y'));
+             $my_template->setValue('reg_number', $app->kuccpsApplication->course_code."/".str_pad(1 + $regNumber, 3, "0", STR_PAD_LEFT)."J"."/".Carbon\carbon::parse($app->kuccpsApplication->kuccpsIntake->intake_from)->format('Y'));
+             $my_template->setValue('ref_number', 'APP/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT));
+             $my_template->setValue('date',  date('d-M-Y'));
+
+
+               $docPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx");
+
+                        $my_template->saveAs($docPath);
+
+                        $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
+
+                        $pdfPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf");
+
+                        if(file_exists($pdfPath)){
+                            unlink($pdfPath);
+                        }
+
+                        $converter = new OfficeConverter(storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
+                        $converter->convertTo('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).'.pdf');
+
+                if(file_exists($docPath)){
+                    unlink($docPath);
+                }
+
+                Mail::to($app->email)->send(new KuccpsMails($app));
+
+                // KuccpsApplication::where('user_id', $app->id)->update('status', 1);
+
+                $app->kuccpsApplication->status = 1;
+                $app->kuccpsApplication->save();
+
+            }
+
+        }
+
+
+    }
 
     public function index(){
 
@@ -41,11 +171,44 @@ class CoursesController extends Controller
         return view('registrar::approval.approveIndex');
     }
 
+    public function importExportViewkuccps(){
+        $intakes = Intake::where('status',1)->get();
+
+        $newstudents = KuccpsApplication::where('status', null)->get();
+
+        return view('registrar::offer.kuccps')->with(['intakes' => $intakes, 'new' => $newstudents]);
+
+     }
+
+     public function importkuccps(Request $request) {
+        $vz = $request->validate([
+            'excel_file'   =>    'required|mimes:xlsx'
+        ]);
+        // return $request->intake;
+
+
+        $excel_file  = $request->excel_file;
+        $intake_id = $request->intake;
+
+        Excel::import(new KuccpsImport( $intake_id), $excel_file);
+
+        return back()->with('success' , 'Data Imported Successfully');
+    }
+
     public function applications(){
 
-        $accepted      =     Application::where('registrar_status', 0)->get();
+        $accepted      =     Application::where('registrar_status', '>=', 0)
+        ->where('registrar_status', '!=', 3 )
+        ->where('registrar_status', '!=', 4 )
+        ->get();
 
         return view('registrar::offer.applications')->with('accepted',$accepted);
+    }
+
+    public function showKuccps(){
+        $kuccps = KuccpsApplicant::orderBy('id', 'desc')->get();
+
+        return view('registrar::offer.showKuccps')->with(['kuccps' => $kuccps]);
     }
 
     public function offer(){
@@ -74,12 +237,21 @@ class CoursesController extends Controller
 
     public function acceptedMail(Request $request){
 
+        $request->validate([
+            'submit' => 'required'
+        ]);
+
         foreach($request->submit as $id){
 
             $app = Application::find($id);
 
+            if($app->registrar_status === 2){
+                Application::where('id', $id)->update(['cod_status' => 3, 'dean_status' => 3, 'registrar_status' => 4]);
+            }else{
+
+
             if($app->dean_status === 1){
-/*
+
                 $domPdfPath = base_path('vendor/dompdf/dompdf');
                     \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
                     \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
@@ -94,7 +266,7 @@ class CoursesController extends Controller
                      $my_template->setValue('duration', $app->courses->course_duration);
                      $my_template->setValue('from', Carbon\carbon::parse($app->app_intake->intake_from)->format('d - m - Y'));
                      $my_template->setValue('to', Carbon\carbon::parse($app->app_intake->intake_to)->format('d-m-Y'));
-                     $my_template->setValue('reg_number', $app->courses->course_code."/".str_pad(0000 + $app->id, 4, "0", STR_PAD_LEFT)."/".date('Y'));
+                     $my_template->setValue('reg_number', $app->courses->course_code."/".str_pad(0000 + $app->id, 4, "0", STR_PAD_LEFT)."/". Carbon\carbon::parse($app->app_intake->intake_from)->format('Y'));
                      $my_template->setValue('ref_number', 'APP/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT));
                      $my_template->setValue('date',  date('d-M-Y'));
 
@@ -118,21 +290,21 @@ class CoursesController extends Controller
                             unlink($docPath);
                         }
 
-            Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails($app->applicant));
-*/
-            $app->find($id);
-            $app->registrar_status = 1;
-            $app->status = 0;
-            $app->ref_number = 'APP/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT);
-            $app->reg_number = $app->courses->course_code."/".str_pad(0000 + $app->id, 4, "0", STR_PAD_LEFT)."/".date('Y');
-            $app->adm_letter = 'APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf";
-            $app->save();
+                    Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails($app->applicant));
+
+                    $app->find($id);
+                    $app->registrar_status = 3;
+                    $app->status = 0;
+                    $app->ref_number = 'APP/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT);
+                    $app->reg_number = $app->courses->course_code."/".str_pad(0000 + $app->id, 4, "0", STR_PAD_LEFT)."/".date('Y');
+                    $app->adm_letter = 'APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf";
+                    $app->save();
 
             }elseif($app->dean_status === 2){
                 Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails1($app->applicant));
 
                 $app->find($id);
-                $app->registrar_status = 1;
+                $app->registrar_status = 3;
                 $app->save();
 
             }else{
@@ -144,8 +316,10 @@ class CoursesController extends Controller
             }
 
         }
-        return redirect()->back()->with('success', 'Email sent');
     }
+        return redirect()->back()->with('success', 'Email sent');
+
+}
 
 
 
@@ -552,7 +726,7 @@ class CoursesController extends Controller
     }
     public function archived(){
 
-        $archived   =  Application::where('registrar_status',1)->get();
+        $archived   =  Application::where('registrar_status',3)->get();
 
         return view('registrar::offer.archived')->with('archived',$archived);
 
@@ -577,7 +751,8 @@ class CoursesController extends Controller
         $vz                    =           $request->validate([
             'attendance'       =>          'required',
             'intake_from'      =>          'required',
-            'course'           =>          'required'
+            'course'           =>          'required',
+
         ]);
 
         $intake                  =        AvailableCourse::where('course_id', $request->course_id)->select('intake_id')->get();
@@ -660,43 +835,43 @@ class CoursesController extends Controller
 
             $student = new Student;
 
-            $student->reg_number = $app->appApproval->reg_number;
-            $student->ref_number = $app->appApproval->ref_number;
-            $student->sname = $app->appApproval->applicant->sname;
-            $student->fname = $app->appApproval->applicant->fname;
-            $student->mname = $app->appApproval->applicant->mname;
-            $student->email = $app->appApproval->applicant->email;
-            $student->student_email = strtolower(str_replace('/', '', $app->appApproval->reg_number).'@students.tum.ac.ke');
-            $student->mobile = $app->appApproval->applicant->mobile;
-            $student->alt_mobile = $app->appApproval->applicant->alt_mobile;
-            $student->title = $app->appApproval->applicant->title;
-            $student->marital_status = $app->appApproval->applicant->marital_status;
-            $student->gender = $app->appApproval->applicant->gender;
-            $student->dob = $app->appApproval->applicant->DOB;
-            $student->id_number = $app->appApproval->applicant->id_number;
-            $student->citizen = $app->appApproval->applicant->nationality;
-            $student->county = $app->appApproval->applicant->county;
-            $student->sub_county = $app->appApproval->applicant->sub_county;
-            $student->town = $app->appApproval->applicant->town;
-            $student->address = $app->appApproval->applicant->address;
-            $student->postal_code = $app->appApproval->applicant->postal_code;
-            $student->disabled = $app->appApproval->applicant->disabled;
-            $student->disability = $app->appApproval->applicant->disability;
+            $student->reg_number = $app->appApprovals->reg_number;
+            $student->ref_number = $app->appApprovals->ref_number;
+            $student->sname = $app->appApprovals->applicant->sname;
+            $student->fname = $app->appApprovals->applicant->fname;
+            $student->mname = $app->appApprovals->applicant->mname;
+            $student->email = $app->appApprovals->applicant->email;
+            $student->student_email = strtolower(str_replace('/', '', $app->appApprovals->reg_number).'@students.tum.ac.ke');
+            $student->mobile = $app->appApprovals->applicant->mobile;
+            $student->alt_mobile = $app->appApprovals->applicant->alt_mobile;
+            $student->title = $app->appApprovals->applicant->title;
+            $student->marital_status = $app->appApprovals->applicant->marital_status;
+            $student->gender = $app->appApprovals->applicant->gender;
+            $student->dob = $app->appApprovals->applicant->DOB;
+            $student->id_number = $app->appApprovals->applicant->id_number;
+            $student->citizen = $app->appApprovals->applicant->nationality;
+            $student->county = $app->appApprovals->applicant->county;
+            $student->sub_county = $app->appApprovals->applicant->sub_county;
+            $student->town = $app->appApprovals->applicant->town;
+            $student->address = $app->appApprovals->applicant->address;
+            $student->postal_code = $app->appApprovals->applicant->postalcode;
+            $student->disabled = $app->appApprovals->applicant->disabled;
+            $student->disability = $app->appApprovals->applicant->disability;
             $student->save();
 
             $studCourse = new StudentCourse;
             $studCourse->student_id = $student->id;
-            $studCourse->department_id = $app->appApproval->courses->department_id;
-            $studCourse->course_id = $app->appApproval->course_id;
-            $studCourse->intake_id = $app->appApproval->intake_id;
-            $studCourse->class_code = strtoupper($app->appApproval->courses->course_code.'/'.Carbon\carbon::parse($app->appApproval->intake_from)->format('MY').'/J-FT');
-            $studCourse->class = strtoupper($app->appApproval->courses->course_code.'/'.Carbon\carbon::parse($app->appApproval->intake_from)->format('MY').'/J-FT');
-            $studCourse->course_duration = $app->appApproval->courses->course_duration;
+            $studCourse->department_id = $app->appApprovals->courses->department_id;
+            $studCourse->course_id = $app->appApprovals->course_id;
+            $studCourse->intake_id = $app->appApprovals->intake_id;
+            $studCourse->class_code = strtoupper($app->appApprovals->courses->course_code.'/'.Carbon\carbon::parse($app->appApprovals->intake_from)->format('MY').'/J-FT');
+            $studCourse->class = strtoupper($app->appApprovals->courses->course_code.'/'.Carbon\carbon::parse($app->appApprovals->intake_from)->format('MY').'/J-FT');
+            $studCourse->course_duration = $app->appApprovals->courses->course_duration;
             $studCourse->save();
 
             $studLogin = new StudentLogin;
-            $studLogin->username = $app->appApproval->reg_number;
-            $studLogin->password = Hash::make($app->appApproval->applicant->id_number);
+            $studLogin->username = $app->appApprovals->reg_number;
+            $studLogin->password = Hash::make($app->appApprovals->applicant->id_number);
             $studLogin->student_id = $student->id;
             $studLogin->save();
 
@@ -746,6 +921,20 @@ class CoursesController extends Controller
 
 
     }
+
+    public function fetchDept(Request $request){
+
+            $school_id = $request->school;
+
+            $departments = School::where('id',$school_id)
+                ->with('departments')
+                ->get();
+            return response()->json([
+                'subcategories' => $departments
+            ]);
+
+    }
+
 }
 
 

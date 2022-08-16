@@ -34,13 +34,11 @@ class UserController extends Controller
                 return redirect()->intended('/dashboard')->with('success', 'Welcome' . " " . $name . " " . 'to' . " " . config('app.name') . ".");
             }
         }
-        /*
         if (Auth::guard('web')->attempt($logins, true)) {
             if (Auth::guard('web'))
                 return redirect()->route('application.applicant')->with('success', 'Welcome' . " " . Auth::user()->email . " " . Auth::user()->role_id . "  " . 'to' . " " . config('app.name') . ".");
 
         }
-        */
         if (Auth::guard('student')->attempt($logins, true)) {
 
             if (Auth::guard('student')) {

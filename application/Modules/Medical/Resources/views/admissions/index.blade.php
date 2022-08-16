@@ -42,9 +42,9 @@
                         <tbody>
                         @foreach($admission as $app)
                             <tr>
-                                <td>{{ $app->appApproval->applicant->sname }} {{ $app->appApproval->applicant->mname }} {{ $app->appApproval->applicant->fname }}</td>
-                                <td>{{ $app->appApproval->courses->department_id }}</td>
-                                <td>{{ $app->appApproval->courses->course_name }}</td>
+                                <td nowrap="">{{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->mname }} {{ $app->appApprovals->applicant->fname }}</td>
+                                <td>{{ $app->appApprovals->courses->department_id }}</td>
+                                <td>{{ $app->appApprovals->courses->course_name }}</td>
                                 <td>
                                     @if($app->medical_status === 0)
                                         <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>
@@ -54,7 +54,7 @@
                                         <span class="badge bg-danger"> <i class="fa fa-close"></i> rejected</span>
                                     @endif
                                 </td>
-                                <td>
+                                <td nowrap="">
                                         <div class="modal fade" id="modal-block-popin{{ $app->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-popin" role="document">
                                                 <div class="modal-content">

@@ -30,7 +30,7 @@
         <div class="block-header block-header-default">
             <h3 class="block-title">CHANGE COURSE</h3>
         </div>
-        <div id = 'course_interaction' style = 'width:100%;'></div>
+        <div id = 'course_interaction' style = 'width:80%;margin-left:20%;'></div>
     </div>
     <!-- <div id="cut_off_courses"></div> -->
 </div>
@@ -39,5 +39,6 @@
 <script defer>
     getCourses();
 </script>
+
 @endsection
 

@@ -1,4 +1,4 @@
-@extends('layouts.backend')
+@extends('registrar::layouts.backend')
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
@@ -55,7 +55,7 @@
               <table id="example" class="table table-borderless table-striped table-vcenter js-dataTable-responsive">
                 <span class="d-flex justify-content-end">
                     <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addIntake') }}">Create</a>
-                </span>
+                </span><br>
                 <thead>
 
                   <tr>

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('attendance_id');
             $table->string('course_id');
-            $table->integer('cut_off');
             $table->string('intake_from');
             $table->string('attendance_code');
             $table->timestamps();

@@ -77,48 +77,86 @@
 
               </a>
             </li>
-              <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
-                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                      <i class="nav-main-link-icon si si-user"></i>
-                      <span class="nav-main-link-name">Courses</span>
-                  </a>
-                  <ul class="nav-main-submenu">
-                      <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('change_course') }}">
-                              <i class="nav-main-link-icon si si-user"></i>
-                              <span class="nav-main-link-name">
+              <div id = 'in_course'>
+                  <li class='nav-main-item{{ request()->is('courses/*') ? ' open' : '' }}'>
+                      <a class='nav-main-link nav-main-link-submenu' data-toggle='submenu' aria-haspopup='true' aria-expanded='true' href='#'>
+                          <i class='nav-main-link-icon si si-user'></i>
+                          <span class='nav-main-link-name'>Courses</span>
+                      </a>
+                      <ul class='nav-main-submenu'>
+                          <li class='nav-main-item'>
+                              <a class='nav-main-link{{ request()->is('student/change_course') ? 'active' : ''  }}' href='{{ route('change_course') }}'>
+                              <i class='nav-main-link-icon si si-user'></i>
+                              <span class='nav-main-link-name'>
                                     Change Courses
-                                </span>
-                          </a>
-                      </li>
-                  </ul>
-              </li>
-              <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
-                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                      <i class="nav-main-link-icon si si-user"></i>
-                      <span class="nav-main-link-name">Academics</span>
-                  </a>
-                  <ul class="nav-main-submenu">
-                      <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('change_course') }}">
-                              <i class="nav-main-link-icon si si-user"></i>
-                              <span class="nav-main-link-name">
+                                  </span>
+                              </a>
+                          </li>
+                      </ul>
+                  </li>
+                  <li class='nav-main-item{{ request()->is('academics/*') ? ' open' : '' }}'>
+                      <a class='nav-main-link nav-main-link-submenu' data-toggle='submenu' aria-haspopup='true' aria-expanded='true' href='#'>
+                          <i class='nav-main-link-icon si si-user'></i>
+                          <span class='nav-main-link-name'>Academics</span>
+                      </a>
+                      <ul class='nav-main-submenu'>
+                          <li class='nav-main-item'>
+                              <a class='nav-main-link{{ request()->is('student/change_course') ? 'active' : ''  }}' href='{{ route('change_course') }}'>
+                              <i class='nav-main-link-icon si si-user'></i>
+                              <span class='nav-main-link-name'>
                                     Exams Transcripts
                                 </span>
-                          </a>
-                      </li>
-                  </ul>
-                  <ul class="nav-main-submenu">
-                      <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('change_course') }}">
-                              <i class="nav-main-link-icon si si-user"></i>
-                              <span class="nav-main-link-name">
+                              </a>
+                          </li>
+                      </ul>
+                      <ul class='nav-main-submenu'>
+                          <li class='nav-main-item'>
+                              <a class='nav-main-link{{ request()->is('student/change_course') ? 'active' : ''  }} href='". route('change_course') }}'>
+                              <i class='nav-main-link-icon si si-user'></i>
+                              <span class='nav-main-link-name'>
                                     Fee
-                                </span>
-                          </a>
-                      </li>
-                  </ul>
-              </li>
+                                    </span>
+                              </a>
+                          </li>
+                      </ul>
+                      <ul class='nav-main-submenu'>
+                          <li class='nav-main-item'>
+                              <a class='nav-main-link{{ request()->is('student/change_course') ? 'active' : ''  }}' href='{{ route('change_course') }}'>
+                              <i class='nav-main-link-icon si si-user'></i>
+                              <span class='nav-main-link-name'>
+                                    Units
+                                    </span>
+                              </a>
+                          </li>
+                      </ul>
+                  </li>
+                  <li class='nav-main-item{{ request()->is('accomodation/*') ? ' open' : '' }}'>
+                      <a class='nav-main-link nav-main-link-submenu' data-toggle='submenu' aria-haspopup='true' aria-expanded='true' href='#'>
+                          <i class='nav-main-link-icon si si-user'></i>
+                          <span class='nav-main-link-name'>Accomodation</span>
+                      </a>
+                      <ul class='nav-main-submenu'>
+                          <li class='nav-main-item'>
+                              <a class='nav-main-link{{ request()->is('student/change_course') ? 'active' : ''  }}' href='{{ route('change_course') }}'>
+                              <i class='nav-main-link-icon si si-user'></i>
+                              <span class='nav-main-link-name'>
+                                    Book Hostel
+                                     </span>
+                              </a>
+                          </li>
+                      </ul>
+                      <ul class='nav-main-submenu'>
+                          <li class='nav-main-item'>
+                              <a class='nav-main-link{{ request()->is('student/change_course') ? 'active' : ''  }}' href='{{ route('change_course') }}'>
+                              <i class='nav-main-link-icon si si-user'></i>
+                              <span class='nav-main-link-name'>
+                                        Clearing
+                                    </span>
+                              </a>
+                          </li>
+                      </ul>
+                  </li>
+              </div>
           </ul>
         </div>
         <!-- END Side Navigation -->
@@ -313,9 +351,9 @@
         <!-- Page JS Plugins CSS -->
             <link rel="stylesheet" href="{{ url('js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
             <link rel="stylesheet" href="{{ url('js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css') }}">
-    @endsection
 
-    @section('js_after')
+        @endsection
+        @section('js_after')
         <!-- jQuery (required for DataTables plugin) -->
             <script src="{{ url('js/lib/jquery.min.js') }}"></script>
 

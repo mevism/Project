@@ -1,4 +1,4 @@
-@extends('layouts.backend')
+@extends('registrar::layouts.backend')
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
@@ -53,38 +53,63 @@
                     <form action="{{ route('courses.acceptedMail') }}" method="post">
                         @csrf
 
-            <table id="example" class="table table-borderless table-striped js-dataTable-responsive fs-sm">
+            <table id="example" class="table table-bordered table-striped js-dataTable-responsive fs-sm">
                 @if(count($accepted)>0)
                     <thead>
                     <tr>
                         <th>✔</th>
                         <th>Applicant Name</th>
-                        {{-- <th class="text-uppercase">school</th> --}}
                         <th>department</th>
                         <th>course</th>
-                        <th>Status</th>
+                        <th>Department</th>
+                        <th>Registrar</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($accepted as $item)
                             <tr>
                                 <td>
-                                    @if($item->dean_status === 1 || 2)
+                                    @if($item->registrar_status > 0 )
                                     <input class="accepted" type="checkbox" name="submit[]" value="{{ $item->id }}">
                                         @else
-                                        ✔
+                                        
                                     @endif
                                     </td>
                                 <td> {{ $item->applicant->sname }} {{ $item->applicant->fname }} {{ $item->applicant->mname }}</td>
                                 {{-- <td> {{ $item->school }}</td> --}}
                                 <td> {{ $item->courses->department_id }}</td>
                                 <td> {{ $item->courses->course_name }}</td>
-                                <td> @if ($item->dean_status ===1)
+                                <td> @if ($item->cod_status ===1)
                                     <a  class="badge badge bg-success" >Approved</a>
-                                    @else
+                                    @elseif($item->cod_status ===2)
                                     <a  class="badge badge bg-danger" >Rejected</a>
+                                    @else
+                                    <a  class="badge badge bg-primary" >Review</a>
+                                    @endif
+
+                                </td>
+                                <td > 
+                                    @if ($item->registrar_status ===1)
+                                    <a  class="badge bg-success" >Approved</a>
+                                    @elseif($item->registrar_status ===2)
+                                    <a  class="badge bg-danger" >Rejected</a>
+                                    @else
+                                    <a  class="badge bg-primary" >Pending</a>
+                                    @endif
+
+                                </td>
+                                <td nowrap>
+                                    @if($item->registrar_status === 0)
+
+                                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.viewApplication', $item->id) }}">view</a> 
+                                    @else 
+                                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.preview', $item->id) }}">view</a>
+                                    <a class="btn btn-sm btn-alt-info" href="{{ route('courses.viewApplication', $item->id) }}">edit</a>
+
                                     @endif
                                 </td>
+                            </td>
 
                             </tr>
 

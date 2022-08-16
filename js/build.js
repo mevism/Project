@@ -7,6 +7,8 @@
                 pop.body = JSON.stringify(m)
             if(c)
                 pop.headers = { 'Content-type': 'application/json; charset=UTF-8', 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+            if(c == 2)
+                pop.headers = { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
             try {
                 const response = await fetch( h, pop );
                 const tears = await response.json();
@@ -612,7 +614,7 @@
                             <p>${ t.level }</p>
                         </div>
                         <div style ='${ (k%2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' }width:24%;margin:0.5%;'>
-                            <p>${ (t.status == 0) ? 'PENDING COD ACTION' : (t.status == 1) ? 'COD APPROVED' : (t.status == 2) ? 'COD REJECTED' : (t.status == 3) ? 'APPROVED BY COD, PENDING DEAN APPROVAL' : (t.status == 4) ? 'COD AND DEAN APPROVED' : (t.status == 5) ? 'DEAN REJECTED' : (t.status == 6) ? 'APPROVED BY COD AND DEAN PENDING REGISTRAR' : (t.status == 7) ? 'REGISTRAR REJECTED' : (t.status == 8) ? 'APPROVED BY COD, DEAN AND REGISTRAR' : 'ERROR'}</p>
+                            ${ (t.status == 0) ? `<p class = 'btn btn-sm btn-alt-info'>PENDING COD ACTION</p>` : (t.status == 1) ? `<p className = 'btn btn-sm btn-alt-success'>COD APPROVED</p>` : (t.status == 2) ? `<p class = 'btn btn-sm btn-alt-danger'>COD REJECTED</p>` : (t.status == 3) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD, PENDING DEAN APPROVAL</p>` : (t.status == 4) ? `<p class = 'btn btn-sm btn-alt-success'>COD AND DEAN APPROVED</p>` : (t.status == 5) ? `<p class = 'btn btn-sm btn-alt-danger'>DEAN REJECTED</p>` : (t.status == 6) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD AND DEAN PENDING REGISTRAR</p>` : (t.status == 7) ? `<p class = 'btn btn-sm btn-alt-danger'>REGISTRAR REJECTED</p>` : (t.status == 8) ? `<p class = 'btn btn-sm btn-alt-success'>APPROVED BY COD, DEAN AND REGISTRAR</p>` : `<p class = 'btn btn-sm btn-alt-danger'>ERROR</p>`}</p>
                         </div>
                         <div style ='${ (k%2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' }width:24%;margin:0.5%;'>
                             <p>${ t.date }</p>
@@ -635,7 +637,7 @@
                     <select class = 'select_approve' id = 'cut_off_approve' name = 'cut_off_approve' style = 'width:50%;margin-left:25%;'></select>
                 </div>
                 <div class="col-12 col-xl-12">
-                    <button id = 'check-course'  class = 'btn btn-sm btn-alt-info' data-ripple = ''>Submit</button>
+                    <button id = 'check-course'  class = 'btn btn-sm btn-alt-info' data-ripple = '' style = 'width:50%;height:40px'>Submit</button>
                 </div>
             `
             )
@@ -787,7 +789,6 @@
         let profile_data = await ServerData.bindAuth('GET',`./student_profile`,false)
         if(!profile_data)
             profile_data = await ServerData.bindAuth('GET',document.location.href + '/student_profile',false)
-        console.log(profile_data)
         let profile_string = profile_data.user.map( p =>
         `
             <section style = 'text-align:center;'>
@@ -823,13 +824,71 @@
             <section style = 'text-align:center;'>
                 <i class="fa-solid fa-user" style = 'font-size:150%;'></i>
                 <h3>Citizen</h3>
-                <p>${ p.citizen }</p>
+                <input type = 'text' loop = '1' field = 'citizen' value = '${ p.citizen }' placeholder = 'Add Input Field' id = 'update_student' style = 'border-radius:3px;border:2px solid rgba(234,234,234,0.5);min-height:40px;'>
+                <p id = 'update_feedback1'></p>
+            </section>   
+            <section style = 'text-align:center;'>
+                <i class="fa-solid fa-globe" style = 'font-size:150%;'></i>
+                <h3>County</h3>
+                <input type = 'text' loop = '2' field = 'county' value = '${ p.county }' placeholder = 'Add Input Field' id = 'update_student' style = 'border-radius:3px;border:2px solid rgba(234,234,234,0.5);min-height:40px;'>
+                <p id = 'update_feedback2'></p>
+            </section>     
+            <section style = 'text-align:center;'>
+                <i class="fa-solid fa-globe" style = 'font-size:150%;'></i>
+                <h3>Sub-County</h3>
+                <input type = 'text' loop = '3' field = 'sub_county' value = '${ p.sub_county }' placeholder = 'Add Input Field' id = 'update_student' style = 'border-radius:3px;border:2px solid rgba(234,234,234,0.5);min-height:40px;'>
+                <p id = 'update_feedback3'></p>
+            </section>        
+            <section style = 'text-align:center;'>
+                <i class="fa-solid fa-tower-broadcast" style = 'font-size:150%;'></i>
+                <h3>Town</h3>
+                <input type = 'text' loop = '4' field = 'town' value = '${ p.town }' placeholder = 'Add Input Field' id = 'update_student' style = 'border-radius:3px;border:2px solid rgba(234,234,234,0.5);min-height:40px;'>
+                <p id = 'update_feedback4'></p>
+            </section>        
+            <section style = 'text-align:center;'>
+                <i class="fa-solid fa-map-pin" style = 'font-size:150%;'></i>
+                <h3>Address</h3>
+                <input type = 'text' loop = '5' field = 'address' value = '${ p.address }' placeholder = 'Add Input Field' id = 'update_student' style = 'border-radius:3px;border:2px solid rgba(234,234,234,0.5);min-height:40px;'>
+                <p id = 'update_feedback5'></p>
+            </section>        
+            <section style = 'text-align:center;'>
+                <i class="fa-solid fa-map-pin" style = 'font-size:150%;'></i>
+                <h3>Postal Code</h3>
+                <input type = 'text' loop = '6' field = 'postal_code' value = '${ p.postal_code }' placeholder = 'Add Input Field' id = 'update_student' style = 'border-radius:3px;border:2px solid rgba(234,234,234,0.5);min-height:40px;'>
+                <p id = 'update_feedback6'></p>
             </section>        
         `)
         $('#student_profile').html(profile_string)
+
+        allowAccess()
+    }
+    const allowAccess = async(e) => {
+        let collect = await ServerData.bindAuth('GET',`./checkProfile`,false)
+        if(!collect)
+            collect = await ServerData.bindAuth('GET',document.location.href + `/checkProfile`,false)
+
+        /*
+        let nav = await ServerData.bindAuth('GET',`./bindNav`,false)
+
+        if(!nav)
+            nav = await ServerData.bindAuth('GET',document.location.href + `/bindNav`,false)
+
+         */
+
+        console.log(collect)
+        if(collect.user) {
+            $('#in_course').css('display', 'block')
+            $('#remind_profile').html("")
+        }else {
+            $('#allow_student').html('')
+            $('#remind_profile').html("<p class = 'btn btn-sm btn-alt-danger'>Please complete your profile update</p>")
+            $('#in_course').css('display','none')
+        }
     }
     const plotName = async(e) => {
         let user_data = await ServerData.bindAuth('GET',`./checkName`,false)
+        if(!user_data)
+            user_data = await ServerData.bindAuth('GET', document.location.href + `/checkName`,false)
         $('#plot-user').html(user_data.name)
     }
     const buildGraph = async(e) => {
@@ -846,7 +905,57 @@
     }
 
     $(document).ready(function (qualifiedName, value){
+//            let collect = await ServerData.bindAuth('GET',`./checkProfile`,false)
+//             if(!collect)
+//                 collect = await ServerData.bindAuth('GET',document.location.href + `/checkProfile`,false)
+//
+//             if(collect.user)
+        $(document).on('click','#actual-input',(e) => {
+            e.preventDefault()
+            $('#input-profile').click()
+        })
+        $(document).on('change','#input-profile',async(e) => {
+            const img = document.getElementById('input-profile').files[0]
+            const frmD = new FormData();
+            frmD.append('image',img)
+            for(var value of frmD.values())
+                console.log(value)
 
+            let update_pro = await ServerData.bindAuth('POST', './updateImg', true, frmD )
+            if(!update_pro)
+                update_pro = await ServerData.bindAuth('POST',document.location.href + '/updateImg',true, frmD)
+            console.log(update_pro)
+            if(update_pro.feedback)
+                ServerData.modalMsg({'msg': '<h3>Uploaded!!</h3>', 'mode': true})
+            else
+                ServerData.modalMsg({'msg': '<h3>Try again!!</h3>', 'mode': false})
+        })
+        $(document).on('keyup','#update_student',async(e) => {
+            let val = e.currentTarget.value
+            let loop = e.currentTarget.attributes[1].value
+            let field = e.currentTarget.attributes[2].value
+
+            console.log(val)
+            let collect = await ServerData.bindAuth('POST', `./updateProfile`, true, {
+                'value' : val,
+                'key' : field
+            })
+            if(!collect) {
+                collect = await ServerData.bindAuth('POST', document.location.href + `/updateProfile`, true, {
+                    'value': val,
+                    'key': field
+                })
+            }
+            console.log(collect)
+            if(collect.feedback)
+                $('#update_feedback' + loop).html('')
+
+            allowAccess()
+        })
+        $(document).on('keydown','#update_student',async(e) => {
+            let loop = e.currentTarget.attributes[1].value
+            $('#update_feedback' + loop).html('Editing...')
+        })
         $(document).on('click','#check-course',async(e) => {
             const cutOff = $('#cut_off_value').val()
             const courseId = $('#cut_off_approve').val().split(',')[0]

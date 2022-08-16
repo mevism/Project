@@ -76,6 +76,12 @@
                                 <div class="col-md-8"> {{ $app->dean_comments }} </div>
                             </div>
                         @endif
+                        @if($app->registrar_status === 4)
+                            <div class="row p-1">
+                                <div class="col-md-4 fw-bolder text-start">Registrar Comments</div>
+                                <div class="col-md-8"> {{ $app->registrar_comments }} </div>
+                            </div>
+                        @endif
                     </div>
                     <div class="col-lg-6 space-y-2">
                         <div class="d-flex justify-content-center">

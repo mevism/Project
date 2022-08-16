@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('username');
             $table->string('email')->unique();
+            $table->string('alt_email')->nullable();
             $table->string('sname')->nullable();
             $table->string('mname')->nullable();
             $table->string('fname')->nullable();
@@ -38,7 +39,7 @@ return new class extends Migration
             $table->string('sub_county')->nullable();
             $table->string('town')->nullable();
             $table->string('address')->nullable();
-            $table->integer('postal_code')->nullable();
+            $table->string('postalcode')->nullable();
             $table->string('remember_token')->nullable();
             $table->string('app_number')->nullable();
             $table->string('reg_number')->nullable();

@@ -44,7 +44,7 @@
                             @foreach($apps as $app)
                                 <tr>
                                     <td>
-                                        @if($app->registrar_status === null)
+                                        @if($app->registrar_status === null || 4)
                                            <input class="batch" type="checkbox" name="submit[]" value="{{ $app->id }}" required>
                                               @else
                                                  ✔

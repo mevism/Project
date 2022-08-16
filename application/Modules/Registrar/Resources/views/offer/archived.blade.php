@@ -1,4 +1,4 @@
-@extends('layouts.backend')
+@extends('registrar::layouts.backend')
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
@@ -58,7 +58,7 @@
                             <td> {{ $item->courses->department_id }}</td>
                             <td> {{ $item->courses->course_name }}</td>
                             <td> {{ $item->ref_number }}</td>
-                            <td> @if ($item->registrar_status ==1)<a  class="badge badge-sm bg-info" >Archived</a>
+                            <td> @if ($item->registrar_status === 4 || 3)<a  class="badge badge-sm bg-info" >Completed</a>
                                 @endif
                             </td>
 

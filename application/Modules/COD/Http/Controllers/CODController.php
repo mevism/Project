@@ -116,9 +116,11 @@ class CODController extends Controller
     public function admissions(){
 
         $applicant = Application::where('cod_status', 1)
-            ->where('registrar_status', 1)
+            ->where('registrar_status', 3)
             ->where('status', 0)
             ->get();
+
+//        return $applicant->id;
 
         return view('cod::admissions.index')->with('applicant', $applicant);
     }
@@ -133,14 +135,13 @@ class CODController extends Controller
     public function acceptAdmission($id){
 
         if(AdmissionApproval::where('app_id', $id)->exists()){
-                AdmissionApproval::where('app_id', $id)->update(['app_id' => $id, 'cod_status' => 1]);
+                AdmissionApproval::where('app_id', $id)->update(['cod_status' => 1]);
             }else{
                 $adm = new AdmissionApproval;
                 $adm->app_id = $id;
                 $adm->cod_status = 1;
                 $adm->save();
             }
-
 
         return redirect()->route('cod.admissions')->with('success', 'New student admitted successfully');
     }

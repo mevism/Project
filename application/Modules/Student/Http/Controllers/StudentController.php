@@ -120,6 +120,46 @@ class StudentController extends Controller
         print_r(json_encode(['group' => $cut]));
     }
 
+    public function checkProfile(){
+        $id = Auth::guard('student')->user()->student_id;
+        $student = DB::table('students')
+            ->where('id', $id)
+            ->get();
+
+        $checkField = ['citizen','county','sub_county','town','address','postal_code'];
+        $moreProfile = [];
+        foreach($student as $user)
+            foreach($user as $key => $value)
+                if(in_array($key,$checkField))
+                    $moreProfile []= $value;
+
+        $feedback = true;
+        if(in_array(null,$moreProfile))
+            $feedback = false;
+
+        print_r(json_encode(['user' => $feedback, 'extra' => $moreProfile]));
+    }
+    public function updateProfile(Request $request){
+        $id = Auth::guard('student')->user()->student_id;
+        $data = $request->json()->all();
+        if(empty($data['value']))
+            $data['value'] = null;
+        $student = DB::table('students')
+            ->where('id', $id)
+            ->update([$data['key'] => $data['value']]);
+
+        $feedback = false;
+        if($student == 1)
+            $feedback = true;
+
+        print_r(json_encode(['feedback' => $feedback]));
+    }
+    public function updateImg(Request $request){
+
+        $image = $request->file('image');
+
+        print_r(json_encode(['feedback' => $image]));
+    }
     public function student_profile(){
         $profile = false;
         if(Auth::guard('student')->check()) {
@@ -129,5 +169,96 @@ class StudentController extends Controller
                 ->get();
         }
         print_r(json_encode(['user' => $profile]));
+    }
+    public function bindNav(){
+        $nav_student = "";
+        if(request()->is('student/*'))
+            $nav_student = " open";
+
+        $sub_navigation = "";
+        if(request()->is('student/change_course'))
+            $sub_navigation = " active";
+
+        $body = "
+                <li class='nav-main-item'>
+                    <a class='nav-main-link nav-main-link-submenu' data-toggle='submenu' aria-haspopup='true' aria-expanded='true' href='#'>
+                        <i class='nav-main-link-icon si si-user'></i>
+                        <span class='nav-main-link-name' id = 'in_course'>Courses</span>
+                    </a>
+                    <ul class='nav-main-submenu'>
+                      <li class='nav-main-item'>
+                          <a class='nav-main-link$sub_navigation' href='" . route('change_course') . "'>
+                              <i class='nav-main-link-icon si si-user'></i>
+                              <span class='nav-main-link-name'>
+                                Change Courses
+                              </span>
+                          </a>
+                      </li>
+                    </ul>
+              </li>
+              <li class='nav-main-item'>
+                  <a class='nav-main-link nav-main-link-submenu' data-toggle='submenu' aria-haspopup='true' aria-expanded='true' href='#'>
+                      <i class='nav-main-link-icon si si-user'></i>
+                      <span class='nav-main-link-name'>Academics</span>
+                  </a>
+                  <ul class='nav-main-submenu'>
+                      <li class='nav-main-item'>
+                          <a class='nav-main-link$sub_navigation' href='" . route('change_course') . "'>
+                              <i class='nav-main-link-icon si si-user'></i>
+                              <span class='nav-main-link-name'>
+                                Exams Transcripts
+                            </span>
+                          </a>
+                      </li>
+                  </ul>
+                  <ul class='nav-main-submenu'>
+                      <li class='nav-main-item'>
+                          <a class='nav-main-link$sub_navigation href='". route('change_course') . "'>
+                              <i class='nav-main-link-icon si si-user'></i>
+                              <span class='nav-main-link-name'>
+                                Fee
+                                </span>
+                          </a>
+                      </li>
+                  </ul>
+                  <ul class='nav-main-submenu'>
+                      <li class='nav-main-item'>
+                          <a class='nav-main-link$sub_navigation' href='" . route('change_course') . "'>
+                              <i class='nav-main-link-icon si si-user'></i>
+                              <span class='nav-main-link-name'>
+                                Units
+                                </span>
+                          </a>
+                      </li>
+                  </ul>
+              </li>
+              <li class='nav-main-item'>
+                  <a class='nav-main-link nav-main-link-submenu' data-toggle='submenu' aria-haspopup='true' aria-expanded='true' href='#'>
+                      <i class='nav-main-link-icon si si-user'></i>
+                      <span class='nav-main-link-name'>Accomodation</span>
+                  </a>
+                  <ul class='nav-main-submenu'>
+                      <li class='nav-main-item'>
+                          <a class='nav-main-link$sub_navigation' href='" . route('change_course') . "'>
+                              <i class='nav-main-link-icon si si-user'></i>
+                              <span class='nav-main-link-name'>
+                                Book Hostel
+                                 </span>
+                          </a>
+                      </li>
+                  </ul>
+                  <ul class='nav-main-submenu'>
+                      <li class='nav-main-item'>
+                          <a class='nav-main-link$sub_navigation' href='" . route('change_course') . "'>
+                              <i class='nav-main-link-icon si si-user'></i>
+                              <span class='nav-main-link-name'>
+                                    Clearing
+                                </span>
+                          </a>
+                      </li>
+                  </ul>
+              </li>
+        ";
+        print_r(json_encode(['body' => $body]));
     }
 }

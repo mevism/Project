@@ -1,3 +1,7 @@
+
+input[type=file]{
+    display:none;
+}
 .cod{
     height : 150px;
     margin : 1%;
@@ -9,8 +13,8 @@
     float : left;
 }
 #student_profile section{
-    width : 23%;
-    margin : 0.5%;
+    width : 28.5%;
+    margin : 0.2%;
     background : #fff;
 }
 #cut_off{
@@ -21,7 +25,6 @@
     width : 50%;
     border : 2px solid #ccc;
     border-radius : 5px;
-    margin-left : 25%;
 }
 #cut_off_courses{
     width : 100%;
@@ -194,5 +197,8 @@
     #application-list{
         width : 80%;
         margin-left : 10%;
+    }
+    #student_profile section {
+        width: 24.5%;
     }
 }
