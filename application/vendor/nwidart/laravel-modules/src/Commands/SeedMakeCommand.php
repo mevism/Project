@@ -12,7 +12,8 @@ use Symfony\Component\Console\Input\InputOption;
 
 class SeedMakeCommand extends GeneratorCommand
 {
-    use ModuleCommandTrait, CanClearModulesCache;
+    use ModuleCommandTrait;
+    use CanClearModulesCache;
 
     protected $argumentName = 'name';
 
@@ -68,8 +69,8 @@ class SeedMakeCommand extends GeneratorCommand
         $module = $this->laravel['modules']->findOrFail($this->getModuleName());
 
         return (new Stub('/seeder.stub', [
-            'NAME'      => $this->getSeederName(),
-            'MODULE'    => $this->getModuleName(),
+            'NAME' => $this->getSeederName(),
+            'MODULE' => $this->getModuleName(),
             'NAMESPACE' => $this->getClassNamespace($module),
 
         ]))->render();
@@ -86,7 +87,7 @@ class SeedMakeCommand extends GeneratorCommand
 
         $seederPath = GenerateConfigReader::read('seeder');
 
-        return $path.$seederPath->getPath().'/'.$this->getSeederName().'.php';
+        return $path . $seederPath->getPath() . '/' . $this->getSeederName() . '.php';
     }
 
     /**
@@ -98,7 +99,7 @@ class SeedMakeCommand extends GeneratorCommand
     {
         $end = $this->option('master') ? 'DatabaseSeeder' : 'TableSeeder';
 
-        return Str::studly($this->argument('name')).$end;
+        return Str::studly($this->argument('name')) . $end;
     }
 
     /**
@@ -106,7 +107,7 @@ class SeedMakeCommand extends GeneratorCommand
      *
      * @return string
      */
-    public function getDefaultNamespace() : string
+    public function getDefaultNamespace(): string
     {
         $module = $this->laravel['modules'];
 

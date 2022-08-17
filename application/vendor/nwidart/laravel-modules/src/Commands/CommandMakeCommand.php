@@ -34,7 +34,7 @@ class CommandMakeCommand extends GeneratorCommand
      */
     protected $description = 'Generate new Artisan command for the specified module.';
 
-    public function getDefaultNamespace() : string
+    public function getDefaultNamespace(): string
     {
         $module = $this->laravel['modules'];
 
@@ -97,7 +97,7 @@ class CommandMakeCommand extends GeneratorCommand
 
         $commandPath = GenerateConfigReader::read('command');
 
-        return $path.$commandPath->getPath().'/'.$this->getFileName().'.php';
+        return $path . $commandPath->getPath() . '/' . $this->getFileName() . '.php';
     }
 
     /**

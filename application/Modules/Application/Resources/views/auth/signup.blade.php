@@ -1,11 +1,18 @@
 @extends('application::layouts.simple')
+{{--<link rel="stylesheet" href="{{ url('node_modules/intl-tel-input/build/css/intlTelInput.css') }}">--}}
+{{--<script src="{{ url('node_modules/intl-tel-input/build/js/intlTelInput.js') }}"></script>--}}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.js"></script>
+{{--<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>--}}
+
 
 @section('content')
     <div id="page-container">
         <!-- Main Container -->
         <main id="main-container">
             <!-- Page Content -->
-            <div class="bg-image" style="background-image: url('media/photos/photo28@2xjpg');">
+            <div class="bg-image" style="background-image: url('{{ asset( 'media/photos/photo28@2x.jpg') }}');">
                 <div class="row g-0 bg-primary-dark-op">
                     <!-- Meta Info Section -->
                     <div class="hero-static col-lg-4 d-none d-lg-flex flex-column justify-content-center">
@@ -63,19 +70,94 @@
                                         <form class="js-validation-signin" action="{{ route('application.signup') }}" method="POST">
                                             @csrf
                                             <div class="form-floating mb-4">
-                                                <input type="email" class="form-control form-control-alt" value="{{ old('email') }}" name="email">
+                                                <input type="email" class="form-control form-control" value="{{ old('email') }}" name="email">
                                                 <label class="form-label" for="email">Email Address</label>
                                             </div>
-                                            <div class="form-floating mb-4">
-                                                <input type="text" class="form-control form-control-alt" value="{{ old('mobile') }}" name="mobile">
+
+                                            <div class=" mb-4">
                                                 <label class="form-label" for="mobile">Mobile Number</label>
+                                                <input id="phone" type="tel" class="form-control col-md-12" value="{{ old('mobile') }}" name="mobile">
+{{--                                                <span id="valid-msg" class="hide">✓ Valid</span>--}}
+{{--                                                <span id="error-msg" class="hide"></span>--}}
+
+{{--                                                <input id="phone" type="tel" style="min-width: 100% !important;">--}}
+                                                <span id="valid-msg" class="hide"></span>
+                                                <span id="error-msg" class="hide text-danger fs-sm"></span>
+
+                                                <script>
+
+                                                    var isValidNumber = false;
+                                                    var input = document.querySelector("#phone"),
+                                                        errorMsg = document.querySelector("#error-msg"),
+                                                        validMsg = document.querySelector("#valid-msg");
+
+                                                    // here, the index maps to the error code returned from getValidationError - see readme
+                                                    var errorMap = ["Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
+
+                                                    // // initialise plugin
+                                                    var iti = window.intlTelInput(input, {
+                                                        allowExtensions: true,
+                                                        formatOnDisplay: true,
+                                                        autoFormat: true,
+                                                        autoHideDialCode: true,
+                                                        defaultCountry: "ke",
+                                                        ipinfoToken: "yolo",
+
+
+                                                        nationalMode: false,
+                                                        numberType: "MOBILE",
+                                                        onlyCountries: ['ke', 'ug', 'tz', 'rw', 'cd', 'bi'],
+                                                        preventInvalidNumbers: true,
+                                                        separateDialCode: true,
+                                                        initialCountry: "KE",
+
+                                                        geoIpLookup: function(callback) {
+                                                            $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+                                                                var countryCode = (resp && resp.country) ? resp.country : "";
+                                                                callback(countryCode);
+                                                            });
+                                                        },
+
+                                                        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.15/js/utils.js?1638200991544"
+                                                        // utilsScript: "node_modules/intl-tel-input/build/js/utils.js"
+                                                    });
+
+                                                    var reset = function() {
+                                                        input.classList.remove("error");
+                                                        errorMsg.innerHTML = "";
+                                                        errorMsg.classList.add("hide");
+                                                        validMsg.classList.add("hide");
+                                                    };
+
+                                                    // on blur: validate
+                                                    input.addEventListener('blur', function() {
+                                                        reset();
+                                                        if (input.value.trim()) {
+                                                            if (iti.isValidNumber()) {
+                                                                validMsg.classList.remove("hide");
+                                                            } else {
+                                                                input.classList.add("error");
+                                                                var errorCode = iti.getValidationError();
+                                                                errorMsg.innerHTML = errorMap[errorCode];
+                                                                errorMsg.classList.remove("hide");
+                                                            }
+                                                        }
+                                                    });
+
+                                                    // on keyup / change flag: reset
+                                                    input.addEventListener('change', reset);
+                                                    input.addEventListener('keyup', reset);
+
+                                                </script>
+
+
                                             </div>
                                             <div class="form-floating mb-4">
-                                                <input type="password" class="form-control form-control-alt" id="password" name="password">
+                                                <input type="password" class="form-control form-control" id="password" name="password">
                                                 <label class="form-label" for="password">Create Password</label>
                                             </div>
                                             <div class="form-floating mb-4">
-                                                <input type="password" class="form-control form-control-alt" id="password_confirmation" name="password_confirmation">
+                                                <input type="password" class="form-control form-control" id="password_confirmation" name="password_confirmation">
                                                 <label class="form-label" for="username">Password Confirmation</label>
                                             </div>
                                             <div class="captcha mb-4">
@@ -85,7 +167,7 @@
                                                     </button>
                                             </div>
                                             <div class="form-floating mb-4">
-                                                <input type="text" class="form-control form-control-alt" id="captcha" name="captcha">
+                                                <input type="text" class="form-control form-control" id="captcha" name="captcha">
                                                 <label class="form-label" for="captcha"> Security Captcha </label>
                                             </div>
 
@@ -127,4 +209,44 @@
             });
         });
     </script>
+
+{{--    <script>--}}
+{{--        var input = document.querySelector("#phone"),--}}
+{{--            errorMsg = document.querySelector("#error-msg"),--}}
+{{--            validMsg = document.querySelector("#valid-msg");--}}
+
+{{--        // here, the index maps to the error code returned from getValidationError - see readme--}}
+{{--        var errorMap = ["Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];--}}
+
+{{--        // initialise plugin--}}
+{{--        var iti = window.intlTelInput(input, {--}}
+{{--            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.15/js/utils.js"--}}
+{{--        });--}}
+
+{{--        var reset = function() {--}}
+{{--            input.classList.remove("error");--}}
+{{--            errorMsg.innerHTML = "";--}}
+{{--            errorMsg.classList.add("hide");--}}
+{{--            validMsg.classList.add("hide");--}}
+{{--        };--}}
+
+{{--        // on blur: validate--}}
+{{--        input.addEventListener('blur', function() {--}}
+{{--            reset();--}}
+{{--            if (input.value.trim()) {--}}
+{{--                if (iti.isValidNumber()) {--}}
+{{--                    validMsg.classList.remove("hide");--}}
+{{--                } else {--}}
+{{--                    input.classList.add("error");--}}
+{{--                    var errorCode = iti.getValidationError();--}}
+{{--                    errorMsg.innerHTML = errorMap[errorCode];--}}
+{{--                    errorMsg.classList.remove("hide");--}}
+{{--                }--}}
+{{--            }--}}
+{{--        });--}}
+
+{{--        // on keyup / change flag: reset--}}
+{{--        input.addEventListener('change', reset);--}}
+{{--        input.addEventListener('keyup', reset);--}}
+{{--    </script>--}}
 @endsection

@@ -157,50 +157,19 @@
                         </div>
                     </div>
                     <div class="block-content">
-                        <div class="d-flex align-items-center push">
-                            <div class="flex-shrink-0 me-3">
-{{--                                <a class="item item-rounded bg-info" href="javascript:void(0)">--}}
-{{--                                    <i class="si si-rocket fa-2x text-white-75"></i>--}}
-{{--                                </a>--}}
+                        @foreach($apps as $app)
+                            <div class="d-flex align-items-center push">
+                                <div class="flex-shrink-0 me-3">
+                                <a class="item item-rounded bg-info" href="javascript:void(0)">
+                                    <i class="fa fa-book-open-reader fa-2x text-white-75"></i>
+                                </a>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="fw-semibold">{{ $app->courses->course_name }}</div>
+                                    <div class="fs-sm">{{ $app->courses->course_requirements }}</div>
+                                </div>
                             </div>
-                            <div class="flex-grow-1">
-                                <div class="fw-semibold">Course 1</div>
-                                <div class="fs-sm">Course1 Details</div>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center push">
-                            <div class="flex-shrink-0 me-3">
-{{--                                <a class="item item-rounded bg-amethyst" href="javascript:void(0)">--}}
-{{--                                    <i class="si si-calendar fa-2x text-white-75"></i>--}}
-{{--                                </a>--}}
-                            </div>
-                            <div class="flex-grow-1">
-                                <div class="fw-semibold">Course 2</div>
-                                <div class="fs-sm">Course2 Details</div>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center push">
-                            <div class="flex-shrink-0 me-3">
-{{--                                <a class="item item-rounded bg-city" href="javascript:void(0)">--}}
-{{--                                    <i class="si si-speedometer fa-2x text-white-75"></i>--}}
-{{--                                </a>--}}
-                            </div>
-                            <div class="flex-grow-1">
-                                <div class="fw-semibold">Course 3</div>
-                                <div class="fs-sm">Course3 Details</div>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center push">
-                            <div class="flex-shrink-0 me-3">
-                                {{--                                <a class="item item-rounded bg-city" href="javascript:void(0)">--}}
-                                {{--                                    <i class="si si-speedometer fa-2x text-white-75"></i>--}}
-                                {{--                                </a>--}}
-                            </div>
-                            <div class="flex-grow-1">
-                                <div class="fw-semibold">Course 4</div>
-                                <div class="fs-sm">Course4 Details</div>
-                            </div>
-                        </div>
+                        @endforeach
                         <div class="text-center push">
                             <button type="button" class="btn btn-sm btn-alt-secondary">View More..</button>
                         </div>

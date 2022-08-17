@@ -49,12 +49,10 @@ class Installer
      * @var int
      */
     protected $timeout = 3360;
-
     /**
      * @var null|string
      */
     private $type;
-
     /**
      * @var bool
      */
@@ -70,10 +68,10 @@ class Installer
      */
     public function __construct($name, $version = null, $type = null, $tree = false)
     {
-        $this->name    = $name;
+        $this->name = $name;
         $this->version = $version;
-        $this->type    = $type;
-        $this->tree    = $tree;
+        $this->type = $type;
+        $this->tree = $tree;
     }
 
     /**
@@ -198,6 +196,7 @@ class Installer
 
             case 'gitlab':
                 return "git@gitlab.com:{$this->name}.git";
+
                 break;
 
             case 'bitbucket':
@@ -216,6 +215,7 @@ class Installer
                 }
 
                 return;
+
                 break;
         }
     }
@@ -250,10 +250,10 @@ class Installer
     public function getPackageName()
     {
         if (is_null($this->version)) {
-            return $this->name.':dev-master';
+            return $this->name . ':dev-master';
         }
 
-        return $this->name.':'.$this->version;
+        return $this->name . ':' . $this->version;
     }
 
     /**

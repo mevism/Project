@@ -14,10 +14,10 @@ class ResourceMakeCommand extends GeneratorCommand
     use ModuleCommandTrait;
 
     protected $argumentName = 'name';
-    protected $name         = 'module:make-resource';
-    protected $description  = 'Create a new resource class for the specified module.';
+    protected $name = 'module:make-resource';
+    protected $description = 'Create a new resource class for the specified module.';
 
-    public function getDefaultNamespace() : string
+    public function getDefaultNamespace(): string
     {
         $module = $this->laravel['modules'];
 
@@ -66,7 +66,7 @@ class ResourceMakeCommand extends GeneratorCommand
 
         $resourcePath = GenerateConfigReader::read('resource');
 
-        return $path.$resourcePath->getPath().'/'.$this->getFileName().'.php';
+        return $path . $resourcePath->getPath() . '/' . $this->getFileName() . '.php';
     }
 
     /**
@@ -82,7 +82,7 @@ class ResourceMakeCommand extends GeneratorCommand
      *
      * @return bool
      */
-    protected function collection() : bool
+    protected function collection(): bool
     {
         return $this->option('collection') ||
             Str::endsWith($this->argument('name'), 'Collection');

@@ -45,7 +45,7 @@ class ControllerMakeCommand extends GeneratorCommand
 
         $controllerPath = GenerateConfigReader::read('controller');
 
-        return $path.$controllerPath->getPath().'/'.$this->getControllerName().'.php';
+        return $path . $controllerPath->getPath() . '/' . $this->getControllerName() . '.php';
     }
 
     /**
@@ -115,7 +115,7 @@ class ControllerMakeCommand extends GeneratorCommand
         return class_basename($this->getControllerName());
     }
 
-    public function getDefaultNamespace() : string
+    public function getDefaultNamespace(): string
     {
         $module = $this->laravel['modules'];
 
@@ -123,7 +123,7 @@ class ControllerMakeCommand extends GeneratorCommand
     }
 
     /**
-     * Get the stub file name based on the options.
+     * Get the stub file name based on the options
      * @return string
      */
     protected function getStubName()

@@ -7,10 +7,10 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class ModuleDeleteCommand extends Command
 {
-    protected $name        = 'module:delete';
+    protected $name = 'module:delete';
     protected $description = 'Delete a module from the application';
 
-    public function handle() : int
+    public function handle(): int
     {
         $this->laravel['modules']->delete($this->argument('module'));
 

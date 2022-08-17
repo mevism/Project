@@ -29,7 +29,7 @@ class JobMakeCommand extends GeneratorCommand
 
     protected $argumentName = 'name';
 
-    public function getDefaultNamespace() : string
+    public function getDefaultNamespace(): string
     {
         $module = $this->laravel['modules'];
 
@@ -87,7 +87,7 @@ class JobMakeCommand extends GeneratorCommand
 
         $jobPath = GenerateConfigReader::read('jobs');
 
-        return $path.$jobPath->getPath().'/'.$this->getFileName().'.php';
+        return $path . $jobPath->getPath() . '/' . $this->getFileName() . '.php';
     }
 
     /**

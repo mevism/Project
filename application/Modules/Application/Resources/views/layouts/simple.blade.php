@@ -37,6 +37,8 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
+{{--    <script type="module" src="{{ url('js/app.js') }}"></script>--}}
+
 
 </head>
 
@@ -104,6 +106,7 @@
   <!-- <script src="{{ mix('/js/laravel.app.js') }}"></script> -->
 
   @yield('js_after')
+
 </body>
 
 </html>

@@ -58,7 +58,7 @@ class ApplicationController extends Controller
 
         $validated = $request->validate([
             'email' => 'required|email|unique:applicants',
-            'mobile' => 'required|regex:/(0)[0-9]{9}/|min:10|max:10|unique:applicants',
+            'mobile' => 'required|unique:applicants',
             'password' => 'required|confirmed',
             'password_confirmation' => 'required|string',
             'captcha' => 'required|captcha',
@@ -696,7 +696,8 @@ class ApplicationController extends Controller
         return view('application::applicant.progress')->with(['logs' => $logs, 'course' => $course]);
     }
     public function myProfile(){
-        return view('application::applicant.profilepage');
+        $apps = Application::where('user_id', Auth::user()->id)->get();
+        return view('application::applicant.profilepage')->with('apps', $apps);
     }
 
     public function downloadLetter($id){

@@ -17,6 +17,7 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/myclabs/php-enum" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/phpoffice/phpspreadsheet" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/ezyang/htmlpurifier" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/victorybiz/laravel-tel-input" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

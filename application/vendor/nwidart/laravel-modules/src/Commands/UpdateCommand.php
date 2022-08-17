@@ -27,7 +27,7 @@ class UpdateCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle() : int
+    public function handle(): int
     {
         $name = $this->argument('module');
 
@@ -47,7 +47,7 @@ class UpdateCommand extends Command
 
     protected function updateModule($name)
     {
-        $this->line('Running for module: <info>'.$name.'</info>');
+        $this->line('Running for module: <info>' . $name . '</info>');
 
         $this->laravel['modules']->update($name);
 

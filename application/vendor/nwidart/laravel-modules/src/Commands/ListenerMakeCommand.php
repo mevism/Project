@@ -61,14 +61,14 @@ class ListenerMakeCommand extends GeneratorCommand
         $module = $this->laravel['modules']->findOrFail($this->getModuleName());
 
         return (new Stub($this->getStubName(), [
-            'NAMESPACE'      => $this->getClassNamespace($module),
-            'EVENTNAME'      => $this->getEventName($module),
+            'NAMESPACE' => $this->getClassNamespace($module),
+            'EVENTNAME' => $this->getEventName($module),
             'SHORTEVENTNAME' => $this->getShortEventName(),
-            'CLASS'          => $this->getClass(),
+            'CLASS' => $this->getClass(),
         ]))->render();
     }
 
-    public function getDefaultNamespace() : string
+    public function getDefaultNamespace(): string
     {
         $module = $this->laravel['modules'];
 
@@ -77,10 +77,10 @@ class ListenerMakeCommand extends GeneratorCommand
 
     protected function getEventName(Module $module)
     {
-        $namespace = $this->laravel['modules']->config('namespace').'\\'.$module->getStudlyName();
+        $namespace = $this->laravel['modules']->config('namespace') . "\\" . $module->getStudlyName();
         $eventPath = GenerateConfigReader::read('event');
 
-        $eventName = $namespace.'\\'.$eventPath->getPath().'\\'.$this->option('event');
+        $eventName = $namespace . "\\" . $eventPath->getPath() . "\\" . $this->option('event');
 
         return str_replace('/', '\\', $eventName);
     }
@@ -96,7 +96,7 @@ class ListenerMakeCommand extends GeneratorCommand
 
         $listenerPath = GenerateConfigReader::read('listener');
 
-        return $path.$listenerPath->getPath().'/'.$this->getFileName().'.php';
+        return $path . $listenerPath->getPath() . '/' . $this->getFileName() . '.php';
     }
 
     /**

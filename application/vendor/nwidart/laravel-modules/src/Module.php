@@ -40,22 +40,18 @@ abstract class Module
      * @var array of cached Json objects, keyed by filename
      */
     protected $moduleJson = [];
-
     /**
      * @var CacheManager
      */
     private $cache;
-
     /**
      * @var Filesystem
      */
     private $files;
-
     /**
      * @var Translator
      */
     private $translator;
-
     /**
      * @var ActivatorInterface
      */
@@ -69,13 +65,13 @@ abstract class Module
      */
     public function __construct(Container $app, string $name, $path)
     {
-        $this->name       = $name;
-        $this->path       = $path;
-        $this->cache      = $app['cache'];
-        $this->files      = $app['files'];
+        $this->name = $name;
+        $this->path = $path;
+        $this->cache = $app['cache'];
+        $this->files = $app['files'];
         $this->translator = $app['translator'];
-        $this->activator  = $app[ActivatorInterface::class];
-        $this->app        = $app;
+        $this->activator = $app[ActivatorInterface::class];
+        $this->app = $app;
     }
 
     /**
@@ -86,11 +82,6 @@ abstract class Module
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function getBaseName(): string
-    {
-        return basename($this->getStudlyName());
     }
 
     /**
@@ -121,37 +112,6 @@ abstract class Module
     public function getSnakeName(): string
     {
         return Str::snake($this->name);
-    }
-
-    /**
-     * Get name in snake case.
-     *
-     * @return string
-     */
-    public function getSnakeNamespace(): string
-    {
-        // replace Tests/Test to tests_test
-        return Str::snake(str_replace(DIRECTORY_SEPARATOR, '', $this->name));
-    }
-
-    /**
-     * Get replacement for $SUB_MODULE_NAMESPACE$.
-     *
-     * @return string
-     */
-    public function getSubModuleNamespace(): string
-    {
-        return str_replace(DIRECTORY_SEPARATOR, '\\\\', $this->getName());
-    }
-
-    /**
-     * Get replacement for $SUB_MODULE_NAMESPACE$.
-     *
-     * @return string
-     */
-    public function getSubModuleOneSlashNamespace(): string
-    {
-        return str_replace(DIRECTORY_SEPARATOR, '\\', $this->getName());
     }
 
     /**
@@ -211,7 +171,7 @@ abstract class Module
      *
      * @return $this
      */
-    public function setPath($path): self
+    public function setPath($path): Module
     {
         $this->path = $path;
 
@@ -243,7 +203,7 @@ abstract class Module
     {
         $lowerName = $this->getLowerName();
 
-        $langPath = $this->getPath().'/Resources/lang';
+        $langPath = $this->getPath() . '/Resources/lang';
 
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, $lowerName);
@@ -257,14 +217,14 @@ abstract class Module
      *
      * @return Json
      */
-    public function json($file = null) : Json
+    public function json($file = null): Json
     {
         if ($file === null) {
             $file = 'module.json';
         }
 
         return Arr::get($this->moduleJson, $file, function () use ($file) {
-            return $this->moduleJson[$file] = new Json($this->getPath().'/'.$file, $this->files);
+            return $this->moduleJson[$file] = new Json($this->getPath() . '/' . $file, $this->files);
         });
     }
 
@@ -317,9 +277,8 @@ abstract class Module
      */
     protected function fireEvent($event): void
     {
-        $this->app['events']->dispatch(sprintf('modules.%s.'.$event, $this->getLowerName()), [$this]);
+        $this->app['events']->dispatch(sprintf('modules.%s.' . $event, $this->getLowerName()), [$this]);
     }
-
     /**
      * Register the aliases from this module.
      */
@@ -343,7 +302,7 @@ abstract class Module
     protected function registerFiles(): void
     {
         foreach ($this->get('files', []) as $file) {
-            include $this->path.'/'.$file;
+            include $this->path . '/' . $file;
         }
     }
 
@@ -364,7 +323,7 @@ abstract class Module
      *
      * @return bool
      */
-    public function isStatus(bool $status) : bool
+    public function isStatus(bool $status): bool
     {
         return $this->activator->hasStatus($this, $status);
     }
@@ -374,7 +333,7 @@ abstract class Module
      *
      * @return bool
      */
-    public function isEnabled() : bool
+    public function isEnabled(): bool
     {
         return $this->activator->hasStatus($this, true);
     }
@@ -384,9 +343,9 @@ abstract class Module
      *
      * @return bool
      */
-    public function isDisabled() : bool
+    public function isDisabled(): bool
     {
-        return ! $this->isEnabled();
+        return !$this->isEnabled();
     }
 
     /**
@@ -446,9 +405,9 @@ abstract class Module
      *
      * @return string
      */
-    public function getExtraPath(string $path) : string
+    public function getExtraPath(string $path): string
     {
-        return $this->getPath().'/'.$path;
+        return $this->getPath() . '/' . $path;
     }
 
     /**
@@ -460,7 +419,7 @@ abstract class Module
     {
         return config('modules.register.files', 'register') === 'boot' &&
             // force register method if option == boot && app is AsgardCms
-            ! class_exists('\Modules\Core\Foundation\AsgardCms');
+            !class_exists('\Modules\Core\Foundation\AsgardCms');
     }
 
     private function flushCache(): void
