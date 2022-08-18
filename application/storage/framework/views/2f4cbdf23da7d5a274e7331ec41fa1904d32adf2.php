@@ -1,8 +1,7 @@
-@extends('student::layouts.backend')
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src = "{{ asset('js/select.js') }}" defer></script>
+<script src = "<?php echo e(asset('js/select.js')); ?>" defer></script>
 
 <div class="bg-body-light">
     <div class="content content-full">
@@ -40,5 +39,7 @@
     getCourses();
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
+
+<?php echo $__env->make('student::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xamp\htdocs\courses\project\application\Modules/Student\Resources/views/student/course.blade.php ENDPATH**/ ?>

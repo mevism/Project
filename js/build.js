@@ -1,13 +1,17 @@
     const ServerData = new (function(){
         this.studies = ['Certificate','Diploma','Non-standard','Graduate','Post-Graduate','Under-Graduate','Masters','PHD'];
         this.attendance_arr = ['REGULAR','FULL-TIME','PART-TIME','ONLINE-LEARNING','HOLIDAY-LEARNING','DISTANCE-LEARNING','EVENING']
-        this.bindAuth = async function(r, h, c, m){
+        this.bindAuth = async function(r, h, c, m, f){
             let pop = { method : r }
-            if(r == "POST")
-                pop.body = JSON.stringify(m)
+            if(r == "POST") {
+                if(!f)
+                    pop.body = JSON.stringify(m)
+                else
+                    pop.body = m
+            }
             if(c)
                 pop.headers = { 'Content-type': 'application/json; charset=UTF-8', 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
-            if(c == 2)
+            else
                 pop.headers = { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
             try {
                 const response = await fetch( h, pop );
@@ -589,42 +593,93 @@
         let checkProgress = await ServerData.bindAuth('GET',`./checkChange`,false)
         if(checkProgress.response) {
             let collect = await ServerData.bindAuth('GET',`./getTransferLogs`,false)
+
             let transfers =
                 `
                     <h4><i class="fa-solid fa-spinner"></i> Application Progress</h4>
                     <section style = 'text-align:center;display:flex;flex-wrap:wrap;width:80%;margin-left:10%;background:rgba(234,234,234,0.6);border:1px solid #fff;'>
-                        <div style ='border:1px solid #fff;width:24%;margin:0.5%;'>
+                        <div style ='border:1px solid #fff;width:19%;margin:0.5%;'>
                             <h4>USER</h4>
                         </div>
-                        <div style ='border:1px solid #fff;width:24%;margin:0.5%;'>
+                        <div style ='border:1px solid #fff;width:19%;margin:0.5%;'>
                             <h4>ACTION</h4>
                         </div>
-                        <div style ='border:1px solid #fff;width:24%;margin:0.5%;'>
+                        <div style ='border:1px solid #fff;width:19%;margin:0.5%;'>
                             <h4>DATE</h4>
                         </div>
-                        <div style ='border:1px solid #fff;width:24%;margin:0.5%;'>
+                        <div style ='border:1px solid #fff;width:19%;margin:0.5%;'>
                             <h4>REASON</h4>
                         </div>
+                        <div style ='border:1px solid #fff;width:19%;margin:0.5%;'>
+                            <h4>STATUS</h4>
+                        </div>
                     </section>
                 `
-            transfers += collect.transfers.map( (t,k) =>
-                `
-                    <section style = 'text-align:center;width:80%;margin-left:10%;display:flex;flex-wrap:wrap;${ (k%2) ? 'background:rgba(234,234,234,0.6);border:1px solid #fff;' : 'background:#fff;border:1px solid rgba(234,234,234,0.6);' }'>
-                        <div style ='${ (k%2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' }width:24%;margin:0.5%;'>
-                            <p>${ t.level }</p>
-                        </div>
-                        <div style ='${ (k%2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' }width:24%;margin:0.5%;'>
-                            ${ (t.status == 0) ? `<p class = 'btn btn-sm btn-alt-info'>PENDING COD ACTION</p>` : (t.status == 1) ? `<p className = 'btn btn-sm btn-alt-success'>COD APPROVED</p>` : (t.status == 2) ? `<p class = 'btn btn-sm btn-alt-danger'>COD REJECTED</p>` : (t.status == 3) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD, PENDING DEAN APPROVAL</p>` : (t.status == 4) ? `<p class = 'btn btn-sm btn-alt-success'>COD AND DEAN APPROVED</p>` : (t.status == 5) ? `<p class = 'btn btn-sm btn-alt-danger'>DEAN REJECTED</p>` : (t.status == 6) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD AND DEAN PENDING REGISTRAR</p>` : (t.status == 7) ? `<p class = 'btn btn-sm btn-alt-danger'>REGISTRAR REJECTED</p>` : (t.status == 8) ? `<p class = 'btn btn-sm btn-alt-success'>APPROVED BY COD, DEAN AND REGISTRAR</p>` : `<p class = 'btn btn-sm btn-alt-danger'>ERROR</p>`}</p>
-                        </div>
-                        <div style ='${ (k%2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' }width:24%;margin:0.5%;'>
-                            <p>${ t.date }</p>
-                        </div>
-                        <div style ='${ (k%2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' }width:24%;margin:0.5%;'>
-                            <p>${ t.reason }</p>
-                        </div>                    
-                    </section>
-                `
-            )
+
+            if(screen.width >= 856 ) {
+
+                transfers += collect.transfers.map( transfer =>
+                    `${
+                        transfer.map((t, k) =>
+                            `
+                                <section style = 'text-align:center;width:80%;margin-left:10%;display:flex;flex-wrap:wrap;${(k % 2) ? 'background:rgba(234,234,234,0.6);border:1px solid #fff;' : 'background:#fff;border:1px solid rgba(234,234,234,0.6);'}'>
+                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
+                                        <p>${t.level}</p>
+                                    </div>
+                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
+                                        ${(t.status == 0) ? `<p class = 'btn btn-sm btn-alt-info'>PENDING COD ACTION</p>` : (t.status == 1) ? `<p class = 'btn btn-sm btn-alt-success'>COD APPROVED</p>` : (t.status == 2) ? `<p class = 'btn btn-sm btn-alt-danger'>COD REJECTED</p>` : (t.status == 3) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD, PENDING DEAN APPROVAL</p>` : (t.status == 4) ? `<p class = 'btn btn-sm btn-alt-success'>COD AND DEAN APPROVED</p>` : (t.status == 5) ? `<p class = 'btn btn-sm btn-alt-danger'>DEAN REJECTED</p>` : (t.status == 6) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD AND DEAN PENDING REGISTRAR</p>` : (t.status == 7) ? `<p class = 'btn btn-sm btn-alt-danger'>REGISTRAR REJECTED</p>` : (t.status == 8) ? `<p class = 'btn btn-sm btn-alt-success'>APPROVED BY COD, DEAN AND REGISTRAR</p>` : `<p class = 'btn btn-sm btn-alt-danger'>ERROR</p>`}</p>
+                                    </div>
+                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
+                                        <p>${t.date}</p>
+                                    </div>
+                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
+                                        <p>${t.reason}</p>
+                                    </div>   
+                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
+                                        ${(t.status == 0) ? `<p class = 'btn btn-sm btn-alt-success'>Opened</p>` : `<p class = 'btn btn-sm btn-alt-danger'>Closed</p>`}
+                                    </div>                    
+                                </section>
+                            `
+                        ).join('')
+                    }
+                    `
+                ).join('')
+            }else{
+                transfers = collect.transfers.map(transfer =>
+                    `
+                    ${
+                        transfer.map((t, k) =>
+
+                            `
+                                <section style = 'text-align:center;width:100%;display:flex;flex-wrap:wrap;${(k % 2) ? 'background:rgba(234,234,234,0.6);border:1px solid #fff;' : 'background:#fff;border:1px solid rgba(234,234,234,0.6);'}'>
+                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
+                                        <h4>USER</h4>
+                                        <p>${t.level}</p>
+                                    </div>
+                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
+                                        <h4>ACTION</h4>
+                                        ${(t.status == 0) ? `<p class = 'btn btn-sm btn-alt-info'>PENDING COD ACTION</p>` : (t.status == 1) ? `<p class = 'btn btn-sm btn-alt-success'>COD APPROVED</p>` : (t.status == 2) ? `<p class = 'btn btn-sm btn-alt-danger'>COD REJECTED</p>` : (t.status == 3) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD, PENDING DEAN APPROVAL</p>` : (t.status == 4) ? `<p class = 'btn btn-sm btn-alt-success'>COD AND DEAN APPROVED</p>` : (t.status == 5) ? `<p class = 'btn btn-sm btn-alt-danger'>DEAN REJECTED</p>` : (t.status == 6) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD AND DEAN PENDING REGISTRAR</p>` : (t.status == 7) ? `<p class = 'btn btn-sm btn-alt-danger'>REGISTRAR REJECTED</p>` : (t.status == 8) ? `<p class = 'btn btn-sm btn-alt-success'>APPROVED BY COD, DEAN AND REGISTRAR</p>` : `<p class = 'btn btn-sm btn-alt-danger'>ERROR</p>`}</p>
+                                    </div>
+                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
+                                        <h4>DATE</h4>
+                                        <p>${t.date}</p>
+                                    </div>
+                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
+                                        <h4>REASON</h4>
+                                        <p>${t.reason}</p>
+                                    </div>  
+                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
+                                        <h4>STATUS</h4>
+                                        ${(t.status == 0) ? `<p class = 'btn btn-sm btn-alt-success'>Opened</p>` : `<p class = 'btn btn-sm btn-alt-danger'>Closed</p>`}
+                                    </div>                    
+                                </section>
+                            `
+                        ).join('')
+                    }
+                    `
+                ).join('')
+
+            }
             $('#course_interaction').html(transfers)
         }else{
             $('#course_interaction').html(
@@ -859,6 +914,8 @@
             </section>        
         `)
         $('#student_profile').html(profile_string)
+        if(profile_data.user[0].profile)
+            document.getElementById('profile-set-image').src = profile_data.profile
 
         allowAccess()
     }
@@ -918,17 +975,15 @@
             const img = document.getElementById('input-profile').files[0]
             const frmD = new FormData();
             frmD.append('image',img)
-            for(var value of frmD.values())
-                console.log(value)
 
-            let update_pro = await ServerData.bindAuth('POST', './updateImg', true, frmD )
+            let update_pro = await ServerData.bindAuth('POST', './updateImg', false, frmD, true )
             if(!update_pro)
-                update_pro = await ServerData.bindAuth('POST',document.location.href + '/updateImg',true, frmD)
-            console.log(update_pro)
-            if(update_pro.feedback)
+                update_pro = await ServerData.bindAuth('POST',document.location.href + '/updateImg',false, frmD, true)
+            if(update_pro.feedback) {
                 ServerData.modalMsg({'msg': '<h3>Uploaded!!</h3>', 'mode': true})
-            else
-                ServerData.modalMsg({'msg': '<h3>Try again!!</h3>', 'mode': false})
+                document.getElementById('profile-set-image').src = 'Images/' + update_pro.feedback
+            }else
+                ServerData.modalMsg({'msg': `${ update_pro.errors.image.map( e => `<h3>${ e }</h3>` ).join('') }`, 'mode' : false })
         })
         $(document).on('keyup','#update_student',async(e) => {
             let val = e.currentTarget.value

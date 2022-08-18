@@ -12,10 +12,15 @@ input[type=file]{
     width : 40%;
     float : left;
 }
+#student_profile section input{
+    width : 95%;
+    margin : 2.5%;
+}
 #student_profile section{
-    width : 28.5%;
+    width : 48.5%;
     margin : 0.2%;
     background : #fff;
+    border-radius : 3px;
 }
 #cut_off{
     width : 100%;
@@ -199,6 +204,6 @@ input[type=file]{
         margin-left : 10%;
     }
     #student_profile section {
-        width: 24.5%;
+        width: 31.5%;
     }
 }

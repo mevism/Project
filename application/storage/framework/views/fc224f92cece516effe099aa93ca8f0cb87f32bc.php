@@ -1,5 +1,4 @@
-@extends('student::layouts.backend')
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <div class="bg-body-light">
     <div class="content content-full">
@@ -13,7 +12,7 @@
     </div>
 </div>
 <div style = 'width:100%;text-align:center;height:30%;'>
-    <img src = '{{ asset('Images/profile.svg') }}' id = 'profile-set-image' alt = 'Profile Image' style = 'height:200px;width:20%;border-radius:50%;'>
+    <img src = '<?php echo e(asset('Images/profile.svg')); ?>' id = 'profile-set-image' alt = 'Profile Image' style = 'height:200px;width:20%;border-radius:50%;'>
     <input type = 'file' id = 'input-profile'>
     <button id = 'actual-input' class = 'btn btn-sm btn-alt-info'>Update Image</button>
 </div>
@@ -26,4 +25,6 @@
 <script async>
     plotProfile();
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('student::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xamp\htdocs\courses\project\application\Modules/Student\Resources/views/student/index.blade.php ENDPATH**/ ?>

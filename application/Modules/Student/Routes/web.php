@@ -34,7 +34,7 @@ Route::prefix('student')->group(function() {
         Route::get('/bindNav', [StudentController::class, 'bindNav']);
 
     });
-    Route::group(['middleware' => ['update_profile']], function (){
+    Route::group(['Modules\Student\Http\Middleware\Comrade' => ['update_profile']], function (){
         Route::get('/change_course', [StudentController::class, 'change_course'])->name('change_course');
     });
 });

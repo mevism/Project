@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use DB;
+use Validator;
+
 class StudentController extends Controller
 {
     /**
@@ -51,11 +53,17 @@ class StudentController extends Controller
     }
     public function getTransferLogs(){
         $id = Auth::guard('student')->user()->student_id;
-        $transfers = DB::table('course_transfer_logs')
+        $active_transfers = DB::table('course_transfer_logs')
             ->where('user_id', '=',  $id)
-            ->where('status', '<=',  8)
+            ->where('status', '=',  0)
             ->get();
-        print_r(json_encode(['transfers' => $transfers]));
+        $closed_transfers = DB::table('course_transfer_logs')
+            ->where('user_id', '=',  $id)
+            ->where('status', '=',  1)
+            ->get();
+
+        // 0 indicates that the log is active 1 indicates closed logs
+        print_r(json_encode(['transfers' => [$active_transfers,$closed_transfers]]));
     }
     public function checkChange(){
         $id = Auth::guard('student')->user()->student_id;
@@ -156,9 +164,25 @@ class StudentController extends Controller
     }
     public function updateImg(Request $request){
 
+        $validation = Validator::make($request->all(), [
+            'image' => 'required|image:jpeg,png,jpg|max:2048'
+        ]);
+        $new_name = false;
         $image = $request->file('image');
+        if($validation->passes())
+        {
+            $image = $request->file('image');
+            $new_name = rand() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('Images'), $new_name);
 
-        print_r(json_encode(['feedback' => $image]));
+            $id = Auth::guard('student')->user()->student_id;
+
+            $student = DB::table('students')
+                ->where('id', $id)
+                ->update(['profile' => $new_name]);
+
+        }
+        print_r(json_encode(['feedback' => $new_name, 'errors' => $validation->errors()]));
     }
     public function student_profile(){
         $profile = false;
@@ -168,7 +192,7 @@ class StudentController extends Controller
                 ->where('id', '=', $id)
                 ->get();
         }
-        print_r(json_encode(['user' => $profile]));
+        print_r(json_encode(['user' => $profile, 'profile' => asset('/application/public/Images/' . $profile[0]->profile)]));
     }
     public function bindNav(){
         $nav_student = "";
