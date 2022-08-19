@@ -348,18 +348,18 @@ class CoursesController extends Controller
 
         $xyz = $request->validate(['status' => 'required']);
 
-        
+
         if($request->status == 1){
             Intake::where('status', 1)->update(['status' => 2]);
 
             AvailableCourse::where('status', 1)->update(['status' => 0]);
-            
+
             $data             =       Intake::find($id);
             $data->status     =       $request->input('status');
             $data->save();
 
            AvailableCourse::where('intake_id', $id)->update(['status' => 1]);
-            
+
         }else{
 
             $data             =       Intake::find($id);
@@ -367,12 +367,12 @@ class CoursesController extends Controller
             $data->save();
 
         AvailableCourse::where('intake_id', $id)->update(['status' => 0]);
-    
+
         }
 
         return redirect()->route('courses.showIntake')->with('status','Data Updated Successfully');
 
-    
+
     }
 
     public function viewCourse($id){
@@ -544,7 +544,7 @@ class CoursesController extends Controller
 
         return view('registrar::school.addSchool');
     }
-    
+
 
     public function  showSchool(){
 
@@ -552,7 +552,7 @@ class CoursesController extends Controller
         return view('registrar::school.showSchool')->with('data',$data);
 
     }
-    
+
 
     public function editSchool($id){
 
@@ -671,6 +671,8 @@ class CoursesController extends Controller
 
     public function storeCourse(Request $request){
 
+        return $request->all();
+
       $vz = $request->validate([
           'department'                =>  'required',
           'course_name'               =>  'required|unique:courses',
@@ -690,8 +692,8 @@ class CoursesController extends Controller
         $courses->course_code         =    $request->input('course_code');
         $courses->level               =    $request->input('level');
         $courses->save();
-        
-        
+
+
         $requirement = new CourseRequirement;
         $requirement->course_id           =    $courses->id;
         $requirement->course_duration     =    $request->input('course_duration');
@@ -775,7 +777,7 @@ class CoursesController extends Controller
 
         $attendances        =         Attendance::all();
         // $clusters            =        ClusterSubjects::all();
-        
+
         $courses            =         Course::all();
         $intakes            =         Intake::where('status', 1)->get();
 
@@ -850,16 +852,16 @@ class CoursesController extends Controller
     public function destroyCoursesAvailable(Request $request, $id){
 
         $course = AvailableCourse::find($id)->delete();
-    
+
 
         return redirect()->route('courses.offer');
     }
 
     public function admissions(){
 
-            $admission = AdmissionApproval::where('medical_status', 1)
-                ->where('status', NULL)
-                ->get();
+        $admission = AdmissionApproval::where('medical_status', 1)
+            ->where('status', NULL)
+            ->get();
 
         return view('registrar::admissions.index')->with('admission', $admission);
     }
@@ -959,17 +961,16 @@ class CoursesController extends Controller
 
     }
 
-    public function fetchDept(Request $request){
+    public function fetchCluster(Request $request){
 
-            $school_id = $request->school;
-
-            $departments = School::where('id',$school_id)
-                ->with('departments')
+            $cluster_id = $request->cat_id;
+            $subject = ClusterSubjects::where('id', $cluster_id)
+//                ->with('')
+                ->select('subject1', 'subject2', 'subject3', 'subject4')
                 ->get();
             return response()->json([
-                'subcategories' => $departments
+               'subject' => $subject
             ]);
-
     }
 
 }

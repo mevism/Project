@@ -101,4 +101,6 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
 
 
     Route::get('/send', [CoursesController::class, 'accepted'])->name('courses.accepted');
+
+    Route::post('/fetchCluster', [CoursesController::class, 'fetchCluster'])->name('courses.fetchCluster');
 });

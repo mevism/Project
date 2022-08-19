@@ -13,12 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('intake_attendance', function (Blueprint $table) {
-            $table->bigIncrements('intake_attendance_id');
-            $table->integer('courses_id')->nullable();
-            $table->integer('intake_id')->nullable();
-            $table->integer('attendance_id')->nullable();
-            $table->timestamps();
+        Schema::table('students', function (Blueprint $table) {
+            $table->string('profile')->nullable();
         });
     }
 
@@ -29,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('intake_attendance');
+        Schema::table('students', function (Blueprint $table) {
+            $table->dropColumn('profile');
+        });
     }
 };
