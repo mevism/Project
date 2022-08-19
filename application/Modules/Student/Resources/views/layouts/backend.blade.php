@@ -35,8 +35,13 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="{{ asset('/css/index.css') }}" rel="stylesheet" />
+    <script src = "{{ asset('js/plugins/chart.js/Chart.min.js') }}" ></script>
+    <script src = "{{ asset('js/utils.js') }}" ></script>
+    <script src = "{{ asset('js/jquery.js') }}" ></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src = "{{ url('js/build.js') }}"></script>
 </head>
 
 <body>
@@ -64,132 +69,94 @@
         <div class="content-side">
           <ul class="nav-main">
             <li class="nav-main-item">
-              <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
+              <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('student_profile') }}">
                 <i class="nav-main-link-icon si si-cursor"></i>
                 <span class="nav-main-link-name">
-                    @if(Auth::guard('student')->check())
-                        Student
-                    @endif
+                    Profile
                 </span>
 
               </a>
             </li>
-              <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
-                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                      <i class="nav-main-link-icon si si-user"></i>
-                      <span class="nav-main-link-name">Profile</span>
-                  </a>
-                  <ul class="nav-main-submenu">
-                      <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="#">
-                              <i class="nav-main-link-icon si si-user"></i>
-                              <span class="nav-main-link-name">
-                       My Profile
-                    </span>
-
-                          </a>
-                      </li>
-                  </ul>
-              </li>
-
-
-{{--            <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">--}}
-{{--              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">--}}
-{{--                <i class="nav-main-link-icon si si-graduation"></i>--}}
-{{--                <span class="nav-main-link-name">Academics</span>--}}
-{{--              </a>--}}
-{{--              <ul class="nav-main-submenu">--}}
-{{--                    <li class="nav-main-item">--}}
-{{--                          <a class="nav-main-link{{ request()->is('school/showSchool') ? ' active' : '' }}" href="{{  route('courses.showSchool') }}">--}}
-{{--                            <i class="nav-main-link-icon si si-graduation"></i>--}}
-{{--                              <span class="nav-main-link-name">Schools</span>--}}
-{{--                          </a>--}}
-{{--                      </li>--}}
-
-{{--                  <li class="nav-main-item">--}}
-{{--                    <a class="nav-main-link{{ request()->is('department/showDepartment') ? ' active' : '' }}" href="{{  route('courses.showDepartment') }}">--}}
-{{--                      <i class="nav-main-link-icon si si-user"></i>--}}
-{{--                      <span class="nav-main-link-name">Department</span>--}}
-{{--                    </a>--}}
-{{--                  </li>--}}
-
-{{--                      <li class="nav-main-item">--}}
-{{--                          <a class="nav-main-link{{ request()->is('courses/showCourse') ? ' active' : '' }}" href="{{  route('courses.showCourse') }}">--}}
-{{--                            <i class="nav-main-link-icon si si-layers"></i>--}}
-{{--                              <span class="nav-main-link-name">Courses</span>--}}
-{{--                          </a>--}}
-{{--                      </li>--}}
-
-{{--                  <li class="nav-main-item">--}}
-{{--                      <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('courses.showIntake') }}">--}}
-{{--                          <i class="nav-main-link-icon si si-calendar"></i>--}}
-{{--                          <span class="nav-main-link-name">Intakes</span>--}}
-{{--                      </a>--}}
-{{--                  </li>--}}
-
-{{--                      <li class="nav-main-item">--}}
-{{--                        <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showAttendance')}}">--}}
-{{--                          <i class="nav-main-link-icon si si-layers"></i>--}}
-{{--                          <span class="nav-main-link-name">Attendances</span>--}}
-{{--                        </a>--}}
-{{--                      </li>--}}
-{{--                      <li class="nav-main-item">--}}
-{{--                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.showClasses')}}">--}}
-{{--                            <i class="nav-main-link-icon si si-layers"></i>--}}
-{{--                            <span class="nav-main-link-name">Classes</span>--}}
-{{--                          </a>--}}
-{{--                        </li>--}}
-{{--              </ul>--}}
-{{--            </li>--}}
-
-{{--            <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">--}}
-{{--              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">--}}
-{{--                <i class="nav-main-link-icon si si-user"></i>--}}
-{{--                <span class="nav-main-link-name">Applications</span>--}}
-{{--              </a>--}}
-{{--              <ul class="nav-main-submenu">--}}
-{{--                <li class="nav-main-item">--}}
-{{--                  <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('courses.applications') }}">--}}
-{{--                    <i class="nav-main-link-icon si si-user"></i>--}}
-{{--                    <span class="nav-main-link-name">--}}
-{{--                       Applications--}}
-{{--                    </span>--}}
-
-{{--                  </a>--}}
-{{--                </li>--}}
-
-{{--                <li class="nav-main-item">--}}
-{{--                  <a class="nav-main-link{{ request()->is('archived') ? ' active' : '' }}" href="{{ route('courses.archived') }}">--}}
-{{--                    <i class="nav-main-link-icon si si-user"></i>--}}
-{{--                    <span class="nav-main-link-name">--}}
-{{--                       Archived--}}
-{{--                    </span>--}}
-
-{{--                  </a>--}}
-{{--                </li>--}}
-
-
-{{--              </ul>--}}
-{{--            </li>--}}
-
-
-{{--              <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">--}}
-{{--                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">--}}
-{{--                      <i class="nav-main-link-icon si si-user"></i>--}}
-{{--                      <span class="nav-main-link-name">Admissions</span>--}}
-{{--                  </a>--}}
-{{--                  <ul class="nav-main-submenu">--}}
-{{--                      <li class="nav-main-item">--}}
-{{--                          <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('courses.admissions') }}">--}}
-{{--                              <i class="nav-main-link-icon si si-user"></i>--}}
-{{--                              <span class="nav-main-link-name">--}}
-{{--                       View list--}}
-{{--                    </span>--}}
-
-{{--                          </a>--}}
-{{--                      </li>--}}
-{{--                  </ul>--}}
-{{--              </li>--}}
+              <div id = 'in_course'>
+                  <li class='nav-main-item{{ request()->is('courses/*') ? ' open' : '' }}'>
+                      <a class='nav-main-link nav-main-link-submenu' data-toggle='submenu' aria-haspopup='true' aria-expanded='true' href='#'>
+                          <i class='nav-main-link-icon si si-user'></i>
+                          <span class='nav-main-link-name'>Courses</span>
+                      </a>
+                      <ul class='nav-main-submenu'>
+                          <li class='nav-main-item'>
+                              <a class='nav-main-link{{ request()->is('student/change_course') ? 'active' : ''  }}' href='{{ route('change_course') }}'>
+                              <i class='nav-main-link-icon si si-user'></i>
+                              <span class='nav-main-link-name'>
+                                    Change Courses
+                                  </span>
+                              </a>
+                          </li>
+                      </ul>
+                  </li>
+                  <li class='nav-main-item{{ request()->is('academics/*') ? ' open' : '' }}'>
+                      <a class='nav-main-link nav-main-link-submenu' data-toggle='submenu' aria-haspopup='true' aria-expanded='true' href='#'>
+                          <i class='nav-main-link-icon si si-user'></i>
+                          <span class='nav-main-link-name'>Academics</span>
+                      </a>
+                      <ul class='nav-main-submenu'>
+                          <li class='nav-main-item'>
+                              <a class='nav-main-link{{ request()->is('student/change_course') ? 'active' : ''  }}' href='{{ route('change_course') }}'>
+                              <i class='nav-main-link-icon si si-user'></i>
+                              <span class='nav-main-link-name'>
+                                    Exams Transcripts
+                                </span>
+                              </a>
+                          </li>
+                      </ul>
+                      <ul class='nav-main-submenu'>
+                          <li class='nav-main-item'>
+                              <a class='nav-main-link{{ request()->is('student/change_course') ? 'active' : ''  }} href='". route('change_course') }}'>
+                              <i class='nav-main-link-icon si si-user'></i>
+                              <span class='nav-main-link-name'>
+                                    Fee
+                                    </span>
+                              </a>
+                          </li>
+                      </ul>
+                      <ul class='nav-main-submenu'>
+                          <li class='nav-main-item'>
+                              <a class='nav-main-link{{ request()->is('student/change_course') ? 'active' : ''  }}' href='{{ route('change_course') }}'>
+                              <i class='nav-main-link-icon si si-user'></i>
+                              <span class='nav-main-link-name'>
+                                    Units
+                                    </span>
+                              </a>
+                          </li>
+                      </ul>
+                  </li>
+                  <li class='nav-main-item{{ request()->is('accomodation/*') ? ' open' : '' }}'>
+                      <a class='nav-main-link nav-main-link-submenu' data-toggle='submenu' aria-haspopup='true' aria-expanded='true' href='#'>
+                          <i class='nav-main-link-icon si si-user'></i>
+                          <span class='nav-main-link-name'>Accomodation</span>
+                      </a>
+                      <ul class='nav-main-submenu'>
+                          <li class='nav-main-item'>
+                              <a class='nav-main-link{{ request()->is('student/change_course') ? 'active' : ''  }}' href='{{ route('change_course') }}'>
+                              <i class='nav-main-link-icon si si-user'></i>
+                              <span class='nav-main-link-name'>
+                                    Book Hostel
+                                     </span>
+                              </a>
+                          </li>
+                      </ul>
+                      <ul class='nav-main-submenu'>
+                          <li class='nav-main-item'>
+                              <a class='nav-main-link{{ request()->is('student/change_course') ? 'active' : ''  }}' href='{{ route('change_course') }}'>
+                              <i class='nav-main-link-icon si si-user'></i>
+                              <span class='nav-main-link-name'>
+                                        Clearing
+                                    </span>
+                              </a>
+                          </li>
+                      </ul>
+                  </li>
+              </div>
           </ul>
         </div>
         <!-- END Side Navigation -->
@@ -227,25 +194,13 @@
           <div class="dropdown d-inline-block ms-2">
             <button type="button" class="btn btn-sm btn-alt-dark d-flex align-items-center" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <img class="rounded-circle" src="{{ asset('media/avatars/may.png') }}" alt="Header Avatar" style="width: 21px;">
-              <span class="d-none d-sm-inline-block ms-2">
-                  @if(Auth::guard('student')->check())
-                      {{ Auth::guard('student')->user()->username }}
-                  @else
-                      {{ Auth::user()->username }}
-                  @endif
-              </span>
+              <span id = 'plot-user' class="d-none d-sm-inline-block ms-2"></span>
               <i class="fa fa-fw fa-angle-down d-none d-sm-inline-block ms-1 mt-1"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-md dropdown-menu-end p-0 border-0" aria-labelledby="page-header-user-dropdown">
               <div class="p-3 text-center bg-body-dark border-bottom rounded-top">
                 <img class="img-avatar img-avatar48 img-avatar-thumb" src="{{ asset('media/avatars/may.png') }}" alt="">
-                <p class="mt-2 mb-0 fw-medium">
-           {{-- {{ Auth::guard('user')->user()->name }}--}}
-                    @if(Auth::guard('student')->check())
-                        {{ Auth::guard('student')->user()->username }}
-                    @else
-                        {{ Auth::user()->username }}
-                    @endif </p>
+                <p id = 'plot-user' class="mt-2 mb-0 fw-medium"></p>
                 <p class="mb-0 text-muted fs-sm fw-medium">
                     @if(Auth::guard('student')->check())
                         {{ Auth::guard('student')->user()->student_id }}
@@ -396,9 +351,9 @@
         <!-- Page JS Plugins CSS -->
             <link rel="stylesheet" href="{{ url('js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
             <link rel="stylesheet" href="{{ url('js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css') }}">
-    @endsection
 
-    @section('js_after')
+        @endsection
+        @section('js_after')
         <!-- jQuery (required for DataTables plugin) -->
             <script src="{{ url('js/lib/jquery.min.js') }}"></script>
 
@@ -442,6 +397,9 @@
   <!-- OneUI Core JS -->
   <script src="{{ url('js/oneui.app.js') }}"></script>
 
+  <script>
+      plotName();
+  </script>
   <!-- Laravel Scaffolding JS -->
   <!-- <script src="{{ mix('/js/laravel.app.js') }}"></script> -->
 
