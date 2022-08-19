@@ -1,6 +1,4 @@
-@extends('registrar::layouts.backend')
-
-@section('content') 
+<?php $__env->startSection('content'); ?> 
 
 <div class="bg-body-light">
   <div class="content content-full">
@@ -32,20 +30,20 @@
               <div class="row">
                  
                 <div class="col-lg-8 space-y-0">
-                   <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.storeCourse') }}" method="POST">
-                    @csrf 
+                   <form class="row row-cols-lg-auto g-3 align-items-center" action="<?php echo e(route('courses.storeCourse')); ?>" method="POST">
+                    <?php echo csrf_field(); ?> 
                  
                     <div class="form-floating col-12 col-xl-12">
-                      <select name="department" id="department" value="{{ old('department') }}" class="form-control form-control-alt text-uppercase">
+                      <select name="department" id="department" value="<?php echo e(old('department')); ?>" class="form-control form-control-alt text-uppercase">
                         <option selected disabled> Select Department</option>
-                        @foreach ($departments as $department)
-                        <option value="{{ $department->name }}">{{ $department->name }}</option>        
-                      @endforeach
+                        <?php $__currentLoopData = $departments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $department): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($department->name); ?>"><?php echo e($department->name); ?></option>        
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                       <label class="form-label">DEPARTMENT</label>
                       </select>
                     </div>
                     <div class="form-floating  col-12 col-xl-12">
-                    <select name="level" id="level"value="{{ old('level') }}" class="form-control form-control-alt text-uppercase form-select">
+                    <select name="level" id="level"value="<?php echo e(old('level')); ?>" class="form-control form-control-alt text-uppercase form-select">
                       <option disabled selected>Level of Study</option>
                       <option value="1">Certificate</option>
                       <option value="2">Diploma</option>
@@ -56,19 +54,19 @@
                     </select>
                     </div>
                     <div class="form-floating  col-12 col-xl-12">
-                      <input type = "text" class = "form-control form-control-alt text-uppercase" id = "course_name"value="{{ old('course_name') }}" name="course_name" placeholder="Course Name">
+                      <input type = "text" class = "form-control form-control-alt text-uppercase" id = "course_name"value="<?php echo e(old('course_name')); ?>" name="course_name" placeholder="Course Name">
                       <label class="form-label">COURSE NAME</label>
                     </div>
                     <div class="form-floating  col-12 col-xl-12">
-                        <input type = "text" class = "form-control form-control-alt text-uppercase" id = "course_code" value="{{ old('course_code') }}"name="course_code" placeholder="Course Code">
+                        <input type = "text" class = "form-control form-control-alt text-uppercase" id = "course_code" value="<?php echo e(old('course_code')); ?>"name="course_code" placeholder="Course Code">
                         <label class="form-label">COURSE CODE</label>
                       </div>
                       <div class="form-floating  col-12 col-xl-12">
-                        <input type = "text" class = "form-control form-control-alt text-uppercase" id = "course_duration" value="{{ old('course_duration') }}"name="course_duration" placeholder="Course Duration">
+                        <input type = "text" class = "form-control form-control-alt text-uppercase" id = "course_duration" value="<?php echo e(old('course_duration')); ?>"name="course_duration" placeholder="Course Duration">
                         <label class="form-label">COURSE DURATION</label>
                       </div>
                       <div class="form-floating col-12 col-xl-12">
-                        <textarea class = "form-control form-control-alt text-uppercase" id="course_requirements" name="course_requirements" placeholder="Course Requirements">{{ old('course_requirements') }}</textarea>
+                        <textarea class = "form-control form-control-alt text-uppercase" id="course_requirements" name="course_requirements" placeholder="Course Requirements"><?php echo e(old('course_requirements')); ?></textarea>
                         <label class="form-label">COURSE REQUIREMENTS</label>
                       </div>
                 </div>
@@ -76,10 +74,10 @@
                 <div class=" col-lg-4">                
                     <div class="form-floating col-12 col-xl-12">
                       
-                      <select class="form-control form-control-alt text-uppercase" value="{{ old('subject1') }}" name="subject1">
-                      @foreach ($clusters as $cluster)
-                        <option value="{{ $cluster->group }}">CLUSTER {{ $cluster->group }}</option>        
-                      @endforeach
+                      <select class="form-control form-control-alt text-uppercase" value="<?php echo e(old('subject1')); ?>" name="subject1">
+                      <?php $__currentLoopData = $clusters; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cluster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($cluster->group); ?>">CLUSTER <?php echo e($cluster->group); ?></option>        
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                       </select>
                       
@@ -88,10 +86,10 @@
                     <br>
                     <div class="form-floating col-12 col-xl-12">
                       
-                      <select class="form-control form-control-alt text-uppercase" value="{{ old('subject2') }}" name="subject2">
-                      @foreach ($clusters as $cluster)
-                        <option value="{{ $cluster->group }}">CLUSTER {{ $cluster->group }}</option>        
-                      @endforeach
+                      <select class="form-control form-control-alt text-uppercase" value="<?php echo e(old('subject2')); ?>" name="subject2">
+                      <?php $__currentLoopData = $clusters; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cluster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($cluster->group); ?>">CLUSTER <?php echo e($cluster->group); ?></option>        
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                       </select>
                       
@@ -101,10 +99,10 @@
                    
                     <div class="form-floating col-12 col-xl-12">
                       
-                      <select class="form-control form-control-alt text-uppercase" value="{{ old('subject3') }}" name="subject3">
-                      @foreach ($clusters as $cluster)
-                        <option value="{{ $cluster->group }}">CLUSTER {{ $cluster->group }}</option>        
-                      @endforeach
+                      <select class="form-control form-control-alt text-uppercase" value="<?php echo e(old('subject3')); ?>" name="subject3">
+                      <?php $__currentLoopData = $clusters; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cluster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($cluster->group); ?>">CLUSTER <?php echo e($cluster->group); ?></option>        
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                       </select>
                       
@@ -113,10 +111,10 @@
                     <br>
                     <div class="form-floating col-12 col-xl-12">
                       
-                      <select class="form-control form-control-alt text-uppercase" value="{{ old('subject4') }}" name="subject4">
-                      @foreach ($clusters as $cluster)
-                        <option value="{{ $cluster->group }}">CLUSTER {{ $cluster->group }}</option>        
-                      @endforeach
+                      <select class="form-control form-control-alt text-uppercase" value="<?php echo e(old('subject4')); ?>" name="subject4">
+                      <?php $__currentLoopData = $clusters; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cluster): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($cluster->group); ?>">CLUSTER <?php echo e($cluster->group); ?></option>        
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                       </select>
                       
@@ -143,5 +141,7 @@
             </div>
           </div>
     </div> 
-@endsection
+<?php $__env->stopSection(); ?>
 
+
+<?php echo $__env->make('registrar::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/html/Finale/application/Modules/Registrar/Resources/views/course/addCourse.blade.php ENDPATH**/ ?>

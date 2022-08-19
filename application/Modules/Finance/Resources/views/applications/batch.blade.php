@@ -76,7 +76,7 @@
                                         @if($app->finance_status === 0)
                                             <span class="badge bg-primary">Awaiting</span>
                                         @elseif($app->finance_status === 1)
-                                            <span class="badge bg-success">Approved</span>
+                                            <span class="badge bg-success">Accepted</span>
                                         @else
                                             <span class="badge bg-warning">Rejected</span>
                                         @endif

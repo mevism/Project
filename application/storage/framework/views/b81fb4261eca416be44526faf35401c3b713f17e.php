@@ -1,5 +1,3 @@
-@extends('registrar::layouts.backend')
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
 
@@ -24,13 +22,13 @@
   } );
 </script>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <div class="flex-grow-1">
+                <div class="flex-grow-0">
                     <h5 class="h5 fw-bold mb-0">
-                        INTAKES
+                      COURSES AVAILABLE
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -39,58 +37,51 @@
                             <a class="link-fx" href="javascript:void(0)">Intakes</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            View intakes
+                            View selected intake
                         </li>
                     </ol>
                 </nav>
             </div>
         </div>
+
     </div>
- 
-    <div class="block block-rounded">
+         <div class="block block-rounded">
 
             <div class="block-content block-content-full">
               <div class="row">
                 <div class="col-12">
               <table id="example" class="table table-borderless table-striped table-vcenter js-dataTable-responsive">
                 <span class="d-flex justify-content-end">
-                    <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addIntake') }}">Create</a>
-                </span><br>
+                  <a class="btn btn-alt-info btn-sm" href="<?php echo e(route('courses.showIntake')); ?>">Back</a>
+              </span><br>
                 <thead>
 
                   <tr>
-                    <th>Intakes</th>
-                    <th>Status</th>
-                    <th>Action</th>
+                    <th>Course Code</th>
+                    <th>Courses</th>
+                    <th>Department</th>
+                    <th>Period</th>
+                    <th>View</th>
                   </tr>
 
                 </thead>
                 <tbody>
-                  @foreach ($data as $intake)
-                  <tr>
-                    <td style="text-transform: uppercase" class="fw-semibold fs-sm">{{ Carbon\carbon::parse($intake->intake_from)->format('M-Y')}} - {{ Carbon\carbon::parse($intake->intake_to)->format('M-Y') }}</td>
-                    {{-- <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ ($intake->course_id)}}</td> --}}
-                    <td>
-                    @if ($intake->status === 0)
-                    <a  class="btn btn-sm btn-alt-primary" href="{{ route('courses.editstatusIntake', $intake->id) }}">Pending</a>
-                    @endif
-                    @if ($intake->status === 1)
-                    <a  class="btn btn-sm btn-alt-success" href="{{ route('courses.editstatusIntake', $intake->id) }}">Ongoing</a>
-                    @endif
-                    @if ($intake->status === 2)
-                    <a  class="btn btn-sm btn-alt-info" href="{{ route('courses.editstatusIntake', $intake->id) }}">Expired</a>
-                    @endif
-                    @if ($intake->status === 3)
-                    <a  class="btn btn-sm btn-alt-danger" href="{{ route('courses.editstatusIntake', $intake->id) }}">Suspended</a>
-                    @endif
-                     </td>
-                    <td> 
-                      <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.viewIntake', $intake->id) }}">view</a> 
-                   {{-- <td> <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editIntake', $intake->id) }}">edit</a> </td> --}}
-                      <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this intake ?')" href="{{ route('courses.destroyIntake', $intake->id) }}">delete</a> 
-                    </td>
-                  </tr>
-                  @endforeach
+                    <?php $__currentLoopData = $courses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $course): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+
+                         <?php $__currentLoopData = $course; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                         <tr>
+                            <td><?php echo e($item->course_code); ?></td>
+                            <td><?php echo e($item->course_name); ?></td>
+                            <td><?php echo e($item->department_id); ?></td>
+                            <td><?php echo e($item->course_duration); ?></td>
+                           <td><a href="<?php echo e(route('courses.viewCourse',$item->id)); ?>" class="btn btn-sm btn-alt-secondary" data-toggle="click-ripple">view</a></td>
+
+
+
+                         </tr>
+                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                 </tbody>
               </table>
@@ -99,4 +90,6 @@
           </div>
           <!-- Dynamic Table Responsive -->
         </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('registrar::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/html/Finale/application/Modules/Registrar/Resources/views/intake/viewIntake.blade.php ENDPATH**/ ?>

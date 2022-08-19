@@ -1,7 +1,4 @@
-@extends('registrar::layouts.backend')
-
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="bg-body-light">
   <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -20,16 +17,16 @@
               <div class="row">
                 <div class="col-lg-12 space-y-0">
 
-                   <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.updateAttendance',$data->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
+                   <form class="row row-cols-lg-auto g-3 align-items-center" action="<?php echo e(route('courses.updateAttendance',$data->id)); ?>" method="POST">
+                    <?php echo csrf_field(); ?>
+                    <?php echo method_field('PUT'); ?>
 
                    <div class="form-floating col-12 col-xl-12">
-                      <input type="text" class="form-control form-control-alt" value="{{ $data->attendance_name }}" id="attendance_name" name="attendance_name" placeholder="Name">
+                      <input type="text" class="form-control form-control-alt" value="<?php echo e($data->attendance_name); ?>" id="attendance_name" name="attendance_name" placeholder="Name">
                       <label class="form-label">ATTENDANCE NAME</label>
                     </div>
                    <div class="form-floating col-12 col-xl-12">
-                      <input type="text" class="form-control form-control-alt" value="{{ $data->attendance_code }}"id="attendance_code" name="attendance_code" placeholder="Attendance Code">
+                      <input type="text" class="form-control form-control-alt" value="<?php echo e($data->attendance_code); ?>"id="attendance_code" name="attendance_code" placeholder="Attendance Code">
                       <label class="form-label">ATTENDANCE CODE</label>
                     </div>
 
@@ -43,4 +40,6 @@
             </div>
           </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('registrar::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/html/Finale/application/Modules/Registrar/Resources/views/attendance/editAttendance.blade.php ENDPATH**/ ?>

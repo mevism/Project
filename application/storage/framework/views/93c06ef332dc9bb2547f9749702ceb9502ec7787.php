@@ -1,6 +1,4 @@
-@extends('registrar::layouts.backend')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="bg-body-light">
   <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -31,34 +29,34 @@
               <div class="row">
                 <div class="col-lg-12 space-y-0">
 
-                   <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.storeClasses') }}" method="POST">
-                    @csrf
+                   <form class="row row-cols-lg-auto g-3 align-items-center" action="<?php echo e(route('courses.storeClasses')); ?>" method="POST">
+                    <?php echo csrf_field(); ?>
 
                     <div class="form-floating col-12 col-xl-12">
                       <select name="attendance"  class="form-control form-control-alt">
                         <option selected disabled> Select Attendance</option>
 
-                          @foreach($attendances as $attend)
-                              <option value="{{ $attend->attendance_code }}">{{ $attend->attendance_name }}</option>
-                          @endforeach
+                          <?php $__currentLoopData = $attendances; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $attend): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                              <option value="<?php echo e($attend->attendance_code); ?>"><?php echo e($attend->attendance_name); ?></option>
+                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                           <label class="form-label">ATTENDANCE CODE</label>
                       </select>
                     </div>
                     <div class="form-floating col-12 col-xl-12">
                       <select name="intake_from" class="form-control form-control-alt">
                         <option selected disabled>Select Intake</option>
-                        @foreach ($intakes as $intake)
-                          <option value="{{ $intake->intake_from }}">{{ Carbon\Carbon::parse($intake->intake_from)->format('M-Y') }} - {{ Carbon\Carbon::parse($intake->intake_to)->format('M-Y') }}</option>
-                        @endforeach
+                        <?php $__currentLoopData = $intakes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $intake): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                          <option value="<?php echo e($intake->intake_from); ?>"><?php echo e(Carbon\Carbon::parse($intake->intake_from)->format('M-Y')); ?> - <?php echo e(Carbon\Carbon::parse($intake->intake_to)->format('M-Y')); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         <label class="form-label">INTAKE NAME</label>
                       </select>
                     </div>
                     <div class="form-floating col-12 col-xl-12">
                       <select name="course" id="course" class="form-control form-control-alt">
                         <option selected disabled> Select Course</option>
-                        @foreach ($courses as $item)
-                          <option value="{{ $item->course_code }}">{{ $item->course_name }}</option>
-                        @endforeach
+                        <?php $__currentLoopData = $courses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                          <option value="<?php echo e($item->course_code); ?>"><?php echo e($item->course_name); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         <label class="form-label">COURSE NAME</label>
                       </select>
                     </div>
@@ -72,4 +70,6 @@
             </div>
           </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('registrar::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/html/Finale/application/Modules/Registrar/Resources/views/class/addClasses.blade.php ENDPATH**/ ?>

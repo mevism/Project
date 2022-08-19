@@ -48,7 +48,7 @@
                                 <td> {{ $app->courses->course_name }}</td>
                                 <td>
                                     @if($app->cod_status === 1)
-                                        <span class="badge bg-success">Approved</span>
+                                        <span class="badge bg-success">Accepted</span>
                                     @else
                                         <span class="badge bg-warning">Rejected</span>
                                     @endif

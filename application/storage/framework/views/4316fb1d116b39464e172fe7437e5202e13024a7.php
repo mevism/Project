@@ -1,5 +1,3 @@
-@extends('registrar::layouts.backend')
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
 
@@ -24,7 +22,7 @@
   } );
 </script>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <div class="bg-body-light">
     <div class="content content-full">
@@ -55,7 +53,7 @@
             <div class="col-12">
           <table id="example" class="table table-bordered table-striped table-vcenter js-dataTable-responsive">
             <span class="d-flex justify-content-end">
-                <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addClasses') }}">Create</a>
+                <a class="btn btn-alt-info btn-sm" href="<?php echo e(route('courses.addClasses')); ?>">Create</a>
             </span><br>
             <thead>
                 <th>Classes</th>
@@ -64,18 +62,18 @@
                 <th>Action</th>
             </thead>
             <tbody>
-              @foreach ($data as $class)
+              <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $class): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
               <tr>
 
-                <td class="fw-semibold fs-sm text-uppercase">{{ $class->name }}</td>
-                <td class="fw-semibold fs-sm">{{ $class->attendance_id }}</td>
-                <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ $class->course_id }}</td>
+                <td class="fw-semibold fs-sm text-uppercase"><?php echo e($class->name); ?></td>
+                <td class="fw-semibold fs-sm"><?php echo e($class->attendance_id); ?></td>
+                <td style="text-transform: uppercase"class="fw-semibold fs-sm"><?php echo e($class->course_id); ?></td>
                 <td>
-                  <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editClasses', $class->id) }}">edit</a>
-                <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this course ?')" href="{{ route('courses.destroyClasses', $class->id) }}">delete</a>
+                  <a class="btn btn-sm btn-alt-info" href="<?php echo e(route('courses.editClasses', $class->id)); ?>">edit</a>
+                <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this course ?')" href="<?php echo e(route('courses.destroyClasses', $class->id)); ?>">delete</a>
               </td>
               </tr>
-              @endforeach
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
             </tbody>
           </table>
@@ -85,15 +83,17 @@
       </div>
       <!-- Dynamic Table Responsive -->
     </div>
-@endsection
-{{--<script>--}}
-{{--  $(document).ready(function() {--}}
-{{--      $('#example').DataTable( {--}}
-{{--          responsive: true,--}}
-{{--          order: [[2, 'asc']],--}}
-{{--          rowGroup: {--}}
-{{--              dataSrc: 2--}}
-{{--          }--}}
-{{--      } );--}}
-{{--  } );--}}
-{{--</script>--}}
+<?php $__env->stopSection(); ?>
+
+
+
+
+
+
+
+
+
+
+
+
+<?php echo $__env->make('registrar::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/html/Finale/application/Modules/Registrar/Resources/views/class/showClasses.blade.php ENDPATH**/ ?>

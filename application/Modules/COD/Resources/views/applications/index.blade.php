@@ -51,7 +51,7 @@
                                         @if($app->cod_status === 0)
                                             <span class="badge bg-primary">Awaiting</span>
                                         @elseif($app->cod_status === 1)
-                                            <span class="badge bg-success">Approved</span>
+                                            <span class="badge bg-success">Accepted</span>
                                         @elseif($app->cod_status === 2)
                                             <span class="badge bg-warning">Rejected</span>
                                         @elseif($app->cod_status === 4)

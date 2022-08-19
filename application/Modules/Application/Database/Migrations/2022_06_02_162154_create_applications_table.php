@@ -32,6 +32,7 @@ return new class extends Migration
             $table->string('cod_comments')->nullable();
             $table->integer('dean_status')->nullable();
             $table->string('dean_comments')->nullable();
+            $table->integer('registrar_comments')->nullable();
             $table->integer('registrar_status')->nullable();
             $table->integer('status')->nullable();
             $table->string('ref_number')->nullable();

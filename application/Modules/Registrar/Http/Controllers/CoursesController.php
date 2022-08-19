@@ -35,6 +35,9 @@ use Modules\Registrar\Entities\AvailableCourse;
 use Modules\Registrar\Entities\KuccpsApplicant;
 use Modules\Registrar\Entities\KuccpsApplication;
 use Modules\Application\Entities\AdmissionApproval;
+use Modules\Registrar\Entities\ClusterSubjects;
+use Modules\Registrar\Entities\CourseRequirement;
+use PHPUnit\TextUI\XmlConfiguration\Group;
 
 class CoursesController extends Controller
 
@@ -157,8 +160,7 @@ class CoursesController extends Controller
             }
 
         }
-
-
+        return redirect()->back()->with('success', 'Email sent');
     }
 
     public function index(){
@@ -344,12 +346,33 @@ class CoursesController extends Controller
 
     public function statusIntake(Request $request, $id){
 
-        $data             =       Intake::find($id);
+        $xyz = $request->validate(['status' => 'required']);
 
-        $data->status     =       $request->input('status');
-        $data->update();
+        
+        if($request->status == 1){
+            Intake::where('status', 1)->update(['status' => 2]);
+
+            AvailableCourse::where('status', 1)->update(['status' => 0]);
+            
+            $data             =       Intake::find($id);
+            $data->status     =       $request->input('status');
+            $data->save();
+
+           AvailableCourse::where('intake_id', $id)->update(['status' => 1]);
+            
+        }else{
+
+            $data             =       Intake::find($id);
+            $data->status     =       $request->input('status');
+            $data->save();
+
+        AvailableCourse::where('intake_id', $id)->update(['status' => 0]);
+    
+        }
 
         return redirect()->route('courses.showIntake')->with('status','Data Updated Successfully');
+
+    
     }
 
     public function viewCourse($id){
@@ -521,6 +544,7 @@ class CoursesController extends Controller
 
         return view('registrar::school.addSchool');
     }
+    
 
     public function  showSchool(){
 
@@ -528,12 +552,13 @@ class CoursesController extends Controller
         return view('registrar::school.showSchool')->with('data',$data);
 
     }
+    
 
     public function editSchool($id){
 
         $data      =     School::find($id);
 
-        return view('registrar::school.editSchool')->with('data',$data);
+        return view('registrar::school.editSchool')->with('data',$data ) ;
     }
 
     public function updateSchool(Request $request, $id){
@@ -639,14 +664,14 @@ class CoursesController extends Controller
 
         $schools           =      School::all();
         $departments       =      Department::all();
+        $clusters       =      ClusterSubjects::all();
 
-         return view('registrar::course.addCourse')->with(['schools'=>$schools,'departments'=>$departments]);
+         return view('registrar::course.addCourse')->with(['clusters'=>$clusters,'schools'=>$schools,'departments'=>$departments]);
     }
 
     public function storeCourse(Request $request){
 
       $vz = $request->validate([
-          'school'                    =>  'required',
           'department'                =>  'required',
           'course_name'               =>  'required|unique:courses',
           'course_code'               =>  'required|unique:courses',
@@ -660,22 +685,31 @@ class CoursesController extends Controller
       ]);
 
         $courses                      =    new Course;
-        $courses->school_id           =    $request->input('school');
         $courses->department_id       =    $request->input('department');
         $courses->course_name         =    $request->input('course_name');
-        $courses->level               =    $request->input('level');
-        $courses->course_duration     =    $request->input('course_duration');
-        if($request->level == 1) {$courses->fee  = '500';}
-        if($request->level == 2) {$courses->fee  = '500';}
-        if($request->level == 3) {$courses->fee  = '1000';}
-        if($request->level >= 4) {$courses->fee  = '1500';}
         $courses->course_code         =    $request->input('course_code');
-        $courses->course_requirements =    $request->input('course_requirements');
-        $courses->subject1            =    $request->input('subject1');
-        $courses->subject2            =    $request->input('subject2');
-        $courses->subject3            =    $request->input('subject3');
-        $courses->subject4            =    $request->input('subject4');
+        $courses->level               =    $request->input('level');
         $courses->save();
+        
+        
+        $requirement = new CourseRequirement;
+        $requirement->course_id           =    $courses->id;
+        $requirement->course_duration     =    $request->input('course_duration');
+        if($request->level  == 1) {
+            $requirement->fee  = '500';
+        }elseif($request->level  == 2) {
+            $requirement->fee  = '500';
+        }elseif($request->level  == 3){
+            $requirement->fee  = '1000';
+        }else{
+            $requirement->fee  = '1500';
+        }
+        $requirement->course_requirements =    $request->input('course_requirements');
+        $requirement->subject1            =    $request->input('subject1');
+        $requirement->subject2            =    $request->input('subject2');
+        $requirement->subject3            =    $request->input('subject3');
+        $requirement->subject4            =    $request->input('subject4');
+        $requirement->save();
 
         return redirect()->route('courses.showCourse')->with('success','Course Created');
     }
@@ -740,6 +774,8 @@ class CoursesController extends Controller
     public function addClasses(){
 
         $attendances        =         Attendance::all();
+        // $clusters            =        ClusterSubjects::all();
+        
         $courses            =         Course::all();
         $intakes            =         Intake::where('status', 1)->get();
 
@@ -770,7 +806,7 @@ class CoursesController extends Controller
 
     public function showClasses(){
 
-        $data = Classes::latest()->paginate(5);
+        $data = Classes::all();
 
         return view('registrar::class.showClasses')->with('data',$data);
     }
@@ -813,7 +849,8 @@ class CoursesController extends Controller
     }
     public function destroyCoursesAvailable(Request $request, $id){
 
-        $course = AvailableCourse::find('id', $id)->delete();
+        $course = AvailableCourse::find($id)->delete();
+    
 
         return redirect()->route('courses.offer');
     }

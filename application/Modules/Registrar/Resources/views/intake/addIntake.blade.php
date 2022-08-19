@@ -33,21 +33,20 @@
                    <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.storeIntake') }}" method="POST">
                     @csrf
                     <div class="row">
-                      <div class="col-12">                
-                      </div>
-                        <div  class="col-12">
-                          <label for="intake_name">From:</label>
+                      
+                      <div class="form-floating col-12 col-xl-12"> 
+                         
                           <input type="date" class="form-control form-control-alt" id="intake_name_from" name="intake_name_from" placeholder="Intake From">
-                          
+                          <label class="form-label">NTAKE FROM</label>
                         </div>
-                        <br>
-                        <div class="col-12">
-                          <label for="intake_name">To:</label>
+                        <br><BR>
+                        <div class="form-floating col-12 col-xl-12"> 
+                       
                           <input type="date" class="form-control form-control-alt" id="intake_name_to" name="intake_name_to" placeholder="Intake To">
-                          
+                          <label class="form-label">INTAKE TO</label>
                         </div>
                     </div>
-                
+                <BR>
                     
                   <div>
                    

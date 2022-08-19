@@ -13,12 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('courses', function (Blueprint $table) {
+        Schema::create('cluster_subjects', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('course_name');
-            $table->string('level');
-            $table->string('department_id');
-            $table->string('course_code')->unique();
+            $table->string('group');
+            $table->string('subject1');
+            $table->string('subject2');
+            $table->string('subject3');
+            $table->string('subject4')->nullable();
+            $table->string('subject5')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('courses');
+        Schema::dropIfExists('cluster_subjects');
     }
 };

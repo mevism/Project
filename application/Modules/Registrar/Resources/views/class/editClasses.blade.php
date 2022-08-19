@@ -24,16 +24,7 @@
                    <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.updateClasses',$data->id) }}" method="POST">
                     @csrf
                     @method('PUT')
-                    <div class="col-12 col-xl-12">
-                      <select name="intake_from" id="intake_from" class="form-control form-control-alt" required>
-                        <option selected value="{{ $data->intake_from }}"> {{ $data->intake_from }} </option>
-                        @foreach ($intakes as $intake)
-                          <option value="{{ $intake->intake_from }}">{{ Carbon\Carbon::parse($intake->intake_from)->format('M-Y') }}</option>
-                        @endforeach
-                      </select>
-                    </div>
-
-                    <div class="col-12 col-xl-12">
+                   <div class="form-floating col-12 col-xl-12">
                       <select name="attendance" id="attendance"class="form-control form-control-alt text-uppercase">
 
                         <option selected value="{{ $data->attendance_id }}">{{ $data->attendance_id }} </option>
@@ -42,10 +33,22 @@
                               <option value="{{ $attendance->attendance_name }}">{{ $attendance->attendance_name }}</option>
                           @endforeach
                           <input type="hidden" name="attendance_code" value="{{ $attendance->attendance_code }}">
+                          <label class="form-label">ATTENDANCE NAME</label>
+                      </select>
+                    </div>
+                   <div class="form-floating col-12 col-xl-12">
+                      <select name="intake_from" id="intake_from" class="form-control form-control-alt" required>
+                        <option selected value="{{ $data->intake_from }}"> {{ $data->intake_from }} </option>
+                        @foreach ($intakes as $intake)
+                          <option value="{{ $intake->intake_from }}">{{ Carbon\Carbon::parse($intake->intake_from)->format('M-Y') }}</option>
+                        @endforeach
+                        <label class="form-label">INTAKE NAME</label>
                       </select>
                     </div>
 
-                    <div class="col-12 col-xl-12">
+                    
+
+                   <div class="form-floating col-12 col-xl-12">
                       <select name="course" class="form-control form-control-alt" required>
                           <option value="{{ $data->course_id }}" selected>{{ $data->course_id }}</option>
                           @foreach ($courses as $course)
@@ -53,6 +56,7 @@
                           <option value="{{ $course->course_name }}">{{ $course->course_name }}</option>
                         @endforeach
                               <input type="hidden" name="course_code" value="{{ $course->course_code }}">
+                              <label class="form-label">COURSE NAME</label>
                       </select>
                     </div>
                     {{-- <div class="col-12 col-xl-12">
