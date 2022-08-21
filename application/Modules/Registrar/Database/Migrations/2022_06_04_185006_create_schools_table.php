@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('schools', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name')->unique();
             $table->string('initials')->unique();
+            $table->string('name')->unique();
             $table->timestamps();
             $table->softDeletes();
         });

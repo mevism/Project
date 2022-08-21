@@ -36,7 +36,7 @@
                 <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addAttendance') }}">Create</a>
             </span><br>
             <thead>
-                <th>Attendance</th>
+                <th>Attendance Mode</th>
                 <th>Code</th>
                 <th>Action</th>
               </thead>

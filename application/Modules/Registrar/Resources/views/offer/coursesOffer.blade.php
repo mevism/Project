@@ -42,10 +42,8 @@
                 @method('delete') 
                 @if(count($availables)>0)
                     <thead>
-                       
-                        <th>Course name</th>
                         <th>Department</th>
-                        <th>School</th>
+                        <th>Course name</th>
                         <th>Intake</th>
                         <th>Duration</th>
                         <th>Action</th>
@@ -55,11 +53,10 @@
 
                         @foreach($course as $item)
                             <tr>
-                                <td> {{ $item->course_name }}</td>
                                 <td> {{ $item->department_id }}</td>
-                                <td> {{ $item->school_id }}</td>
-                                <td> {{ $item->$intake }}</td>
-                                <td> {{ $item->course_duration }}</td>
+                                <td> {{ $item->course_name }}</td>
+                                <td> {{ $item->availablecourse->intake_id }}</td>
+                                <td> {{ $item->courseRequirements->course_duration }}</td>
                                 <td nowrap=""> <a class="btn btn-sm btn-alt-danger" href="{{ route('courses.destroyCoursesAvailable', $item->id) }}">delete </a> </td>
                             </tr>
                         @endforeach

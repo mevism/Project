@@ -9,9 +9,10 @@ class Campus extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = ['name'];
+    
     protected static function newFactory()
     {
-        return \Modules\Courses\Database\factories\CampusFactory::new();
+        return \Modules\Registrar\Database\factories\CampusFactory::new();
     }
 }

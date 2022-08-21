@@ -104,10 +104,11 @@ class CoursesController extends Controller
 
 
                 $regNumber = KuccpsApplication::where('course_code', $app->kuccpsApplication->course_code)
+                ->where('intake_id', $app->kuccpsApplication->kuccpsIntake->id)
                 ->where('status', '!=', NULL)->count();
 
                 $course  =  Courses::where('course_code', $app->kuccpsApplication->course_code)
-                ->select('department_id','course_duration')->first();
+                ->first();
 
                 // return $course->course_duration;
 
@@ -119,11 +120,12 @@ class CoursesController extends Controller
 
              $my_template->setValue('name', strtoupper($app->sname." ".$app->mname." ".$app->fname));
              $my_template->setValue('box', strtoupper( $app->BOX));
-             $my_template->setValue('address', strtoupper($app->postal_code));
+             $my_template->setValue('address', strtoupper($app->address));
+             $my_template->setValue('postal_code', strtoupper($app->postal_code));
              $my_template->setValue('town', strtoupper($app->town));
              $my_template->setValue('course', $app->kuccpsApplication->course_name);
              $my_template->setValue('department', $course->department_id);
-             $my_template->setValue('duration', $course->course_duration);
+             $my_template->setValue('duration', $course->courseRequirements->course_duration);
              $my_template->setValue('from', Carbon\carbon::parse($app->kuccpsApplication->kuccpsIntake->intake_from)->format('d-m-Y'));
              $my_template->setValue('to', Carbon\carbon::parse($app->kuccpsApplication->kuccpsIntake->intake_to)->format('d-m-Y'));
              $my_template->setValue('reg_number', $app->kuccpsApplication->course_code."/".str_pad(1 + $regNumber, 3, "0", STR_PAD_LEFT)."J"."/".Carbon\carbon::parse($app->kuccpsApplication->kuccpsIntake->intake_from)->format('Y'));
@@ -262,6 +264,7 @@ class CoursesController extends Controller
 
                      $my_template->setValue('name', strtoupper($app->applicant->sname." ".$app->applicant->mname." ".$app->applicant->fname));
                      $my_template->setValue('address', strtoupper($app->applicant->address));
+                     $my_template->setValue('postal_code', strtoupper($app->applicant->postal_code));
                      $my_template->setValue('town', strtoupper($app->applicant->town));
                      $my_template->setValue('course', $app->courses->course_name);
                      $my_template->setValue('department', $app->courses->department_id);
@@ -319,7 +322,7 @@ class CoursesController extends Controller
 
         }
     }
-        return redirect()->back()->with('success', 'Email sent');
+        return redirect()->back()->with('success', 'Report Generated');
 
 }
 
@@ -564,8 +567,8 @@ class CoursesController extends Controller
     public function updateSchool(Request $request, $id){
 
         $data               =       School::find($id);
-        $data->name         =       $request->input('name');
         $data->initials     =       $request->input('initials');
+        $data->name         =       $request->input('name');
         $data->update();
 
         return redirect()->route('courses.showSchool')->with('status','Data Updated Successfully');
@@ -578,9 +581,10 @@ class CoursesController extends Controller
             'name'             =>     'required'
         ]);
 
-        $schools               =     new School;
-        $schools->name         =     $request->input('name');
+        $schools               =     new School; 
+        
         $schools->initials     =   $request->input('initials');
+        $schools->name         =     $request->input('name');
         $schools->save();
 
         return redirect()->route('courses.showSchool')->with('success','School Created');
@@ -621,9 +625,9 @@ class CoursesController extends Controller
         ]);
 
         $departments              =       new Department;
-        $departments->name        =       $request->input('name');
-        $departments->dept_code        =       'Dept';
         $departments->school_id   =       $request->input('school');
+        $departments->dept_code   =       $request->input('dept_code');
+        $departments->name        =       $request->input('name');       
         $departments->save();
 
         return redirect()->route('courses.showDepartment')->with('success','Department Created');
@@ -640,8 +644,10 @@ class CoursesController extends Controller
     public function updateDepartment(Request $request, $id){
 
         $data               =       Department::find($id);
-        $data->name         =       $request->input('name');
         $data->school_id    =       $request->input('school');
+        $data->dept_code   =       $request->input('dept_code');
+        $data->name         =       $request->input('name');
+       
          $data->update();
 
         return redirect()->route('courses.showDepartment')->with('status','Data Updated Successfully');
@@ -664,31 +670,26 @@ class CoursesController extends Controller
 
         $schools           =      School::all();
         $departments       =      Department::all();
-        $clusters       =      ClusterSubjects::all();
+        // $campuses          =      Campus::all();
+        
 
-         return view('registrar::course.addCourse')->with(['clusters'=>$clusters,'schools'=>$schools,'departments'=>$departments]);
+         return view('registrar::course.addCourse')->with([ 'schools'=>$schools,'departments'=>$departments]);
     }
 
     public function storeCourse(Request $request){
-
-//        return $request->all();
 
         $subject = $request->subject;
         $subject1 = $request->subject1;
         $subject2 = $request->subject2;
         $subject3 = $request->subject3;
 
-//        return $dept;
-
         $data = implode(",", $subject);
         $data1 = implode(",", $subject1);
         $data2 = implode(",", $subject2);
         $data3 = implode(",", $subject3);
 
-//        return str_replace(',','/',$data)." ".$request->grade1." ".str_replace(',','/',$data1)." ".$request->grade2." ".str_replace(',','/',$data2)." ".$request->grade3." ".str_replace(',','/',$data3)." ".$request->grade4;
 
-
-//      $vz = $request->validate([
+        //      $vz = $request->validate([
 //          'department'                =>  'required',
 //          'course_name'               =>  'required|unique:courses',
 //          'course_code'               =>  'required|unique:courses',
@@ -702,6 +703,7 @@ class CoursesController extends Controller
 //      ]);
 
         $courses                      =    new Course;
+        $courses->campus_id           =    $request->input('campus');
         $courses->department_id       =    $request->input('department');
         $courses->course_name         =    $request->input('course_name');
         $courses->course_code         =    $request->input('course_code');
@@ -739,7 +741,7 @@ class CoursesController extends Controller
     }
 
     public function editCourse($id){
-
+        // $campuses           =          Campus::all();
         $schools            =          School::all();
         $departments        =          Department::all();
         $data               =          Course::find($id);
@@ -750,8 +752,9 @@ class CoursesController extends Controller
     public function updateCourse(Request $request, $id){
 
         $data                      =    Course::find($id);
+
         $data->course_name         =    $request->input('course_name');
-        $data->school_id           =    $request->input('school');
+        // $data->campus_id           =    $request->input('campus');
         $data->department_id       =    $request->input('department');
         $data->level               =    $request->input('level');
         $data->course_code         =    $request->input('course_code');
@@ -885,7 +888,7 @@ class CoursesController extends Controller
 
         $app = AdmissionApproval::find($id);
 
-//        return $app;
+        //        return $app;
 
             $student = new Student;
 
@@ -908,7 +911,7 @@ class CoursesController extends Controller
             $student->sub_county = $app->appApprovals->applicant->sub_county;
             $student->town = $app->appApprovals->applicant->town;
             $student->address = $app->appApprovals->applicant->address;
-            $student->postal_code = $app->appApprovals->applicant->postalcode;
+            $student->postal_code = $app->appApprovals->applicant->postal_code;
             $student->disabled = $app->appApprovals->applicant->disabled;
             $student->disability = $app->appApprovals->applicant->disability;
             $student->save();
@@ -920,7 +923,7 @@ class CoursesController extends Controller
             $studCourse->intake_id = $app->appApprovals->intake_id;
             $studCourse->class_code = strtoupper($app->appApprovals->courses->course_code.'/'.Carbon\carbon::parse($app->appApprovals->intake_from)->format('MY').'/J-FT');
             $studCourse->class = strtoupper($app->appApprovals->courses->course_code.'/'.Carbon\carbon::parse($app->appApprovals->intake_from)->format('MY').'/J-FT');
-            $studCourse->course_duration = $app->appApprovals->courses->course_duration;
+            $studCourse->course_duration = $app->appApprovals->courses->courseRequirements->course_duration;
             $studCourse->save();
 
             $studLogin = new StudentLogin;
@@ -945,7 +948,7 @@ class CoursesController extends Controller
 
     public function storeStudentID(Request $request, $id){
 
-//        return $request->all();
+        //        return $request->all();
 
         $request->validate([
            'image' => 'required'
@@ -976,33 +979,12 @@ class CoursesController extends Controller
 
     }
 
-    public function fetchCluster(Request $request){
-
-            $cluster_id = $request->cat_id;
-            $subject = ClusterSubjects::where('id', $cluster_id)
-//                ->with('')
-                ->select('subject1', 'subject2', 'subject3', 'subject4')
-                ->get();
-            return response()->json([
-               'subject' => $subject
-            ]);
-    }
-
-
     public function fetchDept(Request $request){
-
-//        $parent_id = $request->cat_id;
-//
-//        $subcategories = Department::where('id',$parent_id)
-//            ->with('subcategories')
-//            ->get();
-//        return response()->json([
-//            'subcategories' => $subcategories
-//        ]);
         $data = Department::where('school_id', $request->id)->get();
         return response()->json($data);
     }
 
 }
+
 
 

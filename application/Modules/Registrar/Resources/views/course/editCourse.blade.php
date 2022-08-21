@@ -23,7 +23,15 @@
                         @csrf
                         @method('PUT')
                     <div class="col-lg-8 space-y-2">
-
+                        <div class="form-floating col-12 col-xl-12 mb-4">
+                            <select name="campus" id="campus" value="{{ old('campus') }}" class="form-control form-control-sm text-uppercase">
+                              <option selected value="{{ $data->campus_id }}"> {{ $data->campus_id }}</option>
+                              @foreach ($campuses as $campus)
+                              <option value="{{ $campus->name }}">{{ $campus->name }}</option>
+                            @endforeach
+                            <label class="form-label">CAMPUS</label>
+                            </select>
+                          </div>
                         <div class="form-floating col-12 col-xl-12">
                             <select name="department" id="department" class="form-control form-control-alt text-uppercase">
                                 <option selected value="{{ $data->department_id }}" > {{ $data->department_id }} </option>
