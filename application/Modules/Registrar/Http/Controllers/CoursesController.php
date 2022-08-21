@@ -608,7 +608,7 @@ class CoursesController extends Controller
 
     public function showDepartment(){
 
-        $data      =       Department::latest()->paginate(5);
+        $data      =       Department::latest()->get();
 
         return view('registrar::department.showDepartment')->with('data',$data);
     }
@@ -671,20 +671,35 @@ class CoursesController extends Controller
 
     public function storeCourse(Request $request){
 
-        return $request->all();
+//        return $request->all();
 
-      $vz = $request->validate([
-          'department'                =>  'required',
-          'course_name'               =>  'required|unique:courses',
-          'course_code'               =>  'required|unique:courses',
-          'level'                     =>  'required',
-          'course_duration'           =>  'required',
-          'course_requirements'       =>  'required',
-          'subject1'                  =>  'required',
-          'subject2'                  =>  'required',
-          'subject3'                  =>  'required',
-          'subject4'                  =>  'required'
-      ]);
+        $subject = $request->subject;
+        $subject1 = $request->subject1;
+        $subject2 = $request->subject2;
+        $subject3 = $request->subject3;
+
+//        return $dept;
+
+        $data = implode(",", $subject);
+        $data1 = implode(",", $subject1);
+        $data2 = implode(",", $subject2);
+        $data3 = implode(",", $subject3);
+
+//        return str_replace(',','/',$data)." ".$request->grade1." ".str_replace(',','/',$data1)." ".$request->grade2." ".str_replace(',','/',$data2)." ".$request->grade3." ".str_replace(',','/',$data3)." ".$request->grade4;
+
+
+//      $vz = $request->validate([
+//          'department'                =>  'required',
+//          'course_name'               =>  'required|unique:courses',
+//          'course_code'               =>  'required|unique:courses',
+//          'level'                     =>  'required',
+//          'course_duration'           =>  'required',
+//          'course_requirements'       =>  'required',
+//          'subject1'                  =>  'required',
+//          'subject2'                  =>  'required',
+//          'subject3'                  =>  'required',
+//          'subject4'                  =>  'required'
+//      ]);
 
         $courses                      =    new Course;
         $courses->department_id       =    $request->input('department');
@@ -707,10 +722,10 @@ class CoursesController extends Controller
             $requirement->fee  = '1500';
         }
         $requirement->course_requirements =    $request->input('course_requirements');
-        $requirement->subject1            =    $request->input('subject1');
-        $requirement->subject2            =    $request->input('subject2');
-        $requirement->subject3            =    $request->input('subject3');
-        $requirement->subject4            =    $request->input('subject4');
+        $requirement->subject1            =    str_replace(',','/',$data)." ".$request->grade1;
+        $requirement->subject2            =    str_replace(',','/',$data1)." ".$request->grade2;
+        $requirement->subject3            =    str_replace(',','/',$data2)." ".$request->grade2;
+        $requirement->subject4            =    str_replace(',','/',$data3)." ".$request->grade3;
         $requirement->save();
 
         return redirect()->route('courses.showCourse')->with('success','Course Created');
@@ -971,6 +986,21 @@ class CoursesController extends Controller
             return response()->json([
                'subject' => $subject
             ]);
+    }
+
+
+    public function fetchDept(Request $request){
+
+//        $parent_id = $request->cat_id;
+//
+//        $subcategories = Department::where('id',$parent_id)
+//            ->with('subcategories')
+//            ->get();
+//        return response()->json([
+//            'subcategories' => $subcategories
+//        ]);
+        $data = Department::where('school_id', $request->id)->get();
+        return response()->json($data);
     }
 
 }

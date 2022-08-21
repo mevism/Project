@@ -42,4 +42,6 @@
         <!-- END Stats -->
     </div>
     <!-- END Page Content -->
+
+{{--    @dd(auth()->guard('user')->user())--}}
 @endsection

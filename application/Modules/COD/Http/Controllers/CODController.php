@@ -18,6 +18,7 @@ class CODController extends Controller
     public function applications(){
 
         $applications = Application::where('cod_status', '>=', 0)
+//            ->where('')
             ->where('dean_status', null)
             ->orWhere('dean_status', 3)
             ->orderby('id', 'DESC')
