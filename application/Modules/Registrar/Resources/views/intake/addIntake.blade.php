@@ -39,7 +39,7 @@
                           <input type="date" class="form-control form-control-alt" id="intake_name_from" name="intake_name_from" placeholder="Intake From">
                           <label class="form-label">NTAKE FROM</label>
                         </div>
-                        <br><BR>
+                        <br><br>
                         <div class="form-floating col-12 col-xl-12"> 
                        
                           <input type="date" class="form-control form-control-alt" id="intake_name_to" name="intake_name_to" placeholder="Intake To">

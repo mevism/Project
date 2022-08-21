@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('departments', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('school_id');
-            $table->string('name')->unique();
             $table->string('dept_code');
+            $table->string('name')->unique();
             $table->timestamps();
             $table->softDeletes();
         });

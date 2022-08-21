@@ -46,6 +46,11 @@
                     </div>
 
                     <div class="form-floating col-12 col-xl-12">
+                      <input type="text" value="{{ old('dept_code') }}"  class="form-control form-control-alt text-uppercase" id="dept_code" name="dept_code" placeholder="Department code">
+                      <label class="form-label">DEPARTMENT CODE</label>
+                    </div>
+
+                    <div class="form-floating col-12 col-xl-12">
                       <input type="text" value="{{ old('name') }}"  class="form-control form-control-alt text-uppercase" id="name" name="name" placeholder="Department Name">
                       <label class="form-label">DEPARTMENT NAME</label>
                     </div>

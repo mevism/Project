@@ -9,10 +9,6 @@ class Courses extends Model
 {
     use HasFactory;
 
-//    protected $fillable = ['campus_id'];
-//    protected $guared = [];
-//
-//    protected $table = 'courses';
     protected $fillable = ['campus_id'];
     protected $guared = [];
 
@@ -43,6 +39,9 @@ class Courses extends Model
 
         return $this->hasMany(Application::class, 'id');
 
+    }
+    public function courseRequirements(){
+        return $this->hasOne(CourseRequirement::class, 'course_id');
     }
 
     protected static function newFactory()

@@ -19,6 +19,10 @@ class CourseRequirement extends Model
     // `subject3`,
     // `subject4`
     ];
+    public function coursesReq(){
+
+        return $this->belongsTo(Courses::class, 'id');
+    }
     
     protected static function newFactory()
     {
