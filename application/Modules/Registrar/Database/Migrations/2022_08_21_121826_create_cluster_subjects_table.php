@@ -16,11 +16,7 @@ return new class extends Migration
         Schema::create('cluster_subjects', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('group_id');
-            $table->string('subject1');
-            $table->string('subject2');
-            $table->string('subject3');
-            $table->string('subject4')->nullable();
-            $table->string('subject5')->nullable();
+            $table->string('subject');
             $table->timestamps();
             $table->softDeletes();
         });

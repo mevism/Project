@@ -581,8 +581,8 @@ class CoursesController extends Controller
             'name'             =>     'required'
         ]);
 
-        $schools               =     new School; 
-        
+        $schools               =     new School;
+
         $schools->initials     =   $request->input('initials');
         $schools->name         =     $request->input('name');
         $schools->save();
@@ -627,7 +627,7 @@ class CoursesController extends Controller
         $departments              =       new Department;
         $departments->school_id   =       $request->input('school');
         $departments->dept_code   =       $request->input('dept_code');
-        $departments->name        =       $request->input('name');       
+        $departments->name        =       $request->input('name');
         $departments->save();
 
         return redirect()->route('courses.showDepartment')->with('success','Department Created');
@@ -647,7 +647,7 @@ class CoursesController extends Controller
         $data->school_id    =       $request->input('school');
         $data->dept_code   =       $request->input('dept_code');
         $data->name         =       $request->input('name');
-       
+
          $data->update();
 
         return redirect()->route('courses.showDepartment')->with('status','Data Updated Successfully');
@@ -670,13 +670,16 @@ class CoursesController extends Controller
 
         $schools           =      School::all();
         $departments       =      Department::all();
-        // $campuses          =      Campus::all();
-        
+        $campuses          =      Campus::all();
+        $group             =      \Modules\Registrar\Entities\Group::all();
 
-         return view('registrar::course.addCourse')->with([ 'schools'=>$schools,'departments'=>$departments]);
+
+         return view('registrar::course.addCourse')->with([ 'schools'=>$schools,'departments'=>$departments, 'campus' => $campuses, 'groups' => $group]);
     }
 
     public function storeCourse(Request $request){
+
+//        return $request->all();
 
         $subject = $request->subject;
         $subject1 = $request->subject1;
@@ -703,7 +706,7 @@ class CoursesController extends Controller
 //      ]);
 
         $courses                      =    new Course;
-        $courses->campus_id           =    $request->input('campus');
+        $courses->campus_id           =    $request->input('main');
         $courses->department_id       =    $request->input('department');
         $courses->course_name         =    $request->input('course_name');
         $courses->course_code         =    $request->input('course_code');
@@ -979,9 +982,11 @@ class CoursesController extends Controller
 
     }
 
-    public function fetchDept(Request $request){
-        $data = Department::where('school_id', $request->id)->get();
+    public function fetchSubjects(Request $request){
+
+        $data = ClusterSubjects::where('group_id', $request->id)->get();
         return response()->json($data);
+
     }
 
 }

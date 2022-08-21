@@ -283,7 +283,7 @@ class ApplicationController extends Controller
         $user->sub_county = $request->subcounty;
         $user->town = $request->town;
         $user->address = $request->address;
-        $user->postalcode = $request->postalcode;
+        $user->postal_code = $request->postalcode;
         $user->user_status = 1;
         $user->title = $request->title;
         $user->marital_status = $request->status;

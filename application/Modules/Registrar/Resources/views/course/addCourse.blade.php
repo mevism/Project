@@ -1,13 +1,13 @@
 @extends('registrar::layouts.backend')
 
-@section('content') 
+@section('content')
 
 <div class="bg-body-light">
   <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
           <div class="flex-grow-1">
               <h4 class="h3 fw-bold mb-2">
-                  
+
               </h4>
           </div>
           <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -29,21 +29,22 @@
               <h3 class="block-title">ADD COURSE</h3>
             </div>
             <div class="block-content block-content-full">
+                <form method="POST" action="{{ route('courses.storeCourse') }}">
+                    @csrf
               <div class="row">
-
                 <div class="col-lg-5 space-y-0">
 
                     <div class="form-floating col-12 col-xl-12 mb-4">
                       <select name="department" id="department" value="{{ old('department') }}" class="form-control form-control-sm text-uppercase">
                         <option selected disabled> Select Department</option>
                         @foreach ($departments as $department)
-                        <option value="{{ $department->name }}">{{ $department->name }}</option>        
+                        <option value="{{ $department->name }}">{{ $department->name }}</option>
                       @endforeach
                       <label class="form-label">DEPARTMENT</label>
                       </select>
                     </div>
-                    <div class="form-floating  col-12 col-xl-12">
-                    <select name="level" id="level"value="{{ old('level') }}" class="form-control form-control-alt text-uppercase form-select">
+                    <div class="form-floating  col-12 col-xl-12 mb-4">
+                    <select name="level" id="level"value="{{ old('level') }}" class="form-control form-control-sm text-uppercase form-select">
                       <option disabled selected>Level of Study</option>
                       <option value="1">Certificate</option>
                       <option value="2">Diploma</option>
@@ -53,54 +54,30 @@
                       <label class="form-label">LEVEL</label>
                     </select>
                     </div>
-                    <div class="form-floating  col-12 col-xl-12">
-                      <input type = "text" class = "form-control form-control-alt text-uppercase" id = "course_name"value="{{ old('course_name') }}" name="course_name" placeholder="Course Name">
+                    <div class="form-floating  col-12 col-xl-12 mb-4">
+                      <input type = "text" class = "form-control form-control-sm text-uppercase" id = "course_name"value="{{ old('course_name') }}" name="course_name" placeholder="Course Name">
                       <label class="form-label">COURSE NAME</label>
                     </div>
-                    <div class="form-floating  col-12 col-xl-12">
-                        <input type = "text" class = "form-control form-control-alt text-uppercase" id = "course_code" value="{{ old('course_code') }}"name="course_code" placeholder="Course Code">
+                    <div class="form-floating  col-12 col-xl-12 mb-4">
+                        <input type = "text" class = "form-control form-control-sm text-uppercase" id = "course_code" value="{{ old('course_code') }}"name="course_code" placeholder="Course Code">
                         <label class="form-label">COURSE CODE</label>
                       </div>
-                      <div class="form-floating  col-12 col-xl-12">
-                        <input type = "text" class = "form-control form-control-alt text-uppercase" id = "course_duration" value="{{ old('course_duration') }}"name="course_duration" placeholder="Course Duration">
+                      <div class="form-floating  col-12 col-xl-12 mb-4">
+                        <input type = "text" class = "form-control form-control-sm text-uppercase" id = "course_duration" value="{{ old('course_duration') }}"name="course_duration" placeholder="Course Duration">
                         <label class="form-label">COURSE DURATION</label>
                       </div>
-                      <div class="form-floating col-12 col-xl-12">
-                        <textarea class = "form-control form-control-alt text-uppercase" id="course_requirements" name="course_requirements" placeholder="Course Requirements">{{ old('course_requirements') }}</textarea>
+                      <div class="form-floating col-12 col-xl-12 mb-4">
+                        <textarea class = "form-control form-control-sm text-uppercase" id="course_requirements" name="course_requirements" placeholder="Course Requirements">{{ old('course_requirements') }}</textarea>
                         <label class="form-label">COURSE REQUIREMENTS</label>
                       </div>
                      </div>
-                
-                <div class=" col-lg-4">                
-                    <div class="form-floating  col-12 col-xl-12">
-                        <input type = "text" class = "form-control form-control-alt text-uppercase" id = "subject1"value="{{ old('subject1') }}" name="subject1" placeholder="subject 1">
-                        <label class="form-label">SUBJECT 1</label>
-                      </div>
-                    <br>
-                    <div class="form-floating  col-12 col-xl-12">
-                        <input type = "text" class = "form-control form-control-alt text-uppercase" id = "subject2"value="{{ old('subject2') }}" name="subject2" placeholder="subject 2">
-                        <label class="form-label">SUBJECT 2</label>
-                      </div>
-                    <br>
-                   
-                    <div class="form-floating  col-12 col-xl-12">
-                        <input type = "text" class = "form-control form-control-alt text-uppercase" id = "subject3"value="{{ old('subject3') }}" name="subject3" placeholder="subject 3">
-                        <label class="form-label">SUBJECT 3</label>
-                      </div>
-                    <br>
-                    <div class="form-floating  col-12 col-xl-12">
-                        <input type = "text" class = "form-control form-control-alt text-uppercase" id = "subject4"value="{{ old('subject4') }}" name="subject4" placeholder="subject 4">
-                        <label class="form-label">SUBJECT 4</label>
-                      </div>
-                    <br>
-
                 <div class=" col-lg-7 space-y-0">
                     <span class="h4 fw-semibold text-muted fs-sm">Add Course Cluster Subjects</span>
                     <div class="d-flex justify-content-center col-sm-12">
                         <select class="form-control form-control-sm text-uppercase category m-1 fs-sm" name="school" id="category">
                                 <option disabled selected> -- select group -- </option>
-                                @foreach ($schools as $school)
-                                    <option value="{{ $school->id }}"> {{ $school->name }}</option>
+                                @foreach ($groups as $group)
+                                    <option value="{{ $group->id }}"> {{ $group->name }}</option>
                                 @endforeach
                             </select>
                             <select class="form-control form-control-sm text-uppercase subcategory m-1 fs-sm" multiple="multiple" name="subject[]" id="subcategory">
@@ -124,8 +101,8 @@
                     <div class="d-flex justify-content-center col-sm-12">
                         <select class="form-control form-control-sm text-uppercase category1 m-1 fs-sm" name="school" id="category1">
                                 <option disabled selected> -- select group -- </option>
-                                @foreach ($schools as $school)
-                                    <option value="{{ $school->id }}"> {{ $school->name }}</option>
+                                @foreach ($groups as $group)
+                                    <option value="{{ $group->id }}"> {{ $group->name }}</option>
                                 @endforeach
                             </select>
                             <select class="form-control form-control-sm text-uppercase subcategory1 m-1 fs-sm" multiple="multiple" name="subject1[]" id="subcategory1">
@@ -149,9 +126,9 @@
                     <div class="d-flex justify-content-center col-sm-12">
                         <select class="form-control form-control-sm text-uppercase category2 m-1 fs-sm" name="school" id="category2">
                                 <option disabled selected> -- select group -- </option>
-                                @foreach ($schools as $school)
-                                    <option value="{{ $school->id }}"> {{ $school->name }}</option>
-                                @endforeach
+                                    @foreach ($groups as $group)
+                                        <option value="{{ $group->id }}"> {{ $group->name }}</option>
+                                    @endforeach
                             </select>
                             <select class="form-control form-control-sm text-uppercase subcategory2 m-1 fs-sm" multiple="multiple" name="subject2[]" id="subcategory2">
                                 <option selected disabled>-- subject(s) -- </option>
@@ -174,9 +151,9 @@
                     <div class="d-flex justify-content-center col-sm-12">
                         <select class="form-control form-control-sm text-uppercase category3 m-1 fs-sm" name="school" id="category3">
                                 <option disabled selected> -- select group -- </option>
-                                @foreach ($schools as $school)
-                                    <option value="{{ $school->id }}"> {{ $school->name }}</option>
-                                @endforeach
+                                    @foreach ($groups as $group)
+                                        <option value="{{ $group->id }}"> {{ $group->name }}</option>
+                                    @endforeach
                             </select>
                             <select class="form-control form-control-sm text-uppercase subcategory3 m-1 fs-sm" multiple="multiple" name="subject3[]" id="subcategory3">
                                 <option selected disabled>-- subject(s) -- </option>
@@ -199,20 +176,14 @@
 
                     <div class="d-flex justify-content-center m-2">
                         <div class="col-12 mb-4">
-                            <label class="form-label">Offerd at: </label>
+                            <label class="form-label">Offered at: </label>
                             <div class="space-x-2">
+                                @foreach($campus as $camp)
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="main" value="MAIN" @if(old('main') === 'campus') checked @endif >
-                                    <label class="form-check-label">MAIN CAMPUS</label>
+                                    <input class="form-check-input" type="checkbox" name="main" value="{{ $camp->name }}" @if(old('main') === 'campus') checked @endif >
+                                    <label class="form-check-label">{{ $camp->name }}</label>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="kwale" value="KWALE" @if(old('kwale') === 'kwale') checked @endif >
-                                    <label class="form-check-label">KWALE CAMPUS</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="lamu" value="LAMU" @if(old('lamu') === 'lamu') checked @endif>
-                                    <label class="form-check-label">LAMU CAMPUS</label>
-                                </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -220,8 +191,8 @@
                 <div class="col-12 text-center p-3">
                   <button type="submit" class="btn btn-alt-success" data-toggle="click-ripple">Create Course</button>
                 </div>
-              </form>
               </div>
+                </form>
             </div>
         </div>
     </div>
@@ -238,17 +209,21 @@
 
                     $.ajax({
                        type:"get",
-                       url:"{{ route('courses.fetchDept') }}",
+                       url:"{{ route('courses.fetchSubjects') }}",
                         data:{'id':cat_id},
                         success:function (data){
 
-                           op+='<option value="0" selected disabled> select department</option>';
+                           console.log(data);
+
+                           op+='<option value="0" selected disabled> select subject</option>';
 
                            for (var i=0;i<data.length;i++){
-                               op+='<option value="'+data[i].name+'">'+data[i].name+'</input>';
+                               op+='<option value="'+data[i].subject+'">'+data[i].subject+'</input>';
                            }
                            div.find('#subcategory').html(" ");
                            div.find("#subcategory").append(op);
+
+                           console.log(op);
                         },
                         error:function (){
 
@@ -269,14 +244,16 @@
 
                     $.ajax({
                         type:"get",
-                        url:"{{ route('courses.fetchDept') }}",
+                        url:"{{ route('courses.fetchSubjects') }}",
                         data:{'id':cat_id},
                         success:function (data){
 
-                            op+='<option value="0" selected disabled> select department</option>';
+                            console.log(data);
+
+                            op+='<option value="0" selected disabled> select subject</option>';
 
                             for (var i=0;i<data.length;i++){
-                                op+='<option value="'+data[i].name+'">'+data[i].name+'</input>';
+                                op+='<option value="'+data[i].subject+'">'+data[i].subject+'</input>';
                             }
                             div.find('#subcategory1').html(" ");
                             div.find("#subcategory1").append(op);
@@ -300,14 +277,14 @@
 
                     $.ajax({
                         type:"get",
-                        url:"{{ route('courses.fetchDept') }}",
+                        url:"{{ route('courses.fetchSubjects') }}",
                         data:{'id':cat_id},
                         success:function (data){
 
-                            op+='<option value="0" selected disabled> select department</option>';
+                            op+='<option value="0" selected disabled> select subject</option>';
 
                             for (var i=0;i<data.length;i++){
-                                op+='<option value="'+data[i].name+'">'+data[i].name+'</input>';
+                                op+='<option value="'+data[i].subject+'">'+data[i].subject+'</input>';
                             }
                             div.find('#subcategory2').html(" ");
                             div.find("#subcategory2").append(op);
@@ -331,14 +308,14 @@
 
                     $.ajax({
                         type:"get",
-                        url:"{{ route('courses.fetchDept') }}",
+                        url:"{{ route('courses.fetchSubjects') }}",
                         data:{'id':cat_id},
                         success:function (data){
 
-                            op+='<option value="0" selected disabled> select department</option>';
+                            op+='<option value="0" selected disabled> select subject</option>';
 
                             for (var i=0;i<data.length;i++){
-                                op+='<option value="'+data[i].name+'">'+data[i].name+'</input>';
+                                op+='<option value="'+data[i].subject+'">'+data[i].subject+'</input>';
                             }
                             div.find('#subcategory3').html(" ");
                             div.find("#subcategory3").append(op);
