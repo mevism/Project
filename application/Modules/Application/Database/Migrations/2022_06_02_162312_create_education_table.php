@@ -18,6 +18,7 @@ return new class extends Migration
             $table->bigInteger('user_id');
             $table->string('institution');
             $table->string('qualification');
+            $table->string('level');
             $table->string('start_date');
             $table->string('exit_date');
             $table->string('certificate')->nullable();

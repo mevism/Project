@@ -15,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('course_name');
-            $table->string('level');
+            $table->string('campus_id');
             $table->string('department_id');
             $table->string('course_code')->unique();
+            $table->string('course_name');
+            $table->string('level');
             $table->timestamps();
             $table->softDeletes();
         });

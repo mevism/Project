@@ -54,8 +54,7 @@
                 <td align="auto" class="bgcolor2" style="padding: 40px 20px 40px 20px; color: #555555; font-family: Arial, sans-serif; font-size: 20px; line-height: 30px; border-bottom: 1px solid #f6f6f6;">
                     <h5>Dear {{ $applicant->fname }} {{ $applicant->mname }} {{ $applicant->sname }}, </h5>
                      <p>
-           
-                        Thank you for your application at Technical University of Mombasa. However we are sorry to inform you that you did not meet the minimum requirements for the course applied. You can visit the <a href="{{ route('root') }}"> TUM Course Application Portal </a> to apply for a new course which you meet the requirements. For any queries you can contact our support at support@tum.ac.ke. 
+                        Congratulations for being approved as successfull applicant of Technical Univerisity of Mombasa. Please visit the <a href="{{ route('root') }}"> TUM Course Application Portal </a>to download your admission documents. For any queries reach use via our email tumsupport@tum.ac.ke
                       
  
                      </p>
@@ -85,7 +84,7 @@
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
                             <td align="center" width="100%" style="color: #999999; font-family: Arial, sans-serif; font-size: 12px;">
-                                2022 &copy; <a href="http://goo.gl/TDOSuC" style="color: #27ae60;">TUM</a>
+                                2022 &copy; <a href="" style="color: #27ae60;">TUM</a>
                             </td>
                         </tr>
                     </table>
