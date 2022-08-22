@@ -74,7 +74,6 @@
                 <span class="nav-main-link-name">
                     Profile
                 </span>
-
               </a>
             </li>
               <div id = 'in_course'>
@@ -85,7 +84,7 @@
                       </a>
                       <ul class='nav-main-submenu'>
                           <li class='nav-main-item'>
-                              <a class='nav-main-link{{ request()->is('student/change_course') ? 'active' : ''  }}' href='{{ route('change_course') }}'>
+                              <a class="nav-main-link{{ request()->is('student/change_course') ? ' active' : ''  }}" href="{{ route('change_course') }}">
                               <i class='nav-main-link-icon si si-user'></i>
                               <span class='nav-main-link-name'>
                                     Change Courses
@@ -94,14 +93,14 @@
                           </li>
                       </ul>
                   </li>
-                  <li class='nav-main-item{{ request()->is('academics/*') ? ' open' : '' }}'>
+                  <li class="nav-main-item{{ request()->is('academics/*') ? ' open' : '' }}">
                       <a class='nav-main-link nav-main-link-submenu' data-toggle='submenu' aria-haspopup='true' aria-expanded='true' href='#'>
                           <i class='nav-main-link-icon si si-user'></i>
                           <span class='nav-main-link-name'>Academics</span>
                       </a>
                       <ul class='nav-main-submenu'>
                           <li class='nav-main-item'>
-                              <a class='nav-main-link{{ request()->is('student/change_course') ? 'active' : ''  }}' href='{{ route('change_course') }}'>
+                              <a class="nav-main-link{{ request()->is('student/exams') ? ' active' : ''  }}" href="{{ route('change_course') }}">
                               <i class='nav-main-link-icon si si-user'></i>
                               <span class='nav-main-link-name'>
                                     Exams Transcripts
@@ -111,7 +110,7 @@
                       </ul>
                       <ul class='nav-main-submenu'>
                           <li class='nav-main-item'>
-                              <a class='nav-main-link{{ request()->is('student/change_course') ? 'active' : ''  }} href='". route('change_course') }}'>
+                              <a class="nav-main-link{{ request()->is('student/fee') ? ' active' : ''  }}" href="{{ route('change_course') }}">
                               <i class='nav-main-link-icon si si-user'></i>
                               <span class='nav-main-link-name'>
                                     Fee
@@ -121,7 +120,7 @@
                       </ul>
                       <ul class='nav-main-submenu'>
                           <li class='nav-main-item'>
-                              <a class='nav-main-link{{ request()->is('student/change_course') ? 'active' : ''  }}' href='{{ route('change_course') }}'>
+                              <a class="nav-main-link{{ request()->is('student/units') ? ' active' : ''  }}" href="{{ route('change_course') }}">
                               <i class='nav-main-link-icon si si-user'></i>
                               <span class='nav-main-link-name'>
                                     Units
@@ -137,7 +136,7 @@
                       </a>
                       <ul class='nav-main-submenu'>
                           <li class='nav-main-item'>
-                              <a class='nav-main-link{{ request()->is('student/change_course') ? 'active' : ''  }}' href='{{ route('change_course') }}'>
+                              <a class="nav-main-link{{ request()->is('student/hostel') ? ' active' : ''  }}" href="{{ route('change_course') }}">
                               <i class='nav-main-link-icon si si-user'></i>
                               <span class='nav-main-link-name'>
                                     Book Hostel
@@ -147,7 +146,7 @@
                       </ul>
                       <ul class='nav-main-submenu'>
                           <li class='nav-main-item'>
-                              <a class='nav-main-link{{ request()->is('student/change_course') ? 'active' : ''  }}' href='{{ route('change_course') }}'>
+                              <a class="nav-main-link{{ request()->is('student/clearing') ? ' active' : ''  }}" href="{{ route('change_course') }}">
                               <i class='nav-main-link-icon si si-user'></i>
                               <span class='nav-main-link-name'>
                                         Clearing
