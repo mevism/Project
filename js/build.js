@@ -618,25 +618,25 @@
 
             if(screen.width >= 856 ) {
 
-                transfers += collect.transfers.map( transfer =>
+                transfers += collect.transfers.map( (transfer,key) =>
                     `${
                         transfer.map((t, k) =>
                             `
-                                <section style = 'text-align:center;width:80%;margin-left:10%;display:flex;flex-wrap:wrap;${(k % 2) ? 'background:rgba(234,234,234,0.6);border:1px solid #fff;' : 'background:#fff;border:1px solid rgba(234,234,234,0.6);'}'>
-                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
-                                        <p>${t.level}</p>
+                                <section style = 'text-align:center;width:80%;margin-left:10%;display:flex;flex-wrap:wrap;${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'background:rgba(234,234,234,0.6);border:1px solid #fff;' : 'background:#fff;border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'background:rgba(234,234,234,0.6);border:1px solid #fff;' : 'background:#fff;border:1px solid rgba(234,234,234,0.6);'}'>
+                                    <div style ='${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
+                                        <p>${ t.level }</p>
                                     </div>
-                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
-                                        ${(t.status == 0) ? `<p class = 'btn btn-sm btn-alt-info'>PENDING COD ACTION</p>` : (t.status == 1) ? `<p class = 'btn btn-sm btn-alt-success'>COD APPROVED</p>` : (t.status == 2) ? `<p class = 'btn btn-sm btn-alt-danger'>COD REJECTED</p>` : (t.status == 3) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD, PENDING DEAN APPROVAL</p>` : (t.status == 4) ? `<p class = 'btn btn-sm btn-alt-success'>COD AND DEAN APPROVED</p>` : (t.status == 5) ? `<p class = 'btn btn-sm btn-alt-danger'>DEAN REJECTED</p>` : (t.status == 6) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD AND DEAN PENDING REGISTRAR</p>` : (t.status == 7) ? `<p class = 'btn btn-sm btn-alt-danger'>REGISTRAR REJECTED</p>` : (t.status == 8) ? `<p class = 'btn btn-sm btn-alt-success'>APPROVED BY COD, DEAN AND REGISTRAR</p>` : `<p class = 'btn btn-sm btn-alt-danger'>ERROR</p>`}</p>
+                                    <div style ='${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
+                                        ${( t.status == 0 ) ? `<p class = 'btn btn-sm btn-alt-info'>PENDING COD ACTION</p>` : (t.status == 1) ? `<p class = 'btn btn-sm btn-alt-success'>COD APPROVED</p>` : (t.status == 2) ? `<p class = 'btn btn-sm btn-alt-danger'>COD REJECTED</p>` : (t.status == 3) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD, PENDING DEAN APPROVAL</p>` : (t.status == 4) ? `<p class = 'btn btn-sm btn-alt-success'>COD AND DEAN APPROVED</p>` : (t.status == 5) ? `<p class = 'btn btn-sm btn-alt-danger'>DEAN REJECTED</p>` : (t.status == 6) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD AND DEAN PENDING REGISTRAR</p>` : (t.status == 7) ? `<p class = 'btn btn-sm btn-alt-danger'>REGISTRAR REJECTED</p>` : (t.status == 8) ? `<p class = 'btn btn-sm btn-alt-success'>APPROVED BY COD, DEAN AND REGISTRAR</p>` : `<p class = 'btn btn-sm btn-alt-danger'>ERROR</p>`}</p>
                                     </div>
-                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
-                                        <p>${t.date}</p>
+                                    <div style ='${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
+                                        <p>${ t.date }</p>
                                     </div>
-                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
-                                        <p>${t.reason}</p>
+                                    <div style ='${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
+                                        <p>${ t.reason }</p>
                                     </div>   
-                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
-                                        ${(t.status == 0) ? `<p class = 'btn btn-sm btn-alt-success'>Opened</p>` : `<p class = 'btn btn-sm btn-alt-danger'>Closed</p>`}
+                                    <div style ='${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
+                                        ${ (t.status == 0) ? `<p class = 'btn btn-sm btn-alt-success'>Opened</p>` : `<p class = 'btn btn-sm btn-alt-danger'>Closed</p>`}
                                     </div>                    
                                 </section>
                             `
@@ -645,28 +645,28 @@
                     `
                 ).join('')
             }else{
-                transfers = collect.transfers.map(transfer =>
+                transfers = collect.transfers.map((transfer,key) =>
                     `
                     ${
                         transfer.map((t, k) =>
 
                             `
-                                <section style = 'text-align:center;width:100%;display:flex;flex-wrap:wrap;${(k % 2) ? 'background:rgba(234,234,234,0.6);border:1px solid #fff;' : 'background:#fff;border:1px solid rgba(234,234,234,0.6);'}'>
-                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
+                                <section style = 'text-align:center;width:100%;display:flex;flex-wrap:wrap;${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'background:rgba(234,234,234,0.6);border:1px solid #fff;' : 'background:#fff;border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'background:rgba(234,234,234,0.6);border:1px solid #fff;' : 'background:#fff;border:1px solid rgba(234,234,234,0.6);'}'>
+                                    <div style ='${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
                                         <h4>USER</h4>
-                                        <p>${t.level}</p>
+                                        <p>${ t.level }</p>
                                     </div>
-                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
+                                    <div style ='${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
                                         <h4>ACTION</h4>
-                                        ${(t.status == 0) ? `<p class = 'btn btn-sm btn-alt-info'>PENDING COD ACTION</p>` : (t.status == 1) ? `<p class = 'btn btn-sm btn-alt-success'>COD APPROVED</p>` : (t.status == 2) ? `<p class = 'btn btn-sm btn-alt-danger'>COD REJECTED</p>` : (t.status == 3) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD, PENDING DEAN APPROVAL</p>` : (t.status == 4) ? `<p class = 'btn btn-sm btn-alt-success'>COD AND DEAN APPROVED</p>` : (t.status == 5) ? `<p class = 'btn btn-sm btn-alt-danger'>DEAN REJECTED</p>` : (t.status == 6) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD AND DEAN PENDING REGISTRAR</p>` : (t.status == 7) ? `<p class = 'btn btn-sm btn-alt-danger'>REGISTRAR REJECTED</p>` : (t.status == 8) ? `<p class = 'btn btn-sm btn-alt-success'>APPROVED BY COD, DEAN AND REGISTRAR</p>` : `<p class = 'btn btn-sm btn-alt-danger'>ERROR</p>`}</p>
+                                        ${ (t.status == 0) ? `<p class = 'btn btn-sm btn-alt-info'>PENDING COD ACTION</p>` : (t.status == 1) ? `<p class = 'btn btn-sm btn-alt-success'>COD APPROVED</p>` : (t.status == 2) ? `<p class = 'btn btn-sm btn-alt-danger'>COD REJECTED</p>` : (t.status == 3) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD, PENDING DEAN APPROVAL</p>` : (t.status == 4) ? `<p class = 'btn btn-sm btn-alt-success'>COD AND DEAN APPROVED</p>` : (t.status == 5) ? `<p class = 'btn btn-sm btn-alt-danger'>DEAN REJECTED</p>` : (t.status == 6) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD AND DEAN PENDING REGISTRAR</p>` : (t.status == 7) ? `<p class = 'btn btn-sm btn-alt-danger'>REGISTRAR REJECTED</p>` : (t.status == 8) ? `<p class = 'btn btn-sm btn-alt-success'>APPROVED BY COD, DEAN AND REGISTRAR</p>` : `<p class = 'btn btn-sm btn-alt-danger'>ERROR</p>`}</p>
                                     </div>
-                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
+                                    <div style ='${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
                                         <h4>DATE</h4>
-                                        <p>${t.date}</p>
+                                        <p>${ t.date }</p>
                                     </div>
-                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
+                                    <div style ='${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
                                         <h4>REASON</h4>
-                                        <p>${t.reason}</p>
+                                        <p>${ t.reason }</p>
                                     </div>  
                                     <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
                                         <h4>STATUS</h4>
@@ -684,17 +684,17 @@
         }else{
             $('#course_interaction').html(
                 `
-                <div class="col-12 col-xl-12">
-                    <div id = 'add-on-l_name' style = 'display:none;'><i class='fas fa-home'></i> Cut Off Points *</div>
-                    <input type = 'text' carry-index = '#add-on-l_name' placeholder="Cut Off Points *" id = 'cut_off_value' >
-                </div>
-                <div class="col-12 col-xl-12">
-                    <select class = 'select_approve' id = 'cut_off_approve' name = 'cut_off_approve' style = 'width:50%;margin-left:25%;'></select>
-                </div>
-                <div class="col-12 col-xl-12">
-                    <button id = 'check-course'  class = 'btn btn-sm btn-alt-info' data-ripple = '' style = 'width:50%;height:40px'>Submit</button>
-                </div>
-            `
+                    <div class="col-12 col-xl-12">
+                        <div id = 'add-on-l_name' style = 'display:none;'><i class='fas fa-home'></i> Cut Off Points *</div>
+                        <input type = 'text' carry-index = '#add-on-l_name' placeholder="Cut Off Points *" id = 'cut_off_value' >
+                    </div>
+                    <div class="col-12 col-xl-12">
+                        <select class = 'select_approve' id = 'cut_off_approve' name = 'cut_off_approve' style = 'width:50%;margin-left:25%;'></select>
+                    </div>
+                    <div class="col-12 col-xl-12">
+                        <button id = 'check-course'  class = 'btn btn-sm btn-alt-info' data-ripple = '' style = 'width:50%;height:40px'>Submit</button>
+                    </div>
+                `
             )
             let collect = await ServerData.bindAuth('GET',`./getCourses`,false)
             console.log(collect)
@@ -703,9 +703,7 @@
     }
     const plotCourses = async() => {
         const intake = $('#all_intake').val().split(',')[0]
-        console.log(intake)
         let collect = await ServerData.bindAuth('POST',`./getCourses`,true,{ intake })
-        console.log(collect)
         let plot_string = "No courses available for this department in the registrar database"
         if(collect.course.length > 0) {
             plot_string = `
