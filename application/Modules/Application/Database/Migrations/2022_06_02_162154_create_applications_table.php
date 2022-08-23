@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_id');
             $table->integer('intake_id');
+            $table->integer('department_id');
             $table->integer('course_id');
             $table->string('subject_1');
             $table->string('subject_2');

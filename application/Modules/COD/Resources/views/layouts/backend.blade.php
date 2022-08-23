@@ -69,7 +69,7 @@
                 <span class="nav-main-link-name">
                     @if(auth()->guard('user')->user()->role_id === 2)
 
-                        {{ auth()->guard('user')->user()->getDept->name }}
+                        {{ auth()->guard('user')->user()->getDept->dept_code }}
 
                     @endif
                 </span>
@@ -112,9 +112,16 @@
                   </a>
                   <ul class="nav-main-submenu">
                       <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('cod.admissions') }}">
+                          <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('cod.jabAdmissions') }}">
                               <i class="nav-main-link-icon si si-calendar"></i>
-                              <span class="nav-main-link-name">View list</span>
+                              <span class="nav-main-link-name">KUCCPS</span>
+                          </a>
+                      </li>
+
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('cod.selfAdmissions') }}">
+                              <i class="nav-main-link-icon si si-calendar"></i>
+                              <span class="nav-main-link-name">Self Sponsored</span>
                           </a>
                       </li>
 

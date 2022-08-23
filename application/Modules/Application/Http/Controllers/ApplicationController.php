@@ -362,6 +362,7 @@ class ApplicationController extends Controller
 
     public function updateApp(Request $request, $id){
 
+
         $request->validate([
             'subject1' => 'required|string',
             'subject2' => 'string|required',
@@ -492,6 +493,7 @@ class ApplicationController extends Controller
     }
 
     public function submitApp(Request $request){
+
         $request->validate([
             'subject1' => 'required|string',
             'subject2' => 'string|required',
@@ -500,12 +502,14 @@ class ApplicationController extends Controller
             ]);
 
         if (Application::where('user_id', Auth::user()->id)->where('course_id', $request->course_id)->first()){
+
             Application::where('user_id', Auth::user()->id)->where('course_id', $request->course_id)->update([
 
-                'subject_1' => $request->subject1,
-                'subject_2' => $request->subject2,
-                'subject_3' => $request->subject3,
-                'subject_4' => $request->subject4,
+
+                'subject_1' => $request->subject1." ".$request->grade1,
+                'subject_2' => $request->subject2." ".$request->grade2,
+                'subject_3' => $request->subject3." ".$request->grade3,
+                'subject_4' => $request->subject4." ".$request->grade4,
                 'campus' => $request->campus
             ]);
         }else {
@@ -514,10 +518,12 @@ class ApplicationController extends Controller
             $application->user_id = Auth::user()->id;
             $application->intake_id = $request->intake;
             $application->course_id = $request->course_id;
-            $application->subject_1 = $request->subject1;
-            $application->subject_2 = $request->subject2;
-            $application->subject_3 = $request->subject3;
-            $application->subject_4 = $request->subject4;
+            $application->department_id = $request->dept;
+            $application->school_id = $request->school;
+            $application->subject_1 = $request->subject1." ".$request->grade1;
+            $application->subject_2 = $request->subject2." ".$request->grade2;
+            $application->subject_3 = $request->subject3." ".$request->grade3;
+            $application->subject_4 = $request->subject4." ".$request->grade4;
             $application->campus = $request->campus;
             $application->save();
         }

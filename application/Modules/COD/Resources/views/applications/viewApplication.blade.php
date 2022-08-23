@@ -50,10 +50,10 @@
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Cluster Subjects</div>
                             <div class="col-md-8">
-                               <p> ENGLISH {{ $app->subject_1 }}</p>
-                                <p> MATHEMATICS {{ $app->subject_2 }}</p>
-                                <p> BUSINESS {{ $app->subject_3 }}</p>
-                                <p> HISTORY {{ $app->subject_4 }}</p>
+                               <p> {{ $app->subject_1 }}</p>
+                                <p> {{ $app->subject_2 }}</p>
+                                <p> {{ $app->subject_3 }}</p>
+                                <p> {{ $app->subject_4 }}</p>
                             </div>
                         </div>
                         <div class="row p-1">

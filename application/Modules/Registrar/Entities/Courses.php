@@ -44,6 +44,12 @@ class Courses extends Model
         return $this->hasOne(CourseRequirement::class, 'course_id');
     }
 
+    public function getCourseDept(){
+
+        return $this->belongsTo(Department::class, 'department_id');
+
+    }
+
     protected static function newFactory()
     {
         return \Modules\Courses\Database\factories\CoursesFactory::new();

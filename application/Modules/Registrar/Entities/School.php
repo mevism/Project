@@ -17,9 +17,9 @@ class School extends Model
         return $this->hasMany(User::class, 'id');
     }
 
-    public function subcategories(){
+    public function departments(){
 
-        return $this->hasMany(Department::class, 'school_id');
+        return $this->hasMany(Department::class, 'id');
     }
 
     protected static function newFactory()

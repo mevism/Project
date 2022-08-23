@@ -51,7 +51,7 @@
                                         @endif
                                     </td>
                                     <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</td>
-                                    <td> {{ $app->courses->department_id }}</td>
+                                    <td> {{ $app->courses->getCourseDept->name }}</td>
                                     <td> {{ $app->courses->course_name }}</td>
                                     <td>
                                         @if($app->cod_status === 0)

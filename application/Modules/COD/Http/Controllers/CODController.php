@@ -2,6 +2,8 @@
 
 namespace Modules\COD\Http\Controllers;
 
+use App\Models\Department;
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -11,6 +13,9 @@ use Modules\Application\Entities\Education;
 use Modules\Finance\Entities\FinanceLog;
 use Modules\COD\Entities\CODLog;
 use Auth;
+use Modules\Registrar\Entities\Courses;
+use Modules\Registrar\Entities\KuccpsApplicant;
+use Modules\Registrar\Entities\KuccpsApplication;
 
 class CODController extends Controller
 {
@@ -18,7 +23,7 @@ class CODController extends Controller
     public function applications(){
 
         $applications = Application::where('cod_status', '>=', 0)
-//            ->where('')
+            ->where('department_id', auth()->guard('user')->user()->department_id)
             ->where('dean_status', null)
             ->orWhere('dean_status', 3)
             ->orderby('id', 'DESC')
@@ -114,9 +119,10 @@ class CODController extends Controller
     }
 
 
-    public function admissions(){
+    public function admissionsSelf(){
 
         $applicant = Application::where('cod_status', 1)
+            ->where('department_id', auth()->guard('user')->user()->department_id)
             ->where('registrar_status', 3)
             ->where('status', 0)
             ->get();
@@ -124,6 +130,22 @@ class CODController extends Controller
 //        return $applicant->id;
 
         return view('cod::admissions.index')->with('applicant', $applicant);
+    }
+
+    public function admissionsJab(){
+
+        $cod = auth()->guard('user')->user()->department_id;
+        $courses = Courses::where('department_id', $cod)->get();
+
+            foreach ($courses as $course){
+
+                $applicant = KuccpsApplication::where('course_code', $course->course_code)
+                    ->where('status', 1)
+                    ->where('registered', null)
+                    ->get();
+            }
+
+        return view('cod::admissions.kuccps')->with('applicant', $applicant);
     }
 
     public function reviewAdmission($id){
@@ -140,11 +162,26 @@ class CODController extends Controller
             }else{
                 $adm = new AdmissionApproval;
                 $adm->app_id = $id;
+                $adm->student_type = 1;
                 $adm->cod_status = 1;
                 $adm->save();
             }
 
-        return redirect()->route('cod.admissions')->with('success', 'New student admitted successfully');
+        return redirect()->route('cod.selfAdmissions')->with('success', 'New student admitted successfully');
+    }
+    public function acceptAdmJab($id){
+
+        if(AdmissionApproval::where('app_id', $id)->exists()){
+            AdmissionApproval::where('app_id', $id)->update(['cod_status' => 1]);
+        }else{
+            $adm = new AdmissionApproval;
+            $adm->app_id = $id;
+            $adm->student_type = 2;
+            $adm->cod_status = 1;
+            $adm->save();
+        }
+
+        return redirect()->back()->with('success', 'New student admitted successfully');
     }
 
     public function rejectAdmission(Request $request, $id){
@@ -159,7 +196,21 @@ class CODController extends Controller
             $adm->save();
         }
 
-        return redirect()->route('cod.admissions')->with('warning', 'Admission request rejected');
+        return redirect()->route('cod.selfAdmissions')->with('warning', 'Admission request rejected');
+    }
+    public function rejectAdmJab(Request $request, $id){
+
+        if (AdmissionApproval::where('app_id', $id)->exists()) {
+            AdmissionApproval::where('app_id', $id)->update(['cod_status' => 2, 'cod_comments' => $request->comment]);
+        }else{
+            $adm = new AdmissionApproval;
+            $adm->app_id = $id;
+            $adm->cod_status = 2;
+            $adm->cod_comments = $request->comment;
+            $adm->save();
+        }
+
+        return redirect()->back()->with('warning', 'Admission request rejected');
     }
 
     public function submitAdmission($id){
@@ -168,8 +219,20 @@ class CODController extends Controller
 
         Application::where('id', $id)->update(['status' => 1]);
 
-        return redirect(route('cod.admissions'))->with('success', 'Record submitted to finance');
+        return redirect()->back()->with('success', 'Record submitted to finance');
     }
+
+
+    public function submitAdmJab($id){
+
+        AdmissionApproval::where('app_id', $id)->update(['finance_status' => 0]);
+
+        KuccpsApplication::where('user_id', $id)->update(['registered' => Carbon::now()]);
+
+        return redirect()->back()->with('success', 'Record submitted to finance');
+    }
+
+
     /**
      * Display a listing of the resource.
      * @return Renderable

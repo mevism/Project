@@ -85,6 +85,7 @@ class UserController extends Controller
                    abort(403)->with('error', 'Please login again');;
                } else{
                    $apps_cod = Application::where('cod_status', 0)
+                       ->where('department_id', auth()->guard('user')->user()->department_id)
                        ->orWhere('dean_status', 3)
                        ->count();
                        return view('cod::COD.index')->with('apps', $apps_cod);
@@ -94,12 +95,14 @@ class UserController extends Controller
                if (!Auth::guard('user')->check()){
                    abort(403)->with('error', 'Please login again');;
                } else{
-                   $apps_dean = Application::where('dean_status', 0)->count();
+                   $apps_dean = Application::where('dean_status', 0)
+                       ->where('school_id', auth()->guard('user')->user()->school_id)->count();
                        return view('dean::dean.index')->with('apps', $apps_dean);
                }
        }elseif (Auth::guard('user')->user()->role_id === 3){
                 $apps_finance = Application::where('cod_status', null)
-                    ->where('finance_status', '!=', 3)->count();
+                    ->where('finance_status', '!=', 3)
+                    ->count();
 
                if (!Auth::guard('user')->check()){
                    abort(403)->with('error', 'Please login again');;

@@ -38,7 +38,7 @@
                       <select name="department" id="department" value="{{ old('department') }}" class="form-control form-control-sm text-uppercase">
                         <option selected disabled> Select Department</option>
                         @foreach ($departments as $department)
-                        <option value="{{ $department->name }}">{{ $department->name }}</option>
+                        <option value="{{ $department->id }}">{{ $department->name }}</option>
                       @endforeach
                       <label class="form-label">DEPARTMENT</label>
                       </select>
@@ -180,7 +180,7 @@
                             <div class="space-x-2">
                                 @foreach($campus as $camp)
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="main" value="{{ $camp->name }}" @if(old('main') === 'campus') checked @endif >
+                                    <input class="form-check-input" type="checkbox" name="main" value="{{ $camp->id }}" @if(old('main') === 'campus') checked @endif >
                                     <label class="form-check-label">{{ $camp->name }}</label>
                                 </div>
                                 @endforeach

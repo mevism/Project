@@ -44,13 +44,13 @@
                             @foreach($applicant as $app)
                                 <tr>
                                     <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }} </td>
-                                    <td> {{ $app->courses->department_id }}</td>
+                                    <td> {{ $app->courses->getCourseDept->name }}</td>
                                     <td> {{ $app->courses->course_name }}</td>
                                     <td>
                                         @if($app->admApproval === NULL)
                                             <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>
                                         @elseif($app->admApproval->cod_status === 1)
-                                            <span class="badge bg-success"> <i class="fa fa-check"></i> approved</span>
+                                            <span class="badge bg-success"> <i class="fa fa-check"></i> accepted</span>
                                         @else
                                             <span class="badge bg-danger"> <i class="fa fa-close"></i> rejected</span>
                                         @endif

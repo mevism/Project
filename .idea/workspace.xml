@@ -22360,6 +22360,9 @@
       <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/.gitignore" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/testing/.gitignore" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/b70075be66cf2da2c56a7c4fa24f6a970e4e31f9.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/cfc7f6891a832cd03d775d031e94f6c825d719a9.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/db61d26d43540f299eff212e1c03ad961853d358.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/logs/.gitignore" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/stubs/nwidart-stubs/assets/js/app.stub" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/stubs/nwidart-stubs/assets/sass/app.stub" afterDir="false" />
@@ -30424,18 +30427,18 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/application/Modules/COD/Resources/views/admissions" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.editor" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\sims\application\Modules\COD\Resources\views\admissions" />
       <recent name="C:\xampp\htdocs\sims" />
       <recent name="C:\xampp\htdocs\sims\application\Modules\Application\Resources\assets" />
       <recent name="C:\xampp\htdocs\sims\application\Modules\Student\Resources\views\layouts" />
       <recent name="C:\xampp\htdocs\sims\application\Modules\Hostel\Resources\views\layouts" />
-      <recent name="C:\xampp\htdocs\sims\application\Modules\Registrar\Resources\views\layouts" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\sims" />
@@ -30482,7 +30485,9 @@
       <workItem from="1660643931611" duration="11547000" />
       <workItem from="1660712341411" duration="25774000" />
       <workItem from="1660985912901" duration="16934000" />
-      <workItem from="1661070992693" duration="23351000" />
+      <workItem from="1661070992693" duration="49333000" />
+      <workItem from="1661230923951" duration="297000" />
+      <workItem from="1661234676724" duration="24658000" />
     </task>
     <servers />
   </component>

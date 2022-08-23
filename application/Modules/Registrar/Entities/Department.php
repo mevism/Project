@@ -16,6 +16,15 @@ class Department extends Model
         return $this->hasMany(User::class, 'id');
     }
 
+    public function schools(){
+        return $this->belongsTo(School::class, 'school_id');
+    }
+
+    public function getDeptCourse(){
+
+        return $this->hasMany(Courses::class, 'id');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Courses\Database\factories\DepartmentFactory::new();

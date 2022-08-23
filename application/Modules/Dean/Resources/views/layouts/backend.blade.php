@@ -68,7 +68,7 @@
                 <i class="nav-main-link-icon si si-cursor"></i>
                 <span class="nav-main-link-name">
                     @if(auth()->guard('user')->user()->role_id === 4)
-                        {{ auth()->guard('user')->user()->getSch->name }}
+                        {{ auth()->guard('user')->user()->getSch->initials }}
                     @else
 
                     @endif

@@ -54,7 +54,7 @@
                                             <span class="badge bg-danger"> <i class="fa fa-close"></i> rejected</span>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td nowrap="">
                                         @if($app->finance_status === 0)
                                             <a class="btn btn-sm btn-alt-info" data-toogle="click-ripple" href="{{ route('finance.reviewAdmission', $app->id) }}"> verify</a>
                                         @elseif($app->finance_status === 1)

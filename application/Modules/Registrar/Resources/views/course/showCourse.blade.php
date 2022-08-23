@@ -68,7 +68,7 @@
             @foreach ($data as $courses)
             <tr>
               {{-- <td style="text-transform: uppercase" >{{ $courses->school_id }}</td> --}}
-              <td style="text-transform: uppercase" >{{ $courses->department_id }}</td>
+              <td style="text-transform: uppercase" >{{ $courses->getCourseDept }}</td>
               <td style="text-transform: uppercase" >{{ $courses->course_name }}</td>
               <td nowrap="">
                 <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editCourse', $courses->id) }}">edit</a>

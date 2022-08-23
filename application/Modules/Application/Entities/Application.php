@@ -49,7 +49,7 @@ class Application extends Model
 
     public function admApprovals(){
 
-        return $this->hasOne(AdmissionApproval::class, 'app_id');
+        return $this->hasOne(AdmissionApproval::class, 'id');
     }
 
 //    public function admitApproval(){

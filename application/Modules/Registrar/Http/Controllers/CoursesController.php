@@ -98,7 +98,7 @@ class CoursesController extends Controller
 
 
 
-            sleep(2);
+//            sleep(2);
 
             if($app->kuccpsApplication->status === null){
 
@@ -109,8 +109,6 @@ class CoursesController extends Controller
 
                 $course  =  Courses::where('course_code', $app->kuccpsApplication->course_code)
                 ->first();
-
-                // return $course->course_duration;
 
             $domPdfPath = base_path('vendor/dompdf/dompdf');
             \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
@@ -124,40 +122,41 @@ class CoursesController extends Controller
              $my_template->setValue('postal_code', strtoupper($app->postal_code));
              $my_template->setValue('town', strtoupper($app->town));
              $my_template->setValue('course', $app->kuccpsApplication->course_name);
-             $my_template->setValue('department', $course->department_id);
+             $my_template->setValue('department', $course->getCourseDept->name);
              $my_template->setValue('duration', $course->courseRequirements->course_duration);
              $my_template->setValue('from', Carbon\carbon::parse($app->kuccpsApplication->kuccpsIntake->intake_from)->format('d-m-Y'));
              $my_template->setValue('to', Carbon\carbon::parse($app->kuccpsApplication->kuccpsIntake->intake_to)->format('d-m-Y'));
              $my_template->setValue('reg_number', $app->kuccpsApplication->course_code."/".str_pad(1 + $regNumber, 3, "0", STR_PAD_LEFT)."J"."/".Carbon\carbon::parse($app->kuccpsApplication->kuccpsIntake->intake_from)->format('Y'));
-             $my_template->setValue('ref_number', 'APP/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT));
+             $my_template->setValue('ref_number', 'APP/JAB/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT));
              $my_template->setValue('date',  date('d-M-Y'));
 
 
-               $docPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx");
+               $docPath = storage_path('APP_JAB'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx");
 
                         $my_template->saveAs($docPath);
 
                         $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
 
-                        $pdfPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf");
+                        $pdfPath = storage_path('APP_JAB'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf");
 
-                        if(file_exists($pdfPath)){
-                            unlink($pdfPath);
-                        }
+//                        if(file_exists($pdfPath)){
+//                            unlink($pdfPath);
+//                        }
 
-                        $converter = new OfficeConverter(storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
-                        $converter->convertTo('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).'.pdf');
+//                        $converter = new OfficeConverter(storage_path('APP_JAB'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
+//                        $converter->convertTo('APP_JAB'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).'.pdf');
+//
+//                if(file_exists($docPath)){
+//                    unlink($docPath);
+//                }
 
-                if(file_exists($docPath)){
-                    unlink($docPath);
-                }
+                $app->kuccpsApplication->status = 1;
+                $app->kuccpsApplication->save();
 
                 Mail::to($app->email)->send(new KuccpsMails($app));
 
                 // KuccpsApplication::where('user_id', $app->id)->update('status', 1);
 
-                $app->kuccpsApplication->status = 1;
-                $app->kuccpsApplication->save();
 
             }
 
@@ -263,46 +262,46 @@ class CoursesController extends Controller
                      $my_template = new TemplateProcessor(storage_path('adm_template.docx'));
 
                      $my_template->setValue('name', strtoupper($app->applicant->sname." ".$app->applicant->mname." ".$app->applicant->fname));
-                     $my_template->setValue('address', strtoupper($app->applicant->address));
+                     $my_template->setValue('box', strtoupper($app->applicant->address));
                      $my_template->setValue('postal_code', strtoupper($app->applicant->postal_code));
                      $my_template->setValue('town', strtoupper($app->applicant->town));
                      $my_template->setValue('course', $app->courses->course_name);
-                     $my_template->setValue('department', $app->courses->department_id);
-                     $my_template->setValue('duration', $app->courses->course_duration);
+                     $my_template->setValue('department', $app->courses->getCourseDept->name);
+                     $my_template->setValue('duration', $app->courses->courseRequirements->course_duration);
                      $my_template->setValue('from', Carbon\carbon::parse($app->app_intake->intake_from)->format('d - m - Y'));
                      $my_template->setValue('to', Carbon\carbon::parse($app->app_intake->intake_to)->format('d-m-Y'));
                      $my_template->setValue('reg_number', $app->courses->course_code."/".str_pad(0000 + $app->id, 4, "0", STR_PAD_LEFT)."/". Carbon\carbon::parse($app->app_intake->intake_from)->format('Y'));
-                     $my_template->setValue('ref_number', 'APP/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT));
+                     $my_template->setValue('ref_number', 'APP/PT/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT));
                      $my_template->setValue('date',  date('d-M-Y'));
 
 
-                       $docPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx");
+                       $docPath = storage_path('APP_PT'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx");
 
                                 $my_template->saveAs($docPath);
 
                                 $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
 
-                                $pdfPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf");
+                                $pdfPath = storage_path('APP_PT'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf");
 
                                 if(file_exists($pdfPath)){
                                     unlink($pdfPath);
                                 }
 
-                                $converter = new OfficeConverter(storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
-                                $converter->convertTo('APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).'.pdf');
-
-                        if(file_exists($docPath)){
-                            unlink($docPath);
-                        }
+//                                $converter = new OfficeConverter(storage_path('APP_PT'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
+//                                $converter->convertTo('APP_PT'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).'.pdf');
+//
+//                        if(file_exists($docPath)){
+//                            unlink($docPath);
+//                        }
 
                     Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails($app->applicant));
 
                     $app->find($id);
                     $app->registrar_status = 3;
                     $app->status = 0;
-                    $app->ref_number = 'APP/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT);
+                    $app->ref_number = 'APP/PT/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT);
                     $app->reg_number = $app->courses->course_code."/".str_pad(0000 + $app->id, 4, "0", STR_PAD_LEFT)."/".date('Y');
-                    $app->adm_letter = 'APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf";
+                    $app->adm_letter = 'APP_PT'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf";
                     $app->save();
 
             }elseif($app->dean_status === 2){

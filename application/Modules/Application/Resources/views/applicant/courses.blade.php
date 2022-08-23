@@ -52,8 +52,8 @@
 {{--                @dd($item)--}}
                 <tr>
                     <td> {{ $item->mainCourses->course_name }}</td>
-                    <td> {{ $item->mainCourses->department_id }}</td>
-                    <td> {{ $item->mainCourses->course_duration }}</td>
+                    <td> {{ $item->mainCourses->getCourseDept->name }}</td>
+                    <td> {{ $item->mainCourses->courseRequirements->course_duration }}</td>
                     <td nowrap="">
                         {{ Carbon\carbon::parse($item->openCourse->intake_from)->format('M')}} - {{ Carbon\carbon::parse($item->openCourse->intake_to)->format('M Y') }}
                     </td>
