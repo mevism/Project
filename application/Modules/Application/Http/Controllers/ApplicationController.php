@@ -243,51 +243,104 @@ class ApplicationController extends Controller
 
     public function makeupdate(Request $request){
 
-        $request->validate([
-            'sname' => 'required|alpha',
-            'fname' => 'required|alpha',
-            'mname' => 'string|nullable',
-            'dob'=> 'required:date_format:Y-M-D|before:2006-05-16',
-            'gender' => 'required|string',
-            'disabled' => 'required',
-            'disability' => 'string|nullable',
-            'index_number' => 'required|string|unique:applicants',
-            'alt_number' => 'required|regex:/(0)[0-9]{9}/|min:10|max:10',
-            'address' => 'required|string',
-            'nationality' => 'required|string',
-            'county' => 'required|string',
-            'subcounty' => 'required|string',
-            'town' => 'required|string',
-            'title' => 'required|string',
-            'status' => 'required|string',
-            'id_number' => 'required|alpha_num|min:7|unique:applicants'
-        ]);
+        if (Auth::user()->student_type === 2){
 
-//        $request->all();
+            $request->validate([
+                'sname' => 'required|alpha',
+                'fname' => 'required|alpha',
+                'mname' => 'string|nullable',
+                'dob'=> 'required:date_format:Y-M-D|before:2006-05-16',
+                'disabled' => 'required',
+                'disability' => 'string|nullable',
+                'address' => 'required|numeric',
+                'postalcode' => 'required|numeric',
+                'nationality' => 'required|string',
+                'county' => 'required|string',
+                'subcounty' => 'required|string',
+                'town' => 'required|string',
+                'title' => 'required|string',
+                'status' => 'required|string',
+                'id_number' => 'required|alpha_num|min:7|unique:applicants',
+                'email' => 'required',
+                'mobile' => 'required|regex:/(0)[0-9]{9}/|min:10|max:10|'
+            ]);
 
-        $user = Applicant::where('id', Auth::user()->id)->first();
-        $user->sname = $request->sname;
-        $user->fname = $request->fname;
-        $user->mname = $request->mname;
-        $user->gender = $request->gender;
-        $user->index_number = $request->index_number;
-        $user->id_number = $request->id_number;
-        $user->alt_mobile = $request->alt_number;
-        $user->alt_email = $request->alt_email;
-        $user->dob = $request->dob;
-        $user->disabled = $request->disabled;
-        $user->disability = $request->disability;
-        $user->title = $request->title;
-        $user->nationality = $request->nationality;
-        $user->county = $request->county;
-        $user->sub_county = $request->subcounty;
-        $user->town = $request->town;
-        $user->address = $request->address;
-        $user->postal_code = $request->postalcode;
-        $user->user_status = 1;
-        $user->title = $request->title;
-        $user->marital_status = $request->status;
-        $user->save();
+            $user = Applicant::where('id', Auth::user()->id)->first();
+            $user->sname = trim($request->sname);
+            $user->fname = trim($request->fname);
+            $user->mname = trim($request->mname);
+            $user->gender = trim(Auth::user()->gender);
+            $user->index_number = trim(Auth::user()->index_number);
+            $user->id_number = trim($request->id_number);
+            $user->alt_mobile = trim($request->alt_number);
+            $user->mobile = trim($request->mobile);
+            $user->email = trim($request->email);
+            $user->alt_email = trim($request->alt_email);
+            $user->dob = trim($request->dob);
+            $user->disabled = trim($request->disabled);
+            $user->disability = trim($request->disability);
+            $user->title = trim($request->title);
+            $user->nationality = trim($request->nationality);
+            $user->county = trim($request->county);
+            $user->sub_county = trim($request->subcounty);
+            $user->town = trim($request->town);
+            $user->address = trim($request->address);
+            $user->postal_code = trim($request->postalcode);
+            $user->user_status = trim(1);
+            $user->title = trim($request->title);
+            $user->marital_status = trim($request->status);
+            $user->save();
+
+        }else{
+
+            $request->validate([
+                'sname' => 'required|alpha',
+                'fname' => 'required|alpha',
+                'mname' => 'string|nullable',
+                'dob'=> 'required:date_format:Y-M-D|before:2006-05-16',
+                'gender' => 'required|string',
+                'disabled' => 'required',
+                'disability' => 'string|nullable',
+                'index_number' => 'required|string|unique:applicants',
+                'alt_number' => 'required|regex:/(0)[0-9]{9}/|min:10|max:10',
+                'address' => 'required|numeric',
+                'postalcode' => 'required|numeric',
+                'nationality' => 'required|string',
+                'county' => 'required|string',
+                'subcounty' => 'required|string',
+                'town' => 'required|string',
+                'title' => 'required|string',
+                'status' => 'required|string',
+                'id_number' => 'required|alpha_num|min:7|unique:applicants'
+            ]);
+
+            $user = Applicant::where('id', Auth::user()->id)->first();
+            $user->sname = trim($request->sname);
+            $user->fname = trim($request->fname);
+            $user->mname = trim($request->mname);
+            $user->gender = trim($request->gender);
+            $user->index_number = trim($request->index_number);
+            $user->id_number = trim($request->id_number);
+            $user->alt_mobile = trim($request->alt_number);
+            $user->mobile = trim($request->mobile);
+            $user->email = trim($request->email);
+            $user->alt_email = trim($request->alt_email);
+            $user->dob = trim($request->dob);
+            $user->disabled = trim($request->disabled);
+            $user->disability = trim($request->disability);
+            $user->title = trim($request->title);
+            $user->nationality = trim($request->nationality);
+            $user->county = trim($request->county);
+            $user->sub_county = trim($request->subcounty);
+            $user->town = trim($request->town);
+            $user->address = trim($request->address);
+            $user->postal_code = trim($request->postalcode);
+            $user->user_status = trim(1);
+            $user->title = trim($request->title);
+            $user->marital_status = trim($request->status);
+            $user->save();
+
+        }
 
         return redirect()->route('application.applicant')->with('success', 'You have successfully updated your profile');
 
