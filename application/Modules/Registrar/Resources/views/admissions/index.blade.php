@@ -44,7 +44,7 @@
                             <tbody>
                             @foreach($admission as $app)
                                 <tr>
-                                    <td nowrap=""> {{ $app->admApproval->applicant->sname }} {{ $app->admApproval->applicant->fname }} {{ $app->admApproval->applicant->mname }} </td>
+                                    <td nowrap=""> {{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->fname }} {{ $app->appApprovals->applicant->mname }} </td>
                                     <td> {{ $app->appApprovals->courses->department_id }}</td>
                                     <td> {{ $app->appApprovals->courses->course_name }}</td>
                                     <td>

@@ -97,6 +97,10 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
     Route::get('admit/{id}', [CoursesController::class, 'admitStudent'])->name('courses.admitStudent');
     Route::get('studentId{id}', [CoursesController::class, 'studentID'])->name('courses.studentID');
     Route::post('storeStudentId{id}', [CoursesController::class, 'storeStudentId'])->name('courses.storeStudentId');
+    Route::get('admissionsJab', [CoursesController::class, 'admissionsJab'])->name('courses.admissionsJab');
+    Route::get('admit/{id}', [CoursesController::class, 'admitStudent'])->name('courses.admitStudent');
+    Route::get('studentId{id}', [CoursesController::class, 'studentID'])->name('courses.studentID');
+    Route::post('storeStudentId{id}', [CoursesController::class, 'storeStudentId'])->name('courses.storeStudentId');
 
 
 

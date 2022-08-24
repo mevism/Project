@@ -37,6 +37,11 @@ class KuccpsApplication extends Model
         return $this->hasOne(AdmissionApproval::class, 'user_id');
     }
 
+    public function studentKuccps(){
+
+        return $this->hasOne(AdmissionApproval::class, 'user_id');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Registrar\Database\factories\KuccpsApplicationFactory::new();

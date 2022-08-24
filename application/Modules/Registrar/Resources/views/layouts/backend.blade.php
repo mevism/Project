@@ -67,7 +67,7 @@
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
                 <i class="nav-main-link-icon si si-cursor"></i>
                 <span class="nav-main-link-name">
-                    @if(auth()->guard('user')->user()->id === 1)
+                    @if(auth()->guard('user')->user()->role_id === 1)
                         Administrator
                     @elseif(auth()->guard('user')->user()->id === 6)
                         Student
@@ -174,7 +174,7 @@
                     <span class="nav-main-link-name">
                        Import File
                     </span>
-    
+
                   </a>
                 </li>
 
@@ -190,12 +190,16 @@
                   </a>
                   <ul class="nav-main-submenu">
                       <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('courses.admissionsJab') }}">
+                              <i class="nav-main-link-icon si si-user"></i>
+                              <span class="nav-main-link-name"> KUCCPS</span>
+                          </a>
+                      </li>
+
+                      <li class="nav-main-item">
                           <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('courses.admissions') }}">
                               <i class="nav-main-link-icon si si-user"></i>
-                              <span class="nav-main-link-name">
-                       View list
-                    </span>
-
+                              <span class="nav-main-link-name"> Self Sponsored</span>
                           </a>
                       </li>
                   </ul>

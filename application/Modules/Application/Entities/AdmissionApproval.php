@@ -32,6 +32,11 @@ class AdmissionApproval extends Model
         return $this->belongsTo(KuccpsApplication::class, 'app_id');
     }
 
+    public function kuccpsStudent(){
+
+        return $this->belongsTo(KuccpsApplication::class, 'app_id');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Application\Database\factories\AdmissionApprovalFactory::new();

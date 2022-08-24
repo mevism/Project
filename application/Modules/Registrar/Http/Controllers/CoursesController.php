@@ -139,16 +139,16 @@ class CoursesController extends Controller
 
                         $pdfPath = storage_path('APP_JAB'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf");
 
-//                        if(file_exists($pdfPath)){
-//                            unlink($pdfPath);
-//                        }
+                        if(file_exists($pdfPath)){
+                            unlink($pdfPath);
+                        }
 
-//                        $converter = new OfficeConverter(storage_path('APP_JAB'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
-//                        $converter->convertTo('APP_JAB'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).'.pdf');
-//
-//                if(file_exists($docPath)){
-//                    unlink($docPath);
-//                }
+                        $converter = new OfficeConverter(storage_path('APP_JAB'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
+                        $converter->convertTo('APP_JAB'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).'.pdf');
+
+                if(file_exists($docPath)){
+                    unlink($docPath);
+                }
 
                 $app->kuccpsApplication->status = 1;
                 $app->kuccpsApplication->save();
@@ -287,12 +287,12 @@ class CoursesController extends Controller
                                     unlink($pdfPath);
                                 }
 
-//                                $converter = new OfficeConverter(storage_path('APP_PT'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
-//                                $converter->convertTo('APP_PT'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).'.pdf');
-//
-//                        if(file_exists($docPath)){
-//                            unlink($docPath);
-//                        }
+                                $converter = new OfficeConverter(storage_path('APP_PT'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
+                                $converter->convertTo('APP_PT'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).'.pdf');
+
+                        if(file_exists($docPath)){
+                            unlink($docPath);
+                        }
 
                     Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails($app->applicant));
 
@@ -880,10 +880,21 @@ class CoursesController extends Controller
     public function admissions(){
 
         $admission = AdmissionApproval::where('medical_status', 1)
+            ->where('student_type', 1)
             ->where('status', NULL)
             ->get();
 
         return view('registrar::admissions.index')->with('admission', $admission);
+    }
+
+    public function admissionsJab(){
+
+        $admission = AdmissionApproval::where('medical_status', 1)
+            ->where('student_type', 2)
+            ->where('status', NULL)
+            ->get();
+
+        return view('registrar::admissions.kuccps')->with('admission', $admission);
     }
 
     public function admitStudent($id){
