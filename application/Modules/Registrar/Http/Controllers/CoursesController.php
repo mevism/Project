@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
+use Modules\Application\Entities\Applicant;
 use Modules\Registrar\Entities\Campus;
 use Modules\Registrar\Entities\Intake;
 use Modules\Registrar\Entities\School;
@@ -89,78 +90,104 @@ class CoursesController extends Controller
 
     public function accepted(){
 
-        $kuccps = KuccpsApplicant::where('email', '!=', NULL)->get();
+        $kuccps = KuccpsApplicant::where('status', 0)->get();
+
+            foreach ($kuccps as $applicant){
+
+                $course = Courses::where('course_code', $applicant->kuccpsApplication->course_code)->first();
+
+                $regNumber = Application::where('course_id', $course->id)
+                    ->where('intake_id', $applicant->kuccpsApplication->intake_id)
+                    ->count();
+
+                        $app = new Applicant;
+
+                        $app->index_number = $applicant->index_number;
+                        $app->password = Hash::make($applicant->index_number);
+                        $app->username = $applicant->index_number;
+                        $app->email = $applicant->email;
+                        $app->alt_email = $applicant->alt_email;
+                        $app->sname = $applicant->sname;
+                        $app->fname = $applicant->fname;
+                        $app->mname = $applicant->mname;
+                        $app->gender = $applicant->gender;
+                        $app->phone_verification = 1;
+                        $app->email_verified_at = date('d-m-Y');
+                        $app->mobile = $applicant->mobile;
+                        $app->alt_mobile = $applicant->alt_mobile;
+                        $app->town = $applicant->town;
+                        $app->address = $applicant->BOX;
+                        $app->postal_code = $applicant->postal;
+                        $app->student_type = 2;
+                        $app->save();
+
+                                $app_course = new Application;
+                                $app_course->user_id = $app->id;
+                                $app_course->intake_id = $applicant->kuccpsApplication->intake_id;
+                                $app_course->department_id = $course->department_id;
+                                $app_course->school_id = $course->getCourseDept->school_id;
+                                $app_course->course_id = $course->id;
+                                $app_course->finance_status = 1;
+                                $app_course->cod_status = 1;
+                                $app_course->dean_status = 1;
+                                $app_course->registrar_status = 3;
+                                $app_course->status = 1;
+                                $app_course->ref_number = 'APP/'.date('Y')."/".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT);
+                                $app_course->reg_number = $applicant->kuccpsApplication->course_code."/".str_pad($regNumber + 1, 3, "0", STR_PAD_LEFT)."J"."/".Carbon\carbon::parse($applicant->kuccpsApplication->kuccpsIntake->intake_from)->format('Y');
+                                $app_course->adm_letter = 'APP'."_".date('Y')."_".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT).'.pdf';
+                                    $app_course->save();
+
+                    $domPdfPath = base_path('vendor/dompdf/dompdf');
+                    \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
+                    \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+
+                    $my_template = new TemplateProcessor(storage_path('adm_template.docx'));
+
+                    $my_template->setValue('name', strtoupper($applicant->sname." ".$applicant->mname." ".$applicant->fname));
+                    $my_template->setValue('box', strtoupper( $applicant->BOX));
+                    $my_template->setValue('address', strtoupper($applicant->address));
+                    $my_template->setValue('postal_code', strtoupper($applicant->postal_code));
+                    $my_template->setValue('town', strtoupper($applicant->town));
+                    $my_template->setValue('course', $applicant->kuccpsApplication->course_name);
+                    $my_template->setValue('department', $course->getCourseDept->name);
+                    $my_template->setValue('duration', $course->courseRequirements->course_duration);
+                    $my_template->setValue('from', Carbon\carbon::parse($applicant->kuccpsApplication->kuccpsIntake->intake_from)->format('d-m-Y'));
+                    $my_template->setValue('to', Carbon\carbon::parse($applicant->kuccpsApplication->kuccpsIntake->intake_to)->format('d-m-Y'));
+                    $my_template->setValue('reg_number', $applicant->kuccpsApplication->course_code."/".str_pad(1 + $regNumber, 3, "0", STR_PAD_LEFT)."J"."/".Carbon\carbon::parse($applicant->kuccpsApplication->kuccpsIntake->intake_from)->format('Y'));
+                    $my_template->setValue('ref_number', 'APP/'.date('Y')."/".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT));
+                    $my_template->setValue('date',  date('d-M-Y'));
 
 
-        foreach($kuccps  as $app){
+                    $docPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT).".docx");
 
-            // return ;
+                    $my_template->saveAs($docPath);
 
+                    $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
 
+                    $pdfPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT).".pdf");
 
-//            sleep(2);
+                    if(file_exists($pdfPath)){
+                        unlink($pdfPath);
+                    }
 
-            if($app->kuccpsApplication->status === null){
-
-
-                $regNumber = KuccpsApplication::where('course_code', $app->kuccpsApplication->course_code)
-                ->where('intake_id', $app->kuccpsApplication->kuccpsIntake->id)
-                ->where('status', '!=', NULL)->count();
-
-                $course  =  Courses::where('course_code', $app->kuccpsApplication->course_code)
-                ->first();
-
-            $domPdfPath = base_path('vendor/dompdf/dompdf');
-            \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
-            \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
-
-             $my_template = new TemplateProcessor(storage_path('adm_template.docx'));
-
-             $my_template->setValue('name', strtoupper($app->sname." ".$app->mname." ".$app->fname));
-             $my_template->setValue('box', strtoupper( $app->BOX));
-             $my_template->setValue('address', strtoupper($app->address));
-             $my_template->setValue('postal_code', strtoupper($app->postal_code));
-             $my_template->setValue('town', strtoupper($app->town));
-             $my_template->setValue('course', $app->kuccpsApplication->course_name);
-             $my_template->setValue('department', $course->getCourseDept->name);
-             $my_template->setValue('duration', $course->courseRequirements->course_duration);
-             $my_template->setValue('from', Carbon\carbon::parse($app->kuccpsApplication->kuccpsIntake->intake_from)->format('d-m-Y'));
-             $my_template->setValue('to', Carbon\carbon::parse($app->kuccpsApplication->kuccpsIntake->intake_to)->format('d-m-Y'));
-             $my_template->setValue('reg_number', $app->kuccpsApplication->course_code."/".str_pad(1 + $regNumber, 3, "0", STR_PAD_LEFT)."J"."/".Carbon\carbon::parse($app->kuccpsApplication->kuccpsIntake->intake_from)->format('Y'));
-             $my_template->setValue('ref_number', 'APP/JAB/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT));
-             $my_template->setValue('date',  date('d-M-Y'));
-
-
-               $docPath = storage_path('APP_JAB'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx");
-
-                        $my_template->saveAs($docPath);
-
-                        $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
-
-                        $pdfPath = storage_path('APP_JAB'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf");
-
-                        if(file_exists($pdfPath)){
-                            unlink($pdfPath);
-                        }
-
-                        $converter = new OfficeConverter(storage_path('APP_JAB'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
-                        $converter->convertTo('APP_JAB'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).'.pdf');
+                $converter = new OfficeConverter(storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
+                $converter->convertTo('APP'."_".date('Y')."_".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT).'.pdf');
 
                 if(file_exists($docPath)){
                     unlink($docPath);
                 }
 
-                $app->kuccpsApplication->status = 1;
-                $app->kuccpsApplication->save();
+                Application::where('user_id', $applicant->id)->update(['status' => 0]);
+                KuccpsApplicant::where('id', $applicant->id)->update(['status' => 1]);
 
-                Mail::to($app->email)->send(new KuccpsMails($app));
+                if ($applicant->email != null){
 
-                // KuccpsApplication::where('user_id', $app->id)->update('status', 1);
+                    Mail::to($applicant->email)->send(new KuccpsMails($applicant));
 
+                }
 
             }
 
-        }
         return redirect()->back()->with('success', 'Email sent');
     }
 
@@ -177,7 +204,7 @@ class CoursesController extends Controller
     public function importExportViewkuccps(){
         $intakes = Intake::where('status',1)->get();
 
-        $newstudents = KuccpsApplication::where('status', null)->get();
+        $newstudents = KuccpsApplicant::where('status', 0)->get();
 
         return view('registrar::offer.kuccps')->with(['intakes' => $intakes, 'new' => $newstudents]);
 

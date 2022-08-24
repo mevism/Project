@@ -17,12 +17,18 @@ class Department extends Model
     }
 
     public function schools(){
+
         return $this->belongsTo(School::class, 'school_id');
     }
 
     public function getDeptCourse(){
 
         return $this->hasMany(Courses::class, 'id');
+    }
+
+    public function Sch(){
+
+        return $this->belongsTo(School::class, 'school_id');
     }
 
     protected static function newFactory()

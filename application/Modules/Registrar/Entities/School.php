@@ -22,6 +22,11 @@ class School extends Model
         return $this->hasMany(Department::class, 'id');
     }
 
+    public function Dept(){
+
+        return $this->hasMany(Department::class, 'id');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Courses\Database\factories\SchoolFactory::new();

@@ -132,22 +132,6 @@ class CODController extends Controller
         return view('cod::admissions.index')->with('applicant', $applicant);
     }
 
-    public function admissionsJab(){
-
-        $cod = auth()->guard('user')->user()->department_id;
-        $courses = Courses::where('department_id', $cod)->get();
-
-            foreach ($courses as $course){
-
-                $applicant = KuccpsApplication::where('course_code', $course->course_code)
-                    ->where('status', 1)
-                    ->where('registered', null)
-                    ->get();
-            }
-
-        return view('cod::admissions.kuccps')->with('applicant', $applicant);
-    }
-
     public function reviewAdmission($id){
         $app = Application::find($id);
         $school = Education::find($id);

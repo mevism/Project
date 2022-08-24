@@ -180,7 +180,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[2, 'asc']],
+            order: [[4, 'desc']],
             rowGroup: {
                 dataSrc: 2
             }

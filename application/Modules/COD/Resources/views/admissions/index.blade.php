@@ -56,14 +56,94 @@
                                         @endif
                                     </td>
                                     <td nowrap="">
-                                        @if($app->admApproval === NULL)
-                                            <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->id) }}"> Verify </a>
-                                        @elseif($app->admApproval->cod_status === 1)
-                                            <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->id) }}"> Edit </a>
-                                            <a class="btn btn-sm btn-alt-success" href="{{ route('cod.submitAdmission', $app->id) }}"> Submit </a>
+
+                                        @if($app->applicant->student_type === 2)
+                                            @if($app->admApproval === NULL)
+                                                <a class="btn btn-sm btn-alt-info" onclick="return confirm('Are you sure you want to approve?')" data-toggle="click-ripple" href="{{ route('cod.acceptAdmission', $app->id) }}">Accept</a>
+                                                <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
+                                                <div class="modal fade" id="modal-block-popin" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-popin" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="block block-rounded block-transparent mb-0">
+                                                                <div class="block-header block-header-default">
+                                                                    <h3 class="block-title">Reason(s) </h3>
+                                                                    <div class="block-options">
+                                                                        <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                                                            <i class="fa fa-fw fa-times"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="block-content fs-sm">
+                                                                    <form action="{{ route('cod.rejectAdmission', $app->id) }}" method="post">
+                                                                        @csrf
+                                                                        <div class="row col-md-12 mb-3">
+                                                                            <textarea class="form-control" placeholder="Write down the reasons for declining this application" name="comment" required></textarea>
+                                                                            <input type="hidden" name="{{ $app->id }}">
+                                                                        </div>
+                                                                        <div class="d-flex justify-content-center mb-2">
+                                                                            <button type="submit" class="btn btn-alt-danger btn-sm">Reject</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="block-content block-content-full text-end bg-body">
+                                                                    <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>
+                                                                    {{--                        <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Okay</button>--}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @elseif($app->admApproval->cod_status === 1)
+                                                <a class="btn btn-sm btn-alt-success" href="{{ route('cod.submitAdmission', $app->id) }}"> Submit </a>
+                                                <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
+                                                <div class="modal fade" id="modal-block-popin" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-popin" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="block block-rounded block-transparent mb-0">
+                                                                <div class="block-header block-header-default">
+                                                                    <h3 class="block-title">Reason(s) </h3>
+                                                                    <div class="block-options">
+                                                                        <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                                                            <i class="fa fa-fw fa-times"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="block-content fs-sm">
+                                                                    <form action="{{ route('cod.rejectAdmission', $app->id) }}" method="post">
+                                                                        @csrf
+                                                                        <div class="row col-md-12 mb-3">
+                                                                            <textarea class="form-control" placeholder="Write down the reasons for declining this application" name="comment" required></textarea>
+                                                                            <input type="hidden" name="{{ $app->id }}">
+                                                                        </div>
+                                                                        <div class="d-flex justify-content-center mb-2">
+                                                                            <button type="submit" class="btn btn-alt-danger btn-sm">Reject</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="block-content block-content-full text-end bg-body">
+                                                                    <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>
+                                                                    {{--                        <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Okay</button>--}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <a class="btn btn-sm btn-alt-info" onclick="return confirm('Are you sure you want to approve?')" data-toggle="click-ripple" href="{{ route('cod.acceptAdmission', $app->id) }}">Accept</a>
+                                            @endif
+
                                         @else
-                                            <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->id) }}"> Edit </a>
+                                            @if($app->admApproval === NULL)
+                                                    <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->id) }}"> Verify </a>
+                                            @elseif($app->admApproval->cod_status === 1)
+                                                <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->id) }}"> Edit </a>
+                                                <a class="btn btn-sm btn-alt-success" href="{{ route('cod.submitAdmission', $app->id) }}"> Submit </a>
+                                            @else
+                                                    <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->id) }}"> Edit </a>
+
+                                            @endif
                                         @endif
+
                                     </td>
                                 </tr>
                             @endforeach
@@ -88,7 +168,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[2, 'asc']],
+            order: [[4, 'asc']],
             rowGroup: {
                 dataSrc: 2
             }
