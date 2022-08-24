@@ -63,7 +63,7 @@
                                         @if($app->appApprovals->applicant->student_type === 2)
 
                                             @if($app->finance_status === 0)
-                                                <a class="btn btn-sm btn-alt-info" data-toogle="click-ripple" href="{{ route('finance.acceptAdmission', $app->id) }}"> Accept</a>
+                                                <a class="btn btn-sm btn-alt-info" onclick="return confirm('Are you sure you want to approve?')" data-toggle="click-ripple" href="{{ route('finance.acceptAdmission', $app->id) }}"> Accept</a>
                                                 <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
 
                                                 <div class="modal fade" id="modal-block-popin" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
@@ -99,7 +99,7 @@
                                                     </div>
                                                 </div>
                                             @elseif($app->finance_status === 1)
-                                                <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" href="{{ route('finance.submitAdmission',$app->id) }}"> submit</a>
+                                                <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('finance.submitAdmission',$app->id) }}"> submit</a>
                                                 <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
 
                                                 <div class="modal fade" id="modal-block-popin" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
@@ -136,7 +136,7 @@
                                                 </div>
 
                                             @else
-                                                <a class="btn btn-sm btn-alt-info" data-toogle="click-ripple" href="{{ route('finance.acceptAdmission', $app->id) }}"> Accept</a>
+                                                <a class="btn btn-sm btn-alt-info" onclick="return confirm('Are you sure you want to approve?')" data-toggle="click-ripple" href="{{ route('finance.acceptAdmission', $app->id) }}"> Accept</a>
                                             @endif
 
                                         @else
@@ -144,7 +144,7 @@
                                                 <a class="btn btn-sm btn-alt-info" data-toogle="click-ripple" href="{{ route('finance.reviewAdmission', $app->id) }}"> verify</a>
                                             @elseif($app->finance_status === 1)
                                                 <a class="btn btn-sm btn-alt-primary" data-toogle="click-ripple" href="{{ route('finance.reviewAdmission', $app->id) }}"> edit</a>
-                                                <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" href="{{ route('finance.submitAdmission',$app->id) }}"> submit</a>
+                                                <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('finance.submitAdmission',$app->id) }}"> submit</a>
                                             @else
                                                 <a class="btn btn-sm btn-alt-primary" data-toogle="click-ripple" href="{{ route('finance.reviewAdmission', $app->id) }}"> edit</a>
                                             @endif

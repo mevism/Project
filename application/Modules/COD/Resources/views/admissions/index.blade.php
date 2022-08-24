@@ -94,7 +94,7 @@
                                                     </div>
                                                 </div>
                                             @elseif($app->admApproval->cod_status === 1)
-                                                <a class="btn btn-sm btn-alt-success" href="{{ route('cod.submitAdmission', $app->id) }}"> Submit </a>
+                                                <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('cod.submitAdmission', $app->id) }}"> Submit </a>
                                                 <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
                                                 <div class="modal fade" id="modal-block-popin" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-popin" role="document">
@@ -137,7 +137,7 @@
                                                     <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->id) }}"> Verify </a>
                                             @elseif($app->admApproval->cod_status === 1)
                                                 <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->id) }}"> Edit </a>
-                                                <a class="btn btn-sm btn-alt-success" href="{{ route('cod.submitAdmission', $app->id) }}"> Submit </a>
+                                                <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('cod.submitAdmission', $app->id) }}"> Submit </a>
                                             @else
                                                     <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->id) }}"> Edit </a>
 

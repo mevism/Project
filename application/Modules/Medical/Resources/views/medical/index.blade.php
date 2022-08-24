@@ -1,5 +1,5 @@
 @extends('medical::layouts.backend')
 @section('content')
 
-    medicine
+    MEDICINE
 @endsection
