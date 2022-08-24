@@ -88,7 +88,7 @@
                                             </div>
                                         </div>
                                     @if($app->medical_status === 0)
-                                        <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to approve?')" href="{{ route('medical.acceptAdmission', $app->id) }}"> Accept</a>
+                                        <a class="btn btn-sm btn-alt-info" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to approve?')" href="{{ route('medical.acceptAdmission', $app->id) }}"> Accept</a>
                                         <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin{{ $app->id }}"> Reject</a>
                                             <div class="modal fade" id="modal-block-popin" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin{{ $app->id }}" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-popin" role="document">
@@ -158,7 +158,7 @@
                                                 </div>
                                             </div>
                                     @else
-                                        <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to approve?')" href="{{ route('medical.acceptAdmission', $app->id) }}"> approve</a>
+                                        <a class="btn btn-sm btn-alt-info" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to approve?')" href="{{ route('medical.acceptAdmission', $app->id) }}"> accept</a>
                                     @endif
                                 </td>
                             </tr>
