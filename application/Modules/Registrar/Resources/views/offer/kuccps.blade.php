@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <div class="container">
+    <div class="content">
     <div  style="margin-left:20%;" class="block block-rounded col-md-9 col-lg-8 col-xl-6">
         <div class="block-header block-header-default">
             <h3 class="block-title">Import </h3>
@@ -35,9 +35,8 @@
             <div class="row">
                 <div class="col-lg-12 space-y-0">
 
-                
-                        
-                <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.importkuccps') }}" method="post" enctype="multipart/form-data">
+                @if(count($new) === 0)
+                    <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.importkuccps') }}" method="post" enctype="multipart/form-data">
 
                     @csrf
                     <div class="col-12 col-xl-12">
@@ -45,7 +44,7 @@
                         <select name="intake" id="intake" value="" class="form-control form-control-alt text-uppercase">
                           <option selected disabled> Select Intake</option>
                           @foreach ($intakes as $intake)
-                            <option value="{{ $intake->id }}">{{ Carbon\carbon::parse($intake->intake_from)->format('M')}} - {{ Carbon\carbon::parse($intake->intake_to)->format('M Y') }}</option>        
+                            <option value="{{ $intake->id }}">{{ Carbon\carbon::parse($intake->intake_from)->format('M')}} - {{ Carbon\carbon::parse($intake->intake_to)->format('M Y') }}</option>
                           @endforeach
                         </select>
                       </div>
@@ -64,20 +63,19 @@
                     </div> --}}
 
                 </form>
+                    @else
             </div>
-
-                @if(count($new) > 0)
                 <div class="d-flex justify-content-center">
 
-                    <span class="text-success"> You have imported {{ count($new) }} new students </span> 
+                    <span class="text-success"> You have imported {{ count($new) }} new students </span>
 
                 </div>
-                @endif
                   <div class="d-flex justify-content-center">
 
-                     <a class="btn btn-sm btn-success col-md-4 mt-4" href="{{ route('courses.accepted') }}" data-toggle="click-ripple"> Send Mails </a>
-            
+                     <a class="btn btn-sm btn-alt-success col-md-4 mt-4" onclick="return confirm('Do you want to generate letters? The process can not be reversed!!!')" href="{{ route('courses.accepted') }}" data-toggle="click-ripple"> Generate Admission Letters </a>
+
                      </div>
+                @endif
                   </div>
         </div>
     </div>
