@@ -27,9 +27,12 @@ Route::prefix('applications')->group(function() {
 
 
         Route::get('/admission', [FinanceController::class, 'admissions'])->name('finance.admissions');
+        Route::get('/admissionJab', [FinanceController::class, 'admissionsJab'])->name('finance.admissionsJab');
         Route::get('/review{id}', [FinanceController::class, 'reviewAdmission'])->name('finance.reviewAdmission');
         Route::get('/accept{id}', [FinanceController::class, 'acceptAdmission'])->name('finance.acceptAdmission');
+        Route::get('/acceptJab/{id}', [FinanceController::class, 'acceptAdmissionJab'])->name('finance.acceptAdmJab');
         Route::post('/reject{id}', [FinanceController::class, 'rejectAdmission'])->name('finance.rejectAdmission');
         Route::get('/submit{id}', [FinanceController::class, 'submitAdmission'])->name('finance.submitAdmission');
+        Route::get('/submitJab/{id}', [FinanceController::class, 'submitAdmissionJab'])->name('finance.submitAdmJab');
     });
 });

@@ -10,6 +10,8 @@ use Modules\Application\Entities\Application;
 use Modules\Application\Entities\Education;
 use Modules\Finance\Entities\FinanceLog;
 use Auth;
+use Modules\Registrar\Entities\Courses;
+
 class FinanceController extends Controller
 {
     /**
@@ -111,10 +113,10 @@ class FinanceController extends Controller
 
         return redirect()->route('finance.batch')->with('success', '1 Batch elevated for COD approval');
     }
-
     public function admissions(){
 
         $apps = AdmissionApproval::where('cod_status', 1)
+            ->where('student_type', 1)
             ->where('finance_status', '!=', NULL)
             ->where('medical_status', NULL)
             ->get();
@@ -122,6 +124,17 @@ class FinanceController extends Controller
 //        return $apps->admApproval;
 
         return view('applications::admissions.index')->with('applicant', $apps);
+    }
+
+    public function admissionsJab(){
+
+            $admission = AdmissionApproval::where('cod_status', 1)
+                ->where('student_type', 2)
+                ->where('finance_status', '!=', NULL)
+                ->where('medical_status', NULL)
+                ->get();
+
+        return view('applications::admissions.kuccps')->with('applicant', $admission);
     }
 
     public function reviewAdmission($id){
@@ -134,10 +147,22 @@ class FinanceController extends Controller
     }
 
     public function acceptAdmission($id){
-            AdmissionApproval::where('id', $id)->update(['finance_status' => 1]);
+
+            $admission = AdmissionApproval::find($id);
+            $admission->finance_status = 1;
+            $admission->save();
 
         return redirect()->route('finance.admissions')->with('success', 'New student verified successfully');
     }
+
+        public function acceptAdmissionJab($id){
+
+                $admission = AdmissionApproval::find($id);
+                $admission->finance_status = 1;
+                $admission->save();
+
+            return redirect()->back()->with('success', 'New student verified successfully');
+        }
 
     public function rejectAdmission(Request $request, $id){
 
@@ -148,8 +173,20 @@ class FinanceController extends Controller
 
     public function submitAdmission($id){
 
-        AdmissionApproval::where('id', $id)->update(['medical_status' => 0]);
+        $admission = AdmissionApproval::find($id);
+        $admission->medical_status = 0;
+        $admission->save();
+
         return redirect(route('finance.admissions'))->with('success', 'Record submitted to Registrar');
+    }
+
+    public function submitAdmissionJab($id){
+
+        $admission = AdmissionApproval::find($id);
+        $admission->medical_status = 0;
+        $admission->save();
+
+        return redirect()->back()->with('success', 'Record submitted to Registrar');
     }
 
     public function index()

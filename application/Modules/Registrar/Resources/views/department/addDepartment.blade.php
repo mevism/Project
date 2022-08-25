@@ -35,17 +35,26 @@
                    <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.storeDepartment') }}" method="POST">
                     @csrf
                     
-                    <div class="col-12 col-xl-12">
+                      <div class="form-floating col-12 col-xl-12">
                       <select name="school" class="form-control form-control-alt text-uppercase">
                         <option selected disabled> Select School </option>
                         @foreach ($schools as $school)
                         <option value="{{ $school->name }}">{{ $school->name }}</option>        
                         @endforeach
+                        <label class="form-label">SCHOOL NAME</label>
                       </select>
                     </div>
-                    <div class="col-12 col-xl-12">
-                      <input type="text" value="{{ old('name') }}"  class="form-control form-control-alt text-uppercase" id="name" name="name" placeholder="Department">
+
+                    <div class="form-floating col-12 col-xl-12">
+                      <input type="text" value="{{ old('dept_code') }}"  class="form-control form-control-alt text-uppercase" id="dept_code" name="dept_code" placeholder="Department code">
+                      <label class="form-label">DEPARTMENT CODE</label>
                     </div>
+
+                    <div class="form-floating col-12 col-xl-12">
+                      <input type="text" value="{{ old('name') }}"  class="form-control form-control-alt text-uppercase" id="name" name="name" placeholder="Department Name">
+                      <label class="form-label">DEPARTMENT NAME</label>
+                    </div>
+
                     <div class="col-12 text-center p-3">
                       <button type="submit" class="btn btn-alt-success" data-toggle="click-ripple">Create Department</button>
                     </div>

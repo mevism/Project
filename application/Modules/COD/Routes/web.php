@@ -24,10 +24,14 @@ Route::prefix('department')->group(function() {
         Route::get('/acceptApplication/{id}', [CODController::class, 'acceptApplication'])->name('cod.acceptApplication');
         Route::post('/rejectApplication/{id}', [CODController::class, 'rejectApplication'])->name('cod.rejectApplication');
 
-        Route::get('/admission', [CODController::class, 'admissions'])->name('cod.admissions');
+        Route::get('/admissionJab', [CODController::class, 'admissionsJab'])->name('cod.jabAdmissions');
+        Route::get('/admissionSelf', [CODController::class, 'admissionsSelf'])->name('cod.selfAdmissions');
         Route::get('/review/{id}', [CODController::class, 'reviewAdmission'])->name('cod.reviewAdmission');
         Route::get('/accept/{id}', [CODController::class, 'acceptAdmission'])->name('cod.acceptAdmission');
         Route::post('/reject/{id}', [CODController::class, 'rejectAdmission'])->name('cod.rejectAdmission');
+        Route::get('/acceptjab/{id}', [CODController::class, 'acceptAdmJab'])->name('cod.acceptAdmJab');
+        Route::post('/rejectjab/{id}', [CODController::class, 'rejectAdmJab'])->name('cod.rejectAdmJab');
         Route::get('/submit/{id}', [CODController::class, 'submitAdmission'])->name('cod.submitAdmission');
+        Route::get('/submitAdmJab/{id}', [CODController::class, 'submitAdmJab'])->name('cod.submitAdmJab');
     });
 });

@@ -45,7 +45,7 @@
                             @foreach($admission as $app)
                                 <tr>
                                     <td nowrap=""> {{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->fname }} {{ $app->appApprovals->applicant->mname }} </td>
-                                    <td> {{ $app->appApprovals->courses->department_id }}</td>
+                                    <td> {{ $app->appApprovals->courses->getCourseDept->name }}</td>
                                     <td> {{ $app->appApprovals->courses->course_name }}</td>
                                     <td>
                                         @if($app->registrar_status === 0)

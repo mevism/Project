@@ -59,7 +59,7 @@
             </span><br>
             <thead>
                 <th>Classes</th>
-                <th>Attendance</th>
+                <th>Attendance MODE</th>
                 <th>Course</th>
                 <th>Action</th>
             </thead>
@@ -72,14 +72,14 @@
                 <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ $class->course_id }}</td>
                 <td>
                   <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editClasses', $class->id) }}">edit</a>
-                <a class="btn btn-sm btn-alt-danger" href="{{ route('courses.destroyClasses', $class->id) }}">delete</a>
+                <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this course ?')" href="{{ route('courses.destroyClasses', $class->id) }}">delete</a>
               </td>
               </tr>
               @endforeach
 
             </tbody>
           </table>
-          {{ $data->links('pagination::bootstrap-5') }}
+        
             </div>
         </div>
       </div>

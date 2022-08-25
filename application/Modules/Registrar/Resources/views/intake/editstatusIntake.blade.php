@@ -40,21 +40,20 @@
                         <br>
                         <div class="col-12">
                          <select name="status"  class="form-control form-control-alt">
-                             <option selected disabled value="" class="form-select">
+                             <option disabled value="{{ $data->status }}" class="form-select">
                               @if ($data->status === 0)
                                 pending
                                 @elseif ($data->status === 1)
                                 Active
                                 @elseif ($data->status  === 2)
                                 Inactive
-                                @else ($data->status === 3)
+                                @else
                                 Suspended
                               @endif
-
                              </option>
-                             <option value="2">Expired</option>
-                             <option value="1">Active</option>
                              <option value="0">Pending</option>
+                             <option value="1">Active</option>
+                             <option value="2">Expired</option>
                              <option value="3">Suspended</option>
                          </select>
                         </div>

@@ -42,22 +42,22 @@
         <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
             @csrf
             @method('delete')
-            @if(count($archived)>0)
+            @if(count($archived) >0 ) 
                 <thead>
-                    <th>Applicant Name</th>
-                    <th>Department</th>
-                    <th>Course</th>
                     <th>Ref. number</th>
+                    <th>Applicant Name</th>
+                    {{-- <th>Department</th> --}}
+                    {{-- <th>Course</th> --}}
                     <th>Status</th>
 
                 </thead>
                 <tbody>
                 @foreach($archived as $item)
                         <tr>
-                            <td> {{ $item->applicant->sname }} {{ $item->applicant->fname }} {{ $item->applicant->mname }}</td>
-                            <td> {{ $item->courses->department_id }}</td>
-                            <td> {{ $item->courses->course_name }}</td>
                             <td> {{ $item->ref_number }}</td>
+                            <td> {{ $item->applicant->sname }} {{ $item->applicant->fname }} {{ $item->applicant->mname }}</td>
+                            {{-- <td> {{ $item->courses->department_id }}</td> --}}
+                            {{-- <td> {{ $item->courses->course_name }}</td> --}}
                             <td> @if ($item->registrar_status === 4 || 3)<a  class="badge badge-sm bg-info" >Completed</a>
                                 @endif
                             </td>

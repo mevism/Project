@@ -22,6 +22,7 @@
           </nav>
       </div>
   </div>
+  
 </div>
     <div class="content">
       <div  style="margin-left:20%;" class="block block-rounded col-md-9 col-lg-8 col-xl-6">
@@ -35,11 +36,13 @@
                    <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.storeAttendance') }}" method="POST">
                     @csrf
 
-                    <div class="col-12 col-xl-12">
+                    <div class="form-floating col-12 col-xl-12">
                       <input type="text" class="form-control form-control-alt" value="{{ old('attendance_name') }}"id="attendance_name" name="attendance_name" placeholder="Attendance Name">
+                      <label class="form-label">ATTENDANCE NAME</label>
                     </div>
-                    <div class="col-12 col-xl-12">
+                    <div class="form-floating col-12 col-xl-12">
                       <input type="text" class="form-control form-control-alt"  value="{{ old('attendance_code') }}"id="attendance_code" name="attendance_code" placeholder="Attendance Code">
+                      <label class="form-label">ATTENDANCE CODE</label>
                     </div>
 
                     <div class="col-12 text-center p-3">

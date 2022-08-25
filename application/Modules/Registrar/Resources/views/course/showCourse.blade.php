@@ -58,21 +58,21 @@
         </span><br>
           <thead>
             <tr>
-              <th>  Schools     </th>
-              <th>  Departments </th>
-              <th> Course       </th>
+              {{-- <th>  Schools     </th> --}}
+              <th>  Department NAME </th>
+              <th> Course NAME       </th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
             @foreach ($data as $courses)
             <tr>
-              <td style="text-transform: uppercase" >{{ $courses->school_id }}</td>
-              <td style="text-transform: uppercase" >{{ $courses->department_id }}</td>
+              {{-- <td style="text-transform: uppercase" >{{ $courses->school_id }}</td> --}}
+              <td style="text-transform: uppercase" >{{ $courses->getCourseDept }}</td>
               <td style="text-transform: uppercase" >{{ $courses->course_name }}</td>
               <td nowrap="">
                 <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editCourse', $courses->id) }}">edit</a>
-                <a class="btn btn-sm btn-alt-danger" href="{{ route('courses.destroyCourse', $courses->id) }}">delete</a>
+                <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this course ?')" href="{{ route('courses.destroyCourse', $courses->id) }}">delete</a>
               </td>
             </tr>
             @endforeach

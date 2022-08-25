@@ -34,30 +34,32 @@
                    <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.storeClasses') }}" method="POST">
                     @csrf
 
-                    <div class="col-12 col-xl-12">
+                    <div class="form-floating col-12 col-xl-12">
                       <select name="attendance"  class="form-control form-control-alt">
                         <option selected disabled> Select Attendance</option>
 
                           @foreach($attendances as $attend)
                               <option value="{{ $attend->attendance_code }}">{{ $attend->attendance_name }}</option>
                           @endforeach
+                          <label class="form-label">ATTENDANCE CODE</label>
                       </select>
                     </div>
-                    <div class="col-12 col-xl-12">
+                    <div class="form-floating col-12 col-xl-12">
                       <select name="intake_from" class="form-control form-control-alt">
                         <option selected disabled>Select Intake</option>
                         @foreach ($intakes as $intake)
                           <option value="{{ $intake->intake_from }}">{{ Carbon\Carbon::parse($intake->intake_from)->format('M-Y') }} - {{ Carbon\Carbon::parse($intake->intake_to)->format('M-Y') }}</option>
                         @endforeach
+                        <label class="form-label">INTAKE NAME</label>
                       </select>
                     </div>
-                    <div class="col-12 col-xl-12">
+                    <div class="form-floating col-12 col-xl-12">
                       <select name="course" id="course" class="form-control form-control-alt">
                         <option selected disabled> Select Course</option>
                         @foreach ($courses as $item)
                           <option value="{{ $item->course_code }}">{{ $item->course_name }}</option>
                         @endforeach
-                      
+                        <label class="form-label">COURSE NAME</label>
                       </select>
                     </div>
                     <div class="col-12 text-center p-3">

@@ -15,4 +15,5 @@ class Classes extends Model
     {
         return \Modules\Courses\Database\factories\ClassesFactory::new();
     }
+
 }

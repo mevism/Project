@@ -32,13 +32,15 @@
 
                    <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.storeSchool') }}" method="POST">
                     @csrf 
-                    <div class="col-12 col-xl-12">
-                      <input type="text" value="{{ old('name') }}"  class="form-control form-control-alt text-uppercase" id="name" name="name" placeholder="School">
-                     
+                    <div class="form-floating col-12 col-xl-12">
+                      <input type="text" value="{{ old('initials') }}"  class="form-control form-control-alt text-uppercase" id="initials" name="initials" placeholder="School Code">
+                      <label class="form-label">SCHOOL INITIALS</label>
                     </div>
-                    <div class="col-12 col-xl-12">
-                      <input type="text" value="{{ old('initials') }}"  class="form-control form-control-alt text-uppercase" id="initials" name="initials" placeholder="Initials">
+                    <div class="form-floating col-12 col-xl-12">
+                      <input type="text" value="{{ old('name') }}"  class="form-control form-control-alt text-uppercase" id="name" name="name" placeholder="School Name">
+                      <label class="form-label">SCHOOL NAME</label>
                     </div>
+                 
                     <div class="col-12 text-center p-3">
                       <button type="submit"  class="btn btn-alt-success" data-toggle="click-ripple">Create School</button>
                     </div>

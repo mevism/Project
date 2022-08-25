@@ -50,10 +50,10 @@
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Cluster Subjects</div>
                             <div class="col-md-8">
-                               <p> ENGLISH {{ $app->subject_1 }}</p>
-                                <p> MATHEMATICS {{ $app->subject_2 }}</p>
-                                <p> BUSINESS {{ $app->subject_3 }}</p>
-                                <p> HISTORY {{ $app->subject_4 }}</p>
+                                <p> {{ $app->subject_1 }}</p>
+                                <p> {{ $app->subject_2 }}</p>
+                                <p> {{ $app->subject_3 }}</p>
+                                <p> {{ $app->subject_4 }}</p>
                             </div>
                         </div>
                         <div class="row p-1">
@@ -61,9 +61,9 @@
                             <div class="col-md-8">
 
                                 @if($app->dean_status === 1)
-                                    <span class="badge bg-success">Approved by Dean</span>
+                                    <span class="badge bg-success">Agreed by Dean</span>
                                 @elseif($app->dean_status === 2)
-                                    <span class="badge bg-danger">Rejected by Dean</span>
+                                    <span class="badge bg-danger">Disagreed by Dean</span>
                                 @elseif($app->dean_status === 3)
                                     <span class="badge bg-primary">Awaiting COD review</span>
                                 @else
@@ -84,14 +84,14 @@
         <div class="d-flex justify-content-center py-1">
 
             @if($app->registrar_status === 0)
-                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('courses.acceptApplication', $app->id) }}">Approve</a>
-                <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
+                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('courses.acceptApplication', $app->id) }}">Agree</a>
+                <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Disagree</a>
                 <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('courses.applications') }}">Close</a>
             @elseif($app->registrar_status === 1)
-                    <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
+                    <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Disagree</a>
                     <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('courses.applications') }}">Close</a>
             @else
-                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('courses.acceptApplication', $app->id) }}">Approve</a>
+                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('courses.acceptApplication', $app->id) }}">Agree</a>
                 <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('courses.applications') }}">Close</a>
             @endif
         </div>
@@ -118,7 +118,7 @@
                             <input type="hidden" name="{{ $app->id }}">
                             </div>
                             <div class="d-flex justify-content-center mb-2">
-                            <button type="submit" class="btn btn-alt-danger btn-sm">Reject</button>
+                            <button type="submit" class="btn btn-alt-danger btn-sm">Disagree</button>
                             </div>
                         </form>
                     </div>

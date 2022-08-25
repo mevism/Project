@@ -50,10 +50,10 @@
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Cluster Subjects</div>
                             <div class="col-md-8">
-                               <p> ENGLISH {{ $app->subject_1 }}</p>
-                                <p> MATHEMATICS {{ $app->subject_2 }}</p>
-                                <p> BUSINESS {{ $app->subject_3 }}</p>
-                                <p> HISTORY {{ $app->subject_4 }}</p>
+                               <p> {{ $app->subject_1 }}</p>
+                                <p> {{ $app->subject_2 }}</p>
+                                <p> {{ $app->subject_3 }}</p>
+                                <p> {{ $app->subject_4 }}</p>
                             </div>
                         </div>
                         <div class="row p-1">
@@ -62,7 +62,7 @@
                                 @if($app->cod_status === 0)
                                     <span class="badge bg-primary">Pending</span>
                                 @elseif($app->cod_status === 1)
-                                    <span class="badge bg-success">Approved by COD</span>
+                                    <span class="badge bg-success">Accepted by COD</span>
                                 @elseif($app->cod_status === 2)
                                     <span class="badge bg-danger">Rejected by COD</span>
                                 @else
@@ -94,18 +94,18 @@
             </div>
         <div class="d-flex justify-content-center py-1">
             @if($app->cod_status === 0)
-            <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('cod.acceptApplication', $app->id) }}">Approve</a>
+            <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('cod.acceptApplication', $app->id) }}">Accept</a>
             <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
             <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('cod.applications') }}">Close</a>
                 @elseif($app->dean_status === 3)
-                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('cod.acceptApplication', $app->id) }}">Approve</a>
+                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('cod.acceptApplication', $app->id) }}">Accept</a>
                 <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
                 <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('cod.applications') }}">Close</a>
             @elseif($app->cod_status === 1)
                 <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
                 <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('cod.applications') }}">Close</a>
             @else
-                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('cod.acceptApplication', $app->id) }}">Approve</a>
+                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('cod.acceptApplication', $app->id) }}">Accept</a>
                 <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('cod.applications') }}">Close</a>
             @endif
         </div>

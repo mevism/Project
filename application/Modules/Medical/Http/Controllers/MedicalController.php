@@ -20,19 +20,39 @@ class MedicalController extends Controller
 
     public function admissions(){
         $adm = AdmissionApproval::where('finance_status', 1)
+            ->where('student_type', 1)
             ->where('registrar_status', NULL)
             ->get();
-
-//        $adm = AdmissionApproval::all();
 
         return view('medical::admissions.index')->with('admission', $adm);
     }
 
+    public function admissionsJab(){
+        $adm = AdmissionApproval::where('finance_status', 1)
+            ->where('student_type', 2)
+            ->where('registrar_status', NULL)
+            ->get();
+
+        return view('medical::admissions.kuccps')->with('admission', $adm);
+    }
+
     public function acceptAdmission($id){
 
-            AdmissionApproval::where('id', $id)->update(['medical_status' => 1]);
+            $admission = AdmissionApproval::find($id);
+            $admission->medical_status = 1;
+            $admission->save();
 
         return redirect()->route('medical.admissions')->with('success', 'New student successfully verified');
+    }
+
+
+    public function acceptAdmissionJab($id){
+
+        $admission = AdmissionApproval::find($id);
+        $admission->medical_status = 1;
+        $admission->save();
+
+        return redirect()->back()->with('success', 'New student successfully verified');
     }
 
     public function rejectAdmission(Request $request, $id){
@@ -44,9 +64,21 @@ class MedicalController extends Controller
 
     public function submitAdmission($id){
 
-        AdmissionApproval::where('id', $id)->update(['registrar_status' => 0]);
+        $admission = AdmissionApproval::find($id);
+        $admission->registrar_status = 0;
+        $admission->save();
 
         return redirect()->route('medical.admissions')->with('success', 'New student approved successfully');
+
+    }
+
+    public function submitAdmissionJab($id){
+
+        $admission = AdmissionApproval::find($id);
+        $admission->registrar_status = 0;
+        $admission->save();
+
+        return redirect()->back()->with('success', 'New student approved successfully');
 
     }
 

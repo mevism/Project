@@ -67,18 +67,8 @@
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
                 <i class="nav-main-link-icon si si-cursor"></i>
                 <span class="nav-main-link-name">
-                    @if(auth()->guard('user')->user()->id === 1)
-                        Administrator
-                    @elseif(auth()->guard('user')->user()->id === 6)
-                        Student
-                    @elseif(auth()->guard('user')->user()->id === 2)
-                        DEPARTMENTAL HEAD
-                    @elseif(auth()->guard('user')->user()->id === 4)
-                        DEAN
-                    @elseif(auth()->guard('user')->user()->id === 3)
+                    @if(auth()->guard('user')->user()->role_id === 3)
                         FINANCE
-                    @else
-
                     @endif
                 </span>
 
@@ -122,7 +112,7 @@
                       <li class="nav-main-item">
                           <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('finance.admissions') }}">
                               <i class="nav-main-link-icon si si-calendar"></i>
-                              <span class="nav-main-link-name">View list</span>
+                              <span class="nav-main-link-name">View Admissions</span>
                           </a>
                       </li>
                   </ul>

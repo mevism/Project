@@ -87,7 +87,7 @@
                     <td> 
                       <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.viewIntake', $intake->id) }}">view</a> 
                    {{-- <td> <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editIntake', $intake->id) }}">edit</a> </td> --}}
-                      <a class="btn btn-sm btn-alt-danger" href="{{ route('courses.destroyIntake', $intake->id) }}">delete</a> 
+                      <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this intake ?')" href="{{ route('courses.destroyIntake', $intake->id) }}">delete</a> 
                     </td>
                   </tr>
                   @endforeach

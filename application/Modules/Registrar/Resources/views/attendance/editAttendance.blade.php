@@ -24,11 +24,13 @@
                     @csrf
                     @method('PUT')
 
-                    <div class="col-12 col-xl-12">
+                   <div class="form-floating col-12 col-xl-12">
                       <input type="text" class="form-control form-control-alt" value="{{ $data->attendance_name }}" id="attendance_name" name="attendance_name" placeholder="Name">
+                      <label class="form-label">ATTENDANCE NAME</label>
                     </div>
-                    <div class="col-12 col-xl-12">
+                   <div class="form-floating col-12 col-xl-12">
                       <input type="text" class="form-control form-control-alt" value="{{ $data->attendance_code }}"id="attendance_code" name="attendance_code" placeholder="Attendance Code">
+                      <label class="form-label">ATTENDANCE CODE</label>
                     </div>
 
                     <div class="col-12 text-center p-3">

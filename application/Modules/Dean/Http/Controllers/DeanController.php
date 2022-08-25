@@ -16,6 +16,7 @@ class DeanController extends Controller
     public function applications(){
 
         $applications = Application::where('dean_status', '!=', 3)
+            ->where('school_id', auth()->guard('user')->user()->school_id)
             ->where('registrar_status', null)
             ->orWhere('registrar_status', 4)
             ->orderBy('id', 'DESC')

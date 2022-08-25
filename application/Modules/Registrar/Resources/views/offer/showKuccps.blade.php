@@ -54,14 +54,16 @@
                 <div class="col-lg-12">
 
                 <table id="example" class="table table-bordered table-striped js-dataTable-responsive fs-sm">
-    
+
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Gender</th>
+                            <th>Sex</th>
+                            <th>Code</th>
+                            <th>Course</th>
                             <th>Phone</th>
                             <th>Email</th>
-                            <th>Altenative Email</th>
+                            <th>Alternative Email</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -69,6 +71,8 @@
                         <tr>
                             <td>{{ $item->sname }} {{ $item->fname }} {{ $item->mname }}</td>
                             <td>{{ $item->gender }}</td>
+                            <td>{{ $item->kuccpsApplication->course_code }}</td>
+                            <td>{{ $item->kuccpsApplication->course_name }}</td>
                             <td>{{ $item->mobile }}</td>
                             <td>{{ $item->email }}</td>
                             <td>{{ $item->alt_email }}</td>
@@ -84,4 +88,4 @@
     </div>
     @endsection
 
-   
+

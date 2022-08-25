@@ -36,7 +36,7 @@
                 <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addAttendance') }}">Create</a>
             </span><br>
             <thead>
-                <th>Attendance</th>
+                <th>Attendance Mode</th>
                 <th>Code</th>
                 <th>Action</th>
               </thead>
@@ -47,7 +47,7 @@
                 <td> {{ $attendance->attendance_code }}</td>
                 <td> 
                   <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editAttendance', $attendance->id) }}">edit</a> 
-                  <a class="btn btn-sm btn-alt-danger" href="{{ route('courses.destroyAttendance', $attendance->id) }}">delete</a> 
+                  <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this attendance mode  ?')" href="{{ route('courses.destroyAttendance', $attendance->id) }}">delete</a> 
                 </td>
               </tr>
               @endforeach

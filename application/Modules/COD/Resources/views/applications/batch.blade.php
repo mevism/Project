@@ -50,13 +50,13 @@
                                     @endif
                                     </td>
                                     <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</td>
-                                    <td> {{ $app->courses->department_id }}</td>
+                                    <td> {{ $app->courses->getCourseDept->name }}</td>
                                     <td> {{ $app->courses->course_name }}</td>
                                     <td>
                                         @if($app->cod_status === 0)
                                             <span class="badge bg-primary">Awaiting</span>
                                         @elseif($app->cod_status === 1)
-                                            <span class="badge bg-success">Approved</span>
+                                            <span class="badge bg-success">Accepted</span>
                                         @elseif($app->cod_status === 2)
                                             <span class="badge bg-warning">Rejected</span>
                                         @else

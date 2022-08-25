@@ -1,11 +1,11 @@
 @extends('registrar::layouts.backend')
 
-@section('content') 
+@section('content')
 <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <div class="">
-                    
+
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -33,24 +33,23 @@
                    <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.storeIntake') }}" method="POST">
                     @csrf
                     <div class="row">
-                      <div class="col-12">                
-                      </div>
-                        <div  class="col-12">
-                          <label for="intake_name">From:</label>
-                          <input type="date" class="form-control form-control-alt" id="intake_name_from" name="intake_name_from" placeholder="Intake From">
-                          
+
+                      <div class="form-floating col-12 col-xl-12 mb-2">
+
+                          <input type="date" class="form-control form-control-sm" id="intake_name_from" name="intake_name_from" placeholder="Intake From">
+                          <label class="form-label">INTAKE FROM</label>
                         </div>
-                        <br>
-                        <div class="col-12">
-                          <label for="intake_name">To:</label>
-                          <input type="date" class="form-control form-control-alt" id="intake_name_to" name="intake_name_to" placeholder="Intake To">
-                          
+                        <br><br>
+                        <div class="form-floating col-12 col-xl-12 mb-2">
+
+                          <input type="date" class="form-control form-control-sm" id="intake_name_to" name="intake_name_to" placeholder="Intake To">
+                          <label class="form-label">INTAKE TO</label>
                         </div>
                     </div>
-                
-                    
+                <BR>
+
                   <div>
-                   
+
                     <table class="table table-responsive table-striped py-0 table-borderless">
                       {{-- <input type="checkbox" name="course[]" id="course"/>Select All<br><br> --}}
                       @if (count($courses)>0)
@@ -70,8 +69,8 @@
 
                         <tr>
                           <span class="small"> no courses to select from </span>
-                        
-                      @endif          
+
+                      @endif
                     </table>
                   </div><br>
                     <div class="col-12 text-center p-3">

@@ -44,7 +44,12 @@
                                 <tr>
                                     <td>{{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->mname }} {{ $app->appApprovals->applicant->fname }}</td>
                                     <td>{{ $app->appApprovals->courses->course_name }}</td>
-                                    <td>{{ $app->appApprovals->receipt }}</td>
+                                    <td>
+                                        @if($app->appApprovals->applicant->student_type === 2)
+                                            KUCCPS PLACEMENT
+                                        @else
+                                        {{ $app->appApprovals->receipt }}</td>
+                                        @endif
                                     <td>
                                         @if($app->finance_status === 0)
                                             <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>
@@ -54,14 +59,95 @@
                                             <span class="badge bg-danger"> <i class="fa fa-close"></i> rejected</span>
                                         @endif
                                     </td>
-                                    <td>
-                                        @if($app->finance_status === 0)
-                                            <a class="btn btn-sm btn-alt-info" data-toogle="click-ripple" href="{{ route('finance.reviewAdmission', $app->id) }}"> verify</a>
-                                        @elseif($app->finance_status === 1)
-                                            <a class="btn btn-sm btn-alt-primary" data-toogle="click-ripple" href="{{ route('finance.reviewAdmission', $app->id) }}"> edit</a>
-                                            <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" href="{{ route('finance.submitAdmission',$app->id) }}"> submit</a>
+                                    <td nowrap="">
+                                        @if($app->appApprovals->applicant->student_type === 2)
+
+                                            @if($app->finance_status === 0)
+                                                <a class="btn btn-sm btn-alt-info" onclick="return confirm('Are you sure you want to approve?')" data-toggle="click-ripple" href="{{ route('finance.acceptAdmission', $app->id) }}"> Accept</a>
+                                                <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
+
+                                                <div class="modal fade" id="modal-block-popin" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-popin" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="block block-rounded block-transparent mb-0">
+                                                                <div class="block-header block-header-default">
+                                                                    <h3 class="block-title">Reason(s) </h3>
+                                                                    <div class="block-options">
+                                                                        <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                                                            <i class="fa fa-fw fa-times"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="block-content fs-sm">
+                                                                    <form action="{{ route('finance.rejectAdmission', $app->id) }}" method="post">
+                                                                        @csrf
+                                                                        <div class="row col-md-12 mb-3">
+                                                                            <textarea class="form-control" placeholder="Write down the reasons for declining this application" name="comment" required></textarea>
+                                                                            <input type="hidden" name="{{ $app->id }}">
+                                                                        </div>
+                                                                        <div class="d-flex justify-content-center mb-2">
+                                                                            <button type="submit" class="btn btn-alt-danger btn-sm">Reject</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="block-content block-content-full text-end bg-body">
+                                                                    <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>
+                                                                    {{--                        <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Okay</button>--}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @elseif($app->finance_status === 1)
+                                                <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('finance.submitAdmission',$app->id) }}"> submit</a>
+                                                <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
+
+                                                <div class="modal fade" id="modal-block-popin" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-popin" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="block block-rounded block-transparent mb-0">
+                                                                <div class="block-header block-header-default">
+                                                                    <h3 class="block-title">Reason(s) </h3>
+                                                                    <div class="block-options">
+                                                                        <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                                                            <i class="fa fa-fw fa-times"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="block-content fs-sm">
+                                                                    <form action="{{ route('finance.rejectAdmission', $app->id) }}" method="post">
+                                                                        @csrf
+                                                                        <div class="row col-md-12 mb-3">
+                                                                            <textarea class="form-control" placeholder="Write down the reasons for declining this application" name="comment" required></textarea>
+                                                                            <input type="hidden" name="{{ $app->id }}">
+                                                                        </div>
+                                                                        <div class="d-flex justify-content-center mb-2">
+                                                                            <button type="submit" class="btn btn-alt-danger btn-sm">Reject</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="block-content block-content-full text-end bg-body">
+                                                                    <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>
+                                                                    {{--                        <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Okay</button>--}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            @else
+                                                <a class="btn btn-sm btn-alt-info" onclick="return confirm('Are you sure you want to approve?')" data-toggle="click-ripple" href="{{ route('finance.acceptAdmission', $app->id) }}"> Accept</a>
+                                            @endif
+
                                         @else
-                                            <a class="btn btn-sm btn-alt-primary" data-toogle="click-ripple" href="{{ route('finance.reviewAdmission', $app->id) }}"> edit</a>
+                                            @if($app->finance_status === 0)
+                                                <a class="btn btn-sm btn-alt-info" data-toogle="click-ripple" href="{{ route('finance.reviewAdmission', $app->id) }}"> verify</a>
+                                            @elseif($app->finance_status === 1)
+                                                <a class="btn btn-sm btn-alt-primary" data-toogle="click-ripple" href="{{ route('finance.reviewAdmission', $app->id) }}"> edit</a>
+                                                <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('finance.submitAdmission',$app->id) }}"> submit</a>
+                                            @else
+                                                <a class="btn btn-sm btn-alt-primary" data-toogle="click-ripple" href="{{ route('finance.reviewAdmission', $app->id) }}"> edit</a>
+                                            @endif
                                         @endif
                                     </td>
                                 </tr>
@@ -82,7 +168,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[2, 'asc']],
+            order: [[4, 'desc']],
             rowGroup: {
                 dataSrc: 2
             }
