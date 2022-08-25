@@ -3,10 +3,8 @@
 namespace Modules\Registrar\Http\Controllers;
 
 use Carbon;
-//use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Imports\KuccpsImport;
-use Illuminate\Contracts\Routing\Registrar;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -21,13 +19,11 @@ use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Student;
 use PhpOffice\PhpWord\TemplateProcessor;
-use Illuminate\Support\Facades\Validator;
 use Modules\Registrar\emails\KuccpsMails;
 use Modules\Registrar\Entities\Attendance;
 use Modules\Registrar\Entities\Department;
 use Modules\Application\Entities\Education;
 use NcJoes\OfficeConverter\OfficeConverter;
-use Illuminate\Contracts\Support\Renderable;
 use Modules\Registrar\Entities\RegistrarLog;
 use Modules\Registrar\Entities\StudentLogin;
 use Modules\Application\Entities\Application;
@@ -38,7 +34,6 @@ use Modules\Registrar\Entities\KuccpsApplication;
 use Modules\Application\Entities\AdmissionApproval;
 use Modules\Registrar\Entities\ClusterSubjects;
 use Modules\Registrar\Entities\CourseRequirement;
-use PHPUnit\TextUI\XmlConfiguration\Group;
 
 class CoursesController extends Controller
 
@@ -365,7 +360,7 @@ class CoursesController extends Controller
     public function addIntake()
     {
         $data          =      Intake::all();
-        $courses       =      Course::all();
+        $courses       =      Courses::all();
 
         return view('registrar::intake.addIntake')->with(['data'=>$data,'courses'=>$courses]);
     }
@@ -415,7 +410,7 @@ class CoursesController extends Controller
 
         foreach($course as $data){
 
-            $courses[]    =      Course::where('id',$data->course_id)->get();
+            $courses[]    =      Courses::where('id',$data->course_id)->get();
 
         }
 
@@ -428,7 +423,7 @@ class CoursesController extends Controller
 
             foreach($course as $item){
 
-            $courses[]    =     Course::where('id', $item->course_id)->get();
+            $courses[]    =     Courses::where('id', $item->course_id)->get();
 
             }
 
@@ -470,7 +465,7 @@ class CoursesController extends Controller
 
     public function editIntake($id)
     {
-        $courses        =         Course::all();
+        $courses        =         Courses::all();
         $data           =         Intake::find($id);
         $course[]       =         AvailableCourse::find($id);
 
@@ -608,13 +603,14 @@ class CoursesController extends Controller
     public function storeSchool(Request $request){
 
         $vz                    =      $request->validate([
-            'name'             =>     'required'
+            'initials'         =>     'required|unique:schools',
+            'name'             =>     'required|unique:schools'
         ]);
 
         $schools               =     new School;
 
         $schools->initials     =   $request->input('initials');
-        $schools->name         =     $request->input('name');
+        $schools->name         =   $request->input('name');
         $schools->save();
 
         return redirect()->route('courses.showSchool')->with('success','School Created');
@@ -650,8 +646,10 @@ class CoursesController extends Controller
     public function storeDepartment(Request $request){
 
         $vz                       =      $request->validate([
-            'name'                =>     'required',
-            'school'              =>     'required'
+            // 'school_id'           =>     'required|unique:departments',
+            'dept_code'           =>     'required|unique:departments',
+            'name'                =>     'required|unique:departments'
+
         ]);
 
         $departments              =       new Department;
@@ -709,7 +707,20 @@ class CoursesController extends Controller
 
     public function storeCourse(Request $request){
 
-//        return $request->all();
+          //        return $request->all();
+        $vz = $request->validate([
+
+            'department'             =>  'required',
+            'course_name'               =>  'required|unique:courses',
+            'course_code'               =>  'required|unique:courses',
+            'level'                     =>  'required',
+            'course_duration'           =>  'required',
+            'course_requirements'       =>  'required',
+            'subject1'                  =>  'required',
+            'subject2'                  =>  'required',
+            'subject3'                  =>  'required',
+            'subject'                  =>  'required'
+        ]);
 
         $subject = $request->subject;
         $subject1 = $request->subject1;
@@ -722,20 +733,9 @@ class CoursesController extends Controller
         $data3 = implode(",", $subject3);
 
 
-        //      $vz = $request->validate([
-//          'department'                =>  'required',
-//          'course_name'               =>  'required|unique:courses',
-//          'course_code'               =>  'required|unique:courses',
-//          'level'                     =>  'required',
-//          'course_duration'           =>  'required',
-//          'course_requirements'       =>  'required',
-//          'subject1'                  =>  'required',
-//          'subject2'                  =>  'required',
-//          'subject3'                  =>  'required',
-//          'subject4'                  =>  'required'
-//      ]);
+      
 
-        $courses                      =    new Course;
+        $courses                      =    new Courses();
         $courses->campus_id           =    $request->input('main');
         $courses->department_id       =    $request->input('department');
         $courses->course_name         =    $request->input('course_name');
@@ -768,7 +768,7 @@ class CoursesController extends Controller
 
     public function showCourse(){
 
-        $data = Courses::all();
+        $data = Courses::orderBy('id', 'desc')->get();
 
         return view('registrar::course.showCourse')->with('data',$data);
     }
@@ -777,14 +777,14 @@ class CoursesController extends Controller
         // $campuses           =          Campus::all();
         $schools            =          School::all();
         $departments        =          Department::all();
-        $data               =          Course::find($id);
+        $data               =          Courses::find($id);
 
         return view('registrar::course.editCourse')->with(['data'=>$data,'schools'=>$schools,'departments'=>$departments]);
     }
 
     public function updateCourse(Request $request, $id){
 
-        $data                      =    Course::find($id);
+        $data                      =    Courses::find($id);
 
         $data->course_name         =    $request->input('course_name');
         // $data->campus_id           =    $request->input('campus');
@@ -805,7 +805,7 @@ class CoursesController extends Controller
 
     public function destroyCourse($id){
 
-        $data     =      Course::find($id);
+        $data     =      Courses::find($id);
         $data->delete();
 
         return redirect()->route('courses.showCourse');
@@ -829,7 +829,7 @@ class CoursesController extends Controller
         $attendances        =         Attendance::all();
         // $clusters            =        ClusterSubjects::all();
 
-        $courses            =         Course::all();
+        $courses            =         Courses::all();
         $intakes            =         Intake::where('status', 1)->get();
 
         return view('registrar::class.addClasses')->with(['attendances'  =>  $attendances, 'courses' =>  $courses, 'intakes' => $intakes]);
@@ -868,7 +868,7 @@ class CoursesController extends Controller
 
         $data             =       Classes::find($id);
         $attendances      =       Attendance::all();
-        $courses          =       Course::all();
+        $courses          =       Courses::all();
         $data             =       Classes::find($id);
         $intakes          =       Intake::where('status',1)->get();
 

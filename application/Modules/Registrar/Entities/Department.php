@@ -20,6 +20,15 @@ class Department extends Model
 
         return $this->belongsTo(School::class, 'school_id');
     }
+    // available course vs dept
+    // public function deptCourse(){
+
+    //     return $this->hasMany(AvailableCourse::class);
+    // }
+    public function course(){
+
+        return $this->hasMany(Courses::class,'id');
+    }
 
     public function getDeptCourse(){
 

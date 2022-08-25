@@ -1,6 +1,4 @@
-@extends('registrar::layouts.backend')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="bg-body-light">
   <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -30,14 +28,14 @@
               <div class="row">
                 <div class="col-lg-12 space-y-0">
 
-                   <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.storeSchool') }}" method="POST">
-                    @csrf 
+                   <form class="row row-cols-lg-auto g-3 align-items-center" action="<?php echo e(route('courses.storeSchool')); ?>" method="POST">
+                    <?php echo csrf_field(); ?> 
                     <div class="form-floating col-12 col-xl-12">
-                      <input type="text" value="{{ old('initials') }}"  class="form-control form-control-alt text-uppercase" id="initials" name="initials" placeholder="School Code">
+                      <input type="text" value="<?php echo e(old('initials')); ?>"  class="form-control form-control-alt text-uppercase" id="initials" name="initials" placeholder="School Code">
                       <label class="form-label">SCHOOL CODE</label>
                     </div>
                     <div class="form-floating col-12 col-xl-12">
-                      <input type="text" value="{{ old('name') }}"  class="form-control form-control-alt text-uppercase" id="name" name="name" placeholder="School Name">
+                      <input type="text" value="<?php echo e(old('name')); ?>"  class="form-control form-control-alt text-uppercase" id="name" name="name" placeholder="School Name">
                       <label class="form-label">SCHOOL NAME</label>
                     </div>
                  
@@ -52,4 +50,5 @@
           </div>
     </div> 
     
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('registrar::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/html/Registrar/application/Modules/Registrar/Resources/views/school/addSchool.blade.php ENDPATH**/ ?>

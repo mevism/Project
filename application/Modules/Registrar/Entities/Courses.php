@@ -44,6 +44,11 @@ class Courses extends Model
         return $this->hasOne(CourseRequirement::class, 'course_id');
     }
 
+    // public function dept(){
+
+    //     return $this->belongsTo(Department::class, 'department_id');
+    // }
+
     public function getCourseDept(){
 
         return $this->belongsTo(Department::class, 'department_id');

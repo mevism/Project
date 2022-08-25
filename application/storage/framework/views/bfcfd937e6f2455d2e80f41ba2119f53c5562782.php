@@ -1,5 +1,3 @@
-@extends('registrar::layouts.backend')
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
 
@@ -23,7 +21,7 @@
       } );
   } );
 </script>
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
@@ -53,22 +51,22 @@
                  <div class="col-12">
                     <table id="example" class="table table-borderless table-striped table-vcenter js-dataTable-responsive">
                         <span class="d-flex justify-content-end">
-                            <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addSchool') }}">Create</a>
+                            <a class="btn btn-alt-info btn-sm" href="<?php echo e(route('courses.addSchool')); ?>">Create</a>
                         </span><br>
                         <thead>
                             <th>School Code</th>
                             <th>School NAME </th>
                             <th>Action</th>
                         </thead>
-                        <tbody>@foreach ($data as $school)
+                        <tbody><?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $school): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ $school->initials }}</td>
-                            <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ $school->name }}</td>
+                            <td style="text-transform: uppercase"class="fw-semibold fs-sm"><?php echo e($school->initials); ?></td>
+                            <td style="text-transform: uppercase"class="fw-semibold fs-sm"><?php echo e($school->name); ?></td>
                             <td> 
-                                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editSchool', $school->id) }}">edit</a> 
-                             <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this school ?')" href="{{ route('courses.destroySchool', $school->id) }}">delete</a> </td>
+                                <a class="btn btn-sm btn-alt-info" href="<?php echo e(route('courses.editSchool', $school->id)); ?>">edit</a> 
+                             <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this school ?')" href="<?php echo e(route('courses.destroySchool', $school->id)); ?>">delete</a> </td>
                         </tr>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                         </tbody>
                     </table>
@@ -79,4 +77,6 @@
         </div>
         <!-- END Page Content -->
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('registrar::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/html/Registrar/application/Modules/Registrar/Resources/views/school/showSchool.blade.php ENDPATH**/ ?>
