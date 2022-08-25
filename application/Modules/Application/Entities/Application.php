@@ -21,7 +21,7 @@ class Application extends Model
 
     public function applicant(){
 
-       return $this->belongsTo(Applicant::class, 'user_id');
+       return $this->belongsTo(Applicant::class, 'id');
     }
 
 //    relationship between an application and course
