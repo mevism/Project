@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'laravel/laravel',
-        'pretty_version' => 'dev-main',
-        'version' => 'dev-main',
-        'reference' => '1d6519cceb094a9ebfe321e40fd693ae985ccd6a',
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
+        'reference' => NULL,
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -419,9 +419,9 @@
             'dev_requirement' => false,
         ),
         'laravel/laravel' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
-            'reference' => '1d6519cceb094a9ebfe321e40fd693ae985ccd6a',
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
+            'reference' => NULL,
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -1359,9 +1359,9 @@
             'dev_requirement' => false,
         ),
         'victorybiz/laravel-tel-input' => array(
-            'pretty_version' => 'v1.2.0',
-            'version' => '1.2.0.0',
-            'reference' => 'c4437a1c33327b47c4e9025a0a6bf2c6c6fc87c0',
+            'pretty_version' => 'v1.2.1',
+            'version' => '1.2.1.0',
+            'reference' => 'a2949655d9a6dbacf1245cb083cfeec483151f9a',
             'type' => 'library',
             'install_path' => __DIR__ . '/../victorybiz/laravel-tel-input',
             'aliases' => array(),

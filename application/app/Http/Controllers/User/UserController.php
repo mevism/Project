@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use Modules\Application\Entities\AdmissionApproval;
 use Session;
 use App\Models\User;
 use App\Models\Course;
@@ -22,8 +23,6 @@ class UserController extends Controller
 {
     public function login(Request $request)
     {
-
-//        return $request->all();
         $logins = $request->only('username', 'password');
 
         if (Auth::guard('user')->attempt($logins)) {
@@ -112,11 +111,14 @@ class UserController extends Controller
                }
        }elseif (Auth::guard('user')->user()->role_id === 8){
 
+            $apps = AdmissionApproval::where('registrar_status', null)
+                ->where('finance_status', 1)->count();
+
                 if (!Auth::guard('user')->check()){
                 abort(403)->with('error', 'Please login again');;
                 } else{
 
-                    return view('medical::medical.index');
+                    return view('medical::medical.index')->with('apps', $apps);
                 }
         }elseif (Auth::guard('user')->user()->role_id === 5){
 

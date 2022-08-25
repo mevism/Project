@@ -3,7 +3,7 @@
 namespace Modules\Registrar\Http\Controllers;
 
 use Carbon;
-use App\Models\Course;
+//use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Imports\KuccpsImport;
 use Illuminate\Contracts\Routing\Registrar;
@@ -243,21 +243,25 @@ class CoursesController extends Controller
 
     public function offer(){
 
-        $course_id     =     AvailableCourse::select('course_id')->get();
+        $active = Intake::where('status', 1)->get();
 
-        if (count($course_id) == 0){
+        if (count($active) === 0){
 
-            $availables  =  [];
+            $courses = $active;
+
+            return view('registrar::offer.coursesOffer', compact('courses'));
+
+        }else{
+
+            foreach ($active as $intake){
+
+                $courses[] = AvailableCourse::where('intake_id', $intake->id)->get();
+
+            }
+
+            return view('registrar::offer.coursesOffer', compact('courses', 'active'));
+
         }
-        foreach ($course_id as $course){
-
-            $availables[]     =     Courses::where('id', $course->course_id)->get();
-
-        }
-
-        $intake_id      =       AvailableCourse::select('intake_id')->get();
-
-        return view('registrar::offer.coursesOffer')->with(['availables' => $availables, 'intake' => $intake_id]);
     }
 
     public function profile(){
@@ -764,7 +768,7 @@ class CoursesController extends Controller
 
     public function showCourse(){
 
-        $data = Course::orderBy('id', 'desc')->get();
+        $data = Courses::all();
 
         return view('registrar::course.showCourse')->with('data',$data);
     }

@@ -31,6 +31,10 @@ class Department extends Model
         return $this->belongsTo(School::class, 'school_id');
     }
 
+    public function useCourse(){
+        return $this->hasMany(Courses::class);
+    }
+
     protected static function newFactory()
     {
         return \Modules\Courses\Database\factories\DepartmentFactory::new();

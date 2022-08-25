@@ -143,8 +143,8 @@
                                             @if($app->finance_status === 0)
                                                 <a class="btn btn-sm btn-alt-info" data-toogle="click-ripple" href="{{ route('finance.reviewAdmission', $app->id) }}"> verify</a>
                                             @elseif($app->finance_status === 1)
-                                                <a class="btn btn-sm btn-alt-primary" data-toogle="click-ripple" href="{{ route('finance.reviewAdmission', $app->id) }}"> edit</a>
                                                 <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('finance.submitAdmission',$app->id) }}"> submit</a>
+                                                <a class="btn btn-sm btn-alt-primary" data-toogle="click-ripple" href="{{ route('finance.reviewAdmission', $app->id) }}"> edit</a>
                                             @else
                                                 <a class="btn btn-sm btn-alt-primary" data-toogle="click-ripple" href="{{ route('finance.reviewAdmission', $app->id) }}"> edit</a>
                                             @endif

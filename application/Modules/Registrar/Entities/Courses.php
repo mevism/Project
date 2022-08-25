@@ -50,6 +50,10 @@ class Courses extends Model
 
     }
 
+    public function useDept(){
+        return $this->belongsTo(Department::class);
+    }
+
     protected static function newFactory()
     {
         return \Modules\Courses\Database\factories\CoursesFactory::new();

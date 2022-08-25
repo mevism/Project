@@ -6119,16 +6119,16 @@
         },
         {
             "name": "victorybiz/laravel-tel-input",
-            "version": "v1.2.0",
+            "version": "v1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/victorybiz/laravel-tel-input.git",
-                "reference": "c4437a1c33327b47c4e9025a0a6bf2c6c6fc87c0"
+                "reference": "a2949655d9a6dbacf1245cb083cfeec483151f9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/victorybiz/laravel-tel-input/zipball/c4437a1c33327b47c4e9025a0a6bf2c6c6fc87c0",
-                "reference": "c4437a1c33327b47c4e9025a0a6bf2c6c6fc87c0",
+                "url": "https://api.github.com/repos/victorybiz/laravel-tel-input/zipball/a2949655d9a6dbacf1245cb083cfeec483151f9a",
+                "reference": "a2949655d9a6dbacf1245cb083cfeec483151f9a",
                 "shasum": ""
             },
             "require": {
@@ -6184,9 +6184,9 @@
             ],
             "support": {
                 "issues": "https://github.com/victorybiz/laravel-tel-input/issues",
-                "source": "https://github.com/victorybiz/laravel-tel-input/tree/v1.2.0"
+                "source": "https://github.com/victorybiz/laravel-tel-input/tree/v1.2.1"
             },
-            "time": "2022-02-09T02:22:03+00:00"
+            "time": "2022-08-24T13:02:05+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

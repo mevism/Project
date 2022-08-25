@@ -46,7 +46,7 @@ class Applicant extends Authenticatable
 
     public function VerifyEmail(){
 
-        return $this->hasOne('\Modules\Application\Entities\VerifyEmail', 'id');
+        return $this->hasOne(VerifyEmail::class, 'user_id');
     }
 
     public function VerifyUser(){

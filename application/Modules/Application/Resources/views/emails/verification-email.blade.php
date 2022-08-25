@@ -15,7 +15,7 @@
 {{--        </div>--}}
 {{--    </div>--}}
 {{--</div>--}}
-{{-- 
+{{--
 <!doctype html>
 <html lang="{{ config('app.locale') }}">
 
@@ -130,7 +130,7 @@
         </style>
     </head>
     <body bgcolor="#344a3d" style="margin: 0; padding: 0;" yahoo="fix">
-       
+
         <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%; max-width: 600px;  " class="content">
             <tr>
                 <td style="padding: 15px 10px 15px 10px;">
@@ -154,7 +154,7 @@
         <p>
             Welcome to Technical University of Mombasa Applicant Portal. You are getting this email because you submitted a registration request to our system. To proceed to complete the registration process you need to confirm you email to activate your applicants account. If your account is not activated within 72hours it will lead to permanent deactivation of the account.
         </p>
-                 
+
                 </td>
             </tr>
                 <tr>
@@ -166,11 +166,11 @@
                             </td>
                         </tr>
                     </table>
-                    
+
                 </td>
 
             </tr>
-            
+
             <tr>
                 <td align="center" bgcolor="#dddddd" style="padding: 15px 10px 15px 10px; color: #555555; font-family: Arial, sans-serif; font-size: 12px; line-height: 18px;">
                     <b>Technical University of Mombasa.</b><br/>Tom Mboya street, Tudor &bull; Mombasa &bull; Kenya

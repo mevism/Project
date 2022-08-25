@@ -39,8 +39,8 @@
                 <div class="col-lg-12">
             <table id="example" class="table table-bordered table-striped js-dataTable-responsive">
                 @csrf
-                @method('delete') 
-                @if(count($availables)>0)
+                @method('delete')
+
                     <thead>
                         <th>Department</th>
                         <th>Course name</th>
@@ -49,24 +49,19 @@
                         <th>Action</th>
                     </thead>
                     <tbody>
-                    @foreach($availables as $course)
+                    @foreach($courses as $course)
 
                         @foreach($course as $item)
                             <tr>
-                                <td> {{ $item->department_id }}</td>
-                                <td> {{ $item->course_name }}</td>
-                                <td> {{ $item->availablecourse->intake_id }}</td>
-                                <td> {{ $item->courseRequirements->course_duration }}</td>
+                                <td> {{ $item->mainCourses->getCourseDept->name }}</td>
+                                <td> {{ $item->mainCourses->course_name }}</td>
+                                <td nowrap=""> {{ Carbon\carbon::parse($item->openCourse->intake_from)->format('M')}} - {{ Carbon\carbon::parse($item->openCourse->intake_to)->format('M Y') }}</td>
+                                <td> {{ $item->mainCourses->courseRequirements->course_duration }}</td>
                                 <td nowrap=""> <a class="btn btn-sm btn-alt-danger" href="{{ route('courses.destroyCoursesAvailable', $item->id) }}">delete </a> </td>
                             </tr>
                         @endforeach
                     @endforeach
                 </tbody>
-                @else
-                <tr>
-                    <small class="text-center text-muted">There are no courses on offer</small>
-                </tr>
-                @endif
         </table>
         </div>
             </div>
