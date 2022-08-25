@@ -28,11 +28,11 @@
                 <!-- Developer Plan -->
                 <a class="block block-rounded block-link-shadow text-center" href="javascript:void(0)">
                     <div class="block-header">
-                        <h2 class="block-title fw-bold">{{ $course->mainCourses->course_name }} | {{ $course->mainCourses->course_duration }} years</h2>
+                        <h2 class="block-title fw-bold">{{ $course->mainCourses->course_name }} | {{ $course->mainCourses->courseRequirements->course_duration }}</h2>
                     </div>
                     <div class="block-content bg-body-light">
                         <div class="py-2">
-                            <p class="mb-2">{{ $course->mainCourses->course_requirements }}</p>
+                            <p class="mb-2">{{ $course->mainCourses->courseRequirements->course_requirements }}</p>
                         </div>
                     </div>
                     <div class="block-content">
@@ -40,19 +40,19 @@
                         <div class="fs-sm py-2">
                             <div class="row">
                                 <div class="col-md-6"> Subject 1</div>
-                                <div class="col-md-6">{{ $course->mainCourses->subject1 }}</div>
+                                <div class="col-md-6">{{ $course->mainCourses->courseRequirements->subject1 }}</div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6"> Subject 2 </div>
-                                <div class="col-md-6">{{ $course->mainCourses->subject2 }}</div>
+                                <div class="col-md-6">{{ $course->mainCourses->courseRequirements->subject2 }}</div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">Subject 3 </div>
-                                <div class="col-md-6">{{ $course->mainCourses->subject3 }}</div>
+                                <div class="col-md-6">{{ $course->mainCourses->courseRequirements->subject3 }}</div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">Subject 4 </div>
-                                <div class="col-md-6">{{ $course->mainCourses->subject4 }}</div>
+                                <div class="col-md-6">{{ $course->mainCourses->courseRequirements->subject4 }}</div>
                             </div>
                         </div>
                     </div>

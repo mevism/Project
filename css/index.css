@@ -35,9 +35,10 @@ input[type=file]{
     width : 100%;
 }
 #student_profile{
-    width : 100%;
+    width : 95%;
     display : flex;
     flex-wrap : wrap;
+    margin-left : 2.5%;
 }
 #time-out{
     width : 50%;

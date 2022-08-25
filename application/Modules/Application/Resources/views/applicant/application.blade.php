@@ -163,13 +163,15 @@
                             <div class="row my-2">
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">Department</label>
                                 <div class="form-floating col-sm-8 text-uppercase py-1">
-                                    <input type="text" class="form-control form-control-sm" name="department" value="{{ $course->mainCourses->department_id }}" readonly>
+                                    <input type="text" class="form-control form-control-sm" name="department" value="{{ $course->mainCourses->getCourseDept->name }}" readonly>
+                                    <input type="hidden" name="dept" value="{{ $course->mainCourses->getCourseDept->id }}">
+                                    <input type="hidden" name="school" value="{{ $course->mainCourses->getCourseDept->schools->id }}">
                                 </div>
                             </div>
                             <div class="row my-2">
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">School</label>
                                 <div class="form-floating col-sm-8 text-uppercase py-1">
-                                    <input type="text" class="form-control form-control-sm" name="school" value="{{ $course->mainCourses->school_id }}" readonly>
+                                    <input type="text" class="form-control form-control-sm" name="" value="{{ $course->mainCourses->getCourseDept->schools->name }}" readonly>
                                     <input type="hidden" name="intake" value="{{ $course->openCourse->id }}">
                                     <input type="hidden" name="course_id" value="{{ $course->mainCourses->id }}">
                                 </div>
@@ -182,19 +184,19 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="campus" value="Main"
                                                    @if($mycourse != null) {{ ($mycourse->campus == 'Main')? "checked" : "" }}@endif
-                                                   @if(old('campus') === 'Main') checked @endif required>
+                                                   @if(old('campus') === 'Main') checked @endif required @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
                                             <label class="form-check-label">Main</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="campus" value="Kwale"
                                                    @if($mycourse != null) {{ ($mycourse->campus == 'Kwale')? "checked" : "" }}@endif
-                                                   @if(old('campus') === 'Kwale')  checked @endif required>
+                                                   @if(old('campus') === 'Kwale')  checked @endif required @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
                                             <label class="form-check-label">Kwale</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="campus" value="Lamu"
                                                    @if($mycourse != null) {{ ($mycourse->campus == 'Lamu')? "checked" : "" }}@endif
-                                                   @if(old('campus') === 'Lamu') checked @endif required>
+                                                   @if(old('campus') === 'Lamu') checked @endif required @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
                                             <label class="form-check-label">Lamu</label>
                                         </div>
                                         <span class="fs-sm text-danger text-lowercase mt-2"> choose which campus to join </span>
@@ -210,8 +212,57 @@
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 1</label>
                                 <div class="col-sm-8 text-uppercase py-1">
                                     <div class="form-floating input-group">
-                                        <span class="input-group-text input-group-text-sm">{{ Str::limit( $course->mainCourses->subject1, $limit = 3 , $end='' )  }}</span>
-                                        <input type="text" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif name="subject1" value="{{ old('subject1') }} @if($mycourse != null) {{ $mycourse->subject_1 }} @endif ">
+                                        <span class="input-group-text input-group-text-sm col-md-3">{{ Str::limit( $course->mainCourses->courseRequirements->subject1, $limit = 10 , $end='' )  }}</span>
+
+                                        <select class="form-control form-control-sm text-uppercase" name="subject1" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                            <option disabled selected> -- select subject-- </option>
+                                                @if($mycourse != null)
+                                                    <option value="@if($mycourse != null) {{ explode(' ', $mycourse->subject_1)[0] }} @endif" selected> {{ explode(' ', $mycourse->subject_1)[0] }}</option>
+                                                @endif
+                                            <option value="ENG"> ENG </option>
+                                            <option value="KIS"> KIS </option>
+                                            <option value="MAT"> MAT </option>
+                                            <option value="BIO"> BIO </option>
+                                            <option value="CHE"> CHE </option>
+                                            <option value="PHY"> PHY </option>
+                                            <option value="GEO"> GEO </option>
+                                            <option value="CRE"> CRE </option>
+                                            <option value="FRE"> FRE </option>
+                                            <option value="GER"> GER </option>
+                                            <option value="HIS"> HIS </option>
+                                            <option value="COM"> COM </option>
+                                            <option value="AGR"> AGR </option>
+                                            <option value="BUS"> BUS </option>
+                                            <option value="IRE"> IRE </option>
+                                            <option value="HRE"> HRE </option>
+                                            <option value="HSCI"> HSCI </option>
+                                            <option value="MUS"> MUSIC </option>
+                                            <option value="ARA"> ARABIC </option>
+                                            <option value="WW"> WOODWORK </option>
+                                            <option value="MW"> METALWORK </option>
+                                            <option value="SIGN"> SIGN LANG </option>
+
+                                        </select>
+
+                                        <span class="input-group-text input-group-text-sm">
+                                            <select name="grade1" class="dept form-control form-control-md text-uppercase fs-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                                <option selected disabled > -- select grade -- </option>
+                                                    @if($mycourse != null)
+                                                        <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_1)[1]  }} @endif" selected> {{ explode(' ', $mycourse->subject_1)[1] }}</option>
+                                                    @endif
+                                                <option value="A"> A </option>
+                                                <option value="A-"> A- </option>
+                                                <option value="B+"> B+ </option>
+                                                <option value="B"> B </option>
+                                                <option value="B-"> B- </option>
+                                                <option value="C+"> C+ </option>
+                                                <option value="C"> C </option>
+                                                <option value="C-"> C- </option>
+                                                <option value="D+"> D+ </option>
+                                                <option value="D"> D </option>
+                                                <option value="D-"> D- </option>
+                                            </select>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -220,8 +271,56 @@
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 2</label>
                                 <div class="col-sm-8 text-uppercase py-1">
                                     <div class="form-floating input-group">
-                                        <span class="input-group-text input-group-text-sm">{{ Str::limit( $course->mainCourses->subject2, $limit = 3 , $end='' )  }}</span>
-                                        <input type="text" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif name="subject2" value="{{ old('subject2') }} @if($mycourse != null) {{ $mycourse->subject_2 }} @endif">
+                                        <span class="input-group-text input-group-text-sm col-md-3">{{ Str::limit( $course->mainCourses->courseRequirements->subject2, $limit = 10 , $end='' )  }}</span>
+                                        <select class="form-control form-control-sm text-uppercase" name="subject2" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                            <option disabled selected> -- select subject-- </option>
+                                                @if($mycourse != null)
+                                                    <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_2)[0] }} @endif" selected> {{ explode(' ', $mycourse->subject_2)[0] }}</option>
+                                                @endif
+                                            <option value="ENG"> ENG </option>
+                                            <option value="KIS"> KIS </option>
+                                            <option value="MAT"> MAT </option>
+                                            <option value="BIO"> BIO </option>
+                                            <option value="CHE"> CHE </option>
+                                            <option value="PHY"> PHY </option>
+                                            <option value="GEO"> GEO </option>
+                                            <option value="CRE"> CRE </option>
+                                            <option value="FRE"> FRE </option>
+                                            <option value="GER"> GER </option>
+                                            <option value="HIS"> HIS </option>
+                                            <option value="COM"> COM </option>
+                                            <option value="AGR"> AGR </option>
+                                            <option value="BUS"> BUS </option>
+                                            <option value="IRE"> IRE </option>
+                                            <option value="HRE"> HRE </option>
+                                            <option value="HSCI"> HSCI </option>
+                                            <option value="MUS"> MUSIC </option>
+                                            <option value="ARA"> ARABIC </option>
+                                            <option value="WW"> WOODWORK </option>
+                                            <option value="MW"> METALWORK </option>
+                                            <option value="SIGN"> SIGN LANG </option>
+
+                                        </select>
+
+                                        <span class="input-group-text input-group-text-sm">
+                                            <select name="grade2" class="dept form-control form-control-md text-uppercase m-1 fs-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                                <option selected disabled > -- select grade -- </option>
+                                                    @if($mycourse != null)
+                                                        <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_2)[1] }} @endif" selected> {{ explode(' ', $mycourse->subject_2)[1] }}</option>
+                                                    @endif
+                                                <option value="A"> A </option>
+                                                <option value="A-"> A- </option>
+                                                <option value="B+"> B+ </option>
+                                                <option value="B"> B </option>
+                                                <option value="B-"> B- </option>
+                                                <option value="C+"> C+ </option>
+                                                <option value="C"> C </option>
+                                                <option value="C-"> C- </option>
+                                                <option value="D+"> D+ </option>
+                                                <option value="D"> D </option>
+                                                <option value="D-"> D- </option>
+                                            </select>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -230,8 +329,59 @@
                                 <label class="col-sm-2 col-form-label" for="example-hf-password">Subject 3</label>
                                 <div class="form-floating col-sm-8 text-uppercase py-1">
                                     <div class="form-floating input-group">
-                                        <span class="input-group-text input-group-text-sm">{{ Str::limit( $course->mainCourses->subject3, $limit = 8 , $end='' )  }}</span>
-                                        <input type="text" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif  name="subject3" value="{{ old('subject3') }} @if($mycourse != null) {{ $mycourse->subject_3 }} @endif">
+                                        <span class="input-group-text input-group-text-sm col-md-3">{{ Str::limit( $course->mainCourses->courseRequirements->subject3, $limit = 10 , $end='' )  }}</span>
+
+                                        <select class="form-control form-control-sm text-uppercase" name="subject3" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                            <option disabled selected> -- select subject-- </option>
+                                                @if($mycourse != null)
+                                                    <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_3)[0]}} @endif" selected> {{ explode(' ', $mycourse->subject_3)[0] }}</option>
+                                                @endif
+                                            <option value="ENG"> ENG </option>
+                                            <option value="KIS"> KIS </option>
+                                            <option value="MAT"> MAT </option>
+                                            <option value="BIO"> BIO </option>
+                                            <option value="CHE"> CHE </option>
+                                            <option value="PHY"> PHY </option>
+                                            <option value="GEO"> GEO </option>
+                                            <option value="CRE"> CRE </option>
+                                            <option value="FRE"> FRE </option>
+                                            <option value="GER"> GER </option>
+                                            <option value="HIS"> HIS </option>
+                                            <option value="COM"> COM </option>
+                                            <option value="AGR"> AGR </option>
+                                            <option value="BUS"> BUS </option>
+                                            <option value="IRE"> IRE </option>
+                                            <option value="HRE"> HRE </option>
+                                            <option value="HSCI"> HSCI </option>
+                                            <option value="MUS"> MUSIC </option>
+                                            <option value="ARA"> ARABIC </option>
+                                            <option value="WW"> WOODWORK </option>
+                                            <option value="MW"> METALWORK </option>
+                                            <option value="SIGN"> SIGN LANG </option>
+
+                                        </select>
+
+
+                                        <span class="input-group-text input-group-text-sm">
+                                            <select name="grade3" class="dept form-control form-control-md text-uppercase m-1 fs-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                                <option selected disabled > -- select grade -- </option>
+                                                    @if($mycourse != null)
+                                                        <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_3)[1] }} @endif" selected> {{ explode(' ', $mycourse->subject_3)[1] }}</option>
+                                                    @endif
+                                                <option value="A"> A </option>
+                                                <option value="A-"> A- </option>
+                                                <option value="B+"> B+ </option>
+                                                <option value="B"> B </option>
+                                                <option value="B-"> B- </option>
+                                                <option value="C+"> C+ </option>
+                                                <option value="C"> C </option>
+                                                <option value="C-"> C- </option>
+                                                <option value="D+"> D+ </option>
+                                                <option value="D"> D </option>
+                                                <option value="D-"> D- </option>
+                                            </select>
+                                        </span>
+
                                     </div>
                                 </div>
                             </div>
@@ -240,8 +390,57 @@
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 4 </label>
                                 <div class="col-sm-8 text-uppercase py-1">
                                     <div class="form-floating input-group">
-                                        <span class="input-group-text input-group-text-sm">{{ Str::limit( $course->mainCourses->subject4, $limit = 8 , $end='' )  }}</span>
-                                        <input type="text" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif name="subject4" value="{{ old('subject4') }} @if($mycourse != null) {{ $mycourse->subject_4 }} @endif">
+                                        <span class="input-group-text input-group-text-sm col-md-3">{{ Str::limit( $course->mainCourses->courseRequirements->subject4, $limit = 10 , $end='' )  }}</span>
+
+                                        <select class="form-control form-control-sm text-uppercase" name="subject4" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                            <option disabled selected> -- select subject-- </option>
+                                                @if($mycourse != null)
+                                                    <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_4)[0] }} @endif" selected>{{ explode(' ', $mycourse->subject_4)[0] }}</option>
+                                                @endif
+                                            <option value="ENG" > ENG </option>
+                                            <option value="KIS"> KIS </option>
+                                            <option value="MAT"> MAT </option>
+                                            <option value="BIO"> BIO </option>
+                                            <option value="CHE"> CHE </option>
+                                            <option value="PHY"> PHY </option>
+                                            <option value="GEO"> GEO </option>
+                                            <option value="CRE"> CRE </option>
+                                            <option value="FRE"> FRE </option>
+                                            <option value="GER"> GER </option>
+                                            <option value="HIS"> HIS </option>
+                                            <option value="COM"> COM </option>
+                                            <option value="AGR"> AGR </option>
+                                            <option value="BUS"> BUS </option>
+                                            <option value="IRE"> IRE </option>
+                                            <option value="HRE"> HRE </option>
+                                            <option value="HSCI"> HSCI </option>
+                                            <option value="MUS"> MUSIC </option>
+                                            <option value="ARA"> ARABIC </option>
+                                            <option value="WW"> WOODWORK </option>
+                                            <option value="MW"> METALWORK </option>
+                                            <option value="SIGN"> SIGN LANG </option>
+
+                                        </select>
+
+                                        <span class="input-group-text input-group-text-sm">
+                                            <select name="grade4" class="dept form-control form-control-md text-uppercase m-1 fs-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                                <option selected disabled > -- select grade -- </option>
+                                                    @if($mycourse != null)
+                                                        <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_4)[1] }} @endif" selected> {{ explode(' ', $mycourse->subject_4)[1] }}</option>
+                                                    @endif
+                                                <option value="A"> A </option>
+                                                <option value="A-"> A- </option>
+                                                <option value="B+"> B+ </option>
+                                                <option value="B"> B </option>
+                                                <option value="B-"> B- </option>
+                                                <option value="C+"> C+ </option>
+                                                <option value="C"> C </option>
+                                                <option value="C-"> C- </option>
+                                                <option value="D+"> D+ </option>
+                                                <option value="D"> D </option>
+                                                <option value="D-"> D- </option>
+                                            </select>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -589,19 +788,19 @@
                                                         </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>{{ $course->mainCourses->subject1 }}</td>
+                                                            <td>{{ $course->mainCourses->courseRequirements->subject1 }}</td>
                                                             <td>{{ $mycourse->subject_1 }}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>{{ $course->mainCourses->subject2 }}</td>
+                                                            <td>{{ $course->mainCourses->courseRequirements->subject2 }}</td>
                                                             <td>{{ $mycourse->subject_2 }}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>{{ $course->mainCourses->subject3 }}</td>
+                                                            <td>{{ $course->mainCourses->courseRequirements->subject3 }}</td>
                                                             <td>{{ $mycourse->subject_3 }}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>{{ $course->mainCourses->subject4 }}</td>
+                                                            <td>{{ $course->mainCourses->courseRequirements->subject4 }}</td>
                                                             <td>{{ $mycourse->subject_4 }}</td>
                                                         </tr>
                                                     </tbody>

@@ -48,7 +48,7 @@
                             <tbody>
                             @foreach($courses as $course)
                                 <tr>
-                                    <td>{{ $course->courses->department_id }}</td>
+                                    <td>{{ $course->courses->getCourseDept->name }}</td>
                                     <td>{{ $course->courses->course_name }}</td>
                                     <td nowrap="">
                                         @if($course->registrar_status === 3 && $course->cod_status === 1)

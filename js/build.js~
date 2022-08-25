@@ -598,19 +598,19 @@
                 `
                     <h4><i class="fa-solid fa-spinner"></i> Application Progress</h4>
                     <section style = 'text-align:center;display:flex;flex-wrap:wrap;width:80%;margin-left:10%;background:rgba(234,234,234,0.6);border:1px solid #fff;'>
-                        <div style ='width:19%;margin:0.5%;'>
+                        <div style ='border:1px solid #fff;width:19%;margin:0.5%;'>
                             <h4>USER</h4>
                         </div>
-                        <div style ='width:19%;margin:0.5%;'>
+                        <div style ='border:1px solid #fff;width:19%;margin:0.5%;'>
                             <h4>ACTION</h4>
                         </div>
-                        <div style ='width:19%;margin:0.5%;'>
+                        <div style ='border:1px solid #fff;width:19%;margin:0.5%;'>
                             <h4>DATE</h4>
                         </div>
-                        <div style ='width:19%;margin:0.5%;'>
+                        <div style ='border:1px solid #fff;width:19%;margin:0.5%;'>
                             <h4>REASON</h4>
                         </div>
-                        <div style ='width:19%;margin:0.5%;'>
+                        <div style ='border:1px solid #fff;width:19%;margin:0.5%;'>
                             <h4>STATUS</h4>
                         </div>
                     </section>
@@ -623,20 +623,20 @@
                         transfer.map((t, k) =>
                             `
                                 <section style = 'text-align:center;width:80%;margin-left:10%;display:flex;flex-wrap:wrap;${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'background:rgba(234,234,234,0.6);border:1px solid #fff;' : 'background:#fff;border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'background:rgba(234,234,234,0.6);border:1px solid #fff;' : 'background:#fff;border:1px solid rgba(234,234,234,0.6);'}'>
-                                    <div style ='width:19%;margin:0.5%;'>
+                                    <div style ='${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
                                         <p>${ t.level }</p>
                                     </div>
-                                    <div style ='width:19%;margin:0.5%;'>
-                                        ${ ( t.status == 0 ) ? `<p class = 'btn btn-sm btn-alt-info'>PENDING COD ACTION</p>` : (t.status == 1) ? `<p class = 'btn btn-sm btn-alt-success'>COD APPROVED</p>` : (t.status == 2) ? `<p class = 'btn btn-sm btn-alt-danger'>COD REJECTED</p>` : (t.status == 3) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD, PENDING DEAN APPROVAL</p>` : (t.status == 4) ? `<p class = 'btn btn-sm btn-alt-success'>COD AND DEAN APPROVED</p>` : (t.status == 5) ? `<p class = 'btn btn-sm btn-alt-danger'>DEAN REJECTED</p>` : (t.status == 6) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD AND DEAN PENDING REGISTRAR</p>` : (t.status == 7) ? `<p class = 'btn btn-sm btn-alt-danger'>REGISTRAR REJECTED</p>` : (t.status == 8) ? `<p class = 'btn btn-sm btn-alt-success'>APPROVED BY COD, DEAN AND REGISTRAR</p>` : `<p class = 'btn btn-sm btn-alt-danger'>ERROR</p>`}</p>
+                                    <div style ='${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
+                                        ${( t.status == 0 ) ? `<p class = 'btn btn-sm btn-alt-info'>PENDING COD ACTION</p>` : (t.status == 1) ? `<p class = 'btn btn-sm btn-alt-success'>COD APPROVED</p>` : (t.status == 2) ? `<p class = 'btn btn-sm btn-alt-danger'>COD REJECTED</p>` : (t.status == 3) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD, PENDING DEAN APPROVAL</p>` : (t.status == 4) ? `<p class = 'btn btn-sm btn-alt-success'>COD AND DEAN APPROVED</p>` : (t.status == 5) ? `<p class = 'btn btn-sm btn-alt-danger'>DEAN REJECTED</p>` : (t.status == 6) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD AND DEAN PENDING REGISTRAR</p>` : (t.status == 7) ? `<p class = 'btn btn-sm btn-alt-danger'>REGISTRAR REJECTED</p>` : (t.status == 8) ? `<p class = 'btn btn-sm btn-alt-success'>APPROVED BY COD, DEAN AND REGISTRAR</p>` : `<p class = 'btn btn-sm btn-alt-danger'>ERROR</p>`}</p>
                                     </div>
-                                    <div style ='width:19%;margin:0.5%;'>
+                                    <div style ='${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
                                         <p>${ t.date }</p>
                                     </div>
-                                    <div style ='width:19%;margin:0.5%;'>
+                                    <div style ='${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
                                         <p>${ t.reason }</p>
                                     </div>   
-                                    <div style ='width:19%;margin:0.5%;'>
-                                        ${ ( t.status == 0 ) ? `<p class = 'btn btn-sm btn-alt-success'>Opened</p>` : `<p class = 'btn btn-sm btn-alt-danger'>Closed</p>`}
+                                    <div style ='${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:19%;margin:0.5%;'>
+                                        ${ (t.status == 0) ? `<p class = 'btn btn-sm btn-alt-success'>Opened</p>` : `<p class = 'btn btn-sm btn-alt-danger'>Closed</p>`}
                                     </div>                    
                                 </section>
                             `
@@ -652,25 +652,25 @@
 
                             `
                                 <section style = 'text-align:center;width:100%;display:flex;flex-wrap:wrap;${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'background:rgba(234,234,234,0.6);border:1px solid #fff;' : 'background:#fff;border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'background:rgba(234,234,234,0.6);border:1px solid #fff;' : 'background:#fff;border:1px solid rgba(234,234,234,0.6);'}'>
-                                    <div style ='width:48%;margin:0.5%;'>
+                                    <div style ='${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
                                         <h4>USER</h4>
                                         <p>${ t.level }</p>
                                     </div>
-                                    <div style ='width:48%;margin:0.5%;'>
+                                    <div style ='${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
                                         <h4>ACTION</h4>
-                                        ${ ( t.status == 0 ) ? `<p class = 'btn btn-sm btn-alt-info'>PENDING COD ACTION</p>` : (t.status == 1) ? `<p class = 'btn btn-sm btn-alt-success'>COD APPROVED</p>` : (t.status == 2) ? `<p class = 'btn btn-sm btn-alt-danger'>COD REJECTED</p>` : (t.status == 3) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD, PENDING DEAN APPROVAL</p>` : (t.status == 4) ? `<p class = 'btn btn-sm btn-alt-success'>COD AND DEAN APPROVED</p>` : (t.status == 5) ? `<p class = 'btn btn-sm btn-alt-danger'>DEAN REJECTED</p>` : (t.status == 6) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD AND DEAN PENDING REGISTRAR</p>` : (t.status == 7) ? `<p class = 'btn btn-sm btn-alt-danger'>REGISTRAR REJECTED</p>` : (t.status == 8) ? `<p class = 'btn btn-sm btn-alt-success'>APPROVED BY COD, DEAN AND REGISTRAR</p>` : `<p class = 'btn btn-sm btn-alt-danger'>ERROR</p>`}</p>
+                                        ${ (t.status == 0) ? `<p class = 'btn btn-sm btn-alt-info'>PENDING COD ACTION</p>` : (t.status == 1) ? `<p class = 'btn btn-sm btn-alt-success'>COD APPROVED</p>` : (t.status == 2) ? `<p class = 'btn btn-sm btn-alt-danger'>COD REJECTED</p>` : (t.status == 3) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD, PENDING DEAN APPROVAL</p>` : (t.status == 4) ? `<p class = 'btn btn-sm btn-alt-success'>COD AND DEAN APPROVED</p>` : (t.status == 5) ? `<p class = 'btn btn-sm btn-alt-danger'>DEAN REJECTED</p>` : (t.status == 6) ? `<p class = 'btn btn-sm btn-alt-info'>APPROVED BY COD AND DEAN PENDING REGISTRAR</p>` : (t.status == 7) ? `<p class = 'btn btn-sm btn-alt-danger'>REGISTRAR REJECTED</p>` : (t.status == 8) ? `<p class = 'btn btn-sm btn-alt-success'>APPROVED BY COD, DEAN AND REGISTRAR</p>` : `<p class = 'btn btn-sm btn-alt-danger'>ERROR</p>`}</p>
                                     </div>
-                                    <div style ='width:48%;margin:0.5%;'>
+                                    <div style ='${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
                                         <h4>DATE</h4>
                                         <p>${ t.date }</p>
                                     </div>
-                                    <div style ='width:48%;margin:0.5%;'>
+                                    <div style ='${ (key > 0) ? ((collect.transfers[0].length + k) % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);' : (k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
                                         <h4>REASON</h4>
                                         <p>${ t.reason }</p>
                                     </div>  
-                                    <div style ='width:48%;margin:0.5%;'>
+                                    <div style ='${(k % 2) ? 'border:1px solid #fff;' : 'border:1px solid rgba(234,234,234,0.6);'}width:48%;margin:0.5%;'>
                                         <h4>STATUS</h4>
-                                        ${ ( t.status == 0 ) ? `<p class = 'btn btn-sm btn-alt-success'>Opened</p>` : `<p class = 'btn btn-sm btn-alt-danger'>Closed</p>`}
+                                        ${(t.status == 0) ? `<p class = 'btn btn-sm btn-alt-success'>Opened</p>` : `<p class = 'btn btn-sm btn-alt-danger'>Closed</p>`}
                                     </div>                    
                                 </section>
                             `

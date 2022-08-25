@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_id');
             $table->integer('intake_id');
+            $table->integer('department_id');
             $table->integer('course_id');
             $table->string('subject_1');
             $table->string('subject_2');
@@ -32,6 +33,7 @@ return new class extends Migration
             $table->string('cod_comments')->nullable();
             $table->integer('dean_status')->nullable();
             $table->string('dean_comments')->nullable();
+            $table->integer('registrar_comments')->nullable();
             $table->integer('registrar_status')->nullable();
             $table->integer('status')->nullable();
             $table->string('ref_number')->nullable();

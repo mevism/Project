@@ -12,6 +12,7 @@
 */
 
 use Modules\Student\Http\Controllers\StudentController;
+use Modules\Student\Http\Middleware\Update;
 
 Route::prefix('student')->group(function() {
 //    Route::get('/', 'StudentController@index')->name('student');
@@ -34,7 +35,7 @@ Route::prefix('student')->group(function() {
         Route::get('/bindNav', [StudentController::class, 'bindNav']);
 
     });
-    Route::group(['Modules\Student\Http\Middleware\Comrade' => ['update_profile']], function (){
+    Route::middleware([Update::class])->group(function () {
         Route::get('/change_course', [StudentController::class, 'change_course'])->name('change_course');
         Route::get('/exams_transcript', [StudentController::class, 'exams_transcript'])->name('exams');
         Route::get('/getFee', [StudentController::class, 'getFee'])->name('fee');
