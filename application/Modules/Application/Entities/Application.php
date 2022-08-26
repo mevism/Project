@@ -22,6 +22,7 @@ class Application extends Model
     public function applicant(){
 
        return $this->belongsTo(Applicant::class, 'id');
+
     }
 
 //    relationship between an application and course
@@ -49,7 +50,7 @@ class Application extends Model
 
     public function admApprovals(){
 
-        return $this->hasOne(AdmissionApproval::class, 'id');
+        return $this->belongsTo(AdmissionApproval::class, 'id');
     }
 
 //    public function admitApproval(){

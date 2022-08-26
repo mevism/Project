@@ -20,7 +20,7 @@ class AdmissionApproval extends Model
 
     public function appApprovals(){
 
-        return $this->belongsTo(Application::class, 'app_id');
+        return $this->hasOne(Application::class, 'app_id');
     }
 
     public function kuccpsApproval(){

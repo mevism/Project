@@ -161,16 +161,16 @@ class CoursesController extends Controller
 
                     $pdfPath = storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT).".pdf");
 
-                    if(file_exists($pdfPath)){
-                        unlink($pdfPath);
-                    }
-
-                $converter = new OfficeConverter(storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
-                $converter->convertTo('APP'."_".date('Y')."_".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT).'.pdf');
-
-                if(file_exists($docPath)){
-                    unlink($docPath);
-                }
+//                    if(file_exists($pdfPath)){
+//                        unlink($pdfPath);
+//                    }
+//
+//                $converter = new OfficeConverter(storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
+//                $converter->convertTo('APP'."_".date('Y')."_".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT).'.pdf');
+//
+//                if(file_exists($docPath)){
+//                    unlink($docPath);
+//                }
 
                 Application::where('user_id', $applicant->id)->update(['status' => 0]);
                 KuccpsApplicant::where('id', $applicant->id)->update(['status' => 1]);
@@ -733,7 +733,7 @@ class CoursesController extends Controller
         $data3 = implode(",", $subject3);
 
 
-      
+
 
         $courses                      =    new Courses();
         $courses->campus_id           =    $request->input('main');
