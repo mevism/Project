@@ -33,6 +33,7 @@
                 <div class="col-lg-12">
                     <table id="example" class="table table-responsive table-md table-striped table-bordered table-vcenter fs-sm">
                             <thead>
+                            <th></th>    
                             <th>Applicant Name</th>
                             <th>Course Name</th>
                             <th>Transaction Code</th>
@@ -42,6 +43,7 @@
                             <tbody>
                             @foreach($applicant as $app)
                                 <tr>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->mname }} {{ $app->appApprovals->applicant->fname }}</td>
                                     <td>{{ $app->appApprovals->courses->course_name }}</td>
                                     <td>
@@ -64,9 +66,9 @@
 
                                             @if($app->finance_status === 0)
                                                 <a class="btn btn-sm btn-alt-info" onclick="return confirm('Are you sure you want to approve?')" data-toggle="click-ripple" href="{{ route('finance.acceptAdmission', $app->id) }}"> Accept</a>
-                                                <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
+                                                <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->id }}"> Reject</a>
 
-                                                <div class="modal fade" id="modal-block-popin" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
+                                                <div class="modal fade" id="modal-block-popin-{{ $app->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-popin" role="document">
                                                         <div class="modal-content">
                                                             <div class="block block-rounded block-transparent mb-0">

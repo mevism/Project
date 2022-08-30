@@ -45,7 +45,7 @@ class Application extends Model
 
     public function admApproval(){
 
-        return $this->hasOne(AdmissionApproval::class, 'app_id');
+        return $this->hasOne(AdmissionApproval::class, 'id');
     }
 
     protected static function newFactory()
