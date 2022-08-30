@@ -53,26 +53,26 @@ class KuccpsImport implements ToCollection
 
 
             $applicant = KuccpsApplicant::create([
-                'index_number' => $row[1],
-                'sname' => $sname,  
-                'fname' => $fname ,
-                'mname' => $mname,
-                'gender' => $row[3],
-                'mobile' => $row[4],
-                'alt_mobile' => $row[5],
-                'email' => $row[6],
-                'alt_email' => $row[7],
-                'BOX' => $row[8],
-                'postal_code' => $row[9],
-                'town' => $row[10],
-                'school' => $row[13],
+                'index_number' =>trim( $row[1]),
+                'sname' => trim($sname),  
+                'fname' => trim($fname) ,
+                'mname' => trim($mname),
+                'gender' => trim($row[3]),
+                'mobile' => trim($row[4]),
+                'alt_mobile' => trim($row[5]),
+                'email' => trim($row[6]),
+                'alt_email' => trim($row[7]),
+                'BOX' => trim($row[8]),
+                'postal_code' => trim($row[9]),
+                'town' => trim($row[10]),
+                'school' => trim($row[13]),
             ]); 
 
             KuccpsApplication::create([
-                'user_id' => $applicant->id,
-                'intake_id' => $this->intake_id,
-                'course_code' => $row[11],
-                'course_name' => $row[12]
+                'user_id' => trim($applicant->id),
+                'intake_id' => trim($this->intake_id),
+                'course_code' => trim($row[11]),
+                'course_name' => trim($row[12])
             
             ]);
         }

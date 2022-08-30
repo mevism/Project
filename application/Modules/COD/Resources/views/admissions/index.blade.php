@@ -34,7 +34,6 @@
                     <table id="example" class="table table-responsive table-md table-striped table-bordered table-vcenter fs-sm">
                         @if(count($applicant)>0)
                             <thead>
-                            <th>#</th>
                             <th>Applicant Name</th>
                             <th>Department</th>
                             <th>Course Name</th>
@@ -48,7 +47,6 @@
                             <tbody>
                             @foreach($applicant as $app)
                                 <tr>
-                                    <td scope="row"> {{ $loop->iteration }}</td>
                                     <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }} </td>
                                     <td> {{ $app->courses->getCourseDept->name }}</td>
                                     <td> {{ $app->courses->course_name }}</td>
@@ -67,12 +65,11 @@
                                         @if($app->applicant->student_type === 2)
                                             @if($app->admApproval === NULL)
                                                 <a class="btn btn-sm btn-alt-info" onclick="return confirm('Are you sure you want to approve?')" data-toggle="click-ripple" href="{{ route('cod.acceptAdmission', $app->id) }}">Accept</a>
-                                                <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->id }}"> Reject</a>
-
-                                                <div class="modal fade" id="modal-block-popin-{{ $app->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
+                                                <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
+                                                <div class="modal fade" id="modal-block-popin" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-popin" role="document">
                                                         <div class="modal-content">
-                                                            <div class="block block-rounded block-transparent mb-0">
+                                                            <div class="block block-rounded block-transparent mb-0">  
                                                                 <div class="block-header block-header-default">
                                                                     <h3 class="block-title">Reason(s) for rejecting {{ $app->applicant->sname }}'s admission</h3>
                                                                     <div class="block-options">
