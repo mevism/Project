@@ -28,7 +28,7 @@ return new class extends Migration
             $table->tinyInteger('phone_verification')->nullable()->default(0);
             $table->string('marital_status')->nullable();
             $table->date('email_verified_at')->nullable();
-            $table->string('mobile')->unique();
+            $table->string('mobile')->nullable();
             $table->string('alt_mobile')->nullable();
             $table->date('DOB')->nullable();
             $table->string('disabled')->nullable();
