@@ -48,15 +48,6 @@ class Application extends Model
         return $this->hasOne(AdmissionApproval::class, 'app_id');
     }
 
-    public function admApprovals(){
-
-        return $this->belongsTo(AdmissionApproval::class, 'id');
-    }
-
-//    public function admitApproval(){
-//        return $this->hasMany(AdmissionApproval::class, )
-//    }
-
     protected static function newFactory()
     {
         return \database\factories\ApplicationFactory::new();

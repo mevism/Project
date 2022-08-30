@@ -13,29 +13,11 @@ class AdmissionApproval extends Model
 
     protected $fillable = [];
 
-    public function appApproval(){
-
-        return $this->belongsTo(Application::class, 'id');
-    }
-
     public function appApprovals(){
 
-        return $this->hasOne(Application::class, 'app_id');
+        return $this->hasOne(Application::class, 'id');
     }
 
-    public function kuccpsApproval(){
-
-        return $this->belongsTo(KuccpsApplication::class, 'user_id');
-    }
-
-    public function admitKuccps(){
-        return $this->belongsTo(KuccpsApplication::class, 'app_id');
-    }
-
-    public function kuccpsStudent(){
-
-        return $this->belongsTo(KuccpsApplication::class, 'app_id');
-    }
 
     protected static function newFactory()
     {

@@ -911,7 +911,7 @@ class CoursesController extends Controller
     public function admissions(){
 
         $admission = AdmissionApproval::where('medical_status', 1)
-            ->where('student_type', 1)
+//            ->where('student_type', 1)
             ->where('status', NULL)
             ->get();
 

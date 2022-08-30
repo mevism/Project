@@ -334,8 +334,6 @@ class ApplicationController extends Controller
             $user->index_number = trim($request->index_number);
             $user->id_number = trim($request->id_number);
             $user->alt_mobile = trim($request->alt_number);
-            $user->mobile = trim($request->mobile);
-            $user->email = trim($request->email);
             $user->alt_email = trim($request->alt_email);
             $user->dob = trim($request->dob);
             $user->disabled = trim($request->disabled);
