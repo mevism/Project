@@ -33,18 +33,19 @@
                     <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
                         @if(count($apps)>0)
                             <thead>
-                        
+                             <th></th>
                             <th nowrap="">Applicant Name</th>
                             <th>Department</th>
                             <th>Course Name</th>
                             <th>COD Status</th>
                             <th>COD Comments</th>
+                            <th>DEAN STATUS</th>
                             <th style="white-space: nowrap !important;">Action</th>
                             </thead>
                             <tbody>
                             @foreach($apps as $app)
                             <tr>
-                               
+                                <td>{{ $loop->iteration }}</td>
                                 <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</td>
                                 <td> {{ $app->courses->getCourseDept->name }}</td>
                                 <td> {{ $app->courses->course_name }}</td>
@@ -56,6 +57,15 @@
                                     @endif
                                 </td>
                                 <td> {{ $app->cod_comments }}</td>
+                                <td>
+                                    @if($app->dean_status === 0)
+                                        <span class="badge bg-primary">Pending</span>
+                                    @elseif($app->dean_status === 1)
+                                        <span class="badge bg-success">Accepted</span>
+                                    @else
+                                        <span class="badge bg-danger">Rejected</span>
+                                    @endif
+                                </td>
                                 <td nowrap="">
                                 @if($app->dean_status === 0)
                                     <a class="btn btn-sm btn-alt-secondary" href="{{ route('dean.viewApplication', $app->id) }}"> View </a>

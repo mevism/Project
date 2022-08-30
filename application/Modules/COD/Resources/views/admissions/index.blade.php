@@ -34,6 +34,7 @@
                     <table id="example" class="table table-responsive table-md table-striped table-bordered table-vcenter fs-sm">
                         @if(count($applicant)>0)
                             <thead>
+                                <th></th>
                             <th>Applicant Name</th>
                             <th>Department</th>
                             <th>Course Name</th>
@@ -47,6 +48,7 @@
                             <tbody>
                             @foreach($applicant as $app)
                                 <tr>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }} </td>
                                     <td> {{ $app->courses->getCourseDept->name }}</td>
                                     <td> {{ $app->courses->course_name }}</td>
