@@ -58,6 +58,7 @@
                     <thead>
                     <tr>
                         <th>✔</th>
+                         <th></th>
                         <th>Applicant Name</th>
                         <th>Department Name</th>
                         <th>Course</th>
@@ -77,6 +78,7 @@
 
                                     @endif
                                     </td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td> {{ $item->applicant->sname }} {{ $item->applicant->fname }} {{ $item->applicant->mname }}</td>
                                 <td> {{ $item->courses->getCourseDept->name }}</td>
                                 <td> {{ $item->courses->course_name }}</td>

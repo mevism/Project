@@ -177,7 +177,7 @@ class FinanceController extends Controller
         $admission->medical_status = 0;
         $admission->save();
 
-        return redirect(route('finance.admissions'))->with('success', 'Record submitted to Registrar');
+        return redirect(route('finance.admissions'))->with('success', 'Record submitted to Medical Officer');
     }
 
     public function submitAdmissionJab($id){

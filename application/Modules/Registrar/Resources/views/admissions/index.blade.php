@@ -34,6 +34,7 @@
                     <table id="example" class="table table-responsive table-md table-striped table-bordered table-vcenter fs-sm">
                         @if(count($admission)>0)
                             <thead>
+                            <th></th>    
                             <th>Applicant Name</th>
                             <th>Department</th>
                             <th>Course Name</th>
@@ -44,6 +45,7 @@
                             <tbody>
                             @foreach($admission as $app)
                                 <tr>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td nowrap=""> {{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->fname }} {{ $app->appApprovals->applicant->mname }} </td>
                                     <td> {{ $app->appApprovals->courses->getCourseDept->name }}</td>
                                     <td> {{ $app->appApprovals->courses->course_name }}</td>
@@ -72,8 +74,8 @@
                                     <td nowrap="">
                                         @if($app->registrar_status === 0)
                                             <a class="btn btn-sm btn-alt-success" data-toggle="click-ripple" onclick="return confirm('Are you sure you want to erroll this student?')" href="{{ route('courses.admitStudent', $app->id) }}"> Enroll </a>
-                                            <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject </a>
-                                            <div class="modal fade" id="modal-block-popin" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin{{ $app->id }}" aria-hidden="true">
+                                            <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->id }}"> Reject </a>
+                                            <div class="modal fade" id="modal-block-popin-{{ $app->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin{{ $app->id }}" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-popin" role="document">
                                                     <div class="modal-content">
                                                         <div class="block block-rounded block-transparent mb-0">

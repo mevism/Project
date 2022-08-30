@@ -34,6 +34,7 @@
                         @if(count($apps)>0)
                             <thead>
                             <th>✔</th>
+                                <th></th>
                             <th>Applicant Name</th>
                             <th>Department </th>
                             <th>Course Name</th>
@@ -49,6 +50,7 @@
                                         ✔
                                     @endif
                                     </td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</td>
                                     <td> {{ $app->courses->getCourseDept->name }}</td>
                                     <td> {{ $app->courses->course_name }}</td>
