@@ -19,13 +19,13 @@ return new class extends Migration
             $table->string('id_number')->unique()->nullable();
             $table->string('password');
             $table->string('username');
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->string('alt_email')->nullable();
             $table->string('sname')->nullable();
             $table->string('mname')->nullable();
             $table->string('fname')->nullable();
             $table->string('gender')->nullable();
-            $table->tinyInteger('phone_verification')->nullable()->default(0);
+            $table->tinyInteger('phone_verification')->nullable();
             $table->string('marital_status')->nullable();
             $table->date('email_verified_at')->nullable();
             $table->string('mobile')->nullable();
@@ -43,6 +43,7 @@ return new class extends Migration
             $table->string('remember_token')->nullable();
             $table->string('app_number')->nullable();
             $table->string('reg_number')->nullable();
+            $table->integer('student_type')->nullable();
             $table->tinyInteger('user_status')->default(0);
             $table->timestamps();
             $table->softDeletes();

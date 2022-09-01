@@ -56,7 +56,7 @@ class Applicant extends Authenticatable
 
     public function application(){
 
-       return $this->hasMany(Application::class, 'user_id');
+       return $this->hasMany(Application::class, 'id');
     }
     protected static function newFactory()
     {

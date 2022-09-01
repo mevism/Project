@@ -30,7 +30,7 @@ use Modules\Application\Http\Controllers\ApplicationController;
         Route::get('/logout', 'ApplicationController@logout')->name('application.logout');
         Route::get('/details', 'ApplicationController@details')->name('application.details');
 
-        Route::group(['middleware' => ['auth', 'is_verified', 'user_updated']], function (){
+        Route::group(['middleware' => ['auth', 'is_verified']], function (){
             Route::post('/updateDetails', 'ApplicationController@makeupdate')->name('application.updateDetails');
         });
 

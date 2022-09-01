@@ -91,6 +91,7 @@ class CODController extends Controller
 
     public function batch(){
         $apps = Application::where('cod_status', '>', 0)
+            ->where('department_id', auth()->guard('user')->user()->department_id)
             ->where('dean_status', null)
             ->orWhere('dean_status', 3)
             ->where('cod_status', '!=', 3)
