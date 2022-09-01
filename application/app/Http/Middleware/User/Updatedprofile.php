@@ -22,7 +22,7 @@ class Updatedprofile
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->email_verified_at === null){
+        if (Auth::user()->email_verified_at === NULL){
 
             VerifyEmail::create([
                 'user_id' => Auth::user()->id,
@@ -39,7 +39,7 @@ class Updatedprofile
 
         }
 
-        if (Auth::user()->phone_verification === 0){
+        if (Auth::user()->phone_verification === NULL){
             $verification_code = rand(1, 999999);
 
             $number = Auth::user()->mobile;

@@ -33,7 +33,7 @@
                         </div>
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Department</div>
-                            <div class="col-md-8"> {{ $app->courses->department_id }} </div>
+                            <div class="col-md-8"> {{ $app->courses->getCourseDept->name }} </div>
                         </div>
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Course Name</div>
@@ -47,13 +47,30 @@
                             <div class="col-md-4 fw-bolder text-start">KCSE Grade</div>
                             <div class="col-md-8"> {{ $school->qualification }} </div>
                         </div>
-                        <div class="row p-1">
-                            <div class="col-md-4 fw-bolder text-start">Cluster Subjects</div>
-                            <div class="col-md-8">
-                                <p> {{ $app->subject_1 }}</p>
-                                <p> {{ $app->subject_2 }}</p>
-                                <p> {{ $app->subject_3 }}</p>
-                                <p> {{ $app->subject_4 }}</p>
+                        <div class="row py-3">
+                            <div class="col-md-12">
+                                <table class="table table-sm table-striped table-borderless">
+                                    <th>Course Requirement</th>
+                                    <th>Applicant Score</th>
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ $app->courses->courseRequirements->subject1 }}</td>
+                                        <td>{{ $app->subject_1 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $app->courses->courseRequirements->subject2 }}</td>
+                                        <td>{{ $app->subject_2 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $app->courses->courseRequirements->subject3 }}</td>
+                                        <td>{{ $app->subject_3 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $app->courses->courseRequirements->subject4 }}</td>
+                                        <td>{{ $app->subject_4 }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         @if($app->dean_status === 2)

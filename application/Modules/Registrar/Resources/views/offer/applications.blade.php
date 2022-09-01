@@ -137,7 +137,7 @@
                 <input type="checkbox" onclick="for(c in document.getElementsByClassName('accepted')) document.getElementsByClassName('accepted').item(c).checked = this.checked"> Select all
             </div>
             <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-sm btn-alt-primary" href="route('courses.archived')" data-toggle="click-ripple">Submit batch</button>
+                <button type="submit" class="btn btn-sm btn-alt-primary" href="route('courses.archived')" data-toggle="click-ripple">Generate Admission letters </button>
             </div>
             @endif
     </form>

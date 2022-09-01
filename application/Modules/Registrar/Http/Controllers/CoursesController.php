@@ -93,7 +93,7 @@ class CoursesController extends Controller
 
                 $regNumber = Application::where('course_id', $course->id)
                         ->where('intake_id', $applicant->kuccpsApplication->intake_id)
-                        ->where('status', 0)
+//                        ->where('status', 0)
                         ->where('student_type', 2)
                         ->count();
 
@@ -168,19 +168,19 @@ class CoursesController extends Controller
                        unlink($pdfPath);
                    }
 
-               $converter = new OfficeConverter(storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
-               $converter->convertTo('APP'."_".date('Y')."_".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT).'.pdf');
+//               $converter = new OfficeConverter(storage_path('APP'."_".date('Y')."_".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT).".docx"), storage_path());
+//               $converter->convertTo('APP'."_".date('Y')."_".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT).'.pdf');
+//
+//               if(file_exists($docPath)){
+//                   unlink($docPath);
+//               }
 
-               if(file_exists($docPath)){
-                   unlink($docPath);
-               }
-
-                Application::where('user_id', $applicant->id)->update(['status' => 1]);
+                Application::where('user_id', $applicant->id)->update(['status' => 0]);
                 KuccpsApplicant::where('id', $applicant->id)->update(['status' => 1]);
 
-                if ($applicant->email != null){
+                if ($applicant->alt_email != null){
 
-                    Mail::to($applicant->email)->send(new KuccpsMails($applicant));
+                    Mail::to($applicant->alt_email)->send(new KuccpsMails($applicant));
 
                 }
 
@@ -276,7 +276,7 @@ class CoursesController extends Controller
                 foreach($request->submit as $id){
 
                     $app = Application::find($id);
-                    
+
                     if($app->registrar_status === 1 && $app->cod_status === 1){
 
                         $regNo  = Application::where('course_id', $app->course_id)
@@ -348,7 +348,7 @@ class CoursesController extends Controller
                     if($app->dean_status === 2 && $app->registrar_status === 1){
 
                         // Send Failure Mail
-                        
+
                     }
                     if($app->dean_status === 1 && $app->registrar_status === 2){
 

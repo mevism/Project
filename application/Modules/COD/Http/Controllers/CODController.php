@@ -139,14 +139,15 @@ class CODController extends Controller
 
     public function acceptAdmission($id){
 
-        if(AdmissionApproval::where('app_id', $id)->exists()){
-                AdmissionApproval::where('app_id', $id)->update(['cod_status' => 1]);
-            }else{
-                $adm = new AdmissionApproval;
-                $adm->app_id = $id;
-                $adm->cod_status = 1;
-                $adm->save();
+        $app = AdmissionApproval::where('app_id', $id)->first();
 
+        if ($app === NULL){
+            $adm = new AdmissionApproval;
+            $adm->app_id = $id;
+            $adm->cod_status = 1;
+            $adm->save();
+        }else{
+            AdmissionApproval::where('app_id', $id)->update(['cod_status' => 1]);
         }
 
         return redirect()->route('cod.selfAdmissions')->with('success', 'New student admitted successfully');

@@ -33,19 +33,30 @@
                 <div class="col-lg-12">
                     <table id="example" class="table table-responsive table-md table-striped table-bordered table-vcenter fs-sm">
                             <thead>
-                            <th></th>    
+                            <th></th>
                             <th>Applicant Name</th>
                             <th>Course Name</th>
+                            <th>Student Type</th>
                             <th>Transaction Code</th>
                             <th>Status</th>
                             <th style="white-space: nowrap !important;">Action</th>
                             </thead>
                             <tbody>
                             @foreach($applicant as $app)
+
+
+{{--                                {{ $app->appApprovals->applicant->sname }}--}}
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->mname }} {{ $app->appApprovals->applicant->fname }}</td>
                                     <td>{{ $app->appApprovals->courses->course_name }}</td>
+                                    <td>
+                                        @if($app->appApprovals->student_type === 1)
+                                            S-PT
+                                        @else
+                                            J-FT
+                                        @endif
+                                    </td>
                                     <td>
                                         @if($app->appApprovals->applicant->student_type === 2)
                                             KUCCPS PLACEMENT
@@ -73,7 +84,7 @@
                                                         <div class="modal-content">
                                                             <div class="block block-rounded block-transparent mb-0">
                                                                 <div class="block-header block-header-default">
-                                                                    <h3 class="block-title">Reason(s) </h3>
+                                                                    <h3 class="block-title">Reason(s) for rejecting {{ $app->appApprovals->applicant->sname }}'s admission </h3>
                                                                     <div class="block-options">
                                                                         <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                                                                             <i class="fa fa-fw fa-times"></i>
@@ -94,7 +105,7 @@
                                                                 </div>
                                                                 <div class="block-content block-content-full text-end bg-body">
                                                                     <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>
-                                                                    {{--                        <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Okay</button>--}}
+                                                                                            <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Okay</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -102,14 +113,14 @@
                                                 </div>
                                             @elseif($app->finance_status === 1)
                                                 <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('finance.submitAdmission',$app->id) }}"> submit</a>
-                                                <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
+                                                <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->id }}"> Reject</a>
 
-                                                <div class="modal fade" id="modal-block-popin" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
+                                                <div class="modal fade" id="modal-block-popin-{{ $app->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-popin" role="document">
                                                         <div class="modal-content">
                                                             <div class="block block-rounded block-transparent mb-0">
                                                                 <div class="block-header block-header-default">
-                                                                    <h3 class="block-title">Reason(s) </h3>
+                                                                    <h3 class="block-title">Reason(s) for rejecting {{ $app->appApprovals->applicant->sname }}'s admission </h3>
                                                                     <div class="block-options">
                                                                         <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                                                                             <i class="fa fa-fw fa-times"></i>
@@ -130,7 +141,7 @@
                                                                 </div>
                                                                 <div class="block-content block-content-full text-end bg-body">
                                                                     <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>
-                                                                    {{--                        <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Okay</button>--}}
+                                                                                            <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Okay</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -170,7 +181,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[4, 'desc']],
+            order: [[6, 'desc']],
             rowGroup: {
                 dataSrc: 2
             }

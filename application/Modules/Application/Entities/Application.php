@@ -21,7 +21,7 @@ class Application extends Model
 
     public function applicant(){
 
-       return $this->belongsTo(Applicant::class, 'user_id');
+       return $this->belongsTo(Applicant::class, 'id');
 
     }
 
@@ -45,7 +45,12 @@ class Application extends Model
 
     public function admApproval(){
 
-        return $this->hasOne(AdmissionApproval::class, 'id');
+        return $this->hasMany(AdmissionApproval::class, 'id');
+    }
+
+    public function approveAdm(){
+
+        return $this->hasOne(AdmissionApproval::class, 'app_id');
     }
 
     protected static function newFactory()

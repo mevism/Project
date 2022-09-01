@@ -86,45 +86,21 @@ class ApplicationController extends Controller
         return view('application::auth.phoneverification');
     }
 
-    public function phoneVerification(Request $request)
-    {
-        $validated = $request->validate([
-            'verification_code' => 'required|alpha_num',
-            'phone_number' => 'required|alpha_num'
-        ]);
-
-        $unverified = VerifyUser::where('verification_code' , $request->verification_code)->first();
-
-
-        if (isset($unverified)){
-
-            $applicant = $unverified->applicant;
-
-            if (!$applicant->phone_verification){
-                $applicant->phone_verification = 1;
-                $applicant->save();
-
-                VerifyUser::where('verification_code', $request->verification_code)->delete();
-
-                 return redirect()->route('application.verification')->with('success', 'Phone number verified successfully');
-
-            }else{
-                return redirect(route('root'))->with('warning', 'Phone verification failed');
-            }
-        }else{
-            return redirect()->back()->with('info', 'Phone number already verified');
-        }
-
-        return redirect()->back()->with('error', 'Phone number failed verification');
-    }
     public function phonereverification(Request $request){
 
         $validated = $request->validate([
-            'verification_code' => 'required|alpha_num',
-            'phone_number' => 'required|alpha_num'
+            'verification_code' => 'required|numeric',
+            'phone_number' => 'required|numeric'
         ]);
 
-            $applicant = Auth::user();
+                $unverified = VerifyUser::where('verification_code', $request->verification_code)->first();
+
+                if (!$unverified){
+
+                    return redirect()->back()->with('error', 'Wrong code! Please request for a new code');
+                }
+
+                $applicant = $unverified->verifyUser;
 
             if (!$applicant->phone_verification){
                 $applicant->phone_verification = 1;
@@ -139,6 +115,23 @@ class ApplicationController extends Controller
             }
 
         return redirect()->back()->with('error', 'Phone number failed verification');
+    }
+
+    public function getNewCode(){
+
+        VerifyUser::where('user_id', Auth::user()->id)->delete();
+
+        $verification_code = rand(1, 999999);
+
+        $number = Auth::user()->mobile;
+
+        VerifyUser::create([
+            'user_id' => Auth::user()->id,
+            'verification_code' => $verification_code,
+        ]);
+
+        return redirect()->back()->with(['info' => 'Enter the code send to your phone', 'code' => $verification_code]);
+
     }
 
     public function emailVerification($verification_code){
@@ -579,6 +572,7 @@ class ApplicationController extends Controller
 
             $application = new Application;
             $application->user_id = Auth::user()->id;
+            $application->student_type = 1;
             $application->intake_id = $request->intake;
             $application->course_id = $request->course_id;
             $application->department_id = $request->dept;

@@ -43,6 +43,9 @@ class DeanController extends Controller
 
         $app = Application::find($id);
         $app->dean_status = 1;
+            if ($app->registrar_status != NULL){
+                $app->registrar_status = NULL;
+            }
         $app->save();
 
         $logs = new DeanLog;

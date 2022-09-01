@@ -12,9 +12,9 @@ class VerifyUser extends Model
 
     protected $fillable = ['user_id', 'verification_code'];
 
-    public function applicant(){
+    public function verifyUser(){
 
-        return $this->belongsTo('\Modules\Application\Entities\Applicant', 'id');
+        return $this->belongsTo(Applicant::class, 'user_id');
     }
 
     protected static function newFactory()

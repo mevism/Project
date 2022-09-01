@@ -15,7 +15,11 @@ class AdmissionApproval extends Model
 
     public function appApprovals(){
 
-        return $this->hasOne(Application::class, 'id');
+        return $this->belongsTo(Application::class, 'app_id');
+    }
+
+    public function admissions(){
+        return $this->belongsTo(Application::class, 'id');
     }
 
 
