@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('c_o_d_logs', function (Blueprint $table) {
             $table->id();
-            $table->integer('app_id');
+            $table->integer('application_id');
             $table->string('user');
             $table->string('user_role');
             $table->string('activity');

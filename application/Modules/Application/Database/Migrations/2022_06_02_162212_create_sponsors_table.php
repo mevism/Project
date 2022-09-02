@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('sponsors', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id');
+            $table->bigInteger('applicant_id');
             $table->string('sponsor_name');
             $table->string('sponsor_mobile');
             $table->string('sponsor_county');
