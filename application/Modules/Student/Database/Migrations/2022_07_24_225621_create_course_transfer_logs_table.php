@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('course_transfer_logs', function (Blueprint $table) {
             $table->bigIncrements('course_transfer_logs_id');
-            $table->integer('user_id')->nullable();
+            $table->integer('applicant_id')->nullable();
             $table->integer('course_id')->nullable();
             $table->string('level')->nullable();
             $table->integer('status')->nullable();

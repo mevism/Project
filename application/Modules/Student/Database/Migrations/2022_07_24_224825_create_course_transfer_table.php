@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('course_transfer', function (Blueprint $table) {
             $table->bigIncrements('course_transfer_id');
-            $table->integer('user_id')->nullable();
+            $table->integer('applicant_id')->nullable();
             $table->integer('course_id')->nullable();
             $table->integer('COD')->nullable();
             $table->integer('DEAN')->nullable();
