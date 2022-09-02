@@ -158,7 +158,6 @@ class ComposerStaticInitaa094eb44816527c6d0c4f53f191d4ad
         array (
             'Fruitcake\\Cors\\' => 15,
             'Faker\\' => 6,
-            'Facade\\IgnitionContracts\\' => 25,
         ),
         'E' => 
         array (
@@ -505,10 +504,6 @@ class ComposerStaticInitaa094eb44816527c6d0c4f53f191d4ad
         'Faker\\' => 
         array (
             0 => __DIR__ . '/..' . '/fakerphp/faker/src/Faker',
-        ),
-        'Facade\\IgnitionContracts\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/facade/ignition-contracts/src',
         ),
         'Egulias\\EmailValidator\\' => 
         array (
@@ -955,12 +950,6 @@ class ComposerStaticInitaa094eb44816527c6d0c4f53f191d4ad
         'Egulias\\EmailValidator\\Warning\\QuotedString' => __DIR__ . '/..' . '/egulias/email-validator/src/Warning/QuotedString.php',
         'Egulias\\EmailValidator\\Warning\\TLD' => __DIR__ . '/..' . '/egulias/email-validator/src/Warning/TLD.php',
         'Egulias\\EmailValidator\\Warning\\Warning' => __DIR__ . '/..' . '/egulias/email-validator/src/Warning/Warning.php',
-        'Facade\\IgnitionContracts\\BaseSolution' => __DIR__ . '/..' . '/facade/ignition-contracts/src/BaseSolution.php',
-        'Facade\\IgnitionContracts\\HasSolutionsForThrowable' => __DIR__ . '/..' . '/facade/ignition-contracts/src/HasSolutionsForThrowable.php',
-        'Facade\\IgnitionContracts\\ProvidesSolution' => __DIR__ . '/..' . '/facade/ignition-contracts/src/ProvidesSolution.php',
-        'Facade\\IgnitionContracts\\RunnableSolution' => __DIR__ . '/..' . '/facade/ignition-contracts/src/RunnableSolution.php',
-        'Facade\\IgnitionContracts\\Solution' => __DIR__ . '/..' . '/facade/ignition-contracts/src/Solution.php',
-        'Facade\\IgnitionContracts\\SolutionProviderRepository' => __DIR__ . '/..' . '/facade/ignition-contracts/src/SolutionProviderRepository.php',
         'Faker\\Calculator\\Ean' => __DIR__ . '/..' . '/fakerphp/faker/src/Faker/Calculator/Ean.php',
         'Faker\\Calculator\\Iban' => __DIR__ . '/..' . '/fakerphp/faker/src/Faker/Calculator/Iban.php',
         'Faker\\Calculator\\Inn' => __DIR__ . '/..' . '/fakerphp/faker/src/Faker/Calculator/Inn.php',
@@ -1911,6 +1900,7 @@ class ComposerStaticInitaa094eb44816527c6d0c4f53f191d4ad
         'Illuminate\\Broadcasting\\PendingBroadcast' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Broadcasting/PendingBroadcast.php',
         'Illuminate\\Broadcasting\\PresenceChannel' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Broadcasting/PresenceChannel.php',
         'Illuminate\\Broadcasting\\PrivateChannel' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Broadcasting/PrivateChannel.php',
+        'Illuminate\\Broadcasting\\UniqueBroadcastEvent' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Broadcasting/UniqueBroadcastEvent.php',
         'Illuminate\\Bus\\Batch' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Bus/Batch.php',
         'Illuminate\\Bus\\BatchFactory' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Bus/BatchFactory.php',
         'Illuminate\\Bus\\BatchRepository' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Bus/BatchRepository.php',
@@ -2320,6 +2310,7 @@ class ComposerStaticInitaa094eb44816527c6d0c4f53f191d4ad
         'Illuminate\\Database\\Query\\Processors\\SqlServerProcessor' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/Query/Processors/SqlServerProcessor.php',
         'Illuminate\\Database\\RecordsNotFoundException' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/RecordsNotFoundException.php',
         'Illuminate\\Database\\SQLiteConnection' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/SQLiteConnection.php',
+        'Illuminate\\Database\\SQLiteDatabaseDoesNotExistException' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/SQLiteDatabaseDoesNotExistException.php',
         'Illuminate\\Database\\Schema\\Blueprint' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php',
         'Illuminate\\Database\\Schema\\Builder' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/Schema/Builder.php',
         'Illuminate\\Database\\Schema\\ColumnDefinition' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Database/Schema/ColumnDefinition.php',
@@ -3790,7 +3781,6 @@ class ComposerStaticInitaa094eb44816527c6d0c4f53f191d4ad
         'Monolog\\Formatter\\FluentdFormatter' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/FluentdFormatter.php',
         'Monolog\\Formatter\\FormatterInterface' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/FormatterInterface.php',
         'Monolog\\Formatter\\GelfMessageFormatter' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/GelfMessageFormatter.php',
-        'Monolog\\Formatter\\GoogleCloudLoggingFormatter' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/GoogleCloudLoggingFormatter.php',
         'Monolog\\Formatter\\HtmlFormatter' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/HtmlFormatter.php',
         'Monolog\\Formatter\\JsonFormatter' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/JsonFormatter.php',
         'Monolog\\Formatter\\LineFormatter' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/LineFormatter.php',
@@ -4015,6 +4005,7 @@ class ComposerStaticInitaa094eb44816527c6d0c4f53f191d4ad
         'Nwidart\\Modules\\Commands\\MigrateStatusCommand' => __DIR__ . '/..' . '/nwidart/laravel-modules/src/Commands/MigrateStatusCommand.php',
         'Nwidart\\Modules\\Commands\\MigrationMakeCommand' => __DIR__ . '/..' . '/nwidart/laravel-modules/src/Commands/MigrationMakeCommand.php',
         'Nwidart\\Modules\\Commands\\ModelMakeCommand' => __DIR__ . '/..' . '/nwidart/laravel-modules/src/Commands/ModelMakeCommand.php',
+        'Nwidart\\Modules\\Commands\\ModelShowCommand' => __DIR__ . '/..' . '/nwidart/laravel-modules/src/Commands/ModelShowCommand.php',
         'Nwidart\\Modules\\Commands\\ModuleDeleteCommand' => __DIR__ . '/..' . '/nwidart/laravel-modules/src/Commands/ModuleDeleteCommand.php',
         'Nwidart\\Modules\\Commands\\ModuleMakeCommand' => __DIR__ . '/..' . '/nwidart/laravel-modules/src/Commands/ModuleMakeCommand.php',
         'Nwidart\\Modules\\Commands\\NotificationMakeCommand' => __DIR__ . '/..' . '/nwidart/laravel-modules/src/Commands/NotificationMakeCommand.php',
@@ -6073,6 +6064,7 @@ class ComposerStaticInitaa094eb44816527c6d0c4f53f191d4ad
         'SebastianBergmann\\Type\\RuntimeException' => __DIR__ . '/..' . '/sebastian/type/src/exception/RuntimeException.php',
         'SebastianBergmann\\Type\\SimpleType' => __DIR__ . '/..' . '/sebastian/type/src/type/SimpleType.php',
         'SebastianBergmann\\Type\\StaticType' => __DIR__ . '/..' . '/sebastian/type/src/type/StaticType.php',
+        'SebastianBergmann\\Type\\TrueType' => __DIR__ . '/..' . '/sebastian/type/src/type/TrueType.php',
         'SebastianBergmann\\Type\\Type' => __DIR__ . '/..' . '/sebastian/type/src/type/Type.php',
         'SebastianBergmann\\Type\\TypeName' => __DIR__ . '/..' . '/sebastian/type/src/TypeName.php',
         'SebastianBergmann\\Type\\UnionType' => __DIR__ . '/..' . '/sebastian/type/src/type/UnionType.php',
@@ -6150,7 +6142,6 @@ class ComposerStaticInitaa094eb44816527c6d0c4f53f191d4ad
         'Spatie\\LaravelIgnition\\ContextProviders\\LaravelContextProviderDetector' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/ContextProviders/LaravelContextProviderDetector.php',
         'Spatie\\LaravelIgnition\\ContextProviders\\LaravelLivewireRequestContextProvider' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/ContextProviders/LaravelLivewireRequestContextProvider.php',
         'Spatie\\LaravelIgnition\\ContextProviders\\LaravelRequestContextProvider' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/ContextProviders/LaravelRequestContextProvider.php',
-        'Spatie\\LaravelIgnition\\Exceptions\\CannotExecuteSolutionForNonLocalEnvironment' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/Exceptions/CannotExecuteSolutionForNonLocalEnvironment.php',
         'Spatie\\LaravelIgnition\\Exceptions\\CannotExecuteSolutionForNonLocalIp' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/Exceptions/CannotExecuteSolutionForNonLocalIp.php',
         'Spatie\\LaravelIgnition\\Exceptions\\InvalidConfig' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/Exceptions/InvalidConfig.php',
         'Spatie\\LaravelIgnition\\Exceptions\\ViewException' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/Exceptions/ViewException.php',
@@ -6221,6 +6212,7 @@ class ComposerStaticInitaa094eb44816527c6d0c4f53f191d4ad
         'Spatie\\LaravelIgnition\\Support\\LaravelDocumentationLinkFinder' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/Support/LaravelDocumentationLinkFinder.php',
         'Spatie\\LaravelIgnition\\Support\\LaravelVersion' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/Support/LaravelVersion.php',
         'Spatie\\LaravelIgnition\\Support\\LivewireComponentParser' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/Support/LivewireComponentParser.php',
+        'Spatie\\LaravelIgnition\\Support\\RunnableSolutionsGuard' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/Support/RunnableSolutionsGuard.php',
         'Spatie\\LaravelIgnition\\Support\\SentReports' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/Support/SentReports.php',
         'Spatie\\LaravelIgnition\\Support\\StringComparator' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/Support/StringComparator.php',
         'Spatie\\LaravelIgnition\\Views\\BladeSourceMapCompiler' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/Views/BladeSourceMapCompiler.php',

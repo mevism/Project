@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id');
+            $table->bigInteger('applicant_id');
             $table->integer('intake_id');
             $table->integer('student_type');
             $table->integer('school_id');

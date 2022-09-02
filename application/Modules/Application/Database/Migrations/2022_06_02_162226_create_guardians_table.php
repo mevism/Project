@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('guardians', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id');
+            $table->bigInteger('applicant_id');
             $table->string('guardian_name');
             $table->string('guardian_mobile');
             $table->string('guardian_county');
