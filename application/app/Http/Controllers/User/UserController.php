@@ -4,13 +4,6 @@ namespace App\Http\Controllers\User;
 
 use Modules\Application\Entities\AdmissionApproval;
 use Session;
-use App\Models\User;
-use App\Models\Course;
-use App\Models\Intake;
-use App\Models\School;
-use http\Env\Response;
-use App\Models\Classes;
-use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;

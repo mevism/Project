@@ -13,7 +13,6 @@
       <path value="$PROJECT_DIR$/application/vendor/nikic/php-parser" />
       <path value="$PROJECT_DIR$/application/vendor/graham-campbell/result-type" />
       <path value="$PROJECT_DIR$/application/vendor/nwidart/laravel-modules" />
-      <path value="$PROJECT_DIR$/application/vendor/facade/ignition-contracts" />
       <path value="$PROJECT_DIR$/application/vendor/laravelcollective/html" />
       <path value="$PROJECT_DIR$/application/vendor/fakerphp/faker" />
       <path value="$PROJECT_DIR$/application/vendor/filp/whoops" />

@@ -58,6 +58,7 @@
 
                                         @if($app->approveAdm === NULL)
                                             <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>
+                                            {{ $app->approveAdm }}
                                         @elseif($app->approveAdm->cod_status === 1)
                                             <span class="badge bg-success"> <i class="fa fa-check"></i> accepted</span>
                                         @else

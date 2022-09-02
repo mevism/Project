@@ -200,7 +200,7 @@ abstract class FileRepository implements RepositoryInterface, Countable
      */
     public function getCached()
     {
-        return $this->cache->remember($this->config('cache.key'), $this->config('cache.lifetime'), function () {
+        return $this->cache->store($this->config->get('modules.cache.driver'))->remember($this->config('cache.key'), $this->config('cache.lifetime'), function () {
             return $this->toCollection()->toArray();
         });
     }
@@ -344,36 +344,6 @@ abstract class FileRepository implements RepositoryInterface, Countable
         }
 
         return;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function findByAlias(string $alias)
-    {
-        foreach ($this->all() as $module) {
-            if ($module->getAlias() === $alias) {
-                return $module;
-            }
-        }
-
-        return;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function findRequirements($name): array
-    {
-        $requirements = [];
-
-        $module = $this->findOrFail($name);
-
-        foreach ($module->getRequires() as $requirementName) {
-            $requirements[] = $this->findByAlias($requirementName);
-        }
-
-        return $requirements;
     }
 
     /**

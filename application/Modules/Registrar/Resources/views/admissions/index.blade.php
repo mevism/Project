@@ -34,10 +34,11 @@
                     <table id="example" class="table table-responsive table-md table-striped table-bordered table-vcenter fs-sm">
                         @if(count($admission)>0)
                             <thead>
-                            <th></th>    
+                            <th></th>
                             <th>Applicant Name</th>
                             <th>Department</th>
                             <th>Course Name</th>
+                            <th>Stud. Type</th>
                             <th>Status</th>
                             <th style="white-space: nowrap !important;">Stud. ID</th>
                             <th style="white-space: nowrap !important;">Action</th>
@@ -46,9 +47,16 @@
                             @foreach($admission as $app)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td nowrap=""> {{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->fname }} {{ $app->appApprovals->applicant->mname }} </td>
-                                    <td> {{ $app->appApprovals->courses->getCourseDept->name }}</td>
-                                    <td> {{ $app->appApprovals->courses->course_name }}</td>
+                                    <td nowrap=""> {{ $app->admissions->applicant->sname }} {{ $app->admissions->applicant->fname }} {{ $app->admissions->applicant->mname }} </td>
+                                    <td> {{ $app->admissions->courses->getCourseDept->name }}</td>
+                                    <td> {{ $app->admissions->courses->course_name }}</td>
+                                    <td>
+                                        @if($app->admissions->applicant->student_type === 1)
+                                            S-PT
+                                        @else
+                                            J-FT
+                                        @endif
+                                    </td>
                                     <td>
                                         @if($app->registrar_status === 0)
                                             <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>
@@ -108,9 +116,9 @@
                                                 </div>
                                             </div>
                                         @elseif($app->registrar_status === 1)
-                                            <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->id) }}"> Edit </a>
+                                            <a class="btn btn-sm btn-alt-info disabled" href="{{ route('cod.reviewAdmission', $app->id) }}"> Edit </a>
                                         @else
-                                            <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->id) }}"> Edit </a>
+                                            <a class="btn btn-sm btn-alt-info disabled" href="{{ route('cod.reviewAdmission', $app->id) }}"> Edit </a>
                                         @endif
                                     </td>
                                 </tr>
@@ -137,7 +145,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[2, 'asc']],
+            order: [[6, 'desc']],
             rowGroup: {
                 dataSrc: 2
             }

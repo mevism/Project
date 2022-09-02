@@ -13,13 +13,16 @@ class AdmissionApproval extends Model
 
     protected $fillable = [];
 
-    public function appApprovals(){
+    public function admissions(){
 
-        return $this->belongsTo(Application::class, 'app_id');
+        return $this->belongsTo(Application::class, 'application_id');
+
     }
 
-    public function admissions(){
-        return $this->belongsTo(Application::class, 'id');
+    public function admApproved(){
+
+        return $this->belongsTo(Application::class);
+
     }
 
 

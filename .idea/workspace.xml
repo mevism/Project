@@ -22356,14 +22356,6 @@
       <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/.gitignore" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/testing/.gitignore" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/011ff4b575d8f7d8d8c3f5ad263ec737936c4e1c.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/389ea469018d0e8b836a8b6504de17ebcf02224d.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/3b2561522f512321966d045e7b221cbc48df6ebf.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/7b0fb88292623f25fc815043004cfe85e5c10e4b.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/86150c7b12a193078b5ee9157ffa97f76c3df4ef.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/9c34d4208fa8a5cae28e39ccd495c127c798330e.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/a6448af40770a2f3b7c8e7e78f4901da1ee961a4.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/db61d26d43540f299eff212e1c03ad961853d358.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/logs/.gitignore" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/~$P_2022_000001.docx" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/stubs/nwidart-stubs/assets/js/app.stub" afterDir="false" />
@@ -22428,6 +22420,7 @@
       <change afterPath="$PROJECT_DIR$/application/vendor/bin/php-parse" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/bin/php-parse.bat" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/bin/phpunit" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/bin/phpunit.bat" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/bin/psysh" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/bin/psysh.bat" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/bin/sail" afterDir="false" />
@@ -22646,19 +22639,6 @@
       <change afterPath="$PROJECT_DIR$/application/vendor/egulias/email-validator/src/Warning/QuotedString.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/egulias/email-validator/src/Warning/TLD.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/egulias/email-validator/src/Warning/Warning.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/facade/ignition-contracts/.github/workflows/php-cs-fixer.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/facade/ignition-contracts/.github/workflows/psalm.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/facade/ignition-contracts/.github/workflows/run-tests.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/facade/ignition-contracts/.php_cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/facade/ignition-contracts/LICENSE.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/facade/ignition-contracts/composer.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/facade/ignition-contracts/psalm.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/facade/ignition-contracts/src/BaseSolution.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/facade/ignition-contracts/src/HasSolutionsForThrowable.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/facade/ignition-contracts/src/ProvidesSolution.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/facade/ignition-contracts/src/RunnableSolution.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/facade/ignition-contracts/src/Solution.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/facade/ignition-contracts/src/SolutionProviderRepository.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/CHANGELOG.md" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/LICENSE" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/fakerphp/faker/README.md" afterDir="false" />
@@ -23270,7 +23250,6 @@
       <change afterPath="$PROJECT_DIR$/application/vendor/guzzlehttp/guzzle/src/functions_include.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/guzzlehttp/promises/CHANGELOG.md" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/guzzlehttp/promises/LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/guzzlehttp/promises/Makefile" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/guzzlehttp/promises/README.md" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/guzzlehttp/promises/composer.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/guzzlehttp/promises/src/AggregateException.php" afterDir="false" />
@@ -28680,7 +28659,6 @@
       <change afterPath="$PROJECT_DIR$/application/vendor/spatie/laravel-ignition/src/ContextProviders/LaravelContextProviderDetector.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/spatie/laravel-ignition/src/ContextProviders/LaravelLivewireRequestContextProvider.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/spatie/laravel-ignition/src/ContextProviders/LaravelRequestContextProvider.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/vendor/spatie/laravel-ignition/src/Exceptions/CannotExecuteSolutionForNonLocalEnvironment.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/spatie/laravel-ignition/src/Exceptions/CannotExecuteSolutionForNonLocalIp.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/spatie/laravel-ignition/src/Exceptions/InvalidConfig.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/spatie/laravel-ignition/src/Exceptions/ViewException.php" afterDir="false" />
@@ -30048,7 +30026,9 @@
       <change afterPath="$PROJECT_DIR$/application/vendor/webmozart/assert/src/InvalidArgumentException.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/webmozart/assert/src/Mixin.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/webpack.mix.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30093,7 +30073,6 @@
       <path value="$PROJECT_DIR$/application/vendor/nikic/php-parser" />
       <path value="$PROJECT_DIR$/application/vendor/graham-campbell/result-type" />
       <path value="$PROJECT_DIR$/application/vendor/nwidart/laravel-modules" />
-      <path value="$PROJECT_DIR$/application/vendor/facade/ignition-contracts" />
       <path value="$PROJECT_DIR$/application/vendor/laravelcollective/html" />
       <path value="$PROJECT_DIR$/application/vendor/fakerphp/faker" />
       <path value="$PROJECT_DIR$/application/vendor/filp/whoops" />
@@ -30283,7 +30262,8 @@
       <workItem from="1661234676724" duration="54487000" />
       <workItem from="1661361038283" duration="15009000" />
       <workItem from="1661942856487" duration="11328000" />
-      <workItem from="1662015620523" duration="15107000" />
+      <workItem from="1662015620523" duration="17973000" />
+      <workItem from="1662102488233" duration="15109000" />
     </task>
     <servers />
   </component>

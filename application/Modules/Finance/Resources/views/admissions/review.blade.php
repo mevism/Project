@@ -29,21 +29,21 @@
                     <div class="col-lg-6 mb-0 fs-sm">
                         <div class="row p-1">
                         <div class="col-md-4 fw-bolder text-start">Applicant Name </div>
-                        <div class="col-md-8"> {{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->fname }} {{ $app->appApprovals->applicant->mname }}</div>
+                        <div class="col-md-8"> {{ $app->admissions->applicant->sname }} {{ $app->admissions->applicant->fname }} {{ $app->admissions->applicant->mname }}</div>
                         </div>
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Course Name</div>
-                            <div class="col-md-8"> {{ $app->appApprovals->courses->course_name }} </div>
+                            <div class="col-md-8"> {{ $app->admissions->courses->course_name }} </div>
                         </div>
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Transaction Code</div>
-                            <div class="col-md-8"> {{ $app->appApprovals->receipt }} </div>
+                            <div class="col-md-8"> {{ $app->admissions->receipt }} </div>
                         </div>
                     </div>
                     <div class="col-lg-6 space-y-1">
                         <div class="d-flex justify-content-center">
                             <div class="card-img" style="margin: auto !important;">
-                                <img style="margin: auto !important; max-height: 80vh !important; width: 100% !important;" src="{{ url('receipts/', $app->appApprovals->receipt_file) }}" alt="">
+                                <img style="margin: auto !important; max-height: 80vh !important; width: 100% !important;" src="{{ url('receipts/', $app->admissions->receipt_file) }}" alt="">
                             </div>
                         </div>
                     </div>

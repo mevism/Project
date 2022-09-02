@@ -46,17 +46,21 @@ class Applicant extends Authenticatable
 
     public function VerifyEmail(){
 
-        return $this->hasOne(VerifyEmail::class, 'user_id');
+        return $this->hasOne(VerifyEmail::class);
     }
 
     public function VerifyUser(){
 
-        return $this->hasOne('\Modules\Application\Entities\VerifyUser', 'id');
+        return $this->hasOne(VerifyUser::class);
     }
 
     public function application(){
 
-       return $this->hasMany(Application::class, 'id');
+       return $this->hasMany(Application::class);
+    }
+
+    public function School(){
+        return $this->hasMany(Education::class);
     }
     protected static function newFactory()
     {

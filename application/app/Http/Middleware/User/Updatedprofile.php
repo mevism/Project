@@ -25,7 +25,7 @@ class Updatedprofile
         if (Auth::user()->email_verified_at === NULL){
 
             VerifyEmail::create([
-                'user_id' => Auth::user()->id,
+                'applicant_id' => Auth::user()->id,
                 'verification_code' => Str::random(100),
             ]);
 
@@ -45,7 +45,7 @@ class Updatedprofile
             $number = Auth::user()->mobile;
 
             VerifyUser::create([
-                'user_id' => Auth::user()->id,
+                'applicant_id' => Auth::user()->id,
                 'verification_code' => $verification_code,
             ]);
 

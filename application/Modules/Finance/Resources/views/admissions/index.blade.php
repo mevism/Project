@@ -48,20 +48,20 @@
 {{--                                {{ $app->appApprovals->applicant->sname }}--}}
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->mname }} {{ $app->appApprovals->applicant->fname }}</td>
-                                    <td>{{ $app->appApprovals->courses->course_name }}</td>
+                                    <td>{{ $app->admissions->applicant->sname }} {{ $app->admissions->applicant->mname }} {{ $app->admissions->applicant->fname }}</td>
+                                    <td>{{ $app->admissions->courses->course_name }}</td>
                                     <td>
-                                        @if($app->appApprovals->student_type === 1)
+                                        @if($app->admissions->student_type === 1)
                                             S-PT
                                         @else
                                             J-FT
                                         @endif
                                     </td>
                                     <td>
-                                        @if($app->appApprovals->applicant->student_type === 2)
+                                        @if($app->admissions->applicant->student_type === 2)
                                             KUCCPS PLACEMENT
                                         @else
-                                        {{ $app->appApprovals->receipt }}</td>
+                                        {{ $app->admissions->receipt }}</td>
                                         @endif
                                     <td>
                                         @if($app->finance_status === 0)
@@ -73,7 +73,7 @@
                                         @endif
                                     </td>
                                     <td nowrap="">
-                                        @if($app->appApprovals->applicant->student_type === 2)
+                                        @if($app->admissions->applicant->student_type === 2)
 
                                             @if($app->finance_status === 0)
                                                 <a class="btn btn-sm btn-alt-info" onclick="return confirm('Are you sure you want to approve?')" data-toggle="click-ripple" href="{{ route('finance.acceptAdmission', $app->id) }}"> Accept</a>
@@ -84,7 +84,7 @@
                                                         <div class="modal-content">
                                                             <div class="block block-rounded block-transparent mb-0">
                                                                 <div class="block-header block-header-default">
-                                                                    <h3 class="block-title">Reason(s) for rejecting {{ $app->appApprovals->applicant->sname }}'s admission </h3>
+                                                                    <h3 class="block-title">Reason(s) for rejecting {{ $app->admissions->applicant->sname }}'s admission </h3>
                                                                     <div class="block-options">
                                                                         <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                                                                             <i class="fa fa-fw fa-times"></i>
@@ -120,7 +120,7 @@
                                                         <div class="modal-content">
                                                             <div class="block block-rounded block-transparent mb-0">
                                                                 <div class="block-header block-header-default">
-                                                                    <h3 class="block-title">Reason(s) for rejecting {{ $app->appApprovals->applicant->sname }}'s admission </h3>
+                                                                    <h3 class="block-title">Reason(s) for rejecting {{ $app->admissions->applicant->sname }}'s admission </h3>
                                                                     <div class="block-options">
                                                                         <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                                                                             <i class="fa fa-fw fa-times"></i>

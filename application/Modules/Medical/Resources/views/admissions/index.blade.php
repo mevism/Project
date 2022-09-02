@@ -45,11 +45,11 @@
                         @foreach($admission as $app)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td nowrap="">{{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->mname }} {{ $app->appApprovals->applicant->fname }}</td>
-                                <td>{{ $app->appApprovals->courses->getCourseDept->name }}</td>
-                                <td>{{ $app->appApprovals->courses->course_name }}</td>
+                                <td nowrap="">{{ $app->admissions->applicant->sname }} {{ $app->admissions->applicant->mname }} {{ $app->admissions->applicant->fname }}</td>
+                                <td>{{ $app->admissions->courses->getCourseDept->name }}</td>
+                                <td>{{ $app->admissions->courses->course_name }}</td>
                                 <td>
-                                    @if($app->appApprovals->student_type === 1)
+                                    @if($app->admissions->student_type === 1)
                                         S-PT
                                     @else
                                         J-FT
@@ -73,7 +73,7 @@
                                                     <div class="modal-content">
                                                         <div class="block block-rounded block-transparent mb-0">
                                                             <div class="block-header block-header-default">
-                                                                <h3 class="block-title">Reason(s) for rejecting {{ $app->appApprovals->applicant->sname }}'s admission </h3>
+                                                                <h3 class="block-title">Reason(s) for rejecting {{ $app->admissions->applicant->sname }}'s admission </h3>
                                                                 <div class="block-options">
                                                                     <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                                                                         <i class="fa fa-fw fa-times"></i>
@@ -108,7 +108,7 @@
                                                     <div class="modal-content">
                                                         <div class="block block-rounded block-transparent mb-0">
                                                             <div class="block-header block-header-default">
-                                                                <h3 class="block-title">Reason(s) for rejecting {{ $app->appApprovals->applicant->sname }}'s admission</h3>
+                                                                <h3 class="block-title">Reason(s) for rejecting {{ $app->admissions->applicant->sname }}'s admission</h3>
                                                                 <div class="block-options">
                                                                     <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                                                                         <i class="fa fa-fw fa-times"></i>
