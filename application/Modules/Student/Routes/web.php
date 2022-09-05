@@ -21,7 +21,7 @@ Route::prefix('student')->group(function() {
         Route::get('/', [StudentController::class, 'index'])->name('student');
         Route::get('/profile', [StudentController::class, 'profile'])->name('student_profile');
 
-        Route::get('/student_profile', [StudentController::class, 'student_profile']);
+        Route::get('/student_profile', [StudentController::class, 'student_profile'])->name('student_dashboard');
         Route::get('/checkName', [StudentController::class, 'checkName']);
         Route::get('/getCourses', [StudentController::class, 'getCourses']);
         Route::get('/checkChange', [StudentController::class, 'checkChange']);

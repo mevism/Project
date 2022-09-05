@@ -57,7 +57,7 @@
                         </span><br>
                         <thead>
                             <th>School Code</th>
-                            <th>School </th>
+                            <th>School NAME </th>
                             <th>Action</th>
                         </thead>
                         <tbody>@foreach ($data as $school)
@@ -71,7 +71,7 @@
                         @endforeach
 
                         </tbody>
-                    </table>{{ $data->links('pagination::bootstrap-5') }}
+                    </table>
                 </div>
             </div>
           </div>

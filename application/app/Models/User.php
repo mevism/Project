@@ -41,10 +41,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected function admin(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $this->role_id == 1,
-        );
+    public function getDept(){
+
+        return $this->belongsTo(\Modules\Registrar\Entities\Department::class, 'department_id');
+
+    }
+
+    public function getSch(){
+        return $this->belongsTo(\Modules\Registrar\Entities\School::class, 'school_id');
     }
 }

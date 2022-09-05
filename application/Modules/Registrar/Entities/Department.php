@@ -20,6 +20,15 @@ class Department extends Model
 
         return $this->belongsTo(School::class, 'school_id');
     }
+    // available course vs dept
+    // public function deptCourse(){
+
+    //     return $this->hasMany(AvailableCourse::class);
+    // }
+    public function course(){
+
+        return $this->hasMany(Courses::class,'id');
+    }
 
     public function getDeptCourse(){
 
@@ -29,6 +38,10 @@ class Department extends Model
     public function Sch(){
 
         return $this->belongsTo(School::class, 'school_id');
+    }
+
+    public function useCourse(){
+        return $this->hasMany(Courses::class);
     }
 
     protected static function newFactory()

@@ -24,6 +24,13 @@ class AvailableCourse extends Model
         return $this->belongsTo(Intake::class, 'intake_id');
     }
 
+    // available course and department
+    public function courseDept(){
+
+        return $this->belongsTo(Department::class);
+
+    }
+    
 //    available course vs courses
 
     public function mainCourses(){

@@ -20,7 +20,6 @@ class MedicalController extends Controller
 
     public function admissions(){
         $adm = AdmissionApproval::where('finance_status', 1)
-            ->where('student_type', 1)
             ->where('registrar_status', NULL)
             ->get();
 

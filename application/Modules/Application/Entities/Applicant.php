@@ -46,7 +46,7 @@ class Applicant extends Authenticatable
 
     public function VerifyEmail(){
 
-        return $this->hasOne('\Modules\Application\Entities\VerifyEmail', 'id');
+        return $this->hasOne(VerifyEmail::class, 'user_id');
     }
 
     public function VerifyUser(){
@@ -56,7 +56,7 @@ class Applicant extends Authenticatable
 
     public function application(){
 
-       return $this->hasMany(Application::class, 'id');
+       return $this->hasMany(Application::class, 'app_id');
     }
     protected static function newFactory()
     {

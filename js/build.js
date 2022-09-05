@@ -398,10 +398,10 @@
         };
         this.modalMsg = (e) => {
             const { msg, mode, callback } = e
-            let img = "<img src = './../Images/success-tick.gif'>"
+            let img = "<img src = './Images/success-tick.gif'>"
             if(!mode)
-                img = "<img src = './../Images/error-tick.jpg'>"
-            $('.content-force').append(`
+                img = "<img src = './Images/error-tick.jpg'>"
+            $('#page-container').append(`
                             <div id = 'fill-modal'>
                                 <div id = 'inner-fill-modal'>
                                     ${ img }
@@ -844,72 +844,142 @@
             profile_data = await ServerData.bindAuth('GET',document.location.href + '/student_profile',false)
         let profile_string = profile_data.user.map( p =>
         `
-            <section style = 'text-align:center;'>
-                <i class="fa-solid fa-user" style = 'font-size:150%;'></i>
-                <h3>Name</h3>
-                <p>${ p.fname + ',' + p.mname + ',' + p.sname }</p>
-            </section>
-            <section style = 'text-align:center;'>
-                <i class="fa-solid fa-user" style = 'font-size:150%;'></i>
-                <h3>Registration Number</h3>
-                <p>${ p.reg_number }</p>
-            </section>
-            <section style = 'text-align:center;'>
-                <i class="fa-solid fa-genderless" style = 'font-size:150%;'></i>
-                <h3>Gender</h3>
-                <p>${ p.gender }</p>
-            </section>
-            <section style = 'text-align:center;'>
-                <i class="fa-solid fa-at" style = 'font-size:150%;'></i>
-                <h3>Email</h3>
-                <p>${ p.email }</p>
-            </section>
-            <section style = 'text-align:center;'>
-                <i class="fa-solid fa-at" style = 'font-size:150%;'></i>
-                <h3>Student Email</h3>
-                <p>${ p.student_email }</p>
-            </section>
-            <section style = 'text-align:center;'>
-                <i class="fa-solid fa-phone" style = 'font-size:150%;'></i>
-                <h3>Mobile</h3>
-                <p>${ p.mobile }</p>
-            </section>
-            <section style = 'text-align:center;'>
-                <i class="fa-solid fa-user" style = 'font-size:150%;'></i>
-                <h3>Citizen</h3>
-                <input type = 'text' loop = '1' field = 'citizen' value = '${ p.citizen }' placeholder = 'Add Input Field' id = 'update_student' style = 'border-radius:3px;border:2px solid rgba(234,234,234,0.5);min-height:40px;'>
-                <p id = 'update_feedback1'></p>
-            </section>   
-            <section style = 'text-align:center;'>
-                <i class="fa-solid fa-globe" style = 'font-size:150%;'></i>
-                <h3>County</h3>
-                <input type = 'text' loop = '2' field = 'county' value = '${ p.county }' placeholder = 'Add Input Field' id = 'update_student' style = 'border-radius:3px;border:2px solid rgba(234,234,234,0.5);min-height:40px;'>
-                <p id = 'update_feedback2'></p>
-            </section>     
-            <section style = 'text-align:center;'>
-                <i class="fa-solid fa-globe" style = 'font-size:150%;'></i>
-                <h3>Sub-County</h3>
-                <input type = 'text' loop = '3' field = 'sub_county' value = '${ p.sub_county }' placeholder = 'Add Input Field' id = 'update_student' style = 'border-radius:3px;border:2px solid rgba(234,234,234,0.5);min-height:40px;'>
-                <p id = 'update_feedback3'></p>
-            </section>        
-            <section style = 'text-align:center;'>
-                <i class="fa-solid fa-tower-broadcast" style = 'font-size:150%;'></i>
-                <h3>Town</h3>
-                <input type = 'text' loop = '4' field = 'town' value = '${ p.town }' placeholder = 'Add Input Field' id = 'update_student' style = 'border-radius:3px;border:2px solid rgba(234,234,234,0.5);min-height:40px;'>
-                <p id = 'update_feedback4'></p>
-            </section>        
-            <section style = 'text-align:center;'>
-                <i class="fa-solid fa-map-pin" style = 'font-size:150%;'></i>
-                <h3>Address</h3>
-                <input type = 'text' loop = '5' field = 'address' value = '${ p.address }' placeholder = 'Add Input Field' id = 'update_student' style = 'border-radius:3px;border:2px solid rgba(234,234,234,0.5);min-height:40px;'>
-                <p id = 'update_feedback5'></p>
-            </section>        
-            <section style = 'text-align:center;'>
-                <i class="fa-solid fa-map-pin" style = 'font-size:150%;'></i>
-                <h3>Postal Code</h3>
-                <input type = 'text' loop = '6' field = 'postal_code' value = '${ p.postal_code }' placeholder = 'Add Input Field' id = 'update_student' style = 'border-radius:3px;border:2px solid rgba(234,234,234,0.5);min-height:40px;'>
-                <p id = 'update_feedback6'></p>
-            </section>        
+            <ul class="timeline timeline-alt py-0" style = 'width:100%;'>
+                <li class="timeline-event">
+                    <div class="timeline-event-icon bg-default">
+                        <i class="fa fa-user-gear"></i>
+                    </div>
+                    <div class="timeline-event-block block">
+                        <div class="block-header">
+                            <h3 class="block-title">Personal Info</h3>
+                            <div class="block-options">
+                                <div class="timeline-event-time block-options-item fs-sm">
+                                    <i class="fa fa-info" title="user information"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div style = 'display : flex;flex-direction : row;'>
+                            <section style = 'text-align:center;'>
+                                <i class="fa-solid fa-user" id = 'fas_update'></i>
+                                <h3 class = 'h3_update'>Name</h3>
+                                <p>${ p.fname + ',' + p.mname + ',' + p.sname }</p>
+                            </section>
+                            <section style = 'text-align:center;'>
+                                <i class="fa-solid fa-user" id = 'fas_update'></i>
+                                <h3 class = 'h3_update'>Registration Number</h3>
+                                <p>${ p.reg_number }</p>
+                            </section>
+                            <section style = 'text-align:center;'>
+                                <i class="fa-solid fa-genderless" id = 'fas_update'></i>
+                                <h3 class = 'h3_update'>Gender</h3>
+                                <p>${ p.gender }</p>
+                            </section>
+                        </div>
+                    </div>
+                </li>
+                <li class="timeline-event">
+                    <div class="timeline-event-icon bg-modern">
+                        <i class="fa fa-contact-card"></i>
+                    </div>
+                    <div class="timeline-event-block block">
+                        <div class="block-header">
+                            <h3 class="block-title">Contact Info</h3>
+                            <div class="block-options">
+                                <div class="timeline-event-time block-options-item fs-sm">
+                                    <i class="fa fa-info" title="user information"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div style = 'display : flex;flex-direction : row;'>
+                            <section style = 'text-align:center;'>
+                                <i class="fa-solid fa-at" id = 'fas_update'></i>
+                                <h3 class = 'h3_update'>Email</h3>
+                                <p>${ p.email }</p>
+                            </section>
+                            <section style = 'text-align:center;'>
+                                <i class="fa-solid fa-at" id = 'fas_update'></i>
+                                <h3 class = 'h3_update'>Student Email</h3>
+                                <p>${ p.student_email }</p>
+                            </section>
+                            <section style = 'text-align:center;'>
+                                <i class="fa-solid fa-phone" id = 'fas_update'></i>
+                                <h3 class = 'h3_update'>Mobile</h3>
+                                <p>${ p.mobile }</p>
+                            </section>
+                        </div>
+                    </div>
+                </li>
+                <li class="timeline-event">
+                    <div class="timeline-event-icon bg-info">
+                        <i class="fa fa-address-book"></i>
+                    </div>
+                    <div class="timeline-event-block block">
+                        <div class="block-header">
+                            <h3 class="block-title">Physical Address</h3>
+                            <div class="block-options">
+                                <div class="timeline-event-time block-options-item fs-sm">
+                                    <i class="fa fa-info" title="user information"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div style = 'display : flex;flex-direction : row;'>
+                            <section style = 'text-align:center;'>
+                                <i class="fa-solid fa-user" id = 'fas_update'></i>
+                                <h3 class = 'h3_update'>Citizen</h3>
+                                <input type = 'text' loop = '1' field = 'citizen' value = '${ p.citizen }' placeholder = 'Add Input Field' id = 'update_student' style = 'border-radius:3px;min-height:40px;border:2px solid rgba(234,234,234,0.5);text-align:center;${ (p.citizen) ? '' : 'box-shadow:0px 2px 7px #ff6666;' }'>
+                                <p id = 'update_feedback1'></p>
+                            </section>   
+                            <section style = 'text-align:center;'>
+                                <i class="fa-solid fa-globe"  id = 'fas_update'></i>
+                                <h3 class = 'h3_update'>County</h3>
+                                <input type = 'text' loop = '2' field = 'county' value = '${ p.county }' placeholder = 'Add Input Field' id = 'update_student' style = 'border-radius:3px;min-height:40px;border:2px solid rgba(234,234,234,0.5);text-align:center;${ (p.county) ? '' : 'box-shadow:0px 2px 7px #ff6666;' }'>
+                                <p id = 'update_feedback2'></p>
+                            </section>     
+                            <section style = 'text-align:center;'>
+                                <i class="fa-solid fa-globe" id = 'fas_update'></i>
+                                <h3 class = 'h3_update'>Sub-County</h3>
+                                <input type = 'text' loop = '3' field = 'sub_county' value = '${ p.sub_county }' placeholder = 'Add Input Field' id = 'update_student' style = 'border-radius:3px;min-height:40px;border:2px solid rgba(234,234,234,0.5);text-align:center;${ (p.sub_county) ? '' : 'box-shadow:0px 2px 7px #ff6666;' }'>
+                                <p id = 'update_feedback3'></p>
+                            </section>
+                        </div>
+                    </div>
+                </li>
+                <li class="timeline-event">
+                    <div class="timeline-event-icon bg-info">
+                        <i class="fa fa-address-book"></i>
+                    </div>
+                    <div class="timeline-event-block block">
+                        <div class="block-header">
+                            <h3 class="block-title">Physical Address</h3>
+                            <div class="block-options">
+                                <div class="timeline-event-time block-options-item fs-sm">
+                                    <i class="fa fa-info" title="user information"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div style = 'display : flex;flex-direction : row;'>        
+                            <section style = 'text-align:center;'>
+                                <i class="fa-solid fa-tower-broadcast" id = 'fas_update'></i>
+                                <h3 class = 'h3_update'>Town</h3>
+                                <input type = 'text' loop = '4' field = 'town' value = '${ p.town }' placeholder = 'Add Input Field' id = 'update_student'  style = 'border-radius:3px;min-height:40px;border:2px solid rgba(234,234,234,0.5);text-align:center;${ (p.town) ? '' : 'box-shadow:0px 2px 7px #ff6666;' }'>
+                                <p id = 'update_feedback4'></p>
+                            </section>        
+                            <section style = 'text-align:center;'>
+                                <i class="fa-solid fa-map-pin" id = 'fas_update'></i>
+                                <h3 class = 'h3_update'>Address</h3>
+                                <input type = 'text' loop = '5' field = 'address' value = '${ p.address }' placeholder = 'Add Input Field' id = 'update_student' style = 'border-radius:3px;min-height:40px;border:2px solid rgba(234,234,234,0.5);text-align:center;${ (p.address) ? '' : 'box-shadow:0px 2px 7px #ff6666;' }'>
+                                <p id = 'update_feedback5'></p>
+                            </section>        
+                            <section style = 'text-align:center;'>
+                                <i class="fa-solid fa-map-pin" id = 'fas_update'></i>
+                                <h3 class = 'h3_update'>Postal Code</h3>
+                                <input type = 'text' loop = '6' field = 'postal_code' value = '${ p.postal_code }' placeholder = 'Add Input Field' id = 'update_student' style = 'border-radius:3px;min-height:40px;border:2px solid rgba(234,234,234,0.5);text-align:center;${ (p.postal_code) ? '' : 'box-shadow:0px 2px 7px #ff6666;' }'>
+                                <p id = 'update_feedback6'></p>
+                            </section>  
+                        </div>
+                    </div>
+                </li>
+            </ul>      
         `)
         $('#student_profile').html(profile_string)
         if(profile_data.user[0].profile)
@@ -965,6 +1035,16 @@
 //                 collect = await ServerData.bindAuth('GET',document.location.href + `/checkProfile`,false)
 //
 //             if(collect.user)
+        $(document).on('click','#host-student',async(e) => {
+            e.preventDefault()
+            let collect = await ServerData.bindAuth('GET',`./checkProfile`,false)
+            if(!collect)
+                collect = await ServerData.bindAuth('GET',document.location.href + `/checkProfile`,false)
+            if(collect.user)
+                document.location.assign(e.currentTarget.attributes[1].value)
+            else
+                ServerData.modalMsg({'msg': '<h3>Please complete your profile!!</h3>', 'mode': false })
+        })
         $(document).on('click','#actual-input',(e) => {
             e.preventDefault()
             $('#input-profile').click()

@@ -58,8 +58,8 @@
             <thead>
 
               <tr>
-                <td>Schools</th>
-                <td>Departments</th>
+                <td>SCHOOL NAME</th>
+                <td>DEPARTMENT NAME</th>
                 <th>Action</th>
 
               </tr>
@@ -68,7 +68,7 @@
             <tbody>
               @foreach ($data as $department)
               <tr>
-                <td> {{ $department->school_id }}</td>
+                <td> {{ $department->schools->name }}</td>
                 <td> {{ $department->name }}</td>
                 <td nowrap> 
                   <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editDepartment', $department->id) }}">edit</a>

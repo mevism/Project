@@ -116,12 +116,12 @@ class FinanceController extends Controller
     public function admissions(){
 
         $apps = AdmissionApproval::where('cod_status', 1)
-            ->where('student_type', 1)
+//            ->where('student_type', 1)
             ->where('finance_status', '!=', NULL)
             ->where('medical_status', NULL)
             ->get();
 
-//        return $apps->admApproval;
+//        return $apps->appApproval->applicant;
 
         return view('applications::admissions.index')->with('applicant', $apps);
     }

@@ -69,6 +69,7 @@ class ApplicationController extends Controller
             $app->username = $request->email;
             $app->email = $request->email;
             $app->password = Hash::make($request->password);
+            $app->student_type = 1;
             $app->save();
 
             VerifyEmail::create([
@@ -141,25 +142,33 @@ class ApplicationController extends Controller
     }
 
     public function emailVerification($verification_code){
+
         $unverified = VerifyEmail::where('verification_code', $verification_code)->first();
 
-        if (isset($unverified)){
+//        return $unverified;
 
-            $applicant = $unverified->applicant;
+                if (isset($unverified)){
 
-            if (!$applicant->email_verified_at){
-                $applicant->email_verified_at = Carbon::now();
-                $applicant->save();
+                    $applicant = $unverified->userEmail;
 
-                VerifyEmail::where('verification_code', $verification_code)->delete();
+//                    return $applicant;
 
-                return redirect(route('root'))->with('success', 'Your email has been verified');
-            }
+                    if (!$applicant->email_verified_at){
+                        $applicant->email_verified_at = Carbon::now();
+                        $applicant->save();
 
-            return redirect(route('root'))->with('warning', 'The code does not exist');
-        }else{
-            return redirect(route('root'))->with('info', 'Email already verified');
-        }
+                        VerifyEmail::where('verification_code', $verification_code)->delete();
+
+                        return redirect(route('root'))->with('success', 'Your email has been verified');
+                    }else{
+
+                        return redirect(route('root'))->with('warning', 'The code does not exist');
+
+                    }
+
+                }else{
+                    return redirect(route('root'))->with('info', 'Email already verified');
+                }
     }
 
     public function checkverification(){
@@ -173,61 +182,64 @@ class ApplicationController extends Controller
 
             if (count($courses) === 0 ){
 
-          $mycourses = Application::where('user_id', Auth::user()->id)->count();
+                        $mycourses = Application::where('user_id', Auth::user()->id)->count();
 
-        if (Auth::check()) {
+                            if (Auth::check()) {
 
-            if (Auth::user()->email_verified_at === null){
-                Auth::logout();
+                                if (Auth::user()->email_verified_at === null){
+                                    Auth::logout();
 
-                return redirect(route('root'))->with('warning', 'Please verify your email first');
-            }
-            if (Auth::user()->user_status === 0) {
-                return redirect()->route('application.details')->with(['info' => 'Please update your profile']);
+                                    return redirect(route('root'))->with('warning', 'Please verify your email first');
+                                }
+                                if (Auth::user()->user_status === 0) {
+                                    return redirect()->route('application.details')->with(['info' => 'Please update your profile']);
 
-            } else {
+                                } else {
 
-                return view('application::applicant.home')->with(['success' => 'Welcome', 'courses' => $courses, 'mycourses' => $mycourses]);
+                                    return view('application::applicant.home')->with(['success' => 'Welcome', 'courses' => $courses, 'mycourses' => $mycourses]);
 
-            }
-            redirect()->route('application.login')->with('error', 'Please try again');
-        }
+                                }
 
+                                redirect()->route('application.login')->with('error', 'Please try again');
 
-            }else{
-                $intake = Intake::where('status', 1)->get();
+                            }
 
-                foreach ($intake as $id){
+                    }else{
 
-                    $course = AvailableCourse::where('intake_id', $id->id)->get();
+                            $intake = Intake::where('status', 1)->get();
 
-                    foreach ($course as $item){
-                        $available_courses [] = Courses::where('id', $item->course_id)->count();
+                                foreach ($intake as $id){
 
-                        $courses = $available_courses;
-                    }
+                                    $course = AvailableCourse::where('intake_id', $id->id)->get();
 
-                }
+                                    foreach ($course as $item){
+                                        $available_courses [] = Courses::where('id', $item->course_id)->count();
 
-                $mycourses = Application::where('user_id', Auth::user()->id)->count();
+                                        $courses = $available_courses;
+                                    }
 
-                if (Auth::check()) {
+                                }
 
-                    if (Auth::user()->email_verified_at === null){
-                        Auth::logout();
+                            $mycourses = Application::where('user_id', Auth::user()->id)->count();
 
-                        return redirect(route('root'))->with('warning', 'Please verify your email first');
-                    }
-                    if (Auth::user()->user_status === 0) {
-                        return redirect()->route('application.details')->with(['info' => 'Please update your profile']);
+                                if (Auth::check()) {
 
-                    } else {
+                                    if (Auth::user()->email_verified_at === null){
 
-                        return view('application::applicant.home')->with(['success' => 'Welcome', 'courses' => $courses, 'mycourses' => $mycourses]);
+                                        Auth::logout();
 
-                    }
-                    redirect()->route('application.login')->with('error', 'Please try again');
-                }
+                                        return redirect(route('root'))->with('warning', 'Please verify your email first');
+                                    }
+                                    if (Auth::user()->user_status === 0) {
+                                        return redirect()->route('application.details')->with(['info' => 'Please update your profile']);
+
+                                    } else {
+
+                                        return view('application::applicant.home')->with(['success' => 'Welcome', 'courses' => $courses, 'mycourses' => $mycourses]);
+
+                                    }
+                                    redirect()->route('application.login')->with('error', 'Please try again');
+                                }
             }
 
     }
@@ -322,8 +334,6 @@ class ApplicationController extends Controller
             $user->index_number = trim($request->index_number);
             $user->id_number = trim($request->id_number);
             $user->alt_mobile = trim($request->alt_number);
-            $user->mobile = trim($request->mobile);
-            $user->email = trim($request->email);
             $user->alt_email = trim($request->alt_email);
             $user->dob = trim($request->dob);
             $user->disabled = trim($request->disabled);

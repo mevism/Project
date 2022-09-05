@@ -34,11 +34,15 @@ input[type=file]{
 #cut_off_courses{
     width : 100%;
 }
+#profile-set-image{
+    height:200px;
+    width:90%;
+    border-radius:50%;
+}
 #student_profile{
-    width : 95%;
+    width : 100%;
     display : flex;
     flex-wrap : wrap;
-    margin-left : 2.5%;
 }
 #time-out{
     width : 50%;
@@ -100,6 +104,30 @@ input[type=file]{
 .image-headers{
     float : left;
     width : 20%;
+}
+.profile-img{
+    width : 100%;
+}
+#host-student{
+    width : 100%;
+    height : 100%;
+}
+#fas_update{
+    font-size : 150%;
+    background : rgba(234,234,234,0.5);
+    width : 70%;
+}
+.h3_update{
+    width : 70%;
+    background : rgba(234,234,234,0.5);
+    height : 40%;
+    margin-left : 15%;
+}
+.content-force-student{
+    display : flex;
+    flex-direction : column;
+    width : 100%;
+    height : 100%;
 }
 .content-force{
     width : 100%;
@@ -204,7 +232,20 @@ input[type=file]{
         width : 80%;
         margin-left : 10%;
     }
+    #student_profile{
+        width : 75%;
+        float : left;
+        margin : 1%;
+    }
+    .profile-img{
+        float : right;
+        width : 30%;
+    }
     #student_profile section {
         width: 31.5%;
     }
+    .content-force-student {
+        flex-direction: row-reverse;
+    }
+
 }

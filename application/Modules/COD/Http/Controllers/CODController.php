@@ -127,8 +127,6 @@ class CODController extends Controller
             ->where('status', 0)
             ->get();
 
-//        return $applicant->id;
-
         return view('cod::admissions.index')->with('applicant', $applicant);
     }
 
@@ -146,39 +144,31 @@ class CODController extends Controller
             }else{
                 $adm = new AdmissionApproval;
                 $adm->app_id = $id;
-                $adm->student_type = 1;
                 $adm->cod_status = 1;
                 $adm->save();
-            }
 
-        return redirect()->route('cod.selfAdmissions')->with('success', 'New student admitted successfully');
-    }
-    public function acceptAdmJab($id){
-
-        if(AdmissionApproval::where('app_id', $id)->exists()){
-            AdmissionApproval::where('app_id', $id)->update(['cod_status' => 1]);
-        }else{
-            $adm = new AdmissionApproval;
-            $adm->app_id = $id;
-            $adm->student_type = 2;
-            $adm->cod_status = 1;
-            $adm->save();
         }
 
-        return redirect()->back()->with('success', 'New student admitted successfully');
+        return redirect()->route('cod.selfAdmissions')->with('success', 'New student admitted successfully');
     }
 
     public function rejectAdmission(Request $request, $id){
 
-        if (AdmissionApproval::where('app_id', $id)->exists()) {
-            AdmissionApproval::where('app_id', $id)->update(['cod_status' => 2, 'cod_comments' => $request->comment]);
-        }else{
-            $adm = new AdmissionApproval;
-            $adm->app_id = $id;
-            $adm->cod_status = 2;
-            $adm->cod_comments = $request->comment;
-            $adm->save();
-        }
+            $app = AdmissionApproval::where('app_id', $id)->first();
+
+            if ($app === NULL){
+
+                $adm = new AdmissionApproval;
+                $adm->app_id = $id;
+                $adm->cod_status = 2;
+                $adm->cod_comments = $request->comment;
+                $adm->save();
+
+            }else{
+
+                AdmissionApproval::where('app_id', $id)->update(['cod_status' => 2, 'cod_comments' => $request->comment]);
+
+            }
 
         return redirect()->route('cod.selfAdmissions')->with('warning', 'Admission request rejected');
     }

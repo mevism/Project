@@ -15,8 +15,9 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->integer('role_id')->nullable();
-            $table->string('department_role')->nullable();
+            $table->integer('role_id');
+            $table->integer('school_id')->default(0);
+            $table->integer('department_id')->default(0);
             $table->string('username')->unique();
             $table->string('password');
             $table->string('name');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use Modules\Application\Entities\AdmissionApproval;
 use Session;
 use App\Models\User;
 use App\Models\Course;
@@ -22,8 +23,6 @@ class UserController extends Controller
 {
     public function login(Request $request)
     {
-
-//        return $request->all();
         $logins = $request->only('username', 'password');
 
         if (Auth::guard('user')->attempt($logins)) {
@@ -64,8 +63,8 @@ class UserController extends Controller
                     return view('admin.index')->with(['courses'=>$courses,'applications'=>$applications]);
                 }
         }elseif (Auth::guard('user')->user()->role_id === 1){
-            $courses = AvailableCourse::count();
-            $applications = Application::count();
+            $courses = AvailableCourse::where('status', 1)->count();
+            $applications = Application::where('registrar_status',0)->count();
 
                if (!Auth::guard('user')->check()){
                    abort(403)->with('error', 'Please login again');
@@ -85,6 +84,7 @@ class UserController extends Controller
                    abort(403)->with('error', 'Please login again');;
                } else{
                    $apps_cod = Application::where('cod_status', 0)
+                       ->where('department_id', auth()->guard('user')->user()->department_id)
                        ->orWhere('dean_status', 3)
                        ->count();
                        return view('cod::COD.index')->with('apps', $apps_cod);
@@ -94,12 +94,14 @@ class UserController extends Controller
                if (!Auth::guard('user')->check()){
                    abort(403)->with('error', 'Please login again');;
                } else{
-                   $apps_dean = Application::where('dean_status', 0)->count();
+                   $apps_dean = Application::where('dean_status', 0)
+                       ->where('school_id', auth()->guard('user')->user()->school_id)->count();
                        return view('dean::dean.index')->with('apps', $apps_dean);
                }
        }elseif (Auth::guard('user')->user()->role_id === 3){
                 $apps_finance = Application::where('cod_status', null)
-                    ->where('finance_status', '!=', 3)->count();
+                    ->where('finance_status', '!=', 3)
+                    ->count();
 
                if (!Auth::guard('user')->check()){
                    abort(403)->with('error', 'Please login again');;
@@ -109,11 +111,14 @@ class UserController extends Controller
                }
        }elseif (Auth::guard('user')->user()->role_id === 8){
 
+            $apps = AdmissionApproval::where('registrar_status', null)
+                ->where('finance_status', 1)->count();
+
                 if (!Auth::guard('user')->check()){
                 abort(403)->with('error', 'Please login again');;
                 } else{
 
-                    return view('medical::medical.index');
+                    return view('medical::medical.index')->with('apps', $apps);
                 }
         }elseif (Auth::guard('user')->user()->role_id === 5){
 

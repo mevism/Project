@@ -34,7 +34,7 @@
                     @csrf 
                     <div class="form-floating col-12 col-xl-12">
                       <input type="text" value="{{ old('initials') }}"  class="form-control form-control-alt text-uppercase" id="initials" name="initials" placeholder="School Code">
-                      <label class="form-label">SCHOOL INITIALS</label>
+                      <label class="form-label">SCHOOL CODE</label>
                     </div>
                     <div class="form-floating col-12 col-xl-12">
                       <input type="text" value="{{ old('name') }}"  class="form-control form-control-alt text-uppercase" id="name" name="name" placeholder="School Name">
@@ -51,4 +51,5 @@
             </div>
           </div>
     </div> 
+    
 @endsection
