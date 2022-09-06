@@ -28,14 +28,14 @@ class DeanController extends Controller
     public function viewApplication($id){
 
         $app = Application::find($id);
-        $school = Education::where('user_id', $app->applicant->id)->first();
+        $school = Education::where('applicant_id', $app->applicant->id)->first();
         return view('dean::applications.viewApplication')->with(['app' => $app, 'school' => $school]);
     }
 
     public function previewApplication($id){
 
         $app = Application::find($id);
-        $school = Education::where('user_id', $app->applicant->id)->first();
+        $school = Education::where('applicant_id', $app->applicant->id)->first();
         return view('dean::applications.preview')->with(['app' => $app, 'school' => $school]);
     }
 
@@ -43,10 +43,13 @@ class DeanController extends Controller
 
         $app = Application::find($id);
         $app->dean_status = 1;
+            if ($app->registrar_status != NULL){
+                $app->registrar_status = NULL;
+            }
         $app->save();
 
         $logs = new DeanLog;
-        $logs->app_id = $app->id;
+        $logs->application_id = $app->id;
         $logs->user = Auth::guard('user')->user()->name;
         $logs->user_role = Auth::guard('user')->user()->role_id;
         $logs->activity = 'Application accepted';
@@ -62,7 +65,7 @@ class DeanController extends Controller
         $app->save();
 
         $logs = new DeanLog;
-        $logs->app_id = $app->id;
+        $logs->application_id = $app->id;
         $logs->user = Auth::guard('user')->user()->name;
         $logs->user_role = Auth::guard('user')->user()->role_id;
         $logs->activity = 'Application rejected';
@@ -74,6 +77,7 @@ class DeanController extends Controller
 
     public function batch(){
         $apps = Application::where('dean_status', '>', 0)
+            ->where('school_id', auth()->guard('user')->user()->school_id)
             ->where('registrar_status', null)
             ->orwhere('registrar_status', 4)
             ->where('dean_status', '!=', 3)
@@ -96,7 +100,7 @@ class DeanController extends Controller
             $app->save();
 
             $logs = new DeanLog;
-            $logs->app_id = $app->id;
+            $logs->application_id = $app->id;
             $logs->user = Auth::guard('user')->user()->name;
             $logs->user_role = Auth::guard('user')->user()->role_id;
 

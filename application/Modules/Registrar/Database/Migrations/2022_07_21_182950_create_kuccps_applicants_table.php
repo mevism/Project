@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('BOX')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('town')->nullable();
+            $table->integer('status')->default(0);
             $table->string('school');
             $table->timestamps();
             $table->softDeletes();

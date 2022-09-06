@@ -10,7 +10,11 @@ class Education extends Model
     use HasFactory;
 
     protected $fillable = [];
-    
+
+    public function applicantSchool(){
+        return $this->belongsTo(Applicant::class);
+    }
+
     protected static function newFactory()
     {
         return \Modules\Application\Database\factories\EducationFactory::new();

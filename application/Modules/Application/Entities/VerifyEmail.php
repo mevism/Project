@@ -10,11 +10,11 @@ class VerifyEmail extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'verification_code'];
+    protected $fillable = ['applicant_id', 'verification_code'];
 
     public function userEmail(){
 
-        return $this->belongsTo(Applicant::class, 'user_id');
+        return $this->belongsTo(Applicant::class, 'applicant_id');
     }
 
     protected static function newFactory()

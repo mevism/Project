@@ -73,7 +73,7 @@ class ApplicationController extends Controller
             $app->save();
 
             VerifyEmail::create([
-                'user_id' => $app->id,
+                'applicant_id' => $app->id,
                 'verification_code' => Str::random(100),
             ]);
 
@@ -86,45 +86,21 @@ class ApplicationController extends Controller
         return view('application::auth.phoneverification');
     }
 
-    public function phoneVerification(Request $request)
-    {
-        $validated = $request->validate([
-            'verification_code' => 'required|alpha_num',
-            'phone_number' => 'required|alpha_num'
-        ]);
-
-        $unverified = VerifyUser::where('verification_code' , $request->verification_code)->first();
-
-
-        if (isset($unverified)){
-
-            $applicant = $unverified->applicant;
-
-            if (!$applicant->phone_verification){
-                $applicant->phone_verification = 1;
-                $applicant->save();
-
-                VerifyUser::where('verification_code', $request->verification_code)->delete();
-
-                 return redirect()->route('application.verification')->with('success', 'Phone number verified successfully');
-
-            }else{
-                return redirect(route('root'))->with('warning', 'Phone verification failed');
-            }
-        }else{
-            return redirect()->back()->with('info', 'Phone number already verified');
-        }
-
-        return redirect()->back()->with('error', 'Phone number failed verification');
-    }
     public function phonereverification(Request $request){
 
         $validated = $request->validate([
-            'verification_code' => 'required|alpha_num',
-            'phone_number' => 'required|alpha_num'
+            'verification_code' => 'required',
+            'phone_number' => 'required'
         ]);
 
-            $applicant = Auth::user();
+                $unverified = VerifyUser::where('verification_code', $request->verification_code)->first();
+
+                if (!$unverified){
+
+                    return redirect()->back()->with('error', 'Wrong code! Please request for a new code');
+                }
+
+                $applicant = $unverified->verifyUser;
 
             if (!$applicant->phone_verification){
                 $applicant->phone_verification = 1;
@@ -141,17 +117,30 @@ class ApplicationController extends Controller
         return redirect()->back()->with('error', 'Phone number failed verification');
     }
 
+    public function getNewCode(){
+
+        VerifyUser::where('applicant_id', Auth::user()->id)->delete();
+
+        $verification_code = rand(1, 999999);
+
+        $number = Auth::user()->mobile;
+
+        VerifyUser::create([
+            'applicant_id' => Auth::user()->id,
+            'verification_code' => $verification_code,
+        ]);
+
+        return redirect()->back()->with(['info' => 'Enter the code send to your phone', 'code' => $verification_code]);
+
+    }
+
     public function emailVerification($verification_code){
 
         $unverified = VerifyEmail::where('verification_code', $verification_code)->first();
 
-//        return $unverified;
-
-                if (isset($unverified)){
+       if (isset($unverified)){
 
                     $applicant = $unverified->userEmail;
-
-//                    return $applicant;
 
                     if (!$applicant->email_verified_at){
                         $applicant->email_verified_at = Carbon::now();
@@ -182,7 +171,7 @@ class ApplicationController extends Controller
 
             if (count($courses) === 0 ){
 
-                        $mycourses = Application::where('user_id', Auth::user()->id)->count();
+                        $mycourses = Application::where('applicant_id', Auth::user()->id)->count();
 
                             if (Auth::check()) {
 
@@ -220,7 +209,7 @@ class ApplicationController extends Controller
 
                                 }
 
-                            $mycourses = Application::where('user_id', Auth::user()->id)->count();
+                            $mycourses = Application::where('applicant_id', Auth::user()->id)->count();
 
                                 if (Auth::check()) {
 
@@ -278,28 +267,28 @@ class ApplicationController extends Controller
             ]);
 
             $user = Applicant::where('id', Auth::user()->id)->first();
-            $user->sname = trim($request->sname);
-            $user->fname = trim($request->fname);
-            $user->mname = trim($request->mname);
-            $user->gender = trim(Auth::user()->gender);
+            $user->sname = trim(strtoupper($request->sname));
+            $user->fname = trim(strtoupper($request->fname));
+            $user->mname = trim(strtoupper($request->mname));
+            $user->gender = trim(strtoupper(Auth::user()->gender));
             $user->index_number = trim(Auth::user()->index_number);
             $user->id_number = trim($request->id_number);
             $user->alt_mobile = trim($request->alt_number);
             $user->mobile = trim($request->mobile);
-            $user->email = trim($request->email);
-            $user->alt_email = trim($request->alt_email);
+            $user->email = trim(strtolower($request->email));
+            $user->alt_email = trim(strtolower($request->alt_email));
             $user->dob = trim($request->dob);
             $user->disabled = trim($request->disabled);
-            $user->disability = trim($request->disability);
-            $user->title = trim($request->title);
-            $user->nationality = trim($request->nationality);
-            $user->county = trim($request->county);
-            $user->sub_county = trim($request->subcounty);
-            $user->town = trim($request->town);
+            $user->disability = trim(strtoupper($request->disability));
+            $user->title = trim(strtoupper($request->title));
+            $user->nationality = trim(strtoupper($request->nationality));
+            $user->county = trim(strtoupper($request->county));
+            $user->sub_county = trim(strtoupper($request->subcounty));
+            $user->town = trim(strtoupper($request->town));
             $user->address = trim($request->address);
             $user->postal_code = trim($request->postalcode);
             $user->user_status = trim(1);
-            $user->title = trim($request->title);
+            $user->title = trim(strtoupper($request->title));
             $user->marital_status = trim($request->status);
             $user->save();
 
@@ -327,26 +316,26 @@ class ApplicationController extends Controller
             ]);
 
             $user = Applicant::where('id', Auth::user()->id)->first();
-            $user->sname = trim($request->sname);
-            $user->fname = trim($request->fname);
-            $user->mname = trim($request->mname);
+            $user->sname = trim(strtoupper($request->sname));
+            $user->fname = trim(strtoupper($request->fname));
+            $user->mname = trim(strtoupper($request->mname));
             $user->gender = trim($request->gender);
             $user->index_number = trim($request->index_number);
             $user->id_number = trim($request->id_number);
             $user->alt_mobile = trim($request->alt_number);
-            $user->alt_email = trim($request->alt_email);
+            $user->alt_email = trim(strtolower($request->alt_email));
             $user->dob = trim($request->dob);
             $user->disabled = trim($request->disabled);
-            $user->disability = trim($request->disability);
-            $user->title = trim($request->title);
-            $user->nationality = trim($request->nationality);
-            $user->county = trim($request->county);
-            $user->sub_county = trim($request->subcounty);
-            $user->town = trim($request->town);
+            $user->disability = trim(strtoupper($request->disability));
+            $user->title = trim(strtoupper($request->title));
+            $user->nationality = trim(strtoupper($request->nationality));
+            $user->county = trim(strtoupper($request->county));
+            $user->sub_county = trim(strtoupper($request->subcounty));
+            $user->town = trim(strtoupper($request->town));
             $user->address = trim($request->address);
             $user->postal_code = trim($request->postalcode);
             $user->user_status = trim(1);
-            $user->title = trim($request->title);
+            $user->title = trim(strtoupper($request->title));
             $user->marital_status = trim($request->status);
             $user->save();
 
@@ -371,7 +360,7 @@ class ApplicationController extends Controller
     }
 
     public function myCourses(){
-        $mycourses = Application::where('user_id', Auth::user()->id)->get();
+        $mycourses = Application::where('applicant_id', Auth::user()->id)->get();
         return view('application::applicant.mycourses')->with('courses', $mycourses);
     }
 
@@ -401,12 +390,12 @@ class ApplicationController extends Controller
 
     public function applyNow($id){
 
-        $education = Education::where('user_id', Auth::user()->id)->get();
-        $work = WorkExperience::where('user_id', Auth::user()->id)->get();
+        $education = Education::where('applicant_id', Auth::user()->id)->get();
+        $work = WorkExperience::where('applicant_id', Auth::user()->id)->get();
         $course = AvailableCourse::find($id);
-        $mycourse = Application::where('user_id', Auth::user()->id)->where('course_id', $course->course_id)->first();
-        $parent = Guardian::where('user_id', Auth::user()->id)->get();
-        $sponsor = Sponsor::where('user_id', Auth::user()->id)->get();
+        $mycourse = Application::where('applicant_id', Auth::user()->id)->where('course_id', $course->course_id)->first();
+        $parent = Guardian::where('applicant_id', Auth::user()->id)->get();
+        $sponsor = Sponsor::where('applicant_id', Auth::user()->id)->get();
 
         return view('application::applicant.application')
             ->with(['course' => $course, 'education' => $education, 'work' => $work, 'mycourse' => $mycourse, 'sponsor' => $sponsor, 'parent' => $parent]);
@@ -414,8 +403,8 @@ class ApplicationController extends Controller
 
     public function applicationEdit($id){
         $application = Application::find($id);
-        $education = Education::where('user_id', Auth::user()->id)->get();
-//        $work = WorkExperience::where('user_id', Auth::user()->id)->get();
+        $education = Education::where('applicant_id', Auth::user()->id)->get();
+//        $work = WorkExperience::where('applicant_id', Auth::user()->id)->get();
 //        $parent = Guardian::where('app_id', $id)->first();
 //        $sponsor = Sponsor::where('app_id', Auth::user()->id)->first();
 
@@ -458,7 +447,7 @@ class ApplicationController extends Controller
 //                return $request->all();
 
                 $app = Application::find($id);
-                $app->user_id = Auth::user()->id;
+                $app->applicant_id = Auth::user()->id;
                 $app->intake_id = $request->intake;
                 $app->course_id = $request->course_id;
                 $app->subject_1 = $request->subject1;
@@ -480,7 +469,7 @@ class ApplicationController extends Controller
 
 
                 $edu = Education::find(Auth::user()->id);
-                $edu->user_id = Auth::user()->id;
+                $edu->applicant_id = Auth::user()->id;
                 $edu->institution = $request->secondary;
                 $edu->qualification = $request->secondaryqualification;
                 $edu->start_date = $request->secstartdate;
@@ -498,7 +487,7 @@ class ApplicationController extends Controller
                 if ($request->filled(['tertiary', 'teriaryqualification', 'terstartdate', 'terenddate'])){
 
                     $edu = Education::find(Auth::user()->id);
-                    $edu->user_id = Auth::user()->id;
+                    $edu->applicant_id = Auth::user()->id;
                     $edu->institution = $request->tertiary;
                     $edu->qualification = $request->teriaryqualification;
                     $edu->start_date = $request->terstartdate;
@@ -516,7 +505,7 @@ class ApplicationController extends Controller
                 if ($request->filled(['tertiary2', 'teriary2qualification', 'ter2startdate', 'ter2enddate'])) {
 
                     $edu = Education::find(Auth::user()->id);
-                    $edu->user_id = Auth::user()->id;
+                    $edu->applicant_id = Auth::user()->id;
                     $edu->institution = $request->tertiary2;
                     $edu->qualification = $request->teriary2qualification;
                     $edu->start_date = $request->ter2startdate;
@@ -534,7 +523,7 @@ class ApplicationController extends Controller
                 if ($request->filled(['tertiary3', 'ter3iaryqualification', 'ter3startdate', 'ter3enddate'])) {
 
                     $edu = Education::find(Auth::user()->id);
-                    $edu->user_id = Auth::user()->id;
+                    $edu->applicant_id = Auth::user()->id;
                     $edu->institution = $request->tertiary3;
                     $edu->qualification = $request->ter3iaryqualification;
                     $edu->start_date = $request->ter3startdate;
@@ -564,9 +553,9 @@ class ApplicationController extends Controller
             'subject4' => 'string|required',
             ]);
 
-        if (Application::where('user_id', Auth::user()->id)->where('course_id', $request->course_id)->first()){
+        if (Application::where('applicant_id', Auth::user()->id)->where('course_id', $request->course_id)->first()){
 
-            Application::where('user_id', Auth::user()->id)->where('course_id', $request->course_id)->update([
+            Application::where('applicant_id', Auth::user()->id)->where('course_id', $request->course_id)->update([
 
 
                 'subject_1' => $request->subject1." ".$request->grade1,
@@ -578,7 +567,8 @@ class ApplicationController extends Controller
         }else {
 
             $application = new Application;
-            $application->user_id = Auth::user()->id;
+            $application->applicant_id = Auth::user()->id;
+            $application->student_type = 1;
             $application->intake_id = $request->intake;
             $application->course_id = $request->course_id;
             $application->department_id = $request->dept;
@@ -607,7 +597,7 @@ class ApplicationController extends Controller
             $request->receipt_file->move('receipts', $fileName);
         }
 
-            Application::where('user_id', Auth::user()->id)
+            Application::where('applicant_id', Auth::user()->id)
                 ->where('course_id', $request->course_id)->update(['receipt' => $request->receipt, 'receipt_file' => $fileName ]);
 
         return redirect()->back()->with('success', 'You course payment details have been update successfully');
@@ -627,7 +617,7 @@ class ApplicationController extends Controller
             ]);
 
                 $parent = new Guardian;
-                $parent->user_id = Auth::user()->id;
+                $parent->applicant_id = Auth::user()->id;
                 $parent->guardian_name = $request->parentname;
                 $parent->guardian_mobile = $request->parentmobile;
                 $parent->guardian_county = $request->parentcounty;
@@ -635,7 +625,7 @@ class ApplicationController extends Controller
                 $parent->save();
 
                 $sponsor = new Sponsor;
-                $sponsor->user_id = Auth::user()->id;
+                $sponsor->applicant_id = Auth::user()->id;
                 $sponsor->sponsor_name = $request->sponsorname;
                 $sponsor->sponsor_mobile = $request->sponsormobile;
                 $sponsor->sponsor_county = $request->sponsorcounty;
@@ -655,7 +645,7 @@ class ApplicationController extends Controller
         ]);
 
         $work = new WorkExperience;
-        $work->user_id = Auth::user()->id;
+        $work->applicant_id = Auth::user()->id;
         $work->organization = $request->org1;
         $work->post = $request->org1post;
         $work->start_date = $request->org1startdate;
@@ -674,7 +664,7 @@ class ApplicationController extends Controller
             ]);
 
             $education = new Education;
-            $education->user_id = Auth::user()->id;
+            $education->applicant_id = Auth::user()->id;
             $education->institution = $request->secondary;
             $education->qualification = $request->secondaryqualification;
             $education->start_date = $request->secstartdate;
@@ -706,7 +696,7 @@ class ApplicationController extends Controller
 //            return $request->all();
 
             $education = new Education;
-            $education->user_id = Auth::user()->id;
+            $education->applicant_id = Auth::user()->id;
             $education->institution = $request->tertiary;
             $education->qualification = $request->teriaryqualification;
             $education->start_date = $request->terstartdate;
@@ -730,7 +720,7 @@ class ApplicationController extends Controller
             'declare' => 'required'
         ]);
 
-        Application::where('user_id', Auth::user()->id)->where('id', $request->course_id)->update(['declaration' => 1, 'finance_status' => 0, 'status' => 0]);
+        Application::where('applicant_id', Auth::user()->id)->where('id', $request->course_id)->update(['declaration' => 1, 'finance_status' => 0, 'status' => 0]);
 
         return redirect()->back()->with('success', 'Your application was submitted successfully');
 
@@ -765,7 +755,7 @@ class ApplicationController extends Controller
         return view('application::applicant.progress')->with(['logs' => $logs, 'course' => $course]);
     }
     public function myProfile(){
-        $apps = Application::where('user_id', Auth::user()->id)->get();
+        $apps = Application::where('applicant_id', Auth::user()->id)->get();
         return view('application::applicant.profilepage')->with('apps', $apps);
     }
 

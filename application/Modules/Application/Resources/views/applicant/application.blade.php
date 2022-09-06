@@ -659,7 +659,7 @@
                                 </div>
                                 <div class="col-md-8">
                                     <div class="py-2 mb-0">
-                                        You are required to pay <span class="fw-bold">Ksh. {{ $course->mainCourses->fee }} </span> to complete this application.
+                                        You are required to pay <span class="fw-bold">Ksh. {{ $course->mainCourses->courseRequirements->fee }} </span> to complete this application.
                                         <a href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> How do I pay?</a>
                                     </div>
                                     <div class="form-floating text-uppercase py-1">
@@ -755,8 +755,8 @@
                             <div class="block-content-full">
                                     <div class="p-sm-2 p-xl-12">
                                         <div class="row mb-2 text-center">
-                                            <span class="fw-semibold mb-2"> {{ $course->mainCourses->school_id }} </span>
-                                            <span class="fw-semibold mb-2"> {{ $course->mainCourses->department_id }}</span>
+                                            <span class="fw-semibold mb-2"> {{ $course->mainCourses->getCourseDept->schools->name }} </span>
+                                            <span class="fw-semibold mb-2"> {{ $course->mainCourses->getCourseDept->name }}</span>
                                             <span class="fw-semibold mb-2"> {{ $course->mainCourses->course_name }} </span>
                                         </div>
 
@@ -764,18 +764,20 @@
                                             @if($mycourse != null && $mycourse->receipt != null)
                                                 <thead>
                                                 <th>Receipt Number</th>
+                                                <th>Amount</th>
                                                 <th>Status</th>
                                                 </thead>
                                                 <tbody>
                                                 <tr>
                                                     <td>{{ $mycourse->receipt }}</td>
+                                                    <td>{{ $course->mainCourses->courseRequirements->fee }}</td>
                                                     <td><span class="badge bg-success"><i class="fa fa-check-circle"> Paid </i> </span> </td>
                                                 </tr>
                                                 </tbody>
                                             @endif
                                                 @if($mycourse != null)
                                                     <thead>
-                                                        <th colspan="2">Course Requiremet</th>
+                                                        <th colspan="2">Course Requirements</th>
                                                     </thead>
                                                     <tbody>
                                                         <td colspan="2"> {{ $course->mainCourses->course_requirements }} </td>
@@ -784,24 +786,24 @@
                                             @if($mycourse != null)
                                                         <thead>
                                                         <th>Cluster subject</th>
-                                                        <th>Your Score</th>
+                                                        <th colspan="2">Your Score</th>
                                                         </thead>
                                                     <tbody>
                                                         <tr>
                                                             <td>{{ $course->mainCourses->courseRequirements->subject1 }}</td>
-                                                            <td>{{ $mycourse->subject_1 }}</td>
+                                                            <td colspan="2">{{ $mycourse->subject_1 }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td>{{ $course->mainCourses->courseRequirements->subject2 }}</td>
-                                                            <td>{{ $mycourse->subject_2 }}</td>
+                                                            <td colspan="2">{{ $mycourse->subject_2 }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td>{{ $course->mainCourses->courseRequirements->subject3 }}</td>
-                                                            <td>{{ $mycourse->subject_3 }}</td>
+                                                            <td colspan="2">{{ $mycourse->subject_3 }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td>{{ $course->mainCourses->courseRequirements->subject4 }}</td>
-                                                            <td>{{ $mycourse->subject_4 }}</td>
+                                                            <td colspan="2">{{ $mycourse->subject_4 }}</td>
                                                         </tr>
                                                     </tbody>
                                                 @endif

@@ -15,15 +15,17 @@ return new class extends Migration
     {
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id');
+            $table->bigInteger('applicant_id');
             $table->integer('intake_id');
+            $table->integer('student_type');
+            $table->integer('school_id');
             $table->integer('department_id');
             $table->integer('course_id');
-            $table->string('subject_1');
-            $table->string('subject_2');
-            $table->string('subject_3');
-            $table->string('subject_4');
-            $table->string('campus');
+            $table->string('subject_1')->nullable();
+            $table->string('subject_2')->nullable();
+            $table->string('subject_3')->nullable();
+            $table->string('subject_4')->nullable();
+            $table->string('campus')->nullable();
             $table->string('receipt')->nullable();
             $table->string('receipt_file')->nullable();
             $table->tinyInteger('declaration')->nullable();

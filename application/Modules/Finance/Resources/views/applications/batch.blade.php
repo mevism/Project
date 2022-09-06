@@ -54,6 +54,7 @@
                         @if(count($apps)>0)
                             <thead>
                             <th>✔</th>
+                            <th></th>
                             <th>Applicant Name</th>
                             <th>Course Name</th>
                             <th>Transaction code</th>
@@ -69,6 +70,7 @@
                                         ✔
                                     @endif
                                     </td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</td>
                                     <td> {{ $app->courses->course_name }}</td>
                                     <td> {{ $app->receipt }}</td>

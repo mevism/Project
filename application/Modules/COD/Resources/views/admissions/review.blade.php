@@ -40,27 +40,94 @@
                             <div class="col-md-8"> {{ $app->courses->course_name }} </div>
                         </div>
                         <div class="row p-1">
-                            <div class="col-md-4 fw-bolder text-start">Institution</div>
-                            <div class="col-md-8"> {{ $school->institution }} </div>
+                            <div class="col-md-4 fw-bolder text-start">Institution(s)</div>
+                            <div class="col-md-8">
+                                @foreach($app->applicant->School as $sch)
+                                    <p class="fw-semibold">{{ $sch->institution }}</p>
+                                @endforeach
+                            </div>
                         </div>
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">KCSE Grade</div>
-                            <div class="col-md-8"> {{ $school->qualification }} </div>
+                            <div class="col-md-8"> @foreach($app->applicant->School as $sch)
+                                    <p class="fw-semibold">{{ $sch->qualification }}</p>
+                                @endforeach</div>
                         </div>
-                        <div class="row p-1">
-                            <div class="col-md-4 fw-bolder text-start">Cluster Subjects</div>
-                            <div class="col-md-8">
-                                <p> ENGLISH {{ $app->subject_1 }}</p>
-                                <p> MATHEMATICS {{ $app->subject_2 }}</p>
-                                <p> BUSINESS {{ $app->subject_3 }}</p>
-                                <p> HISTORY {{ $app->subject_4 }}</p>
+                        <div class="row py-3">
+                            <div class="col-md-12">
+                                <table class="table table-sm table-striped table-borderless">
+                                    <th>Course Requirement</th>
+                                    <th>Applicant Score</th>
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ $app->courses->courseRequirements->subject1 }}</td>
+                                        <td>{{ $app->subject_1 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $app->courses->courseRequirements->subject2 }}</td>
+                                        <td>{{ $app->subject_2 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $app->courses->courseRequirements->subject3 }}</td>
+                                        <td>{{ $app->subject_3 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $app->courses->courseRequirements->subject4 }}</td>
+                                        <td>{{ $app->subject_4 }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6 space-y-2">
-                        <div class="d-flex justify-content-center">
-                            <div class="card-img" style="margin: auto !important;">
-                                <img style="margin: auto !important; max-height: 80vh !important; width: 100% !important;" src="{{ url('certs/', $school->certificate) }}" alt="">
+{{--                        <div class="d-flex justify-content-center">--}}
+{{--                            <div id="carouselExampleControls" class="carousel slide">--}}
+{{--                                <div class="carousel-inner">--}}
+
+{{--                                    <div class="carousel-item active">--}}
+{{--                                        <img src="assets/media/photos/photo4.jpg" class="d-block w-100" alt="Carousel Image 1">--}}
+{{--                                    </div>--}}
+{{--                                    <div class="carousel-item">--}}
+{{--                                        <img src="assets/media/photos/photo5.jpg" class="d-block w-100" alt="Carousel Image 2">--}}
+{{--                                    </div>--}}
+{{--                                    <div class="carousel-item">--}}
+{{--                                        <img src="assets/media/photos/photo6.jpg" class="d-block w-100" alt="Carousel Image 3">--}}
+{{--                                    </div>--}}
+
+
+
+{{--                                </div>--}}
+{{--                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"  data-bs-slide="prev">--}}
+{{--                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>--}}
+{{--                                    <span class="visually-hidden">Previous</span>--}}
+{{--                                </button>--}}
+{{--                                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"  data-bs-slide="next">--}}
+{{--                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>--}}
+{{--                                    <span class="visually-hidden">Next</span>--}}
+{{--                                </button>--}}
+{{--                            </div>--}}
+{{--                            <div class="card-img" style="margin: auto !important;">--}}
+{{--                                <img style="margin: auto !important; max-height: 80vh !important; width: 100% !important;" src="{{ url('certs/') }}" alt="">--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+                        <div class="block-content block-content-full">
+                            <div id="carouselExampleControls" class="carousel slide carousel-fade" data-bs-touch="false" data-bs-interval="false">
+                                <div class="carousel-inner">
+                                    @foreach($app->applicant->School as $key => $sch)
+                                        <div class="carousel-item {{$key == 0 ? 'active' : '' }} ">
+                                            <img src="{{ url('certs/', $sch->certificate) }}" class="d-block w-100" alt="certificate" style="width: 100% !important;">
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"  data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"  data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -68,11 +135,11 @@
             </div>
             <div class="d-flex justify-content-center py-1">
 
-                @if($app->admApproval === NULL)
+                @if($app->approveAdm === NULL)
                     <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('cod.acceptAdmission', $app->id) }}"> Accept </a>
                     <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
                     <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('cod.selfAdmissions') }}">Close</a>
-                @elseif($app->admApproval->cod_status === 1)
+                @elseif($app->approveAdm->cod_status === 1)
                     <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
                     <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('cod.selfAdmissions') }}">Close</a>
                 @else

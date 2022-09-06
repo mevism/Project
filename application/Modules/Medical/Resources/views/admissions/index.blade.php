@@ -33,18 +33,28 @@
                 <div class="col-lg-12">
                     <table id="example" class="table table-responsive table-md table-striped table-bordered table-vcenter fs-sm">
                         <thead>
+                        <th></th>
                         <th>Applicant Name</th>
                         <th>Department</th>
                         <th>Course Name</th>
+                        <th>Student Type</th>
                         <th>Status</th>
                         <th style="white-space: nowrap !important;">Action</th>
                         </thead>
                         <tbody>
                         @foreach($admission as $app)
                             <tr>
-                                <td nowrap="">{{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->mname }} {{ $app->appApprovals->applicant->fname }}</td>
-                                <td>{{ $app->appApprovals->courses->getCourseDept->name }}</td>
-                                <td>{{ $app->appApprovals->courses->course_name }}</td>
+                                <td>{{ $loop->iteration }}</td>
+                                <td nowrap="">{{ $app->admissions->applicant->sname }} {{ $app->admissions->applicant->mname }} {{ $app->admissions->applicant->fname }}</td>
+                                <td>{{ $app->admissions->courses->getCourseDept->name }}</td>
+                                <td>{{ $app->admissions->courses->course_name }}</td>
+                                <td>
+                                    @if($app->admissions->student_type === 1)
+                                        S-PT
+                                    @else
+                                        J-FT
+                                    @endif
+                                </td>
                                 <td>
                                     @if($app->medical_status === 0)
                                         <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>
@@ -55,47 +65,15 @@
                                     @endif
                                 </td>
                                 <td nowrap="">
-                                        <div class="modal fade" id="modal-block-popin{{ $app->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-popin" role="document">
-                                                <div class="modal-content">
-                                                    <div class="block block-rounded block-transparent mb-0">
-                                                        <div class="block-header block-header-default">
-                                                            <h3 class="block-title">Reason(s) </h3>
-                                                            <div class="block-options">
-                                                                <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
-                                                                    <i class="fa fa-fw fa-times"></i>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                        <div class="block-content fs-sm">
-                                                            <form action="{{ route('medical.rejectAdmission', $app->id) }}" method="post">
-                                                                @csrf
-                                                                <div class="row col-md-12 mb-3">
-                                                                    <textarea class="form-control" placeholder="Write down the reasons for declining this application" name="comment" required></textarea>
-                                                                    <input type="hidden" name="{{ $app->id }}">
-                                                                </div>
-                                                                <div class="d-flex justify-content-center mb-2">
-                                                                    <button type="submit" class="btn btn-alt-danger btn-sm">Reject</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                        <div class="block-content block-content-full text-end bg-body">
-                                                            <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>
-                                                            {{--                        <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Okay</button>--}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     @if($app->medical_status === 0)
                                         <a class="btn btn-sm btn-alt-info" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to approve?')" href="{{ route('medical.acceptAdmission', $app->id) }}"> Accept</a>
-                                        <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin{{ $app->id }}"> Reject</a>
-                                            <div class="modal fade" id="modal-block-popin" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin{{ $app->id }}" aria-hidden="true">
+                                        <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->id }}"> Reject</a>
+                                            <div class="modal fade" id="modal-block-popin-{{ $app->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-popin" role="document">
                                                     <div class="modal-content">
                                                         <div class="block block-rounded block-transparent mb-0">
                                                             <div class="block-header block-header-default">
-                                                                <h3 class="block-title">Reason(s) </h3>
+                                                                <h3 class="block-title">Reason(s) for rejecting {{ $app->admissions->applicant->sname }}'s admission </h3>
                                                                 <div class="block-options">
                                                                     <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                                                                         <i class="fa fa-fw fa-times"></i>
@@ -124,13 +102,13 @@
                                             </div>
                                     @elseif($app->medical_status === 1)
                                         <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('medical.submitAdmission',$app->id) }}"> submit</a>
-                                        <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
-                                            <div class="modal fade" id="modal-block-popin" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin{{ $app->id }}" aria-hidden="true">
+                                        <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->id }}"> Reject</a>
+                                            <div class="modal fade" id="modal-block-popin-{{ $app->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-popin" role="document">
                                                     <div class="modal-content">
                                                         <div class="block block-rounded block-transparent mb-0">
                                                             <div class="block-header block-header-default">
-                                                                <h3 class="block-title">Reason(s) </h3>
+                                                                <h3 class="block-title">Reason(s) for rejecting {{ $app->admissions->applicant->sname }}'s admission</h3>
                                                                 <div class="block-options">
                                                                     <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                                                                         <i class="fa fa-fw fa-times"></i>
@@ -180,7 +158,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[4, 'desc']],
+            order: [[6, 'desc']],
             rowGroup: {
                 dataSrc: 2
             }

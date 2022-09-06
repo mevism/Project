@@ -58,6 +58,7 @@
                     <thead>
                     <tr>
                         <th>✔</th>
+                         <th></th>
                         <th>Applicant Name</th>
                         <th>Department Name</th>
                         <th>Course</th>
@@ -77,6 +78,7 @@
 
                                     @endif
                                     </td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td> {{ $item->applicant->sname }} {{ $item->applicant->fname }} {{ $item->applicant->mname }}</td>
                                 <td> {{ $item->courses->getCourseDept->name }}</td>
                                 <td> {{ $item->courses->course_name }}</td>
@@ -135,7 +137,7 @@
                 <input type="checkbox" onclick="for(c in document.getElementsByClassName('accepted')) document.getElementsByClassName('accepted').item(c).checked = this.checked"> Select all
             </div>
             <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-sm btn-alt-primary" href="route('courses.archived')" data-toggle="click-ripple">Submit batch</button>
+                <button type="submit" class="btn btn-sm btn-alt-primary" href="route('courses.archived')" data-toggle="click-ripple">Generate Admission letters </button>
             </div>
             @endif
     </form>

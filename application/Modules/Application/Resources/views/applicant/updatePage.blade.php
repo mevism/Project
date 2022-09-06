@@ -39,15 +39,15 @@
                             @csrf
                             <div class="row row-cols-sm-3 g-2">
                                 <div class="form-floating col-12">
-                                    <input type="text" class="form-control text-uppercase" name="fname" required value=" @if(Auth::user()->fname != null) {{ Auth::user()->fname }} @else {{ old('fname') }} @endif" placeholder="FIRST NAME">
+                                    <input type="text" class="form-control text-uppercase" name="fname" required value="@if(Auth::user()->fname != null){{ Auth::user()->fname }}@else{{ old('fname') }}@endif" placeholder="FIRST NAME">
                                     <label class="form-label" for="fname">FIRST NAME</label>
                                 </div>
                                 <div class="form-floating col-12">
-                                    <input type="text" class="form-control text-uppercase" name="mname" value="@if(Auth::user()->mname != null) {{ Auth::user()->mname }} @else {{ old('mname') }} @endif" placeholder="MIDDLE NAME">
+                                    <input type="text" class="form-control text-uppercase" name="mname" value="@if(Auth::user()->mname != null){{ Auth::user()->mname }}@else{{ old('mname') }}@endif" placeholder="MIDDLE NAME">
                                     <label class="form-label" for="mname">MIDDLE NAME</label>
                                 </div>
                                 <div class="form-floating col-12">
-                                    <input type="text" class="form-control" name="sname" value="@if(Auth::user()->sname != null) {{ Auth::user()->sname }} @else {{ old('sname') }} @endif" required placeholder="SUR NAME">
+                                    <input type="text" class="form-control" name="sname" value="@if(Auth::user()->sname != null){{ Auth::user()->sname }}@else{{ old('sname') }}@endif" required placeholder="SUR NAME">
                                     <label class="form-label" for="sname">SUR NAME</label>
                                 </div>
                                 <div class="form-floating col-12">
@@ -78,7 +78,7 @@
                                 </div>
                                 @if(Auth::user()->student_type ===2 )
                                     <div class="form-floating col-12">
-                                        <input type="text" class="form-control text-uppercase" name="mobile" value=" @if(Auth::user()->mobile != null ) {{ Auth::user()->mobile }} @else {{ old('alt_number') }} @endif" required placeholder="PHONE">
+                                        <input type="text" class="form-control text-uppercase" name="mobile"value="@if(Auth::user()->mobile != null ){{ Auth::user()->mobile }}@else{{ old('alt_number') }}@endif" required placeholder="PHONE">
                                         <label class="form-label">MOBILE NUMBER</label>
                                     </div>
                                     @else
@@ -117,19 +117,19 @@
                                 </div>
                                 @endif
                                 <div class="form-floating col-12">
-                                    <input type="text" class="form-control text-uppercase" name="alt_number" value=" @if(Auth::user()->alt_mobile != null) {{ Auth::user()->alt_mobile }} @else {{ old('alt_number') }} @endif" required placeholder="PHONE">
+                                    <input type="text" class="form-control text-uppercase" name="alt_number" value="@if(Auth::user()->alt_mobile != null){{ Auth::user()->alt_mobile }}@else{{ old('alt_number') }}@endif" required placeholder="PHONE">
                                     <label class="form-label">ALTERNATIVE MOBILE NUMBER</label>
                                 </div>
                                 <div class="form-floating col-12">
-                                    <input type="email" class="form-control text-lowercase" name="alt_email" value=" @if(Auth::user()->alt_email != null) {{ Auth::user()->alt_email }} @else {{ old('alt_email') }} @endif" required placeholder="EMAIL">
+                                    <input type="email" class="form-control text-lowercase" name="alt_email" value="@if(Auth::user()->alt_email != null){{ Auth::user()->alt_email }}@else{{ old('alt_email') }}@endif" required placeholder="EMAIL">
                                     <label class="form-label">ALTERNATIVE EMAIL ADDRESS</label>
                                 </div>
                                 <div class="form-floating col-12">
-                                    <input type="text" class="form-control text-uppercase" name="address" value=" @if(Auth::user()->address != null) {{ Auth::user()->address }} @else {{ old('address') }} @endif " required placeholder="BOX">
+                                    <input type="text" class="form-control text-uppercase" name="address" value="@if(Auth::user()->address != null){{ Auth::user()->address }}@else{{ old('address') }}@endif" required placeholder="BOX">
                                     <label class="form-label">P.O BOX</label>
                                 </div>
                                 <div class="form-floating col-12">
-                                    <input type="text" class="form-control text-uppercase" name="postalcode" value=" @if(Auth::user()->postal_code != null) {{ Auth::user()->postal_code }} @else {{ old('address') }} @endif" required placeholder="POSTAL">
+                                    <input type="text" class="form-control text-uppercase" name="postalcode" value="@if(Auth::user()->postal_code != null){{ Auth::user()->postal_code }}@else{{ old('address') }}@endif" required placeholder="POSTAL">
                                     <label class="form-label">POSTAL CODE</label>
                                 </div>
                                 <div class="form-floating col-12">
@@ -150,7 +150,7 @@
                                     <label class="form-label">SUB-COUNTY</label>
                                 </div>
                                 <div class="form-floating col-12">
-                                    <input type="text" class="form-control text-uppercase" name="town" required value=" @if(Auth::user()->town != null) {{ Auth::user()->town }} @else {{ old('town') }} @endif" placeholder="TOWN">
+                                    <input type="text" class="form-control text-uppercase" name="town" required value="@if(Auth::user()->town != null){{ Auth::user()->town }}@else{{ old('town') }}@endif" placeholder="TOWN">
                                     <label class="form-label">TOWN</label>
                                 </div>
                             <div class="col-12">

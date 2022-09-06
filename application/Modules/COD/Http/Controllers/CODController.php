@@ -35,7 +35,7 @@ class CODController extends Controller
     public function viewApplication($id){
 
         $app = Application::find($id);
-        $school = Education::where('user_id', $app->applicant->id)->first();
+        $school = Education::where('applicant_id', $app->applicant->id)->first();
 
         return view('cod::applications.viewApplication')->with(['app' => $app, 'school' => $school]);
     }
@@ -43,7 +43,7 @@ class CODController extends Controller
     public function previewApplication($id){
 
         $app = Application::find($id);
-        $school = Education::where('user_id', $app->applicant->id)->first();
+        $school = Education::where('applicant_id', $app->applicant->id)->first();
         return view('cod::applications.preview')->with(['app' => $app, 'school' => $school]);
     }
 
@@ -55,7 +55,7 @@ class CODController extends Controller
         $app->save();
 
         $logs = new CODLog;
-        $logs->app_id = $app->id;
+        $logs->application_id = $app->id;
         $logs->user = Auth::guard('user')->user()->name;
         $logs->user_role = Auth::guard('user')->user()->role_id;
         $logs->activity = 'Application accepted';
@@ -76,7 +76,7 @@ class CODController extends Controller
         $app->save();
 
         $logs = new CODLog;
-        $logs->app_id = $app->id;
+        $logs->application_id = $app->id;
         $logs->user = Auth::guard('user')->user()->name;
         $logs->user_role = Auth::guard('user')->user()->role_id;
         $logs->comments = $request->comment;
@@ -91,6 +91,7 @@ class CODController extends Controller
 
     public function batch(){
         $apps = Application::where('cod_status', '>', 0)
+            ->where('department_id', auth()->guard('user')->user()->department_id)
             ->where('dean_status', null)
             ->orWhere('dean_status', 3)
             ->where('cod_status', '!=', 3)
@@ -107,7 +108,7 @@ class CODController extends Controller
             $app->save();
 
             $logs = new CODLog;
-            $logs->app_id = $app->id;
+            $logs->application_id = $app->id;
             $logs->user = Auth::guard('user')->user()->name;
             $logs->user_role = Auth::guard('user')->user()->role_id;
             $logs->activity = "Application awaiting Dean's Verification";
@@ -139,14 +140,15 @@ class CODController extends Controller
 
     public function acceptAdmission($id){
 
-        if(AdmissionApproval::where('app_id', $id)->exists()){
-                AdmissionApproval::where('app_id', $id)->update(['cod_status' => 1]);
-            }else{
-                $adm = new AdmissionApproval;
-                $adm->app_id = $id;
-                $adm->cod_status = 1;
-                $adm->save();
+        $app = AdmissionApproval::where('application_id', $id)->first();
 
+        if ($app === NULL){
+            $adm = new AdmissionApproval;
+            $adm->application_id = $id;
+            $adm->cod_status = 1;
+            $adm->save();
+        }else{
+            AdmissionApproval::where('application_id', $id)->update(['cod_status' => 1]);
         }
 
         return redirect()->route('cod.selfAdmissions')->with('success', 'New student admitted successfully');
@@ -154,19 +156,19 @@ class CODController extends Controller
 
     public function rejectAdmission(Request $request, $id){
 
-            $app = AdmissionApproval::where('app_id', $id)->first();
+            $app = AdmissionApproval::where('application_id', $id)->first();
 
             if ($app === NULL){
 
                 $adm = new AdmissionApproval;
-                $adm->app_id = $id;
+                $adm->application_id = $id;
                 $adm->cod_status = 2;
                 $adm->cod_comments = $request->comment;
                 $adm->save();
 
             }else{
 
-                AdmissionApproval::where('app_id', $id)->update(['cod_status' => 2, 'cod_comments' => $request->comment]);
+                AdmissionApproval::where('application_id', $id)->update(['cod_status' => 2, 'cod_comments' => $request->comment]);
 
             }
 
@@ -174,11 +176,11 @@ class CODController extends Controller
     }
     public function rejectAdmJab(Request $request, $id){
 
-        if (AdmissionApproval::where('app_id', $id)->exists()) {
-            AdmissionApproval::where('app_id', $id)->update(['cod_status' => 2, 'cod_comments' => $request->comment]);
+        if (AdmissionApproval::where('application_id', $id)->exists()) {
+            AdmissionApproval::where('application_id', $id)->update(['cod_status' => 2, 'cod_comments' => $request->comment]);
         }else{
             $adm = new AdmissionApproval;
-            $adm->app_id = $id;
+            $adm->application_id = $id;
             $adm->cod_status = 2;
             $adm->cod_comments = $request->comment;
             $adm->save();
@@ -189,7 +191,7 @@ class CODController extends Controller
 
     public function submitAdmission($id){
 
-        AdmissionApproval::where('app_id', $id)->update(['finance_status' => 0]);
+        AdmissionApproval::where('application_id', $id)->update(['finance_status' => 0]);
 
         Application::where('id', $id)->update(['status' => 1]);
 
@@ -199,9 +201,9 @@ class CODController extends Controller
 
     public function submitAdmJab($id){
 
-        AdmissionApproval::where('app_id', $id)->update(['finance_status' => 0]);
+        AdmissionApproval::where('application_id', $id)->update(['finance_status' => 0]);
 
-        KuccpsApplication::where('user_id', $id)->update(['registered' => Carbon::now()]);
+        KuccpsApplication::where('applicant_id', $id)->update(['registered' => Carbon::now()]);
 
         return redirect()->back()->with('success', 'Record submitted to finance');
     }

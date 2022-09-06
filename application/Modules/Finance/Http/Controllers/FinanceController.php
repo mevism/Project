@@ -48,7 +48,7 @@ class FinanceController extends Controller
         $app->save();
 
         $logs = new FinanceLog;
-        $logs->app_id = $app->id;
+        $logs->application_id = $app->id;
         $logs->user = Auth::guard('user')->user()->name;
         $logs->user_role = Auth::guard('user')->user()->role_id;
         $logs->activity = 'Application accepted';
@@ -65,7 +65,7 @@ class FinanceController extends Controller
         $app->save();
 
         $logs = new FinanceLog;
-        $logs->app_id = $app->id;
+        $logs->application_id = $app->id;
         $logs->user = Auth::guard('user')->user()->name;
         $logs->user_role = Auth::guard('user')->user()->role_id;
         $logs->comments = $request->comment;
@@ -104,7 +104,7 @@ class FinanceController extends Controller
                 }
 
                 $logs = new FinanceLog;
-                $logs->app_id = $app->id;
+                $logs->application_id = $app->id;
                 $logs->user = Auth::guard('user')->user()->name;
                 $logs->user_role = Auth::guard('user')->user()->role_id;
                 $logs->activity = 'Your application has been forwarded to COD for review';
@@ -177,7 +177,7 @@ class FinanceController extends Controller
         $admission->medical_status = 0;
         $admission->save();
 
-        return redirect(route('finance.admissions'))->with('success', 'Record submitted to Registrar');
+        return redirect(route('finance.admissions'))->with('success', 'Record submitted to Medical Officer');
     }
 
     public function submitAdmissionJab($id){

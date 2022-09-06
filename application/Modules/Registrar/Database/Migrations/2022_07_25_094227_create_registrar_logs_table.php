@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('registrar_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('app_id');
+            $table->string('application_id');
             $table->string('user');
             $table->integer('user_role');
             $table->string('activity');

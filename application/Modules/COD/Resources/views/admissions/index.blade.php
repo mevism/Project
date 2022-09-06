@@ -34,41 +34,42 @@
                     <table id="example" class="table table-responsive table-md table-striped table-bordered table-vcenter fs-sm">
                         @if(count($applicant)>0)
                             <thead>
-                            <th>#</th>
+                                <th></th>
                             <th>Applicant Name</th>
-                            <th>Department</th>
                             <th>Course Name</th>
+                            <th>Student Type</th>
                             <th>Status</th>
                             <th style="white-space: nowrap !important;">Action</th>
                             </thead>
-
-{{--                        @foreach($applicant as $app)--}}
-
-{{--                            {{ $app->applicant }} <br>--}}
                             <tbody>
                             @foreach($applicant as $app)
                                 <tr>
-                                    <td scope="row"> {{ $loop->iteration }}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }} </td>
-                                    <td> {{ $app->courses->getCourseDept->name }}</td>
                                     <td> {{ $app->courses->course_name }}</td>
                                     <td>
-{{--                                        {{ $app->admApproval }}--}}
-                                        @if($app->admApproval === NULL)
+                                        @if($app->applicant->student_type === 1)
+                                            S-PT
+                                        @else
+                                            J-FT
+                                        @endif
+                                    </td>
+                                    <td>
+
+                                        @if($app->approveAdm === NULL)
                                             <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>
-                                        @elseif($app->admApproval->cod_status === 1)
+                                            {{ $app->approveAdm }}
+                                        @elseif($app->approveAdm->cod_status === 1)
                                             <span class="badge bg-success"> <i class="fa fa-check"></i> accepted</span>
                                         @else
                                             <span class="badge bg-danger"> <i class="fa fa-close"></i> rejected</span>
                                         @endif
                                     </td>
                                     <td nowrap="">
-
                                         @if($app->applicant->student_type === 2)
-                                            @if($app->admApproval === NULL)
+                                            @if($app->approveAdm === NULL)
                                                 <a class="btn btn-sm btn-alt-info" onclick="return confirm('Are you sure you want to approve?')" data-toggle="click-ripple" href="{{ route('cod.acceptAdmission', $app->id) }}">Accept</a>
                                                 <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->id }}"> Reject</a>
-
                                                 <div class="modal fade" id="modal-block-popin-{{ $app->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-popin" role="document">
                                                         <div class="modal-content">
@@ -102,7 +103,7 @@
                                                     </div>
                                                 </div>
 
-                                            @elseif($app->admApproval->cod_status === 1)
+                                            @elseif($app->approveAdm->cod_status === 1)
                                                 <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('cod.submitAdmission', $app->id) }}"> Submit </a>
                                                 <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->id }}"> Reject</a>
                                                 <div class="modal fade" id="modal-block-popin-{{ $app->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
@@ -142,9 +143,9 @@
                                             @endif
 
                                         @else
-                                            @if($app->admApproval === NULL)
+                                            @if($app->approveAdm === NULL)
                                                     <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->id) }}"> Verify </a>
-                                            @elseif($app->admApproval->cod_status === 1)
+                                            @elseif($app->approveAdm->cod_status === 1)
                                                 <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->id) }}"> Edit </a>
                                                 <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('cod.submitAdmission', $app->id) }}"> Submit </a>
                                             @else

@@ -1,5 +1,5 @@
 <?php
-
+use Modules\Application\Http\Controllers\ApplicationController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,12 +22,13 @@
         Route::get('/verifyemail/{verification_code}', 'ApplicationController@emailVerification')->name('application.emailverification');
         Route::get('/confirmed', 'ApplicationController@checkverification')->name('application.verification');
         Route::get('/verifyphone', 'ApplicationController@verifyemail')->name('application.phoneverify');
-        Route::get('/details', 'ApplicationController@details')->name('application.details')->middleware('auth');
         Route::get('/verifyphone', 'ApplicationController@phoneverify')->name('application.phone');
+        Route::any('/generateCode', [ApplicationController::class, 'getNewCode'])->name('application.getNewCode');
 
 
 
         Route::get('/logout', 'ApplicationController@logout')->name('application.logout');
+        Route::get('/details', 'ApplicationController@details')->name('application.details');
 
         Route::group(['middleware' => ['auth', 'is_verified']], function (){
             Route::post('/updateDetails', 'ApplicationController@makeupdate')->name('application.updateDetails');
