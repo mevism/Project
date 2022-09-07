@@ -33,5 +33,15 @@ Route::prefix('department')->group(function() {
         Route::post('/rejectjab/{id}', [CODController::class, 'rejectAdmJab'])->name('cod.rejectAdmJab');
         Route::get('/submit/{id}', [CODController::class, 'submitAdmission'])->name('cod.submitAdmission');
         Route::get('/submitAdmJab/{id}', [CODController::class, 'submitAdmJab'])->name('cod.submitAdmJab');
+
+
+
+        Route::get('/courses', [CODController::class, 'courses'])->name('department.courses');
+
+
+        Route::get('/intakes', [CODController::class, 'intakes'])->name('department.intakes');
+        Route::get('/intakes/addCourse/{id}', [CODController::class, 'intakeCourses'])->name('department.intakeCourses');
+        Route::post('/intakes/addAvailableCourses', [CODController::class, 'addAvailableCourses'])->name('department.addAvailableCourses');
+
     });
 });

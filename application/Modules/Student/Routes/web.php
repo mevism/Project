@@ -16,6 +16,7 @@ use Modules\Student\Http\Middleware\Update;
 
 Route::prefix('student')->group(function() {
 //    Route::get('/', 'StudentController@index')->name('student');
+    Route::get('/downstream', [StudentController::class, 'downstream'])->name('raw.route');
     Route::group(['middleware' => ['student']], function (){
 
         Route::get('/', [StudentController::class, 'index'])->name('student');

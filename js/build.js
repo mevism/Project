@@ -1,6 +1,4 @@
     const ServerData = new (function(){
-        this.studies = ['Certificate','Diploma','Non-standard','Graduate','Post-Graduate','Under-Graduate','Masters','PHD'];
-        this.attendance_arr = ['REGULAR','FULL-TIME','PART-TIME','ONLINE-LEARNING','HOLIDAY-LEARNING','DISTANCE-LEARNING','EVENING']
         this.bindAuth = async function(r, h, c, m, f){
             let pop = { method : r }
             if(r == "POST") {
@@ -21,6 +19,10 @@
             } catch (error) {
                 console.log(error);
             }
+        };
+        this.UPSTREAM = async() => {
+            let collect = await this.bindAuth('GET',document.querySelector('meta[name="oneui-route"]').content,false)
+            return collect;
         };
         this.buildSelect = (e) => {
             let { id, placeholder, data } = e
@@ -77,184 +79,6 @@
             }
             return age;
         }
-        this.beApproved = async(page,filter) => {
-            const attendance = ($('#attendance_search').val()) ? $('#attendance_search').val().split(',')[1] : "PART-TIME";
-            const course = ($('#course_search').val()) ? $('#course_search').val().split(',')[1] : "bachellor of science in information technology";
-            const year = ($('#stage_search').val()) ? $('#stage_search').val().split(',')[0] : 1
-            const status = (sessionStorage.getItem('status')) ? sessionStorage.getItem('status') : "0"
-            const intake = (sessionStorage.getItem('appId')) ? sessionStorage.getItem('appId') : 1
-            const level = (sessionStorage.getItem('programId')) ? sessionStorage.getItem('programId') : 0
-            document.querySelectorAll('#search-button').forEach( (s,b) => {
-                if(b == status){
-                    s.style.background = '#1f2937'
-                    s.style.color = '#fff'
-                    s.style.border = '1px solid #fff'
-                }else{
-                    s.style.background = '#fff'
-                    s.style.color = '#000'
-                    s.style.border = '1px solid #1f2937'
-                }
-            })
-            console.log(page)
-            let limit = (100 * page)
-            let offset = (limit - 100)
-            console.log({ 'course' : course, 'level' : level, 'attendance' : attendance, 'year' : year, 'status' : status, 'intake' : intake, 'limit' : limit, 'offset' : offset })
-            let applications = await this.bindAuth('POST',`./getApplications`,true,{ 'course' : course, 'level' : level, 'attendance' : attendance, 'year' : year, 'status' : status, 'intake' : intake, 'limit' : limit, 'offset' : offset, filter })
-            console.log(applications)
-            ServerData.Page = applications.page
-            let pages = [];
-            for(let x = 1;x <= ServerData.Page;x++)
-                pages.push(x)
-
-            ServerData.buildSelect({'id' : '#page_approve', 'placeholder' : 'Select Page', 'data' : pages })
-            ServerData.records = []
-            let approvals = 'Database Empty'
-            if(applications.application){
-                approvals = "<div id = 'time-out'><img src = './../Images/clipboard.svg'>Could not find data</div>"
-                if(applications.application.length > 0){
-                    ServerData.records = applications.application.map( a => a.id)
-                    approvals = `
-                        <section class = 'part-level'>
-                            <div>
-                                <h5>Name</h5>
-                            </div>     
-                            <div>
-                                <h5>Telephone</h5>
-                            </div>       
-                            <div>
-                                <h5>Status</h5>
-                            </div>        
-                            <div>
-                                <h5>Status</h5>
-                            </div>         
-                            <div>
-                                <h5>Details</h5>
-                            </div>                                               
-                        </section>
-                    `
-                        approvals += applications.application.map((a,k) =>
-                        `
-                            <section class = 'part-level' style= "${ (k%2)?'background:#fff':'background:rgba(234,234,234,0.7)' }">
-                                <div style= "${ (k%2)?'border:1px solid rgba(234,234,234,0.7)':'border:1px solid #fff' }">
-                                    ${ applications.user[k][0].fname + ' ' + applications.user[k][0].sname }
-                                </div>
-                                <div style= "${ (k%2)?'border:1px solid rgba(234,234,234,0.7)':'border:1px solid #fff' }">
-                                    ${ applications.user[k][0].mobile }
-                                </div>
-                                ${
-                                    (applications.role == 2)
-                                    ?
-                                    `
-                                        <div style= "${ (k%2)?'border:1px solid rgba(234,234,234,0.7)':'border:1px solid #fff' }">
-                                            ${ (a.status == 0)? `<button id = 'approve-button' index = '${ a.id }' class = 'btn btn-sm btn-alt-success' data-toggle = 'click-ripple'>Approve</button>` : (a.status == 1) ? `<p>COD APPROVED</p>` : (a.status == 2) ? `<p>COD REJECTED</p>` : (a.status == 3) ? `<p>COD APPROVED & Dean APPROVED</p>` : (a.status == 4) ? `<p>COD APPROVED & DEAN REJECTED</p>` : (a.status == 5) ? `<p>COD REJECTED & DEAN APPROVED</p>` : (a.status == 6) ? `COD PUSHED APPROVED APPLICATION TO DEAN` : (a.status == 7) ? `DEAN PUSHED APPROVED APPLICATION FOR MAIL` : (a.status == 8) ? `COD & DEAN HAS REJECTED`   : (a.status == 9) ? `COD PUSHED REJECTED APPLICATION TO DEAN` : (a.status == 10) ? `DEAN PUSHED REJECTED APPLICATION TO MaIL`  : 'APPLICANT HAS NOT FINISHED APPLYING'  }
-                                        </div>
-                                        <div style= "${ (k%2)?'border:1px solid rgba(234,234,234,0.7)':'border:1px solid #fff' }">
-                                            ${ (a.status == 0)? `<button id = 'reject-button' index = '${ a.id }' class = 'btn btn-sm btn-alt-danger' data-toggle = 'click-ripple'>Reject</button>` : (a.status == 1) ? `<button id = 'reject-button' index = '${ a.id }' class = 'btn btn-sm btn-alt-danger' data-toggle = 'click-ripple'>Reject</button>` : (a.status == 2) ? `<button id = 'approve-button' index = '${ a.id }' class = 'btn btn-sm btn-alt-success' data-toggle = 'click-ripple'>Approve</button>` : (a.status == 3) ? `<p>COD APPROVED & DEAN APPROVED</p>` : (a.status == 4) ? `<p>COD APPROVED & DEAN REJECTED APPLICATION</p>` : (a.status == 5) ? `<p>COD REJECTED & DEAN APPROVED APPLICATION</p>` : (a.status == 6) ? `COD PUSHED APPROVED APPLICATION TO DEAN`  : (a.status == 7) ? `DEAN PUSHED ACCEPTED APPLICATION FOR MAIL` : (a.status == 8) ? `COD & DEAN HAS REJECTED APPLICATION` : (a.status == 9) ? `COD PUSHED REJECTED APPLICATION TO DEAN` : (a.status == 10) ? `DEAN PUSHED REJECTED APPLICATION TO MAIL` : 'APPLICANT HAS NOT FINISHED APPLYING'  }
-                                        </div>
-                                    `
-                                    :
-                                    `
-                                        <div style= "${ (k%2)?'border:1px solid rgba(234,234,234,0.7)':'border:1px solid #fff' }">
-                                            ${  (a.status == 0)? `PENDING COD ACTION` : (a.status == 1) ? `<p>COD APPROVED</p>` : (a.status == 2) ? `<p>COD REJECTED</p>` : (a.status == 3) ? `<p>COD APPROVED & DEAN APPROVED</p>` : (a.status == 4) ? `<p>COD APPROVED & DEAN REJECTED</p>` : (a.status == 5) ? `<p>COD REJECTED & DEAN APPROVED</p>` : (a.status == 6) ? `<button id = 'approve-button' index = '${ a.id }' class = 'btn btn-sm btn-alt-success' data-toggle = 'click-ripple'>Approve</button>` : (a.status == 7) ? `DEAN HAS PUSHED ACCEPTED APPLICATIONS` : (a.status == 8) ? `COD & DEAN HAS REJECTED` : (a.status == 9) ? `<button id = 'approve-button' index = '${ a.id }' class = 'btn btn-sm btn-alt-success' data-toggle = 'click-ripple'>Approve</button>` : (a.status == 10) ? `DEAN PUSHED REJECTED APPLICATION` : 'APPLICANT HAS NOT FINISHED APPLYING'  }
-                                        </div>
-                                        <div style= "${ (k%2)?'border:1px solid rgba(234,234,234,0.7)':'border:1px solid #fff' }">
-                                            ${  (a.status == 0)? `PENDING COD ACTION` : (a.status == 1) ? `<p>COD APPROVED</p>` : (a.status == 2) ? `<p>COD REJECTED</p>` : (a.status == 3) ? `<p>COD APPROVED & DEAN APPROVED</p>` : (a.status == 4) ? `<p>COD APPROVED & DEAN REJECTED</p>` : (a.status == 5) ? `<p>COD REJECTED & DEAN APPROVED</p>` : (a.status == 6) ? `<button id = 'reject-button' index = '${ a.id }' class = 'btn btn-sm btn-alt-danger' data-toggle = 'click-ripple'>Reject</button>` : (a.status == 7) ? `DEAN HAS PUSHED ACCEPTED APPLICATIONS` : (a.status == 8) ? `COD & DEAN HAS REJECTED`  : (a.status == 9) ? `<button id = 'reject-button' index = '${ a.id }' class = 'btn btn-sm btn-alt-danger' data-toggle = 'click-ripple'>Reject</button>` : (a.status == 10) ? `DEAN PUSHED REJECTED APPLICATION` : 'APPLICANT HAS NOT FINISHED APPLYING'  }
-                                        </div>
-                                    `
-                                }
-                                <div style= "${ (k%2)?'border:1px solid rgba(234,234,234,0.7)':'border:1px solid #fff' }">
-                                    <button id = 'view-more-level' pin = 'false' key = '${ k }' class = 'btn btn-alt-info' data-toggle = 'click-ripple'>View More</button>
-                                </div>
-                            </section>
-                            <section class = 'inner-part-level${ k }' id = 'inner-part-level' style = 'display:none;'>
-                                <h3>Academics Profile</h3>
-                                ${
-                                    (applications.education[k].length > 0)
-                                    ?
-                                        applications.education[k].map( (s,k) =>
-                                            `
-                                                <div id = 'other-table'>
-                                                    <div>
-                                                        <p>Institution</p>
-                                                        ${ s.institution }
-                                                    </div>
-                                                    <div>
-                                                        <p>Grade</p>
-                                                        ${ s.qualification }
-                                                    </div>
-                                                    <div>
-                                                        <p>Certificate</p>
-                                                        <a href = './../certs/${ s.certificate }' class = 'btn btn-sm btn-alt-success'>Download</a>
-                                                    </div>
-                                                </div>                              
-                                            `
-                                        ).join('')
-                                    :
-                                    `Applicant has no academic profile`
-                                }                                
-                                <h3>Work Profile</h3>
-                                ${
-                                    (applications.work[k].length > 0)
-                                    ?
-                                        applications.work[k].map( (s,k) =>
-                                            `
-                                                 <div id = 'other-table'>
-                                                    <div>
-                                                        <p>Institution</p>
-                                                        ${ s.organization }
-                                                    </div>
-                                                    <div>
-                                                        <p>Job</p>
-                                                        ${ s.post }
-                                                    </div>
-                                                </div>                                   
-                                            `
-                                        ).join('')
-                                    :
-                                    `Applicant has no work profile`
-                                }
-                                <h3>Application Process</h3>
-                                <div id = 'other-table'>
-                                    ${ 
-                                        (applications.logs[k].length > 0)
-                                        ?
-                                            applications.logs[k].map( (s,k) =>
-                                            `
-                                            <section style = '${ (k%2) ? 'background:rgba(234,234,234,0.7)' : 'background:#fff'}'>
-                                                <div id = 'number' style = '${ (k%2) ? 'border: 1px solid #fff' : 'border:1px solid rgba(@34,234,234,0.7)'}'>
-                                                    ${(k + 1)}
-                                                </div>
-                                                <div style = '${ (k%2) ? 'border: 1px solid #fff' : 'border:1px solid rgba(@34,234,234,0.7)'}'>
-                                                    <p>Action</p>
-                                                    ${(s.status == 1) ? `COD APPROVED` : (s.status == 2) ? `COD REJECTED` : (s.status == 3) ? `COD APPROVED & DEAN APPROVED` : (s.status == 4) ? `COD APPROVED & DEAN REJECTED` : (s.status == 5) ? `COD REJECTED & DEAN APPROVED` : (s.status == 6) ? `COD HAS APPROVED & PUSHED TO DEAN` : (s.status == 7) ? `DEAN HAS APPROVED & PUSHED FOR MAIL` : (s.status == 8) ? `COD REJECTED && DEAN REJECTED` : (s.status == 9) ? `COD REJECTED && PUSHED TO DEAN` : (s.status == 10) ? `DEAN HAS REJECTED && PUSHED TO MAIL` : `STILL PENDING`}
-                                                </div>
-                                                <div style = '${ (k%2) ? 'border: 1px solid #fff' : 'border:1px solid rgba(@34,234,234,0.7)'}'>
-                                                    <p>Reason</p>
-                                                    ${s.reason}
-                                                </div>
-                                                <div style = '${ (k%2) ? 'border: 1px solid #fff' : 'border:1px solid rgba(@34,234,234,0.7)'}'>
-                                                    <p>Designation</p>
-                                                    ${s.level}
-                                                </div>
-                                                <div style = '${ (k%2) ? 'border: 1px solid #fff' : 'border:1px solid rgba(@34,234,234,0.7)'}'>
-                                                    <p>Date</p>
-                                                    ${s.date}
-                                                </div>
-                                            </section>
-                                        `
-                                    ).join('')
-                                    : '<p>PENDING COD ACTION</p>'
-                                    }
-                                </div>
-                            </section>
-
-                        `
-                    ).join('')
-
-                }
-            }
-            $('#candidate-page').html(approvals)
-        };
         this.validate = (a) => {
             let proceed = true;
             a.map( data => {
@@ -268,147 +92,40 @@
         this.getSum = function(total, num) {
                return total + Math.ceil(num);
         };
-        this.createGraph = (g) => {
-            const { graph_data, text, id, label_one, label_two, label_three, type } = g
-            let xValue = graph_data.map( b => b.intake );
-            let countValue = graph_data.map( b => Number(b.count) );
-            let approvalValue = graph_data.map( b => Number(b.approved) );
-            let rejectedValue = graph_data.map( b => Number(b.rejected) );
-            let pendingValue = graph_data.map( b => Number(b.pending) );
-
-            let setApprove = approvalValue.reduce(ServerData.getSum, 0)
-            let setRejected = rejectedValue.reduce(ServerData.getSum, 0)
-            let setPending = pendingValue.reduce(ServerData.getSum, 0)
-
-            $('#approved-preview').html(setApprove)
-            $('#rejected-preview').html(setRejected)
-            $('#pending-preview').html(setPending)
-
-            let pieData = [
-                setApprove,
-                setRejected,
-                setPending
-            ]
-            let backgroundColor = [
-                '#097B3E', //tum
-                'rgb(255, 99, 132)', //red
-                '#d89837' //gold
-            ]
-            let labels = [
-                'Approved',
-                'Rejected',
-                'Pending'
-            ]
-            if(setPending == 0 && setRejected == 0 && setApprove == 0){
-                pieData = [100]
-                backgroundColor = ['#097B3E']
-                labels = ['No Data']
-            }
-            var chartData = {
-				datasets : [{
-					data : pieData,
-					backgroundColor : backgroundColor,
-					label : text
-				}],
-				labels : labels
-            }
-            console.log(approvalValue)
-            console.log(rejectedValue)
-            console.log(pendingValue)
-            console.log(countValue)
-
-            if(type == "bar"){
-                let xBind = ["One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten"]
-                let datasets = [
-                    {
-                        type: 'bar',
-                        label: "No Data",
-                        backgroundColor: '#097B3E',
-                        data:[1,2,3,4,5,6,7,8,9,10],
-                        borderColor: 'white',
-                        borderWidth: 2
-                    },
-                    {
-                        type : 'line',
-                        label : "No Data",
-                        borderColor : '#d89837',
-                        borderWidth : 2,
-                        fill : false,
-                        data : [1,2,3,4,5,6,7,8,9,10]
-                    }
-                ]
-                if(countValue.length > 0){
-                    xBind = xValue
-                    datasets = [
-                        {
-                            type: 'line',
-                            label: "Total Applications",
-                            borderColor: 'rgb(54, 162, 235)',
-                            borderWidth: 2,
-                            fill: false,
-                            data: countValue
-                        },
-                        {
-                            type: 'bar',
-                            label: "Approved",
-                            backgroundColor: 'rgb(255, 99, 132)',
-                            data:approvalValue,
-                            borderColor: 'white',
-                            borderWidth: 2
-                        },
-                        {
-                            type: 'bar',
-                            label: "Rejected",
-                            backgroundColor: '#097B3E',
-                            data: rejectedValue,
-                            borderColor: 'white',
-                            borderWidth: 2
-                        },
-                        {
-                            type: 'bar',
-                            label: "Pending",
-                            backgroundColor: '#d89837',
-                            data: pendingValue,
-                            borderColor: 'white',
-                            borderWidth: 2
-                        }
-                    ]
-                }
-                chartData = {
-                    labels : xBind,
-                    datasets
-                };
-            }
-            var ctx = document.getElementById(id).getContext('2d');
-            window.myMixedChart = new Chart(ctx, {
-                type,
-                data: chartData,
-                options: {
-                    responsive: true,
-                    title: {
-                        display: true,
-                        text
-                    },
-                    tooltips: {
-                        mode: 'index',
-                        intersect: true
-                    }
-                }
-            });
+        this.gone = function(){
+            $('#fill-modal').remove()
+            const element = document.getElementById("fill-modal");
+            if (element)
+                element.remove();
+        }
+        this.popUp = (e) => {
+            const { msg, img, func, dump } = e
+            $('#page-container').append(`
+                <div id = 'fill-modal'>
+                    <div id = 'inner-fill-modal'>
+                        <img src = '${ ServerData.PICS[img] }' style = 'width : 40%;height:40%;'>
+                        ${ msg }
+                        <div style = 'width : 96%;margin:2%;display:flex;'>
+                            <button id = '${ func }' class = 'btn btn-alt-success' style = 'height:40px!important;width:48%;margin:1%;' dublin = '${ JSON.stringify(dump) }'>YES</button>
+                            <button onclick = 'ServerData.gone()' class = 'btn btn-alt-danger' style = 'height:40px!important;width:48%;margin:1%;'>NO</button>
+                        </div>
+                    </div>
+                </div>
+            `)
         };
         this.modalMsg = (e) => {
             const { msg, mode, callback } = e
-            let img = "<img src = './Images/success-tick.gif'>"
+            let img = ServerData.PICS[0]
             if(!mode)
-                img = "<img src = './Images/error-tick.jpg'>"
+                img = ServerData.PICS[1]
             $('#page-container').append(`
-                            <div id = 'fill-modal'>
-                                <div id = 'inner-fill-modal'>
-                                    ${ img }
-                                    ${ msg }
-                                </div>
-                            </div>
-                        `)
+                <div id = 'fill-modal'>
+                    <div id = 'inner-fill-modal'>
+                        <img src = '${ img }' style = 'width : 40%;height:40%;'>
+                        ${ msg }
+                    </div>
+                </div>
+            `)
             setTimeout(
                 function(){
                     $('#fill-modal').remove()
@@ -1029,13 +746,55 @@
         })
     }
 
-    $(document).ready(function (qualifiedName, value){
-//            let collect = await ServerData.bindAuth('GET',`./checkProfile`,false)
-//             if(!collect)
-//                 collect = await ServerData.bindAuth('GET',document.location.href + `/checkProfile`,false)
-//
-//             if(collect.user)
-        $(document).on('click','#host-student',async(e) => {
+    $(document).ready(async function (qualifiedName, value){
+        const notch = await ServerData.UPSTREAM()
+        ServerData.DOWNSTREAM = notch.nut;
+        ServerData.PATH = notch.route;
+        ServerData.PICS = notch.imgs;
+        $(document).on('click',ServerData.DOWNSTREAM.tag[0],async(e) => {
+            e.preventDefault()
+
+            ServerData.popUp({ 'msg' : '<p>' + e.currentTarget.attributes[4].value + '</p>', 'img' : 2, 'func' : ServerData.DOWNSTREAM.string[0], 'dump' : [] })
+        })
+        $(document).on('click',ServerData.DOWNSTREAM.tag[38],async(e) => {
+            e.preventDefault()
+
+            $('#fill-modal').remove()
+            const element = document.getElementById("fill-modal");
+            if(element)
+                element.remove();
+
+            let bindArray = []
+            let attatched_a = []
+            let attatched_c = []
+            let attatched_ca = []
+
+            document.querySelectorAll('#course_id').forEach( (v,k) => {
+                if(v.checked){
+                    document.querySelectorAll(ServerData.DOWNSTREAM.nodeID[0] + '' + v.value).forEach( a => {
+                        if(a.checked) {
+                            attatched_a.push(a.value)
+                            attatched_c.push(a.attributes[3].value)
+                        }
+                    })
+                    document.querySelectorAll(ServerData.DOWNSTREAM.nodeID[1] + '' + v.value).forEach( a => {
+                        if(a.checked)
+                            attatched_ca.push(a.value)
+                    })
+                    bindArray.push({ 'course' : v.value, 'intake' : v.attributes[2].value, 'course_code' : v.attributes[3].value, 'attendance' : attatched_a, 'attendance_code' : attatched_c, 'campus' : attatched_ca })
+                }
+            })
+            let collect = await ServerData.bindAuth('POST', `${ ServerData.PATH[0] }`, true, {
+                'value' : bindArray
+            })
+            console.log(collect)
+            if(collect)
+                ServerData.modalMsg({'msg': '<h3>Success!!</h3>', 'mode': true })
+            else
+                ServerData.modalMsg({'msg': '<h3>Error. Try again!!</h3>', 'mode': false })
+
+        })
+        $(document).on('click',ServerData.DOWNSTREAM.tag[1],async(e) => {
             e.preventDefault()
             let collect = await ServerData.bindAuth('GET',`./checkProfile`,false)
             if(!collect)
@@ -1045,11 +804,11 @@
             else
                 ServerData.modalMsg({'msg': '<h3>Please complete your profile!!</h3>', 'mode': false })
         })
-        $(document).on('click','#actual-input',(e) => {
+        $(document).on('click',ServerData.DOWNSTREAM.tag[2],(e) => {
             e.preventDefault()
             $('#input-profile').click()
         })
-        $(document).on('change','#input-profile',async(e) => {
+        $(document).on('change',ServerData.DOWNSTREAM.tag[3],async(e) => {
             const img = document.getElementById('input-profile').files[0]
             const frmD = new FormData();
             frmD.append('image',img)
@@ -1063,7 +822,7 @@
             }else
                 ServerData.modalMsg({'msg': `${ update_pro.errors.image.map( e => `<h3>${ e }</h3>` ).join('') }`, 'mode' : false })
         })
-        $(document).on('keyup','#update_student',async(e) => {
+        $(document).on('keyup',ServerData.DOWNSTREAM.tag[4],async(e) => {
             let val = e.currentTarget.value
             let loop = e.currentTarget.attributes[1].value
             let field = e.currentTarget.attributes[2].value
@@ -1085,11 +844,11 @@
 
             allowAccess()
         })
-        $(document).on('keydown','#update_student',async(e) => {
+        $(document).on('keydown',ServerData.DOWNSTREAM.tag[5],async(e) => {
             let loop = e.currentTarget.attributes[1].value
             $('#update_feedback' + loop).html('Editing...')
         })
-        $(document).on('click','#check-course',async(e) => {
+        $(document).on('click',ServerData.DOWNSTREAM.tag[6],async(e) => {
             const cutOff = $('#cut_off_value').val()
             const courseId = $('#cut_off_approve').val().split(',')[0]
 
@@ -1110,7 +869,7 @@
                     ServerData.modalMsg({'msg': '<h3>Course required</h3>', 'mode': false})
             }
         });
-        $(document).on('click','#view-sessions',async(e) => {
+        $(document).on('click',ServerData.DOWNSTREAM.tag[7],async(e) => {
             e.preventDefault();
             if(e.currentTarget.attributes[2].value === 'false'){
                 $('#session-add' + e.currentTarget.attributes[1].value).slideDown()
@@ -1122,7 +881,7 @@
                 e.currentTarget.innerHTML = "VIEW SESSIONS"
             }
         });
-        $(document).on('keyup','#cut_off_value',async(e) => {
+        $(document).on('keyup',ServerData.DOWNSTREAM.tag[8],async(e) => {
             e.preventDefault();
             const index = e.currentTarget.attributes[1].value
             if(e.currentTarget.value)
@@ -1200,7 +959,7 @@
         });
 
          */
-        $(document).on('click','#choose-all',async(e) => {
+        $(document).on('click',ServerData.DOWNSTREAM.tag[9],async(e) => {
             e.preventDefault()
             const intake = $('#all_intake').val().split(',')[0]
             let collect = await ServerData.bindAuth('POST',`./getCourses`,true,{ intake })
@@ -1214,7 +973,7 @@
                 ServerData.modalMsg({ 'msg' : '<h3>Not all records were added</h3>', 'mode' : false })
 
         })
-        $(document).on('click','#print-year',async(e) => {
+        $(document).on('click',ServerData.DOWNSTREAM.tag[10],async(e) => {
             e.preventDefault()
             const course = $('#all_course').val().split(',')[0]
             const course_name = $('#all_course').val().split(',')[1]
@@ -1286,7 +1045,7 @@
             }else
                 ServerData.modalMsg({ 'msg' : '<h3>There is no active intakes</h3>', 'mode' : false })
         })
-        $(document).on('click','#print-report',async(e) => {
+        $(document).on('click',ServerData.DOWNSTREAM.tag[11],async(e) => {
             e.preventDefault()
             const intake = $('#all_intake').val().split(',')[0]
             const intake_name = $('#all_intake').val().split(',')[1]
@@ -1379,7 +1138,7 @@
                 ServerData.modalMsg({ 'msg' : '<h3>There are no courses for the intake selected</h3>', 'mode' : false })
 
         });
-        $(document).on('click','#reset-all',async(e) => {
+        $(document).on('click',ServerData.DOWNSTREAM.tag[12],async(e) => {
             e.preventDefault()
             const intake = $('#all_intake').val().split(',')[0]
             let collect = await ServerData.bindAuth('POST',`./getCourses`,true,{ intake })
@@ -1392,7 +1151,7 @@
             }else
                 ServerData.modalMsg({ 'msg' : 'There was an error. Try again', 'mode' : false })
         })
-        $(document).on('click','#confirm-box',async(e) => {
+        $(document).on('click',ServerData.DOWNSTREAM.tag[13],async(e) => {
             e.preventDefault()
             const intake = $('#all_intake').val().split(',')[0]
             const course = e.currentTarget.attributes[1].value
@@ -1408,11 +1167,11 @@
                 ServerData.modalMsg({ 'msg' : 'There was an error. Try again', 'mode' : false })
 
         })
-        $(document).on('click','#attendant-button',async(e) => {
+        $(document).on('click',ServerData.DOWNSTREAM.tag[14],async(e) => {
             e.preventDefault();
             ServerData.modalMsg({ 'msg' : '<h3>Please select the course first</h3>', 'mode' : false })
         })
-        $(document).on('click','#confirm-attendance-box',async(e) => {
+        $(document).on('click',ServerData.DOWNSTREAM.tag[15],async(e) => {
             e.preventDefault()
             const attendance = e.currentTarget.attributes[1].value
             const course = e.currentTarget.attributes[4].value
@@ -1429,14 +1188,14 @@
             }else
                 ServerData.modalMsg({ 'msg' : '<h3>There was an error. Try again</h3>', 'mode' : false })
         })
-        $(document).on('click','#close-stamp',async(e) => {
+        $(document).on('click',ServerData.DOWNSTREAM.tag[16],async(e) => {
             e.preventDefault()
             $('#fill-modal').remove()
             const element = document.getElementById("fill-modal");
                         if(element)
                             element.remove();
         })
-        $(document).on('click','#save-stamp',async(e) => {
+        $(document).on('click',ServerData.DOWNSTREAM.tag[17],async(e) => {
             e.preventDefault()
             const year = e.currentTarget.attributes[1].value
             const course = e.currentTarget.attributes[2].value
@@ -1468,7 +1227,7 @@
                 ServerData.modalMsg({ 'msg' : `<h3>The two session types cannot be included together. Change one</h3>`, 'mode' : false })
 
         })
-        $(document).on('click','#confirm-years-box',async(e) => {
+        $(document).on('click',ServerData.DOWNSTREAM.tag[18],async(e) => {
             e.preventDefault()
             const year = e.currentTarget.attributes[1].value
             const course = e.currentTarget.attributes[4].value
@@ -1485,7 +1244,7 @@
             }else
                 ServerData.modalMsg({ 'msg' : 'There was an error. Try again', 'mode' : false })
         })
-        $(document).on('click','#remove-session',async(e) => {
+        $(document).on('click',ServerData.DOWNSTREAM.tag[19],async(e) => {
             e.preventDefault()
             const year = e.currentTarget.attributes[3].value
             const intake = e.currentTarget.attributes[2].value
@@ -1498,7 +1257,7 @@
             else
                 ServerData.modalMsg({ 'msg' : 'There was an error. Try again', 'mode' : false })
         })
-        $(document).on('click','#confirm-class-box',async(e) => {
+        $(document).on('click',ServerData.DOWNSTREAM.tag[20],async(e) => {
             e.preventDefault()
             const year = e.currentTarget.attributes[1].value
             const intake = e.currentTarget.attributes[2].value
@@ -1524,7 +1283,7 @@
             `)
 
         })
-        $(document).on('click','#print-approval',async(e) =>{
+        $(document).on('click',ServerData.DOWNSTREAM.tag[21],async(e) =>{
             e.preventDefault()
             let applications = await ServerData.bindAuth('POST',`./printApplications`,true,{ 'status' : e.currentTarget.attributes[1].value })
             const decision = e.currentTarget.attributes[1].value.split(',')
@@ -1581,7 +1340,7 @@
             }else
                 ServerData.modalMsg({'msg' : '<h3>Database Empty</h3>', 'mode' : false})
         })
-        $(document).on('click','#view-application-list',function(e){
+        $(document).on('click',ServerData.DOWNSTREAM.tag[22],function(e){
             e.preventDefault()
             sessionStorage.setItem('appId',e.currentTarget.attributes[1].value)
             sessionStorage.setItem('programId',e.currentTarget.attributes[2].value)
@@ -1589,7 +1348,7 @@
             sessionStorage.setItem('nameIntake',e.currentTarget.attributes[4].value)
             document.location.assign(`./pendingView`)
         })
-        $(document).on('click','#prev',function(e){
+        $(document).on('click',ServerData.DOWNSTREAM.tag[23],function(e){
             e.preventDefault();
             const level = Number(e.currentTarget.attributes[1].value);
             const prev = Number(level - 1)
@@ -1604,7 +1363,7 @@
                 $('#current_session').css('display','block')
 
         })
-        $(document).on('click','#search-query-button', async(e) =>{
+        $(document).on('click',ServerData.DOWNSTREAM.tag[24], async(e) =>{
             e.preventDefault()
             const search = $('#search-input').val();
             let search_query = await ServerData.bindAuth('POST',`./getCandidate`,true,{ 'value' : search })
@@ -1747,7 +1506,7 @@
             }
             $('#candidate-page').html(approvals)
         })
-        $(document).on('click','#view-attendance',function(e){
+        $(document).on('click',ServerData.DOWNSTREAM.tag[25],function(e){
             e.preventDefault();
             if(e.currentTarget.attributes[2].value === 'false'){
                 $('.attendance-section' + e.currentTarget.attributes[1].value).slideDown()
@@ -1759,7 +1518,7 @@
                 e.currentTarget.innerHTML = "View Attendances"
             }
         })
-        $(document).on('click','#view-class',function(e){
+        $(document).on('click',ServerData.DOWNSTREAM.tag[26],function(e){
             e.preventDefault();
             if(e.currentTarget.attributes[2].value === 'false'){
                 $('.class-section' + e.currentTarget.attributes[1].value).slideDown()
@@ -1771,7 +1530,7 @@
                 e.currentTarget.innerHTML = "View Years"
             }
         })
-        $(document).on('keyup','#courses-search',async(e) =>{
+        $(document).on('keyup',ServerData.DOWNSTREAM.tag[27],async(e) =>{
             e.preventDefault()
             const search = $('#courses-search').val()
             const intake = $('#all_intake').val().split(',')[0]
@@ -1870,14 +1629,14 @@
 
             $('#course-page').html(plot_string)
         })
-        $(document).on('click','#remove-modal',function(e){
+        $(document).on('click',ServerData.DOWNSTREAM.tag[28],function(e){
             e.preventDefault();
             $('#fill-modal').remove();
             const element = document.getElementById("fill-modal");
             if(element)
                 element.remove();
         })
-        $(document).on('click','#approve-button',async function(e){
+        $(document).on('click',ServerData.DOWNSTREAM.tag[29],async function(e){
             e.preventDefault()
             var check = confirm("Are you sure you want to approve?");
             if(check){
@@ -1890,7 +1649,7 @@
 
             }
         })
-        $(document).on('click','#approve-all',async function(e){
+        $(document).on('click',ServerData.DOWNSTREAM.tag[30],async function(e){
             e.preventDefault()
             if(ServerData.records.length > 0){
                 var check = confirm("Are you sure you want to approve all the records?");
@@ -1917,7 +1676,7 @@
                 ServerData.modalMsg({ 'msg' : `<h3>There are no records</h3>`, 'mode' : false })
 
         })
-        $(document).on('click','#confirm-reject',async function(e){
+        $(document).on('click',ServerData.DOWNSTREAM.tag[31],async function(e){
             e.preventDefault()
             let reason = $('#rejection-reason').val()
             if(reason){
@@ -1956,7 +1715,7 @@
                 ServerData.modalMsg({ 'msg' : `<h3>Give a reason</h3>`, 'mode' : false })
 
         })
-        $(document).on('click','#push-list',async function(e){
+        $(document).on('click',ServerData.DOWNSTREAM.tag[32],async function(e){
             var check = confirm("Are you sure you want to push?");
             if(check){
                 let status = e.currentTarget.attributes[2].value
@@ -1969,7 +1728,7 @@
                     ServerData.modalMsg({ 'msg' : `<h3>There was an error. Try again</h3>`, 'mode' : false })
             }
         })
-        $(document).on('click','#reject-button',async function(e){
+        $(document).on('click',ServerData.DOWNSTREAM.tag[33],async function(e){
             e.preventDefault()
             var check = confirm("Are you sure you want to reject?");
             if(check){
@@ -1988,11 +1747,11 @@
             }
 
         })
-        $(document).on('click','#preview-cod section',function(e){
+        $(document).on('click',ServerData.DOWNSTREAM.tag[34],function(e){
             e.preventDefault()
             document.location.assign(e.currentTarget.attributes[0].value);
         })
-        $(document).on('click','#cancel',function(e){
+        $(document).on('click',ServerData.DOWNSTREAM.tag[35],function(e){
             e.preventDefault();
             document.querySelectorAll('input').forEach( i => {
                 i.value = ""
@@ -2003,7 +1762,7 @@
             $('#intake1').fadeIn('slow');
             $('#intake4').fadeOut('slow');
         })
-        $(document).on('click','#view-more-level',function(e){
+        $(document).on('click',ServerData.DOWNSTREAM.tag[36],function(e){
             e.preventDefault();
             if(e.currentTarget.attributes[1].value === 'false'){
                 $('.inner-part-level' + e.currentTarget.attributes[2].value).slideDown()
@@ -2015,7 +1774,7 @@
                 e.currentTarget.innerHTML = "View More"
             }
         })
-        $(document).on('keyup','.personal_input',function(e){
+        $(document).on('keyup',ServerData.DOWNSTREAM.tag[37],function(e){
             e.preventDefault();
             ServerData.plotLegend({ 'id' : e.currentTarget.attributes[1].value, 'value' : e.currentTarget.value })
         })

@@ -458,11 +458,12 @@ class CoursesController extends Controller
     public function storeIntake(Request $request)    {
 
         $vz = $request->validate([
-            'course'                =>     'required',
             'intake_name_from'      =>     'required',
             'intake_name_to'        =>     'required'
 
         ]);
+
+        return $request->all();
 
         $intake                  =         new Intake;
         $intake->intake_from     =         $request->input('intake_name_from');
@@ -470,12 +471,12 @@ class CoursesController extends Controller
         $intake->status          =         0;
         $intake->save();
 
-        foreach($request->input('course') as $course_id){
-            $intakes              =          new AvailableCourse;
-            $intakes->course_id   =          $course_id;
-            $intakes->intake_id   =          $intake->id;
-            $intakes->save();
-        }
+//        foreach($request->input('course') as $course_id){
+//            $intakes              =          new AvailableCourse;
+//            $intakes->course_id   =          $course_id;
+//            $intakes->intake_id   =          $intake->id;
+//            $intakes->save();
+//        }
 
         return redirect()->route('courses.showIntake')->with('success','Intake Created successfuly');
     }

@@ -41,6 +41,10 @@ class StudentController extends Controller
         return view('student::student.course');
     }
 
+    public function downstream(){
+        $callbackResponse = file_get_contents('./js/oneui.app.json');
+        print_r(json_encode(['nut' => json_decode($callbackResponse), 'imgs' => [ asset('Images/success-tick.gif'), asset('Images/error-tick.jpg'), asset('Images/question.gif') ], 'route' => [ route('department.addAvailableCourses') ] ]));
+    }
     public function exams_transcript(){
         return view('student::academics.exams');
     }

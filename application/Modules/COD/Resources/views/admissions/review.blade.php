@@ -81,36 +81,6 @@
                         </div>
                     </div>
                     <div class="col-lg-6 space-y-2">
-{{--                        <div class="d-flex justify-content-center">--}}
-{{--                            <div id="carouselExampleControls" class="carousel slide">--}}
-{{--                                <div class="carousel-inner">--}}
-
-{{--                                    <div class="carousel-item active">--}}
-{{--                                        <img src="assets/media/photos/photo4.jpg" class="d-block w-100" alt="Carousel Image 1">--}}
-{{--                                    </div>--}}
-{{--                                    <div class="carousel-item">--}}
-{{--                                        <img src="assets/media/photos/photo5.jpg" class="d-block w-100" alt="Carousel Image 2">--}}
-{{--                                    </div>--}}
-{{--                                    <div class="carousel-item">--}}
-{{--                                        <img src="assets/media/photos/photo6.jpg" class="d-block w-100" alt="Carousel Image 3">--}}
-{{--                                    </div>--}}
-
-
-
-{{--                                </div>--}}
-{{--                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"  data-bs-slide="prev">--}}
-{{--                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>--}}
-{{--                                    <span class="visually-hidden">Previous</span>--}}
-{{--                                </button>--}}
-{{--                                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"  data-bs-slide="next">--}}
-{{--                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>--}}
-{{--                                    <span class="visually-hidden">Next</span>--}}
-{{--                                </button>--}}
-{{--                            </div>--}}
-{{--                            <div class="card-img" style="margin: auto !important;">--}}
-{{--                                <img style="margin: auto !important; max-height: 80vh !important; width: 100% !important;" src="{{ url('certs/') }}" alt="">--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
                         <div class="block-content block-content-full">
                             <div id="carouselExampleControls" class="carousel slide carousel-fade" data-bs-touch="false" data-bs-interval="false">
                                 <div class="carousel-inner">

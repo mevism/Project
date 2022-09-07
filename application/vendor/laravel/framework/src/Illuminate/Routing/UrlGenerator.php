@@ -2,6 +2,7 @@
 
 namespace Illuminate\Routing;
 
+use BackedEnum;
 use Closure;
 use Illuminate\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
 use Illuminate\Contracts\Routing\UrlRoutable;
@@ -249,7 +250,7 @@ class UrlGenerator implements UrlGeneratorContract
             return $path;
         }
 
-        // Once we get the root URL, we will check to see if it contains an index.blade.php
+        // Once we get the root URL, we will check to see if it contains an index.php
         // file in the paths. If it does, we will remove it since it is not needed
         // for asset paths, but only for routes to endpoints in the application.
         $root = $this->assetRoot ?: $this->formatRoot($this->formatScheme($secure));
@@ -278,7 +279,7 @@ class UrlGenerator implements UrlGeneratorContract
      */
     public function assetFrom($root, $path, $secure = null)
     {
-        // Once we get the root URL, we will check to see if it contains an index.blade.php
+        // Once we get the root URL, we will check to see if it contains an index.php
         // file in the paths. If it does, we will remove it since it is not needed
         // for asset paths, but only for routes to endpoints in the application.
         $root = $this->formatRoot($this->formatScheme($secure), $root);
@@ -287,14 +288,14 @@ class UrlGenerator implements UrlGeneratorContract
     }
 
     /**
-     * Remove the index.blade.php file from a path.
+     * Remove the index.php file from a path.
      *
      * @param  string  $root
      * @return string
      */
     protected function removeIndex($root)
     {
-        $i = 'index.blade.php';
+        $i = 'index.php';
 
         return str_contains($root, $i) ? str_replace('/'.$i, '', $root) : $root;
     }
@@ -478,12 +479,14 @@ class UrlGenerator implements UrlGeneratorContract
      */
     public function toRoute($route, $parameters, $absolute)
     {
-        $route->excludedParameters = $this->getDefaultParameters();
-
         $parameters = collect(Arr::wrap($parameters))->map(function ($value, $key) use ($route) {
-            return $value instanceof UrlRoutable && $route->bindingFieldFor($key)
+            $value = $value instanceof UrlRoutable && $route->bindingFieldFor($key)
                     ? $value->{$route->bindingFieldFor($key)}
                     : $value;
+
+            return function_exists('enum_exists') && $value instanceof BackedEnum
+                ? $value->value
+                : $value;
         })->all();
 
         return $this->routeUrl()->to(

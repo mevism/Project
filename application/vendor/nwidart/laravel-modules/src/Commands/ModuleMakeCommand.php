@@ -27,7 +27,7 @@ class ModuleMakeCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle() : int
+    public function handle(): int
     {
         $names = $this->argument('name');
         $success = true;
@@ -39,6 +39,7 @@ class ModuleMakeCommand extends Command
                 ->setConfig($this->laravel['config'])
                 ->setActivator($this->laravel[ActivatorInterface::class])
                 ->setConsole($this)
+                ->setComponent($this->components)
                 ->setForce($this->option('force'))
                 ->setType($this->getModuleType())
                 ->setActive(!$this->option('disabled'))

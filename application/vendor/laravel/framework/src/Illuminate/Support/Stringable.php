@@ -576,12 +576,20 @@ class Stringable implements JsonSerializable
     /**
      * Replace the given value in the given string.
      *
-     * @param  string|string[]  $search
-     * @param  string|string[]  $replace
+     * @param  string|string[]|Enumerable<array-key, string>  $search
+     * @param  string|string[]|Enumerable<array-key, string>  $replace
      * @return static
      */
     public function replace($search, $replace)
     {
+        if ($search instanceof Enumerable) {
+            $search = $search->toArray();
+        }
+
+        if ($replace instanceof Enumerable) {
+            $replace = $replace->toArray();
+        }
+
         return new static(str_replace($search, $replace, $this->value));
     }
 
@@ -951,6 +959,19 @@ class Stringable implements JsonSerializable
     public function whenExactly($value, $callback, $default = null)
     {
         return $this->when($this->exactly($value), $callback, $default);
+    }
+
+    /**
+     * Execute the given callback if the string is not an exact match with the given value.
+     *
+     * @param  string  $value
+     * @param  callable  $callback
+     * @param  callable|null  $default
+     * @return static
+     */
+    public function whenNotExactly($value, $callback, $default = null)
+    {
+        return $this->when(! $this->exactly($value), $callback, $default);
     }
 
     /**

@@ -13,6 +13,7 @@
 
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="oneui-route" content="{{ route('raw.route') }}">
 
   <!-- Icons -->
   <link rel="shortcut icon" href="{{ asset('media/favicons/favicon.png') }}">
@@ -23,6 +24,8 @@
   @yield('css_before')
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
   <link rel="stylesheet" id="css-main" href="{{ url('/css/oneui.css') }}">
+  <link rel="stylesheet" id="css-main" href="{{ url('/css/index.css') }}">
+  <link rel="stylesheet" id="css-main" href="{{ url('/css/admissions.css') }}">
 
   <!-- You can include a specific file from public/css/themes/ folder to alter the default color theme of the template. eg: -->
   <!-- <link rel="stylesheet" id="css-theme" href="{{ mix('/css/themes/amethyst.css') }}"> -->
@@ -36,6 +39,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="{{ url("js/build.js") }}"></script>
 
 </head>
 
@@ -76,14 +80,42 @@
 
               </a>
             </li>
-{{--            <li class="nav-main-item">--}}
-{{--              <i class="nav-main-link-icon"></i>--}}
-{{--              <a class="nav-main-link {{ request()->is('approve/approveIndex') ? ' active' : '' }}" href="{{ route('courses.approveIndex') }}">--}}
-{{--                <i class="nav-main-link-icon si si-user"></i>--}}
-{{--                <span class="nav-main-link-name">Review</span>--}}
 
-{{--              </a>--}}
-{{--            </li>--}}
+              <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
+                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                      <i class="nav-main-link-icon si si-graduation"></i>
+                      <span class="nav-main-link-name">Academics</span>
+                  </a>
+                  <ul class="nav-main-submenu">
+                     <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('courses/showCourse') ? ' active' : '' }}" href="{{  route('department.courses') }}">
+                              <i class="nav-main-link-icon si si-layers"></i>
+                              <span class="nav-main-link-name">Courses</span>
+                          </a>
+                      </li>
+
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('department.intakes') }}">
+                              <i class="nav-main-link-icon si si-calendar"></i>
+                              <span class="nav-main-link-name">Intakes</span>
+                          </a>
+                      </li>
+
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showAttendance')}}">
+                              <i class="nav-main-link-icon si si-layers"></i>
+                              <span class="nav-main-link-name">Attendances</span>
+                          </a>
+                      </li>
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.showClasses')}}">
+                              <i class="nav-main-link-icon si si-layers"></i>
+                              <span class="nav-main-link-name">Classes</span>
+                          </a>
+                      </li>
+                  </ul>
+              </li>
+
             <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="{{ route('cod.applications') }}">
                 <i class="nav-main-link-icon si si-graduation"></i>
@@ -117,15 +149,7 @@
                               <span class="nav-main-link-name">View Admissions</span>
                           </a>
                       </li>
-
-{{--                      <li class="nav-main-item">--}}
-{{--                          <a class="nav-main-link{{ request()->is('school/showSchool') ? ' active' : '' }}" href="{{  route('cod.batch') }}">--}}
-{{--                              <i class="nav-main-link-icon si si-graduation"></i>--}}
-{{--                              <span class="nav-main-link-name">Submit batch</span>--}}
-{{--                          </a>--}}
-{{--                      </li>--}}
                   </ul>
-{{--              </li>--}}
               </li>
           </ul>
         </div>
@@ -375,6 +399,7 @@
   <!-- END Page Container -->
 
   <script src="{{ url("js/oneui.app.js") }}"></script>
+
 
   <!-- Laravel Scaffolding JS -->
   <!-- <script src="{{ mix('/js/laravel.app.js') }}"></script> -->

@@ -25,9 +25,13 @@ class ListCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle() : int
+    public function handle(): int
     {
-        $this->table(['Name', 'Status', 'Priority', 'Path'], $this->getRows());
+        $this->components->twoColumnDetail('<fg=gray>Status / Name</>', '<fg=gray>Path / priority</>');
+        collect($this->getRows())->each(function ($row) {
+
+            $this->components->twoColumnDetail("[{$row[1]}] {$row[0]}", "{$row[3]} [{$row[2]}]");
+        });
 
         return 0;
     }
@@ -45,7 +49,7 @@ class ListCommand extends Command
         foreach ($this->getModules() as $module) {
             $rows[] = [
                 $module->getName(),
-                $module->isEnabled() ? 'Enabled' : 'Disabled',
+                $module->isEnabled() ? '<fg=green>Enabled</>' : '<fg=red>Disabled</>',
                 $module->get('priority'),
                 $module->getPath(),
             ];
@@ -59,18 +63,22 @@ class ListCommand extends Command
         switch ($this->option('only')) {
             case 'enabled':
                 return $this->laravel['modules']->getByStatus(1);
+
                 break;
 
             case 'disabled':
                 return $this->laravel['modules']->getByStatus(0);
+
                 break;
 
             case 'priority':
                 return $this->laravel['modules']->getPriority($this->option('direction'));
+
                 break;
 
             default:
                 return $this->laravel['modules']->all();
+
                 break;
         }
     }

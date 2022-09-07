@@ -88,15 +88,6 @@ interface RepositoryInterface
     public function find(string $name);
 
     /**
-     * Find all modules that are required by a module. If the module cannot be found, throw an exception.
-     *
-     * @param $name
-     * @return array
-     * @throws ModuleNotFoundException
-     */
-    public function findRequirements($name): array;
-
-    /**
      * Find a specific module. If there return that, otherwise throw exception.
      *
      * @param $name
@@ -126,14 +117,7 @@ interface RepositoryInterface
      *
      * @return string
      */
-    public function getPath() : string;
-
-    /**
-     * Find a specific module by its alias.
-     * @param string $alias
-     * @return Module|void
-     */
-    public function findByAlias(string $alias);
+    public function getPath(): string;
 
     /**
      * Boot the modules.
@@ -167,7 +151,7 @@ interface RepositoryInterface
      * @return bool
      * @throws ModuleNotFoundException
      */
-    public function isEnabled(string $name) : bool;
+    public function isEnabled(string $name): bool;
 
     /**
      * Determine whether the given module is not activated.
@@ -175,5 +159,5 @@ interface RepositoryInterface
      * @return bool
      * @throws ModuleNotFoundException
      */
-    public function isDisabled(string $name) : bool;
+    public function isDisabled(string $name): bool;
 }
