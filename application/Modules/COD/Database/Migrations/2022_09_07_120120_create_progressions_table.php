@@ -13,15 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('available_courses', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('intake_id');
-            $table->bigInteger('course_id');
-            $table->bigInteger('campus_id');
-            $table->bigInteger('attendance_id');
-            $table->tinyInteger('status')->default(0);
+        Schema::create('progressions', function (Blueprint $table) {
+            $table->id();
+
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -32,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('available_courses');
+        Schema::dropIfExists('progressions');
     }
 };

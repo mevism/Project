@@ -46,103 +46,81 @@ class UserController extends Controller
     }
     public function dashboard(){
 
-        if (Auth::guard('user')->user()->role_id === 0){
-            $courses = AvailableCourse::count();
-            $applications = Application::count();
+        if (auth()->guard('user')->check()){
 
-                if (!Auth::guard('user')->check()){
-                    abort(403)->with('error', 'Please login again');
-                } else{
-                    return view('admin.index')->with(['courses'=>$courses,'applications'=>$applications]);
-                }
-        }elseif (Auth::guard('user')->user()->role_id === 1){
-            $courses = AvailableCourse::where('status', 1)->count();
-            $applications = Application::where('registrar_status',0)->count();
-            $admissions = AdmissionApproval::where('registrar_status',0)->count();
+            if (\auth()->guard('user')->user()->role_id === 0){
+                $courses = AvailableCourse::count();
+                $applications = Application::count();
 
-               if (!Auth::guard('user')->check()){
-                   abort(403)->with('error', 'Please login again');
-               } else{
-                   return view('admin.index')->with(['courses'=>$courses,'applications'=>$applications,'admissions'=>$admissions]);
-               }
-       }elseif (Auth::guard('user')->user()->role_id === 6){
+                return view('admin.index')->with(['courses'=>$courses,'applications'=>$applications]);
 
-               if (!Auth::guard('user')->check()){
-                   abort(403)->with('error', 'Please login again');;
-               } else{
-                   return view('student.index');
-               }
-       }elseif (Auth::guard('user')->user()->role_id === 2){
+            } elseif (\auth()->guard('user')->user()->role_id === 1){
 
-               if (!Auth::guard('user')->check()){
-                   abort(403)->with('error', 'Please login again');;
-               } else{
+                $courses = AvailableCourse::where('status', 1)->count();
+                $applications = Application::where('registrar_status',0)->count();
+                $admissions = AdmissionApproval::where('registrar_status',0)->count();
+
+                return view('admin.index')->with(['courses'=>$courses,'applications'=>$applications,'admissions'=>$admissions]);
+
+            } elseif (\auth()->guard('user')->user()->role_id === 2){
+
                 $admissions = Application::where('cod_status', 1)
-                ->where('department_id',auth()->guard('user')->user()->department_id)
-                ->where('registrar_status',3)
-                ->where('status',0)
-                ->count();
+                    ->where('department_id',auth()->guard('user')->user()->department_id)
+                    ->where('registrar_status',3)
+                    ->where('status',0)
+                    ->count();
 
-                   $apps_cod = Application::where('cod_status', 0)
-                       ->where('department_id', auth()->guard('user')->user()->department_id)
-                       ->orWhere('dean_status', 3)
-                       ->count();
-                       return view('cod::COD.index')->with(['apps'=>$apps_cod, 'admissions'=>$admissions]);
-               }
-       }elseif (Auth::guard('user')->user()->role_id === 4){
+                $apps_cod = Application::where('cod_status', 0)
+                    ->where('department_id', auth()->guard('user')->user()->department_id)
+                    ->orWhere('dean_status', 3)
+                    ->count();
 
-               if (!Auth::guard('user')->check()){
-                   abort(403)->with('error', 'Please login again');;
-               } else{
-             
-                   $apps_dean = Application::where('dean_status', 0)
-                       ->where('school_id', auth()->guard('user')->user()->school_id)->count();
-                       return view('dean::dean.index')->with('apps', $apps_dean);
-               }
-       }elseif (Auth::guard('user')->user()->role_id === 3){
+                return view('cod::COD.index')->with(['apps'=>$apps_cod, 'admissions'=>$admissions]);
+
+            }elseif (auth()->guard('user')->user()->role_id === 3){
+
                 $apps_finance = Application::where('cod_status', null)
                     ->where('finance_status', '!=', 3)
                     ->count();
 
-               if (!Auth::guard('user')->check()){
-                   abort(403)->with('error', 'Please login again');;
-               } else{
+                return view('applications::finance.index')->with('apps', $apps_finance);
 
-                   return view('applications::finance.index')->with('apps', $apps_finance);
-               }
-       }elseif (Auth::guard('user')->user()->role_id === 8){
+            }elseif (auth()->guard('user')->user()->role_id === 4){
 
-            $apps = AdmissionApproval::where('registrar_status', null)
-                ->where('finance_status', 1)->count();
+                $apps_dean = Application::where('dean_status', 0)
+                    ->where('school_id', auth()->guard('user')->user()->school_id)->count();
+                return view('dean::dean.index')->with('apps', $apps_dean);
 
-
-                if (!Auth::guard('user')->check()){
-                abort(403)->with('error', 'Please login again');;
-                } else{
-
-                    return view('medical::medical.index')->with('apps', $apps);
-                }
-        }elseif (Auth::guard('user')->user()->role_id === 5){
-
-            if (!Auth::guard('user')->check()){
-                abort(403)->with('error', 'Please login again');;
-            } else{
+            }elseif (auth()->guard('user')->user()->role_id === 5){
 
                 return view('hostel::hostels.index');
-            }
-        }elseif (Auth::guard('student')){
 
-            if (!Auth::guard('student')->check()){
+            }elseif (auth()->guard('user')->user()->role_id === 6){
 
-                abort(403)->with('error', 'Please login again');
+                //
+            }elseif (auth()->guard('user')->user()->role_id === 7){
 
-            } else{
+
+            }elseif (\auth()->guard('user')->user()->role_id === 8){
+
+                $apps = AdmissionApproval::where('registrar_status', null)
+                    ->where('finance_status', 1)->count();
+
+                return view('medical::medical.index')->with('apps', $apps);
+
+            }elseif (\auth()->guard('student')->check()){
 
                 return redirect()->route('student')->with('success', 'You are now logged in');
+
+            }else{
+
+                return redirect()->route('root')->with('error', 'You are not registered to use this system');
             }
+
         }else{
-                   return redirect(route('student'))->with('success', 'You are now logged in');
-               }
+
+            return redirect()->route('root')->with('error', 'Your are not looged in. Please login first.');
+        }
     }
 
 

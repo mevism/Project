@@ -45,7 +45,7 @@
                         <form action="{{ route('department.addAvailableCourses') }}" method="POST">
                             @csrf
 
-                            <table class="table table-striped table-sm-responsive fs-sm">
+                            <table id="courses" class="table table-striped table-sm-responsive fs-sm">
                                 <thead>
                                     <th>#</th>
                                     <th>Course Name</th>
@@ -109,5 +109,7 @@
 @endsection
 
 <script>
+
+
 
 </script>
