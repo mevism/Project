@@ -13,7 +13,11 @@ use Modules\Application\Entities\Education;
 use Modules\Finance\Entities\FinanceLog;
 use Modules\COD\Entities\CODLog;
 use Auth;
+use Modules\Registrar\Entities\Attendance;
+use Modules\Registrar\Entities\AvailableCourse;
+use Modules\Registrar\Entities\Campus;
 use Modules\Registrar\Entities\Courses;
+use Modules\Registrar\Entities\Intake;
 use Modules\Registrar\Entities\KuccpsApplicant;
 use Modules\Registrar\Entities\KuccpsApplication;
 
@@ -207,6 +211,55 @@ class CODController extends Controller
 
         return redirect()->back()->with('success', 'Record submitted to finance');
     }
+
+    public function courses(){
+            $courses = Courses::where('department_id', auth()->guard('user')->user()->department_id)->get();
+
+            return view('cod::courses.index')->with('courses', $courses);
+    }
+
+    public function intakes(){
+            $intakes = Intake::all();
+
+            return view('cod::intakes.index')->with('intakes', $intakes);
+    }
+
+    public function intakeCourses($id){
+
+            $modes = Attendance::all();
+            $campuses = Campus::all();
+            $intake = Intake::find($id);
+            $courses = Courses::where('department_id', auth()->guard('user')->user()->department_id)->get();
+
+            return view('cod::intakes.addCourses')->with(['intake' => $intake, 'courses' => $courses, 'modes' => $modes, 'campuses' => $campuses]);
+
+    }
+
+    public function addAvailableCourses(Request $request){
+
+        $request->validate([
+            'intake_id' => 'required',
+            'course_id' => 'required',
+            'campus_id' => 'required',
+            'course_code' => 'required',
+            'attendance_id' => 'required',
+            'attendance_code' => 'required',
+
+        ]);
+
+        return $request->all();
+
+        foreach($request->input('course') as $course){
+            $intakes              =          new AvailableCourse;
+            $intakes->course_id   =          $course->course_id;
+            $intakes->intake_id   =          $course->intake_id;
+            $intakes->save();
+        }
+
+        return redirect()->back()->with('success', 'Course added to available intake');
+
+    }
+
 
 
     /**

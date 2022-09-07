@@ -42,9 +42,9 @@
                             <th style="white-space: nowrap !important;">Action</th>
                             </thead>
                             <tbody>
-                            @foreach($applicant as $app)
+                            @foreach($applicant as $key => $app)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
+                                    <td> {{ ++$key }}</td>
                                     <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }} </td>
                                     <td> {{ $app->courses->course_name }}</td>
                                     <td>
