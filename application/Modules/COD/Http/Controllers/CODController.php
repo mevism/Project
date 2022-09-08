@@ -238,7 +238,7 @@ class CODController extends Controller
 //
 //        ]);
 
-            return $request->json()->all();
+//             return $request->json()->all();
 
 //        foreach($request->input('course') as $course){
 //            $intakes              =          new AvailableCourse;
