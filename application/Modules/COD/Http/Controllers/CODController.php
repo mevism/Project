@@ -247,6 +247,11 @@ class CODController extends Controller
 
         ]);
 
+
+        print_r(json_encode($request->json()->all()));
+
+/*
+
         return $request->all();
 
         foreach($request->input('course') as $course){
@@ -257,6 +262,7 @@ class CODController extends Controller
         }
 
         return redirect()->back()->with('success', 'Course added to available intake');
+        */
 
     }
 

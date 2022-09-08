@@ -18,6 +18,7 @@ class UserController extends Controller
     {
         $logins = $request->only('username', 'password');
 
+
         if (Auth::guard('user')->attempt($logins)) {
 
             $name = Auth::guard('user')->user()->name;
@@ -31,6 +32,7 @@ class UserController extends Controller
                 return redirect()->route('application.applicant')->with('success', 'Welcome' . " " . Auth::user()->email . " " . Auth::user()->role_id . "  " . 'to' . " " . config('app.name') . ".");
 
         }
+
         if (Auth::guard('student')->attempt($logins, true)) {
 
             if (Auth::guard('student')) {
@@ -94,7 +96,7 @@ class UserController extends Controller
                if (!Auth::guard('user')->check()){
                    abort(403)->with('error', 'Please login again');;
                } else{
-             
+
                    $apps_dean = Application::where('dean_status', 0)
                        ->where('school_id', auth()->guard('user')->user()->school_id)->count();
                        return view('dean::dean.index')->with('apps', $apps_dean);

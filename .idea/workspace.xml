@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="" />
+    <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/build.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/build.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -172,6 +176,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "D:/xamp/htdocs/project/application/Modules/Student/Resources/views/layouts",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -182,13 +187,14 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\xamp\htdocs\project\application\Modules\Student\Resources\views\layouts" />
+      <recent name="D:\xamp\htdocs\project\application\Modules\Student\Resources\views" />
       <recent name="C:\xampp\htdocs\sims\application\Modules\COD\Resources\views\admissions" />
       <recent name="C:\xampp\htdocs\sims" />
       <recent name="C:\xampp\htdocs\sims\application\Modules\Application\Resources\assets" />
-      <recent name="C:\xampp\htdocs\sims\application\Modules\Student\Resources\views\layouts" />
-      <recent name="C:\xampp\htdocs\sims\application\Modules\Hostel\Resources\views\layouts" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\xamp\htdocs\project\application\Modules\Student\Resources\views\layouts" />
       <recent name="C:\xampp\htdocs\sims" />
       <recent name="C:\xampp\htdocs\sims\js" />
       <recent name="C:\xampp\htdocs\sims\application\Modules\Dean\Resources\views" />
@@ -242,7 +248,8 @@
       <workItem from="1662102488233" duration="17194000" />
       <workItem from="1662364040847" duration="20682000" />
       <workItem from="1662534156846" duration="723000" />
-      <workItem from="1662536000619" duration="18597000" />
+      <workItem from="1662536000619" duration="19656000" />
+      <workItem from="1662615368282" duration="9883000" />
     </task>
     <servers />
   </component>
