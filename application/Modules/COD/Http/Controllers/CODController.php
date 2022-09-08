@@ -2,8 +2,6 @@
 
 namespace Modules\COD\Http\Controllers;
 
-use App\Models\Department;
-use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -13,13 +11,6 @@ use Modules\Application\Entities\Education;
 use Modules\Finance\Entities\FinanceLog;
 use Modules\COD\Entities\CODLog;
 use Auth;
-use Modules\Registrar\Entities\Attendance;
-use Modules\Registrar\Entities\AvailableCourse;
-use Modules\Registrar\Entities\Campus;
-use Modules\Registrar\Entities\Courses;
-use Modules\Registrar\Entities\Intake;
-use Modules\Registrar\Entities\KuccpsApplicant;
-use Modules\Registrar\Entities\KuccpsApplication;
 
 class CODController extends Controller
 {
@@ -195,7 +186,7 @@ class CODController extends Controller
 
     public function submitAdmission($id){
 
-        AdmissionApproval::where('application_id', $id)->update(['finance_status' => 0]);
+        AdmissionApproval::where('applicationlication_id', $id)->update(['finance_status' => 0]);
 
         Application::where('id', $id)->update(['status' => 1]);
 

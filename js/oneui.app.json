@@ -1,0 +1,5 @@
+{
+  "tag" : ["#save-course","#host-student","#actual-input","#input-profile","#update_student","#update_student","#check-course","#view-sessions","#cut_off_value","#choose-all","#print-year","#print-report","#reset-all","#confirm-box","#attendant-button","#confirm-attendance-box","#close-stamp","#save-stamp","#confirm-years-box","#remove-session","#confirm-class-box","#print-approval","#view-application-list","#prev","#search-query-button","#view-attendance","#view-class","#courses-search","#remove-modal","#approve-button","#approve-all","#confirm-reject","#push-list","#reject-button","#preview-cod section","#cancel","#view-more-level",".personal_input","#confirm-save"],
+  "nodeID" : ["#attendance_id","#campus_id"],
+  "string" : ["confirm-save"]
+}

@@ -45,7 +45,7 @@
                         <form action="{{ route('department.addAvailableCourses') }}" method="POST">
                             @csrf
 
-                            <table id="courses" class="table table-striped table-sm-responsive fs-sm">
+                            <table class="table table-striped table-sm-responsive fs-sm">
                                 <thead>
                                     <th>#</th>
                                     <th>Course Name</th>
@@ -57,17 +57,15 @@
                                     <tr>
                                         <td>{{ ++$key }}</td>
                                         <td>
-                                            <input name="course_id[]" value="{{ $course->id }}" type="checkbox">
-                                            <input name="intake_id" value="{{ $intake->id }}" type="hidden">
-                                            <input name="course_code[]" value="{{ $course->course_code }}" type="hidden">
+                                            <input id = 'course_id' value="{{ $course->id }}" data-intake = '{{ $intake->id }}' data-code = '{{ $course->course_code }}' type="checkbox">
+
                                             <label>{{ $course->course_name }}</label>
                                         </td>
                                         <td>
                                             @foreach($modes as $key => $mode)
                                                 <p class="">
                                                     {{ ++$key }}
-                                                    <input name="attendance_id[]" type="checkbox" value="{{ $mode->id }}">
-                                                    <input name="attendance_code[]" type="hidden" value="{{ $mode->attendance_code }}">
+                                                    <input id = 'attendance_id{{ $course->id }}' type="checkbox" value="{{ $mode->id }}" data-code = "{{ $mode->attendance_code }}">
                                                     <label>{{ $mode->attendance_name }}</label>
                                                 </p>
                                             @endforeach
@@ -77,7 +75,7 @@
                                             @foreach($campuses as $key => $campus)
                                                 <p>
                                                     {{ ++$key }}
-                                                    <input name="campus_id[]" type="checkbox" value="{{ $campus->id }}">
+                                                    <input id = 'campus_id{{ $course->id }}' type="checkbox" value="{{ $campus->id }}">
                                                     <label>{{ $campus->name }}</label>
                                                 </p>
                                             @endforeach
@@ -90,7 +88,7 @@
                             </table>
 
                             <div class="d-flex justify-content-center">
-                                <button class="btn btn-sm btn-alt-success mb-4" data-toggle="click-ripple" onclick="return confirm('You are about to add courses to {{ Carbon\carbon::parse($intake->intake_from)->format('M')}} - {{ Carbon\carbon::parse($intake->intake_to)->format('M Y') }} intake. Are you sure you want to proceed?')">Save courses</button>
+                                <button class="btn btn-sm btn-alt-success mb-4" data-toggle="click-ripple" id = 'save-course' type = 'button' onlick = "You are about to add courses to {{ Carbon\carbon::parse($intake->intake_from)->format('M')}} - {{ Carbon\carbon::parse($intake->intake_to)->format('M Y') }} intake. Are you sure you want to proceed?">Save courses</button>
                             </div>
 
                         </form>
@@ -104,12 +102,7 @@
             </div>
         </div>
     </div>
-
+<!-- END Page Content -->
 
 @endsection
 
-<script>
-
-
-
-</script>

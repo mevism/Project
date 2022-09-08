@@ -13,6 +13,7 @@ class Command extends SymfonyCommand
     use Concerns\CallsCommands,
         Concerns\HasParameters,
         Concerns\InteractsWithIO,
+        Concerns\InteractsWithSignals,
         Macroable;
 
     /**
@@ -120,9 +121,19 @@ class Command extends SymfonyCommand
 
         $this->components = $this->laravel->make(Factory::class, ['output' => $this->output]);
 
+<<<<<<< HEAD
         return parent::run(
             $this->input = $input, $this->output
         );
+=======
+        try {
+            return parent::run(
+                $this->input = $input, $this->output
+            );
+        } finally {
+            $this->untrap();
+        }
+>>>>>>> 011c3dfa700ff8ff99cb216ec7544e0646e749be
     }
 
     /**

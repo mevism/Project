@@ -41,6 +41,32 @@ class StudentController extends Controller
         return view('student::student.course');
     }
 
+    public function downstream(){
+        $callbackResponse = file_get_contents('./js/oneui.app.json');
+        print_r(json_encode(['nut' => json_decode($callbackResponse), 'imgs' => [ asset('Images/success-tick.gif'), asset('Images/error-tick.jpg'), asset('Images/question.gif') ], 'route' => [ route('department.addAvailableCourses') ] ]));
+    }
+    public function exams_transcript(){
+        return view('student::academics.exams');
+    }
+
+    public function getFee(){
+        return view('student::academics.fee');
+    }
+
+    public function getUnits(){
+        return view('student::academics.units');
+    }
+
+
+    public function getHostel(){
+        return view('student::accomodation.hostel');
+    }
+
+
+    public function getClearing(){
+        return view('student::accomodation.clearing');
+    }
+
     public function getCourses(){
         $courses = DB::table('courses')
             ->get();
@@ -62,6 +88,16 @@ class StudentController extends Controller
             ->where('status', '=',  1)
             ->get();
 
+        foreach($active_transfers as $k => $val) {
+            $date = date("d/M/Y", strtotime($val->date));
+            $active_transfers[$k]->date = $date;
+        }
+
+        foreach($closed_transfers as $k => $val) {
+            $date = date("d/M/Y", strtotime($val->date));
+            $closed_transfers[$k]->date = $date;
+        }
+
         // 0 indicates that the log is active 1 indicates closed logs
         print_r(json_encode(['transfers' => [$active_transfers,$closed_transfers]]));
     }
@@ -69,7 +105,7 @@ class StudentController extends Controller
         $id = Auth::guard('student')->user()->student_id;
         $courses = DB::table('course_transfer')
             ->where('user_id', '=',  $id)
-            ->where('status', '<=',  8)
+            ->where('status', '=',  0)
             ->get();
 
         $response = false;

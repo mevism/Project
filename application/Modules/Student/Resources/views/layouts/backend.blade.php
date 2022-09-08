@@ -41,7 +41,6 @@
     <script src = "{{ asset('js/jquery.js') }}" ></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <script src = "{{ url('js/build.js') }}"></script>
 </head>
 
 <body>
@@ -88,7 +87,7 @@
                               <i class='nav-main-link-icon si si-user'></i>
                               <span class='nav-main-link-name'>
                                     Change Courses
-                                  </span>
+                              </span>
                               </a>
                           </li>
                       </ul>
@@ -100,31 +99,43 @@
                       </a>
                       <ul class='nav-main-submenu'>
                           <li class='nav-main-item'>
+<<<<<<< HEAD
                               <a class="nav-main-link{{ request()->is('student/exams') ? ' active' : ''  }}" href="{{ route('change_course') }}">
+=======
+                              <a class="nav-main-link{{ request()->is('academics/exams') ? ' active' : ''  }}" href="{{ route('exams') }}">
+>>>>>>> 011c3dfa700ff8ff99cb216ec7544e0646e749be
                               <i class='nav-main-link-icon si si-user'></i>
                               <span class='nav-main-link-name'>
                                     Exams Transcripts
-                                </span>
+                              </span>
                               </a>
                           </li>
                       </ul>
                       <ul class='nav-main-submenu'>
                           <li class='nav-main-item'>
+<<<<<<< HEAD
                               <a class="nav-main-link{{ request()->is('student/fee') ? ' active' : ''  }}" href="{{ route('change_course') }}">
+=======
+                              <a class="nav-main-link{{ request()->is('academics/fee') ? ' active' : ''  }}" href="{{ route('fee') }}">
+>>>>>>> 011c3dfa700ff8ff99cb216ec7544e0646e749be
                               <i class='nav-main-link-icon si si-user'></i>
                               <span class='nav-main-link-name'>
-                                    Fee
-                                    </span>
+                                Fee
+                              </span>
                               </a>
                           </li>
                       </ul>
                       <ul class='nav-main-submenu'>
                           <li class='nav-main-item'>
+<<<<<<< HEAD
                               <a class="nav-main-link{{ request()->is('student/units') ? ' active' : ''  }}" href="{{ route('change_course') }}">
+=======
+                              <a class="nav-main-link{{ request()->is('academics/units') ? ' active' : ''  }}" href="{{ route('units') }}">
+>>>>>>> 011c3dfa700ff8ff99cb216ec7544e0646e749be
                               <i class='nav-main-link-icon si si-user'></i>
                               <span class='nav-main-link-name'>
-                                    Units
-                                    </span>
+                                Units
+                              </span>
                               </a>
                           </li>
                       </ul>
@@ -136,21 +147,29 @@
                       </a>
                       <ul class='nav-main-submenu'>
                           <li class='nav-main-item'>
+<<<<<<< HEAD
                               <a class="nav-main-link{{ request()->is('student/hostel') ? ' active' : ''  }}" href="{{ route('change_course') }}">
+=======
+                              <a class="nav-main-link{{ request()->is('accomodation/hostel') ? ' active' : ''  }}" href="{{ route('hostel') }}">
+>>>>>>> 011c3dfa700ff8ff99cb216ec7544e0646e749be
                               <i class='nav-main-link-icon si si-user'></i>
                               <span class='nav-main-link-name'>
-                                    Book Hostel
-                                     </span>
+                                Book Hostel
+                              </span>
                               </a>
                           </li>
                       </ul>
                       <ul class='nav-main-submenu'>
                           <li class='nav-main-item'>
+<<<<<<< HEAD
                               <a class="nav-main-link{{ request()->is('student/clearing') ? ' active' : ''  }}" href="{{ route('change_course') }}">
+=======
+                              <a class="nav-main-link{{ request()->is('accomodation/clearing') ? ' active' : ''  }}" href="{{ route('clearing') }}">
+>>>>>>> 011c3dfa700ff8ff99cb216ec7544e0646e749be
                               <i class='nav-main-link-icon si si-user'></i>
                               <span class='nav-main-link-name'>
-                                        Clearing
-                                    </span>
+                                Clearing
+                              </span>
                               </a>
                           </li>
                       </ul>

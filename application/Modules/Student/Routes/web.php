@@ -12,15 +12,17 @@
 */
 
 use Modules\Student\Http\Controllers\StudentController;
+use Modules\Student\Http\Middleware\Update;
 
 Route::prefix('student')->group(function() {
 //    Route::get('/', 'StudentController@index')->name('student');
+    Route::get('/downstream', [StudentController::class, 'downstream'])->name('raw.route');
     Route::group(['middleware' => ['student']], function (){
 
         Route::get('/', [StudentController::class, 'index'])->name('student');
         Route::get('/profile', [StudentController::class, 'profile'])->name('student_profile');
 
-        Route::get('/student_profile', [StudentController::class, 'student_profile']);
+        Route::get('/student_profile', [StudentController::class, 'student_profile'])->name('student_dashboard');
         Route::get('/checkName', [StudentController::class, 'checkName']);
         Route::get('/getCourses', [StudentController::class, 'getCourses']);
         Route::get('/checkChange', [StudentController::class, 'checkChange']);
@@ -34,8 +36,13 @@ Route::prefix('student')->group(function() {
         Route::get('/bindNav', [StudentController::class, 'bindNav']);
 
     });
-    Route::group(['Modules\Student\Http\Middleware\Comrade' => ['update_profile']], function (){
+    Route::middleware([Update::class])->group(function () {
         Route::get('/change_course', [StudentController::class, 'change_course'])->name('change_course');
+        Route::get('/exams_transcript', [StudentController::class, 'exams_transcript'])->name('exams');
+        Route::get('/getFee', [StudentController::class, 'getFee'])->name('fee');
+        Route::get('/getUnits', [StudentController::class, 'getUnits'])->name('units');
+        Route::get('/getHostel', [StudentController::class, 'getHostel'])->name('hostel');
+        Route::get('/getClearing', [StudentController::class, 'getClearing'])->name('clearing');
     });
 });
 //Route::get('/updateProfile', [StudentController::class, 'updateProfile']);

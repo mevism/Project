@@ -3,7 +3,7 @@
 namespace Modules\Student\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
-use Modules\Student\Middleware\Comrade\Update;
+use Modules\Student\Middleware\Update;
 
 class Kernel extends HttpKernel
 {

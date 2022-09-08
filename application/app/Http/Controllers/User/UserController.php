@@ -18,6 +18,7 @@ class UserController extends Controller
     {
         $logins = $request->only('username', 'password');
 
+
         if (Auth::guard('user')->attempt($logins)) {
 
             $name = Auth::guard('user')->user()->name;
@@ -31,6 +32,7 @@ class UserController extends Controller
                 return redirect()->route('application.applicant')->with('success', 'Welcome' . " " . Auth::user()->email . " " . Auth::user()->role_id . "  " . 'to' . " " . config('app.name') . ".");
 
         }
+
         if (Auth::guard('student')->attempt($logins, true)) {
 
             if (Auth::guard('student')) {

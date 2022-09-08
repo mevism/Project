@@ -13,6 +13,7 @@
 
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="oneui-route" content="{{ route('raw.route') }}">
 
   <!-- Icons -->
   <link rel="shortcut icon" href="{{ asset('media/favicons/favicon.png') }}">
@@ -23,6 +24,8 @@
   @yield('css_before')
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
   <link rel="stylesheet" id="css-main" href="{{ url('/css/oneui.css') }}">
+  <link rel="stylesheet" id="css-main" href="{{ url('/css/index.css') }}">
+  <link rel="stylesheet" id="css-main" href="{{ url('/css/admissions.css') }}">
 
   <!-- You can include a specific file from public/css/themes/ folder to alter the default color theme of the template. eg: -->
   <!-- <link rel="stylesheet" id="css-theme" href="{{ mix('/css/themes/amethyst.css') }}"> -->
@@ -36,6 +39,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="{{ url("js/build.js") }}"></script>
 
 </head>
 
@@ -395,6 +399,7 @@
   <!-- END Page Container -->
 
   <script src="{{ url("js/oneui.app.js") }}"></script>
+
 
   <!-- Laravel Scaffolding JS -->
   <!-- <script src="{{ mix('/js/laravel.app.js') }}"></script> -->

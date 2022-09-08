@@ -747,7 +747,7 @@
         })
     }
 
-    $(document).ready(async function (qualifiedName, value){
+    $(document).ready(async function (){
 
         const notch = await ServerData.UPSTREAM()
         ServerData.DOWNSTREAM = notch.nut;
