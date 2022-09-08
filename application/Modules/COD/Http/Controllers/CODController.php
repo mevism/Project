@@ -237,26 +237,26 @@ class CODController extends Controller
 
     public function addAvailableCourses(Request $request){
 
-        $request->validate([
-            'intake_id' => 'required',
-            'course_id' => 'required',
-            'campus_id' => 'required',
-            'course_code' => 'required',
-            'attendance_id' => 'required',
-            'attendance_code' => 'required',
+//        $request->validate([
+//            'intake_id' => 'required',
+//            'course_id' => 'required',
+//            'campus_id' => 'required',
+//            'course_code' => 'required',
+//            'attendance_id' => 'required',
+//            'attendance_code' => 'required',
+//
+//        ]);
 
-        ]);
+            return $request->json()->all();
 
-        return $request->all();
+//        foreach($request->input('course') as $course){
+//            $intakes              =          new AvailableCourse;
+//            $intakes->course_id   =          $course->course_id;
+//            $intakes->intake_id   =          $course->intake_id;
+//            $intakes->save();
+//        }
 
-        foreach($request->input('course') as $course){
-            $intakes              =          new AvailableCourse;
-            $intakes->course_id   =          $course->course_id;
-            $intakes->intake_id   =          $course->intake_id;
-            $intakes->save();
-        }
-
-        return redirect()->back()->with('success', 'Course added to available intake');
+//        return redirect()->back()->with('success', 'Course added to available intake');
 
     }
 
