@@ -1,129 +1,334 @@
 @extends('registrar::layouts.backend')
 
 @section('content')
-<div class="bg-body-light" xmlns="http://www.w3.org/1999/html">
+
+<div class="bg-body-light">
   <div class="content content-full">
-      <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
-          <div class="flex-grow-0">
-              <h5 class="h5 fw-bold mb-0">
-                  Edit Course
-              </h5>
+      <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+          <div class="flex-grow-1">
+              <h4 class="h3 fw-bold mb-2">
+
+              </h4>
           </div>
+          {{-- <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
+              <ol class="breadcrumb breadcrumb-alt">
+                  <li class="breadcrumb-item">
+                      <a class="link-fx" href="javascript:void(0)">Courses</a>
+                  </li>
+                  <li class="breadcrumb-item" aria-current="page">
+                    <a  href="showCourse">View Courses</a>
+                  </li>
+              </ol>
+          </nav> --}}
       </div>
   </div>
 </div>
     <div class="content">
-      <div class="block block-rounded">
+        <div  class="block block-rounded">
             <div class="block-header block-header-default">
-              <h5 class="block-title">Add Course</h5>
+              <h3 class="block-title">EDIT COURSE</h3>
             </div>
             <div class="block-content block-content-full">
-                <div class="row">
-                    <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.updateCourse',$data->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                    <div class="col-lg-8 space-y-2">
-                        <div class="form-floating col-12 col-xl-12 mb-4">
-                            <select name="campus" id="campus" value="{{ old('campus') }}" class="form-control form-control-sm text-uppercase">
-                              <option selected value="{{ $data->campus_id }}"> {{ $data->campus_id }}</option>
-                              @foreach ($campuses as $campus)
-                              <option value="{{ $campus->name }}">{{ $campus->name }}</option>
-                            @endforeach
-                            <label class="form-label">CAMPUS</label>
-                            </select>
-                          </div>
-                        <div class="form-floating col-12 col-xl-12">
-                            <select name="department" id="department" class="form-control form-control-alt text-uppercase">
-                                <option selected value="{{ $data->department_id }}" > {{ $data->department_id }} </option>
-                                @foreach ($departments as $department)
-                                    <option value="{{ $department->name }}">{{ $department->name }}</option>
-                                @endforeach
-                                <label class="form-label">DEPARTMENT</label>
-                            </select>
-                        </div>
-                        <div class="form-floating col-12 col-xl-12">
-                            <select name="level" id="level"value="{{ old('level') }}" class="form-control form-control-alt text-uppercase form-select">
-                                <option selected value="{{ $data->level }}">
-                                    @if($data->level == 1)
-                                        CERTIFICATE
-                                    @elseif($data->level == 2)
-                                        DIPLOMA
-                                    @elseif($data->level == 3)
-                                        DEGREE
-                                    @elseif($data->level == 5)
-                                        MASTERS
-                                    @else
-                                        PhD
-                                    @endif
-                                </option>
-                                <option value="1">Certificate</option>
-                                <option value="2">Diploma</option>
-                                <option value="3">Degree</option>
-                                <option value="4">Masters</option>
-                                <option value="5">PhD</option>
-                                <label class="form-label">LEVEL</label>
-                            </select>
-                        </div>
-                        <div class="form-floating col-12 col-xl-12">
-                            <input type = "text" class = "form-control form-control-alt text-uppercase" id = "course_name"value = "{{$data->course_name}}" name="course_name" placeholder="Course Name">
-                            <label class="form-label">COURSE NAME</label>
-                        </div>
-                        <div class="form-floating col-12 col-xl-12">
-                            <input type = "text" class = "form-control form-control-alt text-uppercase" id = "course_code" value = "{{$data->course_code}}" name="course_code" placeholder="Course Code">
-                            <label class="form-label">COURSE CODE</label>
-                        </div>
-                        <div class="form-floating col-12 col-xl-12">
-                            <input type = "text" class = "form-control form-control-alt text-uppercase" id = "course_duration" value = "{{$data->course_duration}}"name="course_duration" placeholder="Course Duration">
-                            <label class="form-label">COURSE DURATION</label>
-                        </div>
-                        <div class="form-floating col-12 col-xl-12">
-                            <textarea value = "{{$data->course_requirements}}" class = "form-control form-control-alt text-uppercase" id="course_requirements" name="course_requirements" placeholder="Course Requirements"></textarea>
-                            <label class="form-label">COURSE REQUIREMENTS</label>
-                        </div>
+                <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.updateCourse',$data->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+              <div class="row">
+                <div class="col-lg-5 space-y-0">
+
+                    <div class="form-floating col-12 col-xl-12 mb-4">
+                      <select name="department" id="department"  class="form-control form-control-sm text-uppercase">
+                        <option selected value="{{ $data->department_id }}"> {{ $data->getCourseDept->name }}</option>
+                        @foreach ($departments as $department)
+                        <option value="{{ $department->id }}">{{ $department->name }}</option>
+                      @endforeach
+                      <label class="form-label">DEPARTMENT</label>
+                      </select>
                     </div>
-                    <div class="col-lg-4 space-y-2">
-                        <div class="form-floating col-12 col-xl-12">
-                            <input type="text" value = "{{$data->subject1}}" class="form-control form-control-alt text-uppercase" id="subject1" name="subject1" placeholder="subject1">
-                            <label class="form-label">SUBJECT 1</label>
-                        </div>
-                        <div class="form-floating col-12 col-xl-12">
-                            <input type="text"value = "{{$data->subject2}}"class="form-control form-control-alt text-uppercase" id="subject2" name="subject2" placeholder="subject2">
-                            <label class="form-label">SUBJECT 2</label>
-                        </div>
-                        <div class="form-floating col-12 col-xl-12">
-                            <select value = "{{$data->subject3}}" name="subject3" id="subject3"class="form-control form-control-alt form-select text-uppercase">
-                                <option value="" selected disabled>Choose One Humanity</option>
-                                <option value="Geo">Geo</option>
-                                <option value="His">His</option>
-                                <option value="CRE">CRE</option>
-                                <label class="form-label">SUBJECT 3</label>
+                    <div class="form-floating  col-12 col-xl-12 mb-4">
+                    <select name="level" id="level" class="form-control form-control-sm text-uppercase form-select">
+                      <option  selected value="{{ $data->level }}">{{ $data->level }}</option>
+                      <option value="1">Certificate</option>
+                      <option value="2">Diploma</option>
+                      <option value="3">Degree</option>
+                      <option value="4">Masters</option>
+                      <option value="5">PhD</option>
+                      <label class="form-label">LEVEL</label>
+                    </select>
+                    </div>
+                    <div class="form-floating  col-12 col-xl-12 mb-4">
+                      <input type = "text" class = "form-control form-control-sm text-uppercase" id = "course_name" value="{{$data->course_name }}" name="course_name" placeholder="Course Name">
+                      <label class="form-label">COURSE NAME</label>
+                    </div>
+                    <div class="form-floating  col-12 col-xl-12 mb-4">
+                        <input type = "text" class = "form-control form-control-sm text-uppercase" id = "course_code" value="{{$data->course_code }}" name="course_code" placeholder="Course Code">
+                        <label class="form-label">COURSE CODE</label>
+                      </div>
+                      <div class="form-floating  col-12 col-xl-12 mb-4">
+                        <input type = "text" class = "form-control form-control-sm text-uppercase" id = "course_duration" value="{{$data->courseRequirements->course_duration }} " name="course_duration" placeholder="Course Duration">
+                        <label class="form-label">COURSE DURATION</label>
+                      </div>
+                      <div class="form-floating col-12 col-xl-12 mb-4">
+                        <textarea class = "form-control form-control-sm text-uppercase" id="course_requirements" name="course_requirements" placeholder="Course Requirements"> {{$data->courseRequirements->course_requirements }} </textarea>
+                        <label class="form-label">COURSE REQUIREMENTS</label>
+                      </div>
+                     </div>
+                <div class=" col-lg-7 space-y-0">
+                    <span class="h4 fw-semibold text-muted fs-sm">Add Course Cluster Subjects</span>
+                    <div class="d-flex justify-content-center col-sm-12">
+                        <select class="form-control form-control-sm text-uppercase category m-1 fs-sm" name="school" id="category">
+                                <option disabled selected> -- select group -- </option>
+                                @foreach ($groups as $group)
+                                    <option value="{{ $group->id }}"> {{ $group->name }}</option>
+                                @endforeach
                             </select>
-                        </div>
-                        <div class="form-floating col-12 col-xl-12">
-                            <select value = "{{$data->subject4}}" name="subject4" id="subject4"class="form-control form-select form-control-alt text-uppercase">
-                                <option value="" selected disabled>Choose One Science</option>
-                                <option value="Phy">Phy</option>
-                                <option value="Chem">Chem</option>
-                                <option value="Bio">Bio</option>
-                                <label class="form-label">SUBJECT 4</label>
+                            <select class="form-control form-control-sm text-uppercase subcategory m-1 fs-sm" multiple="multiple" name="subject[]" id="subcategory">
+                                <option selected value="{{ explode(' ', $data->courseRequirements->subject1)[0] }}">{{ explode(' ', $data->courseRequirements->subject1)[0] }} </option>
                             </select>
+                            <select name="grade1" class="dept form-control form-control-md text-uppercase m-1 fs-sm">
+                                <option selected value="{{ explode(' ', $data->courseRequirements->subject1)[1] }}" > {{ explode(' ', $data->courseRequirements->subject1)[1] }} </option>
+                                <option value="A"> A </option>
+                                <option value="A-"> A- </option>
+                                <option value="B+"> B+ </option>
+                                <option value="B"> B </option>
+                                <option value="B-"> B- </option>
+                                <option value="C+"> C+ </option>
+                                <option value="C"> C </option>
+                                <option value="C-"> C- </option>
+                                <option value="D+"> D+ </option>
+                                <option value="D"> D </option>
+                                <option value="D-"> D- </option>
+                            </select>
+                    </div>
+                    <div class="d-flex justify-content-center col-sm-12">
+                        <select class="form-control form-control-sm text-uppercase category1 m-1 fs-sm" name="school" id="category1">
+                                <option disabled selected> -- select group -- </option>
+                                @foreach ($groups as $group)
+                                    <option value="{{ $group->id }}"> {{ $group->name }}</option>
+                                @endforeach
+                            </select>
+                            <select class="form-control form-control-sm text-uppercase subcategory1 m-1 fs-sm" multiple="multiple" name="subject1[]" id="subcategory1">
+                                <option selected value="{{ explode(' ', $data->courseRequirements->subject2)[0] }}">{{ explode(' ', $data->courseRequirements->subject2)[0] }} </option>
+                            </select>
+                            <select name="grade2" class="dept form-control form-control-md text-uppercase m-1 fs-sm">
+                                <option selected value="{{ explode(' ', $data->courseRequirements->subject2)[1] }}" > {{ explode(' ', $data->courseRequirements->subject2)[1] }} </option>
+                                <option value="A"> A </option>
+                                <option value="A-"> A- </option>
+                                <option value="B+"> B+ </option>
+                                <option value="B"> B </option>
+                                <option value="B-"> B- </option>
+                                <option value="C+"> C+ </option>
+                                <option value="C"> C </option>
+                                <option value="C-"> C- </option>
+                                <option value="D+"> D+ </option>
+                                <option value="D"> D </option>
+                                <option value="D-"> D- </option>
+                            </select>
+                    </div>
+                    <div class="d-flex justify-content-center col-sm-12">
+                        <select class="form-control form-control-sm text-uppercase category2 m-1 fs-sm" name="school" id="category2">
+                                <option disabled selected> -- select group -- </option>
+                                    @foreach ($groups as $group)
+                                        <option value="{{ $group->id }}"> {{ $group->name }}</option>
+                                    @endforeach
+                            </select>
+                            <select class="form-control form-control-sm text-uppercase subcategory2 m-1 fs-sm" multiple="multiple" name="subject2[]" id="subcategory2">
+                                <option selected value="{{ explode(' ', $data->courseRequirements->subject3)[0] }}">{{ explode(' ', $data->courseRequirements->subject3)[0] }} </option>
+                            </select>
+                            <select name="grade3" class="dept form-control form-control-md text-uppercase m-1 fs-sm">
+                                <option selected value="{{ explode(' ', $data->courseRequirements->subject3)[1] }}" >{{ explode(' ', $data->courseRequirements->subject3)[1] }} </option>
+                                <option value="A"> A </option>
+                                <option value="A-"> A- </option>
+                                <option value="B+"> B+ </option>
+                                <option value="B"> B </option>
+                                <option value="B-"> B- </option>
+                                <option value="C+"> C+ </option>
+                                <option value="C"> C </option>
+                                <option value="C-"> C- </option>
+                                <option value="D+"> D+ </option>
+                                <option value="D"> D </option>
+                                <option value="D-"> D- </option>
+                            </select>
+                    </div>
+                    <div class="d-flex justify-content-center col-sm-12">
+                        <select class="form-control form-control-sm text-uppercase category3 m-1 fs-sm" name="school" id="category3">
+                                <option disabled selected> -- select group -- </option>
+                                    @foreach ($groups as $group)
+                                        <option value="{{ $group->id }}"> {{ $group->name }}</option>
+                                    @endforeach
+                            </select>
+                            <select class="form-control form-control-sm text-uppercase subcategory3 m-1 fs-sm" multiple="multiple" name="subject3[]" id="subcategory3">
+                                <option selected value="{{ explode(' ', $data->courseRequirements->subject4)[0] }}">{{ explode(' ', $data->courseRequirements->subject4)[0] }} </option>
+                            </select>
+                            <select name="grade4" class="dept form-control form-control-md text-uppercase m-1 fs-sm">
+                                <option selected value="{{ explode(' ', $data->courseRequirements->subject4)[1] }}" > {{ explode(' ', $data->courseRequirements->subject4)[1] }}</option>
+                                <option value="A"> A </option>
+                                <option value="A-"> A- </option>
+                                <option value="B+"> B+ </option>
+                                <option value="B"> B </option>
+                                <option value="B-"> B- </option>
+                                <option value="C+"> C+ </option>
+                                <option value="C"> C </option>
+                                <option value="C-"> C- </option>
+                                <option value="D+"> D+ </option>
+                                <option value="D"> D </option>
+                                <option value="D-"> D- </option>
+                            </select>
+                    </div>
+
+                    <div class="d-flex justify-content-center m-2">
+                        <div class="col-12 mb-4">
+                            <label class="form-label">Offered at: </label>
+                            <div class="space-x-2">
+                                @foreach($campus as $camp)
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" name="main" value="{{ $camp->id }}" @if(old('main') === 'campus') checked @endif >
+                                    <label class="form-check-label">{{ $camp->name }}</label>
+                                </div>
+                                @endforeach
+                            </div>
                         </div>
-                        <p class="p-2">
-
-                            <b>KEY:</b>  <br>
-                            Format to key in cluster subjects <br>
-                            <span class="small">
-                        MAT B+, ENG A-
-                      </span>
-
-                        </p>
                     </div>
                 </div>
                 <div class="col-12 text-center p-3">
-                    <button type="submit" class="btn btn-alt-success" data-toggle="click-ripple">Update Course</button>
+                  <button type="submit" class="btn btn-alt-success" data-toggle="click-ripple">Create Course</button>
                 </div>
-            </form>
+              </div>
+                </form>
             </div>
-      </div>
+        </div>
     </div>
+
+        <script>
+            $(document).ready(function (){
+                $(document).on('change', '.category', function (){
+
+                    var cat_id = $(this).val();
+
+                    var div=$(this).parent();
+
+                    var op = " ";
+
+                    $.ajax({
+                       type:"get",
+                       url:"{{ route('courses.fetchSubjects') }}",
+                        data:{'id':cat_id},
+                        success:function (data){
+
+                           console.log(data);
+
+                           op+='<option value="0" selected disabled> select subject</option>';
+
+                           for (var i=0;i<data.length;i++){
+                               op+='<option value="'+data[i].subject+'">'+data[i].subject+'</input>';
+                           }
+                           div.find('#subcategory').html(" ");
+                           div.find("#subcategory").append(op);
+
+                           console.log(op);
+                        },
+                        error:function (){
+
+                        }
+
+                    });
+                });
+            });
+
+            $(document).ready(function (){
+                $(document).on('change', '.category1', function (){
+
+                    var cat_id = $(this).val();
+
+                    var div=$(this).parent();
+
+                    var op = " ";
+
+                    $.ajax({
+                        type:"get",
+                        url:"{{ route('courses.fetchSubjects') }}",
+                        data:{'id':cat_id},
+                        success:function (data){
+
+                            console.log(data);
+
+                            op+='<option value="0" selected disabled> select subject</option>';
+
+                            for (var i=0;i<data.length;i++){
+                                op+='<option value="'+data[i].subject+'">'+data[i].subject+'</input>';
+                            }
+                            div.find('#subcategory1').html(" ");
+                            div.find("#subcategory1").append(op);
+                        },
+                        error:function (){
+
+                        }
+
+                    });
+                });
+            });
+
+            $(document).ready(function (){
+                $(document).on('change', '.category2', function (){
+
+                    var cat_id = $(this).val();
+
+                    var div=$(this).parent();
+
+                    var op = " ";
+
+                    $.ajax({
+                        type:"get",
+                        url:"{{ route('courses.fetchSubjects') }}",
+                        data:{'id':cat_id},
+                        success:function (data){
+
+                            op+='<option value="0" selected disabled> select subject</option>';
+
+                            for (var i=0;i<data.length;i++){
+                                op+='<option value="'+data[i].subject+'">'+data[i].subject+'</input>';
+                            }
+                            div.find('#subcategory2').html(" ");
+                            div.find("#subcategory2").append(op);
+                        },
+                        error:function (){
+
+                        }
+
+                    });
+                });
+            });
+
+            $(document).ready(function (){
+                $(document).on('change', '.category3', function (){
+
+                    var cat_id = $(this).val();
+
+                    var div=$(this).parent();
+
+                    var op = " ";
+
+                    $.ajax({
+                        type:"get",
+                        url:"{{ route('courses.fetchSubjects') }}",
+                        data:{'id':cat_id},
+                        success:function (data){
+
+                            op+='<option value="0" selected disabled> select subject</option>';
+
+                            for (var i=0;i<data.length;i++){
+                                op+='<option value="'+data[i].subject+'">'+data[i].subject+'</input>';
+                            }
+                            div.find('#subcategory3').html(" ");
+                            div.find("#subcategory3").append(op);
+                        },
+                        error:function (){
+
+                        }
+
+                    });
+                });
+            });
+
+        </script>
 @endsection
+

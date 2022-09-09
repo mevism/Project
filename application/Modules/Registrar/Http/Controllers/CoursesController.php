@@ -3,14 +3,16 @@
 namespace Modules\Registrar\Http\Controllers;
 
 use Carbon;
+use App\Imports\UnitImport;
 use Illuminate\Http\Request;
 use App\Imports\KuccpsImport;
 use Illuminate\Routing\Controller;
+use App\Imports\UnitProgrammsImport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
-use Modules\Application\Entities\Applicant;
+use Modules\Registrar\Entities\Unit;
 use Modules\Registrar\Entities\Campus;
 use Modules\Registrar\Entities\Intake;
 use Modules\Registrar\Entities\School;
@@ -22,22 +24,35 @@ use PhpOffice\PhpWord\TemplateProcessor;
 use Modules\Registrar\emails\KuccpsMails;
 use Modules\Registrar\Entities\Attendance;
 use Modules\Registrar\Entities\Department;
+use Modules\Application\Entities\Applicant;
 use Modules\Application\Entities\Education;
 use NcJoes\OfficeConverter\OfficeConverter;
 use Modules\Registrar\Entities\RegistrarLog;
 use Modules\Registrar\Entities\StudentLogin;
 use Modules\Application\Entities\Application;
 use Modules\Registrar\Entities\StudentCourse;
+use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Registrar\Entities\AvailableCourse;
+use Modules\Registrar\Entities\ClusterSubjects;
 use Modules\Registrar\Entities\KuccpsApplicant;
+use Modules\Registrar\Entities\CourseRequirement;
 use Modules\Registrar\Entities\KuccpsApplication;
 use Modules\Application\Entities\AdmissionApproval;
-use Modules\Registrar\Entities\ClusterSubjects;
-use Modules\Registrar\Entities\CourseRequirement;
+use Modules\Registrar\Entities\AcademicYear;
+use SebastianBergmann\CodeCoverage\Report\Xml\Unit as XmlUnit;
 
 class CoursesController extends Controller
 
 {
+
+    public function syllabus($id){
+
+        $course   =   Courses::find($id);
+
+        $unit   =  UnitProgramms::where('course_code', $course->course_code)->get();
+        
+        return view('registrar::course.syllabus')->with('units',$unit);
+    }
 
     public function acceptApplication($id){
 
@@ -199,6 +214,19 @@ class CoursesController extends Controller
         return view('registrar::approval.approveIndex');
     }
 
+    public function importUnitProgramms(){
+
+        $up = UnitProgramms::all();
+
+        return view('registrar::offer.unitprog')->with('up',$up);
+    }
+    public function importUnit(){
+
+        $units = Unit::all();
+
+        return view('registrar::offer.unit')->with('units',$units);
+    }
+
     public function importExportViewkuccps(){
         $intakes = Intake::where('status',1)->get();
 
@@ -207,6 +235,37 @@ class CoursesController extends Controller
         return view('registrar::offer.kuccps')->with(['intakes' => $intakes, 'new' => $newstudents]);
 
      }
+
+     public function importUnitProg(Request $request) {
+
+        $vz = $request->validate([
+            'excel_file'   =>    'required|mimes:xlsx'
+        ]);
+
+        $excel_file  = $request->excel_file;
+
+        Excel::import(new UnitProgrammsImport(), $excel_file);
+
+        return back()->with('success' , 'Data Imported Successfully');
+
+     }
+
+
+
+     public function importUnits(Request $request) {
+
+        $vz = $request->validate([
+            'excel_file'   =>    'required|mimes:xlsx'
+        ]);
+
+        $excel_file  = $request->excel_file;
+
+        Excel::import(new UnitImport(), $excel_file);
+
+        return back()->with('success' , 'Data Imported Successfully');
+
+     }
+
 
      public function importkuccps(Request $request) {
         $vz = $request->validate([
@@ -377,7 +436,50 @@ class CoursesController extends Controller
 
 }
 
+    public function addYear(){
 
+        return view('registrar::academicYear.addAcademicYear');
+    }
+
+    public function academicYear(){
+        
+        $years   =  AcademicYear::all();
+
+        return view('registrar::academicYear.showAcademicYear')->with('years',$years);
+    }
+
+    public function storeYear(Request $request)    {
+
+        $vz = $request->validate([
+            'year_start'      =>     'required',
+            'year_end'        =>     'required'
+
+        ]);
+
+        $year                  =         new AcademicYear();
+        $year->year_start       =         $request->input('year_start');
+        $year->year_end        =         $request->input('year_end');
+        $year->status          =         0;
+        $year->save();
+
+        return redirect()->route('courses.academicYear')->with('success','Academic Year Created successfuly');
+
+    }
+
+    public function destroyYear($id)
+    {
+        $data      =    AcademicYear::find($id);
+        $data->delete();
+
+        return redirect()->route('courses.academicYear');
+    }
+
+    public function showSemester($id){
+
+        $intakes   =   Intake::find($id)->where('academic_year_id',$id)->get();
+
+        return view('registrar::academicYear.showSemester')->with('intakes',$intakes);
+    }
 
     /**
      * Show the form for a new Intake Information.
@@ -385,10 +487,11 @@ class CoursesController extends Controller
      */
     public function addIntake()
     {
+        $years  = AcademicYear::all();
         $data          =      Intake::all();
         $courses       =      Courses::all();
 
-        return view('registrar::intake.addIntake')->with(['data'=>$data,'courses'=>$courses]);
+        return view('registrar::intake.addIntake')->with(['data'=>$data,'years'=>$years,'courses'=>$courses]);
     }
 
     public function editstatusIntake($id)
@@ -459,26 +562,22 @@ class CoursesController extends Controller
     public function storeIntake(Request $request)    {
 
         $vz = $request->validate([
-            'course'                =>     'required',
+            'year'                =>     'required',
             'intake_name_from'      =>     'required',
             'intake_name_to'        =>     'required'
 
         ]);
 
         $intake                  =         new Intake;
+        $intake->academic_year_id   =      $request->input('year');
         $intake->intake_from     =         $request->input('intake_name_from');
         $intake->intake_to       =         $request->input('intake_name_to');
         $intake->status          =         0;
         $intake->save();
 
-        foreach($request->input('course') as $course_id){
-            $intakes              =          new AvailableCourse;
-            $intakes->course_id   =          $course_id;
-            $intakes->intake_id   =          $intake->id;
-            $intakes->save();
-        }
+        
 
-        return redirect()->route('courses.showIntake')->with('success','Intake Created successfuly');
+        return redirect()->route('courses.showSemester')->with('success','Intake Created successfuly');
     }
 
     public function showIntake()
@@ -800,30 +899,50 @@ class CoursesController extends Controller
     }
 
     public function editCourse($id){
-        // $campuses           =          Campus::all();
+        $campuses          =      Campus::all();
         $schools            =          School::all();
         $departments        =          Department::all();
         $data               =          Courses::find($id);
+        $group           =      \Modules\Registrar\Entities\Group::all();
 
-        return view('registrar::course.editCourse')->with(['data'=>$data,'schools'=>$schools,'departments'=>$departments]);
+        return view('registrar::course.editCourse')->with(['campus'=>$campuses,'groups'=>$group, 'data'=>$data,'schools'=>$schools,'departments'=>$departments]);
     }
 
     public function updateCourse(Request $request, $id){
 
         $data                      =    Courses::find($id);
+        
 
         $data->course_name         =    $request->input('course_name');
         // $data->campus_id           =    $request->input('campus');
         $data->department_id       =    $request->input('department');
         $data->level               =    $request->input('level');
         $data->course_code         =    $request->input('course_code');
-        $data->course_duration     =    $request->input('course_duration');
-        $data->course_requirements =    $request->input('course_requirements');
-        $data->subject1            =    $request->input('subject1');
-        $data->subject2            =    $request->input('subject2');
-        $data->subject3            =    $request->input('subject3');
-        $data->subject4            =    $request->input('subject4');
+     
         $data->update();
+
+
+
+        $req  =    CourseRequirement::where('course_id', $id)->first();
+
+        $req->course_duration   =  $request->input('course_duration');
+        $req->course_requirements   =  $request->input('course_requirements');
+        if($request->level  == 1) {
+            $req->fee  = '500';
+        }elseif($request->level  == 2) {
+            $req->fee  = '500';
+        }elseif($request->level  == 3){
+            $req->fee  = '1000';
+        }else{
+            $req->fee  = '1500';
+        }
+
+        $req->subject1   =  $request->input('subject');
+        $req->subject2   =  $request->input('subject1');
+        $req->subject3   =  $request->input('subject2');
+        $req->subject4   =  $request->input('subject3');
+        $req->save();
+
 
         return redirect()->route('courses.showCourse')->with('status','Data Updated Successfully');
 

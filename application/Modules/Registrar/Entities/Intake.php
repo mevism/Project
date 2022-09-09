@@ -25,6 +25,12 @@ class Intake extends Model
         return $this->hasOne(KuccpsApplication::class, 'id');
     }
 
+    //rlship between an intake and academic year
+    public function academicYear(){
+
+        return $this->belongsTo(AcademicYear::class, 'academic_year_id');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Courses\Database\factories\IntakeFactory::new();

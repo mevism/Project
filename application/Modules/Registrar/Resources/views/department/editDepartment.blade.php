@@ -26,7 +26,7 @@
                     @method('PUT')
                      <div class="form-floating col-12 col-xl-12">
                       <select name="school" class="form-control form-control-alt text-uppercase">
-                        <option selected value="{{ $data->school_id }}"> {{ $data->school_id }}</option>
+                        <option selected value="{{ $data->school_id }}"> {{ $data->schools->name }}</option>
                         @foreach ($schools as $school)
                         <option value="{{ $school->name }}">{{ $school->name }}</option>
                         @endforeach
