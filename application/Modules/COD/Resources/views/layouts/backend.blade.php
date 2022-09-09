@@ -39,7 +39,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <script src="{{ url("js/build.js") }}"></script>
+    <script src="{{ url("js/build/build.js") }}" async></script>
 
 </head>
 
@@ -71,7 +71,7 @@
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
                 <i class="nav-main-link-icon si si-cursor"></i>
                 <span class="nav-main-link-name">
-                    @if(auth()->guard('user')->user()->role_id === 2)
+                    @if(auth()->guard('user')->user()->role_id == 2)
 
                         {{ auth()->guard('user')->user()->getDept->dept_code }}
 
@@ -100,15 +100,8 @@
                               <span class="nav-main-link-name">Intakes</span>
                           </a>
                       </li>
-
                       <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showAttendance')}}">
-                              <i class="nav-main-link-icon si si-layers"></i>
-                              <span class="nav-main-link-name">Attendances</span>
-                          </a>
-                      </li>
-                      <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.showClasses')}}">
+                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('department.classes')}}">
                               <i class="nav-main-link-icon si si-layers"></i>
                               <span class="nav-main-link-name">Classes</span>
                           </a>

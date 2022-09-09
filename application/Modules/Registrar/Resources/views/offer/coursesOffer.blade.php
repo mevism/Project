@@ -46,7 +46,7 @@
                         <th>Course name</th>
                         <th>Intake</th>
                         <th>Duration</th>
-                        <th>Action</th>
+{{--                        <th>Action</th>--}}
                     </thead>
                     <tbody>
                     @foreach($courses as $course)
@@ -57,7 +57,7 @@
                                 <td> {{ $item->mainCourses->course_name }}</td>
                                 <td nowrap=""> {{ Carbon\carbon::parse($item->openCourse->intake_from)->format('M')}} - {{ Carbon\carbon::parse($item->openCourse->intake_to)->format('M Y') }}</td>
                                 <td> {{ $item->mainCourses->courseRequirements->course_duration }}</td>
-                                <td nowrap=""> <a class="btn btn-sm btn-alt-danger" href="{{ route('courses.destroyCoursesAvailable', $item->id) }}">delete </a> </td>
+{{--                                <td nowrap=""> <a class="btn btn-sm btn-alt-danger" href="{{ route('courses.destroyCoursesAvailable', $item->id) }}">delete </a> </td>--}}
                             </tr>
                         @endforeach
                     @endforeach

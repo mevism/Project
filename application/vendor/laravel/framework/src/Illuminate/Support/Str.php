@@ -218,16 +218,12 @@ class Str
      * Determine if a given string contains a given substring.
      *
      * @param  string  $haystack
-     * @param  string|string[]|Enumerable<array-key, string>  $needles
+     * @param  string|string[]  $needles
      * @param  bool  $ignoreCase
      * @return bool
      */
     public static function contains($haystack, $needles, $ignoreCase = false)
     {
-        if ($needles instanceof Enumerable) {
-            $needles = $needles->toArray();
-        }
-
         if ($ignoreCase) {
             $haystack = mb_strtolower($haystack);
             $needles = array_map('mb_strtolower', (array) $needles);
@@ -246,16 +242,12 @@ class Str
      * Determine if a given string contains all array values.
      *
      * @param  string  $haystack
-     * @param  string[]|Enumerable<array-key, string>  $needles
+     * @param  string[]  $needles
      * @param  bool  $ignoreCase
      * @return bool
      */
-    public static function containsAll($haystack, $needles, $ignoreCase = false)
+    public static function containsAll($haystack, array $needles, $ignoreCase = false)
     {
-        if ($needles instanceof Enumerable) {
-            $needles = $needles->toArray();
-        }
-
         if ($ignoreCase) {
             $haystack = mb_strtolower($haystack);
             $needles = array_map('mb_strtolower', $needles);
@@ -274,7 +266,7 @@ class Str
      * Determine if a given string ends with a given substring.
      *
      * @param  string  $haystack
-     * @param  string|string[]|Enumerable<array-key, string>  $needles
+     * @param  string|string[]  $needles
      * @return bool
      */
     public static function endsWith($haystack, $needles)
@@ -789,16 +781,12 @@ class Str
      * Replace a given value in the string sequentially with an array.
      *
      * @param  string  $search
-     * @param  string[]|Enumerable<array-key, string>  $replace
+     * @param  array<int|string, string>  $replace
      * @param  string  $subject
      * @return string
      */
-    public static function replaceArray($search, $replace, $subject)
+    public static function replaceArray($search, array $replace, $subject)
     {
-        if ($replace instanceof Enumerable) {
-            $replace = $replace->toArray();
-        }
-
         $segments = explode($search, $subject);
 
         $result = array_shift($segments);
@@ -813,25 +801,13 @@ class Str
     /**
      * Replace the given value in the given string.
      *
-     * @param  string|string[]|Enumerable<array-key, string>  $search
-     * @param  string|string[]|Enumerable<array-key, string>  $replace
-     * @param  string|string[]|Enumerable<array-key, string>  $subject
+     * @param  string|string[]  $search
+     * @param  string|string[]  $replace
+     * @param  string|string[]  $subject
      * @return string
      */
     public static function replace($search, $replace, $subject)
     {
-        if ($search instanceof Enumerable) {
-            $search = $search->toArray();
-        }
-
-        if ($replace instanceof Enumerable) {
-            $replace = $replace->toArray();
-        }
-
-        if ($subject instanceof Enumerable) {
-            $subject = $subject->toArray();
-        }
-
         return str_replace($search, $replace, $subject);
     }
 
@@ -886,17 +862,13 @@ class Str
     /**
      * Remove any occurrence of the given string in the subject.
      *
-     * @param  string|string[]|Enumerable<array-key, string>  $search
+     * @param  string|array<string>  $search
      * @param  string  $subject
      * @param  bool  $caseSensitive
      * @return string
      */
     public static function remove($search, $subject, $caseSensitive = true)
     {
-        if ($search instanceof Enumerable) {
-            $search = $search->toArray();
-        }
-
         $subject = $caseSensitive
                     ? str_replace($search, '', $subject)
                     : str_ireplace($search, '', $subject);
@@ -1049,7 +1021,7 @@ class Str
      * Determine if a given string starts with a given substring.
      *
      * @param  string  $haystack
-     * @param  string|string[]|Enumerable<array-key, string>  $needles
+     * @param  string|string[]  $needles
      * @return bool
      */
     public static function startsWith($haystack, $needles)
@@ -1285,11 +1257,9 @@ class Str
         Str::createUuidsUsing(fn () => $uuid);
 
         if ($callback !== null) {
-            try {
-                $callback($uuid);
-            } finally {
-                Str::createUuidsNormally();
-            }
+            $callback($uuid);
+
+            Str::createUuidsNormally();
         }
 
         return $uuid;

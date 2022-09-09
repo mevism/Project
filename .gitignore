@@ -4,3 +4,4 @@ receipts
 application/node_modules
 application/.env
 application/vendor
+node_modules

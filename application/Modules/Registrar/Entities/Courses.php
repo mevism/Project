@@ -25,12 +25,8 @@ class Courses extends Model
 
     public function onOffer(){
 
-        return $this->hasMany(AvailableCourse::class, 'id');
+        return $this->hasMany(AvailableCourse::class);
 
-    }
-    public function availablecourse(){
-
-        return $this->hasOne(AvailableCourse::class, 'id');
     }
 
 //    relationship between a course and an application
@@ -64,7 +60,7 @@ class Courses extends Model
         return \Modules\Courses\Database\factories\CoursesFactory::new();
     }
 
-//    public function intakes(){
-//        $this->belongsTo(Intake::class, 'id');
-//    }
+    public function Classes(){
+        return $this->hasOne(Classes::class, 'id');
+    }
 }

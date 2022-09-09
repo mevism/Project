@@ -810,21 +810,17 @@ class Validator implements ValidatorContract
         }
 
         if (! $rule->passes($attribute, $value)) {
-            $ruleClass = $rule instanceof InvokableValidationRule ?
-                get_class($rule->invokable()) :
-                get_class($rule);
+            $this->failedRules[$attribute][get_class($rule)] = [];
 
-            $this->failedRules[$attribute][$ruleClass] = [];
+            $messages = $this->getFromLocalArray($attribute, get_class($rule)) ?? $rule->message();
 
-            $messages = $this->getFromLocalArray($attribute, $ruleClass) ?? $rule->message();
-
-            $messages = $messages ? (array) $messages : [$ruleClass];
+            $messages = $messages ? (array) $messages : [get_class($rule)];
 
             foreach ($messages as $key => $message) {
                 $key = is_string($key) ? $key : $attribute;
 
                 $this->messages->add($key, $this->makeReplacements(
-                    $message, $key, $ruleClass, []
+                    $message, $key, get_class($rule), []
                 ));
             }
         }

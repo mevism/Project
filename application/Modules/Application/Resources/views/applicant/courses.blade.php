@@ -49,7 +49,7 @@
         @foreach($courses as $course)
             @foreach($course as $item)
 
-{{--                @dd($item)--}}
+{{--                {{ $item->mainCourses }}--}}
                 <tr>
                     <td> {{ $item->mainCourses->course_name }}</td>
                     <td> {{ $item->mainCourses->getCourseDept->name }}</td>

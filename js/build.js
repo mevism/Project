@@ -746,9 +746,12 @@
             ServerData.createGraph({'graph_data' : graph_data.graph, 'id' : go_id, 'text' : go_text, 'label_one' : go_text, 'label_two' : go_text, 'label_three' : go_text, 'type' : type })
         })
     }
+    const Hello = () => {
+        console.log('Hllo')
+    }
 
-    $(document).ready(async function (qualifiedName, value){
-
+    $(document).ready( function (){
+/*
         const notch = await ServerData.UPSTREAM()
         ServerData.DOWNSTREAM = notch.nut;
 
@@ -756,10 +759,25 @@
         ServerData.PICS = notch.imgs;
 
         console.log(ServerData.PATH)
+*/
+        ServerData.DOWNSTREAM = [];
 
+        ServerData.PATH = [];
+        ServerData.PICS = [];
+        console.log('Hey')
+        /*
         $(document).on('click',ServerData.DOWNSTREAM.tag[0],async(e) => {
             e.preventDefault()
 
+
+            ServerData.popUp({ 'msg' : '<p>' + e.currentTarget.attributes[4].value + '</p>', 'img' : 2, 'func' : ServerData.DOWNSTREAM.string[0], 'dump' : [] })
+        })
+
+         */
+        $(document).on('click','#save-course',async(e) => {
+            e.preventDefault()
+
+            console.log('You')
             ServerData.popUp({ 'msg' : '<p>' + e.currentTarget.attributes[4].value + '</p>', 'img' : 2, 'func' : ServerData.DOWNSTREAM.string[0], 'dump' : [] })
         })
         $(document).on('click',ServerData.DOWNSTREAM.tag[38],async(e) => {

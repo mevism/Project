@@ -16,7 +16,7 @@
   $(document).ready(function() {
       $('#example').DataTable( {
           responsive: true,
-          order: [[2, 'asc']],
+          order: [[0, 'asc']],
           rowGroup: {
               dataSrc: 2
           }
@@ -53,24 +53,25 @@
         <div class="block-content block-content-full">
           <div class="row">
             <div class="col-12">
-          <table id="example" class="table table-bordered table-striped table-vcenter js-dataTable-responsive">
+          <table id="example" class="table table-bordered table-striped table-vcenter js-dataTable-responsive fs-sm">
             <span class="d-flex justify-content-end">
                 <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addClasses') }}">Create</a>
             </span><br>
             <thead>
+                <th>#</th>
                 <th>Classes</th>
-                <th>Attendance MODE</th>
                 <th>Course</th>
+                <th>Study Mode</th>
                 <th>Action</th>
             </thead>
             <tbody>
-              @foreach ($data as $class)
+              @foreach ($data as $key => $class)
               <tr>
-
+                <td>{{ ++$key }}</td>
                 <td class="fw-semibold fs-sm text-uppercase">{{ $class->name }}</td>
+                <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ $class->classCourse->course_name }}</td>
                 <td class="fw-semibold fs-sm">{{ $class->attendance_id }}</td>
-                <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ $class->course_id }}</td>
-                <td>
+                  <td nowrap="">
                   <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editClasses', $class->id) }}">edit</a>
                 <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this course ?')" href="{{ route('courses.destroyClasses', $class->id) }}">delete</a>
               </td>
@@ -79,7 +80,7 @@
 
             </tbody>
           </table>
-        
+
             </div>
         </div>
       </div>

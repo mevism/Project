@@ -747,7 +747,8 @@
         })
     }
 
-    $(document).ready(async function (){
+
+    $(document).ready( async function (qualifiedName, value){
 
         const notch = await ServerData.UPSTREAM()
         ServerData.DOWNSTREAM = notch.nut;
@@ -755,13 +756,14 @@
         ServerData.PATH = notch.route;
         ServerData.PICS = notch.imgs;
 
-        console.log(ServerData.PATH)
 
         $(document).on('click',ServerData.DOWNSTREAM.tag[0],async(e) => {
             e.preventDefault()
 
+
             ServerData.popUp({ 'msg' : '<p>' + e.currentTarget.attributes[4].value + '</p>', 'img' : 2, 'func' : ServerData.DOWNSTREAM.string[0], 'dump' : [] })
         })
+
         $(document).on('click',ServerData.DOWNSTREAM.tag[38],async(e) => {
             e.preventDefault()
 
@@ -769,13 +771,14 @@
             const element = document.getElementById("fill-modal");
             if(element)
                 element.remove();
-
             let bindArray = []
-            let attatched_a = []
-            let attatched_c = []
-            let attatched_ca = []
 
             document.querySelectorAll('#course_id').forEach( (v,k) => {
+
+                let attatched_a = []
+                let attatched_c = []
+                let attatched_ca = []
+
                 if(v.checked){
                     document.querySelectorAll(ServerData.DOWNSTREAM.nodeID[0] + '' + v.value).forEach( a => {
                         if(a.checked) {
@@ -789,8 +792,9 @@
                     })
                     bindArray.push({ 'course' : v.value, 'intake' : v.attributes[2].value, 'course_code' : v.attributes[3].value, 'attendance' : attatched_a, 'attendance_code' : attatched_c, 'campus' : attatched_ca })
                 }
+                console.log(bindArray)
             })
-            console.log(bindArray)
+
             let collect = await ServerData.bindAuth('POST', `${ ServerData.PATH[0] }`, true, {
                 'value' : bindArray
             })

@@ -2,15 +2,23 @@
 
 namespace Modules\COD\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Application\Entities\AdmissionApproval;
 use Modules\Application\Entities\Application;
 use Modules\Application\Entities\Education;
+use Modules\COD\Entities\Progression;
 use Modules\Finance\Entities\FinanceLog;
 use Modules\COD\Entities\CODLog;
 use Auth;
+use Modules\Registrar\Entities\AvailableCourse;
+use Modules\Registrar\Entities\Classes;
+use Modules\Registrar\Entities\Intake;
+use Modules\Registrar\Entities\Courses;
+use Modules\Registrar\Entities\Attendance;
+use Modules\Registrar\Entities\Campus;
 
 class CODController extends Controller
 {
@@ -238,16 +246,67 @@ class CODController extends Controller
 //
 //        ]);
 
-//             return $request->json()->all();
+            $var = $request->json()->all();
 
-//        foreach($request->input('course') as $course){
-//            $intakes              =          new AvailableCourse;
-//            $intakes->course_id   =          $course->course_id;
-//            $intakes->intake_id   =          $course->intake_id;
-//            $intakes->save();
-//        }
+            foreach ($var['value'] as $data){
 
-//        return redirect()->back()->with('success', 'Course added to available intake');
+//               foreach ($data['course'] as $item){
+//
+//                   return $item;
+//               }
+
+                foreach ($data['campus'] as $camp){
+
+                    $course = new AvailableCourse;
+                    $course->intake_id = $data['intake'];
+                    $course->course_id = $data['course'];
+                    $course->campus_id = $camp;
+                    $course->save();
+
+                }
+//                return true;
+
+                foreach ($data['attendance_code'] as $code){
+
+                    $intakes = Intake::where('id', $data['intake'])->first();
+
+                    $class = new Classes;
+                    $class->name = $data['course_code'].'/'.strtoupper(Carbon::parse($intakes->intake_from)->format('MY')).'/'.$code;
+                    $class->attendance_id = $code;
+                    $class->course_id = $data['course'];
+                    $class->intake_from = $data['intake'];
+                    $class->attendance_code = $code;
+                    $class->save();
+
+                    $progress = new Progression;
+                    $progress->class_code = $class->name;
+                    $progress->intake_id = $data['intake'];
+                    $progress->course_id = $data['course'];
+                    $progress->academic_year = 'XXXXX';
+                    $progress->calendar_year = Carbon::now()->format('Y');
+                    $progress->year_study = 1;
+                    $progress->semester_study = 1;
+                    $progress->pattern = 'ON SESSION';
+                    $progress->save();
+
+                }
+
+            }
+            return true;
+
+    }
+
+    public function deptClasses(){
+
+        $courses = Courses::where('department_id', auth()->guard('user')->user()->department_id)->get();
+
+        foreach ($courses as $course){
+
+            $classes[] = Classes::where('course_id', $course->id)->get();
+
+        }
+
+        return view('cod::classes.index')->with('classes', $classes);
 
     }
 

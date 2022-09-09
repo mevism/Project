@@ -105,7 +105,7 @@ class WithoutOverlapping
     /**
      * Set the maximum number of seconds that can elapse before the lock is released.
      *
-     * @param  \DateTimeInterface|\DateInterval|int  $expiresAfter
+     * @param  \DateTimeInterface|int  $expiresAfter
      * @return $this
      */
     public function expireAfter($expiresAfter)

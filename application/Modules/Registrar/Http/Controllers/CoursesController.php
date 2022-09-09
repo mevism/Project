@@ -463,20 +463,11 @@ class CoursesController extends Controller
 
         ]);
 
-        return $request->all();
-
         $intake                  =         new Intake;
         $intake->intake_from     =         $request->input('intake_name_from');
         $intake->intake_to       =         $request->input('intake_name_to');
         $intake->status          =         0;
         $intake->save();
-
-//        foreach($request->input('course') as $course_id){
-//            $intakes              =          new AvailableCourse;
-//            $intakes->course_id   =          $course_id;
-//            $intakes->intake_id   =          $intake->id;
-//            $intakes->save();
-//        }
 
         return redirect()->route('courses.showIntake')->with('success','Intake Created successfuly');
     }

@@ -175,13 +175,6 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
     protected static $lazyLoadingViolationCallback;
 
     /**
-     * Indicates if an exception should be thrown instead of silently discarding non-fillable attributes.
-     *
-     * @var bool
-     */
-    protected static $modelsShouldPreventSilentlyDiscardingAttributes = false;
-
-    /**
      * Indicates if broadcasting is currently enabled.
      *
      * @var bool
@@ -400,17 +393,6 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
     }
 
     /**
-     * Prevent non-fillable attributes from being silently discarded.
-     *
-     * @param  bool  $value
-     * @return void
-     */
-    public static function preventSilentlyDiscardingAttributes($value = true)
-    {
-        static::$modelsShouldPreventSilentlyDiscardingAttributes = $value;
-    }
-
-    /**
      * Execute a callback without broadcasting any model events for all model types.
      *
      * @param  callable  $callback
@@ -447,7 +429,7 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
             // the model, and all others will just get ignored for security reasons.
             if ($this->isFillable($key)) {
                 $this->setAttribute($key, $value);
-            } elseif ($totallyGuarded || static::preventsSilentlyDiscardingAttributes()) {
+            } elseif ($totallyGuarded) {
                 throw new MassAssignmentException(sprintf(
                     'Add [%s] to fillable property to allow mass assignment on [%s].',
                     $key, get_class($this)
@@ -2077,16 +2059,6 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
     public static function preventsLazyLoading()
     {
         return static::$modelsShouldPreventLazyLoading;
-    }
-
-    /**
-     * Determine if discarding guarded attribute fills is disabled.
-     *
-     * @return bool
-     */
-    public static function preventsSilentlyDiscardingAttributes()
-    {
-        return static::$modelsShouldPreventSilentlyDiscardingAttributes;
     }
 
     /**

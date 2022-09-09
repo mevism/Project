@@ -43,5 +43,8 @@ Route::prefix('department')->group(function() {
         Route::get('/intakes/addCourse/{id}', [CODController::class, 'intakeCourses'])->name('department.intakeCourses');
         Route::post('/intakes/addAvailableCourses', [CODController::class, 'addAvailableCourses'])->name('department.addAvailableCourses');
 
+
+        Route::get('/getClasses', [CODController::class, 'deptClasses'])->name('department.classes');
+
     });
 });

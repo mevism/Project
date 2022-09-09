@@ -30,7 +30,7 @@ class AvailableCourse extends Model
         return $this->belongsTo(Department::class);
 
     }
-    
+
 //    available course vs courses
 
     public function mainCourses(){

@@ -1544,7 +1544,6 @@
         },
         {
             "name": "laravel/framework",
-<<<<<<< HEAD
             "version": "v9.27.0",
             "version_normalized": "9.27.0.0",
             "source": {
@@ -1556,19 +1555,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/framework/zipball/27572f45120fd3977d92651a71d8c711a9aaa790",
                 "reference": "27572f45120fd3977d92651a71d8c711a9aaa790",
-=======
-            "version": "v9.28.0",
-            "version_normalized": "9.28.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laravel/framework.git",
-                "reference": "396a89e1f3654123d1c7f56306051212e5c75bc0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/396a89e1f3654123d1c7f56306051212e5c75bc0",
-                "reference": "396a89e1f3654123d1c7f56306051212e5c75bc0",
->>>>>>> 011c3dfa700ff8ff99cb216ec7544e0646e749be
                 "shasum": ""
             },
             "require": {
@@ -1693,11 +1679,7 @@
                 "symfony/postmark-mailer": "Required to enable support for the Postmark mail transport (^6.0).",
                 "symfony/psr-http-message-bridge": "Required to use PSR-7 bridging features (^2.0)."
             },
-<<<<<<< HEAD
             "time": "2022-08-30T13:34:43+00:00",
-=======
-            "time": "2022-09-06T14:57:01+00:00",
->>>>>>> 011c3dfa700ff8ff99cb216ec7544e0646e749be
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1745,7 +1727,6 @@
         },
         {
             "name": "laravel/sail",
-<<<<<<< HEAD
             "version": "v1.15.4",
             "version_normalized": "1.15.4.0",
             "source": {
@@ -1757,19 +1738,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/sail/zipball/853dea1fa866a52a93beccc4e5affdc49b98e7d5",
                 "reference": "853dea1fa866a52a93beccc4e5affdc49b98e7d5",
-=======
-            "version": "v1.16.0",
-            "version_normalized": "1.16.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laravel/sail.git",
-                "reference": "73030c18b769f27e6f6aacf7848d024fa9a55560"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laravel/sail/zipball/73030c18b769f27e6f6aacf7848d024fa9a55560",
-                "reference": "73030c18b769f27e6f6aacf7848d024fa9a55560",
->>>>>>> 011c3dfa700ff8ff99cb216ec7544e0646e749be
                 "shasum": ""
             },
             "require": {
@@ -1778,11 +1746,7 @@
                 "illuminate/support": "^8.0|^9.0",
                 "php": "^7.3|^8.0"
             },
-<<<<<<< HEAD
             "time": "2022-08-17T13:17:15+00:00",
-=======
-            "time": "2022-08-31T16:38:14+00:00",
->>>>>>> 011c3dfa700ff8ff99cb216ec7544e0646e749be
             "bin": [
                 "bin/sail"
             ],
