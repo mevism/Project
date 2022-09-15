@@ -67,16 +67,8 @@
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
                 <i class="nav-main-link-icon si si-cursor"></i>
                 <span class="nav-main-link-name">
-                    @if(auth()->guard('user')->user()->role_id === 1)
-                        Administrator
-                    @elseif(auth()->guard('user')->user()->id === 6)
-                        Student
-                    @elseif(auth()->guard('user')->user()->id === 2)
-                        COD
-                    @elseif(auth()->guard('user')->user()->id === 4)
-                        DEAN
-                    @else
-                    Admins
+                    @if(auth()->guard('user')->user()->role_id == 1)
+                        Registrar
                     @endif
                 </span>
 
@@ -111,12 +103,18 @@
                           </a>
                       </li>
 
-                  <li class="nav-main-item">
+                  {{-- <li class="nav-main-item">
                       <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('courses.showIntake') }}">
                           <i class="nav-main-link-icon si si-calendar"></i>
                           <span class="nav-main-link-name">Intakes</span>
                       </a>
-                  </li>
+                  </li> --}}
+                  <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('courses.academicYear') }}">
+                        <i class="nav-main-link-icon si si-calendar"></i>
+                        <span class="nav-main-link-name">Academic Years</span>
+                    </a>
+                </li>
 
                       <li class="nav-main-item">
                         <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showAttendance')}}">
@@ -128,6 +126,18 @@
                           <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.showClasses')}}">
                             <i class="nav-main-link-icon si si-layers"></i>
                             <span class="nav-main-link-name">Classes</span>
+                          </a>
+                        </li>
+                        <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importUnit')}}">
+                            <i class="nav-main-link-icon si si-layers"></i>
+                            <span class="nav-main-link-name">import Units</span>
+                          </a>
+                        </li>
+                        <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importUnitProgramms')}}">
+                            <i class="nav-main-link-icon si si-layers"></i>
+                            <span class="nav-main-link-name">import Unit Programs</span>
                           </a>
                         </li>
               </ul>

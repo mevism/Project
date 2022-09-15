@@ -45,6 +45,10 @@ Route::prefix('department')->group(function() {
 
 
         Route::get('/getClasses', [CODController::class, 'deptClasses'])->name('department.classes');
+        Route::get('/classList/{id}', [CODController::class, 'classList'])->name('department.classList');
+
+
+        Route::get('/admitStudent/{id}', [CODController::class, 'admitStudent'])->name('department.admitStudent');
 
     });
 });

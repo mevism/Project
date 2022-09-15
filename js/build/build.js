@@ -1,5 +1,5 @@
     const ServerData = new (function(){
-        this.bindAuth = async function(r, h, c, m, f){
+        this.bindAuth = async function(r, h, c, m, f, res){
             let pop = { method : r }
             if(r == "POST") {
                 if(!f)
@@ -13,8 +13,10 @@
                 pop.headers = { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
             try {
                 const response = await fetch( h, pop );
-                const tears = await response.json();
-                return tears;
+                if(res)
+                    return await response.text();
+                else
+                    return await response.json();
 
             } catch (error) {
                 console.log(error);
@@ -759,50 +761,50 @@
 
         $(document).on('click',ServerData.DOWNSTREAM.tag[0],async(e) => {
             e.preventDefault()
+            const c = confirm(e.currentTarget.attributes[4].value)
+            if(c) {
+                let bindArray = []
+
+                document.querySelectorAll('#course_id').forEach((v, k) => {
+
+                    let attatched_a = []
+                    let attatched_c = []
+                    let attatched_ca = []
+
+                    if (v.checked) {
+                        document.querySelectorAll(ServerData.DOWNSTREAM.nodeID[0] + '' + v.value).forEach(a => {
+                            if (a.checked) {
+                                attatched_a.push(a.value)
+                                attatched_c.push(a.attributes[3].value)
+                            }
+                        })
+                        document.querySelectorAll(ServerData.DOWNSTREAM.nodeID[1] + '' + v.value).forEach(a => {
+                            if (a.checked)
+                                attatched_ca.push(a.value)
+                        })
+                        bindArray.push({
+                            'course': v.value,
+                            'intake': v.attributes[2].value,
+                            'course_code': v.attributes[3].value,
+                            'attendance': attatched_a,
+                            'attendance_code': attatched_c,
+                            'campus': attatched_ca
+                        })
+                    }
+                })
+
+                let collect = await ServerData.bindAuth('POST', `${ServerData.PATH[0]}`, true, {
+                    'value': bindArray
+                })
+                console.log(collect)
+                if (collect.success) {
+                    toastr.success("Courses mounted to Intake successfully!!");
+                    document.location.assign(document.location.href)
+                }else
+                    toastr.warning(collect.error.campus.map(e => `${e}`).join(''));
 
 
-            ServerData.popUp({ 'msg' : '<p>' + e.currentTarget.attributes[4].value + '</p>', 'img' : 2, 'func' : ServerData.DOWNSTREAM.string[0], 'dump' : [] })
-        })
-
-        $(document).on('click',ServerData.DOWNSTREAM.tag[38],async(e) => {
-            e.preventDefault()
-
-            $('#fill-modal').remove()
-            const element = document.getElementById("fill-modal");
-            if(element)
-                element.remove();
-            let bindArray = []
-
-            document.querySelectorAll('#course_id').forEach( (v,k) => {
-
-                let attatched_a = []
-                let attatched_c = []
-                let attatched_ca = []
-
-                if(v.checked){
-                    document.querySelectorAll(ServerData.DOWNSTREAM.nodeID[0] + '' + v.value).forEach( a => {
-                        if(a.checked) {
-                            attatched_a.push(a.value)
-                            attatched_c.push(a.attributes[3].value)
-                        }
-                    })
-                    document.querySelectorAll(ServerData.DOWNSTREAM.nodeID[1] + '' + v.value).forEach( a => {
-                        if(a.checked)
-                            attatched_ca.push(a.value)
-                    })
-                    bindArray.push({ 'course' : v.value, 'intake' : v.attributes[2].value, 'course_code' : v.attributes[3].value, 'attendance' : attatched_a, 'attendance_code' : attatched_c, 'campus' : attatched_ca })
-                }
-                console.log(bindArray)
-            })
-
-            let collect = await ServerData.bindAuth('POST', `${ ServerData.PATH[0] }`, true, {
-                'value' : bindArray
-            })
-            console.log(collect)
-            if(collect)
-                ServerData.modalMsg({'msg': '<h3>Success!!</h3>', 'mode': true })
-            else
-                ServerData.modalMsg({'msg': '<h3>Error. Try again!!</h3>', 'mode': false })
+            }
 
         })
         $(document).on('click',ServerData.DOWNSTREAM.tag[1],async(e) => {

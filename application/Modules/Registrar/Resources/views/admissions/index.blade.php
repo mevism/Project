@@ -47,11 +47,11 @@
                             @foreach($admission as $app)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td nowrap=""> {{ $app->admissions->applicant->sname }} {{ $app->admissions->applicant->fname }} {{ $app->admissions->applicant->mname }} </td>
-                                    <td> {{ $app->admissions->courses->getCourseDept->name }}</td>
-                                    <td> {{ $app->admissions->courses->course_name }}</td>
+                                    <td nowrap=""> {{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->fname }} {{ $app->appApprovals->applicant->mname }} </td>
+                                    <td> {{ $app->appApprovals->courses->getCourseDept->name }}</td>
+                                    <td> {{ $app->appApprovals->courses->course_name }}</td>
                                     <td>
-                                        @if($app->admissions->applicant->student_type === 1)
+                                        @if($app->appApprovals->applicant->student_type === 1)
                                             S-PT
                                         @else
                                             J-FT
@@ -88,7 +88,7 @@
                                                     <div class="modal-content">
                                                         <div class="block block-rounded block-transparent mb-0">
                                                             <div class="block-header block-header-default">
-                                                                <h3 class="block-title">Reason(s) </h3>
+                                                                <h3 class="block-title">Reason(s) for rejecting {{ $app->appApprovals->applicant->sname }}'s admission </h3>
                                                                 <div class="block-options">
                                                                     <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                                                                         <i class="fa fa-fw fa-times"></i>
@@ -96,7 +96,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="block-content fs-sm">
-                                                                <form action="{{ route('medical.rejectAdmission', $app->id) }}" method="post">
+                                                                <form action="{{ route('courses.rejectAdmissions', $app->id) }}" method="post">
                                                                     @csrf
                                                                     <div class="row col-md-12 mb-3">
                                                                         <textarea class="form-control" placeholder="Write down the reasons for declining this application" name="comment" required></textarea>

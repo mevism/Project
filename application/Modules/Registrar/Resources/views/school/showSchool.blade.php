@@ -56,12 +56,14 @@
                             <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addSchool') }}">Create</a>
                         </span><br>
                         <thead>
+                            <th></th>
                             <th>School Code</th>
                             <th>School NAME </th>
                             <th>Action</th>
                         </thead>
                         <tbody>@foreach ($data as $school)
                         <tr>
+                            <td>{{ $loop->iteration }}</td>
                             <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ $school->initials }}</td>
                             <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ $school->name }}</td>
                             <td> 

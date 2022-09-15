@@ -7,20 +7,11 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <div class="flex-grow-1">
-                    <h5 class="h5 fw-bold mb-0">
-                        Data Import
+                    <h5 class="h5 fw-bold mb-0" style="text-align: center">
+                       IMPORT KUCCPS STUDENTS
                     </h5>
                 </div>
-                <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
-                        <li class="breadcrumb-item">
-                            <a class="link-fx" href="javascript:void(0)">Data Import</a>
-                        </li>
-                        <li class="breadcrumb-item" aria-current="page" >
-                            Data Import
-                        </li>
-                    </ol>
-                </nav>
+             
             </div>
         </div>
     </div>
@@ -28,7 +19,7 @@
     <div class="content">
     <div  style="margin-left:20%;" class="block block-rounded col-md-9 col-lg-8 col-xl-6">
         <div class="block-header block-header-default">
-            <h3 class="block-title">Import </h3>
+            <h3 class="block-title" style="text-align: center">Import </h3>
           </div>
     <div class="block block-rounded">
         <div class="block-content block-content-full">
@@ -53,14 +44,11 @@
                          <label class="mb-2 fw-bold">File Import</label>
                          <input type="file" name="excel_file" class="form-control">
                     </div>
-
+                    <br>
                     <div class="col-12 col-xl-12">
                          <button type="submit" class="btn btn-alt-success mb-3">Import </button>
                     </div>
-                    {{-- <div>
-                        <a class="btn btn-alt-info" href="{{ route('courses.exportkuccps') }}">Download </a>
-
-                    </div> --}}
+                  
 
                 </form>
                     @else

@@ -24,6 +24,11 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
     Route::post('/rejectApplication/{id}', 'CoursesController@rejectApplication')->name('courses.rejectApplication');
 
 
+    Route::get('/importUnitProgramms','CoursesController@importUnitProgramms')->name('courses.importUnitProgramms');
+    Route::post('/importUnitProgramms','CoursesController@importUnitProg')->name('courses.importUnitProg');
+
+    Route::get('/importUnit','CoursesController@importUnit')->name('courses.importUnit');
+    Route::post('/importUnit','CoursesController@importUnits')->name('courses.importUnits');
 
     // Route::get('/offer', 'CoursesController@offer')->name('courses.offer');registrar
     // Route::get('/profile', 'CoursesController@profile')->name('courses.profile');
@@ -51,6 +56,13 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
     Route::get('/editstatusIntake/{id}', 'CoursesController@editstatusIntake')->name('courses.editstatusIntake');
 
 
+    Route::get('/addYear', 'CoursesController@addYear')->name('courses.addYear');
+    Route::get('/academicYear', 'CoursesController@academicYear')->name('courses.academicYear');
+    Route::post('/storeYear', 'CoursesController@storeYear')->name('courses.storeYear');
+    Route::get('/destroyYear/{id}', 'CoursesController@destroyYear')->name('courses.destroyYear');
+
+    Route::get('/showSemester/{id}', 'CoursesController@showSemester')->name('courses.showSemester');
+
 
     Route::get('/addSchool', 'CoursesController@addSchool')->name('courses.addSchool');
     Route::post('/storeSchool', 'CoursesController@storeSchool')->name('courses.storeSchool');
@@ -72,6 +84,7 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
     Route::post('/storeCourse', 'CoursesController@storeCourse')->name('courses.storeCourse');
     Route::get('/showCourse', 'CoursesController@showCourse')->name('courses.showCourse');
     Route::get('/editCourse/{id}', 'CoursesController@editCourse')->name('courses.editCourse');
+    Route::get('/syllabus/{id}', 'CoursesController@syllabus')->name('courses.syllabus');
     Route::put('/updateCourse/{id}', 'CoursesController@updateCourse')->name('courses.updateCourse');
     Route::get('/destroyCourse/{id}', 'CoursesController@destroyCourse')->name('courses.destroyCourse');
 
@@ -98,6 +111,7 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
     Route::get('studentId{id}', [CoursesController::class, 'studentID'])->name('courses.studentID');
     Route::post('storeStudentId{id}', [CoursesController::class, 'storeStudentId'])->name('courses.storeStudentId');
     Route::get('admissionsJab', [CoursesController::class, 'admissionsJab'])->name('courses.admissionsJab');
+    Route::get('rejectAdmissions/{id}', [CoursesController::class, 'rejectAdmission'])->name('courses.rejectAdmissions');
     Route::get('admit/{id}', [CoursesController::class, 'admitStudent'])->name('courses.admitStudent');
     Route::get('studentId{id}', [CoursesController::class, 'studentID'])->name('courses.studentID');
     Route::post('storeStudentId{id}', [CoursesController::class, 'storeStudentId'])->name('courses.storeStudentId');

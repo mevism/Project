@@ -10,6 +10,7 @@ use Modules\COD\Entities\CODLog;
 use Modules\Registrar\Entities\Intake;
 use Modules\Dean\Entities\DeanLog;
 use Modules\Finance\Entities\FinanceLog;
+use Modules\Registrar\Entities\Student;
 
 class Application extends Model
 {
@@ -44,11 +45,6 @@ class Application extends Model
 //        application-admission relationship
 
     public function approveAdm(){
-
-        return $this->hasOne(AdmissionApproval::class);
-    }
-
-    public function appApproved(){
 
         return $this->hasOne(AdmissionApproval::class);
     }

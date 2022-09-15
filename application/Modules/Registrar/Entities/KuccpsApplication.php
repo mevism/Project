@@ -12,7 +12,7 @@ class KuccpsApplication extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'applicant_id',
         'intake_id',
         'course_code',
         'course_name'

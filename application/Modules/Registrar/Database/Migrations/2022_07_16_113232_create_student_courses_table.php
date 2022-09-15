@@ -16,9 +16,11 @@ return new class extends Migration
         Schema::create('student_courses', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('student_id')->unique();
+            $table->tinyInteger('student_type');
             $table->string('department_id');
             $table->integer('course_id');
             $table->integer('intake_id');
+            $table->integer('academic_year_id');
             $table->string('class_code');
             $table->string('class');
             $table->string('course_duration');

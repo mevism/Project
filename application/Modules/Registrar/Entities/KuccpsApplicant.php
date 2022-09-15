@@ -17,9 +17,9 @@ class KuccpsApplicant extends Model
 
     public function kuccpsApplication(){
 
-        return $this->hasOne(KuccpsApplication::class, 'user_id');
+        return $this->hasOne(KuccpsApplication::class, 'applicant_id');
     }
-    
+
     protected static function newFactory()
     {
         return \Modules\Registrar\Database\factories\KuccpsApplicantFactory::new();

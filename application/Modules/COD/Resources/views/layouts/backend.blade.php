@@ -26,8 +26,11 @@
   <link rel="stylesheet" id="css-main" href="{{ url('/css/oneui.css') }}">
   <link rel="stylesheet" id="css-main" href="{{ url('/css/index.css') }}">
   <link rel="stylesheet" id="css-main" href="{{ url('/css/admissions.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
-  <!-- You can include a specific file from public/css/themes/ folder to alter the default color theme of the template. eg: -->
+
+    <!-- You can include a specific file from public/css/themes/ folder to alter the default color theme of the template. eg: -->
   <!-- <link rel="stylesheet" id="css-theme" href="{{ mix('/css/themes/amethyst.css') }}"> -->
   @yield('css_after')
 

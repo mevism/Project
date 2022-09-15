@@ -1,25 +1,25 @@
 {
-  "dependencies": {
-    "autoprefixer": "10.4.5",
-    "intl-tel-input": "^17.0.18"
-  },
-  "name": "sims",
-  "version": "1.0.0",
-  "main": "jquery.js",
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/userdevkei/project.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/userdevkei/project/issues"
-  },
-  "homepage": "https://github.com/userdevkei/project#readme",
-  "description": ""
+    "dependencies": {
+        "autoprefixer": "10.4.5",
+        "intl-tel-input": "^17.0.18"
+    },
+    "name": "sims",
+    "version": "1.0.0",
+    "main": "jquery.js",
+    "devDependencies": {},
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/userdevkei/project.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/userdevkei/project/issues"
+    },
+    "homepage": "https://github.com/userdevkei/project#readme",
+    "description": ""
 }

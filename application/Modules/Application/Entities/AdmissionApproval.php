@@ -13,19 +13,11 @@ class AdmissionApproval extends Model
 
     protected $fillable = [];
 
-    public function admissions(){
+    public function appApprovals(){
 
         return $this->belongsTo(Application::class, 'application_id');
 
     }
-
-    public function admApproved(){
-
-        return $this->belongsTo(Application::class);
-
-    }
-
-
     protected static function newFactory()
     {
         return \Modules\Application\Database\factories\AdmissionApprovalFactory::new();
