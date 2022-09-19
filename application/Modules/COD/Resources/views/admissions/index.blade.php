@@ -48,10 +48,12 @@
                                     <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }} </td>
                                     <td> {{ $app->courses->course_name }}</td>
                                     <td>
-                                        @if($app->applicant->student_type== 1)
-                                            S-PT
-                                        @else
+                                        @if($app->applicant->student_type == 1)
+                                            S-FT
+                                        @elseif($app->applicant->student_type == 2)
                                             J-FT
+                                        @else
+                                            S-PT
                                         @endif
                                     </td>
                                     <td>

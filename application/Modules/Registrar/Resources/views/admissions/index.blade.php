@@ -52,9 +52,11 @@
                                     <td> {{ $app->appApprovals->courses->course_name }}</td>
                                     <td>
                                         @if($app->appApprovals->applicant->student_type == 1)
-                                            S-PT
-                                        @else
+                                            S-FT
+                                        @elseif($app->appApprovals->applicant->student_type == 2)
                                             J-FT
+                                        @else
+                                            S-PT
                                         @endif
                                     </td>
                                     <td>

@@ -58,10 +58,12 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if($app->appApprovals->applicant->student_type== 2)
-                                            KUCCPS PLACEMENT
+                                        @if($app->appApprovals->applicant->student_type == 1)
+                                            S-FT
+                                        @elseif($app->appApprovals->applicant->student_type == 2)
+                                            J-FT
                                         @else
-                                        {{ $app->appApprovals->receipt }}</td>
+                                            S-PT
                                         @endif
                                     <td>
                                         @if($app->finance_status== 0)
