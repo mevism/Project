@@ -17,7 +17,7 @@ class Applicant
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!auth()->check() || !Auth::user()->role_id === 8){
+        if (!auth()->check() || !Auth::user()->role_id == 8){
 
             abort(403);
         }

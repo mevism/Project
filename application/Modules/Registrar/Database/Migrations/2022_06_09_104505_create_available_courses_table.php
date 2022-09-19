@@ -18,7 +18,6 @@ return new class extends Migration
             $table->bigInteger('intake_id');
             $table->bigInteger('course_id');
             $table->bigInteger('campus_id');
-            $table->bigInteger('attendance_id');
             $table->tinyInteger('status')->default(0);
             $table->timestamps();
             $table->softDeletes();

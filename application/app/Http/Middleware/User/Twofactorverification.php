@@ -16,10 +16,10 @@ class Twofactorverification
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::user()->phone_verified === 1){
+        if (!Auth::user()->phone_verified == 1){
             return 'verify phone';
         }
-        if (Auth::user()->email_verified_at === NULL){
+        if (Auth::user()->email_verified_at == NULL){
             return 'verify email';
         }
         return $next($request);

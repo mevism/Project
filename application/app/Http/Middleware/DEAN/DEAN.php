@@ -17,7 +17,7 @@ class DEAN
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::guard('user')->check() || !Auth::guard('user')->user()->role_id === 4){
+        if (!Auth::guard('user')->check() || !Auth::guard('user')->user()->role_id == 4){
             abort(403);
         }
         return $next($request);

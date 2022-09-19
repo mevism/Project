@@ -17,7 +17,7 @@ class Isverified
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->user_status === 1){
+        if (Auth::user()->user_status == 1){
             return redirect()->route('application.applicant')->with('warning', 'First update your user profile to continue');
         }
 

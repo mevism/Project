@@ -22,7 +22,7 @@ class Updatedprofile
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->email_verified_at === NULL){
+        if (Auth::user()->email_verified_at == NULL){
 
             VerifyEmail::create([
                 'applicant_id' => Auth::user()->id,
@@ -39,7 +39,7 @@ class Updatedprofile
 
         }
 
-        if (Auth::user()->phone_verification === NULL){
+        if (Auth::user()->phone_verification == NULL){
             $verification_code = rand(1, 999999);
 
             $number = Auth::user()->mobile;
@@ -52,7 +52,7 @@ class Updatedprofile
             return redirect(route('application.reverify'))->with(['info' => 'Enter the code send to your phone', 'code' => $verification_code, 'phone' => $number]);
         }
 
-        if (Auth::user()->user_status === 0){
+        if (Auth::user()->user_status == 0){
             return redirect()->route('application.details')->with('warning', 'First update your user profile to continue');
         }
 

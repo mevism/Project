@@ -306,7 +306,7 @@ class CODController extends Controller
 
         $courses = Courses::where('department_id', auth()->guard('user')->user()->department_id)->get();
 
-        if (count($courses) === 0){
+        if (count($courses) == 0){
 
             $classes = $courses;
 

@@ -17,7 +17,7 @@ class COD
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::guard('user')->check() || !Auth::guard('user')->user()->role_id === 2){
+        if (!Auth::guard('user')->check() || !Auth::guard('user')->user()->role_id == 2){
             abort(403);
         }
         return $next($request);
