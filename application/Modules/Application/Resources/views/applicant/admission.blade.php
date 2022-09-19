@@ -37,7 +37,7 @@
                 <tbody>
                     <tr>
                         <td>1</td>
-                        <td>Academic certificates (as 1 document)</td>
+                        <td>Academic certificates (as 1 pdf document)</td>
                         <td>
                             @if($admission->admissionDoc != null)
                                 {{ $admission->admissionDoc->certificates }}
@@ -67,7 +67,7 @@
                     </tr>
                     <tr>
                         <td>2</td>
-                        <td>Bank slip/receipt/cheques (as 1 document)</td>
+                        <td>Bank slip/receipt/cheques (as 1 pdf document)</td>
                         <td>
                             @if($admission->admissionDoc != null)
                                 {{ $admission->admissionDoc->bank_receipt }}
@@ -97,7 +97,7 @@
                     </tr>
                     <tr>
                         <td>3</td>
-                        <td>Medical Report form (as 1 document)</td>
+                        <td>Medical Report form (as 1 pdf document)</td>
                         <td>
                             @if($admission->admissionDoc != null)
                                 {{ $admission->admissionDoc->medical_form }}
@@ -125,6 +125,36 @@
                             @endif
                         </td>
                     </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Student PassPort (as 1 Image)</td>
+                        <td>
+                            @if($admission->admissionDoc != null)
+                                {{ $admission->admissionDoc->passport_photo }}
+                            @else
+                                no file
+                            @endif
+                        </td>
+                        <td>
+                            <form method="POST" action="{{ route('application.passportPhoto') }}" enctype="multipart/form-data">
+                                @csrf
+                                <input type="file" name="passPort" class="form-control-sm" @if($admission->admissionDoc != null && $admission->admissionDoc->status == 1) disabled @endif>
+                                <input type="hidden" name="passPortId" value="{{ $admission->id }}">
+                                <button type="submit" class="btn btn-sm btn-success" @if($admission->admissionDoc != null && $admission->admissionDoc->status == 1) disabled @endif ><i class="fa fa-file-upload"></i> upload</button>
+                            </form>
+                        </td>
+                        <td>
+                            @if($admission->admissionDoc != null)
+                            @if($admission->admissionDoc->passport_photo == null)
+                                    <i class="fa fa-spinner text-primary"></i> <span class="text-primary">Pending</span>
+                                @else
+                                <i class="fa fa-check text-success"></i> <span class="text-success fw-bold">Uploaded</span>
+                            @endif
+                            @else
+                                <i class="fa fa-spinner text-primary"></i> <span class="text-primary">Pending</span>
+                            @endif
+                        </td>
+                    </tr>
                 </tbody>
             </table>
                 @if($admission->admissionDoc == null)
@@ -138,7 +168,7 @@
                    </div>
 
                 @else
-                @if($admission->admissionDoc->certificates &&  $admission->admissionDoc->bank_receipt && $admission->admissionDoc->medical_form != null)
+                @if($admission->admissionDoc->certificates &&  $admission->admissionDoc->bank_receipt && $admission->admissionDoc->medical_form && $admission->admissionDoc->passport_photo != null)
                     @if($admission->admissionDoc->status == 0)
             <div class="d-flex justify-content-center m-3">
                 <a class="btn btn-sm btn-alt-success" data-toggle="click-ripple" onclick="return confirm('You are about to submit your documents. Once submitted cannot be changed. Are you sure you want to proceed?')" href="{{ route('application.submitDocuments', $admission->id) }}">Submit documents</a>

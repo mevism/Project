@@ -12,7 +12,7 @@ class AdmissionDocument extends Model
     protected $fillable = [];
 
     public function admDocuments(){
-        return $this->belongsTo(Application::class);
+        return $this->belongsTo(Application::class, 'application_id');
     }
 
     protected static function newFactory()

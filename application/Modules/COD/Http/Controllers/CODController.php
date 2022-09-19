@@ -288,7 +288,7 @@ class CODController extends Controller
                             $progress->academic_year = $intakes->academic_year_id;
                             $progress->calendar_year = Carbon::now()->format('Y');
                             $progress->year_study = 1;
-                            $progress->semester_study = 1;
+                            $progress->semester_study = 'I';
                             $progress->pattern = 'ON SESSION';
                             $progress->save();
 

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('certificates')->nullable();
             $table->string('bank_receipt')->nullable();
             $table->string('medical_form')->nullable();
+            $table->string('passport_photo')->nullable();
             $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });

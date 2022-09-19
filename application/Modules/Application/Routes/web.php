@@ -60,6 +60,7 @@ use Modules\Application\Http\Controllers\ApplicationController;
             Route::post('/academicDoc', [ApplicationController::class, 'academicDoc'])->name('application.academicDoc');
             Route::post('/bankReceipt', [ApplicationController::class, 'bankReceipt'])->name('application.bankReceipt');
             Route::post('/medicalForm', [ApplicationController::class, 'medicalForm'])->name('application.medicalForm');
+            Route::post('/passportPhoto', [ApplicationController::class, 'passportPhoto'])->name('application.passportPhoto');
             Route::get('/submitDocuments/{id}', [ApplicationController::class, 'submitDocuments'])->name('application.submitDocuments');
         });
 

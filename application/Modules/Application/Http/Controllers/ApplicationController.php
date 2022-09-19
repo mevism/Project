@@ -2,10 +2,6 @@
 
 namespace Modules\Application\Http\Controllers;
 
-use App\Models\Course;
-use App\Models\Department;
-use App\Models\School;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -32,6 +28,7 @@ use Illuminate\Support\Facades\Mail;
 use Modules\COD\Entities\CODLog;
 use Modules\Dean\Entities\DeanLog;
 use Modules\Finance\Entities\FinanceLog;
+use Image;
 
 
 class ApplicationController extends Controller
@@ -877,6 +874,67 @@ class ApplicationController extends Controller
         }
 
         return redirect()->back()->with('success', 'Bank receipt uploaded successfully');
+
+    }
+
+    public function passportPhoto(Request $request){
+
+        $request->validate([
+            'passPort' => 'required|image|mimes:jpeg,png,jpg|max:40000',
+            'passPortId' => 'required',
+        ]);
+
+
+        if (AdmissionDocument::where('application_id', $request->passPortId)->exists()){
+
+            $name = AdmissionDocument::where('application_id', $request->passPortId)->first()->admDocuments->reg_number;
+
+            if ($request->hasFile('passPort')){
+                $file = $request->passPort;
+                $fileName = str_replace('/', '', $name).'-'.time().'.'.$file->getClientOriginalExtension();
+
+                $thumbnailFolder = storage_path('/thumbnails');
+
+                $passport = Image::make($file->path());
+
+                $passport->resize(100, 100, function ($contraint){
+                    $contraint->aspectRatio();
+                })->save($thumbnailFolder.'/'.$fileName);
+
+                $file->move('Admissions/PassPorts', $fileName);
+
+                AdmissionDocument::where('application_id', $request->passPortId)->update(['passport_photo' => $fileName]);
+
+            }
+
+        }else{
+
+            $id = $request->passPortId;
+
+            $name = Application::find($id);
+
+            $academicCerts = new AdmissionDocument;
+            $academicCerts->application_id = $request->passPortId;
+            if ($request->hasFile('passPort')){
+                $file = $request->passPort;
+                $fileName = str_replace('/', '', $name->reg_number).'-'.time().'.'.$file->getClientOriginalExtension();
+
+                $thumbnailFolder = storage_path('/thumbnails');
+
+                $passport = Image::make($file->path());
+
+                $passport->resize(100, 100, function ($contraint){
+                    $contraint->aspectRatio();
+                })->save($thumbnailFolder.'/'.$fileName);
+
+                $file->move('Admissions/PassPorts', $fileName);
+
+                $academicCerts->passport_photo = $fileName;
+            }
+            $academicCerts->save();
+        }
+
+        return redirect()->back()->with('success', 'Passport Photo uploaded successfully');
 
     }
 
