@@ -63,7 +63,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                @if($app->finance_status == null)
+                                @if($app->finance_status == 0)
                                 <a class="btn btn-sm btn-alt-secondary" href="{{ route('finance.viewApplication', $app->id) }}"> View </a>
                                         @else
                                     <div class="d-flex justify-content-between">
