@@ -77,10 +77,10 @@
                             <div class="col-md-4 fw-bolder text-start">Dean Status</div>
                             <div class="col-md-8">
 
-                                @if($app->dean_status == 1)
-                                    <span class="badge bg-success">Agreed by Dean</span>
-                                @elseif($app->dean_status == 2)
-                                    <span class="badge bg-danger">Disagreed by Dean</span>
+                                @if($app->cod_status == 1)
+                                    <span class="badge bg-success">Accepted by Department</span>
+                                @elseif($app->cod_status == 2)
+                                    <span class="badge bg-danger">Rejected by Department</span>
                                 @elseif($app->dean_status == 3)
                                     <span class="badge bg-primary">Awaiting COD review</span>
                                 @else
