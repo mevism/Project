@@ -144,9 +144,9 @@ class CODController extends Controller
 
         $pdf = 'Admissions/Certificates/'.$app->admissionDoc->certificates;
 
-        return response()->file($pdf);
-
-        return response()->file($pdf, $headers);
+//        return response()->file($pdf);
+//
+//        return response()->file($pdf, $headers);
 
         return view('cod::admissions.review')->with(['app' => $app, 'school' => $school]);
     }
