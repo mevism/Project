@@ -49,6 +49,10 @@ class Application extends Model
         return $this->hasOne(AdmissionApproval::class);
     }
 
+    public function admissionDoc(){
+        return $this->hasOne(AdmissionDocument::class);
+    }
+
     protected static function newFactory()
     {
         return \database\factories\ApplicationFactory::new();

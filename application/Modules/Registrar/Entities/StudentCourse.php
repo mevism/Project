@@ -18,6 +18,11 @@ class StudentCourse extends Model
         return $this->belongsTo(Student::class);
     }
 
+    public function StudCourses(){
+
+        return $this->belongsTo(Courses::class, 'course_id');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Registrar\Database\factories\StudentCourseFactory::new();

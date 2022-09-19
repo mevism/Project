@@ -142,6 +142,12 @@ class CODController extends Controller
         $app = Application::find($id);
         $school = Education::find($id);
 
+        $pdf = 'Admissions/Certificates/'.$app->admissionDoc->certificates;
+
+        return response()->file($pdf);
+
+        return response()->file($pdf, $headers);
+
         return view('cod::admissions.review')->with(['app' => $app, 'school' => $school]);
     }
 
@@ -337,7 +343,7 @@ class CODController extends Controller
         $signed->semester_study = 'I';
         $signed->academic_year = $student->academic_year_id;
         $signed->academic_semester =$student->intake_id;
-        $signed->course_id = $student->course_id;
+        $signed->course_code = $student->StudCourses->course_code;
         $signed->save();
 
         return redirect()->back()->with('success', 'Student admitted successfully');

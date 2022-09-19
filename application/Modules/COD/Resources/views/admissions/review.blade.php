@@ -77,16 +77,21 @@
                                     </tr>
                                     </tbody>
                                 </table>
+{{--                                <iframe src="{{ url('Admissions/Certificates', $app->admissionDoc->certificates) }}" class="d-block w-100" alt="certificate" style="width: 100% !important;"> </iframe>--}}
+                                <embed src="{{ url('Admissions/Certificates', $app->admissionDoc->certificates) }}" type="application/pdf" width="100%" height="100%"> </embed>
                             </div>
                         </div>
                     </div>
+
+
                     <div class="col-lg-6 space-y-2">
                         <div class="block-content block-content-full">
                             <div id="carouselExampleControls" class="carousel slide carousel-fade" data-bs-touch="false" data-bs-interval="false">
                                 <div class="carousel-inner">
                                     @foreach($app->applicant->School as $key => $sch)
                                         <div class="carousel-item {{$key == 0 ? 'active' : '' }} ">
-                                            <img src="{{ url('certs/', $sch->certificate) }}" class="d-block w-100" alt="certificate" style="width: 100% !important;">
+                                            <object data=”{{ url('Admissions/Certificates', $app->admissionDoc->certificates) }}" type=”application/pdf” width=”100%” height=”100%”>
+                                            <iframe src="{{ url('Admissions/Certificates', $app->admissionDoc->certificates) }}" class="d-block w-100" alt="certificate" style="width: 100% !important;"> </iframe>
                                         </div>
                                     @endforeach
                                 </div>

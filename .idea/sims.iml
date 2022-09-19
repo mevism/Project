@@ -131,6 +131,12 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/spatie/ignition" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/spatie/flare-client-php" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/spatie/backtrace" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/phenx/php-svg-lib" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/phenx/php-font-lib" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/sabberworm/php-css-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/barryvdh/laravel-dompdf" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/dompdf/dompdf" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/masterminds/html5" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

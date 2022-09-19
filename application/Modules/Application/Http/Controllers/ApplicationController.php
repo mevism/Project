@@ -13,6 +13,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Modules\Application\Emails\VerifyEmails;
+use Modules\Application\Entities\AdmissionDocument;
 use Modules\Application\Entities\Applicant;
 use Illuminate\Support\Facades\Hash;
 use Modules\Application\Entities\Application;
@@ -764,6 +765,126 @@ class ApplicationController extends Controller
         $letter = Application::find($id);
 
         return response()->download(storage_path($letter->adm_letter));
+    }
+
+    public function uploadDocuments($id){
+
+        $admission = Application::find($id);
+
+//        return $admission;
+        return view('application::applicant.admission')->with(['admission' => $admission]);
+    }
+
+    public function academicDoc(Request $request){
+
+        $request->validate([
+            'academicDoc' => 'required|mimes:pdf',
+            'academicDocId' => 'required',
+        ]);
+
+        if (AdmissionDocument::where('application_id', $request->academicDocId)->exists()){
+
+            if ($request->hasFile('academicDoc')){
+                $file = $request->academicDoc;
+                $fileName = 'certificate'.time().'.'.$file->getClientOriginalExtension();
+                $request->academicDoc->move('Admissions/Certificates', $fileName);
+
+                AdmissionDocument::where('application_id', $request->academicDocId)->update(['certificates' => $fileName]);
+
+            }
+
+        }else{
+
+            $academicCerts = new AdmissionDocument;
+            $academicCerts->application_id = $request->academicDocId;
+            if ($request->hasFile('academicDoc')){
+                $file = $request->academicDoc;
+                $fileName = 'certificate'.time().'.'.$file->getClientOriginalExtension();
+                $request->academicDoc->move('Admissions/Certificates', $fileName);
+                $academicCerts->certificates = $fileName;
+            }
+            $academicCerts->save();
+        }
+
+        return redirect()->back()->with('success', 'Academic documents uploaded successfully');
+
+    }
+
+    public function bankReceipt(Request $request){
+
+        $request->validate([
+            'bankReceipt' => 'required|mimes:pdf|max:40000',
+            'bankReceiptId' => 'required',
+        ]);
+
+        if (AdmissionDocument::where('application_id', $request->bankReceiptId)->exists()){
+
+            if ($request->hasFile('bankReceipt')){
+                $file = $request->bankReceipt;
+                $fileName = 'bankreceipt'.time().'.'.$file->getClientOriginalExtension();
+                $request->bankReceipt->move('Admissions/BankReceipt', $fileName);
+
+                AdmissionDocument::where('application_id', $request->bankReceiptId)->update(['bank_receipt' => $fileName]);
+
+            }
+
+        }else{
+
+            $academicCerts = new AdmissionDocument;
+            $academicCerts->application_id = $request->bankReceiptId;
+            if ($request->hasFile('bankReceipt')){
+                $file = $request->bankReceipt;
+                $fileName = 'bankreceipt'.time().'.'.$file->getClientOriginalExtension();
+                $request->bankReceipt->move('Admissions/BankReceipt', $fileName);
+                $academicCerts->bank_receipt = $fileName;
+            }
+            $academicCerts->save();
+        }
+
+        return redirect()->back()->with('success', 'Bank receipt uploaded successfully');
+
+    }
+
+    public function medicalForm(Request $request){
+
+        $request->validate([
+            'medicalForm' => 'required|mimes:pdf|max:40000',
+            'medicalFormId' => 'required',
+        ]);
+
+        if (AdmissionDocument::where('application_id', $request->medicalFormId)->exists()){
+
+            if ($request->hasFile('medicalForm')){
+                $file = $request->medicalForm;
+                $fileName = 'medicalForm'.time().'.'.$file->getClientOriginalExtension();
+                $request->medicalForm->move('Admissions/MedicalForms', $fileName);
+
+                AdmissionDocument::where('application_id', $request->medicalFormId)->update(['medical_form' => $fileName]);
+
+            }
+
+        }else{
+
+            $academicCerts = new AdmissionDocument;
+            $academicCerts->application_id = $request->medicalFormId;
+            if ($request->hasFile('medicalForm')){
+                $file = $request->medicalForm;
+                $fileName = 'medicalForm'.time().'.'.$file->getClientOriginalExtension();
+                $request->medicalForm->move('Admissions/MedicalForms', $fileName);
+                $academicCerts->medical_form = $fileName;
+            }
+            $academicCerts->save();
+        }
+
+        return redirect()->back()->with('success', 'Bank receipt uploaded successfully');
+
+    }
+
+    public function submitDocuments($id){
+
+        AdmissionDocument::where('application_id', $id)->update(['status' => 1]);
+
+        return redirect()->back()->with('success', 'Your documents submitted for admission process');
     }
 
     /**

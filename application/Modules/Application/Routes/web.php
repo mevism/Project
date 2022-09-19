@@ -54,6 +54,13 @@ use Modules\Application\Http\Controllers\ApplicationController;
             Route::get('/edit/{id}', 'ApplicationController@applicationEdit')->name('application.edit');
             Route::get('/progress/{id}', 'ApplicationController@applicationProgress')->name('application.progress');
             Route::get('/dowload/{id}', 'ApplicationController@downloadLetter')->name('application.download');
+
+
+            Route::get('/uploadDocuments/{id}', [ApplicationController::class, 'uploadDocuments'])->name('application.uploadDocuments');
+            Route::post('/academicDoc', [ApplicationController::class, 'academicDoc'])->name('application.academicDoc');
+            Route::post('/bankReceipt', [ApplicationController::class, 'bankReceipt'])->name('application.bankReceipt');
+            Route::post('/medicalForm', [ApplicationController::class, 'medicalForm'])->name('application.medicalForm');
+            Route::get('/submitDocuments/{id}', [ApplicationController::class, 'submitDocuments'])->name('application.submitDocuments');
         });
 
     });

@@ -55,6 +55,10 @@ class Courses extends Model
         return $this->belongsTo(Department::class);
     }
 
+    public function studentCrs(){
+        return $this->hasOne(StudentCourse::class, 'id');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Courses\Database\factories\CoursesFactory::new();

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('semester_study');
             $table->string('academic_year');
             $table->string('academic_semester');
-            $table->string('course_id');
+            $table->string('course_code');
             $table->timestamps();
             $table->softDeletes();
         });
