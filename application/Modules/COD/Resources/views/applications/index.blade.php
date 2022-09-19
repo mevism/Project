@@ -50,13 +50,13 @@
                                 <td> {{ $app->courses->getCourseDept->name }}</td>
                                 <td> {{ $app->courses->course_name }}</td>
                                 <td>
-                                        @if($app->cod_status === 0)
+                                        @if($app->cod_status == 0)
                                             <span class="badge bg-primary">Awaiting</span>
-                                        @elseif($app->cod_status === 1)
+                                        @elseif($app->cod_status == 1)
                                             <span class="badge bg-success">Accepted</span>
-                                        @elseif($app->cod_status === 2)
+                                        @elseif($app->cod_status == 2)
                                             <span class="badge bg-warning">Rejected</span>
-                                        @elseif($app->cod_status === 4)
+                                        @elseif($app->cod_status == 4)
                                             <span class="badge bg-success">Reviewed</span>
                                         @else
                                         <span class="badge bg-info">Review</span>
@@ -64,7 +64,7 @@
 
                                 </td>
                                 <td nowrap="">
-                                    @if($app->cod_status === 0)
+                                    @if($app->cod_status == 0)
                                 <a class="btn btn-sm btn-alt-secondary" href="{{ route('cod.viewApplication', $app->id) }}"> View </a>
                                         @else
                                 <a class="btn btn-sm btn-alt-secondary" href="{{ route('cod.previewApplication', $app->id) }}"> View </a>

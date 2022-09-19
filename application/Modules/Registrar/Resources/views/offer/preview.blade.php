@@ -73,7 +73,7 @@
                                 </table>
                             </div>
                         </div>
-                        @if($app->cod_status === 2)
+                        @if($app->cod_status == 2)
 
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Why rejected?</div>
@@ -84,7 +84,7 @@
 
                     @endif
 
-                        @if($app->registrar_status === 2)
+                        @if($app->registrar_status == 2)
 
                             <div class="row p-1">
                                 <div class="col-md-4 fw-bolder text-start">Why rejected?</div>

@@ -181,7 +181,7 @@
                             <div class="space-x-2">
                                 @foreach($campus as $camp)
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="main" value="{{ $camp->id }}" @if(old('main') === 'campus') checked @endif >
+                                    <input class="form-check-input" type="checkbox" name="main" value="{{ $camp->id }}" @if(old('main') == 'campus') checked @endif >
                                     <label class="form-check-label">{{ $camp->name }}</label>
                                 </div>
                                 @endforeach

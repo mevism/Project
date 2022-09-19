@@ -87,7 +87,7 @@ class CODController extends Controller
         $logs->user = Auth::guard('user')->user()->name;
         $logs->user_role = Auth::guard('user')->user()->role_id;
         $logs->comments = $request->comment;
-        if ($app->dean_status === 3){
+        if ($app->dean_status == 3){
             $logs->activity = 'Application reviewed by COD';
         }
         $logs->activity = 'Application rejected';
@@ -155,7 +155,7 @@ class CODController extends Controller
 
         $app = AdmissionApproval::where('application_id', $id)->first();
 
-        if ($app === NULL){
+        if ($app == NULL){
             $adm = new AdmissionApproval;
             $adm->application_id = $id;
             $adm->cod_status = 1;
@@ -171,7 +171,7 @@ class CODController extends Controller
 
             $app = AdmissionApproval::where('application_id', $id)->first();
 
-            if ($app === NULL){
+            if ($app == NULL){
 
                 $adm = new AdmissionApproval;
                 $adm->application_id = $id;

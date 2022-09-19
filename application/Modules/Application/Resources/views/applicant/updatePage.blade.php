@@ -53,22 +53,22 @@
                                 <div class="form-floating col-12">
                                 <select class="form-control text-muted" name="title" required>
                                     <option selected="selected" disabled class="text-center"> - select title - </option>
-                                    <option @if(old('title') === 'Mr.') selected="selected" @endif value="Mr."> Mr.</option>
-                                    <option @if(old('title') === 'Miss.') selected="selected" @endif value="Miss."> Miss. </option>
-                                    <option @if(old('title') === 'Ms.') selected="selected" @endif value="Ms."> Ms. </option>
-                                    <option @if(old('title') === 'Mrs.') selected="selected" @endif value="Mrs."> Mrs. </option>
-                                    <option @if(old('title') === 'Dr.') selected="selected" @endif value="Dr.">Dr.</option>
-                                    <option @if(old('title') === 'Prof.') selected="selected" @endif value="Prof."> Prof. </option>
+                                    <option @if(old('title') == 'Mr.') selected="selected" @endif value="Mr."> Mr.</option>
+                                    <option @if(old('title') == 'Miss.') selected="selected" @endif value="Miss."> Miss. </option>
+                                    <option @if(old('title') == 'Ms.') selected="selected" @endif value="Ms."> Ms. </option>
+                                    <option @if(old('title') == 'Mrs.') selected="selected" @endif value="Mrs."> Mrs. </option>
+                                    <option @if(old('title') == 'Dr.') selected="selected" @endif value="Dr.">Dr.</option>
+                                    <option @if(old('title') == 'Prof.') selected="selected" @endif value="Prof."> Prof. </option>
                                 </select>
                                 <label class="form-label" for="title">TITTLE</label>
                             </div>
                             <div class="form-floating col-12">
                                     <select name="status" id="status" class="form-control text-muted" required>
                                         <option disabled selected class="text-center"> - select martial status - </option>
-                                        <option @if(old('status') === 'Single') selected="selected" @endif value="single" >Single</option>
-                                        <option @if(old('status') === 'Married') selected="selected" @endif value="married">Married</option>
-                                        <option @if(old('status') === 'Divorced') selected="selected" @endif value="divorced" >Divorced</option>
-                                        <option @if(old('status') === 'Separated') selected="selected" @endif value="separated" >Separated</option>
+                                        <option @if(old('status') == 'Single') selected="selected" @endif value="single" >Single</option>
+                                        <option @if(old('status') == 'Married') selected="selected" @endif value="married">Married</option>
+                                        <option @if(old('status') == 'Divorced') selected="selected" @endif value="divorced" >Divorced</option>
+                                        <option @if(old('status') == 'Separated') selected="selected" @endif value="separated" >Separated</option>
                                     </select>
                                     <label class="form-label" for="status">MARITAL STATUS</label>
                                 </div>
@@ -76,7 +76,7 @@
                                     <input type="date" class="form-control" name="dob" value="{{ old('dob') }}" required>
                                     <label class="form-label">DATE OF BIRTH </label>
                                 </div>
-                                @if(Auth::user()->student_type ===2 )
+                                @if(Auth::user()->student_type ==2 )
                                     <div class="form-floating col-12">
                                         <input type="text" class="form-control text-uppercase" name="mobile"value="@if(Auth::user()->mobile != null ){{ Auth::user()->mobile }}@else{{ old('alt_number') }}@endif" required placeholder="PHONE">
                                         <label class="form-label">MOBILE NUMBER</label>
@@ -86,15 +86,15 @@
                                     <label class="form-label">GENDER</label>
                                     <div class="space-x-2">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="gender" value="M" @if(old('gender') === 'Male') checked @endif @if(Auth::user()->gender != null) {{ (Auth::user()->gender == 'M') ? "checked" : "" }} @endif required>
+                                                <input class="form-check-input" type="radio" name="gender" value="M" @if(old('gender') == 'Male') checked @endif @if(Auth::user()->gender != null) {{ (Auth::user()->gender == 'M') ? "checked" : "" }} @endif required>
                                                 <label class="form-check-label">Male</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="gender" value="F" @if(old('gender') === 'Female') checked @endif @if(Auth::user()->gender != null) {{ (Auth::user()->gender == 'F') ? "checked" : "" }} @endif required>
+                                                <input class="form-check-input" type="radio" name="gender" value="F" @if(old('gender') == 'Female') checked @endif @if(Auth::user()->gender != null) {{ (Auth::user()->gender == 'F') ? "checked" : "" }} @endif required>
                                                 <label class="form-check-label">Female</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="gender" value="O" @if(old('gender') === 'Other') checked @endif required>
+                                                <input class="form-check-input" type="radio" name="gender" value="O" @if(old('gender') == 'Other') checked @endif required>
                                                 <label class="form-check-label">Other</label>
                                             </div>
                                     </div>
@@ -105,7 +105,7 @@
                                 <input type="text" class="form-control text-uppercase" name="id_number" value="{{ old('id_number') }}" required placeholder="ID/PASSPORT/BIRTH CERT">
                                 <label class="form-label">ID/ BIRTH/ PASSPORT NUMBER</label>
                             </div>
-                                @if(Auth::user()->student_type === 2)
+                                @if(Auth::user()->student_type == 2)
                                     <div class="form-floating col-12">
                                         <input type="email" class="form-control text-lowercase" name="email" value=" @if(Auth::user()->email != null) {{ Auth::user()->email }} @else {{ old('alt_email') }} @endif" required placeholder="EMAIL">
                                         <label class="form-label">EMAIL ADDRESS</label>
@@ -157,11 +157,11 @@
                                 <label class="form-label">ARE YOU DISABLED </label>
                                 <div class="space-x-2">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="disabled" value="No" @if(old('disabled') === 'No') checked @endif required>
+                                        <input class="form-check-input" type="radio" name="disabled" value="No" @if(old('disabled') == 'No') checked @endif required>
                                         <label class="form-check-label">No</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="disabled" value="Yes" @if(old('disabled') === 'Yes') checked @endif required>
+                                        <input class="form-check-input" type="radio" name="disabled" value="Yes" @if(old('disabled') == 'Yes') checked @endif required>
                                         <label class="form-check-label">Yes</label>
                                     </div>
                                 </div>

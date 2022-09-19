@@ -303,7 +303,7 @@ class CoursesController extends Controller
 
         $active = Intake::where('status', 1)->get();
 
-        if (count($active) === 0){
+        if (count($active) == 0){
 
             $courses = $active;
 
@@ -337,7 +337,7 @@ class CoursesController extends Controller
 
                     $app = Application::find($id);
 
-                    if($app->registrar_status === 1 && $app->cod_status === 1){
+                    if($app->registrar_status == 1 && $app->cod_status == 1){
 
                         $regNo  = Application::where('course_id', $app->course_id)
                         ->where('intake_id', $app->intake_id)
@@ -396,7 +396,7 @@ class CoursesController extends Controller
                                     Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails($app->applicant));
 
                     }
-                    if($app->finance_status === 3 && $app->registrar_status === 1){
+                    if($app->finance_status == 3 && $app->registrar_status == 1){
 
                         // Send Mail
 
@@ -405,23 +405,23 @@ class CoursesController extends Controller
                         $update->registrar_status = NULL;
                         $update->save();
                     }
-                    if($app->dean_status === 2 && $app->registrar_status === 1){
+                    if($app->dean_status == 2 && $app->registrar_status == 1){
 
                         // Send Failure Mail
 
                     }
-                    if($app->dean_status === 1 && $app->registrar_status === 2){
+                    if($app->dean_status == 1 && $app->registrar_status == 2){
 
                         Application::where('id', $id)->update(['cod_status' => 3, 'dean_status' => 3, 'registrar_status' => 4]);
 
                     }
-                    if($app->dean_status === 2 && $app->registrar_status === 1){
+                    if($app->dean_status == 2 && $app->registrar_status == 1){
 
                         Application::where('id', $id)->update(['cod_status' => 3, 'dean_status' => 3, 'registrar_status' => 4]);
 
 
                     }
-                    if($app->cod_status === 2 && $app->registrar_status === 1){
+                    if($app->cod_status == 2 && $app->registrar_status == 1){
 
                     Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails1($app->applicant));
 

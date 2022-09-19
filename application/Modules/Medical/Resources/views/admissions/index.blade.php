@@ -49,23 +49,23 @@
                                 <td>{{ $app->appApprovals->courses->getCourseDept->name }}</td>
                                 <td>{{ $app->appApprovals->courses->course_name }}</td>
                                 <td>
-                                    @if($app->appApprovals->student_type === 1)
+                                    @if($app->appApprovals->student_type == 1)
                                         S-PT
                                     @else
                                         J-FT
                                     @endif
                                 </td>
                                 <td>
-                                    @if($app->medical_status === 0)
+                                    @if($app->medical_status == 0)
                                         <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>
-                                    @elseif($app->medical_status === 1)
+                                    @elseif($app->medical_status == 1)
                                         <span class="badge bg-success"> <i class="fa fa-check"></i> approved</span>
                                     @else
                                         <span class="badge bg-danger"> <i class="fa fa-close"></i> rejected</span>
                                     @endif
                                 </td>
                                 <td nowrap="">
-                                    @if($app->medical_status === 0)
+                                    @if($app->medical_status == 0)
                                         <a class="btn btn-sm btn-alt-info" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to approve?')" href="{{ route('medical.acceptAdmission', $app->id) }}"> Accept</a>
                                         <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->id }}"> Reject</a>
                                             <div class="modal fade" id="modal-block-popin-{{ $app->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
@@ -100,7 +100,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                    @elseif($app->medical_status === 1)
+                                    @elseif($app->medical_status == 1)
                                         <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('medical.submitAdmission',$app->id) }}"> submit</a>
                                         <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->id }}"> Reject</a>
                                             <div class="modal fade" id="modal-block-popin-{{ $app->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">

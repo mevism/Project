@@ -77,11 +77,11 @@
                             <div class="col-md-4 fw-bolder text-start">Dean Status</div>
                             <div class="col-md-8">
 
-                                @if($app->dean_status === 1)
+                                @if($app->dean_status == 1)
                                     <span class="badge bg-success">Agreed by Dean</span>
-                                @elseif($app->dean_status === 2)
+                                @elseif($app->dean_status == 2)
                                     <span class="badge bg-danger">Disagreed by Dean</span>
-                                @elseif($app->dean_status === 3)
+                                @elseif($app->dean_status == 3)
                                     <span class="badge bg-primary">Awaiting COD review</span>
                                 @else
                                     <span class="badge bg-info">Awaiting Dean review</span>
@@ -100,11 +100,11 @@
             </div>
         <div class="d-flex justify-content-center py-1">
 
-            @if($app->registrar_status === 0)
+            @if($app->registrar_status == 0)
                 <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('courses.acceptApplication', $app->id) }}">Agree</a>
                 <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Disagree</a>
                 <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('courses.applications') }}">Close</a>
-            @elseif($app->registrar_status === 1)
+            @elseif($app->registrar_status == 1)
                     <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Disagree</a>
                     <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('courses.applications') }}">Close</a>
             @else

@@ -44,7 +44,7 @@
                             @foreach($apps as $app)
                                 <tr>
                                     <td>
-                                    @if($app->dean_status === null || 3)
+                                    @if($app->dean_status == null || 3)
                                     <input class="batch" type="checkbox" name="submit[]" value="{{ $app->id }}" required>
                                         @else
                                         ✔
@@ -55,11 +55,11 @@
                                     <td> {{ $app->courses->getCourseDept->name }}</td>
                                     <td> {{ $app->courses->course_name }}</td>
                                     <td>
-                                        @if($app->cod_status === 0)
+                                        @if($app->cod_status == 0)
                                             <span class="badge bg-primary">Awaiting</span>
-                                        @elseif($app->cod_status === 1)
+                                        @elseif($app->cod_status == 1)
                                             <span class="badge bg-success">Accepted</span>
-                                        @elseif($app->cod_status === 2)
+                                        @elseif($app->cod_status == 2)
                                             <span class="badge bg-warning">Rejected</span>
                                         @else
                                             <span class="badge bg-primary">Awaiting</span>

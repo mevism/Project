@@ -67,19 +67,19 @@
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
                 <i class="nav-main-link-icon si si-cursor"></i>
                 <span class="nav-main-link-name">
-                    @if(auth()->guard('user')->user()->id === 1)
+                    @if(auth()->guard('user')->user()->id == 1)
                         Administrator
-                    @elseif(auth()->guard('user')->user()->id === 6)
+                    @elseif(auth()->guard('user')->user()->id == 6)
                         Student
-                    @elseif(auth()->guard('user')->user()->id === 2)
+                    @elseif(auth()->guard('user')->user()->id == 2)
                         DEPARTMENTAL HEAD
-                    @elseif(auth()->guard('user')->user()->id === 4)
+                    @elseif(auth()->guard('user')->user()->id == 4)
                         DEAN
-                    @elseif(auth()->guard('user')->user()->id === 3)
+                    @elseif(auth()->guard('user')->user()->id == 3)
                         FINANCE
-                    @elseif(auth()->guard('user')->user()->id === 8)
+                    @elseif(auth()->guard('user')->user()->id == 8)
                         MEDICAL
-                    @elseif(auth()->guard('user')->user()->id === 5)
+                    @elseif(auth()->guard('user')->user()->id == 5)
                         ACCOMMODATION
                     @else
 

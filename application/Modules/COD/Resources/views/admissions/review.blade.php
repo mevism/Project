@@ -110,11 +110,11 @@
             </div>
             <div class="d-flex justify-content-center py-1">
 
-                @if($app->approveAdm === NULL)
+                @if($app->approveAdm == NULL)
                     <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('cod.acceptAdmission', $app->id) }}"> Accept </a>
                     <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
                     <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('cod.selfAdmissions') }}">Close</a>
-                @elseif($app->approveAdm->cod_status === 1)
+                @elseif($app->approveAdm->cod_status == 1)
                     <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
                     <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('cod.selfAdmissions') }}">Close</a>
                 @else

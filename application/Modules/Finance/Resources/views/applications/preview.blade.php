@@ -39,7 +39,7 @@
                             <div class="col-md-4 fw-bolder text-start">Course Name</div>
                             <div class="col-md-8"> {{ $app->receipt }} </div>
                         </div>
-                        @if($app->finance_status === 2)
+                        @if($app->finance_status== 2)
 
                             <div class="row p-1">
                                 <div class="col-md-4 fw-bolder text-start">Why rejected?</div>

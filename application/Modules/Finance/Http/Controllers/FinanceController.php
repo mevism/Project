@@ -90,7 +90,7 @@ class FinanceController extends Controller
 
             $app = Application::find($id);
 
-                if ($app->finance_status === 2){
+                if ($app->finance_status == 2){
 
                     $app = Application::find($id);
                     $app->finance_status = 3;

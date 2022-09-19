@@ -52,11 +52,11 @@
                                 <td> {{ $app->courses->course_name }}</td>
                                 <td> {{ $app->receipt }}</td>
                                 <td>
-                                    @if($app->finance_status === 0)
+                                    @if($app->finance_status== 0)
                                         <span class="badge bg-primary">Awaiting</span>
-                                    @elseif($app->finance_status === 1)
+                                    @elseif($app->finance_status== 1)
                                         <span class="badge bg-success">Accepted</span>
-                                    @elseif($app->finance_status === 2)
+                                    @elseif($app->finance_status== 2)
                                         <span class="badge bg-warning">Rejected</span>
                                     @else
                                         <span class="badge bg-primary">Awaiting</span>

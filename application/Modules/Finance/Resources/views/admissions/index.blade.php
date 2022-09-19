@@ -51,31 +51,31 @@
                                     <td>{{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->mname }} {{ $app->appApprovals->applicant->fname }}</td>
                                     <td>{{ $app->appApprovals->courses->course_name }}</td>
                                     <td>
-                                        @if($app->appApprovals->student_type === 1)
+                                        @if($app->appApprovals->student_type== 1)
                                             S-PT
                                         @else
                                             J-FT
                                         @endif
                                     </td>
                                     <td>
-                                        @if($app->appApprovals->applicant->student_type === 2)
+                                        @if($app->appApprovals->applicant->student_type== 2)
                                             KUCCPS PLACEMENT
                                         @else
                                         {{ $app->appApprovals->receipt }}</td>
                                         @endif
                                     <td>
-                                        @if($app->finance_status === 0)
+                                        @if($app->finance_status== 0)
                                             <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>
-                                        @elseif($app->finance_status === 1)
+                                        @elseif($app->finance_status== 1)
                                             <span class="badge bg-success"> <i class="fa fa-check"></i> approved</span>
                                         @else
                                             <span class="badge bg-danger"> <i class="fa fa-close"></i> rejected</span>
                                         @endif
                                     </td>
                                     <td nowrap="">
-                                        @if($app->appApprovals->applicant->student_type === 2)
+                                        @if($app->appApprovals->applicant->student_type== 2)
 
-                                            @if($app->finance_status === 0)
+                                            @if($app->finance_status== 0)
                                                 <a class="btn btn-sm btn-alt-info" onclick="return confirm('Are you sure you want to approve?')" data-toggle="click-ripple" href="{{ route('finance.acceptAdmission', $app->id) }}"> Accept</a>
                                                 <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->id }}"> Reject</a>
 
@@ -111,7 +111,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            @elseif($app->finance_status === 1)
+                                            @elseif($app->finance_status== 1)
                                                 <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('finance.submitAdmission',$app->id) }}"> submit</a>
                                                 <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->id }}"> Reject</a>
 
@@ -153,9 +153,9 @@
                                             @endif
 
                                         @else
-                                            @if($app->finance_status === 0)
+                                            @if($app->finance_status== 0)
                                                 <a class="btn btn-sm btn-alt-info" data-toogle="click-ripple" href="{{ route('finance.reviewAdmission', $app->id) }}"> verify</a>
-                                            @elseif($app->finance_status === 1)
+                                            @elseif($app->finance_status== 1)
                                                 <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('finance.submitAdmission',$app->id) }}"> submit</a>
                                                 <a class="btn btn-sm btn-alt-primary" data-toogle="click-ripple" href="{{ route('finance.reviewAdmission', $app->id) }}"> edit</a>
                                             @else

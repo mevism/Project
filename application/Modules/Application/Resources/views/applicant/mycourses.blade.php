@@ -51,13 +51,13 @@
                                     <td>{{ $course->courses->getCourseDept->name }}</td>
                                     <td>{{ $course->courses->course_name }}</td>
                                     <td nowrap="">
-                                        @if($course->registrar_status === 3 && $course->cod_status === 1)
+                                        @if($course->registrar_status == 3 && $course->cod_status == 1)
                                         <a class="btn btn-sm btn-alt-success" target="_top" href="{{ route('application.download', $course->id) }}"><i class="fa fa-file-pdf"></i> download</a>
                                         <a class="btn btn-sm btn-alt-info" data-toggle="click-ripple" href="{{ route('application.uploadDocuments', $course->id) }}"><i class="fa fa-file-upload"></i> upload docs</a>
-                                        @elseif($course->registrar_status === NULL && $course->finance_status === NULL)
+                                        @elseif($course->registrar_status == NULL && $course->finance_status == NULL)
                                         <a class="btn btn-sm btn-alt-info" href="{{ route('application.edit', $course->id) }}">
                                             <i class="fa fa-pen-to-square"></i> update</a>
-                                        @elseif($course->registrar_status === 1 && $course->cod_status === 2)
+                                        @elseif($course->registrar_status == 1 && $course->cod_status == 2)
                                             <a class="btn btn-sm btn-alt-danger" href="#">
                                                 <i class="fa fa-ban"></i> rejected</a>
                                         @else

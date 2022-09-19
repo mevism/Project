@@ -51,26 +51,26 @@
                                     <td> {{ $app->appApprovals->courses->getCourseDept->name }}</td>
                                     <td> {{ $app->appApprovals->courses->course_name }}</td>
                                     <td>
-                                        @if($app->appApprovals->applicant->student_type === 1)
+                                        @if($app->appApprovals->applicant->student_type == 1)
                                             S-PT
                                         @else
                                             J-FT
                                         @endif
                                     </td>
                                     <td>
-                                        @if($app->registrar_status === 0)
+                                        @if($app->registrar_status == 0)
                                             <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>
-                                        @elseif($app->registrar_status === 1)
+                                        @elseif($app->registrar_status == 1)
                                             <span class="badge bg-success"> <i class="fa fa-check"></i> enrolled</span>
                                         @else
                                             <span class="badge bg-danger"> <i class="fa fa-close"></i> rejected</span>
                                         @endif
                                     </td>
                                     <td nowrap="">
-                                        @if($app->registrar_status === 0)
+                                        @if($app->registrar_status == 0)
                                             <span class="badge bg-primary"> <i class="fa fa-spinner"></i> waiting...</span>
-                                            @elseif($app->registrar_status === 1)
-                                                @if($app->id_status === NULL)
+                                            @elseif($app->registrar_status == 1)
+                                                @if($app->id_status == NULL)
                                             <a class="btn btn-sm btn-alt-success" data-toggle="click-ripple" href="{{ route('courses.studentID', $app->id) }}"> Take Image</a>
                                                 @else
                                                     <a class="badge bg-success"><i class="fa fa-check"></i> uploaded</a>
@@ -80,7 +80,7 @@
                                         @endif
                                     </td>
                                     <td nowrap="">
-                                        @if($app->registrar_status === 0)
+                                        @if($app->registrar_status == 0)
                                             <a class="btn btn-sm btn-alt-success" data-toggle="click-ripple" onclick="return confirm('Are you sure you want to erroll this student?')" href="{{ route('courses.admitStudent', $app->id) }}"> Enroll </a>
                                             <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->id }}"> Reject </a>
                                             <div class="modal fade" id="modal-block-popin-{{ $app->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin{{ $app->id }}" aria-hidden="true">
@@ -115,7 +115,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        @elseif($app->registrar_status === 1)
+                                        @elseif($app->registrar_status == 1)
                                             <a class="btn btn-sm btn-alt-info disabled" href="{{ route('cod.reviewAdmission', $app->id) }}"> Edit </a>
                                         @else
                                             <a class="btn btn-sm btn-alt-info disabled" href="{{ route('cod.reviewAdmission', $app->id) }}"> Edit </a>

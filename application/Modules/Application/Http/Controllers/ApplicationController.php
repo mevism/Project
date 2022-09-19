@@ -170,18 +170,18 @@ class ApplicationController extends Controller
 
         $courses = Intake::where('status', 1)->get();
 
-            if (count($courses) === 0 ){
+            if (count($courses) == 0 ){
 
                         $mycourses = Application::where('applicant_id', Auth::user()->id)->count();
 
                             if (Auth::check()) {
 
-                                if (Auth::user()->email_verified_at === null){
+                                if (Auth::user()->email_verified_at == null){
                                     Auth::logout();
 
                                     return redirect(route('root'))->with('warning', 'Please verify your email first');
                                 }
-                                if (Auth::user()->user_status === 0) {
+                                if (Auth::user()->user_status == 0) {
                                     return redirect()->route('application.details')->with(['info' => 'Please update your profile']);
 
                                 } else {
@@ -214,13 +214,13 @@ class ApplicationController extends Controller
 
                                 if (Auth::check()) {
 
-                                    if (Auth::user()->email_verified_at === null){
+                                    if (Auth::user()->email_verified_at == null){
 
                                         Auth::logout();
 
                                         return redirect(route('root'))->with('warning', 'Please verify your email first');
                                     }
-                                    if (Auth::user()->user_status === 0) {
+                                    if (Auth::user()->user_status == 0) {
                                         return redirect()->route('application.details')->with(['info' => 'Please update your profile']);
 
                                     } else {
@@ -245,7 +245,7 @@ class ApplicationController extends Controller
 
     public function makeupdate(Request $request){
 
-        if (Auth::user()->student_type === 2){
+        if (Auth::user()->student_type == 2){
 
             $request->validate([
                 'sname' => 'required|alpha',
@@ -369,7 +369,7 @@ class ApplicationController extends Controller
 
         $active = Intake::where('status', 1)->get();
 
-        if (count($active) === 0){
+        if (count($active) == 0){
 
             $courses = $active;
 
@@ -747,9 +747,9 @@ class ApplicationController extends Controller
     public function applicationProgress($id){
         $course = Application::find($id);
 
-        $finance = FinanceLog::where('app_id', $id)->orderBy('created_at', 'desc')->get();
-        $cod = CODLog::where('app_id', $id)->orderBy('created_at', 'desc')->get();
-        $dean = DeanLog::where('app_id', $id)->orderBy('created_at', 'desc')->get();
+        $finance = FinanceLog::where('application_id', $id)->orderBy('created_at', 'desc')->get();
+        $cod = CODLog::where('application_id', $id)->orderBy('created_at', 'desc')->get();
+        $dean = DeanLog::where('application_id', $id)->orderBy('created_at', 'desc')->get();
 
         $logs = $cod->concat($finance)->concat($dean)->sortByDesc('created_at');
 

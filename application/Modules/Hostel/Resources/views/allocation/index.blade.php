@@ -54,16 +54,16 @@
                                     <td> {{ $row->student_email }}</td>
                                     <td> {{ $row->disabled }}</td>
                                     <td>
-{{--                                        @if($row->registrar_status === 0)--}}
+{{--                                        @if($row->registrar_status == 0)--}}
                                             <span class="badge bg-info"> <i class="fa fa-spinner"></i> pending</span>
-{{--                                        @elseif($row->registrar_status === 1)--}}
+{{--                                        @elseif($row->registrar_status == 1)--}}
 {{--                                            <span class="badge bg-success"> <i class="fa fa-check"></i> enrolled</span>--}}
 {{--                                        @else--}}
 {{--                                            <span class="badge bg-danger"> <i class="fa fa-close"></i> rejected</span>--}}
 {{--                                        @endif--}}
                                     </td>
                                     <td nowrap="">
-{{--                                        @if($row->registrar_status === 0)--}}
+{{--                                        @if($row->registrar_status == 0)--}}
 {{--                                            <a class="btn btn-sm btn-alt-success" data-toggle="click-ripple" onclick="return confirm('Are you sure you want to erroll this student?')" href="{{ route('courses.admitStudent', $row->id) }}"> Enroll </a>--}}
 {{--                                            <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject </a>--}}
 {{--                                            <div class="modal fade" id="modal-block-popin" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin{{ $row->id }}" aria-hidden="true">--}}
@@ -98,7 +98,7 @@
 {{--                                                    </div>--}}
 {{--                                                </div>--}}
 {{--                                            </div>--}}
-{{--                                        @elseif($row->registrar_status === 1)--}}
+{{--                                        @elseif($row->registrar_status == 1)--}}
 {{--                                            <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $row->id) }}"> Edit </a>--}}
 {{--                                        @else--}}
 {{--                                            <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $row->id) }}"> Edit </a>--}}

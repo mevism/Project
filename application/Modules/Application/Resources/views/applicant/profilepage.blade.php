@@ -63,7 +63,7 @@
                                     <div class="col-xl-8"> <p>: {{ Auth::user()->disabled }}</p></div>
                                 </div>
 
-                                @if(Auth::user()->disabled === 'Yes')
+                                @if(Auth::user()->disabled == 'Yes')
                                 <div class="row">
                                     <div class="col-4 fw-semibold">Type of Disability </div>
                                     <div class="col-8"> <p>: {{ Auth::user()->disability }}</p></div>

@@ -64,7 +64,7 @@
                             @foreach($apps as $app)
                                 <tr>
                                     <td>
-                                    @if($app->cod_status === null)
+                                    @if($app->cod_status== null)
                                     <input class="batch" type="checkbox" name="submit[]" value="{{ $app->id }}">
                                         @else
                                         ✔
@@ -75,9 +75,9 @@
                                     <td> {{ $app->courses->course_name }}</td>
                                     <td> {{ $app->receipt }}</td>
                                     <td>
-                                        @if($app->finance_status === 0)
+                                        @if($app->finance_status== 0)
                                             <span class="badge bg-primary">Awaiting</span>
-                                        @elseif($app->finance_status === 1)
+                                        @elseif($app->finance_status== 1)
                                             <span class="badge bg-success">Accepted</span>
                                         @else
                                             <span class="badge bg-warning">Rejected</span>

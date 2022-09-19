@@ -82,18 +82,18 @@
                                 <td> {{ $item->applicant->sname }} {{ $item->applicant->fname }} {{ $item->applicant->mname }}</td>
                                 <td> {{ $item->courses->getCourseDept->name }}</td>
                                 <td> {{ $item->courses->course_name }}</td>
-                                <td> @if ($item->finance_status ===1)
+                                <td> @if ($item->finance_status ==1)
                                     <a  class="badge badge bg-success" >Accepted</a>
-                                    @elseif($item->finance_status ===2)
+                                    @elseif($item->finance_status ==2)
                                     <a  class="badge badge bg-danger" >Rejected</a>
                                     @else
                                     <a  class="badge badge bg-primary" >Review</a>
                                     @endif
 
                                 </td>
-                                <td> @if ($item->cod_status ===1)
+                                <td> @if ($item->cod_status ==1)
                                     <a  class="badge badge bg-success" >Accepted</a>
-                                    @elseif($item->cod_status ===2)
+                                    @elseif($item->cod_status ==2)
                                     <a  class="badge badge bg-danger" >Rejected</a>
                                     @else
                                     <a  class="badge badge bg-primary" >Review</a>
@@ -101,9 +101,9 @@
 
                                 </td>
                                 <td >
-                                    @if ($item->registrar_status ===1)
+                                    @if ($item->registrar_status ==1)
                                     <a  class="badge bg-success" >Accepted</a>
-                                    @elseif($item->registrar_status ===2)
+                                    @elseif($item->registrar_status ==2)
                                     <a  class="badge bg-danger" >Rejected</a>
                                     @else
                                     <a  class="badge bg-primary" >Pending</a>
@@ -111,7 +111,7 @@
 
                                 </td>
                                 <td nowrap>
-                                    @if($item->registrar_status === 0)
+                                    @if($item->registrar_status == 0)
 
                                     <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.viewApplication', $item->id) }}">view</a>
                                     @else

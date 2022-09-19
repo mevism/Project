@@ -90,11 +90,11 @@ class DeanController extends Controller
 
         foreach ($request->submit as $item){
             $app = Application::find($item);
-            if ($app->dean_status === 2){
+            if ($app->dean_status == 2){
                 $app->dean_status = 3;
                 $app->cod_status = 3;
             }
-            if ($app->dean_status === 1) {
+            if ($app->dean_status == 1) {
                 $app->registrar_status = 0;
             }
             $app->save();
@@ -104,7 +104,7 @@ class DeanController extends Controller
             $logs->user = Auth::guard('user')->user()->name;
             $logs->user_role = Auth::guard('user')->user()->role_id;
 
-            if ($app->dean_status === 3){
+            if ($app->dean_status == 3){
 
                 $logs->activity = 'Your application has been reverted to COD office for review';
             }else{
