@@ -34,7 +34,7 @@
 
     function showoptios() {
         var x = document.getElementById("institution");
-        if (x.style.display === "none") {
+        if (x.style.display== "none") {
             x.style.display = "block";
         } else {
             x.style.display = "none";
@@ -43,7 +43,7 @@
 
     function addwork(){
         var x = document.getElementById('work');
-        if(x.style.display === 'none'){
+        if(x.style.display== 'none'){
             x.style.display = 'block';
         }else {
             x.style.display = 'none';
@@ -184,19 +184,19 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="campus" value="Main"
                                                    @if($mycourse != null) {{ ($mycourse->campus == 'Main')? "checked" : "" }}@endif
-                                                   @if(old('campus') === 'Main') checked @endif required @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                                   @if(old('campus')== 'Main') checked @endif required @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                             <label class="form-check-label">Main</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="campus" value="Kwale"
                                                    @if($mycourse != null) {{ ($mycourse->campus == 'Kwale')? "checked" : "" }}@endif
-                                                   @if(old('campus') === 'Kwale')  checked @endif required @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                                   @if(old('campus')== 'Kwale')  checked @endif required @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                             <label class="form-check-label">Kwale</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="campus" value="Lamu"
                                                    @if($mycourse != null) {{ ($mycourse->campus == 'Lamu')? "checked" : "" }}@endif
-                                                   @if(old('campus') === 'Lamu') checked @endif required @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                                   @if(old('campus')== 'Lamu') checked @endif required @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                             <label class="form-check-label">Lamu</label>
                                         </div>
                                         <span class="fs-sm text-danger text-lowercase mt-2"> choose which campus to join </span>
@@ -214,7 +214,7 @@
                                     <div class="form-floating input-group">
                                         <span class="input-group-text input-group-text-sm col-md-3">{{ Str::limit( $course->mainCourses->courseRequirements->subject1, $limit = 10 , $end='' )  }}</span>
 
-                                        <select class="form-control form-control-sm text-uppercase" name="subject1" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                        <select class="form-control form-control-sm text-uppercase" name="subject1" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                             <option disabled selected> -- select subject-- </option>
                                                 @if($mycourse != null)
                                                     <option value="@if($mycourse != null) {{ explode(' ', $mycourse->subject_1)[0] }} @endif" selected> {{ explode(' ', $mycourse->subject_1)[0] }}</option>
@@ -245,7 +245,7 @@
                                         </select>
 
                                         <span class="input-group-text input-group-text-sm">
-                                            <select name="grade1" class="dept form-control form-control-md text-uppercase fs-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                            <select name="grade1" class="dept form-control form-control-md text-uppercase fs-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                                 <option selected disabled > -- select grade -- </option>
                                                     @if($mycourse != null)
                                                         <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_1)[1]  }} @endif" selected> {{ explode(' ', $mycourse->subject_1)[1] }}</option>
@@ -272,7 +272,7 @@
                                 <div class="col-sm-8 text-uppercase py-1">
                                     <div class="form-floating input-group">
                                         <span class="input-group-text input-group-text-sm col-md-3">{{ Str::limit( $course->mainCourses->courseRequirements->subject2, $limit = 10 , $end='' )  }}</span>
-                                        <select class="form-control form-control-sm text-uppercase" name="subject2" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                        <select class="form-control form-control-sm text-uppercase" name="subject2" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                             <option disabled selected> -- select subject-- </option>
                                                 @if($mycourse != null)
                                                     <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_2)[0] }} @endif" selected> {{ explode(' ', $mycourse->subject_2)[0] }}</option>
@@ -303,7 +303,7 @@
                                         </select>
 
                                         <span class="input-group-text input-group-text-sm">
-                                            <select name="grade2" class="dept form-control form-control-md text-uppercase m-1 fs-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                            <select name="grade2" class="dept form-control form-control-md text-uppercase m-1 fs-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                                 <option selected disabled > -- select grade -- </option>
                                                     @if($mycourse != null)
                                                         <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_2)[1] }} @endif" selected> {{ explode(' ', $mycourse->subject_2)[1] }}</option>
@@ -331,7 +331,7 @@
                                     <div class="form-floating input-group">
                                         <span class="input-group-text input-group-text-sm col-md-3">{{ Str::limit( $course->mainCourses->courseRequirements->subject3, $limit = 10 , $end='' )  }}</span>
 
-                                        <select class="form-control form-control-sm text-uppercase" name="subject3" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                        <select class="form-control form-control-sm text-uppercase" name="subject3" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                             <option disabled selected> -- select subject-- </option>
                                                 @if($mycourse != null)
                                                     <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_3)[0]}} @endif" selected> {{ explode(' ', $mycourse->subject_3)[0] }}</option>
@@ -363,7 +363,7 @@
 
 
                                         <span class="input-group-text input-group-text-sm">
-                                            <select name="grade3" class="dept form-control form-control-md text-uppercase m-1 fs-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                            <select name="grade3" class="dept form-control form-control-md text-uppercase m-1 fs-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                                 <option selected disabled > -- select grade -- </option>
                                                     @if($mycourse != null)
                                                         <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_3)[1] }} @endif" selected> {{ explode(' ', $mycourse->subject_3)[1] }}</option>
@@ -392,7 +392,7 @@
                                     <div class="form-floating input-group">
                                         <span class="input-group-text input-group-text-sm col-md-3">{{ Str::limit( $course->mainCourses->courseRequirements->subject4, $limit = 10 , $end='' )  }}</span>
 
-                                        <select class="form-control form-control-sm text-uppercase" name="subject4" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                        <select class="form-control form-control-sm text-uppercase" name="subject4" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                             <option disabled selected> -- select subject-- </option>
                                                 @if($mycourse != null)
                                                     <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_4)[0] }} @endif" selected>{{ explode(' ', $mycourse->subject_4)[0] }}</option>
@@ -423,7 +423,7 @@
                                         </select>
 
                                         <span class="input-group-text input-group-text-sm">
-                                            <select name="grade4" class="dept form-control form-control-md text-uppercase m-1 fs-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                            <select name="grade4" class="dept form-control form-control-md text-uppercase m-1 fs-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                                 <option selected disabled > -- select grade -- </option>
                                                     @if($mycourse != null)
                                                         <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_4)[1] }} @endif" selected> {{ explode(' ', $mycourse->subject_4)[1] }}</option>
@@ -446,7 +446,7 @@
                             </div>
                             <div class="d-flex justify-content-center mb-4 mt-4">
                                 @if($mycourse != null)
-                                    @if($mycourse != null && $mycourse->declaration === 1)
+                                    @if($mycourse != null && $mycourse->declaration== 1)
                                         <button class="btn btn-sm btn-success" disabled data-toggle="click-ripple"><i class="fa fa-check-circle"></i> Course Details Updated </button>
                                     @else
                                         <button class="btn btn-sm btn-success" disabled data-toggle="click-ripple"><i class="fa fa-check-circle"></i> Course Details Updated </button>
@@ -663,17 +663,17 @@
                                         <a href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> How do I pay?</a>
                                     </div>
                                     <div class="form-floating text-uppercase py-1">
-                                        <input type="text" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif required value="{{ old('receipt') }} @if($mycourse != null && $mycourse->receipt != null) {{ $mycourse->receipt }} @endif" name="receipt" placeholder="Enter RECEIPT NUMBER">
+                                        <input type="text" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif required value="{{ old('receipt') }} @if($mycourse != null && $mycourse->receipt != null) {{ $mycourse->receipt }} @endif" name="receipt" placeholder="Enter RECEIPT NUMBER">
                                         <label class="form-label">TRANSACTION CODE</label>
                                     </div>
                                     <div class="form-floating text-uppercase py-1">
-                                        <input type="file" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration === 1) disabled @endif required value="{{ old('receipt_file') }} " name="receipt_file">
+                                        <input type="file" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif required value="{{ old('receipt_file') }} " name="receipt_file">
                                     </div>
                                         <input type="hidden" value="{{ $course->mainCourses->id }}" name="course_id">
                                     <small class="text-muted">upload your bank reciept (format .pdf .png .jpeg .jpg</small>
                                     <div class="d-flex justify-content-center my-4">
                                         @if($mycourse != null && $mycourse->receipt != null)
-                                            @if($mycourse != null && $mycourse->declaration === 1)
+                                            @if($mycourse != null && $mycourse->declaration== 1)
                                         <button class="btn btn-sm btn-success" disabled data-toggle="click-ripple"><i class="fa fa-check-circle"></i>
                                             Payments Details Updated
                                         </button>
@@ -817,13 +817,13 @@
                                 <div class="col-md-12">
                                     <span>Applicant Declaration</span>
                                     <div class="" style="padding: 7px !important;">
-                                        <input type="checkbox" name="declare" required @if($mycourse != null && $mycourse->declaration === 1) disabled @endif>
+                                        <input type="checkbox" name="declare" required @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                         <input hidden name="course_id" value="@if($mycourse != null) {{ $mycourse->id }} @endif">
                                         I <span class="text-decoration-underline"> {{ Auth::user()->sname }} {{ Auth::user()->mname }} {{ Auth::user()->fname }}</span> declare that the information given in this application form is correct. I further certify that I have read, understood and agreed to comply with the terms stipulated herein.
                                     </div>
                                 </div>
                                     <div class="d-flex justify-content-center mb-1 mt-4">
-                                        @if($mycourse != null && $mycourse->declaration === 1)
+                                        @if($mycourse != null && $mycourse->declaration== 1)
                                             <button class="btn btn-success" disabled> <i class="fa fa-check-circle"></i> Submitted </button>
                                         @else
                                         <button onclick='confirm("Once this application has been submitted cannot be changed. Are you sure you want to submit the application?")' class="btn btn-sm btn-alt-success">Submit Application</button>
