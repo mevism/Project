@@ -120,7 +120,7 @@ class UserController extends Controller
 
         }else{
 
-            return redirect()->route('root')->with('error', 'Your are not looged in. Please login first.');
+            return redirect()->route('root')->with('error', 'Your are not logged in. Please login first.');
         }
     }
 

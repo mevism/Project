@@ -47,16 +47,16 @@
         </div>
 
     </div>
-    
+
           <div class="block block-rounded">
-           
+
             <div class="block-content block-content-full">
               <div class="row">
                 <div class="col-12">
               <table id="example" class="table table-bordered table-striped table-vcenter js-dataTable-responsive">
                 <span class="d-flex justify-content-end">
-              
-                  <thead>                    
+
+                  <thead>
                   <tr>
                     <th>Course Code</th>
                     <th>Courses</th>
@@ -69,11 +69,11 @@
                     <th>Subject3</th>
                     <th>Subject4</th>
                   </tr>
-                  
+
                 </thead>
                 <tbody>
                     @foreach ($courses as $course)
-                    
+
                          @foreach ($course as $item)
                          <tr>
                             <td>{{ $item->course_code }}</td>
@@ -86,12 +86,12 @@
                             <td>{{ $item->subject2 }}</td>
                             <td>{{ $item->subject3 }}</td>
                             <td>{{ $item->subject4 }}</td>
-                    
+
                          </tr>
                          @endforeach
 
                      @endforeach
-                
+
                 </tbody>
               </table>
                 </div>

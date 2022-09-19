@@ -64,21 +64,21 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td style="text-transform: uppercase" class="fw-semibold fs-sm">{{ Carbon\carbon::parse($intake->intake_from)->format('M')}} - {{ Carbon\carbon::parse($intake->intake_to)->format('M Y') }}</td>
                                 <td>
-                                    @if ($intake->status === 0)
+                                    @if ($intake->status == 0)
                                         <span class="badge bg-primary">Intake Pending</span>
                                     @endif
-                                    @if ($intake->status === 1)
+                                    @if ($intake->status == 1)
                                           <span class="badge bg-success">Intake Ongoing</span>
                                     @endif
-                                    @if ($intake->status === 2)
+                                    @if ($intake->status == 2)
                                         <span  class="badge bg-warning">Intake Closed</span>
                                     @endif
-                                    @if ($intake->status === 3)
+                                    @if ($intake->status == 3)
                                         <span  class="badge bg-danger">Intake Suspended</span>
                                     @endif
                                 </td>
                                 <td>
-                                    @if($intake->status === 0 )
+                                    @if($intake->status == 0 )
                                     <a class="btn btn-sm btn-alt-info" href="{{ route('department.intakeCourses', $intake->id) }}">Add courses</a>
                                     @else
                                     <a class="btn btn-sm btn-alt-secondary" onclick="return confirm('Are you sure you want to delete this intake ?')" href="{{ route('courses.destroyIntake', $intake->id) }}">View details</a>
