@@ -45,33 +45,33 @@ class KuccpsImport implements ToCollection
                 $mname = $name[2];
             }
 
-            $exit_date = substr($row[1], -4);
+            $exit_date = preg_replace('/&/', '', substr($row[1], -4));
 
             $applicant = KuccpsApplicant::create([
-                'index_number' => $row[1],
-                'sname' => $sname,
-                'fname' => $fname ,
-                'mname' => $mname,
-                'gender' => $row[3],
-                'mobile' => $row[4],
-                'alt_mobile' => $row[5],
-                'alt_email' => $row[7],
-                'BOX' => $row[8],
-                'postal_code' => $row[9],
-                'town' => $row[10],
-                'school' => $row[13],
+                'index_number' => preg_replace('/&/', 'AND', $row[1]),
+                'sname' => preg_replace('/&/', 'AND', $sname),
+                'fname' => preg_replace('/&/', 'AND', $fname) ,
+                'mname' => preg_replace('/&/', 'AND', $mname) ,
+                'gender' => preg_replace('/&/', 'AND', $row[3]),
+                'mobile' => preg_replace('/&/', 'AND', $row[4]),
+                'alt_mobile' => preg_replace('/&/', 'AND', $row[5]),
+                'alt_email' => preg_replace('/&/', 'AND', $row[7]),
+                'BOX' => preg_replace('/&/', 'AND', $row[8]),
+                'postal_code' => preg_replace('/&/', 'AND', $row[9]),
+                'town' => preg_replace('/&/', 'AND', $row[10]),
+                'school' => preg_replace('/&/', 'AND', $row[13]),
             ]);
 
             KuccpsApplication::create([
                 'applicant_id' => $applicant->id,
                 'intake_id' => $this->intake_id,
-                'course_code' => $row[11],
-                'course_name' => $row[12]
+                'course_code' => preg_replace('/&/', 'AND', $row[11]) ,
+                'course_name' => preg_replace('/&/', 'AND', $row[12])
             ]);
 
             Education::create([
                 'applicant_id' => $applicant->id,
-                'institution' => $row[13],
+                'institution' => preg_replace('/&/', 'AND', $row[13]),
                 'level' => 'SECONDARY',
                 'qualification' => 'KUCCPS',
                 'exit_date' => $exit_date,
