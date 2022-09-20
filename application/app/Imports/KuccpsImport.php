@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Modules\Application\Entities\Education;
 use Modules\Registrar\Entities\KuccpsApplicant;
 use Modules\Registrar\Entities\KuccpsApplication;
 use Illuminate\Support\Collection;
@@ -44,6 +45,8 @@ class KuccpsImport implements ToCollection
                 $mname = $name[2];
             }
 
+            $exit_date = substr($row[1], -4);
+
             $applicant = KuccpsApplicant::create([
                 'index_number' => $row[1],
                 'sname' => $sname,
@@ -64,7 +67,15 @@ class KuccpsImport implements ToCollection
                 'intake_id' => $this->intake_id,
                 'course_code' => $row[11],
                 'course_name' => $row[12]
+            ]);
 
+            Education::create([
+                'applicant_id' => $applicant->id,
+                'institution' => $row[13],
+                'level' => 'SECONDARY',
+                'qualification' => 'KUCCPS',
+                'exit_date' => $exit_date,
+                'start_date' => $exit_date - 3,
             ]);
         }
     }

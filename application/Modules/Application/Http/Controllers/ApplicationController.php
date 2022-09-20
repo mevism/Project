@@ -781,9 +781,11 @@ class ApplicationController extends Controller
 
         if (AdmissionDocument::where('application_id', $request->academicDocId)->exists()){
 
+            $name = AdmissionDocument::where('application_id', $request->academicDocId)->first()->admDocuments->reg_number;
+
             if ($request->hasFile('academicDoc')){
                 $file = $request->academicDoc;
-                $fileName = 'certificate'.time().'.'.$file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name).'-'.time().'.'.$file->getClientOriginalExtension();
                 $request->academicDoc->move('Admissions/Certificates', $fileName);
 
                 AdmissionDocument::where('application_id', $request->academicDocId)->update(['certificates' => $fileName]);
@@ -792,11 +794,15 @@ class ApplicationController extends Controller
 
         }else{
 
+            $id = $request->academicDocId;
+
+            $name = Application::find($id);
+
             $academicCerts = new AdmissionDocument;
             $academicCerts->application_id = $request->academicDocId;
             if ($request->hasFile('academicDoc')){
                 $file = $request->academicDoc;
-                $fileName = 'certificate'.time().'.'.$file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name->reg_number).'-'.time().'.'.$file->getClientOriginalExtension();
                 $request->academicDoc->move('Admissions/Certificates', $fileName);
                 $academicCerts->certificates = $fileName;
             }
@@ -816,9 +822,11 @@ class ApplicationController extends Controller
 
         if (AdmissionDocument::where('application_id', $request->bankReceiptId)->exists()){
 
+            $name = AdmissionDocument::where('application_id', $request->bankReceiptId)->first()->admDocuments->reg_number;
+
             if ($request->hasFile('bankReceipt')){
                 $file = $request->bankReceipt;
-                $fileName = 'bankreceipt'.time().'.'.$file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name).'-'.time().'.'.$file->getClientOriginalExtension();
                 $request->bankReceipt->move('Admissions/BankReceipt', $fileName);
 
                 AdmissionDocument::where('application_id', $request->bankReceiptId)->update(['bank_receipt' => $fileName]);
@@ -827,11 +835,15 @@ class ApplicationController extends Controller
 
         }else{
 
+            $id = $request->bankReceiptId;
+
+            $name = Application::find($id);
+
             $academicCerts = new AdmissionDocument;
             $academicCerts->application_id = $request->bankReceiptId;
             if ($request->hasFile('bankReceipt')){
                 $file = $request->bankReceipt;
-                $fileName = 'bankreceipt'.time().'.'.$file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name->reg_number).'-'.time().'.'.$file->getClientOriginalExtension();
                 $request->bankReceipt->move('Admissions/BankReceipt', $fileName);
                 $academicCerts->bank_receipt = $fileName;
             }
@@ -851,9 +863,11 @@ class ApplicationController extends Controller
 
         if (AdmissionDocument::where('application_id', $request->medicalFormId)->exists()){
 
+            $name = AdmissionDocument::where('application_id', $request->medicalFormId)->first()->admDocuments->reg_number;
+
             if ($request->hasFile('medicalForm')){
                 $file = $request->medicalForm;
-                $fileName = 'medicalForm'.time().'.'.$file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name).'-'.time().'.'.$file->getClientOriginalExtension();
                 $request->medicalForm->move('Admissions/MedicalForms', $fileName);
 
                 AdmissionDocument::where('application_id', $request->medicalFormId)->update(['medical_form' => $fileName]);
@@ -862,11 +876,15 @@ class ApplicationController extends Controller
 
         }else{
 
+            $id = $request->medicalFormId;
+
+            $name = Application::find($id);
+
             $academicCerts = new AdmissionDocument;
             $academicCerts->application_id = $request->medicalFormId;
             if ($request->hasFile('medicalForm')){
                 $file = $request->medicalForm;
-                $fileName = 'medicalForm'.time().'.'.$file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name->reg_number).'-'.time().'.'.$file->getClientOriginalExtension();
                 $request->medicalForm->move('Admissions/MedicalForms', $fileName);
                 $academicCerts->medical_form = $fileName;
             }
@@ -918,7 +936,6 @@ class ApplicationController extends Controller
             if ($request->hasFile('passPort')){
                 $file = $request->passPort;
                 $fileName = str_replace('/', '', $name->reg_number).'-'.time().'.'.$file->getClientOriginalExtension();
-
                 $thumbnailFolder = storage_path('/thumbnails');
 
                 $passport = Image::make($file->path());

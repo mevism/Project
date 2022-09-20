@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Entities/Education.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Entities/Education.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/app/Imports/KuccpsImport.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Imports/KuccpsImport.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -253,7 +257,8 @@
       <workItem from="1663099250066" duration="15385000" />
       <workItem from="1663159983860" duration="24805000" />
       <workItem from="1663317153067" duration="20200000" />
-      <workItem from="1663567949900" duration="18998000" />
+      <workItem from="1663567949900" duration="19714000" />
+      <workItem from="1663655279176" duration="5450000" />
     </task>
     <servers />
   </component>
@@ -270,5 +275,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/application" />
+    </ignored-roots>
   </component>
 </project>
