@@ -1,4 +1,3 @@
-@extends('application::layouts.backend')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
 
@@ -68,7 +67,7 @@
     });
 </script>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
@@ -100,61 +99,61 @@
                         <li class="nav-item d-md-flex flex-md-column">
                             <button class="nav-link text-md-start active" id="btabs-vertical-work-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-work" role="tab" aria-controls="btabs-vertical-require" aria-selected="false">
                                 <i class="fa fa-fw fa-briefcase opacity-50 me-1 d-none d-sm-inline-block"></i> Course Requirements
-                                @if($mycourse != null)
+                                <?php if($mycourse != null): ?>
                                     <span class="badge bg-success"><i class="fa fa-check-circle"></i> Complete </span>
-                                @endif
+                                <?php endif; ?>
                             </button>
                         </li>
 
                         <li class="nav-item d-md-flex flex-md-column">
                             <button class="nav-link text-md-start" id="btabs-vertical-course-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-course" role="tab" aria-controls="btabs-vertical-course" aria-selected="true">
                                 <i class="fa fa-fw fa-book-atlas opacity-50 me-1 d-none d-sm-inline-block"></i> Course Details
-                                @if($mycourse != null)
+                                <?php if($mycourse != null): ?>
                                 <span class="badge bg-success"><i class="fa fa-check-circle"></i> Complete </span>
-                                @endif
+                                <?php endif; ?>
                             </button>
                         </li>
                         <li class="nav-item d-md-flex flex-md-column">
                             <button class="nav-link text-md-start" id="btabs-vertical-education-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-education" role="tab" aria-controls="btabs-vertical-education" aria-selected="false">
                                 <i class="fa fa-fw fa-school opacity-50 me-1 d-none d-sm-inline-block"></i> Education History
-                                @if(count($education) > 0)
+                                <?php if(count($education) > 0): ?>
                                     <span class="badge bg-success"><i class="fa fa-check-circle"></i> Complete </span>
-                                @endif
+                                <?php endif; ?>
                             </button>
                         </li>
                         <li class="nav-item d-md-flex flex-md-column">
                             <button class="nav-link text-md-start" id="btabs-vertical-work-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-work" role="tab" aria-controls="btabs-vertical-work" aria-selected="false">
                                 <i class="fa fa-fw fa-briefcase opacity-50 me-1 d-none d-sm-inline-block"></i> Working History
-                                @if(count($work) > 0)
+                                <?php if(count($work) > 0): ?>
                                     <span class="badge bg-success"><i class="fa fa-check-circle"></i> Complete </span>
-                                @endif
+                                <?php endif; ?>
                             </button>
                         </li>
-{{--                        {{ $mycourse->receipt }}--}}
+
                         <li class="nav-item d-md-flex flex-md-column">
                             <button class="nav-link text-md-start" id="btabs-vertical-fee-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-fee" role="tab" aria-controls="btabs-vertical-fee" aria-selected="false">
                                 <i class="fa fa-fw fa-money-bill opacity-50 me-1 d-none d-sm-inline-block"></i> Application Fees
-{{--                                @if($mycourse != null)--}}
-                                @if($mycourse != null && $mycourse->receipt != null)
+
+                                <?php if($mycourse != null && $mycourse->receipt != null): ?>
                                     <span class="badge bg-success"><i class="fa fa-check-circle"></i> Complete </span>
-                                @endif
-{{--                                @endif--}}
+                                <?php endif; ?>
+
                             </button>
                         </li>
                         <li class="nav-item d-md-flex flex-md-column">
                             <button class="nav-link text-md-start" id="btabs-vertical-sponsor-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-sponsor" role="tab" aria-controls="btabs-vertical-sponsor" aria-selected="false">
                                 <i class="fa fa-fw fa-user-group opacity-50 me-1 d-none d-sm-inline-block"></i> Sponsor / Guardian
-                                @if(count($parent) > 0 && count($sponsor) > 0)
+                                <?php if(count($parent) > 0 && count($sponsor) > 0): ?>
                                     <span class="badge bg-success"><i class="fa fa-check-circle"></i> Complete </span>
-                                @endif
+                                <?php endif; ?>
                             </button>
                         </li>
                         <li class="nav-item d-md-flex flex-md-column">
                             <button class="nav-link text-md-start" id="btabs-vertical-submit-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-submit" role="tab" aria-controls="btabs-vertical-submit" aria-selected="false">
                                 <i class="fa fa-fw fa-check-double opacity-50 me-1 d-none d-sm-inline-block"></i> Complete Application
-                                @if($mycourse != null && $mycourse->receipt != null && count($education) > 0)
+                                <?php if($mycourse != null && $mycourse->receipt != null && count($education) > 0): ?>
                                     <span class="badge bg-success"><i class="fa fa-check-circle"></i> Submit </span>
-                                @endif
+                                <?php endif; ?>
                             </button>
                         </li>
                     </ul>
@@ -163,13 +162,13 @@
                             <h4 class="fw-semibold"> Course Requirements </h4>
                             <h4 class="fs-sm fw-semibold">Minimum Course Requirements</h4>
 
-                                <p class="text-amethyst-darker">{{ $course->mainCourses->courseRequirements->course_requirements }} </p>
+                                <p class="text-amethyst-darker"><?php echo e($course->mainCourses->courseRequirements->course_requirements); ?> </p>
 
                             <h4 class="fs-sm fw-semibold"> Minmimum Subject Requirements</h4>
-                            <span class="h4 fs-sm">Subject 1</span> - <span class="ml-4">{{ $course->mainCourses->courseRequirements->subject1 }}</span> <br>
-                            <span class="h4 fs-sm">Subject 2</span> - <span class="ml-4">{{ $course->mainCourses->courseRequirements->subject2 }}</span> <br>
-                            <span class="h4 fs-sm">Subject 3</span> - <span class="ml-4">{{ $course->mainCourses->courseRequirements->subject3 }}</span> <br>
-                            <span class="h4 fs-sm">Subject 4</span> - <span class="ml-4">{{ $course->mainCourses->courseRequirements->subject4 }}</span>
+                            <span class="h4 fs-sm">Subject 1</span> - <span class="ml-4"><?php echo e($course->mainCourses->courseRequirements->subject1); ?></span> <br>
+                            <span class="h4 fs-sm">Subject 2</span> - <span class="ml-4"><?php echo e($course->mainCourses->courseRequirements->subject2); ?></span> <br>
+                            <span class="h4 fs-sm">Subject 3</span> - <span class="ml-4"><?php echo e($course->mainCourses->courseRequirements->subject3); ?></span> <br>
+                            <span class="h4 fs-sm">Subject 4</span> - <span class="ml-4"><?php echo e($course->mainCourses->courseRequirements->subject4); ?></span>
 
                             <p class="text-danger mt-4">
                                 Disclaimer here!!!!!!!!!!!!!!!!!!!!!
@@ -177,28 +176,28 @@
                         </div>
                         <div class="block-content tab-pane" id="btabs-vertical-course" role="tabpanel" aria-labelledby="btabs-vertical-home-course">
                             <h4 class="fw-semibold">Course Details</h4>
-                            <form method="POST" action="{{ route('application.submitApp') }}">
-                                @csrf
+                            <form method="POST" action="<?php echo e(route('application.submitApp')); ?>">
+                                <?php echo csrf_field(); ?>
                             <div class="row my-1">
                                 <label class="col-sm-2 col-form-label" for="example-hf-password">Course Name</label>
                                 <div class="col-sm-10 text-uppercase py-1">
-                                    <input type="text" class="form-control form-control-md" name="course" value="{{ $course->mainCourses->course_name }}" readonly>
+                                    <input type="text" class="form-control form-control-md" name="course" value="<?php echo e($course->mainCourses->course_name); ?>" readonly>
                                 </div>
                             </div>
                             <div class="row my-1">
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">Department</label>
                                 <div class="col-sm-10 text-uppercase py-1">
-                                    <input type="text" class="form-control form-control-md" name="department" value="{{ $course->mainCourses->getCourseDept->name }}" readonly>
-                                    <input type="hidden" name="dept" value="{{ $course->mainCourses->getCourseDept->id }}">
-                                    <input type="hidden" name="school" value="{{ $course->mainCourses->getCourseDept->schools->id }}">
+                                    <input type="text" class="form-control form-control-md" name="department" value="<?php echo e($course->mainCourses->getCourseDept->name); ?>" readonly>
+                                    <input type="hidden" name="dept" value="<?php echo e($course->mainCourses->getCourseDept->id); ?>">
+                                    <input type="hidden" name="school" value="<?php echo e($course->mainCourses->getCourseDept->schools->id); ?>">
                                 </div>
                             </div>
                             <div class="row my-1">
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">School</label>
                                 <div class="col-sm-10 text-uppercase py-1">
-                                    <input type="text" class="form-control form-control-md" name="" value="{{ $course->mainCourses->getCourseDept->schools->name }}" readonly>
-                                    <input type="hidden" name="intake" value="{{ $course->openCourse->id }}">
-                                    <input type="hidden" name="course_id" value="{{ $course->mainCourses->id }}">
+                                    <input type="text" class="form-control form-control-md" name="" value="<?php echo e($course->mainCourses->getCourseDept->schools->name); ?>" readonly>
+                                    <input type="hidden" name="intake" value="<?php echo e($course->openCourse->id); ?>">
+                                    <input type="hidden" name="course_id" value="<?php echo e($course->mainCourses->id); ?>">
                                 </div>
                             </div>
                             <div class="row" style="padding: 5px !important;">
@@ -206,8 +205,8 @@
                                 <div class="col-sm-10 text-uppercase mb-4" style="padding: 5px !important;">
                                     <div class="space-x-0">
                                         <div class="form-check form-check-inline">
-                                            <label class="form-check-label">{{ $course->courseXCampus->name }}</label>
-                                            <input class="form-check-input" type="radio" name="campus" value="{{ $course->courseXCampus->id }}" checked readonly="readonly">
+                                            <label class="form-check-label"><?php echo e($course->courseXCampus->name); ?></label>
+                                            <input class="form-check-input" type="radio" name="campus" value="<?php echo e($course->courseXCampus->id); ?>" checked readonly="readonly">
                                         </div>
                                         <h6 class="fs-sm text-info fw-normal mt-2"> You can go courses list to see if this course is offered in another campus </h6>
                                     </div>
@@ -219,7 +218,7 @@
                                         <span class="h6">KCSE OR Equivalent</span>
                                     </div>
                                     <div class="col-md-8">
-                                        <span class="h5 text-info"> {{ $course->mainCourses->courseRequirements->course_requirements }} </span>
+                                        <span class="h5 text-info"> <?php echo e($course->mainCourses->courseRequirements->course_requirements); ?> </span>
                                      </div>
                                 </div>
                             <span class="h5 fw-semibold">Cluster Subject</span>
@@ -231,13 +230,13 @@
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 1</label>
                                 <div class="col-sm-10 text-uppercase py-1">
                                     <div class="form-floating input-group">
-                                        <span class="input-group-text input-group-text-sm col-md-4">{{ Str::limit( $course->mainCourses->courseRequirements->subject1, $limit = 15 , $end='' )  }}</span>
+                                        <span class="input-group-text input-group-text-sm col-md-4"><?php echo e(Str::limit( $course->mainCourses->courseRequirements->subject1, $limit = 15 , $end='' )); ?></span>
 
-                                        <select class="form-control form-control-sm text-uppercase" name="subject1" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
+                                        <select class="form-control form-control-sm text-uppercase" name="subject1" <?php if($mycourse != null && $mycourse->declaration== 1): ?> disabled <?php endif; ?>>
                                             <option disabled selected> -- select subject-- </option>
-                                                @if($mycourse != null)
-                                                    <option value="@if($mycourse != null) {{ explode(' ', $mycourse->subject_1)[0] }} @endif" selected> {{ explode(' ', $mycourse->subject_1)[0] }}</option>
-                                                @endif
+                                                <?php if($mycourse != null): ?>
+                                                    <option value="<?php if($mycourse != null): ?> <?php echo e(explode(' ', $mycourse->subject_1)[0]); ?> <?php endif; ?>" selected> <?php echo e(explode(' ', $mycourse->subject_1)[0]); ?></option>
+                                                <?php endif; ?>
                                             <option value="ENG"> ENG </option>
                                             <option value="KIS"> KIS </option>
                                             <option value="MAT"> MAT </option>
@@ -264,11 +263,11 @@
                                         </select>
 
                                         <span class="input-group-text input-group-text-sm">
-                                            <select name="grade1" class="dept form-control form-control-md text-uppercase fs-sm" @if($mycourse != null && $mycourse->declaration == 1) disabled @endif>
+                                            <select name="grade1" class="dept form-control form-control-md text-uppercase fs-sm" <?php if($mycourse != null && $mycourse->declaration == 1): ?> disabled <?php endif; ?>>
                                                 <option selected disabled > -- select grade -- </option>
-                                                    @if($mycourse != null)
-                                                        <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_1)[1]  }} @endif" selected> {{ explode(' ', $mycourse->subject_1)[1] }}</option>
-                                                    @endif
+                                                    <?php if($mycourse != null): ?>
+                                                        <option value=" <?php if($mycourse != null): ?> <?php echo e(explode(' ', $mycourse->subject_1)[1]); ?> <?php endif; ?>" selected> <?php echo e(explode(' ', $mycourse->subject_1)[1]); ?></option>
+                                                    <?php endif; ?>
                                                 <option value="A"> A </option>
                                                 <option value="A-"> A- </option>
                                                 <option value="B+"> B+ </option>
@@ -290,12 +289,12 @@
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 2</label>
                                 <div class="col-sm-10 text-uppercase py-1">
                                     <div class="form-floating input-group">
-                                        <span class="input-group-text input-group-text-sm col-md-4">{{ Str::limit( $course->mainCourses->courseRequirements->subject2, $limit = 15 , $end='' )  }}</span>
-                                        <select class="form-control form-control-sm text-uppercase" name="subject2" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
+                                        <span class="input-group-text input-group-text-sm col-md-4"><?php echo e(Str::limit( $course->mainCourses->courseRequirements->subject2, $limit = 15 , $end='' )); ?></span>
+                                        <select class="form-control form-control-sm text-uppercase" name="subject2" <?php if($mycourse != null && $mycourse->declaration== 1): ?> disabled <?php endif; ?>>
                                             <option disabled selected> -- select subject-- </option>
-                                                @if($mycourse != null)
-                                                    <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_2)[0] }} @endif" selected> {{ explode(' ', $mycourse->subject_2)[0] }}</option>
-                                                @endif
+                                                <?php if($mycourse != null): ?>
+                                                    <option value=" <?php if($mycourse != null): ?> <?php echo e(explode(' ', $mycourse->subject_2)[0]); ?> <?php endif; ?>" selected> <?php echo e(explode(' ', $mycourse->subject_2)[0]); ?></option>
+                                                <?php endif; ?>
                                             <option value="ENG"> ENG </option>
                                             <option value="KIS"> KIS </option>
                                             <option value="MAT"> MAT </option>
@@ -322,11 +321,11 @@
                                         </select>
 
                                         <span class="input-group-text input-group-text-sm">
-                                            <select name="grade2" class="dept form-control form-control-md text-uppercase m-1 fs-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
+                                            <select name="grade2" class="dept form-control form-control-md text-uppercase m-1 fs-sm" <?php if($mycourse != null && $mycourse->declaration== 1): ?> disabled <?php endif; ?>>
                                                 <option selected disabled > -- select grade -- </option>
-                                                    @if($mycourse != null)
-                                                        <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_2)[1] }} @endif" selected> {{ explode(' ', $mycourse->subject_2)[1] }}</option>
-                                                    @endif
+                                                    <?php if($mycourse != null): ?>
+                                                        <option value=" <?php if($mycourse != null): ?> <?php echo e(explode(' ', $mycourse->subject_2)[1]); ?> <?php endif; ?>" selected> <?php echo e(explode(' ', $mycourse->subject_2)[1]); ?></option>
+                                                    <?php endif; ?>
                                                 <option value="A"> A </option>
                                                 <option value="A-"> A- </option>
                                                 <option value="B+"> B+ </option>
@@ -348,13 +347,13 @@
                                 <label class="col-sm-2 col-form-label" for="example-hf-password">Subject 3</label>
                                 <div class="form-floating col-sm-10 text-uppercase py-1">
                                     <div class="form-floating input-group">
-                                        <span class="input-group-text input-group-text-sm col-md-4">{{ Str::limit( $course->mainCourses->courseRequirements->subject3, $limit = 15 , $end='' )  }}</span>
+                                        <span class="input-group-text input-group-text-sm col-md-4"><?php echo e(Str::limit( $course->mainCourses->courseRequirements->subject3, $limit = 15 , $end='' )); ?></span>
 
-                                        <select class="form-control form-control-sm text-uppercase" name="subject3" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
+                                        <select class="form-control form-control-sm text-uppercase" name="subject3" <?php if($mycourse != null && $mycourse->declaration== 1): ?> disabled <?php endif; ?>>
                                             <option disabled selected> -- select subject-- </option>
-                                                @if($mycourse != null)
-                                                    <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_3)[0]}} @endif" selected> {{ explode(' ', $mycourse->subject_3)[0] }}</option>
-                                                @endif
+                                                <?php if($mycourse != null): ?>
+                                                    <option value=" <?php if($mycourse != null): ?> <?php echo e(explode(' ', $mycourse->subject_3)[0]); ?> <?php endif; ?>" selected> <?php echo e(explode(' ', $mycourse->subject_3)[0]); ?></option>
+                                                <?php endif; ?>
                                             <option value="ENG"> ENG </option>
                                             <option value="KIS"> KIS </option>
                                             <option value="MAT"> MAT </option>
@@ -382,11 +381,11 @@
 
 
                                         <span class="input-group-text input-group-text-sm">
-                                            <select name="grade3" class="dept form-control form-control-md text-uppercase m-1 fs-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
+                                            <select name="grade3" class="dept form-control form-control-md text-uppercase m-1 fs-sm" <?php if($mycourse != null && $mycourse->declaration== 1): ?> disabled <?php endif; ?>>
                                                 <option selected disabled > -- select grade -- </option>
-                                                    @if($mycourse != null)
-                                                        <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_3)[1] }} @endif" selected> {{ explode(' ', $mycourse->subject_3)[1] }}</option>
-                                                    @endif
+                                                    <?php if($mycourse != null): ?>
+                                                        <option value=" <?php if($mycourse != null): ?> <?php echo e(explode(' ', $mycourse->subject_3)[1]); ?> <?php endif; ?>" selected> <?php echo e(explode(' ', $mycourse->subject_3)[1]); ?></option>
+                                                    <?php endif; ?>
                                                 <option value="A"> A </option>
                                                 <option value="A-"> A- </option>
                                                 <option value="B+"> B+ </option>
@@ -409,13 +408,13 @@
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 4 </label>
                                 <div class="col-sm-10 text-uppercase py-1">
                                     <div class="form-floating input-group">
-                                        <span class="input-group-text input-group-text-sm col-md-4">{{ Str::limit( $course->mainCourses->courseRequirements->subject4, $limit = 15 , $end='' )  }}</span>
+                                        <span class="input-group-text input-group-text-sm col-md-4"><?php echo e(Str::limit( $course->mainCourses->courseRequirements->subject4, $limit = 15 , $end='' )); ?></span>
 
-                                        <select class="form-control form-control-sm text-uppercase" name="subject4" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
+                                        <select class="form-control form-control-sm text-uppercase" name="subject4" <?php if($mycourse != null && $mycourse->declaration== 1): ?> disabled <?php endif; ?>>
                                             <option disabled selected> -- select subject-- </option>
-                                                @if($mycourse != null)
-                                                    <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_4)[0] }} @endif" selected>{{ explode(' ', $mycourse->subject_4)[0] }}</option>
-                                                @endif
+                                                <?php if($mycourse != null): ?>
+                                                    <option value=" <?php if($mycourse != null): ?> <?php echo e(explode(' ', $mycourse->subject_4)[0]); ?> <?php endif; ?>" selected><?php echo e(explode(' ', $mycourse->subject_4)[0]); ?></option>
+                                                <?php endif; ?>
                                             <option value="ENG" > ENG </option>
                                             <option value="KIS"> KIS </option>
                                             <option value="MAT"> MAT </option>
@@ -442,11 +441,11 @@
                                         </select>
 
                                         <span class="input-group-text input-group-text-sm">
-                                            <select name="grade4" class="dept form-control form-control-md text-uppercase m-1 fs-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
+                                            <select name="grade4" class="dept form-control form-control-md text-uppercase m-1 fs-sm" <?php if($mycourse != null && $mycourse->declaration== 1): ?> disabled <?php endif; ?>>
                                                 <option selected disabled > -- select grade -- </option>
-                                                    @if($mycourse != null)
-                                                        <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_4)[1] }} @endif" selected> {{ explode(' ', $mycourse->subject_4)[1] }}</option>
-                                                    @endif
+                                                    <?php if($mycourse != null): ?>
+                                                        <option value=" <?php if($mycourse != null): ?> <?php echo e(explode(' ', $mycourse->subject_4)[1]); ?> <?php endif; ?>" selected> <?php echo e(explode(' ', $mycourse->subject_4)[1]); ?></option>
+                                                    <?php endif; ?>
                                                 <option value="A"> A </option>
                                                 <option value="A-"> A- </option>
                                                 <option value="B+"> B+ </option>
@@ -464,18 +463,18 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center mb-4 mt-4">
-                                @if($mycourse != null)
-                                    @if($mycourse != null && $mycourse->declaration== 1)
+                                <?php if($mycourse != null): ?>
+                                    <?php if($mycourse != null && $mycourse->declaration== 1): ?>
                                         <button class="btn btn-sm btn-success" disabled data-toggle="click-ripple"><i class="fa fa-check-circle"></i> Course Details Updated </button>
-                                    @else
+                                    <?php else: ?>
                                         <button class="btn btn-sm btn-success" disabled data-toggle="click-ripple"><i class="fa fa-check-circle"></i> Course Details Updated </button>
                                         <button class="btn btn-sm btn-alt-success" style="margin-left: 1rem; " data-toggle="click-ripple">
                                             Update Course
                                         </button>
-                                    @endif
-                                @else
+                                    <?php endif; ?>
+                                <?php else: ?>
                                 <button class="btn btn-sm btn-alt-success" data-toggle="click-ripple">Save Course</button>
-                                @endif
+                                <?php endif; ?>
                             </div>
                             </form>
                         </div>
@@ -489,14 +488,14 @@
                                 <th>Exit Date</th>
                                 </thead>
                                 <tbody>
-                                @foreach($work as $row)
+                                <?php $__currentLoopData = $work; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
-                                        <td>{{ $row->organization }}</td>
-                                        <td>{{ $row->post }}</td>
-                                        <td>{{ $row->start_date }}</td>
-                                        <td>{{ $row->exit_date }}</td>
+                                        <td><?php echo e($row->organization); ?></td>
+                                        <td><?php echo e($row->post); ?></td>
+                                        <td><?php echo e($row->start_date); ?></td>
+                                        <td><?php echo e($row->exit_date); ?></td>
                                     </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </tbody>
                             </table>
 
@@ -506,24 +505,24 @@
 
                             <div id="work" style="display: none;">
                                 <div class="content">
-                                    <form action="{{ route('application.addWork') }}" method="POST">
-                                        @csrf
+                                    <form action="<?php echo e(route('application.addWork')); ?>" method="POST">
+                                        <?php echo csrf_field(); ?>
                                     <div class="col-md-12">
                                         <div class="form-floating py-1">
-                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('org1') }}" name="org1" placeholder="Organization name">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="<?php echo e(old('org1')); ?>" name="org1" placeholder="Organization name">
                                             <label class="form-label">ORGANIZATION NAME</label>
                                         </div>
                                         <div class="form-floating py-1">
-                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('org1post') }}" name="org1post" placeholder="Post held">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="<?php echo e(old('org1post')); ?>" name="org1post" placeholder="Post held">
                                             <label class="form-label">POST HELD</label>
                                         </div>
                                         <div class="row py-1">
                                             <div class="form-floating col-6">
-                                                <input type="month" class="form-control form-control-sm" value="{{ old('org1startdate') }}" name="org1startdate">
+                                                <input type="month" class="form-control form-control-sm" value="<?php echo e(old('org1startdate')); ?>" name="org1startdate">
                                                 <small class="text-muted">Starting year</small>
                                             </div>
                                             <div class="form-floating col-6">
-                                                <input type="month" class="form-control form-control-sm" value="{{ old('org1enddate') }}" name="org1enddate">
+                                                <input type="month" class="form-control form-control-sm" value="<?php echo e(old('org1enddate')); ?>" name="org1enddate">
                                                 <small class="text-muted">Year Finished</small>
                                             </div>
                                         </div>
@@ -548,16 +547,16 @@
                                     <th>Action</th>
                                 </thead>
                                 <tbody>
-                                    @foreach($education as $row)
+                                    <?php $__currentLoopData = $education; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
-                                            <td>{{ $row->institution }}</td>
-                                            <td>{{ $row->level }}</td>
-                                            <td>{{ $row->qualification }}</td>
-                                            <td>{{ $row->start_date }}</td>
-                                            <td>{{ $row->exit_date }}</td>
+                                            <td><?php echo e($row->institution); ?></td>
+                                            <td><?php echo e($row->level); ?></td>
+                                            <td><?php echo e($row->qualification); ?></td>
+                                            <td><?php echo e($row->start_date); ?></td>
+                                            <td><?php echo e($row->exit_date); ?></td>
                                             <td><a class="btn btn-sm btn-primary"> edit</a> </td>
                                         </tr>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </tbody>
                             </table>
 
@@ -578,34 +577,34 @@
                                     </div>
                                 </div>
 
-                                <form method="POST" action="{{ route('application.secSch') }}" enctype="multipart/form-data">
-                                    @csrf
+                                <form method="POST" action="<?php echo e(route('application.secSch')); ?>" enctype="multipart/form-data">
+                                    <?php echo csrf_field(); ?>
                                 <div class="row secondary my-4">
                                     <div class="col-md-2">
                                         <label class="form-check-label"> Secondary school</label>
                                     </div>
                                     <div class="col-md-8">
                                         <div class="form-floating col-sm-12 py-1">
-                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('secondary') }}" name="secondary" placeholder="Institution name">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="<?php echo e(old('secondary')); ?>" name="secondary" placeholder="Institution name">
                                             <label class="form-label">SCHOOL NAME</label>
                                         </div>
                                         <div class="form-floating col-sm-12 py-1">
-                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('secondaryqualification') }}" name="secondaryqualification" placeholder="Qualifications acquired">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="<?php echo e(old('secondaryqualification')); ?>" name="secondaryqualification" placeholder="Qualifications acquired">
                                             <label class="form-label">QUALIFICATION</label>
                                         </div>
                                         <input type="hidden" value="secondary" name="level">
                                         <div class="row">
                                             <div class="form-floating col-6">
-                                                <input type="month" class="form-control form-control-sm" value="{{ old('secstartdate') }}" name="secstartdate">
+                                                <input type="month" class="form-control form-control-sm" value="<?php echo e(old('secstartdate')); ?>" name="secstartdate">
                                                 <small class="text-muted">Starting year</small>
                                             </div>
                                             <div class="form-floating col-6">
-                                                <input type="month" class="form-control form-control-sm" value="{{ old('secenddate') }}" name="secenddate">
+                                                <input type="month" class="form-control form-control-sm" value="<?php echo e(old('secenddate')); ?>" name="secenddate">
                                                 <small class="text-muted">Year Finished</small>
                                             </div>
                                         </div>
                                         <div class="form-floating col-sm-12 py-1">
-                                            <input type="file" class="form-control form-control-sm" value="{{ old('seccert') }}" name="seccert" placeholder="upload certificate">
+                                            <input type="file" class="form-control form-control-sm" value="<?php echo e(old('seccert')); ?>" name="seccert" placeholder="upload certificate">
                                             <small class="text-muted">Upload certificate (format .pdf .pgn .jpeg .jpg)</small>
                                         </div>
                                     </div>
@@ -617,15 +616,15 @@
                                 </div>
                                 </form>
 
-                                <form action="{{ route('application.terSch') }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
+                                <form action="<?php echo e(route('application.terSch')); ?>" method="POST" enctype="multipart/form-data">
+                                    <?php echo csrf_field(); ?>
                                 <div class="row tertiary my-4">
                                     <div class="col-md-2">
                                         <label class="form-check-label"> Tertiary Institution</label>
                                     </div>
                                     <div class="col-md-8">
                                         <div class="form-floating col-sm-12 py-1">
-                                            <input type="text" class="form-control form-control-sm text-uppercase py-2" value="{{ old('tertiary') }}" name="tertiary" placeholder="INSTITUTION NAME">
+                                            <input type="text" class="form-control form-control-sm text-uppercase py-2" value="<?php echo e(old('tertiary')); ?>" name="tertiary" placeholder="INSTITUTION NAME">
                                             <label class="form-label">INSTITUTION NAME</label>
                                         </div>
 
@@ -642,22 +641,22 @@
                                         </div>
 
                                         <div class="form-floating col-sm-12 py-1">
-                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('teriaryqualification') }}" name="teriaryqualification" placeholder="Qualifications acquired">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="<?php echo e(old('teriaryqualification')); ?>" name="teriaryqualification" placeholder="Qualifications acquired">
                                             <label class="form-label">QUALIFICATION</label>
                                         </div>
 
                                         <div class="row py-1">
                                             <div class="form-floating col-sm-6">
-                                                <input type="month" class="form-control form-control-sm" value="{{ old('terstartdate') }}" name="terstartdate">
+                                                <input type="month" class="form-control form-control-sm" value="<?php echo e(old('terstartdate')); ?>" name="terstartdate">
                                                 <small class="text-muted py-1">Starting year</small>
                                             </div>
                                             <div class="form-floating col-sm-6">
-                                                <input type="month" class="form-control form-control-sm" value="{{ old('terenddate') }}" name="terenddate">
+                                                <input type="month" class="form-control form-control-sm" value="<?php echo e(old('terenddate')); ?>" name="terenddate">
                                                 <small class="text-muted py-1">Year Finished</small>
                                             </div>
                                         </div>
                                         <div class="form-floating col-sm-12">
-                                            <input type="file" class="form-control form-control-sm" value="{{ old('tercert')}}" name="tercert">
+                                            <input type="file" class="form-control form-control-sm" value="<?php echo e(old('tercert')); ?>" name="tercert">
                                             <small class="text-muted py-1">Upload Certificate ( format.pdf .png .jpeg .jpg)</small>
                                         </div>
 
@@ -672,39 +671,39 @@
                         </div>
                         <div class="block-content tab-pane" id="btabs-vertical-fee" role="tabpanel" aria-labelledby="btabs-vertical-fee-tab">
                             <h4 class="fw-semibold">Application Fees</h4>
-                            <form action="{{ route('application.payment') }}" method="POST" enctype="multipart/form-data">
-                                @csrf
+                            <form action="<?php echo e(route('application.payment')); ?>" method="POST" enctype="multipart/form-data">
+                                <?php echo csrf_field(); ?>
                             <div class="row">
                                 <div class="col-md-4">
                                     <p class="text-muted">To complete application you must pay and add payment details to this form</p>
                                 </div>
                                 <div class="col-md-8">
                                     <div class="py-2 mb-0">
-                                        You are required to pay <span class="fw-bold">Ksh. {{ $course->mainCourses->courseRequirements->fee }} </span> to complete this application.
+                                        You are required to pay <span class="fw-bold">Ksh. <?php echo e($course->mainCourses->courseRequirements->fee); ?> </span> to complete this application.
                                         <a href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> How do I pay?</a>
                                     </div>
                                     <div class="form-floating text-uppercase py-1">
-                                        <input type="text" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif required value="{{ old('receipt') }} @if($mycourse != null && $mycourse->receipt != null) {{ $mycourse->receipt }} @endif" name="receipt" placeholder="Enter RECEIPT NUMBER">
+                                        <input type="text" class="form-control form-control-sm" <?php if($mycourse != null && $mycourse->declaration== 1): ?> disabled <?php endif; ?> required value="<?php echo e(old('receipt')); ?> <?php if($mycourse != null && $mycourse->receipt != null): ?> <?php echo e($mycourse->receipt); ?> <?php endif; ?>" name="receipt" placeholder="Enter RECEIPT NUMBER">
                                         <label class="form-label">TRANSACTION CODE</label>
                                     </div>
                                     <div class="form-floating text-uppercase py-1">
-                                        <input type="file" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif required value="{{ old('receipt_file') }} " name="receipt_file">
+                                        <input type="file" class="form-control form-control-sm" <?php if($mycourse != null && $mycourse->declaration== 1): ?> disabled <?php endif; ?> required value="<?php echo e(old('receipt_file')); ?> " name="receipt_file">
                                     </div>
-                                        <input type="hidden" value="{{ $course->mainCourses->id }}" name="course_id">
+                                        <input type="hidden" value="<?php echo e($course->mainCourses->id); ?>" name="course_id">
                                     <small class="text-muted">upload your bank reciept (format .pdf .png .jpeg .jpg</small>
                                     <div class="d-flex justify-content-center my-4">
-                                        @if($mycourse != null && $mycourse->receipt != null)
-                                            @if($mycourse != null && $mycourse->declaration== 1)
+                                        <?php if($mycourse != null && $mycourse->receipt != null): ?>
+                                            <?php if($mycourse != null && $mycourse->declaration== 1): ?>
                                         <button class="btn btn-sm btn-success" disabled data-toggle="click-ripple"><i class="fa fa-check-circle"></i>
                                             Payments Details Updated
                                         </button>
-                                            @else
+                                            <?php else: ?>
                                         <button class="btn btn-sm btn-success" disabled data-toggle="click-ripple"><i class="fa fa-check-circle"></i>  Payments Details Updated</button>
                                         <button class="btn btn-sm btn-alt-success" style="margin-left: 1rem;" data-toggle="click-ripple">Update payments</button>
-                                            @endif
-                                        @else
+                                            <?php endif; ?>
+                                        <?php else: ?>
                                         <button class="btn btn-sm btn-alt-success" data-toggle="click-ripple">Submit payments</button>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                         </div>
@@ -715,27 +714,27 @@
                             <p class="fs-sm">
                             <div class="content">
                                 <h5 class="fw-semibold">Parent / Next of kin</h5>
-                                <form method="POST" action="{{ route('application.addParent') }}">
-                                    @csrf
+                                <form method="POST" action="<?php echo e(route('application.addParent')); ?>">
+                                    <?php echo csrf_field(); ?>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <p class="text-muted">Add the details of your parent or guardian here</p>
                                     </div>
                                     <div class="col-md-8 my-4">
                                         <div class="form-floating text-uppercase py-1">
-                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('parentname') }}" name="parentname" placeholder="Parent/Guardian name">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="<?php echo e(old('parentname')); ?>" name="parentname" placeholder="Parent/Guardian name">
                                             <label class="form-label">PARENT NAME</label>
                                         </div>
                                         <div class="form-floating text-uppercase py-1">
-                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('parentmobile') }}" name="parentmobile" placeholder="Parent/Guardian mobile number">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="<?php echo e(old('parentmobile')); ?>" name="parentmobile" placeholder="Parent/Guardian mobile number">
                                             <label class="form-label">PARENT PHONE NUMBER</label>
                                         </div>
                                         <div class="form-floating text-uppercase py-1">
-                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('parentcounty') }}" name="parentcounty" placeholder="Parent/Guardian county of residence">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="<?php echo e(old('parentcounty')); ?>" name="parentcounty" placeholder="Parent/Guardian county of residence">
                                             <label class="form-label">PARENTS HOME COUNTY</label>
                                         </div>
                                         <div class="form-floating text-uppercase py-1">
-                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('parenttown') }}" name="parenttown" placeholder="Parent/Guardian Home town">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="<?php echo e(old('parenttown')); ?>" name="parenttown" placeholder="Parent/Guardian Home town">
                                             <label class="form-label">PARENT HOME TOWN</label>
                                         </div>
                                     </div>
@@ -747,19 +746,19 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="form-floating text-uppercase py-1">
-                                            <input type="text" class="form-control form-control-sm" value="{{ old('sponsorname') }}" name="sponsorname" placeholder="Sponsor name">
+                                            <input type="text" class="form-control form-control-sm" value="<?php echo e(old('sponsorname')); ?>" name="sponsorname" placeholder="Sponsor name">
                                             <label class="form-label">SPONSOR NAME</label>
                                         </div>
                                         <div class="form-floating text-uppercase py-1">
-                                            <input type="text" class="form-control form-control-sm" value="{{ old('sponsormobile') }}" name="sponsormobile" placeholder="Sponsor mobile number">
+                                            <input type="text" class="form-control form-control-sm" value="<?php echo e(old('sponsormobile')); ?>" name="sponsormobile" placeholder="Sponsor mobile number">
                                             <label class="form-label">SPONSOR PHONE NUMBER</label>
                                         </div>
                                         <div class="form-floating text-uppercase py-1">
-                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('sponsorcounty') }}" name="sponsorcounty" placeholder="Sponsor county of residence">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="<?php echo e(old('sponsorcounty')); ?>" name="sponsorcounty" placeholder="Sponsor county of residence">
                                             <label class="form-label">SPONSOR HOME COUNTY</label>
                                         </div>
                                         <div class="form-floating text-uppercase py-1">
-                                            <input type="text" class="form-control form-control-sm text-uppercase" value="{{ old('sponsortown') }}" name="sponsortown" placeholder="Sponsor Home town">
+                                            <input type="text" class="form-control form-control-sm text-uppercase" value="<?php echo e(old('sponsortown')); ?>" name="sponsortown" placeholder="Sponsor Home town">
                                             <label class="form-label">SPONSOR HOME TOWN</label>
                                         </div>
                                     </div>
@@ -776,13 +775,13 @@
                             <div class="block-content-full">
                                     <div class="p-sm-2 p-xl-12">
                                         <div class="row mb-2 text-center">
-                                            <span class="fw-semibold mb-2"> {{ $course->mainCourses->getCourseDept->schools->name }} </span>
-                                            <span class="fw-semibold mb-2"> {{ $course->mainCourses->getCourseDept->name }}</span>
-                                            <span class="fw-semibold mb-2"> {{ $course->mainCourses->course_name }} </span>
+                                            <span class="fw-semibold mb-2"> <?php echo e($course->mainCourses->getCourseDept->schools->name); ?> </span>
+                                            <span class="fw-semibold mb-2"> <?php echo e($course->mainCourses->getCourseDept->name); ?></span>
+                                            <span class="fw-semibold mb-2"> <?php echo e($course->mainCourses->course_name); ?> </span>
                                         </div>
 
                                         <table class="table table-sm table-bordered table-striped table-responsive-md">
-                                            @if($mycourse != null && $mycourse->receipt != null)
+                                            <?php if($mycourse != null && $mycourse->receipt != null): ?>
                                                 <thead>
                                                 <th>Receipt Number</th>
                                                 <th>Amount</th>
@@ -790,66 +789,66 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr>
-                                                    <td>{{ $mycourse->receipt }}</td>
-                                                    <td>{{ $course->mainCourses->courseRequirements->fee }}</td>
+                                                    <td><?php echo e($mycourse->receipt); ?></td>
+                                                    <td><?php echo e($course->mainCourses->courseRequirements->fee); ?></td>
                                                     <td><span class="badge bg-success"><i class="fa fa-check-circle"> Paid </i> </span> </td>
                                                 </tr>
                                                 </tbody>
-                                            @endif
-                                                @if($mycourse != null)
+                                            <?php endif; ?>
+                                                <?php if($mycourse != null): ?>
                                                     <thead>
                                                         <th colspan="1">Course Requirements</th>
-                                                        <th colspan="2"> {{ $course->mainCourses->courseRequirements->course_requirements }} </th>
+                                                        <th colspan="2"> <?php echo e($course->mainCourses->courseRequirements->course_requirements); ?> </th>
                                                     </thead>
-                                                @endif
-                                            @if($mycourse != null)
+                                                <?php endif; ?>
+                                            <?php if($mycourse != null): ?>
                                                         <thead>
                                                         <th>Cluster subject</th>
                                                         <th colspan="2">Your Score</th>
                                                         </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>{{ $course->mainCourses->courseRequirements->subject1 }}</td>
-                                                            <td colspan="2">{{ $mycourse->subject_1 }}</td>
+                                                            <td><?php echo e($course->mainCourses->courseRequirements->subject1); ?></td>
+                                                            <td colspan="2"><?php echo e($mycourse->subject_1); ?></td>
                                                         </tr>
                                                         <tr>
-                                                            <td>{{ $course->mainCourses->courseRequirements->subject2 }}</td>
-                                                            <td colspan="2">{{ $mycourse->subject_2 }}</td>
+                                                            <td><?php echo e($course->mainCourses->courseRequirements->subject2); ?></td>
+                                                            <td colspan="2"><?php echo e($mycourse->subject_2); ?></td>
                                                         </tr>
                                                         <tr>
-                                                            <td>{{ $course->mainCourses->courseRequirements->subject3 }}</td>
-                                                            <td colspan="2">{{ $mycourse->subject_3 }}</td>
+                                                            <td><?php echo e($course->mainCourses->courseRequirements->subject3); ?></td>
+                                                            <td colspan="2"><?php echo e($mycourse->subject_3); ?></td>
                                                         </tr>
                                                         <tr>
-                                                            <td>{{ $course->mainCourses->courseRequirements->subject4 }}</td>
-                                                            <td colspan="2">{{ $mycourse->subject_4 }}</td>
+                                                            <td><?php echo e($course->mainCourses->courseRequirements->subject4); ?></td>
+                                                            <td colspan="2"><?php echo e($mycourse->subject_4); ?></td>
                                                         </tr>
                                                     </tbody>
-                                                @endif
+                                                <?php endif; ?>
 
                                         </table>
 
                             <div class="row">
-                                @if($mycourse != null && $mycourse->receipt != null)
-                                <form action="{{ route('application.finish') }}" method="POST">
-                                    @csrf
+                                <?php if($mycourse != null && $mycourse->receipt != null): ?>
+                                <form action="<?php echo e(route('application.finish')); ?>" method="POST">
+                                    <?php echo csrf_field(); ?>
                                 <div class="col-md-12">
                                     <span>Applicant Declaration</span>
                                     <div class="" style="padding: 7px !important;">
-                                        <input type="checkbox" name="declare" required @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
-                                        <input hidden name="course_id" value="@if($mycourse != null) {{ $mycourse->id }} @endif">
-                                        I <span class="text-decoration-underline"> {{ Auth::user()->sname }} {{ Auth::user()->mname }} {{ Auth::user()->fname }}</span> declare that the information given in this application form is correct. I further certify that I have read, understood and agreed to comply with the terms stipulated herein.
+                                        <input type="checkbox" name="declare" required <?php if($mycourse != null && $mycourse->declaration== 1): ?> disabled <?php endif; ?>>
+                                        <input hidden name="course_id" value="<?php if($mycourse != null): ?> <?php echo e($mycourse->id); ?> <?php endif; ?>">
+                                        I <span class="text-decoration-underline"> <?php echo e(Auth::user()->sname); ?> <?php echo e(Auth::user()->mname); ?> <?php echo e(Auth::user()->fname); ?></span> declare that the information given in this application form is correct. I further certify that I have read, understood and agreed to comply with the terms stipulated herein.
                                     </div>
                                 </div>
                                     <div class="d-flex justify-content-center mb-1 mt-4">
-                                        @if($mycourse != null && $mycourse->declaration== 1)
+                                        <?php if($mycourse != null && $mycourse->declaration== 1): ?>
                                             <button class="btn btn-success" disabled> <i class="fa fa-check-circle"></i> Submitted </button>
-                                        @else
+                                        <?php else: ?>
                                         <button onclick='confirm("Once this application has been submitted cannot be changed. Are you sure you want to submit the application?")' class="btn btn-sm btn-alt-success">Submit Application</button>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </form>
-                                @endif
+                                <?php endif; ?>
                             </div>
                       </p>
                         </div>
@@ -888,13 +887,15 @@
                     </div>
                     <div class="block-content block-content-full text-end bg-body">
                         <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>
-{{--                        <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Okay</button>--}}
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <!-- END Pop In Block Modal -->
-@endsection
+<?php $__env->stopSection(); ?>
 
 
+
+<?php echo $__env->make('application::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\sims\application\Modules/Application\Resources/views/applicant/application.blade.php ENDPATH**/ ?>
