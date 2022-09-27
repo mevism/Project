@@ -9,7 +9,7 @@ class Education extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = ['applicant_id', 'institution', 'start_date', 'exit_date', 'level', 'qualification'];
     
     protected static function newFactory()
     {

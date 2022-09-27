@@ -175,19 +175,6 @@
                             </select>
                     </div>
 
-                    <div class="d-flex justify-content-center m-2">
-                        <div class="col-12 mb-4">
-                            <label class="form-label">Offered at: </label>
-                            <div class="space-x-2">
-                                @foreach($campus as $camp)
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="main" value="{{ $camp->id }}" @if(old('main') === 'campus') checked @endif >
-                                    <label class="form-check-label">{{ $camp->name }}</label>
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="col-12 text-center p-3">
                   <button type="submit" class="btn btn-alt-success" data-toggle="click-ripple">Create Course</button>

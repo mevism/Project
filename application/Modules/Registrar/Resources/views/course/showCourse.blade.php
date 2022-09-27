@@ -16,7 +16,7 @@
   $(document).ready(function() {
       $('#example').DataTable( {
           responsive: true,
-          order: [[2, 'asc']],
+          order: [[0, 'asc']],
           rowGroup: {
               dataSrc: 2
           }
@@ -58,22 +58,22 @@
         </span><br>
           <thead>
             <tr>
-              {{-- <th>  Schools     </th> --}}
+              {{-- <th>  #     </th> --}}
               <th>  Department NAME </th>
               <th> Course NAME       </th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            @foreach ($data as $courses)
+            @foreach ($data as $key => $courses)
             <tr>
-              {{-- <td style="text-transform: uppercase" >{{ $courses->school_id }}</td> --}}
+              {{-- <td style="text-transform: uppercase" >{{ ++$key }} </td> --}}
               <td style="text-transform: uppercase" >{{ $courses->getCourseDept->name }}</td>
               <td style="text-transform: uppercase" >{{ $courses->course_name }}</td>
               <td nowrap="">
-                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editCourse', $courses->id) }}">edit</a>
+                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editCourse', ['id'=> Crypt::encrypt($courses->id)]) }}">edit</a>
                 <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this course ?')" href="{{ route('courses.destroyCourse', $courses->id) }}">delete</a>
-                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.syllabus',$courses->id) }}">syllabus</a>
+                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.syllabus',['id'=> Crypt::encrypt($courses->id)]) }}">syllabus</a>
               </td>
             </tr>
             @endforeach
@@ -86,4 +86,3 @@
     <!-- Dynamic Table Responsive -->
   </div>
 @endsection
-

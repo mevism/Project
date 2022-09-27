@@ -111,12 +111,6 @@
                           </a>
                       </li>
 
-                  {{-- <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('courses.showIntake') }}">
-                          <i class="nav-main-link-icon si si-calendar"></i>
-                          <span class="nav-main-link-name">Intakes</span>
-                      </a>
-                  </li> --}}
                   <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('courses.academicYear') }}">
                         <i class="nav-main-link-icon si si-calendar"></i>
@@ -130,24 +124,34 @@
                           <span class="nav-main-link-name">Attendances</span>
                         </a>
                       </li>
-                      <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.showClasses')}}">
-                            <i class="nav-main-link-icon si si-layers"></i>
-                            <span class="nav-main-link-name">Classes</span>
+
+                        <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
+                          <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                            <i class="nav-main-link-icon si si-graduation"></i>
+                            <span class="nav-main-link-name">Imports</span>
                           </a>
-                        </li>
-                        <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importUnit')}}">
-                            <i class="nav-main-link-icon si si-layers"></i>
-                            <span class="nav-main-link-name">import Units</span>
-                          </a>
-                        </li>
-                        <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importUnitProgramms')}}">
-                            <i class="nav-main-link-icon si si-layers"></i>
-                            <span class="nav-main-link-name">import Unit Programs</span>
-                          </a>
-                        </li>
+                            <ul class="nav-main-submenu">
+                                <li class="nav-main-item">
+                                  <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importUnit')}}">
+                                    <i class="nav-main-link-icon si si-layers"></i>
+                                    <span class="nav-main-link-name"> Units</span>
+                                  </a>
+                                </li>
+                                <li class="nav-main-item">
+                                  <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importExportCourses')}}">
+                                    <i class="nav-main-link-icon si si-layers"></i>
+                                    <span class="nav-main-link-name">Courses</span>
+                                  </a>
+                                </li>
+                                <li class="nav-main-item">
+                                  <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importUnitProgramms')}}">
+                                    <i class="nav-main-link-icon si si-layers"></i>
+                                    <span class="nav-main-link-name"> Unit Programs</span>
+                                  </a>
+                                </li>
+
+                            </ul>
+                          </li>
               </ul>
             </li>
 

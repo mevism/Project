@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb4a6216dd4f6b36cc4ae16e16ab69eeb
+class ComposerStaticInit70b5b589a8cb568e9092a37cf06e4f18
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -746,7 +746,6 @@ class ComposerStaticInitb4a6216dd4f6b36cc4ae16e16ab69eeb
         'Database\\Factories\\ApplicationFactory' => __DIR__ . '/../..' . '/database/factories/ApplicationFactory.php',
         'Database\\Factories\\UserFactory' => __DIR__ . '/../..' . '/database/factories/UserFactory.php',
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
-        'Database\\Seeders\\UnitSeeder' => __DIR__ . '/../..' . '/database/seeders/UnitSeeder.php',
         'Database\\Seeders\\UserSeeder' => __DIR__ . '/../..' . '/database/seeders/UserSeeder.php',
         'DeepCopy\\DeepCopy' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/DeepCopy.php',
         'DeepCopy\\Exception\\CloneException' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Exception/CloneException.php',
@@ -3758,6 +3757,7 @@ class ComposerStaticInitb4a6216dd4f6b36cc4ae16e16ab69eeb
         'Modules\\Medical\\Providers\\MedicalServiceProvider' => __DIR__ . '/../..' . '/Modules/Medical/Providers/MedicalServiceProvider.php',
         'Modules\\Medical\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/Modules/Medical/Providers/RouteServiceProvider.php',
         'Modules\\Registrar\\Database\\Seeders\\CoursesDatabaseSeeder' => __DIR__ . '/../..' . '/Modules/Registrar/Database/Seeders/CoursesDatabaseSeeder.php',
+        'Modules\\Registrar\\Entities\\AcademicYear' => __DIR__ . '/../..' . '/Modules/Registrar/Entities/AcademicYear.php',
         'Modules\\Registrar\\Entities\\Attendance' => __DIR__ . '/../..' . '/Modules/Registrar/Entities/Attendance.php',
         'Modules\\Registrar\\Entities\\AvailableCourse' => __DIR__ . '/../..' . '/Modules/Registrar/Entities/AvailableCourse.php',
         'Modules\\Registrar\\Entities\\Campus' => __DIR__ . '/../..' . '/Modules/Registrar/Entities/Campus.php',
@@ -7178,10 +7178,10 @@ class ComposerStaticInitb4a6216dd4f6b36cc4ae16e16ab69eeb
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb4a6216dd4f6b36cc4ae16e16ab69eeb::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb4a6216dd4f6b36cc4ae16e16ab69eeb::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitb4a6216dd4f6b36cc4ae16e16ab69eeb::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitb4a6216dd4f6b36cc4ae16e16ab69eeb::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit70b5b589a8cb568e9092a37cf06e4f18::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit70b5b589a8cb568e9092a37cf06e4f18::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit70b5b589a8cb568e9092a37cf06e4f18::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit70b5b589a8cb568e9092a37cf06e4f18::$classMap;
 
         }, null, ClassLoader::class);
     }

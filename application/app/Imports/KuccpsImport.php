@@ -6,6 +6,7 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Modules\Registrar\Entities\KuccpsApplicant;
 use Modules\Registrar\Entities\KuccpsApplication;
 use Illuminate\Support\Collection;
+use Modules\Application\Entities\Education;
 use Modules\Courses\Entities\Intake;
 
 class KuccpsImport implements ToCollection
@@ -27,9 +28,6 @@ class KuccpsImport implements ToCollection
 
         foreach($collection as $row){
 
-            // dd($row);
-
-            // return $row;
 
             $names = preg_replace('/\s+/', ' ',$row[2]);
 
@@ -49,10 +47,9 @@ class KuccpsImport implements ToCollection
                 $mname = $name[2];
             }
 
-            // dd($mname);
-
 
             $applicant = KuccpsApplicant::create([
+                
                 'index_number' => $row[1],
                 'sname' => $sname,
                 'fname' => $fname ,
@@ -60,7 +57,6 @@ class KuccpsImport implements ToCollection
                 'gender' => $row[3],
                 'mobile' => $row[4],
                 'alt_mobile' => $row[5],
-//                'email' => $row[6],
                 'alt_email' => $row[7],
                 'BOX' => $row[8],
                 'postal_code' => $row[9],
@@ -73,6 +69,17 @@ class KuccpsImport implements ToCollection
                 'intake_id' => $this->intake_id,
                 'course_code' => $row[11],
                 'course_name' => $row[12]
+
+            ]);
+
+            Education::create([
+
+                'applicant_id' =>  $applicant->id,
+                'institution'  =>  $row[14],
+                'qualification'  => 'KUCCPS',
+                'level'  => 'SECONDARY',
+                'start_date' => date('Y'),
+                'exit_date' => date('Y'),
 
             ]);
         }
