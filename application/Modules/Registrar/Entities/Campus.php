@@ -10,7 +10,12 @@ class Campus extends Model
     use HasFactory;
 
     protected $fillable = ['name'];
-    
+
+    public function campusXCourse(){
+
+        return $this->hasMany(AvailableCourse::class, 'id');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Registrar\Database\factories\CampusFactory::new();

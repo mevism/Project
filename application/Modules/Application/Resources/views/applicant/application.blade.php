@@ -154,55 +154,49 @@
                             <h4 class="fw-semibold">Course Details</h4>
                             <form method="POST" action="{{ route('application.submitApp') }}">
                                 @csrf
-                            <div class="row my-2">
-                                <label class="col-sm-2 col-form-label" for="example-hf-password">Course</label>
-                                <div class="form-floating col-sm-8 text-uppercase py-1">
-                                    <input type="text" class="form-control form-control-sm" name="course" value="{{ $course->mainCourses->course_name }}" readonly>
+                            <div class="row my-1">
+                                <label class="col-sm-2 col-form-label" for="example-hf-password">Course Name</label>
+                                <div class="col-sm-10 text-uppercase py-1">
+                                    <input type="text" class="form-control form-control-md" name="course" value="{{ $course->mainCourses->course_name }}" readonly>
                                 </div>
                             </div>
-                            <div class="row my-2">
+                            <div class="row my-1">
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">Department</label>
-                                <div class="form-floating col-sm-8 text-uppercase py-1">
-                                    <input type="text" class="form-control form-control-sm" name="department" value="{{ $course->mainCourses->getCourseDept->name }}" readonly>
+                                <div class="col-sm-10 text-uppercase py-1">
+                                    <input type="text" class="form-control form-control-md" name="department" value="{{ $course->mainCourses->getCourseDept->name }}" readonly>
                                     <input type="hidden" name="dept" value="{{ $course->mainCourses->getCourseDept->id }}">
                                     <input type="hidden" name="school" value="{{ $course->mainCourses->getCourseDept->schools->id }}">
                                 </div>
                             </div>
-                            <div class="row my-2">
+                            <div class="row my-1">
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">School</label>
-                                <div class="form-floating col-sm-8 text-uppercase py-1">
-                                    <input type="text" class="form-control form-control-sm" name="" value="{{ $course->mainCourses->getCourseDept->schools->name }}" readonly>
+                                <div class="col-sm-10 text-uppercase py-1">
+                                    <input type="text" class="form-control form-control-md" name="" value="{{ $course->mainCourses->getCourseDept->schools->name }}" readonly>
                                     <input type="hidden" name="intake" value="{{ $course->openCourse->id }}">
                                     <input type="hidden" name="course_id" value="{{ $course->mainCourses->id }}">
                                 </div>
                             </div>
                             <div class="row" style="padding: 5px !important;">
                                 <label class="col-sm-2 col-form-label" for="example-hf-password">Campus</label>
-                                <div class="col-sm-8 text-uppercase mb-4" style="padding: 5px !important;">
-                                    <div class="space-x-1">
-                                        <sup class="fs-sm text-danger text-lowercase mt-2">*</sup>
+                                <div class="col-sm-10 text-uppercase mb-4" style="padding: 5px !important;">
+                                    <div class="space-x-0">
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="campus" value="Main"
-                                                   @if($mycourse != null) {{ ($mycourse->campus == 'Main')? "checked" : "" }}@endif
-                                                   @if(old('campus')== 'Main') checked @endif required @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
-                                            <label class="form-check-label">Main</label>
+                                            <label class="form-check-label">{{ $course->courseXCampus->name }}</label>
+                                            <input class="form-check-input" type="radio" name="campus" value="{{ $course->courseXCampus->id }}" checked readonly="readonly">
                                         </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="campus" value="Kwale"
-                                                   @if($mycourse != null) {{ ($mycourse->campus == 'Kwale')? "checked" : "" }}@endif
-                                                   @if(old('campus')== 'Kwale')  checked @endif required @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
-                                            <label class="form-check-label">Kwale</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="campus" value="Lamu"
-                                                   @if($mycourse != null) {{ ($mycourse->campus == 'Lamu')? "checked" : "" }}@endif
-                                                   @if(old('campus')== 'Lamu') checked @endif required @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
-                                            <label class="form-check-label">Lamu</label>
-                                        </div>
-                                        <span class="fs-sm text-danger text-lowercase mt-2"> choose which campus to join </span>
+                                        <h6 class="fs-sm text-info fw-normal mt-2"> You can go courses list to see if this course is offered in another campus </h6>
                                     </div>
                                 </div>
                             </div>
+                                <h4 class="fw-semibold">Course Requiremets</h4>
+                                <div class="row mt-2 mb-4">
+                                    <div class="col-md-4">
+                                        <span class="h6">KCSE OR Equivalent</span>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <span class="h5 text-info"> {{ $course->mainCourses->courseRequirements->course_requirements }} </span>
+                                     </div>
+                                </div>
                             <span class="h5 fw-semibold">Cluster Subject</span>
                             <span class="fs-sm">
                                 <sup class="fs-sm text-danger text-lowercase mt-2">*</sup>
@@ -210,9 +204,9 @@
                             </span>
                             <div class="row mt-2">
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 1</label>
-                                <div class="col-sm-8 text-uppercase py-1">
+                                <div class="col-sm-10 text-uppercase py-1">
                                     <div class="form-floating input-group">
-                                        <span class="input-group-text input-group-text-sm col-md-3">{{ Str::limit( $course->mainCourses->courseRequirements->subject1, $limit = 10 , $end='' )  }}</span>
+                                        <span class="input-group-text input-group-text-sm col-md-4">{{ Str::limit( $course->mainCourses->courseRequirements->subject1, $limit = 15 , $end='' )  }}</span>
 
                                         <select class="form-control form-control-sm text-uppercase" name="subject1" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                             <option disabled selected> -- select subject-- </option>
@@ -245,7 +239,7 @@
                                         </select>
 
                                         <span class="input-group-text input-group-text-sm">
-                                            <select name="grade1" class="dept form-control form-control-md text-uppercase fs-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
+                                            <select name="grade1" class="dept form-control form-control-md text-uppercase fs-sm" @if($mycourse != null && $mycourse->declaration == 1) disabled @endif>
                                                 <option selected disabled > -- select grade -- </option>
                                                     @if($mycourse != null)
                                                         <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_1)[1]  }} @endif" selected> {{ explode(' ', $mycourse->subject_1)[1] }}</option>
@@ -269,9 +263,9 @@
 
                             <div class="row my-2">
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 2</label>
-                                <div class="col-sm-8 text-uppercase py-1">
+                                <div class="col-sm-10 text-uppercase py-1">
                                     <div class="form-floating input-group">
-                                        <span class="input-group-text input-group-text-sm col-md-3">{{ Str::limit( $course->mainCourses->courseRequirements->subject2, $limit = 10 , $end='' )  }}</span>
+                                        <span class="input-group-text input-group-text-sm col-md-4">{{ Str::limit( $course->mainCourses->courseRequirements->subject2, $limit = 15 , $end='' )  }}</span>
                                         <select class="form-control form-control-sm text-uppercase" name="subject2" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                             <option disabled selected> -- select subject-- </option>
                                                 @if($mycourse != null)
@@ -327,9 +321,9 @@
 
                             <div class="row my-2">
                                 <label class="col-sm-2 col-form-label" for="example-hf-password">Subject 3</label>
-                                <div class="form-floating col-sm-8 text-uppercase py-1">
+                                <div class="form-floating col-sm-10 text-uppercase py-1">
                                     <div class="form-floating input-group">
-                                        <span class="input-group-text input-group-text-sm col-md-3">{{ Str::limit( $course->mainCourses->courseRequirements->subject3, $limit = 10 , $end='' )  }}</span>
+                                        <span class="input-group-text input-group-text-sm col-md-4">{{ Str::limit( $course->mainCourses->courseRequirements->subject3, $limit = 15 , $end='' )  }}</span>
 
                                         <select class="form-control form-control-sm text-uppercase" name="subject3" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                             <option disabled selected> -- select subject-- </option>
@@ -388,9 +382,9 @@
 
                             <div class="row my-2">
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 4 </label>
-                                <div class="col-sm-8 text-uppercase py-1">
+                                <div class="col-sm-10 text-uppercase py-1">
                                     <div class="form-floating input-group">
-                                        <span class="input-group-text input-group-text-sm col-md-3">{{ Str::limit( $course->mainCourses->courseRequirements->subject4, $limit = 10 , $end='' )  }}</span>
+                                        <span class="input-group-text input-group-text-sm col-md-4">{{ Str::limit( $course->mainCourses->courseRequirements->subject4, $limit = 15 , $end='' )  }}</span>
 
                                         <select class="form-control form-control-sm text-uppercase" name="subject4" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                             <option disabled selected> -- select subject-- </option>
@@ -526,6 +520,7 @@
                                     <th>Qualifications</th>
                                     <th>Start Date</th>
                                     <th>Finish Date</th>
+                                    <th>Action</th>
                                 </thead>
                                 <tbody>
                                     @foreach($education as $row)
@@ -535,6 +530,7 @@
                                             <td>{{ $row->qualification }}</td>
                                             <td>{{ $row->start_date }}</td>
                                             <td>{{ $row->exit_date }}</td>
+                                            <td><a class="btn btn-sm btn-primary"> edit</a> </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -777,11 +773,9 @@
                                             @endif
                                                 @if($mycourse != null)
                                                     <thead>
-                                                        <th colspan="2">Course Requirements</th>
+                                                        <th colspan="1">Course Requirements</th>
+                                                        <th colspan="2"> {{ $course->mainCourses->courseRequirements->course_requirements }} </th>
                                                     </thead>
-                                                    <tbody>
-                                                        <td colspan="2"> {{ $course->mainCourses->course_requirements }} </td>
-                                                    </tbody>
                                                 @endif
                                             @if($mycourse != null)
                                                         <thead>

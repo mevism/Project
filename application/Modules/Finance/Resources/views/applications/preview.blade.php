@@ -26,7 +26,7 @@
         <div class="block block-rounded">
             <div class="block-content block-content-full">
                 <div class="row">
-                    <div class="col-lg-7 mb-1">
+                    <div class="col-lg-5 mb-1">
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Applicant Name </div>
                             <div class="col-md-8"> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</div>
@@ -50,10 +50,9 @@
 
                         @endif
                     </div>
-                    <div class="col-lg-5 space-y-2">
-                        <div class="d-flex justify-content-center">
-                            <div class="card-img" style="margin: auto !important;">
-                                <img style="margin: auto !important; max-height: 80vh !important; width: 100% !important;" src="{{ url('receipts/', $app->receipt_file) }}" alt="">
+                        <div class="col-lg-7 space-y-1">
+                            <div class="content-boxed block-content-full">
+                                <iframe src="{{ url('receipts/', $app->receipt_file) }}" type="application/pdf" style="width: 100% !important; height: 80vh !important;"> </iframe>
                             </div>
                         </div>
                     </div>

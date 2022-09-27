@@ -21,7 +21,7 @@
               <div class="row">
                 <div class="col-lg-12 space-y-0">
 
-                   <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.updateDepartment',$data->id) }}" method="POST">
+                   <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.updateDepartment', $data->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                      <div class="form-floating col-12 col-xl-12">

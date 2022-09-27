@@ -72,9 +72,9 @@
                                     <td class="fw-semibold fs-sm">{{ $classa->attendance_id }}</td>
                                     <td> ON SESSION </td>
                                     <td nowrap="">
-                                        <a class="btn btn-sm btn-alt-info disabled" href="{{ route('courses.editClasses', $classa->id) }}">edit</a>
-                                        <a class="btn btn-sm btn-alt-danger disabled" onclick="return confirm('Are you sure you want to delete this course ?')" href="{{ route('courses.destroyClasses', $classa->id) }}">delete</a>
-                                        <a class="btn btn-sm btn-alt-secondary" href="{{ route('department.classList', $classa->id) }}">View</a>
+                                        <a class="btn btn-sm btn-alt-info disabled" href="{{ route('courses.editClasses', ['id' => Crypt::encrypt($classa->id)]) }}">edit</a>
+                                        <a class="btn btn-sm btn-alt-danger disabled" onclick="return confirm('Are you sure you want to delete this course ?')" href="{{ route('courses.destroyClasses', ['id' => Crypt::encrypt($classa->id)]) }}">delete</a>
+                                        <a class="btn btn-sm btn-alt-secondary" href="{{ route('department.classList', ['id' => Crypt::encrypt($classa->id)]) }}">View</a>
                                     </td>
                                 </tr>
                             @endforeach

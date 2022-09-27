@@ -57,7 +57,7 @@
                                         @elseif($app->cod_status == 2)
                                             <span class="badge bg-warning">Rejected</span>
                                         @elseif($app->cod_status == 4)
-                                            <span class="badge bg-success">Reviewed</span>
+                                            <span class="badge bg-info">Reverted</span>
                                         @else
                                         <span class="badge bg-info">Review</span>
                                         @endif
@@ -65,10 +65,10 @@
                                 </td>
                                 <td nowrap="">
                                     @if($app->cod_status == 0)
-                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('cod.viewApplication', $app->id) }}"> View </a>
+                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('cod.viewApplication', ['id' => Crypt::encrypt($app->id)]) }}"> View </a>
                                         @else
-                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('cod.previewApplication', $app->id) }}"> View </a>
-                                <a class="btn btn-sm btn-alt-info" href="{{ route('cod.viewApplication', $app->id) }}"> Edit </a>
+                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('cod.previewApplication', ['id' => Crypt::encrypt($app->id)]) }}"> View </a>
+                                <a class="btn btn-sm btn-alt-info" href="{{ route('cod.viewApplication', ['id' => Crypt::encrypt($app->id)]) }}"> Edit </a>
                                 </td>
                                 @endif
                             </tr>

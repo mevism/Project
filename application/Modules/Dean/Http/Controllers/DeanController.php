@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Auth;
+use Illuminate\Support\Facades\Crypt;
 use Modules\Application\Entities\Application;
 use Modules\Application\Entities\Education;
 use Modules\Dean\Entities\DeanLog;
@@ -27,21 +28,28 @@ class DeanController extends Controller
 
     public function viewApplication($id){
 
-        $app = Application::find($id);
-        $school = Education::where('applicant_id', $app->applicant->id)->first();
+        $hashedId = Crypt::decrypt($id);
+
+        $app = Application::find($hashedId);
+        $school = Education::where('applicant_id', $app->applicant->id)->get();
+
         return view('dean::applications.viewApplication')->with(['app' => $app, 'school' => $school]);
     }
 
     public function previewApplication($id){
 
-        $app = Application::find($id);
-        $school = Education::where('applicant_id', $app->applicant->id)->first();
+        $hashedId = Crypt::decrypt($id);
+
+        $app = Application::find($hashedId);
+        $school = Education::where('applicant_id', $app->applicant->id)->get();
         return view('dean::applications.preview')->with(['app' => $app, 'school' => $school]);
     }
 
     public function acceptApplication($id){
 
-        $app = Application::find($id);
+        $hashedId = Crypt::decrypt($id);
+
+        $app = Application::find($hashedId);
         $app->dean_status = 1;
             if ($app->registrar_status != NULL){
                 $app->registrar_status = NULL;
@@ -59,7 +67,10 @@ class DeanController extends Controller
     }
 
     public function rejectApplication(Request $request, $id){
-        $app = Application::find($id);
+
+        $hashedId = Crypt::decrypt($id);
+
+        $app = Application::find($hashedId);
         $app->dean_status = 2;
         $app->dean_comments = $request->comment;
         $app->save();
@@ -79,8 +90,9 @@ class DeanController extends Controller
         $apps = Application::where('dean_status', '>', 0)
             ->where('school_id', auth()->guard('user')->user()->school_id)
             ->where('registrar_status', null)
-            ->orwhere('registrar_status', 4)
             ->where('dean_status', '!=', 3)
+            ->where('cod_status', '<=', 2)
+            ->orwhere('registrar_status', 4)
             ->get();
 
         return view('dean::applications.batch')->with('apps', $apps);

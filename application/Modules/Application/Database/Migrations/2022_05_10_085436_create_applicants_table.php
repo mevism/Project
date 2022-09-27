@@ -41,8 +41,6 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('remember_token')->nullable();
-            $table->string('app_number')->nullable();
-            $table->string('reg_number')->nullable();
             $table->integer('student_type')->nullable();
             $table->tinyInteger('user_status')->default(0);
             $table->timestamps();

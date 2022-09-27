@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
+use Modules\Application\Entities\Notification;
 use Modules\Registrar\Entities\Unit;
 use Modules\Registrar\Entities\Campus;
 use Modules\Registrar\Entities\Intake;
@@ -94,7 +95,7 @@ class CoursesController extends Controller
     }
     public function viewApplication($id){
         $app = Application::find($id);
-        $school = Education::where('applicant_id', $app->applicant->id)->first();
+        $school = Education::where('applicant_id', $app->applicant->id)->get();
         return view('registrar::offer.viewApplication')->with(['app' => $app, 'school' => $school]);
     }
 
@@ -359,7 +360,8 @@ class CoursesController extends Controller
                             $my_template->setValue('department', $app->courses->getCourseDept->name);
                             $my_template->setValue('duration', $app->courses->courseRequirements->course_duration);
                             $my_template->setValue('from', Carbon\carbon::parse($app->app_intake->intake_from)->format('d - m - Y'));
-                            $my_template->setValue('to', Carbon\carbon::parse($app->app_intake->intake_to)->format('d-m-Y'));
+                            $my_template->setValue('to', Carbon\carbon::parse($app->app_intake->intake_from)->addDays(4)->format('d - m - Y'));
+                            $my_template->setValue('campus', $app->availableCourseXApplication->courseXCampus->name);
                             $my_template->setValue('reg_number', $app->courses->course_code."/".str_pad( 1 + $regNo, 4, "0", STR_PAD_LEFT)."/". Carbon\carbon::parse($app->app_intake->intake_from)->format('Y'));
                             $my_template->setValue('ref_number', 'APP/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT));
                             $my_template->setValue('date',  date('d-M-Y'));
@@ -393,7 +395,16 @@ class CoursesController extends Controller
                                     $update->adm_letter = 'APP'."_".date('Y')."_".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT).".pdf";
                                     $update->save();
 
+                                    $comms = new Notification;
+                                    $comms->application_id = $id;
+                                    $comms->role_id = Auth::guard('user')->user()->role_id;
+                                    $comms->subject = 'Application Approval Process';
+                                    $comms->comment = 'Congratulations! Your application was successful. Got to My Courses section to download your admission letter.';
+                                    $comms->status = 1;
+                                    $comms->save();
+
                                     Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails($app->applicant));
+
 
                     }
                     if($app->finance_status == 3 && $app->registrar_status == 1){
@@ -405,17 +416,12 @@ class CoursesController extends Controller
                         $update->registrar_status = NULL;
                         $update->save();
                     }
-                    if($app->dean_status == 2 && $app->registrar_status == 1){
-
-                        // Send Failure Mail
-
-                    }
-                    if($app->dean_status == 1 && $app->registrar_status == 2){
+                    if($app->cod_status == 1 && $app->registrar_status == 2){
 
                         Application::where('id', $id)->update(['cod_status' => 3, 'dean_status' => 3, 'registrar_status' => 4]);
 
                     }
-                    if($app->dean_status == 2 && $app->registrar_status == 1){
+                    if($app->cod_status == 2 && $app->registrar_status == 1){
 
                         Application::where('id', $id)->update(['cod_status' => 3, 'dean_status' => 3, 'registrar_status' => 4]);
 
@@ -423,11 +429,19 @@ class CoursesController extends Controller
                     }
                     if($app->cod_status == 2 && $app->registrar_status == 1){
 
-                    Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails1($app->applicant));
-
                         $update = Application::find($id);
                         $update->registrar_status = 3;
                         $update->save();
+
+                        $comms = new Notification;
+                        $comms->application_id = $id;
+                        $comms->role_id = Auth::guard('user')->user()->role_id;
+                        $comms->subject = 'Application Approval Process';
+                        $comms->comment = 'Oops! Your application was not successful. You can go to Courses on offer section and apply for another course that you meet the minimum course requirements.';
+                        $comms->status = 1;
+                        $comms->save();
+
+                    Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails1($app->applicant));
 
                     }
 
@@ -1133,6 +1147,14 @@ class CoursesController extends Controller
             $admin->registrar_status = 1;
             $admin->accommodation_status = 0;
             $admin->save();
+
+                $comms = new Notification;
+                $comms->application_id = $app->appApprovals->id;
+                $comms->role_id = Auth::guard('user')->user()->role_id;
+                $comms->subject = 'Application Admission Process';
+                $comms->comment = 'Congratulations! Your admission was successful. You are now a bonafied student at TUM. You can now log in as a student using your registration number as user ID and ID/PASSPORT/BIRTH certificate number.';
+                $comms->status = 1;
+                $comms->save();
 
             return redirect()->back()->with('success', 'New student admission completed successfully');
 

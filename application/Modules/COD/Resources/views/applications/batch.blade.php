@@ -61,8 +61,10 @@
                                             <span class="badge bg-success">Accepted</span>
                                         @elseif($app->cod_status == 2)
                                             <span class="badge bg-warning">Rejected</span>
+                                        @elseif($app->cod_status == 4)
+                                            <span class="badge bg-info">Reverted</span>
                                         @else
-                                            <span class="badge bg-primary">Awaiting</span>
+                                            <span class="badge bg-info">Review</span>
                                         @endif
                                     </td>
                                 </tr>

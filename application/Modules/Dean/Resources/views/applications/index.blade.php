@@ -68,10 +68,10 @@
                                 </td>
                                 <td nowrap="">
                                 @if($app->dean_status == 0)
-                                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('dean.viewApplication', $app->id) }}"> View </a>
+                                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('dean.viewApplication', [ 'id' => Crypt::encrypt($app->id)]) }}"> View </a>
                                 @else
-                                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('dean.previewApplication', $app->id) }}"> View </a>
-                                    <a class="btn btn-sm btn-alt-info" href="{{ route('dean.viewApplication', $app->id) }}"> Edit </a>
+                                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('dean.previewApplication', [ 'id' => Crypt::encrypt($app->id)]) }}"> View </a>
+                                    <a class="btn btn-sm btn-alt-info" href="{{ route('dean.viewApplication', [ 'id' => Crypt::encrypt($app->id)]) }}"> Edit </a>
                                 @endif
                                 </td>
                             </tr>

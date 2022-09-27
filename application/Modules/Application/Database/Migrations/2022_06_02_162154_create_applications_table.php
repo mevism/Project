@@ -18,6 +18,7 @@ return new class extends Migration
             $table->bigInteger('applicant_id');
             $table->integer('intake_id');
             $table->integer('student_type');
+            $table->string('campus_id')->nullable();
             $table->integer('school_id');
             $table->integer('department_id');
             $table->integer('course_id');
@@ -25,7 +26,6 @@ return new class extends Migration
             $table->string('subject_2')->nullable();
             $table->string('subject_3')->nullable();
             $table->string('subject_4')->nullable();
-            $table->string('campus')->nullable();
             $table->string('receipt')->nullable();
             $table->string('receipt_file')->nullable();
             $table->tinyInteger('declaration')->nullable();

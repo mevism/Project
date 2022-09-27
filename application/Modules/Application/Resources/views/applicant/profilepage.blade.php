@@ -40,7 +40,7 @@
                                 </p>
                                 <div class="row">
                                     <div class="col-4 fw-semibold">Gender </div>
-                                    <div class="col-8"> <p>: {{ Auth::user()->gender }} </p></div>
+                                    <div class="col-8"> <p>:  @if(Auth::user()->gender = 'M') MALE @elseif(Auth::user()->gender = 'F') FEMALE @else OTHER @endif  </p></div>
                                 </div>
 
                                 <div class="row">
@@ -109,11 +109,21 @@
                                 </div>
                             </div>
                             <div class="block-content">
-                                <p>Nationality: {{ Auth::user()->nationality }}</p>
+                                <p>Nationality:
+                                    @if(Auth::user()->nationality = 'KE')
+                                        KENYAN
+                                    @elseif(Auth::user()->nationality = 'UG')
+                                        UGANDAN
+                                    @elseif(Auth::user()->nationality = 'TZ')
+                                        TANZANIAN
+                                    @else
+                                        NON-EAST AFRICA STUDENT
+                                    @endif
+                                </p>
                                 <p>County: {{ Auth::user()->county }}</p>
                                 <p>Sub County: {{ Auth::user()->sub_county }}</p>
                                 <p>Town: {{ Auth::user()->town }}</p>
-                                <p>Address: {{ Auth::user()->address }}</p>
+                                <p>Address: {{ Auth::user()->address }} - {{ Auth::user()->postal_code }}</p>
                             </div>
                         </div>
                     </li>

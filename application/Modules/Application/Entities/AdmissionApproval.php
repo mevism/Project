@@ -11,7 +11,7 @@ class AdmissionApproval extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = ['application_id'];
 
     public function appApprovals(){
 

@@ -23,14 +23,13 @@ Route::prefix('department')->group(function() {
         Route::post('/batchSubmit', [CODController::class, 'batchSubmit'])->name('cod.batchSubmit');
         Route::get('/acceptApplication/{id}', [CODController::class, 'acceptApplication'])->name('cod.acceptApplication');
         Route::post('/rejectApplication/{id}', [CODController::class, 'rejectApplication'])->name('cod.rejectApplication');
+        Route::post('/reverseApplication/{id}', [CODController::class, 'reverseApplication'])->name('cod.reverseApplication');
 
-        Route::get('/admissionJab', [CODController::class, 'admissionsJab'])->name('cod.jabAdmissions');
-        Route::get('/admissionSelf', [CODController::class, 'admissionsSelf'])->name('cod.selfAdmissions');
+        Route::get('/admissions', [CODController::class, 'admissions'])->name('cod.Admissions');
         Route::get('/review/{id}', [CODController::class, 'reviewAdmission'])->name('cod.reviewAdmission');
         Route::get('/accept/{id}', [CODController::class, 'acceptAdmission'])->name('cod.acceptAdmission');
         Route::post('/reject/{id}', [CODController::class, 'rejectAdmission'])->name('cod.rejectAdmission');
-        Route::get('/acceptjab/{id}', [CODController::class, 'acceptAdmJab'])->name('cod.acceptAdmJab');
-        Route::post('/rejectjab/{id}', [CODController::class, 'rejectAdmJab'])->name('cod.rejectAdmJab');
+        Route::post('/withhold/{id}', [CODController::class, 'withholdAdmission'])->name('cod.withholdAdmission');
         Route::get('/submit/{id}', [CODController::class, 'submitAdmission'])->name('cod.submitAdmission');
         Route::get('/submitAdmJab/{id}', [CODController::class, 'submitAdmJab'])->name('cod.submitAdmJab');
 
@@ -49,6 +48,8 @@ Route::prefix('department')->group(function() {
 
 
         Route::get('/admitStudent/{id}', [CODController::class, 'admitStudent'])->name('department.admitStudent');
+
+        Route::get('/getAcademicFile/{id}', 'CODController@viewAcademicFile');
 
     });
 });

@@ -79,9 +79,9 @@
                                 </td>
                                 <td>
                                     @if($intake->status == 0 )
-                                    <a class="btn btn-sm btn-alt-info" href="{{ route('department.intakeCourses', $intake->id) }}">Add courses</a>
+                                    <a class="btn btn-sm btn-alt-info" href="{{ route('department.intakeCourses', ['id' => Crypt::encrypt($intake->id)]) }}">Add courses</a>
                                     @else
-                                    <a class="btn btn-sm btn-alt-secondary" onclick="return confirm('Are you sure you want to delete this intake ?')" href="{{ route('courses.destroyIntake', $intake->id) }}">View details</a>
+                                    <a class="btn btn-sm btn-alt-secondary disabled" onclick="return confirm('Are you sure you want to delete this intake ?')" href="{{ route('courses.destroyIntake', ['id' => Crypt::encrypt($intake->id)]) }}">View details</a>
                                     @endif
                                 </td>
                             </tr>

@@ -63,26 +63,11 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td> {{ $student->student->reg_number }} </td>
                                     <td> {{ $student->student->sname }} {{ $student->student->mname }} {{ $student->student->fname }} </td>
-{{--                                    <td> {{ $app->courses->course_name }}</td>--}}
-{{--                                    <td>--}}
-{{--                                        @if($app->cod_status === 0)--}}
-{{--                                            <span class="badge bg-primary">Awaiting</span>--}}
-{{--                                        @elseif($app->cod_status === 1)--}}
-{{--                                            <span class="badge bg-success">Accepted</span>--}}
-{{--                                        @elseif($app->cod_status === 2)--}}
-{{--                                            <span class="badge bg-warning">Rejected</span>--}}
-{{--                                        @elseif($app->cod_status === 4)--}}
-{{--                                            <span class="badge bg-success">Reviewed</span>--}}
-{{--                                        @else--}}
-{{--                                            <span class="badge bg-info">Review</span>--}}
-{{--                                        @endif--}}
-
-{{--                                    </td>--}}
                                     <td nowrap="">
                                         @if(count($student->student->signNominal) > 0)
                                             <a class="btn btn-sm btn-alt-info disabled">More</a>
                                         @else
-                                            <a class="btn btn-sm btn-alt-success" onclick="return confirm('Are you sure you want to admit this student?')" data-toggle="click-ripple" href="{{ route('department.admitStudent', $student->id) }}">Admit</a>
+                                            <a class="btn btn-sm btn-alt-success" onclick="return confirm('Are you sure you want to admit this student?')" data-toggle="click-ripple" href="{{ route('department.admitStudent', ['id' => Crypt::encrypt($student->id)]) }}">Admit</a>
 
                                         @endif
                                     </td>

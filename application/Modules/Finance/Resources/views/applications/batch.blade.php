@@ -79,8 +79,12 @@
                                             <span class="badge bg-primary">Awaiting</span>
                                         @elseif($app->finance_status== 1)
                                             <span class="badge bg-success">Accepted</span>
-                                        @else
+                                        @elseif($app->finance_status== 2)
                                             <span class="badge bg-warning">Rejected</span>
+                                        @elseif($app->finance_status== 4)
+                                            <span class="badge bg-info">Reverted</span>
+                                        @else
+                                            <span class="badge bg-primary">Awaiting</span>
                                         @endif
                                     </td>
                                 </tr>

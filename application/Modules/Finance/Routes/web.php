@@ -25,13 +25,15 @@ Route::prefix('applications')->group(function() {
         Route::get('/finance/acceptApplication/{id}', [FinanceController::class, 'acceptApplication'])->name('finance.acceptApplication');
         Route::post('/finance/rejectApplication/{id}', [FinanceController::class, 'rejectApplication'])->name('finance.rejectApplication');
 
+        Route::post('/revertApplication/{id}', [FinanceController::class, 'revertApplication'])->name('finance.revertApplication');
+
 
         Route::get('/admission', [FinanceController::class, 'admissions'])->name('finance.admissions');
         Route::get('/admissionJab', [FinanceController::class, 'admissionsJab'])->name('finance.admissionsJab');
         Route::get('/review{id}', [FinanceController::class, 'reviewAdmission'])->name('finance.reviewAdmission');
         Route::get('/accept{id}', [FinanceController::class, 'acceptAdmission'])->name('finance.acceptAdmission');
-        Route::get('/acceptJab/{id}', [FinanceController::class, 'acceptAdmissionJab'])->name('finance.acceptAdmJab');
         Route::post('/reject{id}', [FinanceController::class, 'rejectAdmission'])->name('finance.rejectAdmission');
+        Route::post('/withhold/{id}', [FinanceController::class, 'withholdAdmission'])->name('finance.withholdAdmission');
         Route::get('/submit{id}', [FinanceController::class, 'submitAdmission'])->name('finance.submitAdmission');
         Route::get('/submitJab/{id}', [FinanceController::class, 'submitAdmissionJab'])->name('finance.submitAdmJab');
     });

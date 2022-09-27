@@ -1,7 +1,9 @@
-certs
-media
-receipts
-application/node_modules
+certs/
+media/
+receipts/
+application/node_modules/
 application/.env
-application/vendor
-node_modules
+application/vendor/
+node_modules/
+Admissions/
+Images/

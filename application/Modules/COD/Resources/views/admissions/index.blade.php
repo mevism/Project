@@ -58,104 +58,32 @@
                                     </td>
                                     <td>
 
-                                        @if($app->approveAdm== NULL)
-                                            <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>
-                                            {{ $app->approveAdm }}
-                                        @elseif($app->approveAdm->cod_status== 1)
-                                            <span class="badge bg-success"> <i class="fa fa-check"></i> accepted</span>
+                                        @if($app->approveAdm == NULL)
+                                            <span class="badge bg-warning"> <i class="fa fa-clock-o"></i> Not submitted</span>
                                         @else
-                                            <span class="badge bg-danger"> <i class="fa fa-close"></i> rejected</span>
+                                            @if($app->approveAdm->cod_status == 0)
+                                                <span class="badge bg-primary"> <i class="fa fa-spinner"></i> Awaiting </span>
+                                            @elseif($app->approveAdm->cod_status == 1)
+                                                <span class="badge bg-success"> <i class="fa fa-check-double"></i> Accepted </span>
+                                                @elseif($app->approveAdm->cod_status == 2)
+                                                <span class="badge bg-danger"> <i class="fa fa-ban"></i> Rejected </span>
+                                            @else
+                                                <span class="badge bg-info"> <i class="fa fa-ban"></i> Withheld </span>
+                                            @endif
                                         @endif
                                     </td>
                                     <td nowrap="">
-{{--                                        @if($app->applicant->student_type== 2)--}}
-{{--                                            @if($app->approveAdm== NULL)--}}
-{{--                                                <a class="btn btn-sm btn-alt-info" onclick="return confirm('Are you sure you want to approve?')" data-toggle="click-ripple" href="{{ route('cod.acceptAdmission', $app->id) }}">Accept</a>--}}
-{{--                                                <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->id }}"> Reject</a>--}}
-{{--                                                <div class="modal fade" id="modal-block-popin-{{ $app->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">--}}
-{{--                                                    <div class="modal-dialog modal-dialog-popin" role="document">--}}
-{{--                                                        <div class="modal-content">--}}
-{{--                                                            <div class="block block-rounded block-transparent mb-0">--}}
-{{--                                                                <div class="block-header block-header-default">--}}
-{{--                                                                    <h3 class="block-title">Reason(s) for rejecting {{ $app->applicant->sname }}'s admission</h3>--}}
-{{--                                                                    <div class="block-options">--}}
-{{--                                                                        <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">--}}
-{{--                                                                            <i class="fa fa-fw fa-times"></i>--}}
-{{--                                                                        </button>--}}
-{{--                                                                    </div>--}}
-{{--                                                                </div>--}}
-{{--                                                                <div class="block-content fs-sm">--}}
-{{--                                                                    <form action="{{ route('cod.rejectAdmission', $app->id) }}" method="post">--}}
-{{--                                                                        @csrf--}}
-{{--                                                                        <div class="row col-md-12 mb-3">--}}
-{{--                                                                            <textarea class="form-control" placeholder="Write down the reasons for declining this application" name="comment" required></textarea>--}}
-{{--                                                                            <input type="hidden" name="id" value="{{ $app->id }}">--}}
-{{--                                                                        </div>--}}
-{{--                                                                        <div class="d-flex justify-content-center mb-2">--}}
-{{--                                                                            <button type="submit" class="btn btn-alt-danger btn-sm">Reject</button>--}}
-{{--                                                                        </div>--}}
-{{--                                                                    </form>--}}
-{{--                                                                </div>--}}
-
-{{--                                                                <div class="block-content block-content-full text-end bg-body">--}}
-{{--                                                                    <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>--}}
-{{--                                                                </div>--}}
-{{--                                                            </div>--}}
-{{--                                                        </div>--}}
-{{--                                                    </div>--}}
-{{--                                                </div>--}}
-
-{{--                                            @elseif($app->approveAdm->cod_status== 1)--}}
-{{--                                                <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('cod.submitAdmission', $app->id) }}"> Submit </a>--}}
-{{--                                                <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->id }}"> Reject</a>--}}
-{{--                                                <div class="modal fade" id="modal-block-popin-{{ $app->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">--}}
-{{--                                                    <div class="modal-dialog modal-dialog-popin" role="document">--}}
-{{--                                                        <div class="modal-content">--}}
-{{--                                                            <div class="block block-rounded block-transparent mb-0">--}}
-{{--                                                                <div class="block-header block-header-default">--}}
-{{--                                                                    <h3 class="block-title"> Reason(s) for rejecting {{ $app->applicant->sname }}'s admission </h3>--}}
-{{--                                                                    <div class="block-options">--}}
-{{--                                                                        <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">--}}
-{{--                                                                            <i class="fa fa-fw fa-times"></i>--}}
-{{--                                                                        </button>--}}
-{{--                                                                    </div>--}}
-{{--                                                                </div>--}}
-{{--                                                                <div class="block-content fs-sm">--}}
-{{--                                                                    <form action="{{ route('cod.rejectAdmission', $app->id) }}" method="post">--}}
-{{--                                                                        @csrf--}}
-{{--                                                                        <div class="row col-md-12 mb-3">--}}
-{{--                                                                            <textarea class="form-control" placeholder="Write down the reasons for declining this application" name="comment" required></textarea>--}}
-{{--                                                                            <input type="hidden" name="id" value="{{ $app->id }}">--}}
-{{--                                                                        </div>--}}
-{{--                                                                        <div class="d-flex justify-content-center mb-2">--}}
-{{--                                                                            <button type="submit" class="btn btn-alt-danger btn-sm">Reject</button>--}}
-{{--                                                                        </div>--}}
-{{--                                                                    </form>--}}
-{{--                                                                </div>--}}
-
-{{--                                                                <div class="block-content block-content-full text-end bg-body">--}}
-{{--                                                                    <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>--}}
-{{--                                                                </div>--}}
-{{--                                                            </div>--}}
-{{--                                                        </div>--}}
-{{--                                                    </div>--}}
-{{--                                                </div>--}}
-{{--                                            @else--}}
-{{--                                                <a class="btn btn-sm btn-alt-info" onclick="return confirm('Are you sure you want to approve?')" data-toggle="click-ripple" href="{{ route('cod.acceptAdmission', $app->id) }}">Accept</a>--}}
-{{--                                            @endif--}}
-
-{{--                                        @else--}}
-                                            @if($app->approveAdm== NULL)
-                                                    <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->id) }}"> Verify </a>
-                                            @elseif($app->approveAdm->cod_status== 1)
-                                                <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->id) }}"> Edit </a>
-                                                <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('cod.submitAdmission', $app->id) }}"> Submit </a>
+                                            @if($app->approveAdm == NULL)
+                                                    <a class="btn btn-sm btn-alt-info disabled" href="{{ route('cod.reviewAdmission', ['id' => Crypt::encrypt($app->id)]) }}"> Verify </a>
+                                            @elseif($app->approveAdm->cod_status == 0)
+                                            <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', ['id' => Crypt::encrypt($app->id)]) }}"> Verify </a>
+                                            @elseif($app->approveAdm->cod_status == 1)
+                                                <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', ['id' => Crypt::encrypt($app->id)]) }}"> Edit </a>
+                                                <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('cod.submitAdmission', ['id' => Crypt::encrypt($app->id)]) }}"> Submit </a>
                                             @else
-                                                    <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->id) }}"> Edit </a>
+                                                    <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', ['id' => Crypt::encrypt($app->id)]) }}"> Edit </a>
 
                                             @endif
-{{--                                        @endif--}}
-
                                     </td>
                                 </tr>
                             @endforeach

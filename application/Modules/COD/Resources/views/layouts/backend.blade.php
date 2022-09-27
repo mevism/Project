@@ -140,7 +140,7 @@
                   </a>
                   <ul class="nav-main-submenu">
                       <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('cod.selfAdmissions') }}">
+                          <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('cod.Admissions') }}">
                               <i class="nav-main-link-icon si si-calendar"></i>
                               <span class="nav-main-link-name">View Admissions</span>
                           </a>

@@ -54,21 +54,23 @@
                                 <td>
                                     @if($app->finance_status== 0)
                                         <span class="badge bg-primary">Awaiting</span>
-                                    @elseif($app->finance_status== 1)
+                                    @elseif($app->finance_status == 1)
                                         <span class="badge bg-success">Accepted</span>
-                                    @elseif($app->finance_status== 2)
+                                    @elseif($app->finance_status == 2)
                                         <span class="badge bg-warning">Rejected</span>
+                                    @elseif($app->finance_status == 4)
+                                        <span class="badge bg-info">Reverted</span>
                                     @else
                                         <span class="badge bg-primary">Awaiting</span>
                                     @endif
                                 </td>
                                 <td>
                                 @if($app->finance_status == 0)
-                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('finance.viewApplication', $app->id) }}"> View </a>
+                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('finance.viewApplication', ['id' => Crypt::encrypt($app->id)]) }}"> View </a>
                                         @else
                                     <div class="d-flex justify-content-between">
-                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('finance.previewApplication', $app->id) }}"> View </a>
-                                <a class="btn btn-sm btn-alt-info" href="{{ route('finance.viewApplication', $app->id) }}"> Edit </a>
+                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('finance.previewApplication', ['id' => Crypt::encrypt($app->id)]) }}"> View </a>
+                                <a class="btn btn-sm btn-alt-info" href="{{ route('finance.viewApplication', ['id' => Crypt::encrypt($app->id)]) }}"> Edit </a>
                                     </div>
                                 @endif
                                 </td>

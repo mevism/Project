@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <div class="block-content block-content-full bg-body-light text-center">
-                        <a href="{{ route('application.apply', $course->id) }}" class="btn btn-alt-success btn-sm" data-toggle="click-ripple">Apply now</a>
+                        <a href="{{ route('application.apply', ['id' => Crypt::encrypt($course->id)]) }}" class="btn btn-alt-success btn-sm" data-toggle="click-ripple">Apply now</a>
                     </div>
                 </a>
                 <!-- END Developer Plan -->

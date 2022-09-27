@@ -1,4 +1,6 @@
 @extends('dean::layouts.backend')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 @section('content')
     <div class="bg-body-light">
         <div class="content content-full">
@@ -26,7 +28,7 @@
         <div class="block block-rounded">
             <div class="block-content block-content-full">
                 <div class="row">
-                    <div class="col-lg-6 mb-1">
+                    <div class="col-lg-5 mb-1 fs-sm">
                         <div class="row p-1">
                         <div class="col-md-4 fw-bolder text-start">Applicant Name </div>
                         <div class="col-md-8"> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</div>
@@ -40,12 +42,10 @@
                             <div class="col-md-8"> {{ $app->courses->course_name }} </div>
                         </div>
                         <div class="row p-1">
-                            <div class="col-md-4 fw-bolder text-start">Institution</div>
-                            <div class="col-md-8"> {{ $school->institution }} </div>
-                        </div>
-                        <div class="row p-1">
-                            <div class="col-md-4 fw-bolder text-start">KCSE Grade</div>
-                            <div class="col-md-8"> {{ $school->qualification }} </div>
+                            @foreach($school as $key => $institute)
+                                <p>{{ ++$key }}. {{ $institute->institution }} Level: {{ $institute->level }} </p>
+                                <p>Qualification: {{ $institute->qualification }}</p>
+                            @endforeach
                         </div>
                         <div class="row py-3">
                             <div class="col-md-12">
@@ -89,11 +89,23 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 space-y-2">
-                        <div class="d-flex justify-content-center">
-                            <div class="card-img" style="margin: auto !important;">
-                                <img style="margin: auto !important; max-height: 80vh !important; width: 100% !important;" src="{{ url('certs/', $school->certificate) }}" alt="">
+                    <div class="col-lg-7 space-y-1">
+                        <div id="carouselExampleControls" class="carousel carousel-dark slide" data-interval="50000" data-ride="carousel">
+                            <div class="carousel-inner">
+                                @foreach($school as $key => $item)
+                                    <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                                        <iframe src="{{ url('certs/', $item->certificate) }}" type="application/pdf" style="width: 100% !important; height: 80vh !important;"> </iframe>
+                                    </div>
+                                @endforeach
                             </div>
+                            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -101,22 +113,22 @@
         <div class="d-flex justify-content-center py-1">
 
             @if($app->dean_status == 3)
-                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('dean.acceptApplication', $app->id) }}">Agree</a>
+                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('dean.acceptApplication', [ 'id' => Crypt::encrypt($app->id)]) }}">Agree</a>
                 <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Disagree</a>
                 <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('dean.applications') }}">Close</a>
             @elseif($app->dean_status == 4)
-                    <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('dean.acceptApplication', $app->id) }}">Agree</a>
+                    <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('dean.acceptApplication', [ 'id' => Crypt::encrypt($app->id)]) }}">Agree</a>
                     <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Disagree</a>
                     <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('dean.applications') }}">Close</a>
                 @elseif($app->dean_status == 0)
-                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('dean.acceptApplication', $app->id) }}">Agree</a>
+                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('dean.acceptApplication', [ 'id' => Crypt::encrypt($app->id)]) }}">Agree</a>
                 <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Disagree</a>
                 <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('dean.applications') }}">Close</a>
             @elseif($app->dean_status == 1)
                 <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Disagree</a>
                 <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('dean.applications') }}">Close</a>
             @else
-                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('dean.acceptApplication', $app->id) }}">Agree</a>
+                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('dean.acceptApplication', [ 'id' => Crypt::encrypt($app->id)]) }}">Agree</a>
                 <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('dean.applications') }}">Close</a>
             @endif
         </div>
@@ -136,10 +148,10 @@
                         </div>
                     </div>
                     <div class="block-content fs-sm">
-                        <form action="{{ route('dean.rejectApplication', $app->id) }}" method="post">
+                        <form action="{{ route('dean.rejectApplication', [ 'id' => Crypt::encrypt($app->id)]) }}" method="post">
                             @csrf
-                            <div class="row col-md-12 mb-3">
-                            <textarea class="form-control" placeholder="Write down the reasons for declining this application" name="comment" required></textarea>
+                            <div class="d-flex justify-content-center m-3">
+                            <textarea class="form-control" placeholder="Write down the reasons for declining this application" name="comment" required rows="6"></textarea>
                             <input type="hidden" name="{{ $app->id }}">
                             </div>
                             <div class="d-flex justify-content-center mb-2">
@@ -149,7 +161,6 @@
                     </div>
                     <div class="block-content block-content-full text-end bg-body">
                         <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>
-                        {{--                        <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Okay</button>--}}
                     </div>
                 </div>
             </div>

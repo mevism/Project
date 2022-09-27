@@ -171,7 +171,7 @@
                 @if($admission->admissionDoc->certificates &&  $admission->admissionDoc->bank_receipt && $admission->admissionDoc->medical_form && $admission->admissionDoc->passport_photo != null)
                     @if($admission->admissionDoc->status == 0)
             <div class="d-flex justify-content-center m-3">
-                <a class="btn btn-sm btn-alt-success" data-toggle="click-ripple" onclick="return confirm('You are about to submit your documents. Once submitted cannot be changed. Are you sure you want to proceed?')" href="{{ route('application.submitDocuments', $admission->id) }}">Submit documents</a>
+                <a class="btn btn-sm btn-alt-success" data-toggle="click-ripple" onclick="return confirm('You are about to submit your documents. Once submitted cannot be changed. Are you sure you want to proceed?')" href="{{ route('application.submitDocuments', ['id' => Crypt::encrypt($admission->id)]) }}">Submit documents</a>
             </div>
                     @else
                         <p class="h6 text-center text-success m-4">Your documents are being processed</p>

@@ -22,9 +22,6 @@
         </div>
     </div>
     <div class="block block-rounded">
-{{--        <div class="col-sm d-flex justify-content-center p-4">--}}
-{{--            <span class="alert alert-danger"> <i class="fa fa-info-circle"></i> Please ensure that you update your profile within 72hours or the account will be deleted permanently. </span>--}}
-{{--        </div>--}}
         <div class="block-content">
             <div class="block-content block-content-full">
                 <div class="d-flex justify-content-center fs-sm">

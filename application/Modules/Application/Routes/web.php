@@ -38,9 +38,8 @@ use Modules\Application\Http\Controllers\ApplicationController;
             Route::get('/applicant', 'ApplicationController@dashboard')->name('application.applicant');
             Route::get('/course', 'ApplicationController@myCourses')->name('applicant.course');
             Route::get('/courses', 'ApplicationController@allCourses')->name('applicant.courses');
-            Route::get('/apply', 'ApplicationController@apply')->name('applicant.apply');
-            Route::get('/applyNow/{course}', 'ApplicationController@applyNow')->name('application.apply');;
-            Route::get('/viewCourse/{course}', 'ApplicationController@viewCourse')->name('application.viewOne');;
+            Route::get('/applyNow/{id}', 'ApplicationController@applyNow')->name('application.apply');;
+            Route::get('/viewCourse/{id}', 'ApplicationController@viewCourse')->name('application.viewOne');;
             Route::post('/submitApplication', 'ApplicationController@application')->name('application.save');
             Route::post('/updateApplication{id}', 'ApplicationController@updateApp')->name('application.update');
             Route::get('/profile', 'ApplicationController@myProfile')->name('applicant.profile');
@@ -62,6 +61,8 @@ use Modules\Application\Http\Controllers\ApplicationController;
             Route::post('/medicalForm', [ApplicationController::class, 'medicalForm'])->name('application.medicalForm');
             Route::post('/passportPhoto', [ApplicationController::class, 'passportPhoto'])->name('application.passportPhoto');
             Route::get('/submitDocuments/{id}', [ApplicationController::class, 'submitDocuments'])->name('application.submitDocuments');
+
+            Route::get('/inbox', [ApplicationController::class, 'inbox'])->name('applicant.inbox');
         });
 
     });

@@ -5,6 +5,7 @@ namespace Modules\Application\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Registrar\Entities\AvailableCourse;
 use Modules\Registrar\Entities\Courses;
 use Modules\COD\Entities\CODLog;
 use Modules\Registrar\Entities\Intake;
@@ -51,6 +52,16 @@ class Application extends Model
 
     public function admissionDoc(){
         return $this->hasOne(AdmissionDocument::class);
+    }
+
+    public function myNotification(){
+
+        return $this->hasMany(Notification::class);
+    }
+
+    public function availableCourseXApplication(){
+
+        return $this->belongsTo(AvailableCourse::class, 'course_id');
     }
 
     protected static function newFactory()

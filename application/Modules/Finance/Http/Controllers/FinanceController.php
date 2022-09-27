@@ -5,12 +5,14 @@ namespace Modules\Finance\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Crypt;
 use Modules\Application\Entities\AdmissionApproval;
 use Modules\Application\Entities\Application;
 use Modules\Application\Entities\Education;
 use Modules\Finance\Entities\FinanceLog;
 use Auth;
 use Modules\Registrar\Entities\Courses;
+use Modules\Application\Entities\Notification;
 
 class FinanceController extends Controller
 {
@@ -31,19 +33,26 @@ class FinanceController extends Controller
 
     public function viewApplication($id){
 
-        $app = Application::find($id);
+        $hashedId = Crypt::decrypt($id);
+
+        $app = Application::find($hashedId);
+
         return view('applications::applications.viewApplication')->with('app', $app);
     }
 
     public function previewApplication($id){
 
-        $app = Application::find($id);
+        $hashedId = Crypt::decrypt($id);
+
+        $app = Application::find($hashedId);
         return view('applications::applications.preview')->with('app', $app);
     }
 
     public function acceptApplication($id){
 
-        $app = Application::find($id);
+        $hashedId = Crypt::decrypt($id);
+
+        $app = Application::find($hashedId);
         $app->finance_status = 1;
         $app->save();
 
@@ -59,7 +68,9 @@ class FinanceController extends Controller
 
     public function rejectApplication(Request $request, $id){
 
-        $app = Application::find($id);
+        $hashedId = Crypt::decrypt($id);
+
+        $app = Application::find($hashedId);
         $app->finance_status = 2;
         $app->finance_comments = $request->comment;
         $app->save();
@@ -73,6 +84,32 @@ class FinanceController extends Controller
         $logs->save();
 
         return redirect()->route('finance.applications')->with('success', 'Application declined');
+    }
+
+    public function revertApplication(Request $request, $id){
+        $hashedId = Crypt::decrypt($id);
+
+        $app = Application::find($hashedId);
+        $app->finance_status = 4;
+        $app->finance_comments = $request->comment;
+        $app->save();
+
+        $logs = new FinanceLog;
+        $logs->application_id = $app->id;
+        $logs->user = Auth::guard('user')->user()->name;
+        $logs->user_role = Auth::guard('user')->user()->role_id;
+        $logs->comments = $request->comment;
+        $logs->activity = 'Application reverted for corrections';
+        $logs->save();
+
+        $comms = new Notification;
+        $comms->application_id = $hashedId;
+        $comms->role_id = Auth::guard('user')->user()->role_id;
+        $comms->subject = 'Application Approval Process';
+        $comms->comment = $request->comment;
+        $comms->save();
+
+        return redirect()->route('finance.applications')->with('success', 'Communications passed to the student for corrections');
     }
 
     public function batch(){
@@ -97,6 +134,17 @@ class FinanceController extends Controller
                     $app->registrar_status = 0;
                     $app->save();
 
+                }elseif($app->finance_status == 4){
+
+                    $app = Application::find($id);
+                    $app->finance_status = NULL;
+                    $app->declaration = 0;
+                    $app->save();
+
+                    $notify = Notification::where('application_id', $id)->latest()->first();
+                    $notify->status = 1;
+                    $notify->save();
+
                 }else{
                     $app = Application::find($id);
                     $app->cod_status = 0;
@@ -116,64 +164,56 @@ class FinanceController extends Controller
     public function admissions(){
 
         $apps = AdmissionApproval::where('cod_status', 1)
-//            ->where('student_type', 1)
             ->where('finance_status', '!=', NULL)
             ->where('medical_status', NULL)
             ->get();
 
-//        return $apps->appApproval->applicant;
-
         return view('applications::admissions.index')->with('applicant', $apps);
-    }
-
-    public function admissionsJab(){
-
-            $admission = AdmissionApproval::where('cod_status', 1)
-                ->where('student_type', 2)
-                ->where('finance_status', '!=', NULL)
-                ->where('medical_status', NULL)
-                ->get();
-
-        return view('applications::admissions.kuccps')->with('applicant', $admission);
     }
 
     public function reviewAdmission($id){
 
-        $app = AdmissionApproval::find($id);
+        $hashedId = Crypt::decrypt($id);
 
-//        return $app->appApproval->applicant;
+        $app = AdmissionApproval::find($hashedId);
 
         return view('applications::admissions.review')->with(['app' => $app]);
     }
 
     public function acceptAdmission($id){
 
-            $admission = AdmissionApproval::find($id);
+        $hashedId = Crypt::decrypt($id);
+
+        $admission = AdmissionApproval::find($hashedId);
             $admission->finance_status = 1;
             $admission->save();
 
         return redirect()->route('finance.admissions')->with('success', 'New student verified successfully');
     }
 
-        public function acceptAdmissionJab($id){
-
-                $admission = AdmissionApproval::find($id);
-                $admission->finance_status = 1;
-                $admission->save();
-
-            return redirect()->back()->with('success', 'New student verified successfully');
-        }
-
     public function rejectAdmission(Request $request, $id){
 
-        AdmissionApproval::where('id', $id)->update(['finance_status' => 2, 'finance_comments' => $request->comment]);
+        $hashedId = Crypt::decrypt($id);
+
+        AdmissionApproval::where('id', $hashedId)->update(['finance_status' => 2, 'finance_comments' => $request->comment]);
 
         return redirect()->route('finance.admissions')->with('warning', 'Admission request rejected');
     }
 
+    public function withholdAdmission(Request $request, $id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        AdmissionApproval::where('id', $hashedId)->update(['finance_status' => 3, 'finance_comments' => $request->comment]);
+
+        return redirect()->route('finance.admissions')->with('info', 'Admission request withheld');
+    }
+
     public function submitAdmission($id){
 
-        $admission = AdmissionApproval::find($id);
+        $hashedId = Crypt::decrypt($id);
+
+        $admission = AdmissionApproval::find($hashedId);
         $admission->medical_status = 0;
         $admission->save();
 
@@ -182,7 +222,9 @@ class FinanceController extends Controller
 
     public function submitAdmissionJab($id){
 
-        $admission = AdmissionApproval::find($id);
+        $hashedId = Crypt::decrypt($id);
+
+        $admission = AdmissionApproval::find($hashedId);
         $admission->medical_status = 0;
         $admission->save();
 

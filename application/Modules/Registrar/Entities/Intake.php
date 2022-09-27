@@ -10,6 +10,8 @@ class Intake extends Model
 {
     use HasFactory;
 
+    protected $dates = [ 'intake_from'];
+
     protected $fillable = [
         'intake_from', 'intake_to', 'status'
     ];
@@ -40,24 +42,5 @@ class Intake extends Model
 
         return $this->hasMany(AvailableCourse::class, 'intake_id');
     }
-
-//        public function newapps(){
-//
-//            return $this->hasMany(Application::class, 'id');
-//
-//        }
-
-//    public function available()
-//    {
-//        return $this->hasMany(\Modules\Registrar\Entities\AvailableCourse::class, 'intake_id');
-//    }
-//    public function available()
-//    {
-//        return $this->hasMany('\Modules\Registrar\Entities\AvailableCourse', 'intake_id');
-//    }
-//
-//    public function courses(){
-//        $this->hasOne(Registrar::class, 'id');
-//    }
 
 }

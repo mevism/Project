@@ -137,6 +137,9 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/barryvdh/laravel-dompdf" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/dompdf/dompdf" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/masterminds/html5" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/uid" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/polyfill-uuid" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/davcpas1234/laravelpdfviewer" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
