@@ -65,7 +65,7 @@ class MedicalController extends Controller
 
         $admission = AdmissionApproval::find($hashedId);
 
-        return view('medical::admissions.review')->with('admission', $admission);
+        return view('medical::admissions.viewAdmission')->with('admission', $admission);
     }
 
     public function withholdAdmission(Request $request, $id){
