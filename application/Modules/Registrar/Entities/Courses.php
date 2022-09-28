@@ -25,8 +25,13 @@ class Courses extends Model
 
     public function onOffer(){
 
-        return $this->hasMany(AvailableCourse::class);
+        return $this->hasMany(AvailableCourse::class, 'id');
 
+    }
+
+    public function courseXAvailable(){
+
+        return $this->hasOne(AvailableCourse::class, 'course_id');
     }
 
 //    relationship between a course and an application

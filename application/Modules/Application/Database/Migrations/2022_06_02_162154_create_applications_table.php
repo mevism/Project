@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('campus_id')->nullable();
             $table->integer('school_id');
             $table->integer('department_id');
-            $table->integer('course_id');
+            $table->bigInteger('course_id');
             $table->string('subject_1')->nullable();
             $table->string('subject_2')->nullable();
             $table->string('subject_3')->nullable();

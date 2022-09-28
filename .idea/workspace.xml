@@ -6,9 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/.env" beforeDir="false" afterPath="$PROJECT_DIR$/application/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/application.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/application.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/utFETobamZdLauwP575b7FGvd5RdbuvPlXXmsYse" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2022_06_02_162154_create_applications_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2022_06_02_162154_create_applications_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/AvailableCourse.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/AvailableCourse.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Courses.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Courses.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -265,7 +266,8 @@
       <workItem from="1663745285360" duration="15801000" />
       <workItem from="1663763073417" duration="20949000" />
       <workItem from="1663913344634" duration="40407000" />
-      <workItem from="1664259225838" duration="20854000" />
+      <workItem from="1664259225838" duration="21173000" />
+      <workItem from="1664347767421" duration="5375000" />
     </task>
     <servers />
   </component>

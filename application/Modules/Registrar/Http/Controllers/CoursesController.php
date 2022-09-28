@@ -338,6 +338,8 @@ class CoursesController extends Controller
 
                     $app = Application::find($id);
 
+                    return $app->courses->courseXAvailable->courseXCampus->name;
+
                     if($app->registrar_status == 1 && $app->cod_status == 1){
 
                         $regNo  = Application::where('course_id', $app->course_id)

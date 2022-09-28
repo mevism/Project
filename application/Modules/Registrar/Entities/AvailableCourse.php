@@ -35,6 +35,11 @@ class AvailableCourse extends Model
 
     }
 
+    public function mainXCourse(){
+
+        return $this->belongsTo(Courses::class, 'id');
+    }
+
     public function courseXCampus(){
 
         return $this->belongsTo(Campus::class, 'campus_id');
