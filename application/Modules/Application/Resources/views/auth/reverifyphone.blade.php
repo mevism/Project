@@ -59,7 +59,7 @@
                                                 <input type="hidden" class="form-control form-control-alt" name="phone_number" value="{{ Auth::user()->mobile }}">
                                             </div>
                                             <div class="form-floating mb-4">
-                                                <input type="text" class="form-control form-control-alt" name="verification_code" value="{{ session('code') }}">
+                                                <input type="text" class="form-control form-control-alt" name="verification_code">
                                                 <label class="form-label" for="username">Verification Code</label>
                                             </div>
                                             <div class="d-flex justify-content-center align-items-center mb-4">

@@ -5,19 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sims.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sims.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/.env" beforeDir="false" afterPath="$PROJECT_DIR$/application/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Entities/Applicant.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Entities/Applicant.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/app/Http/Middleware/User/Updatedprofile.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Http/Middleware/User/Updatedprofile.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/application/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/application/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/26Vnhqf5dcGufTVCox5luSXKBsstHhnHolcohg2x" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/f9Rmmjha3giZj8RbKgJ7eIQUXnWFlosGEs0mISR0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/mC3dd5W9A2U2YD4TGPPlO0s1dTigHeW8W5CdVME8" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/auth/reverifyphone.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/auth/reverifyphone.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -277,7 +266,7 @@
       <workItem from="1663763073417" duration="20949000" />
       <workItem from="1663913344634" duration="40407000" />
       <workItem from="1664259225838" duration="21173000" />
-      <workItem from="1664347767421" duration="11181000" />
+      <workItem from="1664347767421" duration="11661000" />
     </task>
     <servers />
   </component>
