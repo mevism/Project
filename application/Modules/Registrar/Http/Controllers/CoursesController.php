@@ -338,7 +338,7 @@ class CoursesController extends Controller
 
                     $app = Application::find($id);
 
-                    return $app->courses->courseXAvailable->courseXCampus->name;
+//                    return $app->courses->courseXAvailable->courseXCampus->name;
 
                     if($app->registrar_status == 1 && $app->cod_status == 1){
 

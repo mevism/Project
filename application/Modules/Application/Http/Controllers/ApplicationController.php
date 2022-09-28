@@ -2,6 +2,7 @@
 
 namespace Modules\Application\Http\Controllers;
 
+use AfricasTalking\SDK\AfricasTalking;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -130,6 +131,24 @@ class ApplicationController extends Controller
         VerifyUser::create([
             'applicant_id' => Auth::user()->id,
             'verification_code' => $verification_code,
+        ]);
+
+        $apiKey   = '39d6ee3bed35128162d45e5b0e68275116de838ee0d657546de71758a82a2c01';
+        $username = 'cicsystems';
+        $sender   = '';
+
+        $receiver = '+254'. \Illuminate\Support\Facades\Auth::user()->mobile;
+
+        $message = 'Welcome to TUM course application system. Your verification code is '. $verification_code.'.Do not share your verification code with anyone.';
+
+
+        $gateway  = new AfricasTalking($username, $apiKey);
+
+        $gateway->sms()->send([
+            'to'      => $receiver,
+            'message' => $message,
+            'from'    => $sender,
+            'enqueue' => true
         ]);
 
         return redirect()->back()->with(['info' => 'Enter the code send to your phone', 'code' => $verification_code]);

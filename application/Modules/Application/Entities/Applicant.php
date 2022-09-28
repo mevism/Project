@@ -44,6 +44,11 @@ class Applicant extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function routeNotificationForAfricasTalking($notification)
+    {
+        return $this->mobile;
+    }
+
     public function VerifyEmail(){
 
         return $this->hasOne(VerifyEmail::class);
@@ -62,6 +67,8 @@ class Applicant extends Authenticatable
     public function School(){
         return $this->hasMany(Education::class);
     }
+
+
     protected static function newFactory()
     {
         return \Modules\Application\Database\factories\ApplicantFactory::new();

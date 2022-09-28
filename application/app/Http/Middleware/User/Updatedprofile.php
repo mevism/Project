@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware\User;
 
+use AfricasTalking\SDK\AfricasTalking;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,6 +49,24 @@ class Updatedprofile
                 'applicant_id' => Auth::user()->id,
                 'verification_code' => $verification_code,
             ]);
+
+            $apiKey   = '39d6ee3bed35128162d45e5b0e68275116de838ee0d657546de71758a82a2c01';
+            $username = 'cicsystems';
+            $sender   = '';
+
+            $receiver = '+254'.Auth::user()->mobile;
+
+            $message = 'Welcome to TUM course application system. Your verification code is '. $verification_code.'.Do not share your verification code with anyone.';
+
+
+            $gateway  = new AfricasTalking($username, $apiKey);
+
+                    $gateway->sms()->send([
+                        'to'      => $receiver,
+                        'message' => $message,
+                        'from'    => $sender,
+                        'enqueue' => true
+                    ]);
 
             return redirect(route('application.reverify'))->with(['info' => 'Enter the code send to your phone', 'code' => $verification_code, 'phone' => $number]);
         }
