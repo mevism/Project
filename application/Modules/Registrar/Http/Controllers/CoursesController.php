@@ -363,7 +363,7 @@ class CoursesController extends Controller
                             $my_template->setValue('duration', $app->courses->courseRequirements->course_duration);
                             $my_template->setValue('from', Carbon\carbon::parse($app->app_intake->intake_from)->format('d - m - Y'));
                             $my_template->setValue('to', Carbon\carbon::parse($app->app_intake->intake_from)->addDays(4)->format('d - m - Y'));
-                            $my_template->setValue('campus', $app->availableCourseXApplication->courseXCampus->name);
+                            $my_template->setValue('campus', $app->courses->courseXAvailable->courseXCampus->name);
                             $my_template->setValue('reg_number', $app->courses->course_code."/".str_pad( 1 + $regNo, 4, "0", STR_PAD_LEFT)."/". Carbon\carbon::parse($app->app_intake->intake_from)->format('Y'));
                             $my_template->setValue('ref_number', 'APP/'.date('Y')."/".str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT));
                             $my_template->setValue('date',  date('d-M-Y'));
