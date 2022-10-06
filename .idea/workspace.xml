@@ -6,7 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/.env" beforeDir="false" afterPath="$PROJECT_DIR$/application/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/application.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/application.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/database/seeders/UserSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/database/seeders/UserSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/resources/views/errors/503.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/resources/views/errors/503.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/ahF4BUGPim0ZkDMBQw7ZiZ9dprxY0K5dIigpOxxj" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -267,6 +273,10 @@
       <workItem from="1663913344634" duration="40407000" />
       <workItem from="1664259225838" duration="21173000" />
       <workItem from="1664347767421" duration="11661000" />
+      <workItem from="1664784188870" duration="4804000" />
+      <workItem from="1664867805056" duration="1509000" />
+      <workItem from="1664957827016" duration="6423000" />
+      <workItem from="1665037485446" duration="14156000" />
     </task>
     <servers />
   </component>

@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         $users = [
-           ['name' => 'Registrar', 'username' => 'registrar'.'@gmail.com', 'password' => Hash::make('1234'), 'role_id' => 1,],
+           ['name' => 'Registrar', 'username' => 'registrarAA', 'password' => Hash::make('1234'), 'role_id' => 1,],
            ['name' => 'COD 1', 'username' => 'coddaf', 'password' => Hash::make('1234'), 'role_id' => 2, 'department_id' => 1,],
            ['name' => 'COD 2', 'username' => 'coddba', 'password' => Hash::make('1234'), 'role_id' => 2, 'department_id' => 2,],
            ['name' => 'COD 3', 'username' => 'coddhm', 'password' => Hash::make('1234'), 'role_id' => 2, 'department_id' => 3,],
@@ -33,17 +33,17 @@ class UserSeeder extends Seeder
            ['name' => 'COD 13', 'username' => 'coddss', 'password' => Hash::make('1234'), 'role_id' => 2, 'department_id' => 13,],
            ['name' => 'COD 14', 'username' => 'coddhtm', 'password' => Hash::make('1234'), 'role_id' => 2, 'department_id' => 14,],
            ['name' => 'COD 15', 'username' => 'coddcs', 'password' => Hash::make('1234'), 'role_id' => 2, 'department_id' => 15,],
-           ['name' => 'COD 16', 'username' => 'coddci', 'password' => Hash::make('1234'), 'role_id' => 2, 'department_id' => 16,],
-           ['name' => 'Finance', 'username' => 'finance'.'@gmail.com', 'password' => Hash::make('1234'), 'role_id' => 3,],
-           ['name' => 'Dean 1', 'username' => 'deansob'.'@gmail.com', 'password' => Hash::make('1234'), 'role_id' => 4, 'school_id' => 1,],
-           ['name' => 'Dean 2', 'username' => 'deansoet'.'@gmail.com', 'password' => Hash::make('1234'), 'role_id' => 4, 'school_id' => 2,],
-           ['name' => 'Dean 3', 'username' => 'deansoahs'.'@gmail.com', 'password' => Hash::make('1234'), 'role_id' => 4, 'school_id' => 3,],
-           ['name' => 'Dean 4', 'username' => 'deansohss'.'@gmail.com', 'password' => Hash::make('1234'), 'role_id' => 4, 'school_id' => 4,],
-           ['name' => 'Dean 5', 'username' => 'deanici'.'@gmail.com', 'password' => Hash::make('1234'), 'role_id' => 4, 'school_id' => 5,],
-           ['name' => 'Accommodation', 'username' => 'accommodation'.'@gmail.com', 'password' => Hash::make('1234'), 'role_id' => 5,],
+           ['name' => 'COD DCI', 'username' => 'coddci', 'password' => Hash::make('1234'), 'role_id' => 2, 'department_id' => 16,],
+           ['name' => 'Student Finance', 'username' => 'studentfinance', 'password' => Hash::make('1234'), 'role_id' => 3,],
+           ['name' => 'Dean SOB', 'username' => 'deansob', 'password' => Hash::make('1234'), 'role_id' => 4, 'school_id' => 1,],
+           ['name' => 'Dean SOET', 'username' => 'deansoet', 'password' => Hash::make('1234'), 'role_id' => 4, 'school_id' => 2,],
+           ['name' => 'Dean SOAHS', 'username' => 'deansoahs', 'password' => Hash::make('1234'), 'role_id' => 4, 'school_id' => 3,],
+           ['name' => 'Dean SOHSS', 'username' => 'deansohss', 'password' => Hash::make('1234'), 'role_id' => 4, 'school_id' => 4,],
+           ['name' => 'Dean ICI', 'username' => 'deanici', 'password' => Hash::make('1234'), 'role_id' => 4, 'school_id' => 5,],
+           ['name' => 'Accommodation Officer', 'username' => 'accommodation', 'password' => Hash::make('1234'), 'role_id' => 5,],
 //            ['name' => 'Student', 'username' => 'student'.'@gmail.com', 'password' => Hash::make('1234'), 'role_id' => 6,],
 ////            ['name' => 'Exams', 'username' => 'examination'.'@gmail.com', 'password' => Hash::make('1234'), 'role_id' => 7,],
-          ['name' => 'Medical', 'username' => 'medical'.'@gmail.com', 'password' => Hash::make('1234'), 'role_id' => 8,],
+          ['name' => 'Medical Officer', 'username' => 'medicalofficer', 'password' => Hash::make('1234'), 'role_id' => 8,],
 ////            ['name' => 'Admin', 'username' => 'admin'.'@gmail.com', 'password' => Hash::make('1234'), 'role_id' => 0,],
         ];
 
@@ -62,7 +62,7 @@ class UserSeeder extends Seeder
             ['name' => 'MAIN CAMPUS'],
             ['name' => 'KWALE CAMPUS'],
             ['name' => 'LAMU CAMPUS'],
-            
+
         ]);
         DB::table('cluster_subjects')->insert([
             ['group_id' => '1', 'subject' => 'MAT'],
@@ -86,17 +86,17 @@ class UserSeeder extends Seeder
             ['group_id' => '5', 'subject' => 'GER'],
             ['group_id' => '5', 'subject' => 'ARAB'],
             ['group_id' => '5', 'subject' => 'MUSIC'],
-            ['group_id' => '5', 'subject' => 'SIGN LANG'],            
+            ['group_id' => '5', 'subject' => 'SIGN LANG'],
         ]);
 
-        
+
         DB::table('schools')->insert([
             ['initials'=>'SOB', 'name'=>'SCHOOL OF BUSINESS'],
             ['initials'=>'SoET', 'name'=>'SCHOOL OF ENGINEERING AND TECHNOLOGY'],
             ['initials'=>'SOAHS', 'name'=>'SCHOOL OF APPLIED AND HEALTH SCIENCES'],
             ['initials'=>'SOHSS', 'name'=>'SCHOOL OF HUMANITIES AND SOCIAL SCIENCES'],
             ['initials'=>'ICI', 'name'=>'SCHOOL OF COMPUTNG AND INFORMATICS'],
-        ]); 
+        ]);
 
         DB::table('departments')->insert([
             ['school_id'=>'1', 'dept_code'=>'DAF', 'name'=>'DEPARTMENT OF ACCOUNTING AND FINANCE'],
@@ -116,6 +116,6 @@ class UserSeeder extends Seeder
             ['school_id'=>'4', 'dept_code'=>'DCS', 'name'=>'DEPARTMENT OF COMMUNICATION STUDIES'],
             ['school_id'=>'5', 'dept_code'=>'DCI', 'name'=>'DEPARTMENT OF COMPUTER SCIENCE AND INFORMATION TECHNOLOGY'],
 
-        ]);   
+        ]);
     }
 }

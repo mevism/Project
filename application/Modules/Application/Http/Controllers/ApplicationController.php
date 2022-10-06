@@ -407,7 +407,7 @@ class ApplicationController extends Controller
         $education = Education::where('applicant_id', Auth::user()->id)->get();
         $work = WorkExperience::where('applicant_id', Auth::user()->id)->get();
         $course = AvailableCourse::find($hashedId);
-        $mycourse = Application::where('applicant_id', Auth::user()->id)->where('course_id', $course->course_id)->where('intake_id', $course->intake_id)->first();
+        $mycourse = Application::where('applicant_id', Auth::user()->id)->where('course_id', $course->course_id)->where('intake_id', $course->intake_id)->where('campus_id', $course->campus_id)->first();
         $parent = Guardian::where('applicant_id', Auth::user()->id)->get();
         $sponsor = Sponsor::where('applicant_id', Auth::user()->id)->get();
 
@@ -567,7 +567,38 @@ class ApplicationController extends Controller
 
             $education->save();
 
-        return redirect()->back()->with('success', 'You work experience details have been update successfully');
+        return redirect()->back()->with('success', 'You education history has been updated successfully');
+    }
+
+    public function updateSecSch(Request $request, $id){
+
+        $request->validate([
+            'secondaryqualification' => 'string|required',
+            'secstartdate' => 'string|required',
+            'secenddate' => 'string|required',
+            'seccert' => 'mimes:pdf|max:2048',
+        ]);
+
+        $hashedID = Crypt::decrypt($id);
+
+        $education =  Education::find($hashedID);
+        $education->applicant_id = Auth::user()->id;
+        $education->institution = $request->secondary;
+        $education->qualification = $request->secondaryqualification;
+        $education->start_date = $request->secstartdate;
+        $education->exit_date = $request->secenddate;
+        $education->level = $request->level;
+
+        if ($request->hasFile('seccert')){
+            $file = $request->seccert;
+            $fileName = 'seccert'.time().'.'.$file->getClientOriginalExtension();
+            $request->seccert->move('certs', $fileName);
+            $education->certificate = $fileName;
+        }
+
+        $education->save();
+
+        return redirect()->back()->with('success', 'You education history has been updated successfully');
     }
 
     public function terSch(Request $request){
@@ -579,8 +610,6 @@ class ApplicationController extends Controller
                 'terenddate' => 'string|required',
                 'tercert' => 'required|mimes:pdf|required|max:2048',
             ]);
-
-//            return $request->all();
 
             $education = new Education;
             $education->applicant_id = Auth::user()->id;
@@ -599,6 +628,38 @@ class ApplicationController extends Controller
             $education->save();
 
         return redirect()->back()->with('success', 'You education history added successfully');
+
+    }
+
+    public function updateTerSch(Request $request, $id){
+        $request->validate([
+            'tertiary' => 'string|required',
+            'teriaryqualification' => 'string|required',
+            'terstartdate' => 'string|required',
+            'level' => 'string|required',
+            'terenddate' => 'string|required',
+            'tercert' => 'mimes:pdf|max:2048',
+        ]);
+
+        $hashedID = Crypt::decrypt($id);
+
+        $education = Education::find($hashedID);
+        $education->applicant_id = Auth::user()->id;
+        $education->institution = $request->tertiary;
+        $education->qualification = $request->teriaryqualification;
+        $education->start_date = $request->terstartdate;
+        $education->exit_date = $request->terenddate;
+        $education->level = $request->level;
+
+        if ($request->hasFile('tercert')){
+            $file = $request->tercert;
+            $fileName = 'tercert'.time().'.'.$file->getClientOriginalExtension();
+            $request->tercert->move('certs', $fileName);
+            $education->certificate = $fileName;
+        }
+        $education->save();
+
+        return redirect()->back()->with('success', 'Your education history has been updated successfully');
 
     }
 

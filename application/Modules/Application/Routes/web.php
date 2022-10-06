@@ -49,6 +49,8 @@ use Modules\Application\Http\Controllers\ApplicationController;
             Route::post('/work', 'ApplicationController@addWork')->name('application.addWork');
             Route::post('/secondary', 'ApplicationController@secSch')->name('application.secSch');
             Route::post('/tertiary', 'ApplicationController@terSch')->name('application.terSch');
+            Route::post('/secondaryUpdate/{id}', 'ApplicationController@updateSecSch')->name('application.updateSecSch');
+            Route::post('/tertiaryUpdate/{id}', 'ApplicationController@updateTerSch')->name('application.updateTerSch');
             Route::post('/finish', 'ApplicationController@finish')->name('application.finish');
             Route::get('/edit/{id}', 'ApplicationController@applicationEdit')->name('application.edit');
             Route::get('/progress/{id}', 'ApplicationController@applicationProgress')->name('application.progress');
