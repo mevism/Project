@@ -3,6 +3,7 @@
 namespace Modules\Application\Http\Controllers;
 
 use AfricasTalking\SDK\AfricasTalking;
+use App\Notifications\Sms;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -68,7 +69,7 @@ class ApplicationController extends Controller
         ]);
 
             $app = new Applicant;
-            $app->mobile = $request->mobile;
+            $app->mobile = '+254'.$request->mobile;
             $app->username = $request->email;
             $app->email = $request->email;
             $app->password = Hash::make($request->password);
@@ -126,30 +127,14 @@ class ApplicationController extends Controller
 
         $verification_code = rand(1, 999999);
 
-        $number = Auth::user()->mobile;
-
         VerifyUser::create([
             'applicant_id' => Auth::user()->id,
             'verification_code' => $verification_code,
         ]);
 
-        $apiKey   = '39d6ee3bed35128162d45e5b0e68275116de838ee0d657546de71758a82a2c01';
-        $username = 'cicsystems';
-        $sender   = '';
+        $user = Auth::user();
 
-        $receiver = '+254'. \Illuminate\Support\Facades\Auth::user()->mobile;
-
-        $message = 'Welcome to TUM course application system. Your verification code is '. $verification_code.'.Do not share your verification code with anyone.';
-
-
-        $gateway  = new AfricasTalking($username, $apiKey);
-
-        $gateway->sms()->send([
-            'to'      => $receiver,
-            'message' => $message,
-            'from'    => $sender,
-            'enqueue' => true
-        ]);
+        $user->notify(new \Modules\Application\Notifications\SMS($verification_code));
 
         return redirect()->back()->with(['info' => 'Enter the code send to your phone', 'code' => $verification_code]);
 
