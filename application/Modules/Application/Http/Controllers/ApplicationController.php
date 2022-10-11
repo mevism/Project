@@ -69,7 +69,7 @@ class ApplicationController extends Controller
         ]);
 
             $app = new Applicant;
-            $app->mobile = '+254'.$request->mobile;
+            $app->mobile = str_replace(' ', '', '+254'.($request->mobile));
             $app->username = $request->email;
             $app->email = $request->email;
             $app->password = Hash::make($request->password);
