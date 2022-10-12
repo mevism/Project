@@ -17,7 +17,7 @@
             <div class="col-6 col-md-3 col-lg-6 col-xl-3">
                 <a class="block block-rounded block-link-pop border-start border-primary border-4" href="{{ route('applicant.course') }}">
                     <div class="block-content block-content-full">
-                        <div class="fs-sm fw-semibold text-uppercase text-muted">My Courses</div>
+                        <div class="fs-sm fw-semibold text-uppercase text-muted">My Applications</div>
                         <div class="fs-2 fw-normal text-dark">{{ $mycourses }}</div>
                     </div>
                 </a>

@@ -98,7 +98,7 @@
                 <div class="block block-rounded row g-0">
                     <ul class="nav nav-tabs nav-tabs-block flex-md-column col-md-3" role="tablist">
                         <li class="nav-item d-md-flex flex-md-column">
-                            <button class="nav-link text-md-start active" id="btabs-vertical-require-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-require" role="tab" aria-controls="btabs-vertical-require" aria-selected="false">
+                            <button class="nav-link text-md-start @if($mycourse == null) active @endif  " id="btabs-vertical-require-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-require" role="tab" aria-controls="btabs-vertical-require" aria-selected="false">
                                 <i class="fa fa-fw fa-briefcase opacity-50 me-1 d-none d-sm-inline-block"></i> Course Requirements
                                 @if($mycourse != null)
                                     <span class="badge bg-success"><i class="fa fa-check-circle"></i> Complete </span>
@@ -115,7 +115,7 @@
                             </button>
                         </li>
                         <li class="nav-item d-md-flex flex-md-column">
-                            <button class="nav-link text-md-start" id="btabs-vertical-education-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-education" role="tab" aria-controls="btabs-vertical-education" aria-selected="false">
+                            <button class="nav-link text-md-start @if(count($education) <= 0 && $mycourse != null) active @endif " id="btabs-vertical-education-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-education" role="tab" aria-controls="btabs-vertical-education" aria-selected="false">
                                 <i class="fa fa-fw fa-school opacity-50 me-1 d-none d-sm-inline-block"></i> Education History
                                 @if(count($education) > 0)
                                     <span class="badge bg-success"><i class="fa fa-check-circle"></i> Complete </span>
@@ -132,7 +132,7 @@
                         </li>
 {{--                        {{ $mycourse->receipt }}--}}
                         <li class="nav-item d-md-flex flex-md-column">
-                            <button class="nav-link text-md-start" id="btabs-vertical-fee-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-fee" role="tab" aria-controls="btabs-vertical-fee" aria-selected="false">
+                            <button class="nav-link text-md-start @if($mycourse != null && $mycourse->receipt == null && count($education) >= 1) active @endif " id="btabs-vertical-fee-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-fee" role="tab" aria-controls="btabs-vertical-fee" aria-selected="false">
                                 <i class="fa fa-fw fa-money-bill opacity-50 me-1 d-none d-sm-inline-block"></i> Application Fees
 {{--                                @if($mycourse != null)--}}
                                 @if($mycourse != null && $mycourse->receipt != null)
@@ -150,7 +150,7 @@
                             </button>
                         </li>
                         <li class="nav-item d-md-flex flex-md-column">
-                            <button class="nav-link text-md-start" id="btabs-vertical-submit-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-submit" role="tab" aria-controls="btabs-vertical-submit" aria-selected="false">
+                            <button class="nav-link text-md-start @if($mycourse != null && $mycourse->receipt != null && count($education) > 0) active @endif " id="btabs-vertical-submit-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-submit" role="tab" aria-controls="btabs-vertical-submit" aria-selected="false">
                                 <i class="fa fa-fw fa-check-double opacity-50 me-1 d-none d-sm-inline-block"></i> Complete Application
                                 @if($mycourse != null && $mycourse->receipt != null && count($education) > 0)
                                     <span class="badge bg-success"><i class="fa fa-check-circle"></i> Submit </span>
@@ -159,7 +159,7 @@
                         </li>
                     </ul>
                     <div class="tab-content col-md-9">
-                        <div class="block-content tab-pane active" id="btabs-vertical-require" role="tabpanel" aria-labelledby="btabs-vertical-work-tab">
+                        <div class="block-content tab-pane @if($mycourse == null) active @endif " id="btabs-vertical-require" role="tabpanel" aria-labelledby="btabs-vertical-work-tab">
                             <h4 class="fw-semibold"> Course Requirements </h4>
                             <h4 class="fs-sm fw-semibold">Minimum Course Requirements</h4>
 
@@ -460,7 +460,7 @@
                             </div>
 
                         </div>
-                        <div class="block-content tab-pane" id="btabs-vertical-education" role="tabpanel" aria-labelledby="btabs-vertical-education-tab">
+                        <div class="block-content tab-pane @if(count($education) <= 0 && $mycourse != null) active @endif " id="btabs-vertical-education" role="tabpanel" aria-labelledby="btabs-vertical-education-tab">
                             <h4 class="fw-semibold">Education History</h4>
                             <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
                                 <thead>
@@ -520,7 +520,7 @@
                                                                                     </div>
                                                                                     <div class="form-floating col-sm-12 py-1">
                                                                                         <input type="file" class="form-control form-control-sm" value="{{ old('seccert') }}" name="seccert" placeholder="upload certificate">
-                                                                                        <small class="text-muted">Upload certificate (format .pdf .pgn .jpeg .jpg)</small>
+                                                                                        <small class="text-muted">Upload certificate (format .pdf only )</small>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="subbutton">
@@ -569,7 +569,7 @@
                                                                                     </div>
                                                                                     <div class="form-floating col-sm-12">
                                                                                         <input type="file" class="form-control form-control-sm" value="{{ old('tercert')}}" name="tercert">
-                                                                                        <small class="text-muted py-1">Upload Certificate ( format .pdf)</small>
+                                                                                        <small class="text-muted py-1">Upload Certificate ( format .pdf only)</small>
                                                                                     </div>
 
                                                                                 </div>
@@ -642,7 +642,7 @@
                                         </div>
                                         <div class="form-floating col-sm-12 py-1">
                                             <input type="file" class="form-control form-control-sm" value="{{ old('seccert') }}" name="seccert" placeholder="upload certificate">
-                                            <small class="text-muted">Upload certificate (format .pdf .pgn .jpeg .jpg)</small>
+                                            <small class="text-muted">Upload certificate (format .pdf only )</small>
                                         </div>
                                     </div>
                                     <div class="subbutton">
@@ -706,7 +706,7 @@
 
                             </div>
                         </div>
-                        <div class="block-content tab-pane" id="btabs-vertical-fee" role="tabpanel" aria-labelledby="btabs-vertical-fee-tab">
+                        <div class="block-content tab-pane @if($mycourse != null && $mycourse->receipt == null && count($education) >= 1) active @endif" id="btabs-vertical-fee" role="tabpanel" aria-labelledby="btabs-vertical-fee-tab">
                             <h4 class="fw-semibold">Application Fees</h4>
                             <form action="{{ route('application.payment') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
@@ -727,7 +727,7 @@
                                         <input type="file" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif required value="{{ old('receipt_file') }} " name="receipt_file">
                                     </div>
                                         <input type="hidden" value="{{ $course->mainCourses->id }}" name="course_id">
-                                    <small class="text-muted">upload your bank reciept (format .pdf .png .jpeg .jpg</small>
+                                    <small class="text-muted">upload your bank reciept (format .pdf only )</small>
                                     <div class="d-flex justify-content-center my-4">
                                         @if($mycourse != null && $mycourse->receipt != null)
                                             @if($mycourse != null && $mycourse->declaration== 1)
@@ -806,7 +806,7 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="block-content tab-pane" id="btabs-vertical-submit" role="tabpanel" aria-labelledby="btabs-vertical-submit-tab">
+                        <div class="block-content tab-pane @if($mycourse != null && $mycourse->receipt != null && count($education) > 0) active @endif " id="btabs-vertical-submit" role="tabpanel" aria-labelledby="btabs-vertical-submit-tab">
                             <h4 class="fw-semibold">Finish application</h4>
                             <p class="fs-sm">
                             <div class="block-content-full">
