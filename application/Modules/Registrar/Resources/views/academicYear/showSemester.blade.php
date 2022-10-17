@@ -30,7 +30,7 @@
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
             <div class="flex-grow-1">
                 <h5 class="h5 fw-bold mb-0">
-                    SEMESTERS
+                    SEMESTERS 
                 </h5>
             </div>
             <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -61,7 +61,7 @@
                <th>  </th>
               <th>  SEMESTERS </th>
               <th>STATUS</th>
-              <th>Action</th>
+              <th>Action</th> 
             </tr>
           </thead>
           <tbody>
@@ -70,23 +70,23 @@
                <td>{{ ++$key }}</td>
                <td style="text-transform: uppercase" class="fw-semibold fs-sm">{{ Carbon\carbon::parse($intake->intake_from)->format('M-Y')}} - {{ Carbon\carbon::parse($intake->intake_to)->format('M-Y') }}</td>
                <td>
-                @if ($intake->status == 0)
+                @if ($intake->status === 0)
                 <a  class="btn btn-sm btn-alt-primary" href="{{ route('courses.editstatusIntake', $intake->id) }}">Pending</a>
                 @endif
-                @if ($intake->status == 1)
+                @if ($intake->status === 1)
                 <a  class="btn btn-sm btn-alt-success" href="{{ route('courses.editstatusIntake', $intake->id) }}">Ongoing</a>
                 @endif
-                @if ($intake->status == 2)
+                @if ($intake->status === 2)
                 <a  class="btn btn-sm btn-alt-info" href="{{ route('courses.editstatusIntake', $intake->id) }}">Expired</a>
                 @endif
-                @if ($intake->status == 3)
+                @if ($intake->status === 3)
                 <a  class="btn btn-sm btn-alt-danger" href="{{ route('courses.editstatusIntake', $intake->id) }}">Suspended</a>
                 @endif
                  </td>
-                 <td>
+                 <td> 
                     {{-- <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.viewIntake', $intake->id) }}">view</a>  --}}
                  {{-- <td> <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editIntake', $intake->id) }}">edit</a> </td> --}}
-                    <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this intake ?')" href="{{ route('courses.destroyIntake', $intake->id) }}">delete</a>
+                    <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this intake ?')" href="{{ route('courses.destroyIntake', $intake->id) }}">delete</a> 
                   </td>
             </tr>
             @endforeach

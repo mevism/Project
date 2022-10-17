@@ -34,17 +34,17 @@
                     @csrf
                     <div class="row d-flex justify-content-center">
 
-                      <div class="form-floating col-10 col-xl-10 mb-2">
+                      <div class="form-floating col-12 col-xl-12">
                         <select name="year" class="form-control form-control-alt text-uppercase">
                           <option selected disabled> Select Year </option>
                           @foreach ($years as $year)
-                          <option value="{{ $year->id }}">{{ \Carbon\Carbon::parse($year->year_start)->format('Y').'/'.\Carbon\Carbon::parse($year->year_end)->format('Y') }}</option>
+                          <option value="{{ $year->id }}">{{ $year->year_start }}</option>        
                           @endforeach
                           <label class="form-label">ACADEMIC YEAR</label>
                         </select>
                       </div>
 
-                      <div class="form-floating col-10 col-xl-10 mb-2">
+                      <div class="form-floating col-12 col-xl-12 mb-2">
                           <input type="date" class="form-control form-control-sm" id="intake_name_from" name="intake_name_from" placeholder="Intake From">
                           <label class="form-label">SEMESTER START</label>
                         </div>
@@ -55,8 +55,10 @@
                           <label class="form-label">SEMESTER END</label>
                         </div>
                     </div>
+                <BR>
+
                     <div class="col-12 text-center p-3">
-                      <button type="submit" class="btn btn-alt-success" data-toggle="click-ripple">Create Intake</button>
+                      <button type="submit" class="btn btn-alt-success" data-toggle="click-ripple">Create Semester</button>
                     </div>
                   </form>
 
@@ -65,4 +67,5 @@
           </div>
     </div>
 @endsection
+
 

@@ -16,12 +16,7 @@ class AcademicYear extends Model
 
         return $this->hasMany(Intake::class, 'id');
     }
-
-//    public function nominalYear(){
-//
-//        return $this->hasMany()
-//    }
-
+    
     protected static function newFactory()
     {
         return \Modules\Registrar\Database\factories\AcademicYearFactory::new();

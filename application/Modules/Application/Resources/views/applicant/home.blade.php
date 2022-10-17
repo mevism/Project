@@ -26,7 +26,7 @@
                 <a class="block block-rounded block-link-pop border-start border-primary border-4" disabled=" " href=" {{ route('applicant.inbox') }}">
                     <div class="block-content block-content-full">
                         <div class="fs-sm fw-semibold text-uppercase text-muted">Notifications</div>
-                        <div class="fs-2 fw-normal text-dark">{{ count($notification) }} <span class="badge rounded-pill bg-info" style="font-size: x-small !important;"><i class="fa fa-fw fa-message"></i> New</span></span> </div>
+                        <div class="fs-2 fw-normal text-dark"> {{ count($notification) }} <span class="badge rounded-pill bg-info" style="font-size: x-small !important;"><i class="fa fa-fw fa-message"></i> New</span></span> </div>
                     </div>
                 </a>
             </div>

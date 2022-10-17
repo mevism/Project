@@ -197,16 +197,19 @@ class ApplicationController extends Controller
 
         $apps  = Application::where('applicant_id', Auth::user()->id)->get();
 
-                if (count($apps) == 0){
+        if (count($apps) == 0){
 
-                    $notification = [];
-                }else{
+            $notification = [];
 
-                    foreach ($apps as $app_id){
-                        $notification = Notification::where('application_id', $app_id->id)->where('status', '>', 0)->get();
+        }else{
 
-                    }
-                }
+            foreach ($apps as $id){
+
+                $notification[] = Notification::where('application_id', $id->id)->where('status', '>', 0)->orderBy('updated_at', 'desc')->get();
+
+
+            }
+        }
 
         $mycourses = Application::where('applicant_id', Auth::user()->id)->count();
 
@@ -914,9 +917,9 @@ class ApplicationController extends Controller
 
         }else{
 
-            foreach ($apps as $app_id){
+            foreach ($apps as $id){
 
-                $notification = Notification::where('application_id', $app_id->id)->where('status', '>', 0)->latest()->get();
+                    $notification[] = Notification::where('application_id', $id->id)->where('status', '>', 0)->orderBy('created_at', 'asc')->get();
 
             }
         }

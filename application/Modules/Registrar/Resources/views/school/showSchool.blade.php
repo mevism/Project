@@ -67,7 +67,7 @@
                             <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ $school->initials }}</td>
                             <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ $school->name }}</td>
                             <td> 
-                                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editSchool', $school->id) }}">edit</a> 
+                                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editSchool', ['id'=> Crypt::encrypt($school->id)]) }}">edit</a> 
                              <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this school ?')" href="{{ route('courses.destroySchool', $school->id) }}">delete</a> </td>
                         </tr>
                         @endforeach

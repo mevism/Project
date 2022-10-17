@@ -29,6 +29,12 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
 
     Route::get('/importUnit','CoursesController@importUnit')->name('courses.importUnit');
     Route::post('/importUnit','CoursesController@importUnits')->name('courses.importUnits');
+    
+    Route::get('/importExportCourses','CoursesController@importExportCourses')->name('courses.importExportCourses');
+    Route::post('/importCourses','CoursesController@importCourses')->name('courses.importCourses');
+
+    Route::get('/kuccpsFee','CoursesController@kuccpsFee')->name('courses.kuccpsFee');
+    Route::post('/storeFee', 'CoursesController@storeFee')->name('courses.storeFee');
 
     // Route::get('/offer', 'CoursesController@offer')->name('courses.offer');registrar
     // Route::get('/profile', 'CoursesController@profile')->name('courses.profile');
@@ -123,3 +129,6 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
     Route::any('/fetchSubjects', [CoursesController::class, 'fetchSubjects'])->name('courses.fetchSubjects');
     Route::any('/fetchDept', [CoursesController::class, 'fetchDept'])->name('courses.fetchDept');
 });
+
+
+

@@ -7,6 +7,7 @@ use Modules\Application\Entities\Education;
 use Modules\Registrar\Entities\KuccpsApplicant;
 use Modules\Registrar\Entities\KuccpsApplication;
 use Illuminate\Support\Collection;
+use Modules\Application\Entities\Education;
 use Modules\Courses\Entities\Intake;
 
 class KuccpsImport implements ToCollection

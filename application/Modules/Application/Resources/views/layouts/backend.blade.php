@@ -190,18 +190,32 @@
                 <ul class="nav-main-submenu">
                     <li class="nav-main-item">
                         <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{ route('applicant.courses') }}">
-                            <span class="nav-main-link-name">View Courses</span>
+                            <span class="nav-main-link-name">View Courses Available</span>
                         </a>
                     </li>
                 </ul>
               <ul class="nav-main-submenu">
                 <li class="nav-main-item">
                   <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{ route('applicant.course') }}">
-                    <span class="nav-main-link-name">View Applications</span>
+                    <span class="nav-main-link-name">My Applications</span>
                   </a>
                 </li>
               </ul>
             </li>
+
+              <li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">
+                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                      <i class="nav-main-link-icon si si-bulb"></i>
+                      <span class="nav-main-link-name">Admission</span>
+                  </a>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{ route('application.myAdmission') }}">
+                              <span class="nav-main-link-name">View Accepted Applications</span>
+                          </a>
+                      </li>
+                  </ul>
+              </li>
               <li class="nav-main-item">
                   <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('applicant.profile') }}">
                       <i class="nav-main-link-icon si si-cursor"></i>

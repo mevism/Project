@@ -1,5 +1,17 @@
 @extends('application::layouts.backend')
 
+<style>
+    .text{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* number of lines to show */
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        line-height: 1.6;
+    }
+</style>
+
 @section('content')
     <!-- Main Container -->
     <main id="main-container">
@@ -176,7 +188,8 @@
                             <div class="pull-x">
                                 <table class="js-table-checkable table table-hover table-vcenter fs-sm">
                                     <tbody>
-                                        @foreach($notification as $message)
+                                        @foreach($notification as $inbox)
+                                            @foreach($inbox as $message)
                                             <tr>
                                                 <td class="d-none d-sm-table-cell fw-semibold" style="width: 140px;">
                                                     @if($message->role_id == 1)
@@ -191,16 +204,51 @@
 
                                                 </td>
                                                 <td>
-                                                    <a class="fw-semibold" data-bs-toggle="modal" data-bs-target="#one-inbox-message" href="#">{{ $message->subject }}</a>
-                                                    <div class="text-muted mt-1">{{ $message->comment }}</div>
-                                                </td>
-                                                <td class="d-none d-xl-table-cell text-muted" style="width: 80px;">
-                                                    <i class="fa fa-paperclip me-1"></i> (3)
+                                                    <a class="fw-semibold" data-bs-toggle="modal" data-bs-target="#one-inbox-message-{{ $message->id }}" href="#">{{ $message->subject }}</a>
+                                                    <div class="text-muted mt-1 text">{{ $message->comment }}</div>
                                                 </td>
                                                 <td class="d-none d-xl-table-cell text-muted" style="width: 120px;">
-                                                    <em>{{ \Carbon\Carbon::parse($message->created_at)->diffForHumans() }}</em>
+                                                    <em>{{ \Carbon\Carbon::parse($message->updated_at)->diffForHumans() }}</em>
                                                 </td>
                                             </tr>
+
+                                            <div class="modal fade" id="one-inbox-message-{{ $message->id }}" tabindex="-1" role="dialog" aria-labelledby="one-inbox-message" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg modal-dialog-popout" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="block block-rounded block-transparent mb-0">
+                                                            <div class="block-header block-header-default">
+                                                                <h3 class="block-title">{{ $message->subject }}</h3>
+                                                                <div class="block-options">
+                                                                    <span class="text-muted"><em> {{ \Carbon\Carbon::parse($message->updated_at)->diffForHumans() }} </em></span>
+                                                                    <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
+                                                                        <i class="fa fa-fw fa-times"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="block-content">
+                                                                <p class="text-capitalize">Dear {{ Auth::user()->sname }},</p>
+                                                                <p>{{ $message->comment }}</p>
+                                                                <p class="mb-4">Best Regards,</p>
+                                                                <p>
+                                                                    @if($message->role_id == 1)
+                                                                        Registrar AA
+                                                                    @elseif($message->role_id == 2)
+                                                                        Chairman of Department
+                                                                    @elseif($message->role_id == 3)
+                                                                        Student Finance
+                                                                    @else
+                                                                        Dean of Student
+                                                                    @endif
+                                                                </p>
+                                                            </div>
+                                                            <div class="block-content bg-body-light">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            @endforeach
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -257,82 +305,6 @@
             <!-- END New Message Modal -->
 
             <!-- Message Modal -->
-            <div class="modal fade" id="one-inbox-message" tabindex="-1" role="dialog" aria-labelledby="one-inbox-message" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-popout" role="document">
-                    <div class="modal-content">
-                        <div class="block block-rounded block-transparent mb-0">
-                            <div class="block-header block-header-default">
-                                <h3 class="block-title">Welcome to our service</h3>
-                                <div class="block-options">
-                                    <button type="button" class="btn-block-option" data-bs-toggle="tooltip" data-bs-placement="left" title="Reply" aria-label="Reply">
-                                        <i class="fa fa-fw fa-reply"></i>
-                                    </button>
-                                    <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
-                                        <i class="fa fa-fw fa-times"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="block-content block-content-full text-center bg-image" style="background-image: url('assets/media/photos/photo7.jpg');">
-                                <img class="img-avatar img-avatar96 img-avatar-thumb" src="assets/media/avatars/avatar4.jpg" alt="">
-                            </div>
-                            <div class="block-content block-content-full fs-sm d-flex justify-content-between bg-body-light">
-                                <a href="javascript:void(0)">user@example.com</a>
-                                <span class="text-muted"><em>2 min ago</em></span>
-                            </div>
-                            <div class="block-content">
-                                <p>Dear John,</p>
-                                <p>Dolor posuere proin blandit accumsan senectus netus nullam curae, ornare laoreet adipiscing luctus mauris adipiscing pretium eget fermentum, tristique lobortis est ut metus lobortis tortor tincidunt himenaeos habitant quis dictumst proin odio sagittis purus mi, nec taciti vestibulum quis in sit varius lorem sit metus mi.</p>
-                                <p>Dolor posuere proin blandit accumsan senectus netus nullam curae, ornare laoreet adipiscing luctus mauris adipiscing pretium eget fermentum, tristique lobortis est ut metus lobortis tortor tincidunt himenaeos habitant quis dictumst proin odio sagittis purus mi, nec taciti vestibulum quis in sit varius lorem sit metus mi.</p>
-                                <p>Best Regards,</p>
-                                <p>Amanda Powell</p>
-                            </div>
-                            <div class="block-content bg-body-light">
-                                <div class="row g-sm items-push fs-sm">
-                                    <div class="col-md-4">
-                                        <div class="options-container fx-item-zoom-in mb-2">
-                                            <img class="img-fluid options-item" src="assets/media/photos/photo1.jpg" alt="">
-                                            <div class="options-overlay bg-black-75">
-                                                <div class="options-overlay-content">
-                                                    <a class="btn btn-sm btn-light" href="javascript:void(0)">
-                                                        <i class="fa fa-download me-1"></i> Download
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="text-muted">01.jpg (350kb)</div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="options-container fx-item-zoom-in mb-2">
-                                            <img class="img-fluid options-item" src="assets/media/photos/photo2.jpg" alt="">
-                                            <div class="options-overlay bg-black-75">
-                                                <div class="options-overlay-content">
-                                                    <a class="btn btn-sm btn-light" href="javascript:void(0)">
-                                                        <i class="fa fa-download me-1"></i> Download
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="text-muted">02.jpg (480kb)</div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="options-container fx-item-zoom-in mb-2">
-                                            <img class="img-fluid options-item" src="assets/media/photos/photo3.jpg" alt="">
-                                            <div class="options-overlay bg-black-75">
-                                                <div class="options-overlay-content">
-                                                    <a class="btn btn-sm btn-light" href="javascript:void(0)">
-                                                        <i class="fa fa-download me-1"></i> Download
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="text-muted">03.jpg (652kb)</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <!-- END Message Modal -->
         </div>
         <!-- END Page Content -->

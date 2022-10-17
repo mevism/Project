@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('course_code');
             $table->string('course_unit_code');
             $table->string('unit_name');
-            $table->integer('stage');
-            $table->string('semester');
+            $table->integer('stage')->nullable();
+            $table->string('semester')->nullable();
             $table->string('type')->nullable();
             $table->timestamps();
         });

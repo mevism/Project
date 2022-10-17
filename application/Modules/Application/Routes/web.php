@@ -57,6 +57,7 @@ use Modules\Application\Http\Controllers\ApplicationController;
             Route::get('/dowload/{id}', 'ApplicationController@downloadLetter')->name('application.download');
 
 
+            Route::get('/myAdmission', [ApplicationController::class, 'myAdmission'])->name('application.myAdmission');
             Route::get('/uploadDocuments/{id}', [ApplicationController::class, 'uploadDocuments'])->name('application.uploadDocuments');
             Route::post('/academicDoc', [ApplicationController::class, 'academicDoc'])->name('application.academicDoc');
             Route::post('/bankReceipt', [ApplicationController::class, 'bankReceipt'])->name('application.bankReceipt');

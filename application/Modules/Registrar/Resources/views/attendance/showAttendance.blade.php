@@ -46,7 +46,7 @@
                 <td> {{ $attendance->attendance_name }}</td>
                 <td> {{ $attendance->attendance_code }}</td>
                 <td> 
-                  <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editAttendance', $attendance->id) }}">edit</a> 
+                  <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editAttendance', ['id'=> Crypt::encrypt($attendance->id)]) }}">edit</a> 
                   <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this attendance mode  ?')" href="{{ route('courses.destroyAttendance', $attendance->id) }}">delete</a> 
                 </td>
               </tr>
