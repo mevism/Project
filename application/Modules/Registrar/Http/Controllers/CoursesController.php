@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
+use Modules\Application\Entities\Notification;
 use Modules\Registrar\Entities\Unit;
 use Modules\Registrar\Entities\Intake;
 use Modules\Registrar\Entities\School;
@@ -122,7 +123,7 @@ class CoursesController extends Controller
 
         }
 
-        
+
         return view('registrar::offer.kuccpsFee')->with('success','Data Inserted');
     }
 
@@ -133,7 +134,7 @@ class CoursesController extends Controller
         $course   =   Courses::find($hashedId);
 
         $unit   =  UnitProgramms::where('course_code', $course->course_code)->get();
-        
+
         return view('registrar::course.syllabus')->with('units',$unit);
     }
 
@@ -222,7 +223,7 @@ class CoursesController extends Controller
                         $app->save();
 
                                 $app_course                 =            new Application;
-                                $app_course->user_id        =            $app->id;
+                                $app_course->applicant_id        =            $app->id;
                                 $app_course->intake_id      =            $applicant->kuccpsApplication->intake_id;
                                 $app_course->department_id  =            $course->department_id;
                                 $app_course->school_id      =            $course->getCourseDept->school_id;
@@ -379,7 +380,7 @@ class CoursesController extends Controller
 
 
     public function importkuccps(Request $request) {
-         
+
         $vz         =          $request->validate([
 
             'excel_file'   =>    'required|mimes:xlsx'
@@ -574,7 +575,7 @@ class CoursesController extends Controller
     }
 
     public function academicYear(){
-        
+
         $years          =          AcademicYear::all();
 
         return view('registrar::academicYear.showAcademicYear')->with('years',$years);
@@ -592,7 +593,7 @@ class CoursesController extends Controller
         $year->year_start             =         $request->input('year_start');
         $year->year_end               =         $request->input('year_end');
         $year->status                 =         0;
-        $year->save();  
+        $year->save();
 
         return redirect()->route('courses.academicYear')->with('success','Academic Year Created successfuly');
 
@@ -608,7 +609,7 @@ class CoursesController extends Controller
 
     public function showSemester($id){
 
-        $intakes            =          Intake::find($id)->where('academic_year_id',$id)->get();
+        $intakes =  Intake::where('academic_year_id',$id)->get();
 
         return view('registrar::academicYear.showSemester')->with('intakes',$intakes);
     }
@@ -673,7 +674,7 @@ class CoursesController extends Controller
         foreach($course as $data){
 
             $courses[]      =      Courses::where('id',$data->course_id)->get();
- 
+
         }
 
         return view('registrar::intake.viewCourse')->with('courses',$courses);
@@ -709,7 +710,7 @@ class CoursesController extends Controller
         $intake->status             =         0;
         $intake->save();
 
-        
+
 
         return redirect()->route('courses.showSemester')->with('success','Intake Created successfuly');
     }
@@ -1051,13 +1052,13 @@ class CoursesController extends Controller
     public function updateCourse(Request $request, $id){
 
         $data                      =           Courses::find($id);
-        
+
 
         $data->course_name         =           $request->input('course_name');
         $data->department_id       =           $request->input('department');
         $data->level               =           $request->input('level');
         $data->course_code         =           $request->input('course_code');
-     
+
         $data->update();
 
 
@@ -1133,7 +1134,6 @@ class CoursesController extends Controller
     public function admitStudent($id){
 
         $app          =           AdmissionApproval::find($id);
- 
 
             $student               =             new Student;
 
@@ -1161,13 +1161,16 @@ class CoursesController extends Controller
             $student->disability   =             $app->appApprovals->applicant->disability;
             $student->save();
 
+
             $studCourse                =             new StudentCourse;
             $studCourse->student_id    =             $student->id;
+            $studCourse->student_type  =             $app->appApprovals->applicant->student_type;
             $studCourse->department_id =             $app->appApprovals->courses->department_id;
             $studCourse->course_id     =             $app->appApprovals->course_id;
             $studCourse->intake_id     =             $app->appApprovals->intake_id;
-            $studCourse->class_code    =             strtoupper($app->appApprovals->courses->course_code.'/'.Carbon\carbon::parse($app->appApprovals->intake_from)->format('MY').'/J-FT');
-            $studCourse->class         =             strtoupper($app->appApprovals->courses->course_code.'/'.Carbon\carbon::parse($app->appApprovals->intake_from)->format('MY').'/J-FT');
+            $studCourse->academic_year_id =          $app->appApprovals->app_intake->academicYear->id;
+            $studCourse->class_code    =             strtoupper($app->appApprovals->courses->course_code.'/'.Carbon\carbon::parse($app->appApprovals->app_intake->intake_from)->format('MY').'/J-FT');
+            $studCourse->class         =             strtoupper($app->appApprovals->courses->course_code.'/'.Carbon\carbon::parse($app->appApprovals->app_intake->intake_from)->format('MY').'/J-FT');
             $studCourse->course_duration =           $app->appApprovals->courses->courseRequirements->course_duration;
             $studCourse->save();
 

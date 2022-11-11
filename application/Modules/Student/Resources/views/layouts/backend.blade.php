@@ -15,6 +15,11 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.3.4/css/searchBuilder.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.1.2/css/dataTables.dateTime.min.css">
+
   <link rel="shortcut icon" href="{{ asset('media/favicons/favicon.png') }}">
   <link rel="icon" sizes="192x192" type="image/png" href="{{ asset('media/favicons/favicon-192x192.png') }}">
   <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('media/favicons/apple-touch-icon-180x180.png') }}">
@@ -33,25 +38,125 @@
     window.Laravel = {!! json_encode(['csrfToken' => csrf_token()]) !!};
   </script>
 
+{{--    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>--}}
+{{--    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>--}}
+{{--    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>--}}
+{{--    <script src="https://cdn.datatables.net/searchbuilder/1.3.4/js/dataTables.searchBuilder.min.js"></script>--}}
+{{--    <script src="https://cdn.datatables.net/searchbuilder/1.3.4/js/searchBuilder.bootstrap5.min.js"></script>--}}
+{{--    <script src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>--}}
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <link href="{{ asset('/css/index.css') }}" rel="stylesheet" />
-    <script src = "{{ asset('js/plugins/chart.js/Chart.min.js') }}" ></script>
-    <script src = "{{ asset('js/utils.js') }}" ></script>
-    <script src = "{{ asset('js/jquery.js') }}" ></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
 </head>
 
 <body>
+  <!-- Page Container -->
+  <!--
+    Available classes for #page-container:
 
+    GENERIC
+
+      'remember-theme'                            Remembers active color theme and dark mode between pages using localStorage when set through
+                                                  - Theme helper buttons [data-toggle="theme"],
+                                                  - Layout helper buttons [data-toggle="layout" data-action="dark_mode_[on/off/toggle]"]
+                                                  - ..and/or One.layout('dark_mode_[on/off/toggle]')
+
+    SIDEBAR & SIDE OVERLAY
+
+      'sidebar-r'                                 Right Sidebar and left Side Overlay (default is left Sidebar and right Side Overlay)
+      'sidebar-mini'                              Mini hoverable Sidebar (screen width > 991px)
+      'sidebar-o'                                 Visible Sidebar by default (screen width > 991px)
+      'sidebar-o-xs'                              Visible Sidebar by default (screen width < 992px)
+      'sidebar-dark'                              Dark themed sidebar
+
+      'side-overlay-hover'                        Hoverable Side Overlay (screen width > 991px)
+      'side-overlay-o'                            Visible Side Overlay by default
+
+      'enable-page-overlay'                       Enables a visible clickable Page Overlay (closes Side Overlay on click) when Side Overlay opens
+
+      'side-scroll'                               Enables custom scrolling on Sidebar and Side Overlay instead of native scrolling (screen width > 991px)
+
+    HEADER
+
+      ''                                          Static Header if no class is added
+      'page-header-fixed'                         Fixed Header
+
+    HEADER STYLE
+
+      ''                                          Light themed Header
+      'page-header-dark'                          Dark themed Header
+
+    MAIN CONTENT LAYOUT
+
+      ''                                          Full width Main Content if no class is added
+      'main-content-boxed'                        Full width Main Content with a specific maximum width (screen width > 1200px)
+      'main-content-narrow'                       Full width Main Content with a percentage width (screen width > 1200px)
+
+    DARK MODE
+
+      'sidebar-dark page-header-dark dark-mode'   Enable dark mode (light sidebar/header is not supported with dark mode)
+    -->
   <div id="page-container" class="sidebar-o enable-page-overlay sidebar-dark side-scroll page-header-fixed main-content-narrow">
+    <!-- Side Overlay-->
+    <aside id="side-overlay" class="fs-sm" style="background-color: gold !important;">
+      <!-- Side Header -->
+      <div class="content-header border-bottom">
+        <!-- User Avatar -->
+        <a class="img-link me-1" href="javascript:void(0)">
+          <img class="img-avatar img-avatar32" src="{{ asset('media/avatars/male.jpg') }}" alt="">
+        </a>
+        <!-- END User Avatar -->
 
+          @php
+
+          $user = Auth::guard('student')->user();
+
+          @endphp
+
+        <!-- User Info -->
+        <div class="ms-2">
+          <a class="text-dark fw-semibold fs-sm" href="javascript:void(0)">{{ $user }}</a>
+        </div>
+        <!-- END User Info -->
+
+        <!-- Close Side Overlay -->
+        <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+        <a class="ms-auto btn btn-sm btn-alt-danger" href="javascript:void(0)" data-toggle="layout" data-action="side_overlay_close">
+          <i class="fa fa-fw fa-times"></i>
+        </a>
+        <!-- END Close Side Overlay -->
+      </div>
+      <!-- END Side Header -->
+
+      <!-- Side Content -->
+      <div class="content-side">
+        <p>
+          Content..
+        </p>
+      </div>
+      <!-- END Side Content -->
+    </aside>
+    <!-- END Side Overlay -->
+
+    <!-- Sidebar -->
+    <!--
+        Sidebar Mini Mode - Display Helper classes
+
+        Adding 'smini-hide' class to an element will make it invisible (opacity: 0) when the sidebar is in mini mode
+        Adding 'smini-show' class to an element will make it visible (opacity: 1) when the sidebar is in mini mode
+            If you would like to disable the transition animation, make sure to also add the 'no-transition' class to your element
+
+        Adding 'smini-hidden' to an element will hide it when the sidebar is in mini mode
+        Adding 'smini-visible' to an element will show it (display: inline-block) only when the sidebar is in mini mode
+        Adding 'smini-visible-block' to an element will show it (display: block) only when the sidebar is in mini mode
+    -->
     <nav id="sidebar" aria-label="Main Navigation">
       <!-- Side Header -->
       <div class="content-header">
         <!-- Logo -->
-        <a class="font-semibold text-dual" href="/">
+        <a class="font-semibold text-dual" href="#">
           <span class="smini-visible">
             <i class="fa fa-circle-notch text-primary"></i>
           </span>
@@ -59,6 +164,16 @@
         </a>
         <!-- END Logo -->
 
+        <!-- Extra -->
+        <div>
+          <!-- Close Sidebar, Visible only on mobile screens -->
+          <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+          <a class="d-lg-none btn btn-sm btn-alt-secondary ms-1" data-toggle="layout" data-action="sidebar_close" href="javascript:void(0)">
+            <i class="fa fa-fw fa-times"></i>
+          </a>
+          <!-- END Close Sidebar -->
+        </div>
+        <!-- END Extra -->
       </div>
       <!-- END Side Header -->
 
@@ -68,113 +183,111 @@
         <div class="content-side">
           <ul class="nav-main">
             <li class="nav-main-item">
-              <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('student_profile') }}">
+              <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('student') }}">
                 <i class="nav-main-link-icon si si-cursor"></i>
-                <span class="nav-main-link-name">
-                    Profile
-                </span>
+                <span class="nav-main-link-name">Home </span>
               </a>
             </li>
-              <div id = 'in_course'>
-                  <li class='nav-main-item{{ request()->is('courses/*') ? ' open' : '' }}'>
-                      <a class='nav-main-link nav-main-link-submenu' data-toggle='submenu' aria-haspopup='true' aria-expanded='true' href='#'>
-                          <i class='nav-main-link-icon si si-user'></i>
-                          <span class='nav-main-link-name'>Courses</span>
-                      </a>
-                      <ul class='nav-main-submenu'>
-                          <li class='nav-main-item'>
-                              <a class="nav-main-link{{ request()->is('student/change_course') ? ' active' : ''  }}" href="{{ route('change_course') }}">
-                              <i class='nav-main-link-icon si si-user'></i>
-                              <span class='nav-main-link-name'>
-                                    Change Courses
-                              </span>
-                              </a>
-                          </li>
-                      </ul>
-                  </li>
-                  <li class="nav-main-item{{ request()->is('academics/*') ? ' open' : '' }}">
-                      <a class='nav-main-link nav-main-link-submenu' data-toggle='submenu' aria-haspopup='true' aria-expanded='true' href='#'>
-                          <i class='nav-main-link-icon si si-user'></i>
-                          <span class='nav-main-link-name'>Academics</span>
-                      </a>
-                      <ul class='nav-main-submenu'>
-                          <li class='nav-main-item'>
-<<<<<<< HEAD
-                              <a class="nav-main-link{{ request()->is('student/exams') ? ' active' : ''  }}" href="{{ route('change_course') }}">
-=======
-                              <a class="nav-main-link{{ request()->is('academics/exams') ? ' active' : ''  }}" href="{{ route('exams') }}">
->>>>>>> 011c3dfa700ff8ff99cb216ec7544e0646e749be
-                              <i class='nav-main-link-icon si si-user'></i>
-                              <span class='nav-main-link-name'>
-                                    Exams Transcripts
-                              </span>
-                              </a>
-                          </li>
-                      </ul>
-                      <ul class='nav-main-submenu'>
-                          <li class='nav-main-item'>
-<<<<<<< HEAD
-                              <a class="nav-main-link{{ request()->is('student/fee') ? ' active' : ''  }}" href="{{ route('change_course') }}">
-=======
-                              <a class="nav-main-link{{ request()->is('academics/fee') ? ' active' : ''  }}" href="{{ route('fee') }}">
->>>>>>> 011c3dfa700ff8ff99cb216ec7544e0646e749be
-                              <i class='nav-main-link-icon si si-user'></i>
-                              <span class='nav-main-link-name'>
-                                Fee
-                              </span>
-                              </a>
-                          </li>
-                      </ul>
-                      <ul class='nav-main-submenu'>
-                          <li class='nav-main-item'>
-<<<<<<< HEAD
-                              <a class="nav-main-link{{ request()->is('student/units') ? ' active' : ''  }}" href="{{ route('change_course') }}">
-=======
-                              <a class="nav-main-link{{ request()->is('academics/units') ? ' active' : ''  }}" href="{{ route('units') }}">
->>>>>>> 011c3dfa700ff8ff99cb216ec7544e0646e749be
-                              <i class='nav-main-link-icon si si-user'></i>
-                              <span class='nav-main-link-name'>
-                                Units
-                              </span>
-                              </a>
-                          </li>
-                      </ul>
-                  </li>
-                  <li class='nav-main-item{{ request()->is('accomodation/*') ? ' open' : '' }}'>
-                      <a class='nav-main-link nav-main-link-submenu' data-toggle='submenu' aria-haspopup='true' aria-expanded='true' href='#'>
-                          <i class='nav-main-link-icon si si-user'></i>
-                          <span class='nav-main-link-name'>Accomodation</span>
-                      </a>
-                      <ul class='nav-main-submenu'>
-                          <li class='nav-main-item'>
-<<<<<<< HEAD
-                              <a class="nav-main-link{{ request()->is('student/hostel') ? ' active' : ''  }}" href="{{ route('change_course') }}">
-=======
-                              <a class="nav-main-link{{ request()->is('accomodation/hostel') ? ' active' : ''  }}" href="{{ route('hostel') }}">
->>>>>>> 011c3dfa700ff8ff99cb216ec7544e0646e749be
-                              <i class='nav-main-link-icon si si-user'></i>
-                              <span class='nav-main-link-name'>
-                                Book Hostel
-                              </span>
-                              </a>
-                          </li>
-                      </ul>
-                      <ul class='nav-main-submenu'>
-                          <li class='nav-main-item'>
-<<<<<<< HEAD
-                              <a class="nav-main-link{{ request()->is('student/clearing') ? ' active' : ''  }}" href="{{ route('change_course') }}">
-=======
-                              <a class="nav-main-link{{ request()->is('accomodation/clearing') ? ' active' : ''  }}" href="{{ route('clearing') }}">
->>>>>>> 011c3dfa700ff8ff99cb216ec7544e0646e749be
-                              <i class='nav-main-link-icon si si-user'></i>
-                              <span class='nav-main-link-name'>
-                                Clearing
-                              </span>
-                              </a>
-                          </li>
-                      </ul>
-                  </li>
-              </div>
+            <li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                <i class="nav-main-link-icon si si-bulb"></i>
+                <span class="nav-main-link-name">Courses</span>
+              </a>
+                <ul class="nav-main-submenu">
+                    <li class="nav-main-item">
+                        <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{ route('student.mycourses') }}">
+                            <span class="nav-main-link-name">My Course</span>
+                        </a>
+                    </li>
+                </ul>
+              <ul class="nav-main-submenu">
+                <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{ route('student.coursetransfers') }}">
+                    <span class="nav-main-link-name">Course Transfer</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+              <li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">
+                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                      <i class="nav-main-link-icon si si-bulb"></i>
+                      <span class="nav-main-link-name">Academics</span>
+                  </a>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{ route('student.unitregistration') }}">
+                              <span class="nav-main-link-name">Semester Registration</span>
+                          </a>
+                      </li>
+                  </ul>
+
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{ route('student.requestacademicleave') }}">
+                              <span class="nav-main-link-name">Academic Leave</span>
+                          </a>
+                      </li>
+                  </ul>
+
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{ route('student.requestreadmission') }}">
+                              <span class="nav-main-link-name">Readmission</span>
+                          </a>
+                      </li>
+                  </ul>
+
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{ route('student.discontinuationstatus') }}">
+                              <span class="nav-main-link-name">My Status</span>
+                          </a>
+                      </li>
+                  </ul>
+              </li>
+
+              <li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">
+                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                      <i class="nav-main-link-icon si si-bulb"></i>
+                      <span class="nav-main-link-name">Examination</span>
+                  </a>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{ route('student.examresults') }}">
+                              <span class="nav-main-link-name">Exam Results</span>
+                          </a>
+                      </li>
+                  </ul>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{ route('student.retakes') }}">
+                              <span class="nav-main-link-name">Apply Retakes</span>
+                          </a>
+                      </li>
+                  </ul>
+              </li>
+
+              <li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">
+                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                      <i class="nav-main-link-icon si si-bulb"></i>
+                      <span class="nav-main-link-name">Finance</span>
+                  </a>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{ route('student.feesstatement') }}">
+                              <span class="nav-main-link-name">Fee Statement</span>
+                          </a>
+                      </li>
+                  </ul>
+              </li>
+
+              <li class="nav-main-item">
+                  <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('student.myprofile') }}">
+                      <i class="nav-main-link-icon si si-cursor"></i>
+                      <span class="nav-main-link-name">My Profile </span>
+                  </a>
+              </li>
           </ul>
         </div>
         <!-- END Side Navigation -->
@@ -184,7 +297,7 @@
     <!-- END Sidebar -->
 
     <!-- Header -->
-    <header id="page-header" style="background: #d89837 !important">
+    <header id="page-header" style="background-color: #d89837 !important">
       <!-- Header Content -->
       <div class="content-header">
         <!-- Left Section -->
@@ -202,7 +315,6 @@
             <i class="fa fa-fw fa-list-ul fa-flip-horizontal"></i>
           </button>
           <!-- END Toggle Mini Sidebar -->
-
         </div>
         <!-- END Left Section -->
 
@@ -211,28 +323,31 @@
           <!-- User Dropdown -->
           <div class="dropdown d-inline-block ms-2">
             <button type="button" class="btn btn-sm btn-alt-dark d-flex align-items-center" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <img class="rounded-circle" src="{{ asset('media/avatars/may.png') }}" alt="Header Avatar" style="width: 21px;">
-              <span id = 'plot-user' class="d-none d-sm-inline-block ms-2"></span>
+              <img class="rounded-circle" src="{{ asset('media/avatars/male.jpg') }}" alt="Header Avatar" style="width: 21px;">
+              <span class="d-none d-sm-inline-block ms-2"> {{ $user->loggedStudent->title }} {{ $user->loggedStudent->sname }}</span>
               <i class="fa fa-fw fa-angle-down d-none d-sm-inline-block ms-1 mt-1"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-md dropdown-menu-end p-0 border-0" aria-labelledby="page-header-user-dropdown">
-              <div class="p-3 text-center bg-body-dark border-bottom rounded-top">
-                <img class="img-avatar img-avatar48 img-avatar-thumb" src="{{ asset('media/avatars/may.png') }}" alt="">
-                <p id = 'plot-user' class="mt-2 mb-0 fw-medium"></p>
-                <p class="mb-0 text-muted fs-sm fw-medium">
-                    @if(Auth::guard('student')->check())
-                        {{ Auth::guard('student')->user()->student_id }}
-                    @elseif(Auth::guard('student')->check())
-                        Student
-                    @endif</p>
+              <div class="p-3 text-center bg-body-light border-bottom rounded-top">
+                <img class="img-avatar img-avatar48 img-avatar-thumb" src="{{ asset('media/avatars/ava.jpg') }}" alt="">
+                <p class="mt-2 mb-0 fw-medium">{{ $user->loggedStudent->fname }} {{ $user->loggedStudent->mnane }} {{ $user->loggedStudent->sname }}</p>
+                <p class="mb-0 text-muted fs-sm fw-medium">Student</p>
               </div>
-              {{-- <div class="p-2">
+              <div class="p-2">
+{{--                <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:void(0)">--}}
+{{--                  <span class="fs-sm fw-medium">Inbox</span>--}}
+{{--                  <span class="badge rounded-pill bg-primary ms-2">3</span>--}}
+{{--                </a>--}}
                 <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:void(0)">
-                  <span class="fs-sm fw-medium">Settings</span>
+                  <span class="fs-sm fw-medium">Profile</span>
+                  <span class="badge rounded-pill bg-primary ms-2">1</span>
                 </a>
-              </div> --}}
+              </div>
               <div role="separator" class="dropdown-divider m-0"></div>
               <div class="p-2">
+{{--                <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:void(0)">--}}
+{{--                  <span class="fs-sm fw-medium">Lock Account</span>--}}
+{{--                </a>--}}
                 <a class="dropdown-item d-flex align-items-center justify-content-between" href="{{ route('application.logout') }}">
                   <span class="fs-sm fw-medium">Log Out</span>
                 </a>
@@ -240,93 +355,100 @@
             </div>
           </div>
           <!-- END User Dropdown -->
-{{--
+
           <!-- Notifications Dropdown -->
-          <div class="dropdown d-inline-block ms-2">
-            <button type="button" class="btn btn-sm btn-alt-secondary" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fa fa-fw fa-bell"></i>
-              <span class="text-primary">•</span>
-            </button>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0 border-0 fs-sm" aria-labelledby="page-header-notifications-dropdown">
-              <div class="p-2 bg-body-light border-bottom text-center rounded-top">
-                <h5 class="dropdown-header text-uppercase">Notifications</h5>
-              </div>
-              <ul class="nav-items mb-0">
-                <li>
-                  <a class="text-dark d-flex py-2" href="javascript:void(0)">
-                    <div class="flex-shrink-0 me-2 ms-3">
-                      <i class="fa fa-fw fa-check-circle text-success"></i>
-                    </div>
-                    <div class="flex-grow-1 pe-2">
-                      <div class="fw-semibold">You have a new follower</div>
-                      <span class="fw-medium text-muted">15 min ago</span>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-dark d-flex py-2" href="javascript:void(0)">
-                    <div class="flex-shrink-0 me-2 ms-3">
-                      <i class="fa fa-fw fa-plus-circle text-primary"></i>
-                    </div>
-                    <div class="flex-grow-1 pe-2">
-                      <div class="fw-semibold">1 new sale, keep it up</div>
-                      <span class="fw-medium text-muted">22 min ago</span>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-dark d-flex py-2" href="javascript:void(0)">
-                    <div class="flex-shrink-0 me-2 ms-3">
-                      <i class="fa fa-fw fa-times-circle text-danger"></i>
-                    </div>
-                    <div class="flex-grow-1 pe-2">
-                      <div class="fw-semibold">Update failed, restart server</div>
-                      <span class="fw-medium text-muted">26 min ago</span>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-dark d-flex py-2" href="javascript:void(0)">
-                    <div class="flex-shrink-0 me-2 ms-3">
-                      <i class="fa fa-fw fa-plus-circle text-primary"></i>
-                    </div>
-                    <div class="flex-grow-1 pe-2">
-                      <div class="fw-semibold">2 new sales, keep it up</div>
-                      <span class="fw-medium text-muted">33 min ago</span>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-dark d-flex py-2" href="javascript:void(0)">
-                    <div class="flex-shrink-0 me-2 ms-3">
-                      <i class="fa fa-fw fa-user-plus text-success"></i>
-                    </div>
-                    <div class="flex-grow-1 pe-2">
-                      <div class="fw-semibold">You have a new subscriber</div>
-                      <span class="fw-medium text-muted">41 min ago</span>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-dark d-flex py-2" href="javascript:void(0)">
-                    <div class="flex-shrink-0 me-2 ms-3">
-                      <i class="fa fa-fw fa-check-circle text-success"></i>
-                    </div>
-                    <div class="flex-grow-1 pe-2">
-                      <div class="fw-semibold">You have a new follower</div>
-                      <span class="fw-medium text-muted">42 min ago</span>
-                    </div>
-                  </a>
-                </li>
-              </ul>
-              <div class="p-2 border-top text-center">
-                <a class="d-inline-block fw-medium" href="javascript:void(0)">
-                  <i class="fa fa-fw fa-arrow-down me-1 opacity-50"></i> Load More..
-                </a>
-              </div>
-            </div>
-          </div>
-          <!-- END Notifications Dropdown --> --}}
+{{--          <div class="dropdown d-inline-block ms-2">--}}
+{{--            <button type="button" class="btn btn-sm btn-alt-secondary" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--}}
+{{--              <i class="fa fa-fw fa-bell"></i>--}}
+{{--              <span class="text-primary">•</span>--}}
+{{--            </button>--}}
+{{--            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0 border-0 fs-sm" aria-labelledby="page-header-notifications-dropdown">--}}
+{{--              <div class="p-2 bg-body-light border-bottom text-center rounded-top">--}}
+{{--                <h5 class="dropdown-header text-uppercase">Notifications</h5>--}}
+{{--              </div>--}}
+{{--              <ul class="nav-items mb-0">--}}
+{{--                <li>--}}
+{{--                  <a class="text-dark d-flex py-2" href="javascript:void(0)">--}}
+{{--                    <div class="flex-shrink-0 me-2 ms-3">--}}
+{{--                      <i class="fa fa-fw fa-check-circle text-success"></i>--}}
+{{--                    </div>--}}
+{{--                    <div class="flex-grow-1 pe-2">--}}
+{{--                      <div class="fw-semibold">You have a new follower</div>--}}
+{{--                      <span class="fw-medium text-muted">15 min ago</span>--}}
+{{--                    </div>--}}
+{{--                  </a>--}}
+{{--                </li>--}}
+{{--                <li>--}}
+{{--                  <a class="text-dark d-flex py-2" href="javascript:void(0)">--}}
+{{--                    <div class="flex-shrink-0 me-2 ms-3">--}}
+{{--                      <i class="fa fa-fw fa-plus-circle text-primary"></i>--}}
+{{--                    </div>--}}
+{{--                    <div class="flex-grow-1 pe-2">--}}
+{{--                      <div class="fw-semibold">1 new sale, keep it up</div>--}}
+{{--                      <span class="fw-medium text-muted">22 min ago</span>--}}
+{{--                    </div>--}}
+{{--                  </a>--}}
+{{--                </li>--}}
+{{--                <li>--}}
+{{--                  <a class="text-dark d-flex py-2" href="javascript:void(0)">--}}
+{{--                    <div class="flex-shrink-0 me-2 ms-3">--}}
+{{--                      <i class="fa fa-fw fa-times-circle text-danger"></i>--}}
+{{--                    </div>--}}
+{{--                    <div class="flex-grow-1 pe-2">--}}
+{{--                      <div class="fw-semibold">Update failed, restart server</div>--}}
+{{--                      <span class="fw-medium text-muted">26 min ago</span>--}}
+{{--                    </div>--}}
+{{--                  </a>--}}
+{{--                </li>--}}
+{{--                <li>--}}
+{{--                  <a class="text-dark d-flex py-2" href="javascript:void(0)">--}}
+{{--                    <div class="flex-shrink-0 me-2 ms-3">--}}
+{{--                      <i class="fa fa-fw fa-plus-circle text-primary"></i>--}}
+{{--                    </div>--}}
+{{--                    <div class="flex-grow-1 pe-2">--}}
+{{--                      <div class="fw-semibold">2 new sales, keep it up</div>--}}
+{{--                      <span class="fw-medium text-muted">33 min ago</span>--}}
+{{--                    </div>--}}
+{{--                  </a>--}}
+{{--                </li>--}}
+{{--                <li>--}}
+{{--                  <a class="text-dark d-flex py-2" href="javascript:void(0)">--}}
+{{--                    <div class="flex-shrink-0 me-2 ms-3">--}}
+{{--                      <i class="fa fa-fw fa-user-plus text-success"></i>--}}
+{{--                    </div>--}}
+{{--                    <div class="flex-grow-1 pe-2">--}}
+{{--                      <div class="fw-semibold">You have a new subscriber</div>--}}
+{{--                      <span class="fw-medium text-muted">41 min ago</span>--}}
+{{--                    </div>--}}
+{{--                  </a>--}}
+{{--                </li>--}}
+{{--                <li>--}}
+{{--                  <a class="text-dark d-flex py-2" href="javascript:void(0)">--}}
+{{--                    <div class="flex-shrink-0 me-2 ms-3">--}}
+{{--                      <i class="fa fa-fw fa-check-circle text-success"></i>--}}
+{{--                    </div>--}}
+{{--                    <div class="flex-grow-1 pe-2">--}}
+{{--                      <div class="fw-semibold">You have a new follower</div>--}}
+{{--                      <span class="fw-medium text-muted">42 min ago</span>--}}
+{{--                    </div>--}}
+{{--                  </a>--}}
+{{--                </li>--}}
+{{--              </ul>--}}
+{{--              <div class="p-2 border-top text-center">--}}
+{{--                <a class="d-inline-block fw-medium" href="javascript:void(0)">--}}
+{{--                  <i class="fa fa-fw fa-arrow-down me-1 opacity-50"></i> Load More..--}}
+{{--                </a>--}}
+{{--              </div>--}}
+{{--            </div>--}}
+{{--          </div>--}}
+          <!-- END Notifications Dropdown -->
+
+          <!-- Toggle Side Overlay -->
+          <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+{{--          <button type="button" class="btn btn-sm btn-alt-secondary ms-2" data-toggle="layout" data-action="side_overlay_toggle">--}}
+{{--            <i class="fa fa-fw fa-list-ul fa-flip-horizontal"></i>--}}
+{{--          </button>--}}
+          <!-- END Toggle Side Overlay -->
         </div>
         <!-- END Right Section -->
       </div>
@@ -364,14 +486,13 @@
 
     <!-- Main Container -->
     <main id="main-container">
-
-      @section('css_before')
+    @section('css_before')
         <!-- Page JS Plugins CSS -->
             <link rel="stylesheet" href="{{ url('js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css') }}">
             <link rel="stylesheet" href="{{ url('js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css') }}">
+    @endsection
 
-        @endsection
-        @section('js_after')
+    @section('js_after')
         <!-- jQuery (required for DataTables plugin) -->
             <script src="{{ url('js/lib/jquery.min.js') }}"></script>
 
@@ -389,21 +510,20 @@
             <!-- Page JS Code -->
             <script src="{{ url('js/pages/tables_datatables.js') }}"></script>
         @endsection
-
       @yield('content')
-        @include('application::messages.notification')
+      @include('application::messages.notification')
     </main>
     <!-- END Main Container -->
 
     <!-- Footer -->
-    <footer id="page-footer" class="" style="background: rgba(0, 0, 0, 0.7) !important">
+    <footer id="page-footer" style="background-color: rgba(0,0,0,0.7) !important; color: snow !important;">
       <div class="content py-3">
-        <div class="row fs-sm" style="color: white; !mportant">
+        <div class="row fs-sm">
           <div class="col-sm-6 order-sm-2 py-1 text-center text-sm-end">
-            Designed by <a class="fw-semibold"  style="color: gold;" href="https://support.tum.ac.ke/" target="_blank">TUM ICTS</a>
+            Designed by <a class="fw-semibold" style="color: gold !important;" href="https://support.tum.ac.ke/" target="_blank">TUM ICTS</a>
           </div>
           <div class="col-sm-6 order-sm-1 py-1 text-center text-sm-start">
-            <a class="fw-semibold" href="https://www.tum.ac.ke/" style="color: gold;" target="_blank">Technical University of Mombasa</a> &copy; <span data-toggle="year-copy"></span>
+            <a class="fw-semibold" style="color: gold !important;" href="https://www.tum.ac.ke/" target="_blank">Technical University of Mombasa</a> &copy; <span data-toggle="year-copy"></span>
           </div>
         </div>
       </div>
@@ -413,11 +533,8 @@
   <!-- END Page Container -->
 
   <!-- OneUI Core JS -->
-  <script src="{{ url('js/oneui.app.js') }}"></script>
+  <script src="{{ url('/js/oneui.app.js') }}"></script>
 
-  <script>
-      plotName();
-  </script>
   <!-- Laravel Scaffolding JS -->
   <!-- <script src="{{ mix('/js/laravel.app.js') }}"></script> -->
 

@@ -12,37 +12,54 @@
 */
 
 use Modules\Student\Http\Controllers\StudentController;
-use Modules\Student\Http\Middleware\Update;
 
 Route::prefix('student')->group(function() {
-//    Route::get('/', 'StudentController@index')->name('student');
-    Route::get('/downstream', [StudentController::class, 'downstream'])->name('raw.route');
-    Route::group(['middleware' => ['student']], function (){
+//    Route::get('/', 'StudentController@index');
 
-        Route::get('/', [StudentController::class, 'index'])->name('student');
-        Route::get('/profile', [StudentController::class, 'profile'])->name('student_profile');
 
-        Route::get('/student_profile', [StudentController::class, 'student_profile'])->name('student_dashboard');
-        Route::get('/checkName', [StudentController::class, 'checkName']);
-        Route::get('/getCourses', [StudentController::class, 'getCourses']);
-        Route::get('/checkChange', [StudentController::class, 'checkChange']);
-        Route::get('/getTransferLogs', [StudentController::class, 'getTransferLogs']);
-        Route::get('/checkProfile', [StudentController::class, 'checkProfile']);
+    Route::get('/', [StudentController::class, 'index'])->name('student');
+    Route::get('/my-course', [StudentController::class, 'myCourse'])->name('student.mycourses');
+    Route::get('/course-transfers', [StudentController::class, 'courseTransfers'])->name('student.coursetransfers');
+    Route::get('/request-transfer', [StudentController::class, 'requestTransfer'])->name('student.requesttransfer');
+    Route::get('/get-department-courses', [StudentController::class, 'getDeptCourses'])->name('student.getdeptcourse');
+    Route::get('/get-courses-classes', [StudentController::class, 'getCourseClasses'])->name('student.getcourseclasses');
+    Route::post('/submit-course-transfer-request', [StudentController::class, 'submitRequest'])->name('student.submittransferrequest');
+    Route::get('/edit-course-transfer-request/{id}', [StudentController::class, 'editRequest'])->name('student.edittransferrequest');
+    Route::post('/update-course-transfer-request/{id}', [StudentController::class, 'updateRequest'])->name('student.updatetransferrequest');
+    Route::get('/delete-course-transfer-request/{id}', [StudentController::class, 'deleteRequest'])->name('student.deletetransferrequest');
+    Route::get('/store-course-transfer-request/{id}', [StudentController::class, 'storeRequest'])->name('student.storetransferrequest');
 
-        Route::post('/platform_courses', [StudentController::class, 'platform_courses']);
-        Route::post('/selectCourses', [StudentController::class, 'selectCourses']);
-        Route::post('/updateImg', [StudentController::class, 'updateImg']);
-        Route::post('/updateProfile', [StudentController::class, 'updateProfile']);
-        Route::get('/bindNav', [StudentController::class, 'bindNav']);
+    Route::get('/units-registration', [StudentController::class, 'unitRegistration'])->name('student.unitregistration');
+    Route::get('/request-semester-registration', [StudentController::class, 'requestSemesterRegistration'])->name('student.requestRegistration');
+    Route::post('/submit-semester-registration', [StudentController::class, 'registerSemester'])->name('student.registerSemester');
+    Route::get('/view-units-in-selected-semester/{id}', [StudentController::class, 'viewSemesterUnits'])->name('student.viewSemesterUnits');
 
-    });
-    Route::middleware([Update::class])->group(function () {
-        Route::get('/change_course', [StudentController::class, 'change_course'])->name('change_course');
-        Route::get('/exams_transcript', [StudentController::class, 'exams_transcript'])->name('exams');
-        Route::get('/getFee', [StudentController::class, 'getFee'])->name('fee');
-        Route::get('/getUnits', [StudentController::class, 'getUnits'])->name('units');
-        Route::get('/getHostel', [StudentController::class, 'getHostel'])->name('hostel');
-        Route::get('/getClearing', [StudentController::class, 'getClearing'])->name('clearing');
-    });
+
+    Route::get('/request-academic-leave', [StudentController::class, 'academicLeave'])->name('student.requestacademicleave');
+    Route::get('/request-deffer-or-academic-leave', [StudentController::class, 'requestLeave'])->name('student.academicleaverequest');
+    Route::post('/submit-academic-leave-request', [StudentController::class, 'submitLeaveRequest'])->name('student.submitacademicleaverequest');
+    Route::get('/edit-request-deffer-or-academic-leave/{id}', [StudentController::class, 'editLeaveRequest'])->name('student.editleaverequest');
+    Route::post('/update-request-deffer-or-academic-leave/{id}', [StudentController::class, 'updateLeaveRequest'])->name('student.updateleaverequest');
+    Route::get('/submits-request-deffer-or-academic-leave/{id}', [StudentController::class, 'submitsLeaveRequest'])->name('student.submitsleaverequest');
+    Route::get('/delete-request-deffer-or-academic-leave/{id}', [StudentController::class, 'deleteLeaveRequest'])->name('student.deleteleaverequest');
+
+
+
+    Route::get('/request-readmission', [StudentController::class, 'requestReadmission'])->name('student.requestreadmission');
+    Route::get('/request-course-readmission', [StudentController::class, 'readmissionRequests'])->name('student.readmisionrequest');
+    Route::post('/store-readmission-request', [StudentController::class, 'storeReadmissionRequest'])->name('student.storereadmissionrequest');
+
+
+
+    Route::get('/discontinuation-status', [StudentController::class , 'discontinuationStatus'])->name('student.discontinuationstatus');
+    Route::get('/check-exam-results', [StudentController::class, 'examResults'])->name('student.examresults');
+    Route::get('/apply-for-retakes', [StudentController::class, 'applyRetake'])->name('student.retakes');
+
+
+    Route::get('/generate-fees-statement', [StudentController::class, 'feesStatement'])->name('student.feesstatement');
+    Route::get('/get-my-fee-statement', [StudentController::class, 'printStatement'])->name('student.printStatement');
+
+
+    Route::get('/my-profile', [StudentController::class, 'myProfile'])->name('student.myprofile');
+
 });
-//Route::get('/updateProfile', [StudentController::class, 'updateProfile']);

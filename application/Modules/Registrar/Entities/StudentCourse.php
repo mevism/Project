@@ -18,9 +18,19 @@ class StudentCourse extends Model
         return $this->belongsTo(Student::class);
     }
 
-    public function StudCourses(){
+    public function studentCourse(){
 
         return $this->belongsTo(Courses::class, 'course_id');
+    }
+
+    public function courseEntry(){
+
+        return $this->belongsTo(AcademicYear::class, 'academic_year_id');
+
+    }
+
+    public function coursesIntake(){
+        return $this->belongsTo(Intake::class, 'intake_id');
     }
 
     protected static function newFactory()

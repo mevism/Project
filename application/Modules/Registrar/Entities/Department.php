@@ -5,6 +5,7 @@ namespace Modules\Registrar\Entities;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Student\Entities\CourseTransfer;
 
 class Department extends Model
 {
@@ -42,6 +43,10 @@ class Department extends Model
 
     public function useCourse(){
         return $this->hasMany(Courses::class);
+    }
+
+    public function transferDept(){
+        return $this->hasMany(CourseTransfer::class, 'id');
     }
 
     protected static function newFactory()

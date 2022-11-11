@@ -13,6 +13,7 @@
 
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <meta name="oneui-route" content="{{ route('raw.route') }}">
 
   <!-- Icons -->

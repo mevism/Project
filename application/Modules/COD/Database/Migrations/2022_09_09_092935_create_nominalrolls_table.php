@@ -16,11 +16,15 @@ return new class extends Migration
         Schema::create('nominalrolls', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('student_id');
+            $table->string('reg_number');
             $table->string('year_study');
             $table->string('semester_study');
             $table->string('academic_year');
             $table->string('academic_semester');
-            $table->string('course_code');
+            $table->integer('pattern_id');
+            $table->string('class_code');
+            $table->integer('registration')->nullable();
+            $table->integer('activation')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

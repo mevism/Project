@@ -16,19 +16,9 @@ use Illuminate\Support\Facades\Route;
 // Example Routes
 
 
-Route::view('/pages/slick', 'pages.slick');
-Route::view('/pages/datatables', 'pages.datatables');
-Route::view('/pages/blank', 'pages.blank');
-
-
-
 Route::view('/', 'userauth.login')->name('root');
 Route::post('/login', [\App\Http\Controllers\User\UserController::class, 'login'])->name('user.login');
-Route::get('/dashboard', [App\Http\Controllers\User\UserController::class, 'dashboard'])->name('dashboard')->middleware('student:auth');
-Route::get('/dashboard', [App\Http\Controllers\User\UserController::class, 'dashboard'])->name('dashboard')->middleware('admin:auth');
-Route::get('/dashboard', [App\Http\Controllers\User\UserController::class, 'dashboard'])->name('dashboard')->middleware('cod:auth');
-Route::get('/dashboard', [App\Http\Controllers\User\UserController::class, 'dashboard'])->name('dashboard')->middleware('dean:auth');
-//Route::get('/dashboard', [App\Http\Controllers\User\UserController::class, 'dashboard'])->name('dashboard')->middleware('student:auth');
+Route::get('/dashboard', [App\Http\Controllers\User\UserController::class, 'dashboard'])->name('dashboard');;
 Route::get('/logout', [\App\Http\Controllers\User\UserController::class, 'logout'])->name('logout');
 
-Route::get('/mail', function (){ return view('mail'); });
+//Route::get('/mail', function (){ return view('mail'); });

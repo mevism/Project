@@ -12,9 +12,7 @@
 */
 use Modules\COD\Http\Controllers\CODController;
 
-Route::prefix('department')->group(function() {
-//    Route::get('/', 'CODController@index');
-    Route::group(['middleware' => 'is_cod'], function (){
+Route::prefix('department')->middleware( ['is_cod'])->group( function() {
         Route::get('/cod', [CODController::class, 'index'])->name('cod.dashboard');
         Route::get('/applications', [CODController::class, 'applications'])->name('cod.applications');
         Route::get('/viewApplication/{id}', [CODController::class, 'viewApplication'])->name('cod.viewApplication');
@@ -34,13 +32,19 @@ Route::prefix('department')->group(function() {
         Route::get('/submitAdmJab/{id}', [CODController::class, 'submitAdmJab'])->name('cod.submitAdmJab');
 
 
+        Route::get('/create-class-pattern/{id}', [CODController::class, 'classPattern'])->name('cod.classPattern');
+        Route::post('/submit-class-pattern', [CODController::class, 'storeClassPattern'])->name('cod.storeClassPattern');
+        Route::post('/update-class-pattern/{id}', [CODController::class, 'updateClassPattern'])->name('cod.updateClassPattern');
+        Route::get('/delete-class-pattern/{id}', [CODController::class, 'deleteClassPattern'])->name('cod.deleteClassPattern');
+
 
         Route::get('/courses', [CODController::class, 'courses'])->name('department.courses');
 
 
         Route::get('/intakes', [CODController::class, 'intakes'])->name('department.intakes');
-        Route::get('/intakes/addCourse/{id}', [CODController::class, 'intakeCourses'])->name('department.intakeCourses');
-        Route::post('/intakes/addAvailableCourses', [CODController::class, 'addAvailableCourses'])->name('department.addAvailableCourses');
+        Route::get('/addCourse/{id}', [CODController::class, 'intakeCourses'])->name('department.intakeCourses');
+        Route::post('/addAvailableCourses', [CODController::class, 'addAvailableCourses'])->name('department.addAvailableCourses');
+        Route::get('/downstream', [CODController::class, 'downstream'])->name('raw.route');
 
 
         Route::get('/getClasses', [CODController::class, 'deptClasses'])->name('department.classes');
@@ -49,7 +53,6 @@ Route::prefix('department')->group(function() {
 
         Route::get('/admitStudent/{id}', [CODController::class, 'admitStudent'])->name('department.admitStudent');
 
-        Route::get('/getAcademicFile/{id}', 'CODController@viewAcademicFile');
+//        Route::get('/getAcademicFile/{id}', 'CODController@viewAcademicFile');
 
-    });
 });

@@ -38,6 +38,7 @@
                             <th>#</th>
                             <th>Course Code</th>
                             <th>Course Name</th>
+                            <th>Class Pattern</th>
                             <th> Amend </th>
                             </thead>
                             <tbody>
@@ -46,6 +47,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td> {{ $course->course_code }} </td>
                                     <td> {{ $course->course_name }}</td>
+                                    <td> <a class="btn btn-sm btn-outline-secondary" href="{{ route('cod.classPattern', ['id' => Crypt::encrypt($course->id)]) }}">Create Pattern</a> </td>
                                     <td>
                                         <a class="btn btn-sm btn-alt-info" href="#" data-toggle="click-ripple" title="Propose some changes"> Amend </a>
                                     </td>

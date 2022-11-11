@@ -30,6 +30,11 @@ class StudentLogin extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function loggedStudent(){
+
+        return $this->belongsTo(Student::class, 'id');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Registrar\Database\factories\StudentLoginFactory::new();

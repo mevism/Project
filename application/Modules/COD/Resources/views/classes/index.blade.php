@@ -61,6 +61,7 @@
                         <th>Course</th>
                         <th>Study Mode</th>
                         <th>Status</th>
+                        <th nowrap="">Class Pattern</th>
                         <th>Action</th>
                         </thead>
                         <tbody>
@@ -71,6 +72,9 @@
                                     <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ $classa->classCourse->course_name }}</td>
                                     <td class="fw-semibold fs-sm">{{ $classa->attendance_id }}</td>
                                     <td> ON SESSION </td>
+                                    <td>
+                                        <a class="btn btn-sm btn-outline-info" href="{{ route('cod.classPattern', ['id' => Crypt::encrypt($classa->id)]) }}">View Pattern</a>
+                                    </td>
                                     <td nowrap="">
                                         <a class="btn btn-sm btn-alt-info disabled" href="{{ route('courses.editClasses', ['id' => Crypt::encrypt($classa->id)]) }}">edit</a>
                                         <a class="btn btn-sm btn-alt-danger disabled" onclick="return confirm('Are you sure you want to delete this course ?')" href="{{ route('courses.destroyClasses', ['id' => Crypt::encrypt($classa->id)]) }}">delete</a>

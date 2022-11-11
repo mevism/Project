@@ -205,7 +205,7 @@ class ApplicationController extends Controller
 
             foreach ($apps as $id){
 
-                $notification[] = Notification::where('application_id', $id->id)->where('status', '>', 0)->orderBy('updated_at', 'desc')->get();
+                $notification = Notification::where('application_id', $id->id)->where('status', '>', 0)->orderBy('updated_at', 'desc')->get();
 
 
             }
@@ -919,12 +919,20 @@ class ApplicationController extends Controller
 
             foreach ($apps as $id){
 
-                    $notification[] = Notification::where('application_id', $id->id)->where('status', '>', 0)->orderBy('created_at', 'asc')->get();
+                    $notification = Notification::where('application_id', $id->id)->where('status', '>', 0)->orderBy('created_at', 'asc')->get();
 
             }
         }
 
         return view('application::applicant.inbox')->with(['notification' => $notification]);
+    }
+
+    public function myAdmission(){
+
+        $myadmission = Application::where('applicant_id', Auth::user()->id)->where('cod_status', 1)->where('registrar_status', 3)->get();
+
+
+        return view('application::applicant.myadmissions')->with('courses', $myadmission);
     }
 
     /**

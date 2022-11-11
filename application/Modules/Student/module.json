@@ -7,7 +7,5 @@
     "providers": [
         "Modules\\Student\\Providers\\StudentServiceProvider"
     ],
-    "aliases": {},
-    "files": [],
-    "requires": []
+    "files": []
 }

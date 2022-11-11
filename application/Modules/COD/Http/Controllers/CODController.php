@@ -6,16 +6,21 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Crypt;
 use Modules\Application\Entities\AdmissionApproval;
 use Modules\Application\Entities\AdmissionDocument;
 use Modules\Application\Entities\Application;
 use Modules\Application\Entities\Education;
 use Modules\Application\Entities\Notification;
+use Modules\COD\Entities\ClassPattern;
 use Modules\COD\Entities\Nominalroll;
+use Modules\COD\Entities\Pattern;
 use Modules\COD\Entities\Progression;
 use Modules\Finance\Entities\FinanceLog;
 use Modules\COD\Entities\CODLog;
 use Auth;
+use Modules\Finance\Entities\StudentInvoice;
+use Modules\Registrar\Entities\FeeStructure;
 use Modules\Registrar\Entities\Student;
 use Modules\Registrar\Entities\StudentCourse;
 use Validator;
@@ -26,10 +31,25 @@ use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Attendance;
 use Modules\Registrar\Entities\Campus;
 use Response;
-use Crypt;
 
 class CODController extends Controller
 {
+
+//    public function index(){
+//
+//        $admissions = Application::where('cod_status', 1)
+//            ->where('department_id',auth()->guard('user')->user()->department_id)
+//            ->where('registrar_status',3)
+//            ->where('status',0)
+//            ->count();
+//
+//        $apps_cod = Application::where('cod_status', 0)
+//            ->where('department_id', auth()->guard('user')->user()->department_id)
+//            ->orWhere('dean_status', 3)
+//            ->count();
+//
+//        return view('cod::COD.index')->with(['apps'=>$apps_cod, 'admissions'=>$admissions]);
+//    }
 
     public function applications(){
 
@@ -386,22 +406,132 @@ class CODController extends Controller
 
         $hashedId = Crypt::decrypt($id);
 
-        $student = StudentCourse::where('student_id', $hashedId)->first();
+        $student = Student::find($hashedId);
+
+        $student_fee = $student->courseStudent;
+
+        $fees = FeeStructure::where('student_type', $student_fee->student_type)
+            ->where('course_id', $student_fee->course_id)
+            ->where('semester', 'I')
+            ->first();
+
+        $fee = $fees->caution_money + $fees->student_union + $fees->medical_levy + $fees->tuition_fee + $fees->industrial_attachment + $fees->student_id + $fees->examination + $fees->registration_fee + $fees->library_levy + $fees->ict_levy + $fees->activity_fee +$fees->student_benevolent + $fees->kuccps_placement_fee + $fees->cue_levy;
+
+        $academic = Carbon::parse($student->courseStudent->courseEntry->year_start)->format('Y').'/'.Carbon::parse($student->courseStudent->courseEntry->year_end)->format('Y');
+       $period = Carbon::parse($student->courseStudent->coursesIntake->intake_from)->format('M').'/'.Carbon::parse($student->courseStudent->coursesIntake->intake_to)->format('M');
+
 
         $signed = new Nominalroll;
         $signed->student_id = $student->id;
+        $signed->reg_number = $student->reg_number;
+        $signed->class_code = $student->courseStudent->class_code;
         $signed->year_study = 1;
-        $signed->semester_study = 'I';
-        $signed->academic_year = $student->academic_year_id;
-        $signed->academic_semester =$student->intake_id;
-        $signed->course_code = $student->StudCourses->course_code;
+        $signed->semester_study = 1;
+        $signed->academic_year = $academic;
+        $signed->academic_semester = strtoupper($period );
+        $signed->pattern_id = 1;
+        $signed->registration = 1;
+        $signed->activation = 1;
         $signed->save();
 
-        return redirect()->back()->with('success', 'Student admitted successfully');
+        $invoice = new StudentInvoice;
+        $invoice->student_id = $student->id;
+        $invoice->reg_number = $student->reg_number;
+        $invoice->invoice_number = 'INV'.time();
+        $invoice->stage = '1.1';
+        $invoice->amount = $fee;
+        $invoice->description = 'New Student Registration Invoice for 1.1 '.'Academic Year '.$academic;
+        $invoice->save();
+
+
+        return redirect()->back()->with('success', 'Student admitted and invoiced successfully');
 
     }
 
 
+    public function downstream(){
+        $callbackResponse = file_get_contents('./js/oneui.app.json');
+        print_r(json_encode(['nut' => json_decode($callbackResponse), 'imgs' => [ asset('Images/success-tick.gif'), asset('Images/error-tick.jpg'), asset('Images/question.gif') ], 'route' => [ route('department.addAvailableCourses') ] ]));
+    }
+
+    public function classPattern($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $class = Classes::find($hashedId);
+
+        $seasons = Pattern::all();
+
+        $patterns = ClassPattern::where('class_code', $class->name)->latest()->get();
+
+        return view('cod::classes.classPattern')->with(['class' => $class, 'patterns' => $patterns, 'seasons' => $seasons]);
+
+    }
+
+    public function storeClassPattern(Request $request){
+
+        $request->validate([
+            'code' => 'required',
+            'stage' => 'required',
+            'period' => 'required',
+            'semester' => 'required',
+            'year' => 'required'
+        ]);
+
+        $semester = Pattern::find($request->semester);
+
+        $pattern = new ClassPattern;
+        $pattern->class_code = $request->code;
+        $pattern->stage = $request->stage;
+        $pattern->period = $request->period;
+        $pattern->academic_year = $request->year;
+        $pattern->pattern_id = $request->semester;
+        $pattern->semester = $request->stage.'.'.$semester->season_code;
+        $pattern->save();
+
+        return redirect()->back()->with('success', 'Class pattern record created successfully');
+
+    }
+
+    public function updateClassPattern(Request $request, $id){
+
+        $request->validate([
+            'code' => 'required',
+            'stage' => 'required',
+            'period' => 'required',
+            'semester' => 'required',
+            'year' => 'required'
+        ]);
+
+        $semester = Pattern::find($request->semester);
+
+        $hashedId = Crypt::decrypt($id);
+
+
+        $pattern = ClassPattern::find($hashedId);
+        $pattern->class_code = $request->code;
+        $pattern->stage = $request->stage;
+        $pattern->period = $request->period;
+        $pattern->academic_year = $request->year;
+        $pattern->start_date = $request->start_date;
+        $pattern->end_date = $request->end_date;
+        $pattern->pattern_id = $request->semester;
+        $pattern->semester = $request->stage.'.'.$semester->season_code;
+        $pattern->save();
+
+        return redirect()->back()->with('success', 'Class pattern record updated successfully');
+
+    }
+
+    public function deleteClassPattern($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        ClassPattern::find($hashedId)->delete();
+
+        return redirect()->back()->with('success', 'Class pattern record deleted successfully');
+
+    }
 
     /**
      * Display a listing of the resource.

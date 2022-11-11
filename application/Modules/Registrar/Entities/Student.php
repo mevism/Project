@@ -4,8 +4,8 @@ namespace Modules\Registrar\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Modules\Application\Entities\Application;
 use Modules\COD\Entities\Nominalroll;
+use Modules\Student\Entities\AcademicLeave;
 
 class Student extends Model
 {
@@ -13,9 +13,9 @@ class Student extends Model
 
     protected $fillable = [];
 
-    public function studentCourse(){
+    public function courseStudent(){
 
-        return $this->hasMany(StudentCourse::class);
+        return $this->hasOne(StudentCourse::class);
     }
 
     public function signNominal(){
@@ -23,6 +23,24 @@ class Student extends Model
         return $this->hasMany(Nominalroll::class);
 
     }
+
+    public function nominalRoll(){
+
+        return $this->hasOne(Nominalroll::class);
+
+    }
+
+    public function loginStudent(){
+
+        return $this->hasOne(StudentLogin::class, 'student_id');
+
+    }
+
+    public function leaveStudent(){
+
+        return $this->hasMany(AcademicLeave::class, 'id');
+    }
+
 
     protected static function newFactory()
     {
