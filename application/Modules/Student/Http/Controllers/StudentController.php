@@ -26,6 +26,7 @@ use Modules\Student\Entities\CourseTransfer;
 use Modules\Student\Entities\ExamResults;
 use Modules\Student\Entities\Readmission;
 use Modules\Student\Entities\StudentDeposit;
+use Modules\Student\Entities\TransferInvoice;
 use PhpOffice\PhpWord\Element\Table;
 use PhpOffice\PhpWord\SimpleType\TblWidth;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -68,7 +69,16 @@ class StudentController extends Controller
 
     public function courseTransfers(){
 
+        $student = Auth::guard('student')->user()->loggedStudent;
+
         $transfers = CourseTransfer::where('student_id', Auth::guard('student')->user()->student_id)->latest()->get();
+
+//        foreach ($transfers as $transfer){
+//            $cluster = Db::table('cluster_weights')
+//                ->where('student_name', $student->sname.' '.$student->fname.' '.$student->mname)
+//                ->latest()
+//                ->get();
+//        }
 
         return view('student::courses.transfers')->with(['transfers' => $transfers]);
     }
@@ -76,21 +86,28 @@ class StudentController extends Controller
     public function requestTransfer(){
 
         $departments = Department::latest()->get();
+        $stage = Nominalroll::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)->latest()->first();
 
-        return view('student::courses.coursetransfer')->with('departments', $departments);
+        return view('student::courses.coursetransfer')->with(['departments' => $departments, 'stage' => $stage]);
 
     }
 
     public function getDeptCourses(Request $request){
 
-        $data = Courses::where('department_id', $request->id)->latest()->get();
+        $data = Courses::where('department_id', $request->id)
+            ->where('level', Auth::guard('student')->user()->loggedStudent->courseStudent->studentCourse->level)
+            ->latest()->get();
 
         return response()->json($data);
     }
 
     public function getCourseClasses(Request $request){
 
-        $classes = Classes::where('course_id', $request->id)->where('attendance_id', 'J-FT')->latest()->get();
+        $classes = Classes::where('course_id', $request->id)
+            ->where('attendance_id', 'J-FT')
+//            ->select('name')
+            ->latest()
+            ->first();
 
         return response()->json($classes);
     }
@@ -185,6 +202,14 @@ class StudentController extends Controller
         $hashedId = Crypt::decrypt($id);
 
         CourseTransfer::find($hashedId)->update(['status' => 0]);
+
+        $invoice = new TransferInvoice;
+        $invoice->student_id = Auth::guard('student')->user()->student_id;
+        $invoice->reg_number = Auth::guard('student')->user()->loggedStudent->reg_number;
+        $invoice->invoice_number = 'INV'.time();
+        $invoice->amount = 500;
+        $invoice->description = 'Invoice for Course Transfer Fee';
+        $invoice->save();
 
         return redirect()->back()->with('success', 'Your course transfer request submitted successfully');
     }
@@ -329,13 +354,9 @@ class StudentController extends Controller
             ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
             ->latest()->first();
 
-//        return $student_activation;
-
        $invoices = StudentInvoice::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
             ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
             ->where('stage', '<', $student_activation->stage)->get();
-
-//       return $invoices;
 
        $semester = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
            ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
@@ -442,9 +463,6 @@ class StudentController extends Controller
 
 
         $reg = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)->latest()->get();
-
-
-//        return $invoice;
 
         return view('student::semester.index')->with([
             'reg' => $reg,
@@ -603,6 +621,11 @@ class StudentController extends Controller
 
         $student = Student::where('id', Auth::guard('student')->user()->id)->first();
 
+        $reg = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
+            ->where('registration', 1)
+            ->where('activation', 1)
+            ->latest()->first();
+
         $statements = StudentInvoice::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -632,9 +655,11 @@ class StudentController extends Controller
 
         \QrCode::size(200)
             ->format('png')
-            ->generate( 'Name => '.$student->fname.' '.$student->mname.' '.$student->sname.' Registration => '.$student->reg_number.' Fee Balance => '.$balance, 'QrCodes/'.$image);
-
-
+            ->generate( 'Name: '.$student->fname.' '.$student->mname.' '.$student->sname."\n".
+                'Registration: '.$student->reg_number. "\n".
+                'Class Code: '.$student->courseStudent->class_code."\n".
+                'Current Stage: '.'Year '.$reg->year_study.' Semester '.$reg->patternRoll->season."\n".
+                'Fee Balance:  '.$balance, 'QrCodes/'.$image);
 
         $domPdfPath = base_path('vendor/dompdf/dompdf');
         \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
@@ -728,3 +753,5 @@ class StudentController extends Controller
         //
     }
 }
+
+

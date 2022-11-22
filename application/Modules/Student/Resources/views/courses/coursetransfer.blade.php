@@ -65,10 +65,10 @@
                                     Not registered
                                 @else
                                 <span class="h5 fs-sm"> YEAR OF STUDY : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->nominalRoll->year_study }}</span>
+                                <span class="h6 fs-sm fw-normal"> {{ $stage->year_study }}</span>
 
                                 <span class="h5 fs-sm"> SEMESTER OF STUDY : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->nominalRoll->semester_study }}</span>
+                                <span class="h6 fs-sm fw-normal"> {{ $stage->semester_study }} ({{ $stage->patternRoll->season }})</span>
                                 @endif
                             </div>
                             </fieldset>
@@ -82,41 +82,49 @@
                                         You cannot request course transfer, ask to be registered first
                                     </span>
                                 @else
-                            <form action="{{ route('student.submittransferrequest') }}" method="POST">
-                                @csrf
-                                <div class="mb-0">
-                                    <label class="mb-2">DEPARTMENT</label>
+                                    @if($stage->year_study.".".$stage->semester_study > '1.1')
 
-                                    <select name="dept" class="form-control form-control-lg form-select mb-2 department">
-                                        <option selected disabled class="text-center"> -- select department -- </option>
-                                        @foreach($departments as $key => $department)
-                                            <option value="{{ $department->id }}"> {{ $department->name }}</option>
-                                        @endforeach
-                                    </select>
+                                        <span class="text-warning text-center">
+                                        Course transfers are done only at year 1 semester 1
+                                        </span>
 
-                                    <label class="mb-2">COURSE</label>
+                                    @else
+                                        <form action="{{ route('student.submittransferrequest') }}" method="POST">
+                                            @csrf
+                                            <div class="mb-0">
+                                                <label class="mb-2">DEPARTMENT</label>
 
-                                    <select name="course" class="form-control form-control-lg form-select mb-3 course">
-                                        <option selected disabled class="text-center"> -- select course -- </option>
-                                    </select>
+                                                <select name="dept" class="form-control form-control-lg form-select mb-2 department">
+                                                    <option selected disabled class="text-center"> -- select department -- </option>
+                                                    @foreach($departments as $key => $department)
+                                                        <option value="{{ $department->id }}"> {{ $department->name }}</option>
+                                                    @endforeach
+                                                </select>
 
-                                    <label class="mb-2">CLASS</label>
+                                                <label class="mb-2">COURSE</label>
 
-                                    <select name="class" class="form-control form-select form-control-lg mb-3 class">
-                                        <option selected disabled class="text-center"> -- select class -- </option>
-                                    </select>
-                                </div>
-                                <div class="mb-4">
-                                    <label class="mb-3">CUT-OFF POINTS</label>
-                                    <input type="text" class="form-control mb-3" name="points" value="{{ old('points') }}">
-                                </div>
-                                <div class="mb-4">
-                                    <div class="d-flex justify-content-center">
-                                        <button class="btn btn-success col-md-7" >SUBMIT TRANSFER REQUEST</button>
-                                    </div>
-                                </div>
-                            </form>
-                            <!-- END Form Labels on top - Default Style -->
+                                                <select name="course" class="form-control form-control-lg form-select mb-3 course">
+                                                    <option selected disabled class="text-center"> -- select course -- </option>
+                                                </select>
+
+                                                <label class="mb-2">CLASS</label>
+
+                                                <select name="class" class="form-control form-select form-control-lg mb-3 class">
+                                                    <option selected disabled class="text-center"> -- select class -- </option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="mb-3">CUT-OFF POINTS</label>
+                                                <input type="text" class="form-control mb-3" name="points" value="{{ old('points') }}">
+                                            </div>
+                                            <div class="mb-4">
+                                                <div class="d-flex justify-content-center">
+                                                    <button class="btn btn-success col-md-7" >SUBMIT TRANSFER REQUEST</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    @endif
+                                        <!-- END Form Labels on top - Default Style -->
                                 @endif
                             </fieldset>
                     </div>
@@ -183,12 +191,12 @@
 
                     console.log(data);
 
-                    op1+='<option value="0" selected disabled class="text-center"> -- choose course -- </option>'
+                    // op1+='<option value="" selected class="text-center"> data[i].name</option>'
 
-                    for (var i = 0; i < data.length; i++){
+                    // for (var i = 0; i < data.length; i++){
 
-                        op1+='<option value="'+data[i].id+'"> '+data[i].name+'</<option>';                           ''
-                    }
+                        op1+='<option selected value="'+data.name+'"> '+data.name+'</<option>';                           ''
+                    // }
 
 
                     a.find('.class').html(" ");

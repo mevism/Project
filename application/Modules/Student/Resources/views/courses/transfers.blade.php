@@ -63,7 +63,7 @@
                     {{--                    <th> Department </th>--}}
                     <th nowrap=""> Course Name </th>
                     <th nowrap=""> Class Code </th>
-                    <th nowrap=""> Request status </th>
+                    <th nowrap=""> Cut-Off </th>
                     <th nowrap=""> Status</th>
                     <th nowrap=""> Action</th>
 {{--                    <th> Status </th>--}}
@@ -76,13 +76,7 @@
                             <td> {{ $transfer->courseTransfer->course_name }}</td>
                             <td nowrap=""> {{ $transfer->classTransfer->name }}</td>
                             <td>
-                                @if($transfer->dean_status == 1 && $transfer->registrar_status == 1)
-                                    <span class="text-success"> Successful </span>
-                                @elseif($transfer->dean_status = 2 && $transfer->registrar_status == 1)
-                                    <span class="text-danger"> Unsuccessful </span>
-                                @else
-                                    <span class="text-primary"> Pending </span>
-                                @endif
+                                {{ $transfer->courseTransfer }} | {{ $transfer->classTransfer->points }}
                             </td>
                             <td nowrap="">
                                 @if($transfer->status === NULL)

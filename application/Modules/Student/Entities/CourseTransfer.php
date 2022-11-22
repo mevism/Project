@@ -4,13 +4,16 @@ namespace Modules\Student\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Department;
 
 class CourseTransfer extends Model
 {
-    use HasFactory;
+    use HasFactory, softDeletes;
+
+    protected $dates = ['delete_at'];
 
     protected $fillable = ['status'];
 

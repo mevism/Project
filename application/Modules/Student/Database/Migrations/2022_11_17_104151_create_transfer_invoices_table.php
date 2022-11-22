@@ -13,16 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('student_invoices', function (Blueprint $table) {
+        Schema::create('transfer_invoices', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('student_id');
             $table->string('reg_number');
-            $table->string('invoice_number')->unique();
-            $table->string('stage');
-            $table->string('amount');
+            $table->string('invoice_number');
+            $table->integer('amount');
             $table->mediumText('description');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -33,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('student_invoices');
+        Schema::dropIfExists('transfer_invoices');
     }
 };

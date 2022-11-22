@@ -14,8 +14,6 @@
 use Modules\Student\Http\Controllers\StudentController;
 
 Route::prefix('student')->group(function() {
-//    Route::get('/', 'StudentController@index');
-
 
     Route::get('/', [StudentController::class, 'index'])->name('student');
     Route::get('/my-course', [StudentController::class, 'myCourse'])->name('student.mycourses');
