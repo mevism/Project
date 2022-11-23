@@ -25,6 +25,7 @@
 </script>
 
 @section('content')
+
 <div class="bg-body-light">
     <div class="content content-full">
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
@@ -58,7 +59,7 @@
         </span><br>
           <thead>
             <tr>
-              {{-- <th>  #     </th> --}}
+              <th>  #     </th>
               <th>  Department NAME </th>
               <th> Course NAME       </th>
               <th>Action</th>
@@ -67,7 +68,7 @@
           <tbody>
             @foreach ($data as $key => $courses)
             <tr>
-              {{-- <td style="text-transform: uppercase" >{{ ++$key }} </td> --}}
+              <td style="text-transform: uppercase" >{{ ++$key }} </td>
               <td style="text-transform: uppercase" >{{ $courses->getCourseDept->name }}</td>
               <td style="text-transform: uppercase" >{{ $courses->course_name }}</td>
               <td nowrap="">
@@ -83,6 +84,6 @@
         </div>
       </div>
     </div>
-    <!-- Dynamic Table Responsive -->
+
   </div>
 @endsection

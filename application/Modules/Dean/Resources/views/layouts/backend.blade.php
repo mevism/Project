@@ -47,7 +47,7 @@
       <!-- Side Header -->
       <div class="content-header">
         <!-- Logo -->
-        <a class="font-semibold text-dual" href="/">
+        <a class="font-semibold text-dual" href="#">
           <span class="smini-visible">
             <i class="fa fa-circle-notch text-primary"></i>
           </span>
@@ -99,6 +99,28 @@
 
                     <li class="nav-main-item">
                           <a class="nav-main-link{{ request()->is('school/showSchool') ? ' active' : '' }}" href="{{  route('dean.batch') }}">
+                            <i class="nav-main-link-icon si si-graduation"></i>
+                              <span class="nav-main-link-name">Submit batch</span>
+                          </a>
+                      </li>
+              </ul>
+            </li>
+
+            <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="{{ route('dean.transfer') }}">
+                <i class="nav-main-link-icon si si-graduation"></i>
+                <span class="nav-main-link-name">Course Transfer</span>
+              </a>
+              <ul class="nav-main-submenu">
+                  <li class="nav-main-item">
+                      <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('dean.transfer') }}">
+                          <i class="nav-main-link-icon si si-calendar"></i>
+                          <span class="nav-main-link-name">Transfers</span>
+                      </a>
+                  </li>
+
+                    <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('school/showSchool') ? ' active' : '' }}" href="{{  route('dean.batchTransfer') }}">
                             <i class="nav-main-link-icon si si-graduation"></i>
                               <span class="nav-main-link-name">Submit batch</span>
                           </a>

@@ -15,7 +15,7 @@
       $(document).ready(function() {
           $('#example').DataTable( {
               responsive: true,
-              order: [[2, 'asc']],
+              order: [[0, 'asc']],
               rowGroup: {
                   dataSrc: 2
               }
@@ -42,37 +42,37 @@
         </div>
     </div>
 </div>
-<main id="main-container">
-    <!-- Page Content -->
-
-      <!-- Dynamic Table Responsive -->
+<!-- Dynamic Table Responsive -->
       <div class="block block-rounded">
-
         <div class="block-content block-content-full">
           <div class="row">
-            <div class="col-12">
-          <table id="example" class="table table-borderless table-striped table-vcenter js-dataTable-responsive">
-            <span class="d-flex justify-content-end">
+            <div class="col-12 table-responsive">
+          <table id="example" class="table table-bordered table-striped table-vcenter js-dataTable-responsive fs-sm">
+            <span class="d-flex justify-content-end m-2">
                 <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addDepartment') }}">Create</a>
-            </span><br>
+            </span>
             <thead>
 
               <tr>
-                <td>SCHOOL NAME</th>
-                <td>DEPARTMENT NAME</th>
+                <th>#</th>
+                <th>SCHOOL NAME</th>
+                <th>DEPARTMENT NAME</th>
+                <th>DEPARTMENT CODE</th>
                 <th>Action</th>
 
               </tr>
 
             </thead>
             <tbody>
-              @foreach ($data as $department)
+              @foreach ($data as $key => $department)
               <tr>
+                  <td> {{ ++$key }} </td>
                 <td> {{ $department->schools->name }}</td>
                 <td> {{ $department->name }}</td>
-                <td nowrap> 
+                  <td> {{ $department->dept_code }} </td>
+                <td nowrap>
                   <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editDepartment', ['id'=> Crypt::encrypt($department->id)]) }}">edit</a>
-                  <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this department ?')"  href="{{ route('courses.destroyDepartment', $department->id) }}">delete</a> 
+                  <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this department ?')"  href="{{ route('courses.destroyDepartment', $department->id) }}">delete</a>
                 </td>
               </tr>
               @endforeach
@@ -85,5 +85,4 @@
       <!-- Dynamic Table Responsive -->
     </div>
     <!-- END Page Content -->
-</main>
 @endsection

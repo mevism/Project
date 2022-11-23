@@ -4,16 +4,19 @@ namespace Modules\Registrar\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Student\Entities\CourseTransfer;
 
 class Courses extends Model
 {
-    use HasFactory;
+    use HasFactory, softDeletes;
 
     protected $fillable = ['department_id', 'course_code', 'course_name','level'];
     protected $guared = [];
 
     protected $table = 'courses';
+
+    protected $dates = ['deleted_at'];
 
 
     public function newCourses(){
@@ -25,36 +28,28 @@ class Courses extends Model
 //    available courses vs courses
 
     public function onOffer(){
-
         return $this->hasMany(AvailableCourse::class, 'id');
-
     }
 
     public function courseXAvailable(){
-
         return $this->hasOne(AvailableCourse::class, 'course_id');
     }
 
 //    relationship between a course and an application
 
     public function apps(){
-
         return $this->hasMany(Application::class, 'id');
-
     }
+
     public function courseRequirements(){
+
         return $this->hasOne(CourseRequirement::class, 'course_id');
     }
 
-    // public function dept(){
-
-    //     return $this->belongsTo(Department::class, 'department_id');
-    // }
 
     public function getCourseDept(){
 
         return $this->belongsTo(Department::class, 'department_id');
-
     }
 
     public function useDept(){
@@ -76,5 +71,15 @@ class Courses extends Model
 
     public function Classes(){
         return $this->hasOne(Classes::class, 'id');
+    }
+
+    public function courselevelmode(){
+        return $this->hasOne(CourseLevelMode::class, 'id');
+    }
+
+    //relationship between a course and a fee structure
+    public function fee(){
+
+        return $this->hasOne(FeeStructure::class);
     }
 }

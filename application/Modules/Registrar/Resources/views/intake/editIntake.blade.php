@@ -61,8 +61,6 @@
                   <div>
                    
                     <table class="table table-responsive table-striped py-0 table-borderless">
-                      {{-- <input type="checkbox" name="course[]" id="course"/>Select All<br><br> --}}
-                      {{-- @if (count($courses) > 0) --}}
 
                         @foreach ($courses as $course)
                           <tr>

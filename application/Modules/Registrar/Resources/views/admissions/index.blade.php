@@ -45,6 +45,7 @@
                             </thead>
                             <tbody>
                             @foreach($admission as $app)
+                       
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td nowrap=""> {{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->fname }} {{ $app->appApprovals->applicant->mname }} </td>

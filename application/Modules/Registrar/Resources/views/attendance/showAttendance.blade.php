@@ -11,15 +11,15 @@
     <div class="content content-full">
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
             <div class="h5 fw-bold mb-0">
-                ATTENDANCES
+                MODES OF STUDY
             </div>
             <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-alt">
                     <li class="breadcrumb-item">
-                        <a class="link-fx" href="javascript:void(0)">Attendances</a>
+                        <a class="link-fx" href="javascript:void(0)">Modes of Studies</a>
                     </li>
                     <li class="breadcrumb-item" aria-current="page">
-                        View attendances
+                        View mode of study
                     </li>
                 </ol>
             </nav>
@@ -30,24 +30,26 @@
 
         <div class="block-content block-content-full">
           <div class="row">
-            <div class="col-12">
-          <table id="example" class="table table-bordered table-striped table-vcenter">
+            <div class="col-12 table-responsive">
+          <table id="example" class="table table-bordered table-striped table-vcenter fs-sm">
             <span class="d-flex justify-content-end">
                 <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addAttendance') }}">Create</a>
             </span><br>
             <thead>
-                <th>Attendance Mode</th>
+                <th>#</th>
                 <th>Code</th>
+                <th>Study Mode</th>
                 <th>Action</th>
               </thead>
             <tbody>
-              @foreach ($data as $attendance)
+              @foreach ($data as $key => $item)
               <tr>
-                <td> {{ $attendance->attendance_name }}</td>
-                <td> {{ $attendance->attendance_code }}</td>
-                <td> 
-                  <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editAttendance', ['id'=> Crypt::encrypt($attendance->id)]) }}">edit</a> 
-                  <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this attendance mode  ?')" href="{{ route('courses.destroyAttendance', $attendance->id) }}">delete</a> 
+                <td> {{ ++$key }} </td>
+                <td> {{ $item->attendance_code }}</td>
+                <td> {{ $item->attendance_name }}</td>
+                <td>
+                  <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editAttendance', ['id'=> Crypt::encrypt($item->id)]) }}">edit</a>
+                  <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this mode of study ?')" href="{{ route('courses.destroyAttendance', $item->id) }}">delete</a>
                 </td>
               </tr>
               @endforeach
@@ -70,7 +72,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[2, 'asc']],
+            order: [[0, 'asc']],
             rowGroup: {
                 dataSrc: 2
             }

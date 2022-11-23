@@ -55,7 +55,7 @@
       <!-- Side Header -->
       <div class="content-header">
         <!-- Logo -->
-        <a class="font-semibold text-dual" href="/">
+        <a class="font-semibold text-dual" href="#">
           <span class="smini-visible">
             <i class="fa fa-circle-notch text-primary"></i>
           </span>

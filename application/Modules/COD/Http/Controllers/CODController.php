@@ -20,7 +20,9 @@ use Modules\Finance\Entities\FinanceLog;
 use Modules\COD\Entities\CODLog;
 use Auth;
 use Modules\Finance\Entities\StudentInvoice;
+use Modules\Registrar\Entities\CourseLevelMode;
 use Modules\Registrar\Entities\FeeStructure;
+use Modules\Registrar\Entities\SemesterFee;
 use Modules\Registrar\Entities\Student;
 use Modules\Registrar\Entities\StudentCourse;
 use Validator;
@@ -410,12 +412,17 @@ class CODController extends Controller
 
         $student_fee = $student->courseStudent;
 
-        $fees = FeeStructure::where('student_type', $student_fee->student_type)
+        $fees = CourseLevelMode::where('attendance_id', $student_fee->student_type)
             ->where('course_id', $student_fee->course_id)
-            ->where('semester', 'I')
+            ->where('level_id', $student_fee->studentCourse->level)
             ->first();
 
-        $fee = $fees->caution_money + $fees->student_union + $fees->medical_levy + $fees->tuition_fee + $fees->industrial_attachment + $fees->student_id + $fees->examination + $fees->registration_fee + $fees->library_levy + $fees->ict_levy + $fees->activity_fee +$fees->student_benevolent + $fees->kuccps_placement_fee + $fees->cue_levy;
+        $proformaInvoice = 0;
+
+        foreach ($fees->invoiceProforma as $votehead){
+
+            $proformaInvoice += $votehead->semesterI;
+        }
 
         $academic = Carbon::parse($student->courseStudent->courseEntry->year_start)->format('Y').'/'.Carbon::parse($student->courseStudent->courseEntry->year_end)->format('Y');
        $period = Carbon::parse($student->courseStudent->coursesIntake->intake_from)->format('M').'/'.Carbon::parse($student->courseStudent->coursesIntake->intake_to)->format('M');
@@ -439,7 +446,7 @@ class CODController extends Controller
         $invoice->reg_number = $student->reg_number;
         $invoice->invoice_number = 'INV'.time();
         $invoice->stage = '1.1';
-        $invoice->amount = $fee;
+        $invoice->amount = $proformaInvoice;
         $invoice->description = 'New Student Registration Invoice for 1.1 '.'Academic Year '.$academic;
         $invoice->save();
 

@@ -68,25 +68,22 @@
                 <tbody>
                   @foreach ($data as $intake)
                   <tr>
-                    <td style="text-transform: uppercase" class="fw-semibold fs-sm">{{ Carbon\carbon::parse($intake->intake_from)->format('M-Y')}} - {{ Carbon\carbon::parse($intake->intake_to)->format('M-Y') }}</td>
-                    {{-- <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ ($intake->course_id)}}</td> --}}
+                    <td style="text-transform: uppercase" class="fw-semibold fs-sm">{{ Carbon\carbon::parse($intake->intake_from)->format('F Y')}} - {{ Carbon\carbon::parse($intake->intake_to)->format('F Y') }}</td>
                     <td>
                     @if ($intake->status == 0)
-                    <a  class="btn btn-sm btn-alt-primary" href="{{ route('courses.editstatusIntake', $intake->id) }}">Pending</a>
+                    <a  class="btn btn-sm btn-alt-primary" href="{{ route('courses.editstatusIntake', ['id'=> Crypt::encrypt($intake->id)]) }}">Pending</a>
                     @endif
                     @if ($intake->status == 1)
-                    <a  class="btn btn-sm btn-alt-success" href="{{ route('courses.editstatusIntake', $intake->id) }}">Ongoing</a>
+                    <a  class="btn btn-sm btn-alt-success" href="{{ route('courses.editstatusIntake', ['id'=> Crypt::encrypt($intake->id)]) }}">Active</a>
                     @endif
                     @if ($intake->status == 2)
-                    <a  class="btn btn-sm btn-alt-info" href="{{ route('courses.editstatusIntake', $intake->id) }}">Expired</a>
+                    <a  class="btn btn-sm btn-alt-info" href="{{ route('courses.editstatusIntake', ['id'=> Crypt::encrypt($intake->id)]) }}">Inactive</a>
                     @endif
                     @if ($intake->status == 3)
-                    <a  class="btn btn-sm btn-alt-danger" href="{{ route('courses.editstatusIntake', $intake->id) }}">Suspended</a>
+                    <a  class="btn btn-sm btn-alt-danger" href="{{ route('courses.editstatusIntake', ['id'=> Crypt::encrypt($intake->id)]) }}">Suspended</a>
                     @endif
                      </td>
                     <td>
-                      <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.viewIntake', $intake->id) }}">view</a>
-                   {{-- <td> <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editIntake', $intake->id) }}">edit</a> </td> --}}
                       <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this intake ?')" href="{{ route('courses.destroyIntake', $intake->id) }}">delete</a>
                     </td>
                   </tr>
@@ -97,6 +94,5 @@
                 </div>
             </div>
           </div>
-          <!-- Dynamic Table Responsive -->
         </div>
 @endsection

@@ -30,7 +30,7 @@
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
             <div class="flex-grow-1">
                 <h5 class="h5 fw-bold mb-0">
-                    UNITS
+                    {{ $course->course_name }} UNITS
                 </h5>
             </div>
        
@@ -45,7 +45,7 @@
       <div class="col-12">
     <table id="example" class="table table-bordered table-striped table-vcenter js-dataTable-responsive fs-sm">
       <span class="d-flex justify-content-end">
-        <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addCourse') }}">Create</a>
+        <a class="btn btn-alt-info btn-sm"  href="{{ route('courses.createUnits', ['id'=> Crypt::encrypt($course->id)] )}}">Create</a>
     </span><br>
       <thead>
         <tr>

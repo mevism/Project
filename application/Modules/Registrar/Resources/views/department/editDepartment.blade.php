@@ -28,7 +28,7 @@
                       <select name="school" class="form-control form-control-alt text-uppercase">
                         <option selected value="{{ $data->school_id }}"> {{ $data->schools->name }}</option>
                         @foreach ($schools as $school)
-                        <option value="{{ $school->name }}">{{ $school->name }}</option>
+                        <option value="{{ $school->id }}">{{ $school->name }}</option>
                         @endforeach
                         <label class="form-label">SCHOOL NAME</label>
                       </select>

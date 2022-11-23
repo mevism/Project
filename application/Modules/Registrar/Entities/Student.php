@@ -5,6 +5,7 @@ namespace Modules\Registrar\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\COD\Entities\Nominalroll;
+use Modules\Examination\Entities\Exam;
 use Modules\Student\Entities\AcademicLeave;
 
 class Student extends Model
@@ -22,6 +23,9 @@ class Student extends Model
 
         return $this->hasMany(Nominalroll::class);
 
+    }
+    public function exams(){
+        return $this->hasMany(Exam::class);
     }
 
     public function nominalRoll(){

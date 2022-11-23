@@ -9,5 +9,6 @@
     "Hostel": true,
     "Student": true,
     "Import": true,
-    "KuccpsImport": true
+    "KuccpsImport": true,
+    "Examination": true
 }

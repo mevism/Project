@@ -9,10 +9,75 @@ use Auth;
 use Illuminate\Support\Facades\Crypt;
 use Modules\Application\Entities\Application;
 use Modules\Application\Entities\Education;
+use Modules\Dean\Entities\CourseTransfer;
 use Modules\Dean\Entities\DeanLog;
 
 class DeanController extends Controller
 {
+    public function transfer(){
+
+        $transfer  =  CourseTransfer::where('dean_status', '!=', 3)
+        ->where('registrar_status', null)
+        ->get();
+
+        return view('dean::transfers.index')->with(['transfer' => $transfer]);
+    }
+
+    public function viewTransfer($id){
+
+         $hashedId = Crypt::decrypt($id);
+
+        $data = CourseTransfer::find($hashedId);
+        return view('dean::transfers.viewTransfer')->with(['data' => $data]);
+    }
+
+    public function preview($id){
+
+         $hashedId = Crypt::decrypt($id);
+        $data = CourseTransfer::find($hashedId);
+        return view('dean::transfers.preview')->with(['data' => $data]);
+    }
+
+    public function rejectTransfer(Request $request, $id){
+
+         $hashedId = Crypt::decrypt($id);
+
+        $data = CourseTransfer::find($hashedId);
+        $data->dean_status = 2;
+        $data->dean_remarks = $request->comment;
+        $data->save();
+
+        $logs = new DeanLog;
+        $logs->application_id = $data->id;
+        $logs->user = Auth::guard('user')->user()->name;
+        $logs->user_role = Auth::guard('user')->user()->role_id;
+        $logs->activity = 'Transfer rejected';
+        $logs->comments = $request->comment;
+        $logs->save();
+
+        return redirect()->route('dean.transfer')->with('success', 'Transfer declined');
+    }
+
+    public function acceptTransfer($id){
+
+         $hashedId = Crypt::decrypt($id);
+
+        $data = CourseTransfer::find($hashedId);
+        $data->dean_status = 1;
+            if ($data->registrar_status != NULL){
+                $data->registrar_status = NULL;
+            }
+        $data->save();
+
+        $logs = new DeanLog;
+        $logs->application_id = $data->id;
+        $logs->user = Auth::guard('user')->user()->name;
+        $logs->user_role = Auth::guard('user')->user()->role_id;
+        $logs->activity = 'Transfer accepted';
+        $logs->save();
+
+        return redirect()->route('dean.transfer')->with('success', 'One Transfer approved');
+    }
 
     public function applications(){
 

@@ -16,7 +16,6 @@ class Intake extends Model
         'intake_from', 'intake_to', 'status'
     ];
 
-
     public function openIntake(){
 
         return $this->hasMany(AvailableCourse::class, 'id');
@@ -31,6 +30,10 @@ class Intake extends Model
     public function academicYear(){
 
         return $this->belongsTo(AcademicYear::class, 'academic_year_id');
+    }
+
+    public function IntakeEvents(){
+        return $this->hasMany(CalenderOfEvents::class, 'id');
     }
 
     protected static function newFactory()

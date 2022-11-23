@@ -23,5 +23,13 @@ Route::prefix('dean')->group(function() {
         Route::post('/batchSubmit', [DeanController::class, 'batchSubmit'])->name('dean.batchSubmit');
         Route::get('/acceptApplication/{id}', [DeanController::class, 'acceptApplication'])->name('dean.acceptApplication');
         Route::post('/rejectApplication/{id}', [DeanController::class, 'rejectApplication'])->name('dean.rejectApplication');
+
+        Route::get('/transfer', [DeanController::class, 'transfer'])->name('dean.transfer');
+        Route::get('/batchTransfer', [DeanController::class, 'batchTransfer'])->name('dean.batchTransfer');
+        Route::get('/viewTransfer/{id}', [DeanController::class, 'viewTransfer'])->name('dean.viewTransfer');
+        Route::get('/preview/{id}', [DeanController::class, 'preview'])->name('dean.preview');
+        Route::post('/rejectTransfer/{id}', [DeanController::class, 'rejectTransfer'])->name('dean.rejectTransfer');
+        Route::get('/acceptTransfer/{id}', [DeanController::class, 'acceptTransfer'])->name('dean.acceptTransfer');
+
     });
 });

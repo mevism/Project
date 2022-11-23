@@ -48,9 +48,9 @@
                       <option disabled selected>Level of Study</option>
                       <option value="1">Certificate</option>
                       <option value="2">Diploma</option>
-                      <option value="3">Degree</option>
-                      <option value="4">Masters</option>
-                      <option value="5">PhD</option>
+                      <option value="3">Undergraduate</option>
+                      <option value="4">Postgraduate</option>
+                      <option value="5">Non Standard</option>
                       <label class="form-label">LEVEL</label>
                     </select>
                     </div>

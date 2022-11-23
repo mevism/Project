@@ -4,26 +4,23 @@ namespace Modules\Registrar\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CourseRequirement extends Model
 {
-    use HasFactory;
+    use HasFactory, softDeletes;
 
     protected $fillable = [
         'fee'
-        
-    //     'course_id`, `course_duration`,
-    // `course_requirements`,
-    // `subject1`,
-    // `subject2`,
-    // `subject3`,
-    // `subject4`
     ];
+
+    protected $dates = ['deleted_at'];
+
     public function coursesReq(){
 
         return $this->belongsTo(Courses::class, 'id');
     }
-    
+
     protected static function newFactory()
     {
         return \Modules\Registrar\Database\factories\CourseRequirementFactory::new();

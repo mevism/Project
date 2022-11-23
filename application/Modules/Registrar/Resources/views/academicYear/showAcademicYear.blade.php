@@ -16,7 +16,7 @@
   $(document).ready(function() {
       $('#example').DataTable( {
           responsive: true,
-          order: [[2, 'asc']],
+          order: [[0, 'asc']],
           rowGroup: {
               dataSrc: 2
           }
@@ -30,7 +30,7 @@
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
             <div class="flex-grow-1">
                 <h5 class="h5 fw-bold mb-0">
-                    ACADEMIC  YEARS 
+                    ACADEMIC  YEARS
                 </h5>
             </div>
             <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -58,8 +58,8 @@
         </span><br>
           <thead>
             <tr>
-              <th>  </th>
-              <th>  Academic Year </th>
+              <th></th>
+              <th>Academic Year </th>
               <th>Action</th>
             </tr>
           </thead>
@@ -69,7 +69,9 @@
               <td>{{ ++$key }}</td>
               <td style="text-transform: uppercase" >{{ Carbon\carbon::parse($year->year_start)->format('Y')}}/{{ Carbon\carbon::parse($year->year_end)->format('Y')}}</td>
               <td nowrap="">
-                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.showSemester', $year->id) }}">view semester</a>
+                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.showSemester',['id'=> Crypt::encrypt($year->id)]) }}">view semester</a>
+
+                {{-- <a class="btn btn-sm btn-alt-info" href="{{ route('courses.showSemester',['id'=> Crypt::encrypt($year->id)]) }}">view semester</a> --}}
                 <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this year ?')" href="{{ route('courses.destroyYear', $year->id) }}">delete</a>
               </td>
             </tr>

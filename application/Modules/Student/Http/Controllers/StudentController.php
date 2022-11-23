@@ -15,6 +15,7 @@ use Modules\COD\Entities\ClassPattern;
 use Modules\COD\Entities\Nominalroll;
 use Modules\Finance\Entities\StudentInvoice;
 use Modules\Registrar\Entities\Classes;
+use Modules\Registrar\Entities\CourseLevelMode;
 use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Department;
 use Modules\Registrar\Entities\FeeStructure;
@@ -27,6 +28,7 @@ use Modules\Student\Entities\ExamResults;
 use Modules\Student\Entities\Readmission;
 use Modules\Student\Entities\StudentDeposit;
 use Modules\Student\Entities\TransferInvoice;
+use NcJoes\OfficeConverter\OfficeConverter;
 use PhpOffice\PhpWord\Element\Table;
 use PhpOffice\PhpWord\SimpleType\TblWidth;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -534,13 +536,16 @@ class StudentController extends Controller
 
         $student = StudentCourse::where('student_id', Auth::guard('student')->user()->student_id)->first();
 
-        $fees = FeeStructure::where('student_type', $student->student_type)
+        $fees = CourseLevelMode::where('attendance_id', $student->student_type)
                             ->where('course_id', $student->course_id)
-                            ->where('semester', 'II')
+                            ->where('level_id', $student->studentCourse->level)
                             ->first();
+        $proformaInvoice = 0;
 
-        $fee = $fees->caution_money + $fees->student_union + $fees->medical_levy + $fees->tuition_fee + $fees->industrial_attachment + $fees->student_id + $fees->examination + $fees->registration_fee + $fees->library_levy + $fees->ict_levy + $fees->activity_fee +$fees->student_benevolent + $fees->kuccps_placement_fee + $fees->cue_levy;
+        foreach ($fees->invoiceProforma as $item){
 
+            $proformaInvoice += $item->semesterII;
+        }
 
         if (Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
                     ->where('academic_year', $request->academicyear)
@@ -573,7 +578,7 @@ class StudentController extends Controller
                 $invoice->reg_number = Auth::guard('student')->user()->loggedStudent->reg_number;
                 $invoice->invoice_number = $invoiceNo;
                 $invoice->stage = $request->semester;
-                $invoice->amount = $fee;
+                $invoice->amount = $proformaInvoice;
                 $invoice->description = $description;
                 $invoice->save();
             }
@@ -668,11 +673,11 @@ class StudentController extends Controller
         $table = new Table(array('unit' => TblWidth::TWIP));
         foreach ($statement as $detail) {
             $table->addRow();
-            $table->addCell(1500)->addText(Carbon::parse($detail->created_at)->format('d-M-Y'));
-            $table->addCell()->addText($detail->description, 'Book Antiqua', 'none');
-            $table->addCell()->addText($detail->invoice_number);
-            $table->addCell()->addText(number_format($detail->amount, 2));
-            $table->addCell()->addText(number_format($detail->deposit, 2));
+            $table->addCell(1750, ['borderSize' => 2])->addText(Carbon::parse($detail->created_at)->format('d-M-Y'));
+            $table->addCell(8800, ['borderSize' => 2])->addText($detail->description, 'Book Antiqua', 'none');
+            $table->addCell(1450, ['borderSize' => 2])->addText($detail->invoice_number);
+            $table->addCell(980, ['borderSize' => 2])->addText(number_format($detail->amount, 2));
+            $table->addCell(980, ['borderSize' => 2])->addText(number_format($detail->deposit, 2));
         }
 
         $my_template = new TemplateProcessor(storage_path('fee_statement.docx'));
@@ -689,6 +694,15 @@ class StudentController extends Controller
         $my_template->setImageValue('qr', array('path' => 'QrCodes/'.$image, 'width' => 80, 'height' => 80, 'ratio' => true));
         $docPath = 'Fees/'.preg_replace('~/~', '', $student->reg_number).".docx";
         $my_template->saveAs($docPath);
+
+        $pdfPath = 'Fees/'.preg_replace('~/~', '', $student->reg_number).".pdf";
+
+        $convert = new OfficeConverter('Fees/'.preg_replace('~/~', '', $student->reg_number).".docx", 'Fee/');
+        $convert->convertTo(preg_replace('~/~', '', $student->reg_number).".pdf");
+
+        if(file_exists($docPath)){
+            unlink($docPath);
+        }
 
          return response()->download($docPath)->deleteFileAfterSend(true);
     }

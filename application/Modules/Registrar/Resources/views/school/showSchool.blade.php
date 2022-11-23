@@ -16,13 +16,14 @@
   $(document).ready(function() {
       $('#example').DataTable( {
           responsive: true,
-          order: [[2, 'asc']],
+          order: [[0, 'asc']],
           rowGroup: {
               dataSrc: 2
           }
       } );
   } );
 </script>
+
 @section('content')
     <div class="bg-body-light">
         <div class="content content-full">
@@ -47,16 +48,15 @@
     </div>
 
           <div class="block block-rounded">
-
             <div class="block-content block-content-full">
                 <div class="row">
-                 <div class="col-12">
-                    <table id="example" class="table table-borderless table-striped table-vcenter js-dataTable-responsive">
-                        <span class="d-flex justify-content-end">
+                 <div class="col-12 table-responsive">
+                    <table id="example" class="table table-bordered table-striped table-vcenter js-dataTable-responsive fs-sm">
+                        <span class="d-flex justify-content-end m-2">
                             <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addSchool') }}">Create</a>
-                        </span><br>
+                        </span>
                         <thead>
-                            <th></th>
+                            <th>#</th>
                             <th>School Code</th>
                             <th>School NAME </th>
                             <th>Action</th>
@@ -64,10 +64,10 @@
                         <tbody>@foreach ($data as $school)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ $school->initials }}</td>
-                            <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ $school->name }}</td>
-                            <td> 
-                                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editSchool', ['id'=> Crypt::encrypt($school->id)]) }}">edit</a> 
+                            <td style="text-transform: uppercase"> {{ $school->initials }}</td>
+                            <td style="text-transform: uppercase"> {{ $school->name }}</td>
+                            <td>
+                                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editSchool', ['id'=> Crypt::encrypt($school->id)]) }}">edit</a>
                              <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this school ?')" href="{{ route('courses.destroySchool', $school->id) }}">delete</a> </td>
                         </tr>
                         @endforeach

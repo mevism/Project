@@ -100,6 +100,7 @@ class UserController extends Controller
 
                 //
             }elseif (auth()->guard('user')->user()->role_id == 7){
+                return redirect()->route('examination')->with("success",'Welcome');
 
 
             }elseif (\auth()->guard('user')->user()->role_id == 8){

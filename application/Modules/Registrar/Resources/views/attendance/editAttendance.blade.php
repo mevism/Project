@@ -14,7 +14,7 @@
     <div class="content">
       <div  style="margin-left:20%;" class="block block-rounded col-md-9 col-lg-8 col-xl-6">
             <div class="block-header block-header-default">
-              <h3 class="block-title">Edit Attendance</h3>
+              <h3 class="block-title">Edit Mode of Study</h3>
             </div>
             <div class="block-content block-content-full">
               <div class="row">
@@ -25,12 +25,12 @@
                     @method('PUT')
 
                    <div class="form-floating col-12 col-xl-12">
-                      <input type="text" class="form-control form-control-alt" value="{{ $data->attendance_name }}" id="attendance_name" name="attendance_name" placeholder="Name">
-                      <label class="form-label">ATTENDANCE NAME</label>
+                      <input type="text" class="form-control form-control-alt" value="{{ $data->attendance_name }}" id="name" name="name" placeholder="Name">
+                      <label class="form-label"> MODE OF STUDY</label>
                     </div>
                    <div class="form-floating col-12 col-xl-12">
-                      <input type="text" class="form-control form-control-alt" value="{{ $data->attendance_code }}"id="attendance_code" name="attendance_code" placeholder="Attendance Code">
-                      <label class="form-label">ATTENDANCE CODE</label>
+                      <input type="text" class="form-control form-control-alt" value="{{ $data->attendance_code }}"id="code" name="code" placeholder="Attendance Code">
+                      <label class="form-label"> CODE</label>
                     </div>
 
                     <div class="col-12 text-center p-3">

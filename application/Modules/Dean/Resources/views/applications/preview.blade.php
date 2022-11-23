@@ -1,4 +1,4 @@
-@extends('cod::layouts.backend')
+@extends('dean::layouts.backend')
 @section('content')
     <div class="bg-body-light">
         <div class="content content-full">

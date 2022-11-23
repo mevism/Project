@@ -10,16 +10,7 @@
 
               </h4>
           </div>
-          {{-- <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-              <ol class="breadcrumb breadcrumb-alt">
-                  <li class="breadcrumb-item">
-                      <a class="link-fx" href="javascript:void(0)">Courses</a>
-                  </li>
-                  <li class="breadcrumb-item" aria-current="page">
-                    <a  href="showCourse">View Courses</a>
-                  </li>
-              </ol>
-          </nav> --}}
+
       </div>
   </div>
 </div>
@@ -46,12 +37,11 @@
                     </div>
                     <div class="form-floating  col-12 col-xl-12 mb-4">
                     <select name="level" id="level" class="form-control form-control-sm text-uppercase form-select">
-                      <option  selected value="{{ $data->level }}">{{ $data->level }}</option>
-                      <option value="1">Certificate</option>
-                      <option value="2">Diploma</option>
-                      <option value="3">Degree</option>
-                      <option value="4">Masters</option>
-                      <option value="5">PhD</option>
+                      <option @if($data->level == 1) selected @endif value="1"> Certificate </option>
+                      <option @if($data->level == 2) selected @endif value="2"> Diploma </option>
+                      <option @if($data->level == 3) selected @endif value="3"> Degree </option>
+                      <option @if($data->level == 4) selected @endif value="4"> Masters </option>
+                      <option @if($data->level == 5) selected @endif value="5"> PhD </option>
                       <label class="form-label">LEVEL</label>
                     </select>
                     </div>
@@ -177,7 +167,7 @@
 
                 </div>
                 <div class="col-12 text-center p-3">
-                  <button type="submit" class="btn btn-alt-success" data-toggle="click-ripple">Create Course</button>
+                  <button type="submit" class="btn btn-alt-success" data-toggle="click-ripple">Update Course</button>
                 </div>
               </div>
                 </form>
