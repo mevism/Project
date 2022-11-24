@@ -1,9 +1,8 @@
 certs/
 media/
 receipts/
-application/node_modules/
-application/.env
-application/vendor/
+.env
+vendor/
 node_modules/
 Admissions/
 Images/

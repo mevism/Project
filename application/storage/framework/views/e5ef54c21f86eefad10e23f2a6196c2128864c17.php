@@ -103,48 +103,13 @@
                           </a>
                       </li>
 
-                  <li class="nav-main-item">
-                    <a class="nav-main-link<?php echo e(request()->is('intake/showIntake') ? ' active' : ''); ?>" href="<?php echo e(route('courses.academicYear')); ?>">
-                        <i class="nav-main-link-icon si si-calendar"></i>
-                        <span class="nav-main-link-name">Academic Years</span>
-                    </a>
-                </li>
-
                       <li class="nav-main-item">
                         <a class="nav-main-link<?php echo e(request()->is('attendance/index') ? ' active' : ''); ?>" href="<?php echo e(route('courses.showAttendance')); ?>">
                           <i class="nav-main-link-icon si si-layers"></i>
                           <span class="nav-main-link-name">Mode of Study</span>
                         </a>
                       </li>
-                      <li class="nav-main-item">
-                        <a class="nav-main-link<?php echo e(request()->is('attendance/index') ? ' active' : ''); ?>" href="<?php echo e(route('courses.showVoteheads')); ?>">
-                          <i class="nav-main-link-icon si si-layers"></i>
-                          <span class="nav-main-link-name"> Voteheads</span>
-                        </a>
-                      </li>
-
-                      <li class="nav-main-item">
-                        <a class="nav-main-link<?php echo e(request()->is('attendance/index') ? ' active' : ''); ?>" href="<?php echo e(route('courses.showSemFee')); ?>">
-                          <i class="nav-main-link-icon si si-layers"></i>
-                          <span class="nav-main-link-name"> Semester Fee</span>
-                        </a>
-                      </li>
-
-                      <li class="nav-main-item">
-                        <a class="nav-main-link<?php echo e(request()->is('attendance/index') ? ' active' : ''); ?>" href="<?php echo e(route('courses.showEvent')); ?>">
-                          <i class="nav-main-link-icon si si-layers"></i>
-                          <span class="nav-main-link-name"> Events</span>
-                        </a>
-                      </li>
-
-                      <li class="nav-main-item">
-                        <a class="nav-main-link<?php echo e(request()->is('attendance/index') ? ' active' : ''); ?>" href="<?php echo e(route('courses.showCalenderOfEvents')); ?>">
-                          <i class="nav-main-link-icon si si-layers"></i>
-                          <span class="nav-main-link-name"> Calender of Events</span>
-                        </a>
-                      </li>
-
-                        <li class="nav-main-item<?php echo e(request()->is('intakes/*') ? ' open' : ''); ?>">
+                      <li class="nav-main-item<?php echo e(request()->is('intakes/*') ? ' open' : ''); ?>">
                           <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                             <i class="nav-main-link-icon si si-graduation"></i>
                             <span class="nav-main-link-name">Imports</span>
@@ -177,6 +142,58 @@
 
                             </ul>
                           </li>
+              </ul>
+            </li>
+
+            <li class="nav-main-item<?php echo e(request()->is('calender/*') ? ' open' : ''); ?>">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                <i class="nav-main-link-icon si si-calendar"></i>
+                <span class="nav-main-link-name">Events Calender</span>
+              </a>
+              <ul class="nav-main-submenu">
+                <li class="nav-main-item">
+                  <a class="nav-main-link<?php echo e(request()->is('attendance/index') ? ' active' : ''); ?>" href="<?php echo e(route('courses.showEvent')); ?>">
+                    <i class="nav-main-link-icon si si-layers"></i>
+                    <span class="nav-main-link-name"> Events</span>
+                  </a>
+                </li>
+
+                <li class="nav-main-item">
+                  <a class="nav-main-link<?php echo e(request()->is('attendance/index') ? ' active' : ''); ?>" href="<?php echo e(route('courses.showCalenderOfEvents')); ?>">
+                    <i class="nav-main-link-icon si si-calendar"></i>
+                    <span class="nav-main-link-name"> Calender of Events</span>
+                  </a>
+                </li>
+                <li class="nav-main-item">
+                  <a class="nav-main-link<?php echo e(request()->is('intake/showIntake') ? ' active' : ''); ?>" href="<?php echo e(route('courses.academicYear')); ?>">
+                      <i class="nav-main-link-icon si si-calendar"></i>
+                      <span class="nav-main-link-name">Academic Years</span>
+                  </a>
+              </li>
+
+              </ul>
+            </li>
+
+
+            <li class="nav-main-item<?php echo e(request()->is('semFee/*') ? ' open' : ''); ?>">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                <i class="nav-main-link-icon si si-user"></i>
+                <span class="nav-main-link-name">Fee Structures</span>
+              </a>
+              <ul class="nav-main-submenu">
+                <li class="nav-main-item">
+                  <a class="nav-main-link<?php echo e(request()->is('attendance/index') ? ' active' : ''); ?>" href="<?php echo e(route('courses.showSemFee')); ?>">
+                    <i class="nav-main-link-icon si si-layers"></i>
+                    <span class="nav-main-link-name"> Course Fee Structures</span>
+                  </a>
+                </li>
+                <li class="nav-main-item">
+                  <a class="nav-main-link<?php echo e(request()->is('attendance/index') ? ' active' : ''); ?>" href="<?php echo e(route('courses.showVoteheads')); ?>">
+                    <i class="nav-main-link-icon si si-layers"></i>
+                    <span class="nav-main-link-name"> Voteheads</span>
+                  </a>
+                </li>
+
               </ul>
             </li>
 
@@ -394,7 +411,7 @@
             <script src="<?php echo e(url('js/plugins/datatables-buttons-pdfmake/vfs_fonts.js')); ?>"></script>
             <script src="<?php echo e(url('js/plugins/datatables-buttons/buttons.print.min.js')); ?>"></script>
              <script src="<?php echo e(url('js/plugins/datatables-buttons/buttons.html5.min.js')); ?>"></script>
-            
+
             <!-- Page JS Code -->
             <script src="<?php echo e(url('js/pages/tables_datatables.js')); ?>"></script>
         <?php $__env->stopSection(); ?>

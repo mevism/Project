@@ -135,12 +135,29 @@ class UserSeeder extends Seeder
 //             ['name' => 'CUE LEVY']
 //         ]);
 
-         DB::table('levels')->insert([
-             ['name' => 'CERTIFICATE'],
-             ['name' => 'DIPLOMA'],
-             ['name' => 'UNDERGRADUATE'],
-             ['name' => 'POSTGRADUATE'],
-             ['name' => 'NON STANDARD']
-         ]);
+//          DB::table('levels')->insert([
+//              ['name' => 'CERTIFICATE'],
+//              ['name' => 'DIPLOMA'],
+//              ['name' => 'UNDERGRADUATE'],
+//              ['name' => 'POSTGRADUATE'],
+//              ['name' => 'NON STANDARD']
+//          ]);
+
+//          DB::table('events')->insert([
+//             ['name' => 'SEMESTER REGISTRATION'],
+//             ['name' => 'TRANSFER'],
+//             ['name' => 'ACADEMIC LEAVE/DIFFERMENT'],
+//             ['name' => 'READMISSION'],
+//             ['name' => 'RETAKE']
+//         ]);
+        DB::table('attendances')->insert([
+            ['attendance_code'=>'S-FT','attendance_name' => 'SELF SPONSORED FULL TIME'],
+            ['attendance_code'=>'J-FT', 'attendance_name' => 'GOVERNMENT SPONSORED'],
+            ['attendance_code'=>'S-PT','attendance_name' => 'SELF SPONSORED PART TIME'],
+            [ 'attendance_code'=>'S-EV','attendance_name' => 'SELF SPONSORED EVENING'],
+
+        ]);
     }
+
+
 }

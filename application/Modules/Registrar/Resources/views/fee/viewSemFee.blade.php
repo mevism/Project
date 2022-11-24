@@ -31,7 +31,8 @@
                     <div class="table-responsive">
                       <table class="table table-bordered justify-content-center">
                         <span class="d-flex justify-content-end m-2">
-                          <a class="btn btn-alt-info btn-sm" href="{{ route('courses.printFee', $id) }}">Print</a>
+                          
+                         <a class="btn btn-alt-info btn-sm" href="{{ route('courses.printFee', ['id'=>Crypt::encrypt($id)]) }}">Print</a>
                       </span><br>
                         <thead>
                           <tr>
