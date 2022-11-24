@@ -53,6 +53,13 @@ Route::prefix('department')->middleware( ['is_cod'])->group( function() {
 
         Route::get('/admitStudent/{id}', [CODController::class, 'admitStudent'])->name('department.admitStudent');
 
+        Route::get('/exam-results', [CODController::class, 'examResults'])->name('department.examResults');
+        Route::get('/add-exam-results', [CODController::class, 'addResults'])->name('department.addResults');
+        Route::post('/submit-exam-results', [CODController::class, 'submitResults'])->name('department.submitResults');
+        Route::get('/edit-exam-results/{id}', [CODController::class, 'editResults'])->name('department.editResults');
+        Route::post('/update-exam-results/{id}', [CODController::class, 'updateResults'])->name('department.updateResults');
+
+
 //        Route::get('/getAcademicFile/{id}', 'CODController@viewAcademicFile');
 
 });

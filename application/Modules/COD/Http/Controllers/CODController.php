@@ -25,6 +25,7 @@ use Modules\Registrar\Entities\FeeStructure;
 use Modules\Registrar\Entities\SemesterFee;
 use Modules\Registrar\Entities\Student;
 use Modules\Registrar\Entities\StudentCourse;
+use Modules\Student\Entities\ExamResults;
 use Validator;
 use Modules\Registrar\Entities\AvailableCourse;
 use Modules\Registrar\Entities\Classes;
@@ -350,17 +351,6 @@ class CODController extends Controller
                             $class->attendance_code = $code;
                             $class->save();
 
-                            $progress = new Progression;
-                            $progress->class_code = $class->name;
-                            $progress->intake_id = $data['intake'];
-                            $progress->course_id = $data['course'];
-                            $progress->academic_year = $intakes->academic_year_id;
-                            $progress->calendar_year = Carbon::now()->format('Y');
-                            $progress->year_study = 1;
-                            $progress->semester_study = 'I';
-                            $progress->pattern = 'ON SESSION';
-                            $progress->save();
-
                         }
 
                     }
@@ -539,6 +529,73 @@ class CODController extends Controller
         return redirect()->back()->with('success', 'Class pattern record deleted successfully');
 
     }
+
+    public function examResults(){
+
+        $exams = ExamResults::latest()->get();
+
+        return view('cod::exams.index')->with(['exams' => $exams]);
+    }
+
+    public function addResults(){
+
+        $students = Student::latest()->get();
+
+        return view('cod::exams.addExam')->with(['students' => $students]);
+    }
+
+    public function submitResults(Request $request){
+        $request->validate([
+            'student' => 'required',
+            'stage' => 'required',
+            'status' => 'required'
+        ]);
+
+        $student = Student::find($request->student);
+
+        $exam = new ExamResults;
+        $exam->student_id = $student->id;
+        $exam->reg_number = $student->reg_number;
+        $exam->stage = $request->stage;
+        $exam->status = $request->status;
+        $exam->save();
+
+        return redirect()->route('department.examResults')->with('success', 'Exam result submitted successfully');
+
+    }
+
+    public function editResults($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $result = ExamResults::find($hashedId);
+
+        return view('cod::exams.editExam')->with(['result' => $result]);
+    }
+
+    public function updateResults(Request $request, $id){
+
+        $request->validate([
+            'student' => 'required',
+            'stage' => 'required',
+            'status' => 'required'
+        ]);
+
+        $hashedId = Crypt::decrypt($id);
+
+        $students = Student::find($request->student);
+
+        $exam = ExamResults::find($hashedId);
+        $exam->student_id = $request->student;
+        $exam->reg_number = $students->reg_number;
+        $exam->stage = $request->stage;
+        $exam->status = $request->status;
+        $exam->save();
+
+        return redirect()->route('department.examResults')->with('success', 'Exam result updated successfully');
+
+    }
+
 
     /**
      * Display a listing of the resource.

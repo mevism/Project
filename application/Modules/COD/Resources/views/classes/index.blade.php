@@ -15,7 +15,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[1, 'asc']],
+            order: [[0, 'asc']],
             rowGroup: {
                 dataSrc: 2
             }
@@ -57,6 +57,7 @@
                 <a class="btn btn-alt-info btn-sm disabled" href="{{ route('courses.addClasses') }}">Create</a>
             </span><br>
                         <thead>
+{{--                        <td>#</td>--}}
                         <th>Class Name</th>
                         <th>Course</th>
                         <th>Study Mode</th>
@@ -65,9 +66,10 @@
                         <th>Action</th>
                         </thead>
                         <tbody>
-                        @foreach ($classes as $class)
-                            @foreach($class as $key => $classa)
+                        @foreach ($classes as $key => $class)
+                            @foreach($class as  $classa)
                                 <tr>
+{{--                                    <td>{{ ++$key }}</td>--}}
                                     <td nowrap="" class="fw-semibold fs-sm text-uppercase">{{ $classa->name }}</td>
                                     <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ $classa->classCourse->course_name }}</td>
                                     <td class="fw-semibold fs-sm">{{ $classa->attendance_id }}</td>

@@ -13,6 +13,8 @@ use Modules\Finance\Entities\FinanceLog;
 use Auth;
 use Modules\Registrar\Entities\Courses;
 use Modules\Application\Entities\Notification;
+use Modules\Registrar\Entities\Student;
+use Modules\Student\Entities\StudentDeposit;
 
 class FinanceController extends Controller
 {
@@ -229,6 +231,38 @@ class FinanceController extends Controller
         $admission->save();
 
         return redirect()->back()->with('success', 'Record submitted to Registrar');
+    }
+
+    public function allInvoices(){
+
+        $invoices = StudentDeposit::latest()->get();
+
+        return view('applications::invoices.index')->with(['invoices' => $invoices]);
+    }
+
+    public function addInvoice(){
+
+        $students = Student::latest()->get();
+
+        return view('applications::invoices.addInvoice')->with(['students' => $students]);
+    }
+
+    public function submitInvoice(Request $request){
+        $request->validate([
+            'student' => 'required',
+            'amount' => 'required',
+            'description' => 'required',
+        ]);
+
+        $deposit = new StudentDeposit;
+
+        $deposit->reg_number = $request->student;
+        $deposit->deposit = $request->amount;
+        $deposit->description = $request->description;
+        $deposit->invoice_number = 'INV'.time();
+        $deposit->save();
+
+        return redirect()->route('finance.invoices')->with('success', 'Student invoiced successfully');
     }
 
     public function index()

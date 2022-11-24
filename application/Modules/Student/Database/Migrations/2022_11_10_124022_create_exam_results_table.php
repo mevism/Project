@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('exam_results', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('student_id');
             $table->string('reg_number');
             $table->string('stage');
             $table->tinyInteger('status');

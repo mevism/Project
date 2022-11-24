@@ -43,6 +43,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
     <script src="{{ url("js/build/build.js") }}" async></script>
 
 </head>
@@ -108,6 +109,13 @@
                           <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('department.classes')}}">
                               <i class="nav-main-link-icon si si-layers"></i>
                               <span class="nav-main-link-name">Classes</span>
+                          </a>
+                      </li>
+
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('department.examResults')}}">
+                              <i class="nav-main-link-icon si si-layers"></i>
+                              <span class="nav-main-link-name">Exam Results</span>
                           </a>
                       </li>
                   </ul>
