@@ -7,7 +7,7 @@
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
           <div class="flex-grow-1">
               <h4 class="h3 fw-bold mb-2">
-
+                ADD COURSE
               </h4>
           </div>
           <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -25,9 +25,7 @@
 </div>
     <div class="content">
         <div  class="block block-rounded">
-            <div class="block-header block-header-default">
-              <h3 class="block-title">ADD COURSE</h3>
-            </div>
+           
             <div class="block-content block-content-full">
                 <form method="POST" action="{{ route('courses.storeCourse') }}">
                     @csrf

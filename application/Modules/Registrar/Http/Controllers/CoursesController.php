@@ -3,6 +3,7 @@
 namespace Modules\Registrar\Http\Controllers;
 
 use Carbon;
+use QrCode;
 use App\Imports\UnitImport;
 use Illuminate\Http\Request;
 use App\Imports\CourseImport;
@@ -14,7 +15,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
-use Modules\Application\Entities\Notification;
 use Modules\Registrar\Entities\Unit;
 use PhpOffice\PhpWord\Element\Table;
 use App\Imports\ClusterWeightsImport;
@@ -43,6 +43,7 @@ use Modules\Registrar\Entities\StudentLogin;
 use Modules\Application\Entities\Application;
 use Modules\Registrar\Entities\StudentCourse;
 use Modules\Registrar\Entities\UnitProgramms;
+use Modules\Application\Entities\Notification;
 use Modules\Registrar\Entities\ClusterWeights;
 use Modules\Registrar\Entities\AvailableCourse;
 use Modules\Registrar\Entities\ClusterSubjects;
@@ -295,9 +296,10 @@ class CoursesController extends Controller
     }
 
     public function printFee($id){
-        $course =  CourseLevelMode::find($id);
+        $hashedId  =  Crypt::decrypt($id);
+        $course =  CourseLevelMode::find($hashedId);
 
-        $semester = SemesterFee::where('course_level_mode_id', $id)->orderBy('voteheads_id', 'asc')->get();
+        $semester = SemesterFee::where('course_level_mode_id', $hashedId)->orderBy('voteheads_id', 'asc')->get();
 
         $semester1 = 0;
         $semester2 = 0;
@@ -313,7 +315,7 @@ class CoursesController extends Controller
 
         $route = route('courses.printFee', $id);
 
-        \QrCode::size(200)
+        QrCode::size(200)
             ->format('png')
             ->generate($route, 'QrCodes/'.$image);
 
@@ -328,8 +330,8 @@ class CoursesController extends Controller
         foreach ($semester as $detail) {
             $table->addRow();
             $table->addCell(5000, ['borderSize' => 2])->addText($detail->semVotehead->name,  $boldedtext1,['name' => 'Book Antique', 'size' => 13]);
-            $table->addCell(3000, ['borderSize' => 2])->addText(number_format($detail->semesterI, 2), $boldedtext1, array('align' => 'right', 'size' => 12));
-            $table->addCell(3000, ['borderSize' => 2])->addText(number_format($detail->semesterII, 2), $boldedtext1, array('align' => 'right', 'size' => 12));
+            $table->addCell(2000, ['borderSize' => 2])->addText(number_format($detail->semesterI, 2), $boldedtext1, array('align' => 'right', 'size' => 12));
+            $table->addCell(2000, ['borderSize' => 2])->addText(number_format($detail->semesterII, 2), $boldedtext1, array('align' => 'right', 'size' => 12));
         }
             $table->addRow();
             $table->addCell(3000, ['borderSize' => 2])->addText("TOTAL PAYABLE FEE", $boldedtext);
@@ -459,6 +461,7 @@ class CoursesController extends Controller
         $kuccps         =          KuccpsApplicant::where('status', 0)->get();
             foreach ($kuccps as $applicant){
                 $course        =          Courses::where('course_code', $applicant->kuccpsApplication->course_code)->first();
+         
                 $regNumber     = Application::where('course_id', $course->id)
                         ->where('intake_id', $applicant->kuccpsApplication->intake_id)
                         ->where('student_type', 2)

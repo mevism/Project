@@ -42,9 +42,6 @@
         </div>
     </div>
 </div>
-<main id="main-container">
-    <!-- Page Content -->
-
       <!-- Dynamic Table Responsive -->
       <div class="block block-rounded">
 
@@ -83,8 +80,6 @@
       </div>
       <!-- Dynamic Table Responsive -->
     </div>
-    <!-- END Page Content -->
-</main>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('registrar::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\smis\application\Modules/Registrar\Resources/views/fee/showsemFee.blade.php ENDPATH**/ ?>

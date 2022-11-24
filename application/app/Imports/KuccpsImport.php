@@ -2,10 +2,11 @@
 
 namespace App\Imports;
 
+use Illuminate\Support\Collection;
+use Modules\Application\Entities\Education;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Modules\Registrar\Entities\KuccpsApplicant;
 use Modules\Registrar\Entities\KuccpsApplication;
-use Illuminate\Support\Collection;
 
 class KuccpsImport implements ToCollection
 {
@@ -26,6 +27,7 @@ class KuccpsImport implements ToCollection
 
         foreach($collection as $row){
 
+
             $names = preg_replace('/\s+/', ' ',$row[2]);
             $name = explode(' ', $names);
 
@@ -44,6 +46,7 @@ class KuccpsImport implements ToCollection
             }
 
             $exit_date = preg_replace('/&/', '', substr($row[1], -4));
+            
 
             $applicant = KuccpsApplicant::create([
                 'index_number' => preg_replace('/&/', 'AND', $row[1]),
@@ -53,6 +56,7 @@ class KuccpsImport implements ToCollection
                 'gender' => preg_replace('/&/', 'AND', $row[3]),
                 'mobile' => preg_replace('/&/', 'AND', $row[4]),
                 'alt_mobile' => preg_replace('/&/', 'AND', $row[5]),
+                'email' => preg_replace('/&/', 'AND', $row[6]),
                 'alt_email' => preg_replace('/&/', 'AND', $row[7]),
                 'BOX' => preg_replace('/&/', 'AND', $row[8]),
                 'postal_code' => preg_replace('/&/', 'AND', $row[9]),
