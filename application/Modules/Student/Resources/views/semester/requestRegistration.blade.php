@@ -180,9 +180,44 @@
                     <input type="hidden" name="pattern" value="{{ $next->pattern_id }}">
                     <div class="d-flex justify-content-center">
                         @if(in_array($next->semester, ['1.3', '2.3', '3.3', '4.3', '5.3', '6.3', '7.3'], true))
-                            <button class="btn btn-outline-primary col-md-5">Break for {{ $next->pattern->season }} </button>
+                            @if($dates === null)
+                                <button class="btn btn-outline-warning col-md-5 disabled"> Semester registration not scheduled </button>
+                            @else
+                                @php
+                                    $today = \Carbon\Carbon::now();
+                                @endphp
+                                @if($today < $dates->start_date)
+                                    <button class="btn btn-outline-warning col-md-5 disabled">
+                                        Semester registration to open on {{ \Carbon\Carbon::parse($dates->start_date)->format('D, d-M-Y') }}
+                                    </button>
+                                @elseif($today > $dates->end_date)
+                                    <button class="btn btn-outline-warning col-md-5 disabled">
+                                        Semester registration closed
+                                    </button>
+                                @elseif($today <= $dates->end_date)
+                                    <button class="btn btn-outline-primary col-md-5">Break for {{ $next->pattern->season }} </button>
+                                @endif
+
+                            @endif
                         @else
-                            <button class="btn btn-outline-success col-md-5"> Submit Registration </button>
+                            @if($dates == null)
+                                <button class="btn btn-outline-warning col-md-5 disabled"> Semester registration not scheduled </button>
+                            @else
+                                @php
+                                    $today = \Carbon\Carbon::now();
+                                @endphp
+                                @if($today < $dates->start_date)
+                                    <button class="btn btn-outline-warning col-md-5 disabled">
+                                        Semester registration to open on {{ \Carbon\Carbon::parse($dates->start_date)->format('D, d-M-Y') }}
+                                    </button>
+                                @elseif($today > $dates->end_date)
+                                    <button class="btn btn-outline-warning col-md-5 disabled">
+                                        Semester registration closed
+                                    </button>
+                                @elseif($today <= $dates->end_date)
+                                    <button class="btn btn-outline-success col-md-5"> Submit Registration </button>
+                                @endif
+                            @endif
                         @endif
                     </div>
                 </form>

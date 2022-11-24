@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\COD\Entities\Nominalroll;
 use Modules\Examination\Entities\Exam;
 use Modules\Student\Entities\AcademicLeave;
+use Modules\Student\Entities\ExamResults;
 
 class Student extends Model
 {
@@ -43,6 +44,10 @@ class Student extends Model
     public function leaveStudent(){
 
         return $this->hasMany(AcademicLeave::class, 'id');
+    }
+
+    public function examResults(){
+        return $this->hasMany(ExamResults::class, 'id');
     }
 
 

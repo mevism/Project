@@ -65,7 +65,6 @@
                         <th>Semester</th>
                         <th>Season </th>
                         <th>Registration</th>
-                        <th>Activation</th>
                         <th>Sem Units</th>
                     </thead>
                     <tbody>
@@ -78,17 +77,8 @@
                                 <td> {{ $register->semester_study }} </td>
                                 <td> {{ $register->patternRoll->season }} </td>
                                 <td>
-                                    @if($register->registration == 0)
-                                        <span class="text-info"> Requested </span>
-                                    @elseif($register->registration == 1)
-                                        <span class="text-success"> Successful </span>
-                                    @else
-                                        <span class="text-danger"> Unsuccessful</span>
-                                    @endif
-                                </td>
-                                <td>
                                     @if($register->activation == 0)
-                                        <span class="text-info"> Processing </span>
+                                        <span class="text-info"> Pending </span>
                                     @elseif($register->registration == 1)
                                         <span class="text-success"> Successful </span>
                                     @else

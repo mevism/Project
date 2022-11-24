@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Modules\COD\Entities\ClassPattern;
 use Modules\COD\Entities\Nominalroll;
 use Modules\Finance\Entities\StudentInvoice;
+use Modules\Registrar\Entities\CalenderOfEvents;
 use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\CourseLevelMode;
 use Modules\Registrar\Entities\Courses;
@@ -365,7 +366,14 @@ class StudentController extends Controller
            ->latest()
            ->first();
 
+       $previousStage = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
+           ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+           ->where('activation', 1)
+           ->latest()
+           ->first();
+
        $results = ExamResults::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+           ->where('stage', $previousStage->year_study)
            ->latest()
            ->first();
 
@@ -466,6 +474,8 @@ class StudentController extends Controller
 
         $reg = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)->latest()->get();
 
+//        return $reg;
+
         return view('student::semester.index')->with([
             'reg' => $reg,
             'balance' => $balance,
@@ -529,7 +539,22 @@ class StudentController extends Controller
 
         }
 
-        return view('student::semester.requestRegistration')->with(['units' => $units, 'next' => $next, 'reg' => $reg, 'list' => $list]);
+        $dates = CalenderOfEvents::where('academic_year_id', $next->academic_year)
+            ->where('intake_id', $next->period)
+            ->where('event_id', 1)
+            ->latest()
+            ->first();
+
+//        if ()
+
+        return view('student::semester.requestRegistration')
+            ->with([
+                'units' => $units,
+                'next' => $next,
+                'reg' => $reg,
+                'list' => $list,
+                'dates' => $dates
+            ]);
     }
 
     public function registerSemester(Request $request){
@@ -609,11 +634,11 @@ class StudentController extends Controller
     public function feesStatement(){
 
         $statements = StudentInvoice::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->get();
 
         $invoices = StudentDeposit::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->get();
 
         $statement = ($statements)->concat($invoices)->sortBy('created_at')->values();

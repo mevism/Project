@@ -42,9 +42,6 @@
         </div>
     </div>
 </div>
-<main id="main-container">
-    <!-- Page Content -->
-
       <!-- Dynamic Table Responsive -->
       <div class="block block-rounded">
 
@@ -83,6 +80,4 @@
       </div>
       <!-- Dynamic Table Responsive -->
     </div>
-    <!-- END Page Content -->
-</main>
 @endsection

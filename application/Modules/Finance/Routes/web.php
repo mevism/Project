@@ -36,5 +36,9 @@ Route::prefix('applications')->group(function() {
         Route::post('/withhold/{id}', [FinanceController::class, 'withholdAdmission'])->name('finance.withholdAdmission');
         Route::get('/submit{id}', [FinanceController::class, 'submitAdmission'])->name('finance.submitAdmission');
         Route::get('/submitJab/{id}', [FinanceController::class, 'submitAdmissionJab'])->name('finance.submitAdmJab');
+
+        Route::get('/student-invoices', [FinanceController::class, 'allInvoices'])->name('finance.invoices');
+        Route::get('/add-student-invoice', [FinanceController::class, 'addInvoice'])->name('finance.addInvoice');
+        Route::post('/submit-student-invoice', [FinanceController::class, 'submitInvoice'])->name('finance.submitInvoice');
     });
 });
