@@ -72,16 +72,16 @@
                 <td>{{ ++$key }}</td>
                <td style="text-transform: uppercase" class="fw-semibold fs-sm">{{ Carbon\carbon::parse($intake->intake_from)->format('M Y')}} - {{ Carbon\carbon::parse($intake->intake_to)->format('M Y') }}</td>
                <td>
-                @if ($intake->status === 0)
+                @if ($intake->status == 0)
                 <a  class="btn btn-sm btn-alt-primary" href="{{ route('courses.editstatusIntake',['id'=> Crypt::encrypt($intake->id)]) }}">Pending</a>
                 @endif
-                @if ($intake->status === 1)
+                @if ($intake->status == 1)
                 <a  class="btn btn-sm btn-alt-success" href="{{ route('courses.editstatusIntake',['id'=> Crypt::encrypt($intake->id)]) }}">Active</a>
                 @endif
-                @if ($intake->status === 2)
+                @if ($intake->status == 2)
                 <a  class="btn btn-sm btn-alt-info" href="{{ route('courses.editstatusIntake',['id'=> Crypt::encrypt($intake->id)]) }}">Expired</a>
                 @endif
-                @if ($intake->status === 3)
+                @if ($intake->status == 3)
                 <a  class="btn btn-sm btn-alt-danger" href="{{ route('courses.editstatusIntake',['id'=> Crypt::encrypt($intake->id)]) }}">Suspended</a>
                 @endif
                  </td>
