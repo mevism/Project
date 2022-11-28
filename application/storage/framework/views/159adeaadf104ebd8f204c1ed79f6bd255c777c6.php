@@ -14,8 +14,6 @@
   <!-- CSRF Token -->
   <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
-    <meta name="oneui-route" content="<?php echo e(route('raw.route')); ?>">
-
   <!-- Icons -->
   <link rel="shortcut icon" href="<?php echo e(asset('media/favicons/favicon.png')); ?>">
   <link rel="icon" sizes="192x192" type="image/png" href="<?php echo e(asset('media/favicons/favicon-192x192.png')); ?>">
@@ -23,16 +21,10 @@
 
   <!-- Fonts and Styles -->
   <?php echo $__env->yieldContent('css_before'); ?>
-  
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
   <link rel="stylesheet" id="css-main" href="<?php echo e(url('/css/oneui.css')); ?>">
-  <link rel="stylesheet" id="css-main" href="<?php echo e(url('/css/index.css')); ?>">
-  <link rel="stylesheet" id="css-main" href="<?php echo e(url('/css/admissions.css')); ?>">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
-
-    <!-- You can include a specific file from public/css/themes/ folder to alter the default color theme of the template. eg: -->
+  <!-- You can include a specific file from public/css/themes/ folder to alter the default color theme of the template. eg: -->
   <!-- <link rel="stylesheet" id="css-theme" href="<?php echo e(mix('/css/themes/amethyst.css')); ?>"> -->
   <?php echo $__env->yieldContent('css_after'); ?>
 
@@ -44,8 +36,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-
-    <script src="<?php echo e(url("js/build/build.js")); ?>" async></script>
 
 </head>
 
@@ -77,10 +67,10 @@
               <a class="nav-main-link<?php echo e(request()->is('dashboard') ? ' active' : ''); ?>" href="<?php echo e(route('dashboard')); ?>">
                 <i class="nav-main-link-icon si si-cursor"></i>
                 <span class="nav-main-link-name">
-                    <?php if(auth()->guard('user')->user()->role_id == 2): ?>
+                    <?php if(auth()->guard('user')->user()->role_id == 4): ?>
+                        <?php echo e(auth()->guard('user')->user()->getSch->initials); ?>
 
-                        <?php echo e(auth()->guard('user')->user()->getDept->dept_code); ?>
-
+                    <?php else: ?>
 
                     <?php endif; ?>
                 </span>
@@ -88,76 +78,56 @@
               </a>
             </li>
 
-              <li class="nav-main-item<?php echo e(request()->is('intakes/*') ? ' open' : ''); ?>">
-                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                      <i class="nav-main-link-icon si si-graduation"></i>
-                      <span class="nav-main-link-name">Academics</span>
-                  </a>
-                  <ul class="nav-main-submenu">
-                     <li class="nav-main-item">
-                          <a class="nav-main-link<?php echo e(request()->is('courses/showCourse') ? ' active' : ''); ?>" href="<?php echo e(route('department.courses')); ?>">
-                              <i class="nav-main-link-icon si si-layers"></i>
-                              <span class="nav-main-link-name">Courses</span>
-                          </a>
-                      </li>
 
-                      <li class="nav-main-item">
-                          <a class="nav-main-link<?php echo e(request()->is('intake/showIntake') ? ' active' : ''); ?>" href="<?php echo e(route('department.intakes')); ?>">
-                              <i class="nav-main-link-icon si si-calendar"></i>
-                              <span class="nav-main-link-name">Intakes</span>
-                          </a>
-                      </li>
-                      <li class="nav-main-item">
-                          <a class="nav-main-link<?php echo e(request()->is('classes/index') ? ' active' : ''); ?>" href="<?php echo e(route('department.classes')); ?>">
-                              <i class="nav-main-link-icon si si-layers"></i>
-                              <span class="nav-main-link-name">Classes</span>
-                          </a>
-                      </li>
 
-                      <li class="nav-main-item">
-                          <a class="nav-main-link<?php echo e(request()->is('classes/index') ? ' active' : ''); ?>" href="<?php echo e(route('department.examResults')); ?>">
-                              <i class="nav-main-link-icon si si-layers"></i>
-                              <span class="nav-main-link-name">Exam Results</span>
-                          </a>
-                      </li>
-                  </ul>
-              </li>
+
+
+
+
 
             <li class="nav-main-item<?php echo e(request()->is('intakes/*') ? ' open' : ''); ?>">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="<?php echo e(route('cod.applications')); ?>">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="<?php echo e(route('dean.applications')); ?>">
                 <i class="nav-main-link-icon si si-graduation"></i>
                 <span class="nav-main-link-name">Applications</span>
               </a>
               <ul class="nav-main-submenu">
                   <li class="nav-main-item">
-                      <a class="nav-main-link<?php echo e(request()->is('intake/showIntake') ? ' active' : ''); ?>" href="<?php echo e(route('cod.applications')); ?>">
+                      <a class="nav-main-link<?php echo e(request()->is('intake/showIntake') ? ' active' : ''); ?>" href="<?php echo e(route('dean.applications')); ?>">
                           <i class="nav-main-link-icon si si-calendar"></i>
                           <span class="nav-main-link-name">All applications</span>
                       </a>
                   </li>
 
                     <li class="nav-main-item">
-                          <a class="nav-main-link<?php echo e(request()->is('school/showSchool') ? ' active' : ''); ?>" href="<?php echo e(route('cod.batch')); ?>">
+                          <a class="nav-main-link<?php echo e(request()->is('school/showSchool') ? ' active' : ''); ?>" href="<?php echo e(route('dean.batch')); ?>">
                             <i class="nav-main-link-icon si si-graduation"></i>
                               <span class="nav-main-link-name">Submit batch</span>
                           </a>
                       </li>
               </ul>
             </li>
-              <li class="nav-main-item<?php echo e(request()->is('intakes/*') ? ' open' : ''); ?>">
-                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="<?php echo e(route('cod.applications')); ?>">
-                      <i class="nav-main-link-icon si si-graduation"></i>
-                      <span class="nav-main-link-name">Admissions</span>
-                  </a>
-                  <ul class="nav-main-submenu">
-                      <li class="nav-main-item">
-                          <a class="nav-main-link<?php echo e(request()->is('intake/showIntake') ? ' active' : ''); ?>" href="<?php echo e(route('cod.Admissions')); ?>">
-                              <i class="nav-main-link-icon si si-calendar"></i>
-                              <span class="nav-main-link-name">View Admissions</span>
+
+            <li class="nav-main-item<?php echo e(request()->is('intakes/*') ? ' open' : ''); ?>">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="<?php echo e(route('dean.transfer')); ?>">
+                <i class="nav-main-link-icon si si-graduation"></i>
+                <span class="nav-main-link-name">Course Transfer</span>
+              </a>
+              <ul class="nav-main-submenu">
+                  <li class="nav-main-item">
+                      <a class="nav-main-link<?php echo e(request()->is('intake/showIntake') ? ' active' : ''); ?>" href="<?php echo e(route('dean.transfer')); ?>">
+                          <i class="nav-main-link-icon si si-calendar"></i>
+                          <span class="nav-main-link-name">Transfers</span>
+                      </a>
+                  </li>
+
+                    <li class="nav-main-item">
+                          <a class="nav-main-link<?php echo e(request()->is('school/showSchool') ? ' active' : ''); ?>" href="<?php echo e(route('dean.batchTransfer')); ?>">
+                            <i class="nav-main-link-icon si si-graduation"></i>
+                              <span class="nav-main-link-name">Submit batch</span>
                           </a>
                       </li>
-                  </ul>
-              </li>
+              </ul>
+            </li>
           </ul>
         </div>
         <!-- END Side Navigation -->
@@ -274,31 +244,31 @@
 
     <!-- Main Container -->
     <main id="main-container">
-    <?php echo $__env->yieldContent('content'); ?>
-    <?php $__env->startSection('css_before'); ?>
-        <!-- Page JS Plugins CSS -->
-            <link rel="stylesheet" href="<?php echo e(url('js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css')); ?>">
-            <link rel="stylesheet" href="<?php echo e(url('js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css')); ?>">
-    <?php $__env->stopSection(); ?>
+      <?php echo $__env->yieldContent('content'); ?>
+      <?php $__env->startSection('css_before'); ?>
+          <!-- Page JS Plugins CSS -->
+              <link rel="stylesheet" href="<?php echo e(url('js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css')); ?>">
+              <link rel="stylesheet" href="<?php echo e(url('js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css')); ?>">
+      <?php $__env->stopSection(); ?>
 
-    <?php $__env->startSection('js_after'); ?>
-        <!-- jQuery (required for DataTables plugin) -->
-            <script src="<?php echo e(url('js/lib/jquery.min.js')); ?>"></script>
+      <?php $__env->startSection('js_after'); ?>
+          <!-- jQuery (required for DataTables plugin) -->
+              <script src="<?php echo e(url('js/lib/jquery.min.js')); ?>"></script>
 
-            <!-- Page JS Plugins -->
-            <script src="<?php echo e(url('js/plugins/datatables/jquery.dataTables.min.js')); ?>"></script>
-            <script src="<?php echo e(url('js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js')); ?>"></script>
-            <script src="<?php echo e(url('js/plugins/datatables-buttons/dataTables.buttons.min.js')); ?>"></script>
-            <script src="<?php echo e(url('js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js')); ?>"></script>
-            <script src="<?php echo e(url('js/plugins/datatables-buttons-jszip/jszip.min.js')); ?>"></script>
-            <script src="<?php echo e(url('js/plugins/datatables-buttons-pdfmake/pdfmake.min.js')); ?>"></script>
-            <script src="<?php echo e(url('js/plugins/datatables-buttons-pdfmake/vfs_fonts.js')); ?>"></script>
-            <script src="<?php echo e(url('js/plugins/datatables-buttons/buttons.print.min.js')); ?>"></script>
-            <script src="<?php echo e(url('js/plugins/datatables-buttons/buttons.html5.min.js')); ?>"></script>
+              <!-- Page JS Plugins -->
+              <script src="<?php echo e(url('js/plugins/datatables/jquery.dataTables.min.js')); ?>"></script>
+              <script src="<?php echo e(url('js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js')); ?>"></script>
+              <script src="<?php echo e(url('js/plugins/datatables-buttons/dataTables.buttons.min.js')); ?>"></script>
+              <script src="<?php echo e(url('js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js')); ?>"></script>
+              <script src="<?php echo e(url('js/plugins/datatables-buttons-jszip/jszip.min.js')); ?>"></script>
+              <script src="<?php echo e(url('js/plugins/datatables-buttons-pdfmake/pdfmake.min.js')); ?>"></script>
+              <script src="<?php echo e(url('js/plugins/datatables-buttons-pdfmake/vfs_fonts.js')); ?>"></script>
+              <script src="<?php echo e(url('js/plugins/datatables-buttons/buttons.print.min.js')); ?>"></script>
+              <script src="<?php echo e(url('js/plugins/datatables-buttons/buttons.html5.min.js')); ?>"></script>
 
-            <!-- Page JS Code -->
-            <script src="<?php echo e(url('js/pages/tables_datatables.js')); ?>"></script>
-        <?php $__env->stopSection(); ?>
+              <!-- Page JS Code -->
+              <script src="<?php echo e(url('js/pages/tables_datatables.js')); ?>"></script>
+          <?php $__env->stopSection(); ?>
         <?php echo $__env->make('application::messages.notification', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     </main>
     <!-- END Main Container -->
@@ -320,8 +290,8 @@
   </div>
   <!-- END Page Container -->
 
-  <script src="<?php echo e(url("js/oneui.app.js")); ?>"></script>
-
+  <!-- OneUI Core JS -->
+  <script src="<?php echo e(url('js/oneui.app.js')); ?>"></script>
 
   <!-- Laravel Scaffolding JS -->
   <!-- <script src="<?php echo e(mix('/js/laravel.app.js')); ?>"></script> -->
@@ -330,4 +300,4 @@
 </body>
 
 </html>
-<?php /**PATH C:\xampp\htdocs\smis\application\Modules/COD\Resources/views/layouts/backend.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\xampp\htdocs\smis\application\Modules/Dean\Resources/views/layouts/backend.blade.php ENDPATH**/ ?>

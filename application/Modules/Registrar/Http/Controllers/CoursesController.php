@@ -374,7 +374,7 @@ class CoursesController extends Controller
     }
 
     public function storeCreatedUnits(Request $request){
-        $vz                       =        $request->validate([
+        $request->validate([
             'course_unit_code'           =>       'required|unique:unit_programms',
             'unit_name'                =>       'required|unique:unit_programms',
             'stage'                =>       'required',
@@ -418,8 +418,9 @@ class CoursesController extends Controller
         $app                     =         Application::find($id);
         $app->registrar_status   =         1;
         $app->save();
+
         $logs                    =         new     RegistrarLog;
-        $logs->app_id            =         $app->id;
+        $logs->application_id            =         $app->id;
         $logs->user              =         Auth::guard('user')->user()->name;
         $logs->user_role         =         Auth::guard('user')->user()->role_id;
         $logs->activity          =         'Application accepted';
@@ -433,7 +434,7 @@ class CoursesController extends Controller
         $app->registrar_comments   =        $request->comment;
         $app->save();
         $logs                      =       new RegistrarLog;
-        $logs->app_id              =       $app->id;
+        $logs->application_id              =       $app->id;
         $logs->user                =       Auth::guard('user')->user()->name;
         $logs->user_role           =       Auth::guard('user')->user()->role_id;
         $logs->activity            =       'Application rejected';
@@ -451,7 +452,7 @@ class CoursesController extends Controller
     public function viewApplication($id){
 
         $app                       =        Application::find($id);
-        $school                    =        Education::where('applicant_id', $app->applicant->id)->first();
+        $school                    =        Education::where('applicant_id', $app->applicant->id)->get();
 
         return view('registrar::offer.viewApplication')->with(['app' => $app, 'school' => $school]);
     }
@@ -461,7 +462,7 @@ class CoursesController extends Controller
         $kuccps         =          KuccpsApplicant::where('status', 0)->get();
             foreach ($kuccps as $applicant){
                 $course        =          Courses::where('course_code', $applicant->kuccpsApplication->course_code)->first();
-         
+
                 $regNumber     = Application::where('course_id', $course->id)
                         ->where('intake_id', $applicant->kuccpsApplication->intake_id)
                         ->where('student_type', 2)
@@ -1285,7 +1286,7 @@ class CoursesController extends Controller
                 $comms->application_id = $app->appApprovals->id;
                 $comms->role_id = Auth::guard('user')->user()->role_id;
                 $comms->subject = 'Application Admission Process';
-                $comms->comment = 'Congratulations! Your admission was successful. You are now a bonafied student at TUM. You can now log in as a student using your registration number as user ID and ID/PASSPORT/BIRTH certificate number.';
+                $comms->comment = 'Congratulations! Your admission was successful. You are now a bona-fied student at TUM. You can now log in as a student using your registration number as user ID and ID/PASSPORT/BIRTH certificate number.';
                 $comms->status = 1;
                 $comms->save();
 

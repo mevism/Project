@@ -528,11 +528,22 @@ class StudentController extends Controller
 
                 $next = [];
 
+                return view('student::semester.requestRegistration')
+                    ->with([
+                        'units' => $units,
+                        'next' => $next,
+                        'reg' => $reg,
+                        'list' => $list,
+                    ]);
+
             }else{
 
                 $new = explode('.', $next_id);
 
-                $units = UnitProgramms::where('stage', $new[0])->where('semester', $new[1])->where('course_code', $course_code)->get();
+                $units = UnitProgramms::where('course_code', $course_code)
+                    ->where('stage', $new[0])
+                    ->where('semester', $new[1])
+                    ->get();
 
                 $next = ClassPattern::where('semester', $next_id)->where('class_code', $class_code)->first();
             }
@@ -729,7 +740,7 @@ class StudentController extends Controller
             unlink($docPath);
         }
 
-         return response()->download($docPath)->deleteFileAfterSend(true);
+         return response()->download($pdfPath)->deleteFileAfterSend(true);
     }
 
     /**
