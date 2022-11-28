@@ -2,240 +2,37 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/QrCodes/1669219461.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/QrCodes/1669219532.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/QrCodes/1669219539.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/QrCodes/1669219599.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/QrCodes/1669270112.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/QrCodes/1669270349.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/QrCodes/1669270759.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/QrCodes/1669270890.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/QrCodes/1669270993.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-LVveighlaMaOAMRIi91fbz0XBlCyaz69" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-hR47In8rYs56nENteOBTCP5HQ26KdjVg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-ynvMC23mtWtTd41a6zxsuobXKDoVOdLR" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/1YGrpNxdm0QnZ78vtja8u9VicS8VJLaWI364Rmub" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/KozY6Yct2PEKunmmt5aqGdJFg85nYQw5E4Z5bGIQ" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/gQHC8N525k3REsihonK6OWNCt9IgiEYOi7O6vsnB" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/xMJ3TLsiK4tOHoYTczEZhHEI3SjktEnnZmDUONLg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sims.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Fees/1668091638.pgn" beforeDir="false" afterPath="$PROJECT_DIR$/Fees/1668091638.pgn" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Fees/BTIT008J2022.docx" beforeDir="false" afterPath="$PROJECT_DIR$/Fees/BTIT008J2022.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669208662.png" beforeDir="false" afterPath="$PROJECT_DIR$/QrCodes/1669208662.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669208722.png" beforeDir="false" afterPath="$PROJECT_DIR$/QrCodes/1669208722.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669208857.png" beforeDir="false" afterPath="$PROJECT_DIR$/QrCodes/1669208857.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669209003.png" beforeDir="false" afterPath="$PROJECT_DIR$/QrCodes/1669209003.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669209040.png" beforeDir="false" afterPath="$PROJECT_DIR$/QrCodes/1669209040.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669209099.png" beforeDir="false" afterPath="$PROJECT_DIR$/QrCodes/1669209099.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669209142.png" beforeDir="false" afterPath="$PROJECT_DIR$/QrCodes/1669209142.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669209212.png" beforeDir="false" afterPath="$PROJECT_DIR$/QrCodes/1669209212.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669209245.png" beforeDir="false" afterPath="$PROJECT_DIR$/QrCodes/1669209245.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669215348.png" beforeDir="false" afterPath="$PROJECT_DIR$/QrCodes/1669215348.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/.env" beforeDir="false" afterPath="$PROJECT_DIR$/application/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Database/Migrations/2022_11_02_095029_create_patterns_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Database/Migrations/2022_11_02_095029_create_patterns_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Entities/ClassPattern.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Entities/ClassPattern.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Entities/Pattern.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Entities/Pattern.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/classes/classPattern.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/classes/classPattern.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/classes/viewClassPattern.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/classes/viewClassPattern.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Entities/CourseTransfer.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Entities/CourseTransfer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/transfers/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/transfers/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/transfers/preview.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/transfers/preview.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/transfers/viewTransfer.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/transfers/viewTransfer.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Config/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Config/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Config/config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Console/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Console/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Database/Migrations/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Database/Migrations/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Database/Migrations/2022_10_28_152018_create_exams_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Database/Migrations/2022_10_28_152018_create_exams_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Database/Seeders/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Database/Seeders/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Database/Seeders/ExaminationDatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Database/Seeders/ExaminationDatabaseSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Database/factories/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Database/factories/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Entities/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Entities/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Entities/Exam.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Entities/Exam.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Http/Controllers/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Http/Controllers/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Http/Controllers/ExaminationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Http/Controllers/ExaminationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Http/Middleware/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Http/Middleware/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Http/Requests/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Http/Requests/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Providers/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Providers/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Providers/ExaminationServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Providers/ExaminationServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Providers/RouteServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Providers/RouteServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Resources/assets/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Resources/assets/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Resources/assets/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Resources/assets/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Resources/assets/sass/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Resources/assets/sass/app.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Resources/lang/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Resources/lang/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/semester/registration.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/semester/registration.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Routes/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Routes/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Routes/api.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Tests/Feature/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Tests/Feature/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Tests/Unit/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Tests/Unit/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/module.json" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/module.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/vendor/autoload.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/vendor/autoload.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/vendor/composer/ClassLoader.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/vendor/composer/ClassLoader.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/vendor/composer/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/vendor/composer/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/vendor/composer/autoload_classmap.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/vendor/composer/autoload_classmap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/vendor/composer/autoload_namespaces.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/vendor/composer/autoload_namespaces.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/vendor/composer/autoload_psr4.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/vendor/composer/autoload_psr4.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/vendor/composer/autoload_real.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/vendor/composer/autoload_real.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/vendor/composer/autoload_static.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/vendor/composer/autoload_static.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/webpack.mix.js" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/webpack.mix.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Database/Migrations/2022_11_07_121643_create_student_invoices_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Database/Migrations/2022_11_07_121643_create_student_invoices_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Entities/StudentInvoice.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Entities/StudentInvoice.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_10_25_171500_create_cluster_weights_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_10_25_171500_create_cluster_weights_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_11_11_112919_create_vote_heads_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_11_11_112919_create_vote_heads_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_11_11_114611_create_semester_fees_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_11_11_114611_create_semester_fees_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_11_11_133509_create_levels_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_11_11_133509_create_levels_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_11_14_140001_create_events_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_11_14_140001_create_events_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_11_15_083955_create_calender_of_events_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_11_15_083955_create_calender_of_events_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_11_21_165351_create_course_level_modes_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_11_21_165351_create_course_level_modes_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_11_23_170606_create_attendances_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_11_23_170606_create_attendances_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/AcademicYear.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/AcademicYear.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Attendance.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Attendance.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/CalenderOfEvents.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/CalenderOfEvents.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/ClusterWeights.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/ClusterWeights.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/CourseLevelMode.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/CourseLevelMode.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Event.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Event.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Level.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Level.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/SemesterFee.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/SemesterFee.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/VoteHead.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/VoteHead.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Fees/BTIT006J2022.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/course/addCourse.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/course/addCourse.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/events/addEvent.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/events/addEvent.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/events/editEvent.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/events/editEvent.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/events/showEvent.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/events/showEvent.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/eventsCalender/addCalenderOfEvents.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/eventsCalender/addCalenderOfEvents.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/eventsCalender/editCalenderOfEvents.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/eventsCalender/editCalenderOfEvents.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/eventsCalender/showCalenderOfEvents.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/eventsCalender/showCalenderOfEvents.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/fee/editVotehead.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/fee/editVotehead.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/fee/semFee.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/fee/semFee.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/fee/showVoteheads.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/fee/showVoteheads.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/fee/showsemFee.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/fee/showsemFee.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/fee/viewSemFee.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/fee/viewSemFee.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/fee/voteheads.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/fee/voteheads.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/offer/clusterweights.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/offer/clusterweights.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/offer/createUnits.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/offer/createUnits.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/offer/getFee.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/offer/getFee.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/offer/showKuccpsFee.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/offer/showKuccpsFee.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/transfers/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/transfers/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/transfers/transferAcceptedmail.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/transfers/transferAcceptedmail.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Config/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Config/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Config/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Config/config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Console/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Console/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_26_155157_create_course_transfers_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_26_155157_create_course_transfers_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_28_111516_create_academic_leaves_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_28_111516_create_academic_leaves_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_28_160443_create_readmissions_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_28_160443_create_readmissions_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_11_10_115421_create_student_deposits_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_11_10_115421_create_student_deposits_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_11_10_124022_create_exam_results_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_11_10_124022_create_exam_results_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_11_17_104151_create_transfer_invoices_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_11_17_104151_create_transfer_invoices_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_11_17_104440_create_transfer_deposits_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_11_17_104440_create_transfer_deposits_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_11_22_144914_create_course_cluster_groups_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_11_22_144914_create_course_cluster_groups_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Seeders/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Seeders/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Seeders/StudentDatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Seeders/StudentDatabaseSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/factories/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/factories/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/AcademicLeave.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/AcademicLeave.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/CourseClusterGroups.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/CourseClusterGroups.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/CourseTransfer.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/CourseTransfer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/ExamResults.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/ExamResults.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/Readmission.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/Readmission.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/StudentDeposit.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/StudentDeposit.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/TransferDeposit.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/TransferDeposit.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/TransferInvoice.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/TransferInvoice.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/.gitkeep" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/offer/viewApplication.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/offer/viewApplication.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Http/Middleware/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Http/Middleware/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Http/Requests/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Http/Requests/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Providers/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Providers/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Providers/RouteServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Providers/RouteServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Providers/StudentServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Providers/StudentServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/assets/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/assets/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/assets/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/assets/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/assets/sass/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/assets/sass/app.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/lang/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/lang/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/academicleave.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/academicleave.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/editleaverequest.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/editleaverequest.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/readmissionrequests.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/readmissionrequests.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/readmissions.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/readmissions.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/requestleave.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/requestleave.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/coursetransfer.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/coursetransfer.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/edittransfer.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/edittransfer.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/transfers.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/transfers.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/includes/notification.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/includes/notification.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/invoice/statement.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/invoice/statement.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/layouts/master.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/layouts/master.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/semester/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/semester/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/semester/requestRegistration.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/semester/requestRegistration.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/semester/semesterUnits.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/semester/semesterUnits.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/student/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/student/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/student/profile.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/student/profile.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Routes/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Routes/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Routes/api.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Tests/Feature/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Tests/Feature/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Tests/Unit/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Tests/Unit/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/module.json" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/module.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/webpack.mix.js" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/webpack.mix.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/app/Imports/ClusterWeightsImport.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Imports/ClusterWeightsImport.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/app/Imports/KuccpsImport.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Imports/KuccpsImport.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/database/seeders/UserSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/database/seeders/UserSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/resources/views/vendor/sweetalert/alert.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/resources/views/vendor/sweetalert/alert.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/fee_statement.docx" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/fee_statement.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/fee_structure.docx" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/fee_structure.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-2WpFCgZRCGCBjxIx1Xnmy9CFdbpMIMep" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-2b9BGzJOxEETcnkljI2QsXVLNVCMfFCB" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-3EiKTRAmPAWW8AwPGPuW5y6iEyH8X6xU" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-3Vpd1YvcU8qu0rv21EQFPANwSyDsWOn7" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-3wjfzuUBwrtwIApxUqw9guJCuJ0h8c90" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-4SBYYSkqW7p29U5ES51uUZuXdQocn5Ve" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-6mvGkPM2tuEhrfCC9oTgFwQONVZPNiD5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-7fygrLFnOsuiAwACnLhBmOEYJUpXIoOz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-9G9blNr6xbCmRz7pddcQUXb4zAe8wj91" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-9VBfMLPdwuUUzSWURFBV8nE3vMBzMsM9" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-AOQox4yavRzIcyydeVo6qSZWAwP4vZOn" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-DgU2ePSLTc9aGbZInAX00g1wUXZ5cw7p" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-GlJpqKKqtJbjcmG0WGu9jnc2o9p2zBcP" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-MfMzzSYa97ASoZykrqahFvhxm39RJ1yG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-Q84yqV2uSZZAPfLNV1v1m86MLvucdFuJ" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-QZYd8qiOXH93Yi5xcyK3k0ejO2eBukGg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-UfZpsNynNh35GMVOV5lPKgZ6soO3eOBU" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-VfN6QpXqlGna3cTpsL7Al6k3bTO52Kj0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-X1ZslI7kLgIuwKBQJThggDF5XNpvFWJe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-ZEzwRHojdbYwyEzab7m6WMWiMcPne5qT" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-bVS8OUyBDQZNL5XJ8Ku8pJjuzh44hgdv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-eF6S28ouohumjJzv0KsiJgP8gimEAtt0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-gYDFGfTOPwCTPjRTYvaIJnjCNJ4yq8By" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-jlUyYLStS2Dc9Q2OS099DKHWuiqsBcec" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-lBu0OvD5JNNJcjUOYfH378d3QdXjYjR4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-mXesSyyEdVpqOebjsYdOqorKO7OGoYLJ" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-nNDASnamWIlAH3GKz9xidam1ohdvY3P3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-ojUSRxS2AiskDQHMRpC0F3odiISPc37l" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-xQCWu76enN3Ou2uwJ8RUZedGSlYtW8oE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-xjTOGW3twdZU5gKCuKRVMAXDC3uWWPNU" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/308ce373905897bda02dd7de481a8f0836058987.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/views/308ce373905897bda02dd7de481a8f0836058987.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/e5ef54c21f86eefad10e23f2a6196c2128864c17.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/views/e5ef54c21f86eefad10e23f2a6196c2128864c17.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/~$e_statement.docx" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/~$e_statement.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/1YGrpNxdm0QnZ78vtja8u9VicS8VJLaWI364Rmub" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/IUG3rQWe6TE0QAxPdu9OdtZUS5EOhCTvojlObSEi" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/KozY6Yct2PEKunmmt5aqGdJFg85nYQw5E4Z5bGIQ" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/bpnfYwCJ3q035Feq9qeey0fuFAXFM7dnb6bxogoa" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/dP7k37ZXzQKIq4shD9q9n8kRbjxLLtx91IHfWNmg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/gQHC8N525k3REsihonK6OWNCt9IgiEYOi7O6vsnB" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/t9s1GMCDXPLLnIPusNBV2C5i9g1s7jR41AKrOFXf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/tLSkkzFyjw2z7AnvUkS5uf5awM0IpNunVtU7wBOM" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/xMJ3TLsiK4tOHoYTczEZhHEI3SjktEnnZmDUONLg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/zHQ9n9tSwzpD00swN3mJcYLgPi9H79Lxf6pykCtu" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/0650c6d3ce1a1f024d4f68e6ab2273a4ad436417.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/views/0650c6d3ce1a1f024d4f68e6ab2273a4ad436417.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/26d5d936a5fb509b0da6a6811307d0ea9b5959cb.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/views/26d5d936a5fb509b0da6a6811307d0ea9b5959cb.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/83b2ace1c1a9dbe83e8533d06c9a4c97b7988d26.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/views/83b2ace1c1a9dbe83e8533d06c9a4c97b7988d26.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/b2ee810a5d8f3eb0033358faa90ab5fa5949cd9a.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/views/b2ee810a5d8f3eb0033358faa90ab5fa5949cd9a.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/ca3312063690ad697b6326ea67046b8878837c2f.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/views/ca3312063690ad697b6326ea67046b8878837c2f.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/d515516a07d9c08687d2867b05810406fc0ed973.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/views/d515516a07d9c08687d2867b05810406fc0ed973.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings">
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/application/composer.json</pharConfigPath>
     <execution />
   </component>
   <component name="Git.Settings">
@@ -254,11 +51,182 @@
     <setting file="file://$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/application/Modules/Application/Resources/views/layouts/backend.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration">
+    <include_path>
+      <path value="$PROJECT_DIR$/application/vendor/composer" />
+      <path value="$PROJECT_DIR$/application/vendor/psr/container" />
+      <path value="$PROJECT_DIR$/application/vendor/psr/event-dispatcher" />
+      <path value="$PROJECT_DIR$/application/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/application/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/application/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/application/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/application/vendor/psr/simple-cache" />
+      <path value="$PROJECT_DIR$/application/vendor/psy/psysh" />
+      <path value="$PROJECT_DIR$/application/vendor/filp/whoops" />
+      <path value="$PROJECT_DIR$/application/vendor/mews/captcha" />
+      <path value="$PROJECT_DIR$/application/vendor/voku/portable-ascii" />
+      <path value="$PROJECT_DIR$/application/vendor/asm89/stack-cors" />
+      <path value="$PROJECT_DIR$/application/vendor/bacon/bacon-qr-code" />
+      <path value="$PROJECT_DIR$/application/vendor/brick/math" />
+      <path value="$PROJECT_DIR$/application/vendor/nette/schema" />
+      <path value="$PROJECT_DIR$/application/vendor/nette/utils" />
+      <path value="$PROJECT_DIR$/application/vendor/nikic/php-parser" />
+      <path value="$PROJECT_DIR$/application/vendor/phenx/php-font-lib" />
+      <path value="$PROJECT_DIR$/application/vendor/phenx/php-svg-lib" />
+      <path value="$PROJECT_DIR$/application/vendor/dompdf/dompdf" />
+      <path value="$PROJECT_DIR$/application/vendor/ezyang/htmlpurifier" />
+      <path value="$PROJECT_DIR$/application/vendor/league/commonmark" />
+      <path value="$PROJECT_DIR$/application/vendor/league/config" />
+      <path value="$PROJECT_DIR$/application/vendor/league/flysystem" />
+      <path value="$PROJECT_DIR$/application/vendor/league/mime-type-detection" />
+      <path value="$PROJECT_DIR$/application/vendor/ncjoes/office-converter" />
+      <path value="$PROJECT_DIR$/application/vendor/nesbot/carbon" />
+      <path value="$PROJECT_DIR$/application/vendor/ramsey/collection" />
+      <path value="$PROJECT_DIR$/application/vendor/ramsey/uuid" />
+      <path value="$PROJECT_DIR$/application/vendor/spatie/backtrace" />
+      <path value="$PROJECT_DIR$/application/vendor/spatie/flare-client-php" />
+      <path value="$PROJECT_DIR$/application/vendor/spatie/ignition" />
+      <path value="$PROJECT_DIR$/application/vendor/spatie/laravel-ignition" />
+      <path value="$PROJECT_DIR$/application/vendor/vlucas/phpdotenv" />
+      <path value="$PROJECT_DIR$/application/vendor/dasprid/enum" />
+      <path value="$PROJECT_DIR$/application/vendor/dflydev/dot-access-data" />
+      <path value="$PROJECT_DIR$/application/vendor/egulias/email-validator" />
+      <path value="$PROJECT_DIR$/application/vendor/laminas/laminas-escaper" />
+      <path value="$PROJECT_DIR$/application/vendor/laravel/framework" />
+      <path value="$PROJECT_DIR$/application/vendor/laravel/sail" />
+      <path value="$PROJECT_DIR$/application/vendor/laravel/sanctum" />
+      <path value="$PROJECT_DIR$/application/vendor/laravel/serializable-closure" />
+      <path value="$PROJECT_DIR$/application/vendor/laravel/tinker" />
+      <path value="$PROJECT_DIR$/application/vendor/mockery/mockery" />
+      <path value="$PROJECT_DIR$/application/vendor/monolog/monolog" />
+      <path value="$PROJECT_DIR$/application/vendor/myclabs/deep-copy" />
+      <path value="$PROJECT_DIR$/application/vendor/myclabs/php-enum" />
+      <path value="$PROJECT_DIR$/application/vendor/nwidart/laravel-modules" />
+      <path value="$PROJECT_DIR$/application/vendor/phar-io/manifest" />
+      <path value="$PROJECT_DIR$/application/vendor/phar-io/version" />
+      <path value="$PROJECT_DIR$/application/vendor/phpunit/php-code-coverage" />
+      <path value="$PROJECT_DIR$/application/vendor/phpunit/php-file-iterator" />
+      <path value="$PROJECT_DIR$/application/vendor/phpunit/php-invoker" />
+      <path value="$PROJECT_DIR$/application/vendor/phpunit/php-text-template" />
+      <path value="$PROJECT_DIR$/application/vendor/phpunit/php-timer" />
+      <path value="$PROJECT_DIR$/application/vendor/phpunit/phpunit" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/console" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/css-selector" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/error-handler" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/event-dispatcher" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/event-dispatcher-contracts" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/finder" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/http-foundation" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/http-kernel" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/mailer" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/mime" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/polyfill-intl-grapheme" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/polyfill-intl-idn" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/polyfill-php72" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/polyfill-php80" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/polyfill-php81" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/polyfill-uuid" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/process" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/routing" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/service-contracts" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/string" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/translation" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/translation-contracts" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/uid" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/var-dumper" />
+      <path value="$PROJECT_DIR$/application/vendor/theseer/tokenizer" />
+      <path value="$PROJECT_DIR$/application/vendor/barryvdh/laravel-dompdf" />
+      <path value="$PROJECT_DIR$/application/vendor/doctrine/inflector" />
+      <path value="$PROJECT_DIR$/application/vendor/doctrine/instantiator" />
+      <path value="$PROJECT_DIR$/application/vendor/doctrine/lexer" />
+      <path value="$PROJECT_DIR$/application/vendor/fakerphp/faker" />
+      <path value="$PROJECT_DIR$/application/vendor/hamcrest/hamcrest-php" />
+      <path value="$PROJECT_DIR$/application/vendor/fruitcake/laravel-cors" />
+      <path value="$PROJECT_DIR$/application/vendor/fruitcake/php-cors" />
+      <path value="$PROJECT_DIR$/application/vendor/maennchen/zipstream-php" />
+      <path value="$PROJECT_DIR$/application/vendor/markbaker/complex" />
+      <path value="$PROJECT_DIR$/application/vendor/markbaker/matrix" />
+      <path value="$PROJECT_DIR$/application/vendor/phpoffice/phpspreadsheet" />
+      <path value="$PROJECT_DIR$/application/vendor/phpoffice/phpword" />
+      <path value="$PROJECT_DIR$/application/vendor/phpoption/phpoption" />
+      <path value="$PROJECT_DIR$/application/vendor/ralouphie/getallheaders" />
+      <path value="$PROJECT_DIR$/application/vendor/sebastian/cli-parser" />
+      <path value="$PROJECT_DIR$/application/vendor/sebastian/code-unit" />
+      <path value="$PROJECT_DIR$/application/vendor/sebastian/code-unit-reverse-lookup" />
+      <path value="$PROJECT_DIR$/application/vendor/sebastian/comparator" />
+      <path value="$PROJECT_DIR$/application/vendor/sebastian/complexity" />
+      <path value="$PROJECT_DIR$/application/vendor/sebastian/diff" />
+      <path value="$PROJECT_DIR$/application/vendor/sebastian/environment" />
+      <path value="$PROJECT_DIR$/application/vendor/sebastian/exporter" />
+      <path value="$PROJECT_DIR$/application/vendor/sebastian/global-state" />
+      <path value="$PROJECT_DIR$/application/vendor/sebastian/lines-of-code" />
+      <path value="$PROJECT_DIR$/application/vendor/sebastian/object-enumerator" />
+      <path value="$PROJECT_DIR$/application/vendor/sebastian/object-reflector" />
+      <path value="$PROJECT_DIR$/application/vendor/sebastian/recursion-context" />
+      <path value="$PROJECT_DIR$/application/vendor/sebastian/resource-operations" />
+      <path value="$PROJECT_DIR$/application/vendor/sebastian/type" />
+      <path value="$PROJECT_DIR$/application/vendor/sebastian/version" />
+      <path value="$PROJECT_DIR$/application/vendor/webmozart/assert" />
+      <path value="$PROJECT_DIR$/application/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/application/vendor/guzzlehttp/promises" />
+      <path value="$PROJECT_DIR$/application/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/application/vendor/nunomaduro/collision" />
+      <path value="$PROJECT_DIR$/application/vendor/nunomaduro/termwind" />
+      <path value="$PROJECT_DIR$/application/vendor/sabberworm/php-css-parser" />
+      <path value="$PROJECT_DIR$/application/vendor/victorybiz/laravel-tel-input" />
+      <path value="$PROJECT_DIR$/application/vendor/davcpas1234/laravelpdfviewer" />
+      <path value="$PROJECT_DIR$/application/vendor/maatwebsite/excel" />
+      <path value="$PROJECT_DIR$/application/vendor/masterminds/html5" />
+      <path value="$PROJECT_DIR$/application/vendor/intervention/image" />
+      <path value="$PROJECT_DIR$/application/vendor/tijsverkoyen/css-to-inline-styles" />
+      <path value="$PROJECT_DIR$/application/vendor/dragonmantank/cron-expression" />
+      <path value="$PROJECT_DIR$/application/vendor/africastalking/africastalking" />
+      <path value="$PROJECT_DIR$/application/vendor/graham-campbell/result-type" />
+      <path value="$PROJECT_DIR$/application/vendor/simplesoftwareio/simple-qrcode" />
+      <path value="$PROJECT_DIR$/application/vendor/laravelcollective/html" />
+      <path value="$PROJECT_DIR$/application/vendor/laravel-notification-channels/africastalking" />
+    </include_path>
+  </component>
+  <component name="ProjectId" id="2I0JWi0XXxtegXRrNvw97FmFmGE" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="" />
+      <created>1669354895261</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1669354895261</updated>
+      <workItem from="1669354905198" duration="2630000" />
+      <workItem from="1669359904229" duration="792000" />
+      <workItem from="1669393540288" duration="289000" />
+      <workItem from="1669616855288" duration="6488000" />
+      <workItem from="1669625476455" duration="654000" />
+    </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

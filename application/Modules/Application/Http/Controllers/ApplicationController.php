@@ -851,7 +851,7 @@ class ApplicationController extends Controller
                 $file = $request->passPort;
                 $fileName = str_replace('/', '', $name).'-'.time().'.'.$file->getClientOriginalExtension();
 
-                $thumbnailFolder = storage_path('/thumbnails');
+                $thumbnailFolder = 'Thumbnails';
 
                 $passport = Image::make($file->path());
 
@@ -878,7 +878,7 @@ class ApplicationController extends Controller
             if ($request->hasFile('passPort')){
                 $file = $request->passPort;
                 $fileName = str_replace('/', '', $name->reg_number).'-'.time().'.'.$file->getClientOriginalExtension();
-                $thumbnailFolder = storage_path('/thumbnails');
+                $thumbnailFolder = 'Thumbnails';
 
                 $passport = Image::make($file->path());
 
