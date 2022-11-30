@@ -356,6 +356,8 @@ class CoursesController extends Controller
             unlink($docPath);
         }
 
+        unlink('QrCodes/'.$image);
+
          return response()->download($pdfPath)->deleteFileAfterSend(true);
     }
 
@@ -838,7 +840,7 @@ class CoursesController extends Controller
             $data->status       =       $request->input('status');
             $data->save();
 
-           AvailableCourse::where('intake_id', $id)->update(['status' => 1]);
+           AvailableCourse::where('intake_id', $hashedId)->update(['status' => 1]);
 
         }else{
 
@@ -846,7 +848,7 @@ class CoursesController extends Controller
             $data->status     =       $request->input('status');
             $data->save();
 
-        AvailableCourse::where('intake_id', $id)->update(['status' => 0]);
+        AvailableCourse::where('intake_id', $hashedId)->update(['status' => 0]);
 
         }
 

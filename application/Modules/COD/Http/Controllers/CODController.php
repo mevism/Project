@@ -295,7 +295,8 @@ class CODController extends Controller
     }
 
     public function intakes(){
-            $intakes = Intake::all();
+
+            $intakes = Intake::latest()->get();
 
             return view('cod::intakes.index')->with('intakes', $intakes);
     }
@@ -374,9 +375,17 @@ class CODController extends Controller
 
             foreach ($courses as $course) {
 
-                $classes[] = Classes::where('course_id', $course->id)->get();
+                $class[] = Classes::where('course_id', $course->id)->get();
 
             }
+
+            $collection = collect($class);
+
+            $classes = $collection->sortBy( function ($created_at){
+
+                return $created_at;
+
+            })->values()->all();
 
             return view('cod::classes.index')->with('classes', $classes);
         }

@@ -11,6 +11,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Modules\COD\Entities\ClassPattern;
 use Modules\COD\Entities\Nominalroll;
 use Modules\Finance\Entities\StudentInvoice;
@@ -357,88 +358,103 @@ class StudentController extends Controller
             ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
             ->latest()->first();
 
+        if ($student_activation == null){
+
+            $reg = [];
+
+            $balance = [];
+
+            $fee = [];
+
+            return view('student::semester.index')->with([
+                'reg' => $reg,
+                'balance' => $balance,
+                'fee' => $fee
+            ]);
+        }else{
+
+        $semester = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
+            ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+            ->latest()
+            ->first();
+
+        $previousStage = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
+            ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+            ->where('activation', 1)
+            ->latest()
+            ->first();
+
        $invoices = StudentInvoice::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
             ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
             ->where('stage', '<', $student_activation->stage)->get();
-
-       $semester = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
-           ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
-           ->latest()
-           ->first();
-
-       $previousStage = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
-           ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
-           ->where('activation', 1)
-           ->latest()
-           ->first();
 
        $results = ExamResults::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
            ->where('stage', $previousStage->year_study)
            ->latest()
            ->first();
 
-        $invoice = 0;
+            $invoice = 0;
 
-        foreach ($invoices as $payment){
+            foreach ($invoices as $payment){
 
-            $invoice += $payment->amount;
-        }
+                $invoice += $payment->amount;
+            }
 
-        $paid = StudentDeposit::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
-            ->get();
+            $paid = StudentDeposit::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+                ->get();
 
-        $payed = 0;
+            $payed = 0;
 
-        foreach ($paid as $invoiced){
+            foreach ($paid as $invoiced){
 
-            $payed += $invoiced->deposit;
-        }
+                $payed += $invoiced->deposit;
+            }
 
-        $balance = $payed - $invoice;
+            $balance = $payed - $invoice;
 
-        if ($semester->semester_study == 1 && $results != null){
-            if ($balance >= $student_activation->amount*0.5 && $results->status == 1){
+            if ($semester->semester_study == 1 && $results != null){
+                if ($balance >= $student_activation->amount*0.5 && $results->status == 1){
+
+                    $sign = Nominalroll::where('student_id', Auth::guard('student')->user()->student_id)
+                        ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+                        ->latest()
+                        ->first();
+                    if (!$sign->activation){
+
+                        $sign->activation = 1;
+                        $sign->save();
+                    }
+                }
+            }
+
+            if ($semester->semester_study == 2){
+                if ($balance >= $student_activation->amount*0.5){
+
+                    $sign = Nominalroll::where('student_id', Auth::guard('student')->user()->student_id)
+                        ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+                        ->latest()
+                        ->first();
+                    if (!$sign->activation){
+
+                        $sign->activation = 1;
+                        $sign->save();
+                    }
+                }
+            }
+
+            if ($semester->pattern_id == 3){
 
                 $sign = Nominalroll::where('student_id', Auth::guard('student')->user()->student_id)
                     ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
                     ->latest()
                     ->first();
+
                 if (!$sign->activation){
 
                     $sign->activation = 1;
                     $sign->save();
                 }
             }
-        }
-
-        if ($semester->semester_study == 2){
-            if ($balance >= $student_activation->amount*0.5){
-
-                $sign = Nominalroll::where('student_id', Auth::guard('student')->user()->student_id)
-                    ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
-                    ->latest()
-                    ->first();
-                if (!$sign->activation){
-
-                    $sign->activation = 1;
-                    $sign->save();
-                }
-            }
-        }
-
-        if ($semester->pattern_id == 3){
-
-            $sign = Nominalroll::where('student_id', Auth::guard('student')->user()->student_id)
-                ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
-                ->latest()
-                ->first();
-
-            if (!$sign->activation){
-
-                $sign->activation = 1;
-                $sign->save();
-            }
-        }
 
             $inv = StudentInvoice::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)->get();
             $dep = StudentDeposit::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)->get();
@@ -456,31 +472,30 @@ class StudentController extends Controller
                 $depo += $d->deposit;
             }
 
-           $bal = $depo - $invo;
+            $bal = $depo - $invo;
 
-        if (in_array($semester->pattern_id, [4, 5], true) && $bal >= 0){
-            $sign = Nominalroll::where('student_id', Auth::guard('student')->user()->student_id)
-                ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
-                ->latest()
-                ->first();
+            if (in_array($semester->pattern_id, [4, 5], true) && $bal >= 0){
+                $sign = Nominalroll::where('student_id', Auth::guard('student')->user()->student_id)
+                    ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+                    ->latest()
+                    ->first();
 
-            if (!$sign->activation){
+                if (!$sign->activation){
 
-                $sign->activation = 1;
-                $sign->save();
+                    $sign->activation = 1;
+                    $sign->save();
+                }
             }
+
+
+            $reg = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)->latest()->get();
+
+            return view('student::semester.index')->with([
+                'reg' => $reg,
+                'balance' => $balance,
+                'fee' => $student_activation->amount
+            ]);
         }
-
-
-        $reg = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)->latest()->get();
-
-//        return $reg;
-
-        return view('student::semester.index')->with([
-            'reg' => $reg,
-            'balance' => $balance,
-            'fee' => $student_activation->amount
-        ]);
     }
 
     public function requestSemesterRegistration(){
@@ -497,6 +512,8 @@ class StudentController extends Controller
             $next = [];
 
             $list = [];
+
+            $dates = [];
 
         }else{
 
@@ -548,15 +565,13 @@ class StudentController extends Controller
                 $next = ClassPattern::where('semester', $next_id)->where('class_code', $class_code)->first();
             }
 
+            $dates = CalenderOfEvents::where('academic_year_id', $next->academic_year)
+                ->where('intake_id', $next->period)
+                ->where('event_id', 1)
+                ->latest()
+                ->first();
+
         }
-
-        $dates = CalenderOfEvents::where('academic_year_id', $next->academic_year)
-            ->where('intake_id', $next->period)
-            ->where('event_id', 1)
-            ->latest()
-            ->first();
-
-//        if ()
 
         return view('student::semester.requestRegistration')
             ->with([
@@ -662,14 +677,14 @@ class StudentController extends Controller
 
         $student = Student::where('id', Auth::guard('student')->user()->id)->first();
 
+        $statements = StudentInvoice::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         $reg = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
             ->where('registration', 1)
             ->where('activation', 1)
             ->latest()->first();
-
-        $statements = StudentInvoice::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
-            ->orderBy('created_at', 'desc')
-            ->get();
 
         $invoices = StudentDeposit::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
             ->orderBy('created_at', 'desc')
@@ -694,13 +709,28 @@ class StudentController extends Controller
 
         $image = time().'.png';
 
-        \QrCode::size(200)
-            ->format('png')
-            ->generate( 'Name: '.$student->fname.' '.$student->mname.' '.$student->sname."\n".
-                'Registration: '.$student->reg_number. "\n".
-                'Class Code: '.$student->courseStudent->class_code."\n".
-                'Current Stage: '.'Year '.$reg->year_study.' Semester '.$reg->patternRoll->season."\n".
-                'Fee Balance:  '.$balance, 'QrCodes/'.$image);
+        if ($reg == null){
+
+            $stage = 'Not registered';
+
+            \QrCode::size(200)
+                ->format('png')
+                ->generate( 'Name: '.$student->fname.' '.$student->mname.' '.$student->sname."\n".
+                    'Registration: '.$student->reg_number. "\n".
+                    'Class Code: '.$student->courseStudent->class_code."\n".
+                    'Current Stage: '.$stage."\n".
+                    'Fee Balance:  '.$balance, 'QrCodes/'.$image);
+
+        }else{
+
+            \QrCode::size(200)
+                ->format('png')
+                ->generate( 'Name: '.$student->fname.' '.$student->mname.' '.$student->sname."\n".
+                    'Registration: '.$student->reg_number. "\n".
+                    'Class Code: '.$student->courseStudent->class_code."\n".
+                    'Current Stage: '.'Year '.$reg->year_study.' Semester '.$reg->patternRoll->season."\n".
+                    'Fee Balance:  '.$balance, 'QrCodes/'.$image);
+        }
 
         $domPdfPath = base_path('vendor/dompdf/dompdf');
         \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
@@ -739,6 +769,8 @@ class StudentController extends Controller
         if(file_exists($docPath)){
             unlink($docPath);
         }
+
+        unlink('QrCodes/'.$image);
 
          return response()->download($pdfPath)->deleteFileAfterSend(true);
     }

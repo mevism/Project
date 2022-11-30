@@ -188,8 +188,8 @@
                             <div class="pull-x">
                                 <table class="js-table-checkable table table-hover table-vcenter fs-sm">
                                     <tbody>
-                                        @foreach($notification as $inbox)
-                                            @foreach($inbox as $message)
+                                        @foreach($notification as $message)
+{{--                                            @foreach($inbox as $message)--}}
                                             <tr>
                                                 <td class="d-none d-sm-table-cell fw-semibold" style="width: 140px;">
                                                     @if($message->role_id == 1)
@@ -248,7 +248,7 @@
                                                 </div>
                                             </div>
 
-                                            @endforeach
+{{--                                            @endforeach--}}
                                         @endforeach
                                     </tbody>
                                 </table>

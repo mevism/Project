@@ -15,7 +15,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[1, 'desc']],
+            order: [[0, 'asc']],
             rowGroup: {
                 dataSrc: 2
             }
@@ -62,7 +62,7 @@
                         @foreach ($intakes as $intake)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td style="text-transform: uppercase" class="fw-semibold fs-sm">{{ Carbon\carbon::parse($intake->intake_from)->format('M')}} - {{ Carbon\carbon::parse($intake->intake_to)->format('M Y') }}</td>
+                                <td class="text-uppercase">{{ Carbon\carbon::parse($intake->intake_from)->format('M')}} - {{ Carbon\carbon::parse($intake->intake_to)->format('M Y') }}</td>
                                 <td>
                                     @if ($intake->status == 0)
                                         <span class="badge bg-primary">Intake Pending</span>
