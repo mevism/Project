@@ -15,10 +15,10 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[0, 'asc']],
-            rowGroup: {
-                dataSrc: 2
-            }
+            // order: [[0, 'asc']],
+            // rowGroup: {
+            //     dataSrc: 2
+            // }
         } );
     } );
 </script>
@@ -61,19 +61,20 @@
                         <th>Class Name</th>
                         <th>Course</th>
                         <th>Study Mode</th>
-                        <th>Status</th>
+{{--                        <th>Status</th>--}}
                         <th nowrap="">Class Pattern</th>
                         <th>Action</th>
                         </thead>
                         <tbody>
-                        @foreach ($classes as $key => $class)
-                            @foreach($class as  $classa)
+                        @foreach ($classes as $class)
+
+                            @foreach($class as $key => $classa)
+{{--                                <td> {{  }} </td>--}}
                                 <tr>
-{{--                                    <td>{{ ++$key }}</td>--}}
-                                    <td nowrap="" class="fw-semibold fs-sm text-uppercase">{{ $classa->name }}</td>
-                                    <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ $classa->classCourse->course_name }}</td>
-                                    <td class="fw-semibold fs-sm">{{ $classa->attendance_id }}</td>
-                                    <td> ON SESSION </td>
+                                    <td nowrap="" class="text-uppercase">{{ $classa->name }}</td>
+                                    <td class="text-uppercase fs-sm">{{ $classa->classCourse->course_name }}</td>
+                                    <td>{{ $classa->attendance_id }}</td>
+{{--                                    <td> ON SESSION </td>--}}
                                     <td>
                                         <a class="btn btn-sm btn-outline-info" href="{{ route('cod.classPattern', ['id' => Crypt::encrypt($classa->id)]) }}">View Pattern</a>
                                     </td>

@@ -409,10 +409,13 @@ class ApplicationController extends Controller
 
         $course = Application::find($hashedId);
 
-        $id = AvailableCourse::where('course_id', $course->course_id)->where('intake_id', $course->intake_id)->pluck('id')->first();
+        $id = AvailableCourse::where('course_id', $course->course_id)
+            ->where('intake_id', $course->intake_id)
+            ->where('campus_id', $course->campus_id)
+            ->pluck('id')
+            ->first();
 
-//        return $ids;
-            return redirect()->route('application.apply', Crypt::encrypt($id))->with(['success' => 'You can now update your application']);
+        return redirect()->route('application.apply', Crypt::encrypt($id))->with(['success' => 'You can now update your application']);
 
     }
 
@@ -919,7 +922,7 @@ class ApplicationController extends Controller
 
             foreach ($apps as $id){
 
-                    $notification = Notification::where('application_id', $id->id)->where('status', '>', 0)->orderBy('created_at', 'asc')->get();
+               $notification = Notification::where('application_id', $id->id)->where('status', '>', 0)->latest()->get();
 
             }
         }
