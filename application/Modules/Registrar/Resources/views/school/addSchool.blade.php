@@ -5,7 +5,8 @@
   <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
           <div class="flex-grow-1">
-            
+              <h6 class="block-title">ADD SCHOOL</h6>
+       
           </div>
           <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
               <ol class="breadcrumb breadcrumb-alt">
@@ -21,14 +22,12 @@
   </div>
 </div>
 
-    <div class="content">
-      <div  style="margin-left:20%;" class="block block-rounded col-md-9 col-lg-8 col-xl-6">
-              <div class="block-header block-header-default">
-                <h3 class="block-title">ADD SCHOOL</h3>
-              </div>
-            <div class="block-content block-content-full">
-              <div class="row">
-                <div class="col-lg-12 space-y-0">
+<div class="content">
+  <div class="block block-rounded col-md-12 col-lg-12 col-xl-12">
+        <div class="block-content block-content-full">
+          <div class="row">
+            <div class="d-flex justify-content-center">
+                <div class="col-lg-6 space-y-0">
 
                    <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.storeSchool') }}" method="POST">
                     @csrf 
@@ -47,10 +46,11 @@
                   </form>
                  
                 </div>
-              </div>
             </div>
           </div>
-    </div> 
+        </div>
+  </div>
+</div> 
     
 @endsection
 

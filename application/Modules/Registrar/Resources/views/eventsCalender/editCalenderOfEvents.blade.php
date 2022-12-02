@@ -4,19 +4,19 @@
 <div class="bg-body-light">
   <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-          <div class="flex-grow-1">
-              <h6 class="h6 fw-bold text-uppercase mb-0">
-                  ADD event to calender
-              </h6>
-          </div>
+        <div class="flex-grow-1">
+          <h6 class="block-title">
+            EDIT CALENDER OF EVENTS
+          </h6>
+      </div>
           <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
               <ol class="breadcrumb breadcrumb-alt">
                   <li class="breadcrumb-item">
                       <a class="link-fx" href="javascript:void(0)">Calender</a>
                   </li>
-                  <li class="breadcrumb-item" aria-current="page">
+                  {{-- <li class="breadcrumb-item" aria-current="page">
                     <a  href="showCalenderOfEvents">View  Calender</a>
-                  </li>
+                  </li> --}}
               </ol>
           </nav>
       </div>

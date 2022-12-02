@@ -5,18 +5,16 @@
 <div class="bg-body-light">
   <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-          <div class="flex-grow-1">
-              <h6 class="h6 fw-bold">
-                  ADD MODE OF STUDY
-              </h6>
-          </div>
+        <div class="flex-grow-1">
+          <h6 class="block-title">ADD MODE OF STUDY</h6>
+        </div>
           <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
               <ol class="breadcrumb breadcrumb-alt">
                   <li class="breadcrumb-item">
                       <a class="link-fx" href="javascript:void(0)">Mode of Study</a>
                   </li>
                   <li class="breadcrumb-item" aria-current="page">
-                    <a  href="showAttendance">View Mode of Study</a>
+                    <a  href="showAttendance">View Modes of Study</a>
                   </li>
               </ol>
           </nav>
@@ -41,7 +39,7 @@
                           <label class="form-label">CODE</label>
                         </div>
                         <div class="col-12 text-center p-3">
-                          <button type="submit" class="btn btn-alt-success" data-toggle="click-ripple">Create Attendance</button>
+                          <button type="submit" class="btn btn-alt-success" data-toggle="click-ripple">Create Mode of Study</button>
                         </div>
                       </form>
                     </div>

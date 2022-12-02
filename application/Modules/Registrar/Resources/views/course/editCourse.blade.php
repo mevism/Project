@@ -5,9 +5,9 @@
 <div class="bg-body-light">
   <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-          <div class="flex-grow-1">
-              <h4 class="h3 fw-bold mb-2">
-
+        <div class="flex-grow-1">
+            <h4 class="h3 fw-bold mb-2 block-title">
+                EDIT COURSE
               </h4>
           </div>
 
@@ -17,7 +17,6 @@
     <div class="content">
         <div  class="block block-rounded">
             <div class="block-header block-header-default">
-              <h3 class="block-title">EDIT COURSE</h3>
             </div>
             <div class="block-content block-content-full">
                 <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.updateCourse',$data->id) }}" method="POST">

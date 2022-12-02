@@ -5,8 +5,8 @@
 <div class="bg-body-light">
   <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-          <div class="flex-grow-1">
-              <h4 class="h3 fw-bold mb-2">
+        <div class="flex-grow-1">
+            <h4 class="h3 fw-bold mb-2 block-title">
                 ADD COURSE
               </h4>
           </div>
@@ -25,7 +25,8 @@
 </div>
     <div class="content">
         <div  class="block block-rounded">
-           
+            <div class="block-header block-header-default">
+            </div>
             <div class="block-content block-content-full">
                 <form method="POST" action="{{ route('courses.storeCourse') }}">
                     @csrf
