@@ -5,8 +5,8 @@
   <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
           <div class="flex-grow-1">
-              <h6 class="h6 fw-bold mb-0">
-                ADD SEMESTER EVENT
+              <h6 class="block-title">
+                ADD CALENDER OF EVENTS
               </h6>
           </div>
           <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -73,7 +73,7 @@
                         <label class="form-label">END DATE</label>
                       </div>
 
-                    <div class="col-12 text-center p-3">
+                    <div class="col-12 text-center p-3 mb-4">
                       <button type="submit"  class="btn btn-alt-success" data-toggle="click-ripple">Create Calender</button>
                     </div>
                   </form>
