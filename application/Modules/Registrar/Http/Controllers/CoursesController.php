@@ -41,6 +41,8 @@ use Modules\Registrar\Entities\AcademicYear;
 use Modules\Registrar\Entities\RegistrarLog;
 use Modules\Registrar\Entities\StudentLogin;
 use Modules\Application\Entities\Application;
+use Modules\Registrar\Entities\CourseHistory;
+use Modules\Registrar\Entities\SchoolHistory;
 use Modules\Registrar\Entities\StudentCourse;
 use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Application\Entities\Notification;
@@ -51,10 +53,28 @@ use Modules\Registrar\Entities\CourseLevelMode;
 use Modules\Registrar\Entities\KuccpsApplicant;
 use Modules\Registrar\Entities\CalenderOfEvents;
 use Modules\Registrar\Entities\CourseRequirement;
+use Modules\Registrar\Entities\DepartmentHistory;
 use Modules\Application\Entities\AdmissionApproval;
 
 class CoursesController extends Controller
 {
+    public function coursePreview($id){
+        $courseName = Courses::find($id);
+        $data = CourseHistory::where('course_id', $id)->latest()->get();
+       return view('registrar::course.preview')->with(['data' => $data , 'courseName'=>$courseName]);
+   }
+
+    public function departmentPreview($id){
+        $departmentName = Department::find($id);
+        $data = DepartmentHistory::where('department_id', $id)->latest()->get();
+       return view('registrar::department.preview')->with(['data' => $data , 'departmentName'=>$departmentName]);
+   }
+
+    public function schoolPreview($id){
+        $schoolName = School::find($id);
+        $data = SchoolHistory::where('school_id', $id)->latest()->get();
+       return view('registrar::school.preview')->with(['data' => $data , 'schoolName'=>$schoolName]);
+   }
 
     public function transfer(){
 
@@ -985,9 +1005,21 @@ class CoursesController extends Controller
 
     public function updateSchool(Request $request, $id){
         $data                  =         School::find($id);
-        $data->initials        =         $request->input('initials');
-        $data->name            =         $request->input('name');
-        $data->update();
+
+        $oldSchool = new SchoolHistory;
+        $oldSchool->school_id = $data->id;
+        $oldSchool->initials = $data->initials;
+        $oldSchool->name = $data->name;
+        $oldSchool->created_at = $data->created_at;
+        $oldSchool->updated_at = $data->updated_at;
+        $oldSchool->save();
+
+        $newSchool = School::find($id);
+
+        $newSchool->initials        =         $request->input('initials');
+        $newSchool->name            =         $request->input('name');
+        $newSchool->update();
+
         return redirect()->route('courses.showSchool')->with('status','Data Updated Successfully');
 
     }
@@ -1050,10 +1082,21 @@ class CoursesController extends Controller
     public function updateDepartment(Request $request, $id){
 
         $data                 =         Department::find($id);
-        $data->school_id      =         $request->input('school');
-        $data->dept_code      =         $request->input('dept_code');
-        $data->name           =         $request->input('name');
-        $data->update();
+
+        $oldDepartment  =  new DepartmentHistory;
+        $oldDepartment->department_id = $data->id;
+        $oldDepartment->school_id  = $data->school_id;
+        $oldDepartment->name  = $data->name;
+        $oldDepartment->dept_code  =  $data->dept_code;
+        $oldDepartment->created_at = $data->created_at;
+        $oldDepartment->updated_at = $data->updated_at;
+        $oldDepartment->save();
+
+        $newDepartment   = Department::find($id);
+        $newDepartment->school_id      =         $request->input('school');
+        $newDepartment->dept_code      =         $request->input('dept_code');
+        $newDepartment->name           =         $request->input('name');
+        $newDepartment->update();
         return redirect()->route('courses.showDepartment')->with('status','Data Updated Successfully');
     }
 
@@ -1078,8 +1121,8 @@ class CoursesController extends Controller
 
         $vz = $request->validate([
             'department'                =>       'required',
-            'course_name'               =>       'required|unique:courses',
-            'course_code'               =>       'required|unique:courses',
+            'course_name'               =>       'required',
+            'course_code'               =>       'required',
             'level'                     =>       'required',
             'course_duration'           =>       'required',
             'course_requirements'       =>       'required',
@@ -1155,8 +1198,6 @@ class CoursesController extends Controller
             'subject'                   =>       'required'
         ]);
 
-//        return $request->all();
-
         $subject          =          $request->subject;
         $subject1         =          $request->subject1;
         $subject2         =          $request->subject2;
@@ -1166,13 +1207,27 @@ class CoursesController extends Controller
         $record2            =          implode(",", $subject2);
         $record3            =          implode(",", $subject3);
 
-
         $data                      =           Courses::find($id);
-        $data->course_name         =           $request->input('course_name');
-        $data->department_id       =           $request->input('department');
-        $data->level               =           $request->input('level');
-        $data->course_code         =           $request->input('course_code');
-        $data->update();
+
+        if($request->department == $data->department_id){
+
+            $oldCourse   =   new  CourseHistory;
+            $oldCourse->course_id           =           $data->id;
+            $oldCourse->course_name         =           $data->course_name;
+            $oldCourse->department_id       =           $data->department_id;
+            $oldCourse->level               =           $data->level;
+            $oldCourse->course_code         =           $data->course_code;
+            $oldCourse->save();
+
+        }else{
+
+            $newCourse   =     Courses::find($id);
+            $newCourse->course_name         =           $request->input('course_name');
+            $newCourse->department_id       =           $request->input('department');
+            $newCourse->level               =           $request->input('level');
+            $newCourse->course_code         =           $request->input('course_code');
+            $newCourse->update();
+        }
 
         $req              =             CourseRequirement::where('course_id', $id)->first();
         $req->course_duration           =             $request->input('course_duration');
@@ -1181,7 +1236,7 @@ class CoursesController extends Controller
             $req->fee  = '500';
         }elseif($request->level  == 2) {
             $req->fee  = '500';
-        }elseif($request->level  == 3){
+        }elseif($request->level  == 3) {
             $req->fee  = '1000';
         }else{
             $req->fee  = '1500';

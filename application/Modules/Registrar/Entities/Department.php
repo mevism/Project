@@ -17,6 +17,8 @@ class Department extends Model
         return $this->hasMany(User::class, 'id');
     }
 
+
+
     public function schools(){
 
         return $this->belongsTo(School::class, 'school_id');
@@ -27,6 +29,11 @@ class Department extends Model
     //     return $this->hasMany(AvailableCourse::class);
     // }
     public function course(){
+
+        return $this->hasMany(Courses::class,'id');
+    }
+
+    public function historycourse(){
 
         return $this->hasMany(Courses::class,'id');
     }

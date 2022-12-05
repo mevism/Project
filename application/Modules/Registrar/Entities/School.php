@@ -17,6 +17,11 @@ class School extends Model
         return $this->hasMany(User::class, 'id');
     }
 
+    public function departmenthistory(){
+
+        return $this->hasMany(DepartmentHistory::class, 'id');
+    }
+
     public function departments(){
 
         return $this->hasMany(Department::class, 'id');

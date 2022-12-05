@@ -57,6 +57,7 @@
                             <th>#</th>
                             <th>School Code</th>
                             <th>School NAME </th>
+                            <th>HISTORY</th>
                             <th>Action</th>
                         </thead>
                         <tbody><?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $school): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -64,6 +65,10 @@
                             <td><?php echo e($loop->iteration); ?></td>
                             <td style="text-transform: uppercase"> <?php echo e($school->initials); ?></td>
                             <td style="text-transform: uppercase"> <?php echo e($school->name); ?></td>
+                            <td>
+                                <a class="btn btn-sm btn-alt-secondary" href="<?php echo e(route('courses.schoolPreview', $school->id)); ?>"> View </a>
+
+                            </td>
                             <td>
                                 <a class="btn btn-sm btn-alt-info" href="<?php echo e(route('courses.editSchool', ['id'=> Crypt::encrypt($school->id)])); ?>">edit</a>
                              <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this school ?')" href="<?php echo e(route('courses.destroySchool', $school->id)); ?>">delete</a> </td>
