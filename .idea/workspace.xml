@@ -4,42 +4,26 @@
     <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Fees/BTIT008J2022.docx" beforeDir="false" afterPath="$PROJECT_DIR$/Fees/BTIT008J2022.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669208662.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669208722.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669208857.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669209003.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669209040.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669209099.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669209142.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669209212.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669209245.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669215348.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669219461.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669219532.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669219539.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669219599.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669270112.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669270349.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669270759.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669270890.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669270993.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669291066.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669359018.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669360112.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669360179.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669364541.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669366605.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669366812.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669367213.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/inbox.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/inbox.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/classes/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/classes/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/intakes/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/intakes/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Student.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Student.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_26_155157_create_course_transfers_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_26_155157_create_course_transfers_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_11_17_104151_create_transfer_invoices_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_11_17_104440_create_transfer_deposits_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/CourseTransfer.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/CourseTransfer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/TransferDeposit.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/TransferInvoice.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/lLH96NxIr2powaeIUz5JBSHDNhcns9QkCTwvrdqk" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/avatars/avatar0.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/coursetransfer.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/coursetransfer.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/transfers.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/transfers.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/layouts/backend.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/semester/requestRegistration.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/semester/requestRegistration.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/chYhE4Xf8NzwIkdQU4ShxSFkQLpFYehBw9clkKpP" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/hB5bv3Wfu7KVAQFMls4qtOVPG46exiOkWqCwjUyz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/sVf8GfBumcSUv74yERZhZ1VkyasVMipMvqSXX8JY" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/avatars/avatar1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/avatars/avatar16.jpg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -238,7 +222,9 @@
       <workItem from="1669616855288" duration="6488000" />
       <workItem from="1669625476455" duration="5427000" />
       <workItem from="1669634473431" duration="622000" />
-      <workItem from="1669788135869" duration="7777000" />
+      <workItem from="1669788135869" duration="28521000" />
+      <workItem from="1669962037985" duration="16393000" />
+      <workItem from="1670219321658" duration="6426000" />
     </task>
     <servers />
   </component>

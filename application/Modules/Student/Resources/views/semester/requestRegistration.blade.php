@@ -180,7 +180,7 @@
                     <input type="hidden" name="pattern" value="{{ $next->pattern_id }}">
                     <div class="d-flex justify-content-center">
                         @if(in_array($next->semester, ['1.3', '2.3', '3.3', '4.3', '5.3', '6.3', '7.3'], true))
-                            @if($dates === null)
+                            @if($dates == null)
                                 <button class="btn btn-outline-warning col-md-5 disabled"> Semester registration not scheduled </button>
                             @else
                                 @php

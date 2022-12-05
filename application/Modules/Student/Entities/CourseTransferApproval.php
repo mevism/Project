@@ -5,14 +5,19 @@ namespace Modules\Student\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class TransferDeposit extends Model
+class CourseTransferApproval extends Model
 {
     use HasFactory;
 
     protected $fillable = [];
-    
+
+    public function transferApproval(){
+
+        return $this->belongsTo(CourseTransfer::class, 'id');
+    }
+
     protected static function newFactory()
     {
-        return \Modules\Student\Database\factories\TransferDepositFactory::new();
+        return \Modules\Student\Database\factories\CourseTransferApprovalFactory::new();
     }
 }

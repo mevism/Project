@@ -19,14 +19,9 @@ return new class extends Migration
             $table->integer('course_id');
             $table->integer('class_id');
             $table->integer('department_id');
-            $table->float('points');
-            $table->integer('cod_status')->nullable();
-            $table->longText('cod_remarks')->nullable();
-            $table->integer('dean_status')->nullable();
-            $table->longText('dean_remarks')->nullable();
-            $table->integer('registrar_status')->nullable();
-            $table->longText('registrar_remarks')->nullable();
-            $table->integer('status')->nullable();
+            $table->string('class_points');
+            $table->string('student_points');
+            $table->integer('status')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

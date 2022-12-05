@@ -60,13 +60,11 @@
                     <thead>
                     <th>#</th>
                     <th> Course Department </th>
-                    {{--                    <th> Department </th>--}}
                     <th nowrap=""> Course Name </th>
                     <th nowrap=""> Class Code </th>
-                    <th nowrap=""> Cut-Off </th>
-                    <th nowrap=""> Status</th>
-                    <th nowrap=""> Action</th>
-{{--                    <th> Status </th>--}}
+                    <th nowrap="">Class Cut-Off </th>
+                    <th nowrap=""> Student Points</th>
+                    <th nowrap=""> Status </th>
                     </thead>
                     <tbody>
                     @foreach($transfers as $key => $transfer)
@@ -75,29 +73,17 @@
                             <td> {{ $transfer->deptTransfer->name }}</td>
                             <td> {{ $transfer->courseTransfer->course_name }}</td>
                             <td nowrap=""> {{ $transfer->classTransfer->name }}</td>
-                            <td>
-                                {{ $transfer->courseTransfer }} | {{ $transfer->classTransfer->points }}
-                            </td>
+                            <td> {{ $transfer->class_points }} </td>
+                            <td> {{ $transfer->student_points }} </td>
                             <td nowrap="">
-                                @if($transfer->status === NULL)
-                                    <span class="text-primary"> Not Submitted </span>
-                                @elseif($transfer->status === 0)
-                                    <span class="text-info"> Submitted </span>
+                                @if($transfer->status == 0)
+                                    <span class="text-info"> Pending </span>
+                                @elseif($transfer->status == 1)
+                                    <span class="text-primary">Processing </span>
+                                @elseif($transfer->status == 2)
+                                    <span class="text-success">Accepted </span>
                                 @else
-                                    <span class="text-success">Closed </span>
-                                @endif
-                            </td>
-                            <td nowrap="">
-                                @if($transfer->status === NULL)
-
-                                    <a class="btn btn-sm btn-alt-success" href="{{ route('student.storetransferrequest', ['id' => Crypt::encrypt($transfer->id)]) }}" >Submit</a> |
-                                    <a class="btn btn-sm btn-alt-info" href="{{ route('student.edittransferrequest', ['id' => Crypt::encrypt($transfer->id)]) }}" >Edit</a> |
-                                    <a class="btn btn-sm btn-alt-danger" href="{{ route('student.deletetransferrequest', ['id' => Crypt::encrypt($transfer->id)]) }}" >Delete</a>
-
-                                @elseif($transfer->status === 1)
-                                     <a class="btn btn-sm btn-alt-success" disabled="">Processed</a>
-                                @else
-                                    <a class="btn btn-sm btn-alt-secondary" disabled="">Processing</a>
+                                    <span class="text-danger">Declined </span>
                                 @endif
                             </td>
                         </tr>

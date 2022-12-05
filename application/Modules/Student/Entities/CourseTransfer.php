@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Department;
+use Modules\Registrar\Entities\Student;
 
 class CourseTransfer extends Model
 {
@@ -27,6 +28,14 @@ class CourseTransfer extends Model
 
     public function classTransfer(){
         return $this->belongsTo(Classes::class, 'class_id');
+    }
+
+    public function studentTransfer(){
+        return $this->belongsTo(Student::class, 'student_id');
+    }
+
+    public function approveTransfer(){
+        return $this->hasOne(CourseTransferApproval::class, 'course_transfer_id');
     }
 
     protected static function newFactory()
