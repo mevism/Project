@@ -25,6 +25,8 @@ use Modules\Registrar\Entities\FeeStructure;
 use Modules\Registrar\Entities\SemesterFee;
 use Modules\Registrar\Entities\Student;
 use Modules\Registrar\Entities\StudentCourse;
+use Modules\Student\Entities\CourseTransfer;
+use Modules\Student\Entities\CourseTransferApproval;
 use Modules\Student\Entities\ExamResults;
 use Validator;
 use Modules\Registrar\Entities\AvailableCourse;
@@ -603,6 +605,87 @@ class CODController extends Controller
 
         return redirect()->route('department.examResults')->with('success', 'Exam result updated successfully');
 
+    }
+
+    public function transferRequests(){
+
+        $transfers = CourseTransfer::where('department_id', Auth::guard('user')->user()->department_id)
+            ->where('status', '<=', 1)
+            ->latest()
+            ->get();
+
+        return view('cod::transfers.index')->with(['transfers' => $transfers]);
+
+    }
+
+    public function viewTransferRequest($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $transfer = CourseTransfer::find($hashedId);
+
+        return view('cod::transfers.viewRequest')->with(['transfer' => $transfer]);
+
+    }
+
+    public function viewUploadedDocument($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $course = CourseTransfer::find($hashedId);
+
+        $document = Application::where('reg_number', $course->studentTransfer->reg_number)->first();
+
+        return response()->file('Admissions/Certificates/'.$document->admissionDoc->certificates);
+
+    }
+
+    public function acceptTransferRequest($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        if (CourseTransferApproval::where('course_transfer_id', $hashedId)->exists()){
+
+            $approval = CourseTransferApproval::where('course_transfer_id', $hashedId)->first();
+            $approval->cod_status = 1;
+            $approval->cod_remarks = 'Accepted';
+            $approval->save();
+
+        }else{
+
+            $approval = new CourseTransferApproval;
+            $approval->course_transfer_id = $hashedId;
+            $approval->cod_status = 1;
+            $approval->cod_remarks = 'Accepted';
+            $approval->save();
+        }
+
+        return redirect()->route('department.courseTransfers')->with('success', 'Course transfer request accepted');
+
+    }
+
+    public function declineTransferRequest(Request $request, $id){
+
+        $hashedId = decrypt($id);
+
+        if (CourseTransferApproval::where('course_transfer_id', $hashedId)->exists()){
+
+            $approval = CourseTransferApproval::where('course_transfer_id', $hashedId)->first();
+            $approval->cod_status = 2;
+            $approval->cod_remarks = $request->remarks;
+            $approval->save();
+
+        }else{
+
+            $approval = new CourseTransferApproval;
+            $approval->course_transfer_id = $hashedId;
+            $approval->cod_status = 2;
+            $approval->cod_remarks = $request->remarks;
+            $approval->save();
+
+        }
+
+        return redirect()->route('department.courseTransfers')->with('success', 'Course transfer request accepted');
     }
 
 

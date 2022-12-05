@@ -200,13 +200,15 @@
                         </a>
                     </li>
                 </ul>
-              <ul class="nav-main-submenu">
-                <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{ route('student.coursetransfers') }}">
-                    <span class="nav-main-link-name">Course Transfer</span>
-                  </a>
-                </li>
-              </ul>
+              @if(Auth::guard('student')->user()->loggedStudent->courseStudent->student_type == 2)
+                    <ul class="nav-main-submenu">
+                        <li class="nav-main-item">
+                            <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{ route('student.coursetransfers') }}">
+                                <span class="nav-main-link-name">Course Transfer</span>
+                            </a>
+                        </li>
+                    </ul>
+                @endif
             </li>
 
               <li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">

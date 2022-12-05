@@ -91,35 +91,116 @@
                                     @else
                                         <form action="{{ route('student.submittransferrequest') }}" method="POST">
                                             @csrf
-                                            <div class="mb-0">
-                                                <label class="mb-2">DEPARTMENT</label>
+                                            <div class="d-flex justify-content-center">
+                                                <div class="col-md-11">
+                                                    <div class="mb-0">
+                                                        <label class="mb-2">DEPARTMENT</label>
 
-                                                <select name="dept" class="form-control form-control-lg form-select mb-2 department">
-                                                    <option selected disabled class="text-center"> -- select department -- </option>
-                                                    @foreach($departments as $key => $department)
-                                                        <option value="{{ $department->id }}"> {{ $department->name }}</option>
-                                                    @endforeach
-                                                </select>
+                                                        <select name="dept" class="form-control form-control-lg form-select mb-2 department">
+                                                            <option selected disabled class="text-center"> -- select department -- </option>
+                                                            @foreach($departments as $key => $department)
+                                                                <option value="{{ $department->id }}"> {{ $department->name }}</option>
+                                                            @endforeach
+                                                        </select>
 
-                                                <label class="mb-2">COURSE</label>
+                                                        <label class="mb-2">COURSE</label>
 
-                                                <select name="course" class="form-control form-control-lg form-select mb-3 course">
-                                                    <option selected disabled class="text-center"> -- select course -- </option>
-                                                </select>
+                                                        <select name="course" class="form-control form-control-lg form-select mb-3 course">
+                                                            <option selected disabled class="text-center"> -- select course -- </option>
+                                                        </select>
 
-                                                <label class="mb-2">CLASS</label>
+                                                        <label class="mb-2">CLASS</label>
 
-                                                <select name="class" class="form-control form-select form-control-lg mb-3 class">
-                                                    <option selected disabled class="text-center"> -- select class -- </option>
-                                                </select>
-                                            </div>
-                                            <div class="mb-4">
-                                                <label class="mb-3">CUT-OFF POINTS</label>
-                                                <input type="text" class="form-control mb-3" name="points" value="{{ old('points') }}">
-                                            </div>
-                                            <div class="mb-4">
-                                                <div class="d-flex justify-content-center">
-                                                    <button class="btn btn-success col-md-7" >SUBMIT TRANSFER REQUEST</button>
+                                                        <select name="class" class="form-control form-control-lg mb-3 class">
+                                                            <option selected disabled class="text-center"> -- select class -- </option>
+                                                        </select>
+                                                        <label class="mb-2 label">CLASS CUT-OFF POINTS</label>
+                                                        <input type="text" id="points" class="form-control mb-3" name="points" readonly>
+
+                                                        <label class="mb-2 label">MY POINTS</label>
+                                                        <input type="text" id="mypoints" class="form-control mb-3" name="mypoints" readonly value="{{ old('points') }}">
+                                                    </div>
+
+                                                    <div class="mb-2" id="requirements">
+                                                        <label class="mb-3">COURSE MINIMUM SUBJECT REQUIREMENT</label>
+                                                        <input type="text" id="subject1" readonly style="border: none transparent; outline: none !important;">
+                                                        <input type="text" id="subject2" readonly style="border: none transparent; outline: none !important;">
+                                                        <hr>
+                                                        <input type="text" id="subject3" readonly style="border: none transparent; outline: none !important;">
+                                                        <input type="text" id="subject4" readonly style="border: none transparent; outline: none !important;">
+                                                        <hr>
+
+                                                    </div>
+
+                                                    <div class="mb-2" id="grades">
+                                                        <label>COURSE MINIMUM GRADE</label>
+                                                        <input name="mingrade" type="text" id="mingrade" class="form-control mb-3" readonly>
+
+                                                        <label class="mb-2">MY KCSE GRADE</label>
+                                                        <select id="mygrade" name="mygrade" class="form-control form-select" required>
+                                                            <option class="text-center" selected disabled> -- select your grade -- </option>
+                                                            <option value="KCSE A">KCSE A</option>
+                                                            <option value="KCSE A-">KCSE A-</option>
+                                                            <option value="KCSE B+">KCSE B+</option>
+                                                            <option value="KCSE B">KCSE B</option>
+                                                            <option value="KCSE B-">KCSE B-</option>
+                                                            <option value="KCSE C+">KCSE C+</option>
+                                                            <option value="KCSE C">KCSE C</option>
+                                                            <option value="KCSE C-">KCSE C-</option>
+                                                            <option value="KCSE D+">KCSE D+</option>
+                                                            <option value="KCSE D">KCSE D</option>
+                                                            <option value="KCSE D-">KCSE D-</option>
+
+                                                        </select>
+                                                    </div>
+
+                                                    <div id="info" class="alert alert-info alert-dismissible fs-sm" role="alert">
+                                                        <p><b>Note!</b> Ensure that you meet all the minimum subject requirement and minimum min-grade for the course you want to transfer to. Only students who meet the minimum requirements will be considered. <br> <span class="text-warning">You will be invoiced Ksh. 500 which you will be required to pay to complete application for course transfer.</span></p>
+                                                    </div>
+
+                                                    <div id="success" class="alert alert-success alert-dismissible fs-sm" role="alert">
+                                                        <p><b>Congratulations!!</b> You meet the minimum course cut-off points for this course. Click "Submit Button" to complete request. <br>
+                                                            <span class="text-warning">You will be invoiced Ksh. 500 which you will be required to pay to complete application for course transfer.</span>
+                                                        </p>
+                                                    </div>
+
+                                                    <div id="warning" class="alert alert-warning alert-dismissible fs-sm" role="alert">
+                                                        <p><b>Oops!!</b> You do not meet the minimum course cut-off points for the selected course. Please choose another course that you qualify.<br>
+                                                            <span class="text-danger">However, if you wish to continue, you will be invoiced Ksh. 500 which you will be required to pay to complete application for course transfer.</span>
+                                                        </p>
+                                                    </div>
+                                                    @if($event == NULL)
+                                                        <div class="mb-4">
+                                                            <div class="d-flex justify-content-center">
+                                                                <button class="btn btn-primary col-md-7 disabled" onclick="return confirm('Are you sure you want to proceed? You will be invoiced for submitting this request.')" >Course transfer not scheduled </button>
+                                                            </div>
+                                                        </div>
+                                                    @else
+
+                                                        @php
+                                                            $now = \Carbon\Carbon::now();
+                                                        @endphp
+
+                                                        @if($now < $event->start_date)
+                                                            <div class="mb-4">
+                                                                <div class="d-flex justify-content-center">
+                                                                    <button class="btn btn-outline-info col-md-10 disabled">  Course Transfer Schedule starts on {{ Carbon\Carbon::parse($event->start_date)->format('D, d M Y') }}</button>
+                                                                </div>
+                                                            </div>
+                                                        @elseif($now > $event->end_date)
+                                                            <div class="mb-4">
+                                                                <div class="d-flex justify-content-center">
+                                                                    <button class="btn btn-outline-danger col-md-7 disabled" >Course transfer schedule closed </button>
+                                                                </div>
+                                                            </div>
+                                                        @elseif($now <= $event->end_date)
+                                                            <div class="mb-4">
+                                                                <div class="d-flex justify-content-center">
+                                                                    <button class="btn btn-outline-success col-md-7"  onclick="return confirm('Are you sure you want to proceed? You will be invoiced for submitting this request.')"> Submit Request </button>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    @endif
                                                 </div>
                                             </div>
                                         </form>
@@ -142,6 +223,15 @@
 <script>
     $(document).ready( function (){
 
+        $("#success").hide();
+        $("#warning").hide();
+        $("#points").hide();
+        $("#mypoints").hide();
+        $(".label").hide();
+        $("#grades").hide();
+        $("#requirements").hide();
+        $("#info").hide();
+
         $(document).on('change', '.department', function () {
 
             var department_id = $(this).val();
@@ -154,6 +244,9 @@
                 url: '{{ route('student.getdeptcourse') }}',
                 data: { id:department_id},
                 success:function (data){
+
+                    console.log(data)
+
                     op+='<option value="0" selected disabled class="text-center"> -- choose course -- </option>'
 
                     for (var i = 0; i < data.length; i++){
@@ -180,6 +273,7 @@
 
             console.log(course_id);
             var op1 = " ";
+            var op2 = " "
 
             $.ajax({
 
@@ -187,7 +281,7 @@
                 url: '{{ route('student.getcourseclasses') }}',
                 data: { id:course_id},
                 // dataType: 'json',
-                success:function (data){
+                success:function (data) {
 
                     console.log(data);
 
@@ -195,14 +289,51 @@
 
                     // for (var i = 0; i < data.length; i++){
 
-                        op1+='<option selected value="'+data.name+'"> '+data.name+'</<option>';                           ''
+                    op1 += '<option selected value="' + data[0] + '"> ' + data[1] + '</<option>';
+                    ''
+                    // op2+='<option selected value="'+data[2]+'"> '+data[2]+'</<option>';                           ''
                     // }
 
+                    console.log(data[7])
 
-                    a.find('.class').html(" ");
-                    a.find('.class').append(op1);
+                        if (data[7] == 2) {
+                            $("#points").hide();
+                            $("#mypoints").hide();
+                            $(".label").hide()
+                            $("#grades").show()
+                            $("#requirements").show()
 
-                    // a.find("class").append(data);
+                            a.find('.class').html(" ");
+                            a.find('.class').append(op1);
+                            $("#mingrade").val(data[6]);
+                            $("#subject1").val(data[3]);
+                            $("#subject2").val(data[4]);
+                            $("#subject3").val(data[5]);
+                            $("#subject4").val(data[6]);
+
+                            $("#info").show();
+
+
+                        } else{
+                            $("#points").show();
+                            $("#mypoints").show();
+                            $(".label").show()
+                            a.find('.class').html(" ");
+                            a.find('.class').append(op1);
+                            // a.find('#points').append(data[2]);
+                            $('#points').val(data[3]);
+                            $('#mypoints').val(data[2]);
+
+                            // a.find("class").append(data);
+
+                            if (data[2] >= data[3]) {
+                                $("#warning").hide();
+                                $("#success").show();
+                            } else {
+                                $("#success").hide();
+                                $("#warning").show();
+                            }
+                    }
                 },
 
                 error: function (){

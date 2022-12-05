@@ -17,10 +17,12 @@ use Modules\COD\Entities\Nominalroll;
 use Modules\Finance\Entities\StudentInvoice;
 use Modules\Registrar\Entities\CalenderOfEvents;
 use Modules\Registrar\Entities\Classes;
+use Modules\Registrar\Entities\ClusterWeights;
 use Modules\Registrar\Entities\CourseLevelMode;
 use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Department;
 use Modules\Registrar\Entities\FeeStructure;
+use Modules\Registrar\Entities\Intake;
 use Modules\Registrar\Entities\Student;
 use Modules\Registrar\Entities\StudentCourse;
 use Modules\Registrar\Entities\UnitProgramms;
@@ -77,12 +79,38 @@ class StudentController extends Controller
 
         $transfers = CourseTransfer::where('student_id', Auth::guard('student')->user()->student_id)->latest()->get();
 
-//        foreach ($transfers as $transfer){
-//            $cluster = Db::table('cluster_weights')
-//                ->where('student_name', $student->sname.' '.$student->fname.' '.$student->mname)
-//                ->latest()
-//                ->get();
-//        }
+        $invoices = StudentInvoice::where('student_id', $student->id)
+            ->where('reg_number', $student->reg_number)
+            ->latest()
+            ->get();
+        $deposits = StudentDeposit::where('reg_number', $student->reg_number)
+            ->latest()
+            ->get();
+
+        $invoice = 0;
+        $deposit = 0;
+
+        foreach ($invoices as $record){
+
+            $invoice += $record->amount;
+        }
+
+        foreach ($deposits as $record){
+
+            $deposit += $record->deposit;
+        }
+
+        if ($deposit >= $invoice){
+
+            foreach ($transfers as $transfer){
+
+                if (!$transfer->status){
+
+                    $transfer->status = 1;
+                    $transfer->save();
+                }
+            }
+        }
 
         return view('student::courses.transfers')->with(['transfers' => $transfers]);
     }
@@ -91,8 +119,21 @@ class StudentController extends Controller
 
         $departments = Department::latest()->get();
         $stage = Nominalroll::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)->latest()->first();
+        $current = Carbon::now()->format('Y-m-d');
 
-        return view('student::courses.coursetransfer')->with(['departments' => $departments, 'stage' => $stage]);
+        $sem_date = Intake::where('intake_from', '<=', $current, )
+            ->where('intake_to', '>=', $current)
+            ->first();
+
+        $academicYear =  Carbon::parse($sem_date->academicYear->year_start)->format('Y').'/'.Carbon::parse($sem_date->academicYear->year_end)->format('Y');
+        $semester = Carbon::parse($sem_date->intake_from)->format('M').'/'.Carbon::parse($sem_date->intake_to)->format('M');
+
+        $event = CalenderOfEvents::where('academic_year_id', $academicYear)
+            ->where('intake_id', strtoupper($semester))
+            ->where('event_id', 5)
+            ->first();
+
+        return view('student::courses.coursetransfer')->with(['departments' => $departments, 'stage' => $stage, 'event' => $event]);
 
     }
 
@@ -107,28 +148,53 @@ class StudentController extends Controller
 
     public function getCourseClasses(Request $request){
 
+        $student = Auth::guard('student')->user()->loggedStudent;
+
+        $group = Courses::where('id', $request->id)->first();
+
+        if ($group->level == 2){
+
+            $classes = Classes::where('course_id', $request->id)
+                ->where('attendance_id', 'J-FT')
+                ->select('id','name', 'points')
+                ->latest()
+                ->first();
+
+            $cluster = [$classes->id, $classes->name, $group->courseRequirements->subject1, $group->courseRequirements->subject2, $group->courseRequirements->subject3, $group->courseRequirements->subject4, $group->courseRequirements->course_requirements, $group->level];
+
+            return response()->json($cluster);
+        }
+        $points = ClusterWeights::where('student_name', $student->sname.' '.$student->fname.' '.$student->mname)
+            ->select($group->cluster_group)
+            ->first();
+
         $classes = Classes::where('course_id', $request->id)
             ->where('attendance_id', 'J-FT')
-//            ->select('name')
+            ->select('id','name', 'points')
             ->latest()
             ->first();
 
-        return response()->json($classes);
+        $cluster = [$classes->id, $classes->name, $points[$group->cluster_group], $classes->points];
+
+        return response()->json($cluster);
     }
 
     public function submitRequest(Request $request){
+
+//        return $request->all();
 
         $request->validate([
             'dept' => 'required',
             'course' => 'required',
             'class' => 'required',
-            'points' => 'required|numeric'
+//            'points' => 'required',
+//            'mypoints' => 'required',
         ]);
 
 
         if (Auth::guard('student')->user()->loggedStudent->courseStudent->course_id == $request->course){
 
-            return redirect()->route('student.coursetransfers')->with('error', 'You are already admitted to this course');
+            return redirect()->back()->with('error', 'You are already admitted to this course');
 
         }else{
             if (CourseTransfer::where('course_id', $request->course)->where('student_id', Auth::guard('student')->user()->student_id)->first()){
@@ -136,13 +202,29 @@ class StudentController extends Controller
                 return redirect()->route('student.coursetransfers')->with('warning', 'You have already created course transfer request for this course');
 
             }else{
+
                 $transfer = new CourseTransfer;
                 $transfer->student_id = Auth::guard('student')->user()->student_id;
                 $transfer->department_id = $request->dept;
                 $transfer->course_id = $request->course;
                 $transfer->class_id = $request->class;
-                $transfer->points = $request->points;
+                if ($request->mingrade == null){
+                    $transfer->class_points = $request->points;
+                    $transfer->student_points = $request->mypoints;
+                }else{
+                    $transfer->class_points = $request->mingrade;
+                    $transfer->student_points = $request->mygrade;
+                }
                 $transfer->save();
+
+                $invoice = new StudentInvoice;
+                $invoice->student_id = Auth::guard('student')->user()->student_id;
+                $invoice->reg_number = Auth::guard('student')->user()->loggedStudent->reg_number;
+                $invoice->invoice_number = 'INV'.time();
+                $invoice->description = 'New Student Course Transfers';
+                $invoice->amount = 500;
+                $invoice->stage = 1;
+                $invoice->save();
 
                 return redirect()->route('student.coursetransfers')->with('success', 'Course transfer request created successfully');
             }
