@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+// use Carbon;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserSeeder extends Seeder
 {
@@ -91,30 +93,32 @@ class UserSeeder extends Seeder
 
 
          DB::table('schools')->insert([
-             ['initials'=>'SOB', 'name'=>'SCHOOL OF BUSINESS'],
-             ['initials'=>'SoET', 'name'=>'SCHOOL OF ENGINEERING AND TECHNOLOGY'],
-             ['initials'=>'SOAHS', 'name'=>'SCHOOL OF APPLIED AND HEALTH SCIENCES'],
-             ['initials'=>'SOHSS', 'name'=>'SCHOOL OF HUMANITIES AND SOCIAL SCIENCES'],
-             ['initials'=>'ICI', 'name'=>'SCHOOL OF COMPUTNG AND INFORMATICS'],
+             ['initials'=>'SOB', 'name'=>'SCHOOL OF BUSINESS', 'created_at' => Carbon::now()],
+             ['initials'=>'SoET', 'name'=>'SCHOOL OF ENGINEERING AND TECHNOLOGY' ,'created_at' => Carbon::now()],
+             ['initials'=>'SOAHS', 'name'=>'SCHOOL OF APPLIED AND HEALTH SCIENCES' ,'created_at' => Carbon::now()],
+             ['initials'=>'SOHSS', 'name'=>'SCHOOL OF HUMANITIES AND SOCIAL SCIENCES' ,'created_at' => Carbon::now()],
+             ['initials'=>'ICI', 'name'=>'SCHOOL OF COMPUTNG AND INFORMATICS','created_at' => Carbon::now()],
+             
          ]);
 
+
          DB::table('departments')->insert([
-             ['school_id'=>'1', 'dept_code'=>'DAF', 'name'=>'DEPARTMENT OF ACCOUNTING AND FINANCE'],
-             ['school_id'=>'1', 'dept_code'=>'DBA', 'name'=>'DEPARTMENT OF BUSINESS ADMINISTRATION'],
-             ['school_id'=>'1', 'dept_code'=>'DHM', 'name'=>'DEPARTMENT OF MANAGEMENT SCIENCE'],
-             ['school_id'=>'2', 'dept_code'=>'DABE', 'name'=>'DEPARTMENT OF ARCHITECTURE AND BUILT ENVIRONMENT'],
-             ['school_id'=>'2', 'dept_code'=>'DBCE', 'name'=>'DEPARTMENT OF BUILDING AND CIVIL ENGINEERING'],
-             ['school_id'=>'2', 'dept_code'=>'DEE', 'name'=>'DEPARTMENT OF ELECTRICAL AND ELECTRONIC ENGINEERING'],
-             ['school_id'=>'2', 'dept_code'=>'DME', 'name'=>'DEPARTMENT OF MEDICAL ENGINEERING'],
-             ['school_id'=>'2', 'dept_code'=>'DMAE', 'name'=>'DEPARTMENT OF MECHANICAL AND AUTOMOTIVE ENGINEERING'],
-             ['school_id'=>'3', 'dept_code'=>'DEHS', 'name'=>'DEPARTMENT OF ENVIRONMENT AND HEALTH SCIENCES'],
-             ['school_id'=>'3', 'dept_code'=>'DMP', 'name'=>'DEPARTMENT OF MATHEMATICS AND PHYSICS'],
-             ['school_id'=>'3', 'dept_code'=>'DPAS', 'name'=>'DEPARTMENT OF PURE AND APPLIED SCIENCES'],
-             ['school_id'=>'3', 'dept_code'=>'DOMS', 'name'=>'DEPARTMENT OF MEDICAL SCIENCES'],
-             ['school_id'=>'4', 'dept_code'=>'DSS', 'name'=>'DEPARTMENT OF SOCIAL SCIENCES'],
-             ['school_id'=>'4', 'dept_code'=>'DHTM', 'name'=>'DEPARTMENT OF HOSPITALITY AND TOURISM MANAGEMENT'],
-             ['school_id'=>'4', 'dept_code'=>'DCS', 'name'=>'DEPARTMENT OF COMMUNICATION STUDIES'],
-             ['school_id'=>'5', 'dept_code'=>'DCI', 'name'=>'DEPARTMENT OF COMPUTER SCIENCE AND INFORMATION TECHNOLOGY'],
+             ['school_id'=>'1', 'dept_code'=>'DAF', 'name'=>'DEPARTMENT OF ACCOUNTING AND FINANCE','created_at' => Carbon::now()],
+             ['school_id'=>'1', 'dept_code'=>'DBA', 'name'=>'DEPARTMENT OF BUSINESS ADMINISTRATION','created_at' => Carbon::now()],
+             ['school_id'=>'1', 'dept_code'=>'DHM', 'name'=>'DEPARTMENT OF MANAGEMENT SCIENCE', 'created_at' => Carbon::now()],
+             ['school_id'=>'2', 'dept_code'=>'DABE', 'name'=>'DEPARTMENT OF ARCHITECTURE AND BUILT ENVIRONMENT', 'created_at' => Carbon::now()],
+             ['school_id'=>'2', 'dept_code'=>'DBCE', 'name'=>'DEPARTMENT OF BUILDING AND CIVIL ENGINEERING', 'created_at' => Carbon::now()],
+             ['school_id'=>'2', 'dept_code'=>'DEE', 'name'=>'DEPARTMENT OF ELECTRICAL AND ELECTRONIC ENGINEERING', 'created_at' => Carbon::now()],
+             ['school_id'=>'2', 'dept_code'=>'DME', 'name'=>'DEPARTMENT OF MEDICAL ENGINEERING', 'created_at' => Carbon::now()],
+             ['school_id'=>'2', 'dept_code'=>'DMAE', 'name'=>'DEPARTMENT OF MECHANICAL AND AUTOMOTIVE ENGINEERING', 'created_at' => Carbon::now()],
+             ['school_id'=>'3', 'dept_code'=>'DEHS', 'name'=>'DEPARTMENT OF ENVIRONMENT AND HEALTH SCIENCES', 'created_at' => Carbon::now()],
+             ['school_id'=>'3', 'dept_code'=>'DMP', 'name'=>'DEPARTMENT OF MATHEMATICS AND PHYSICS', 'created_at' => Carbon::now()],
+             ['school_id'=>'3', 'dept_code'=>'DPAS', 'name'=>'DEPARTMENT OF PURE AND APPLIED SCIENCES', 'created_at' => Carbon::now()],
+             ['school_id'=>'3', 'dept_code'=>'DOMS', 'name'=>'DEPARTMENT OF MEDICAL SCIENCES', 'created_at' => Carbon::now()],
+             ['school_id'=>'4', 'dept_code'=>'DSS', 'name'=>'DEPARTMENT OF SOCIAL SCIENCES', 'created_at' => Carbon::now()],
+             ['school_id'=>'4', 'dept_code'=>'DHTM', 'name'=>'DEPARTMENT OF HOSPITALITY AND TOURISM MANAGEMENT', 'created_at' => Carbon::now()],
+             ['school_id'=>'4', 'dept_code'=>'DCS', 'name'=>'DEPARTMENT OF COMMUNICATION STUDIES', 'created_at' => Carbon::now()],
+             ['school_id'=>'5', 'dept_code'=>'DCI', 'name'=>'DEPARTMENT OF COMPUTER SCIENCE AND INFORMATION TECHNOLOGY', 'created_at' => Carbon::now()],
 
          ]);
 

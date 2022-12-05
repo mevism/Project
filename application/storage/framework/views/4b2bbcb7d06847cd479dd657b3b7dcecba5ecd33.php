@@ -4,7 +4,6 @@
     <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
       <div class="flex-grow-1">
           <h6 class="block-title">EDIT SCHOOL</h6>
-   
       </div>
   </div>
   </div>

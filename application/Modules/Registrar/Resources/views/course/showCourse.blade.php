@@ -61,7 +61,8 @@
             <tr>
               <th>  #     </th>
               <th>  Department NAME </th>
-              <th> Course NAME       </th>
+              <th> Course NAME</th>
+              <th>history</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -71,6 +72,9 @@
               <td style="text-transform: uppercase" >{{ ++$key }} </td>
               <td style="text-transform: uppercase" >{{ $courses->getCourseDept->name }}</td>
               <td style="text-transform: uppercase" >{{ $courses->course_name }}</td>
+              <td>
+                <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.coursePreview', $courses->id)}}"> View </a>
+              </td>
               <td nowrap="">
                 <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editCourse', ['id'=> Crypt::encrypt($courses->id)]) }}">edit</a>
                 <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this course ?')" href="{{ route('courses.destroyCourse', $courses->id) }}">delete</a>

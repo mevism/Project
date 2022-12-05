@@ -58,8 +58,8 @@
                 <th>SCHOOL NAME</th>
                 <th>DEPARTMENT NAME</th>
                 <th>DEPARTMENT CODE</th>
+                <th>HISTORY</th>
                 <th>Action</th>
-
               </tr>
 
             </thead>
@@ -70,6 +70,9 @@
                 <td> {{ $department->schools->name }}</td>
                 <td> {{ $department->name }}</td>
                   <td> {{ $department->dept_code }} </td>
+                  <td>
+                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.departmentPreview', $department->id)}}"> View </a>
+                  </td>
                 <td nowrap>
                   <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editDepartment', ['id'=> Crypt::encrypt($department->id)]) }}">edit</a>
                   <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this department ?')"  href="{{ route('courses.destroyDepartment', $department->id) }}">delete</a>

@@ -161,6 +161,9 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
 
     Route::get('/transfer', [CoursesController::class, 'transfer'])->name('courses.transfer');
     Route::get('/batchTransfer', [CoursesController::class, 'batchTransfer'])->name('courses.batchTransfer');
+    Route::get('/schoolPreview/{id}', [CoursesController::class, 'schoolPreview'])->name('courses.schoolPreview');
+    Route::get('/departmentPreview/{id}', [CoursesController::class, 'departmentPreview'])->name('courses.departmentPreview');
+    Route::get('/coursePreview/{id}', [CoursesController::class, 'coursePreview'])->name('courses.coursePreview');
    
 });
 
