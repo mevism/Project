@@ -13,7 +13,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[1, 'asc']],
+            order: [[0, 'asc']],
             rowGroup: {
                 dataSrc: 2
             }
@@ -26,7 +26,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
                     <h5 class="h5 fw-bold mb-0" >
-                    COURSE TRANSFER
+                    COURSE TRANSFER REQUESTS
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -46,56 +46,71 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-lg-12">
-                    <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
-                        @if(count($transfer)>0)
-                            <thead>
-                                <th></th>
-                                <th nowrap="">Student</th>
-                                <th>Course</th>
-                                <th>Department</th>
-                                <th>COD Status</th>
-                                <th>COD Comments</th>
-                                <th>DEAN STATUS</th>
-                                <th>DEAN Comments</th>
-                                <th style="white-space: nowrap !important;">Action</th>
-                            </thead>
-                            <tbody>
-                            @foreach($transfer as $item)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td> {{ $item->student_id }}</td>
-                                <td> {{ $item->course_id }}</td>
-                                <td> {{ $item->department_id }}</td>
-                                <td>
-                                    @if($item->cod_status == 1)
-                                        <span class="badge bg-success">Accepted</span>
-                                    @else
-                                        <span class="badge bg-warning">Rejected</span>
-                                    @endif
-                                </td>
-                                <td> {{ $item->cod_remarks }}</td>
-                                <td>
-                                    @if($item->dean_status == 0)
-                                        <span class="badge bg-primary">Pending</span>
-                                    @elseif($item->dean_status == 1)
-                                        <span class="badge bg-success">Accepted</span>
-                                    @else
-                                        <span class="badge bg-danger">Rejected</span>
-                                    @endif
-                                </td>
-                                <td> {{ $item->dean_remarks }}</td>
-                                <td nowrap="">
-                                    <a class="btn btn-sm btn-alt-info" href=""> submit </a>
-                                </td>
-                            </tr>
-                            @endforeach
-                            </tbody>
-                        @else
-                            <tr>
-                                <span class="text-muted text-center fs-sm">There are no new transfers submitted</span>
-                            </tr>
-                        @endif
-                    </table>
+                    <form action="{{ route('courses.acceptedTransfers') }}" method="post">
+                        @csrf
+                        <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
+                            @if(count($transfer)>0)
+                                <thead>
+                                    <th>✔</th>
+                                    <th></th>
+                                    <th nowrap="">Reg Number</th>
+                                    <th nowrap="">Student name</th>
+                                    <th nowrap="">Course</th>
+                                    <th nowrap=""> Department</th>
+                                    <th>COD Status</th>
+                                    <th>DEAN STATUS</th>
+                                </thead>
+                                <tbody>
+                                @foreach($transfer as $item)
+                                <tr>
+                                    <td>
+                                        @if($item->registrar_status == NULL )
+                                        <input class="transfer" type="checkbox" name="submit[]" value="{{ $item->id }}">
+                                            @else
+                                            ✔
+                                        @endif
+                                    </td>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td> {{ $item->transferApproval->studentTransfer->reg_number }}</td>
+                                    <td>{{  $item->transferApproval->studentTransfer->sname.' '.$item->transferApproval->studentTransfer->fname.' '.$item->transferApproval->studentTransfer->mname }}</td>
+                                    <td> {{ $item->transferApproval->studentTransfer->courseStudent->studentCourse->course_name }}</td>
+                                    <td> {{ $item->transferApproval->studentTransfer->courseStudent->studentCourse->getCourseDept->name }}</td>
+                                    <td>
+                                        @if($item->cod_status == 1)
+                                            <span class="badge bg-success">Accepted</span>
+                                        @else
+                                            <span class="badge bg-warning">Rejected</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($item->dean_status == 0)
+                                            <span class="badge bg-primary">Pending</span>
+                                        @elseif($item->dean_status == 1)
+                                            <span class="badge bg-success">Accepted</span>
+                                        @else
+                                            <span class="badge bg-danger">Rejected</span>
+                                        @endif
+                                    </td>
+                                
+                                </tr>
+                                @endforeach
+                                </tbody>
+                            @else
+                                <tr>
+                                    <span class="text-muted text-center fs-sm">There are no new transfers submitted</span>
+                                </tr>
+                            @endif
+
+                            @if(count($transfer) > 0)
+                            <div>
+                                <input type="checkbox" onclick="for(c in document.getElementsByClassName('transfer')) document.getElementsByClassName('transfer').item(c).checked = this.checked"> Select all
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <button type="submit" class="btn btn-outline-success col-md-3 m-2" data-toggle="click-ripple">Generate Admission letters</button>
+                            </div>
+                            @endif
+                        </table>
+                    </form>
                 </div>
             </div>
         </div>

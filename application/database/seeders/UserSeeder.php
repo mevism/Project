@@ -149,10 +149,10 @@ class UserSeeder extends Seeder
 
           DB::table('events')->insert([
              ['name' => 'SEMESTER REGISTRATION'],
-             ['name' => 'TRANSFER'],
-             ['name' => 'ACADEMIC LEAVE/DIFFERMENT'],
+             ['name' => 'RETAKE'],
              ['name' => 'READMISSION'],
-             ['name' => 'RETAKE']
+             ['name' => 'ACADEMIC LEAVE/DIFFERMENT'],        
+             ['name' => 'TRANSFER']
          ]);
         DB::table('attendances')->insert([
             ['attendance_code'=>'S-FT','attendance_name' => 'SELF SPONSORED FULL TIME'],

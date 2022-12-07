@@ -54,17 +54,19 @@
                             <th>Course</th>
                             <th>Department</th>
                             <th>COD Status</th>
-                            <th>COD Comments</th>
+                            {{-- <th>COD Comments</th> --}}
                             <th>DEAN STATUS</th>
+                            {{-- <th>dean Comments</th> --}}
+
                             <th style="white-space: nowrap !important;">Action</th>
                         </thead>
                         <tbody>
                         @foreach($transfer as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td> {{ $item->student_id }}</td>
-                            <td> {{ $item->course_id }}</td>
-                            <td> {{ $item->department_id }}</td>
+                            <td> {{ $item->transferApproval->studentTransfer->sname }} {{ $item->transferApproval->studentTransfer->fname }} {{ $item->transferApproval->studentTransfer->mname }}</td>
+                            <td> {{ $item->transferApproval->courseTransfer->course_name }}</td>
+                            <td> {{ $item->transferApproval->deptTransfer->name }}</td>
                             <td>
                                 @if($item->cod_status == 1)
                                     <span class="badge bg-success">Accepted</span>
@@ -72,7 +74,7 @@
                                     <span class="badge bg-warning">Rejected</span>
                                 @endif
                             </td>
-                            <td> {{ $item->cod_remarks }}</td>
+                            {{-- <td> {{ $item->cod_remarks }}</td> --}}
                             <td>
                                 @if($item->dean_status == 0)
                                     <span class="badge bg-primary">Pending</span>
@@ -82,13 +84,13 @@
                                     <span class="badge bg-danger">Rejected</span>
                                 @endif
                             </td>
+                            {{-- <td> {{ $item->dean_remarks }}</td> --}}
+
                             <td nowrap="">
-                            @if($item->dean_status == 0)
-                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('dean.viewTransfer', [ 'id' => Crypt::encrypt($item->id)]) }}"> View </a>
-                            @else
-                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('dean.preview', [ 'id' => Crypt::encrypt($item->id)])}}"> View </a>
-                                <a class="btn btn-sm btn-alt-info" href="{{ route('dean.viewTransfer', [ 'id' => Crypt::encrypt($item->id)])}}"> Edit </a>
-                            @endif
+                                <a class="btn btn-sm btn-outline-secondary" href="{{ route('dean.viewTransfer', $item->id) }}"> View </a>
+                                @if($item->dean_status != null)
+                                <i class="fa fa-check text-primary"></i>
+                                @endif
                             </td>
                         </tr>
                         @endforeach

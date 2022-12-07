@@ -31,9 +31,8 @@ class CourseTransfer extends Model
     }
 
     public function studentTransfer(){
-        return $this->belongsTo(Student::class, 'student_id');
+        return $this->belongsTo(Student::class, 'student_id')->withTrashed();
     }
-
     public function approveTransfer(){
         return $this->hasOne(CourseTransferApproval::class, 'course_transfer_id');
     }

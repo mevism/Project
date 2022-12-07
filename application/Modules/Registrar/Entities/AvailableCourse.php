@@ -14,7 +14,6 @@ class AvailableCourse extends Model
     protected $fillable = [];
 
 //        availablecourse vs intake
-
     public function openCourse(){
 
         return $this->belongsTo(Intake::class, 'intake_id');
