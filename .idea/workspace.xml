@@ -3,27 +3,17 @@
   <component name="ChangeListManager">
     <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Fees/BTIT008J2022.docx" beforeDir="false" afterPath="$PROJECT_DIR$/Fees/BTIT008J2022.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/transfers/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/transfers/index.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Student.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Student.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_26_155157_create_course_transfers_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_26_155157_create_course_transfers_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_11_17_104151_create_transfer_invoices_table.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_11_17_104440_create_transfer_deposits_table.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/CourseTransfer.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/CourseTransfer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/TransferDeposit.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/TransferInvoice.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/coursetransfer.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/coursetransfer.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/transfers.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/transfers.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/semester/requestRegistration.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/semester/requestRegistration.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/chYhE4Xf8NzwIkdQU4ShxSFkQLpFYehBw9clkKpP" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/hB5bv3Wfu7KVAQFMls4qtOVPG46exiOkWqCwjUyz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/sVf8GfBumcSUv74yERZhZ1VkyasVMipMvqSXX8JY" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/avatars/avatar1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/avatars/avatar16.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/app/Models/Role.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Models/Role.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Models/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/config/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/config/database.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/ZfvmRCi3vbGPoMSYxXXkZ3HBJnqVMFY3HwVHzwCf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/~$e_statement.docx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -224,7 +214,8 @@
       <workItem from="1669634473431" duration="622000" />
       <workItem from="1669788135869" duration="28521000" />
       <workItem from="1669962037985" duration="16393000" />
-      <workItem from="1670219321658" duration="6426000" />
+      <workItem from="1670219321658" duration="18319000" />
+      <workItem from="1670308480216" duration="20861000" />
     </task>
     <servers />
   </component>

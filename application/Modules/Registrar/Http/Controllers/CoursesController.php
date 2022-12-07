@@ -329,7 +329,7 @@ class CoursesController extends Controller
         $table = new Table(array('unit' => TblWidth::TWIP));
         foreach ($semester as $detail) {
             $table->addRow();
-            $table->addCell(5000, ['borderSize' => 2])->addText($detail->semVotehead->name,  $boldedtext1,['name' => 'Book Antique', 'size' => 13]);
+            $table->addCell(5000, ['borderSize' => 2])->addText($detail->semVotehead->name,  $boldedtext1,['name' => 'Book Antiqua', 'size' => 13]);
             $table->addCell(2000, ['borderSize' => 2])->addText(number_format($detail->semesterI, 2), $boldedtext1, array('align' => 'right', 'size' => 12));
             $table->addCell(2000, ['borderSize' => 2])->addText(number_format($detail->semesterII, 2), $boldedtext1, array('align' => 'right', 'size' => 12));
         }

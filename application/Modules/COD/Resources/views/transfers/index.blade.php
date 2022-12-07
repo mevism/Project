@@ -51,40 +51,60 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-12">
-                    <table id="example" class="table table-bordered table-striped fs-sm">
-                        <thead>
-                        <th>#</th>
-                        <th>Reg. Number</th>
-                        <th>Student Name</th>
-                        <th>Department (From)</th>
-                        <th>Course</th>
-                        <th>Course Pts/Grade</th>
-                        <th>Student Pts/Grade</th>
-                        <th>Action</th>
-                        </thead>
-                        <tbody>
-                        @foreach ($transfers as $key => $transfer)
-                            <tr>
-                                <td> {{ ++$key }} </td>
-                                <td> {{ $transfer->studentTransfer->reg_number }}</td>
-                                <td class="text-uppercase">
-                                    {{ $transfer->studentTransfer->sname.' '.$transfer->studentTransfer->fname.' '.$transfer->studentTransfer->mname }}
-                                </td>
-                                <td> {{ $transfer->studentTransfer->courseStudent->studentCourse->getCourseDept->name }} </td>
-                                <td> {{ $transfer->courseTransfer->course_name }} </td>
-                                <td> {{ $transfer->class_points }} </td>
-                                <td> {{ $transfer->student_points }} </td>
-                                <td nowrap="">
-                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewTransferRequest', ['id' => Crypt::encrypt($transfer->id)]) }}">View</a>
-                                    @if($transfer->approveTransfer != null)
-                                        <i class="fa fa-check text-primary"></i>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
+                        <table id="example" class="table table-bordered table-striped fs-sm">
+                            <thead>
+                                <th>#</th>
+                                <th>Academic Year</th>
+                                <th>Total Request</th>
+                                <th>Action</th>
+                            </thead>
+                            <tbody>
+                                @foreach($transfers as $academic_year => $transfer)
+                                    <tr>
+                                        <td> {{ $loop->iteration }} </td>
+                                        <td> {{ $academic_year }} </td>
+                                        <td> {{ $transfer->count() }}</td>
+                                        <td>
+                                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewYearRequests', ['year' => Crypt::encrypt($academic_year)]) }}">view requests</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+{{--                    <table id="example" class="table table-bordered table-striped fs-sm">--}}
+{{--                        <thead>--}}
+{{--                        <th>#</th>--}}
+{{--                        <th>Reg. Number</th>--}}
+{{--                        <th>Student Name</th>--}}
+{{--                        <th>Department (From)</th>--}}
+{{--                        <th>Course</th>--}}
+{{--                        <th>Course Pts/Grade</th>--}}
+{{--                        <th>Student Pts/Grade</th>--}}
+{{--                        <th>Action</th>--}}
+{{--                        </thead>--}}
+{{--                        <tbody>--}}
+{{--                        @foreach ($transfers as $key => $transfer)--}}
+{{--                            <tr>--}}
+{{--                                <td> {{ ++$key }} </td>--}}
+{{--                                <td> {{ $transfer->studentTransfer->reg_number }}</td>--}}
+{{--                                <td class="text-uppercase">--}}
+{{--                                    {{ $transfer->studentTransfer->sname.' '.$transfer->studentTransfer->fname.' '.$transfer->studentTransfer->mname }}--}}
+{{--                                </td>--}}
+{{--                                <td> {{ $transfer->studentTransfer->courseStudent->studentCourse->getCourseDept->name }} </td>--}}
+{{--                                <td> {{ $transfer->courseTransfer->course_name }} </td>--}}
+{{--                                <td> {{ $transfer->class_points }} </td>--}}
+{{--                                <td> {{ $transfer->student_points }} </td>--}}
+{{--                                <td nowrap="">--}}
+{{--                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewTransferRequest', ['id' => Crypt::encrypt($transfer->id)]) }}">View</a>--}}
+{{--                                    @if($transfer->approveTransfer != null)--}}
+{{--                                        <i class="fa fa-check text-primary"></i>--}}
+{{--                                    @endif--}}
+{{--                                </td>--}}
+{{--                            </tr>--}}
+{{--                        @endforeach--}}
 
-                        </tbody>
-                    </table>
+{{--                        </tbody>--}}
+{{--                    </table>--}}
                 </div>
             </div>
         </div>

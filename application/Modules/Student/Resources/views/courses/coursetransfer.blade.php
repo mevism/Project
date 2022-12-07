@@ -119,6 +119,7 @@
 
                                                         <label class="mb-2 label">MY POINTS</label>
                                                         <input type="text" id="mypoints" class="form-control mb-3" name="mypoints" readonly value="{{ old('points') }}">
+                                                        <input type="hidden" value="{{ $academic_year }}" name="academic_year">
                                                     </div>
 
                                                     <div class="mb-2" id="requirements">

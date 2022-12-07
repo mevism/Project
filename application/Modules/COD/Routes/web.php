@@ -64,6 +64,8 @@ Route::prefix('department')->middleware( ['is_cod'])->group( function() {
         Route::get('/view-student-uploaded-document/{id}', [CODController::class, 'viewUploadedDocument'])->name('department.viewUploadedDocument');
         Route::get('/accept-student-transfer-request/{id}', [CODController::class, 'acceptTransferRequest'])->name('department.acceptTransferRequest');
         Route::post('/decline-student-transfer-request/{id}', [CODController::class, 'declineTransferRequest'])->name('department.declineTransferRequest');
+        Route::get('/generate-list-of-all-transfer-requests/{year}', [CODController::class, 'requestedTransfers'])->name('department.requestedTransfers');
+        Route::get('/view-yearly-course-transfer-requests/{year}', [CODController::class, 'viewYearRequests'])->name('department.viewYearRequests');
 
 
 //        Route::get('/getAcademicFile/{id}', 'CODController@viewAcademicFile');

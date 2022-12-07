@@ -79,35 +79,53 @@ class StudentController extends Controller
 
         $transfers = CourseTransfer::where('student_id', Auth::guard('student')->user()->student_id)->latest()->get();
 
-        $invoices = StudentInvoice::where('student_id', $student->id)
-            ->where('reg_number', $student->reg_number)
-            ->latest()
-            ->get();
-        $deposits = StudentDeposit::where('reg_number', $student->reg_number)
-            ->latest()
-            ->get();
+        $today = Carbon::now()->format('Y-m-d');
 
-        $invoice = 0;
-        $deposit = 0;
+        $current = Carbon::now()->format('Y-m-d');
 
-        foreach ($invoices as $record){
+        $sem_date = Intake::where('intake_from', '<=', $current, )
+            ->where('intake_to', '>=', $current)
+            ->first();
 
-            $invoice += $record->amount;
-        }
+        $academicYear =  Carbon::parse($sem_date->academicYear->year_start)->format('Y').'/'.Carbon::parse($sem_date->academicYear->year_end)->format('Y');
+        $semester = Carbon::parse($sem_date->intake_from)->format('M').'/'.Carbon::parse($sem_date->intake_to)->format('M');
 
-        foreach ($deposits as $record){
+        $event = CalenderOfEvents::where('academic_year_id', $academicYear)
+            ->where('intake_id', strtoupper($semester))
+            ->where('event_id', 5)
+            ->first();
+        if ($event->start_date <= $current && $current <= $event->end_date){
 
-            $deposit += $record->deposit;
-        }
+            $invoices = StudentInvoice::where('student_id', $student->id)
+                ->where('reg_number', $student->reg_number)
+                ->latest()
+                ->get();
+            $deposits = StudentDeposit::where('reg_number', $student->reg_number)
+                ->latest()
+                ->get();
 
-        if ($deposit >= $invoice){
+            $invoice = 0;
+            $deposit = 0;
 
-            foreach ($transfers as $transfer){
+            foreach ($invoices as $record){
 
-                if (!$transfer->status){
+                $invoice += $record->amount;
+            }
 
-                    $transfer->status = 1;
-                    $transfer->save();
+            foreach ($deposits as $record){
+
+                $deposit += $record->deposit;
+            }
+
+            if ($deposit >= $invoice){
+
+                foreach ($transfers as $transfer){
+
+                    if (!$transfer->status){
+
+                        $transfer->status = 1;
+                        $transfer->save();
+                    }
                 }
             }
         }
@@ -133,7 +151,7 @@ class StudentController extends Controller
             ->where('event_id', 5)
             ->first();
 
-        return view('student::courses.coursetransfer')->with(['departments' => $departments, 'stage' => $stage, 'event' => $event]);
+        return view('student::courses.coursetransfer')->with(['departments' => $departments, 'stage' => $stage, 'event' => $event, 'academic_year' => $academicYear]);
 
     }
 
@@ -181,16 +199,12 @@ class StudentController extends Controller
 
     public function submitRequest(Request $request){
 
-//        return $request->all();
 
         $request->validate([
             'dept' => 'required',
             'course' => 'required',
             'class' => 'required',
-//            'points' => 'required',
-//            'mypoints' => 'required',
         ]);
-
 
         if (Auth::guard('student')->user()->loggedStudent->courseStudent->course_id == $request->course){
 
@@ -208,6 +222,7 @@ class StudentController extends Controller
                 $transfer->department_id = $request->dept;
                 $transfer->course_id = $request->course;
                 $transfer->class_id = $request->class;
+                $transfer->academic_year = $request->academic_year;
                 if ($request->mingrade == null){
                     $transfer->class_points = $request->points;
                     $transfer->student_points = $request->mypoints;
