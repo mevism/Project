@@ -43,7 +43,7 @@ class DeanController extends Controller
 
             $approval = CourseTransferApproval::find($id);
             $approval->dean_status = 1;
-            $approval->dean_remarks = 'Admit';
+            $approval->dean_remarks = 'Admit Student';
             $approval->save();
 
         }else{
@@ -51,7 +51,7 @@ class DeanController extends Controller
             $approval = new CourseTransferApproval;
             $approval->course_transfer_id = $id;
             $approval->dean_status = 1;
-            $approval->dean_remarks = 'Admit';
+            $approval->dean_remarks = 'Admit Student';
             $approval->save();
         }
 
@@ -63,16 +63,18 @@ class DeanController extends Controller
 
         // $hashedId = Crypt::decrypt($id);
 
-        $course = CourseTransfer::find($id);
+        $course = CourseTransferApproval::find($id);
 
-        $document = Application::where('reg_number', $course->studentTransfer->reg_number)->first();
+             $document = Application::where('reg_number', $course->transferApproval->studentTransfer->reg_number)->first();
 
-        // return $document->admissionDoc;
+//        return $document;
+//
+//         return $document->admDocuments;
 
         return response()->file('Admissions/Certificates/'.$document->admissionDoc->certificates);
 
     }
-    
+
     public function transfer(){
 
         $transfer  =  CourseTransferApproval::where('cod_status', '>=', 1)
@@ -98,7 +100,7 @@ class DeanController extends Controller
         return view('dean::transfers.preview')->with(['data' => $data]);
     }
 
-   
+
 
     public function applications(){
 
