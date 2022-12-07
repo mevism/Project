@@ -47,6 +47,11 @@ class User extends Authenticatable
 
     }
 
+    public function userRoles(){
+
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
     public function getSch(){
         return $this->belongsTo(\Modules\Registrar\Entities\School::class, 'school_id');
     }

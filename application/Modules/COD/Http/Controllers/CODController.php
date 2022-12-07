@@ -7,6 +7,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Modules\Application\Entities\AdmissionApproval;
 use Modules\Application\Entities\AdmissionDocument;
 use Modules\Application\Entities\Application;
@@ -28,6 +29,10 @@ use Modules\Registrar\Entities\StudentCourse;
 use Modules\Student\Entities\CourseTransfer;
 use Modules\Student\Entities\CourseTransferApproval;
 use Modules\Student\Entities\ExamResults;
+use NcJoes\OfficeConverter\OfficeConverter;
+use PhpOffice\PhpWord\Element\Table;
+use PhpOffice\PhpWord\SimpleType\TblWidth;
+use PhpOffice\PhpWord\TemplateProcessor;
 use Validator;
 use Modules\Registrar\Entities\AvailableCourse;
 use Modules\Registrar\Entities\Classes;
@@ -612,9 +617,25 @@ class CODController extends Controller
         $transfers = CourseTransfer::where('department_id', Auth::guard('user')->user()->department_id)
             ->where('status', '<=', 1)
             ->latest()
-            ->get();
+            ->get()
+            ->groupBy('academic_year');
 
         return view('cod::transfers.index')->with(['transfers' => $transfers]);
+
+    }
+
+    public function viewYearRequests($year){
+
+        $hashedYear = Crypt::decrypt($year);
+
+        $transfers = CourseTransfer::where('department_id', Auth::guard('user')->user()->department_id)
+            ->where('status', '<=', 1)
+            ->where('academic_year', $hashedYear)
+            ->latest()
+            ->get();
+
+        return view('cod::transfers.annualTransfers')->with(['transfers' => $transfers, 'year' => $hashedYear]);
+
 
     }
 
@@ -643,12 +664,14 @@ class CODController extends Controller
     public function acceptTransferRequest($id){
 
         $hashedId = Crypt::decrypt($id);
+        $year = CourseTransfer::find($hashedId)->academic_year;
+        $class = CourseTransfer::find($hashedId)->classTransfer->name;
 
         if (CourseTransferApproval::where('course_transfer_id', $hashedId)->exists()){
 
             $approval = CourseTransferApproval::where('course_transfer_id', $hashedId)->first();
             $approval->cod_status = 1;
-            $approval->cod_remarks = 'Accepted';
+            $approval->cod_remarks = 'Student to be admitted to '.$class.' class.';
             $approval->save();
 
         }else{
@@ -656,11 +679,11 @@ class CODController extends Controller
             $approval = new CourseTransferApproval;
             $approval->course_transfer_id = $hashedId;
             $approval->cod_status = 1;
-            $approval->cod_remarks = 'Accepted';
+            $approval->cod_remarks = 'Student to be admitted to '.$class.' class.';
             $approval->save();
         }
 
-        return redirect()->route('department.courseTransfers')->with('success', 'Course transfer request accepted');
+        return redirect()->route('department.viewYearRequests', ['year' => Crypt::encrypt($year)])->with('success', 'Course transfer request accepted');
 
     }
 
@@ -668,6 +691,8 @@ class CODController extends Controller
 
         $hashedId = decrypt($id);
 
+        $year = CourseTransfer::find($hashedId)->academic_year;
+
         if (CourseTransferApproval::where('course_transfer_id', $hashedId)->exists()){
 
             $approval = CourseTransferApproval::where('course_transfer_id', $hashedId)->first();
@@ -685,7 +710,117 @@ class CODController extends Controller
 
         }
 
-        return redirect()->route('department.courseTransfers')->with('success', 'Course transfer request accepted');
+        return redirect()->route('department.viewYearRequests', ['year' => Crypt::encrypt($year)])->with('success', 'Course transfer request accepted');
+    }
+
+    public function requestedTransfers($year){
+
+        $hashedYear = Crypt::decrypt($year);
+
+        $user = Auth::guard('user')->user();
+
+        $by = $user->name;
+        $dept = $user->getDept->dept_code;
+        $role = $user->userRoles->name;
+
+        $transfers = CourseTransfer::where('department_id', Auth::guard('user')->user()->department_id)
+            ->where('status', '<=', 1)
+            ->where('academic_year', $hashedYear)
+            ->latest()
+            ->get()
+            ->groupBy('course_id');
+
+        $school = Auth::guard('user')->user()->getDept->schools->name;
+
+        $courses = Courses::all();
+
+        $domPdfPath = base_path('vendor/dompdf/dompdf');
+        \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
+        \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+
+        $center = ['bold' => true];
+
+        $table = new Table(array('unit' => TblWidth::TWIP));
+        foreach ($transfers as $course => $transfer) {
+            foreach ($courses as $listed){
+                if ($listed->id == $course){
+                    $courseName =  $listed->course_name;
+                    $courseCode = $listed->course_code;
+                }
+            }
+
+            $headers = ['bold' => true, 'space' => ['before' => 2000, 'after' => 2000, 'rule' => 'exact']];
+
+            $table->addRow(600);
+            $table->addCell(5000, [ 'gridSpan' => 9, ])->addText($courseName.' '.'('.$courseCode.')', $headers, ['spaceAfter' => 300,'spaceBefore' => 300]);
+            $table->addRow();
+            $table->addCell(200, ['borderSize' => 1])->addText('#');
+            $table->addCell(2800, ['borderSize' => 1])->addText('Student Name/ Reg. Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+            $table->addCell(1900, ['borderSize' => 1])->addText('Programme/ Course Admitted', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1900, ['borderSize' => 1])->addText('Programme/ Course Transferring', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1750, ['borderSize' => 1])->addText('Programme/ Course Cut-off Points', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1000, ['borderSize' => 1])->addText('Student Cut-off Points', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(2600, ['borderSize' => 1])->addText('COD Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1500, ['borderSize' => 1])->addText('Dean Remarks',  $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1750, ['borderSize' => 1])->addText('Deans Committee Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+
+            foreach ($transfer as $key => $list) {
+                $name = $list->studentTransfer->reg_number.'<w:br/>'.$list->studentTransfer->sname.' '.$list->studentTransfer->fname.' '.$list->studentTransfer->mname;
+                if ($list->approveTransfer == null){
+                    $remarks = 'Missed Deadline';
+                }else{
+                    $remarks = $list->approveTransfer->cod_remarks;
+                }
+                $table->addRow();
+                $table->addCell(200, ['borderSize' => 1])->addText(++$key);
+                $table->addCell(2800, ['borderSize' => 1])->addText($name);
+                $table->addCell(1900, ['borderSize' => 1])->addText($list->studentTransfer->courseStudent->studentCourse->course_code);
+                $table->addCell(1900, ['borderSize' => 1])->addText($list->courseTransfer->course_code);
+                $table->addCell(1750, ['borderSize' => 1])->addText($list->class_points);
+                $table->addCell(1000, ['borderSize' => 1])->addText($list->student_points);
+                $table->addCell(2600, ['borderSize' => 1])->addText($remarks);
+                $table->addCell(1500, ['borderSize' => 1])->addText();
+                $table->addCell(1750, ['borderSize' => 1])->addText();
+
+            }
+        }
+
+        $summary = new Table(array('unit' => TblWidth::TWIP));
+        $total = 0;
+        foreach ($transfers as $group => $transfer){
+            foreach ($courses as $listed){
+                if ($listed->id == $group){
+                    $courseName =  $listed->course_name;
+                    $courseCode = $listed->course_code;
+                }
+            }
+
+            $summary->addRow();
+            $summary->addCell(5000, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
+            $summary->addCell(1250, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
+            $summary->addCell(1250, ['borderSize' => 1])->addText($transfer->count());
+
+            $total += $transfer->count();
+
+
+        }
+        $summary->addRow();
+        $summary->addCell(6250, ['borderSize' => 1])->addText('Totals', ['bold' => true]);
+        $summary->addCell(1250, ['borderSize' => 1])->addText($transfers->count(), ['bold' => true]);
+        $summary->addCell(1250, ['borderSize' => 1])->addText($total, ['bold' => true]);
+
+        $my_template = new TemplateProcessor(storage_path('course_transfers.docx'));
+
+        $my_template->setValue('school', $school);
+        $my_template->setValue('by', $by);
+        $my_template->setValue('dept', $dept);
+        $my_template->setValue('role', $role);
+        $my_template->setComplexBlock('{table}', $table);
+        $my_template->setComplexBlock('{summary}', $summary);
+        $docPath = 'Fees/'.'Transfers'.time().".docx";
+        $my_template->saveAs($docPath);
+
+        return response()->download($docPath)->deleteFileAfterSend(true);
     }
 
 
