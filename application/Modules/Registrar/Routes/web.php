@@ -165,6 +165,9 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
     Route::get('/departmentPreview/{id}', [CoursesController::class, 'departmentPreview'])->name('courses.departmentPreview');
     Route::get('/coursePreview/{id}', [CoursesController::class, 'coursePreview'])->name('courses.coursePreview');
    
+
+    Route::post('/acceptedTransfers', 'CoursesController@acceptedTransfers')->name('courses.acceptedTransfers');
+
 });
 
 

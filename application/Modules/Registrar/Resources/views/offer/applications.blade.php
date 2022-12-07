@@ -77,7 +77,7 @@
                                         @else
 
                                     @endif
-                                    </td>
+                                </td>
                                 <td>{{ $loop->iteration }}</td>
                                 <td> {{ $item->applicant->sname }} {{ $item->applicant->fname }} {{ $item->applicant->mname }}</td>
                                 <td> {{ $item->courses->getCourseDept->name }}</td>

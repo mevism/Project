@@ -2,21 +2,80 @@
 
 namespace Modules\Dean\Http\Controllers;
 
-use Illuminate\Contracts\Support\Renderable;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Auth;
-use Illuminate\Support\Facades\Crypt;
-use Modules\Application\Entities\Application;
-use Modules\Application\Entities\Education;
-use Modules\Dean\Entities\CourseTransfer;
 use Modules\Dean\Entities\DeanLog;
+use Illuminate\Support\Facades\Crypt;
+use Modules\Application\Entities\Education;
+use Illuminate\Contracts\Support\Renderable;
+use Modules\Student\Entities\CourseTransfer;
+use Modules\Application\Entities\Application;
+use Modules\Student\Entities\CourseTransferApproval;
 
 class DeanController extends Controller
 {
+    public function declineTransferRequest(Request $request, $id){
+
+        if (CourseTransferApproval::find($id)->exists()){
+
+            $approval = CourseTransferApproval::find($id);
+            $approval->dean_status = 2;
+            $approval->dean_remarks = $request->remarks;
+            $approval->save();
+
+        }else{
+
+            $approval = new CourseTransferApproval;
+            $approval->course_transfer_id = $id;
+            $approval->dean_status = 2;
+            $approval->dean_remarks = $request->remarks;
+            $approval->save();
+
+        }
+
+        return redirect()->route('dean.transfer')->with('success', 'Course transfer request accepted');
+    }
+
+    public function acceptTransferRequest($id){
+        //  return $id;
+        if (CourseTransferApproval::find($id)->exists()){
+
+            $approval = CourseTransferApproval::find($id);
+            $approval->dean_status = 1;
+            $approval->dean_remarks = 'Admit';
+            $approval->save();
+
+        }else{
+
+            $approval = new CourseTransferApproval;
+            $approval->course_transfer_id = $id;
+            $approval->dean_status = 1;
+            $approval->dean_remarks = 'Admit';
+            $approval->save();
+        }
+
+        return redirect()->route('dean.transfer')->with('success', 'Course transfer request accepted');
+
+    }
+
+    public function viewUploadedDocument($id){
+
+        // $hashedId = Crypt::decrypt($id);
+
+        $course = CourseTransfer::find($id);
+
+        $document = Application::where('reg_number', $course->studentTransfer->reg_number)->first();
+
+        // return $document->admissionDoc;
+
+        return response()->file('Admissions/Certificates/'.$document->admissionDoc->certificates);
+
+    }
+    
     public function transfer(){
 
-        $transfer  =  CourseTransfer::where('dean_status', '!=', 3)
+        $transfer  =  CourseTransferApproval::where('cod_status', '>=', 1)
         ->where('registrar_status', null)
         ->get();
 
@@ -25,59 +84,21 @@ class DeanController extends Controller
 
     public function viewTransfer($id){
 
-         $hashedId = Crypt::decrypt($id);
+        //  $hashedId = Crypt::decrypt($id);
+        //  return $hashedId;
 
-        $data = CourseTransfer::find($hashedId);
+        $data = CourseTransferApproval::find($id);
         return view('dean::transfers.viewTransfer')->with(['data' => $data]);
     }
 
     public function preview($id){
 
          $hashedId = Crypt::decrypt($id);
-        $data = CourseTransfer::find($hashedId);
+        $data = CourseTransferApproval::find($hashedId);
         return view('dean::transfers.preview')->with(['data' => $data]);
     }
 
-    public function rejectTransfer(Request $request, $id){
-
-         $hashedId = Crypt::decrypt($id);
-
-        $data = CourseTransfer::find($hashedId);
-        $data->dean_status = 2;
-        $data->dean_remarks = $request->comment;
-        $data->save();
-
-        $logs = new DeanLog;
-        $logs->application_id = $data->id;
-        $logs->user = Auth::guard('user')->user()->name;
-        $logs->user_role = Auth::guard('user')->user()->role_id;
-        $logs->activity = 'Transfer rejected';
-        $logs->comments = $request->comment;
-        $logs->save();
-
-        return redirect()->route('dean.transfer')->with('success', 'Transfer declined');
-    }
-
-    public function acceptTransfer($id){
-
-         $hashedId = Crypt::decrypt($id);
-
-        $data = CourseTransfer::find($hashedId);
-        $data->dean_status = 1;
-            if ($data->registrar_status != NULL){
-                $data->registrar_status = NULL;
-            }
-        $data->save();
-
-        $logs = new DeanLog;
-        $logs->application_id = $data->id;
-        $logs->user = Auth::guard('user')->user()->name;
-        $logs->user_role = Auth::guard('user')->user()->role_id;
-        $logs->activity = 'Transfer accepted';
-        $logs->save();
-
-        return redirect()->route('dean.transfer')->with('success', 'One Transfer approved');
-    }
+   
 
     public function applications(){
 

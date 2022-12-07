@@ -31,5 +31,10 @@ Route::prefix('dean')->group(function() {
         Route::post('/rejectTransfer/{id}', [DeanController::class, 'rejectTransfer'])->name('dean.rejectTransfer');
         Route::get('/acceptTransfer/{id}', [DeanController::class, 'acceptTransfer'])->name('dean.acceptTransfer');
 
+
+        Route::get('/acceptTransferRequest/{id}', [DeanController::class, 'acceptTransferRequest'])->name('dean.acceptTransferRequest');
+        Route::post('/declineTransferRequest/{id}', [DeanController::class, 'declineTransferRequest'])->name('dean.declineTransferRequest');
+        Route::get('/viewUploadedDocument/{id}', [DeanController::class, 'viewUploadedDocument'])->name('dean.viewUploadedDocument');
+
     });
 });
