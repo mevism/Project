@@ -3,17 +3,19 @@
   <component name="ChangeListManager">
     <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/transfers/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/transfers/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/.env" beforeDir="false" afterPath="$PROJECT_DIR$/application/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Http/Controllers/DeanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Http/Controllers/DeanController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/transfers/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/transfers/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_07_16_113219_create_students_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_07_16_113219_create_students_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_07_16_115134_create_student_logins_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_07_16_115134_create_student_logins_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Student.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Student.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/coursetransfer.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/coursetransfer.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/app/Models/Role.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Models/Role.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Models/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/config/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/config/database.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/ZfvmRCi3vbGPoMSYxXXkZ3HBJnqVMFY3HwVHzwCf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/~$e_statement.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_26_155157_create_course_transfers_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_26_155157_create_course_transfers_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/CourseTransfer.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/CourseTransfer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/CourseTransferApproval.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/CourseTransferApproval.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/XFER_2022_000001.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/c1zNnsSwT8CPS9Ro8ZJL5m0Zz0Z0F4OWo6rSQo2h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/zDbArrinyUA1tY3Axc9GMh5GmknbQyIuJ1KTrXeL" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -216,6 +218,7 @@
       <workItem from="1669962037985" duration="16393000" />
       <workItem from="1670219321658" duration="18319000" />
       <workItem from="1670308480216" duration="20861000" />
+      <workItem from="1670399941714" duration="4738000" />
     </task>
     <servers />
   </component>

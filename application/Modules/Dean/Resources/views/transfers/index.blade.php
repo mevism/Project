@@ -13,7 +13,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[1, 'asc']],
+            order: [[0, 'asc']],
             rowGroup: {
                 dataSrc: 2
             }
@@ -49,43 +49,33 @@
                 <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
                     @if(count($transfer)>0)
                         <thead>
-                            <th></th>
-                            <th nowrap="">Student</th>
+                            <th>#</th>
+                            <th>Reg. Number</th>
+                            <th>Student</th>
                             <th>Course</th>
                             <th>Department</th>
-                            <th>COD Status</th>
-                            {{-- <th>COD Comments</th> --}}
-                            <th>DEAN STATUS</th>
-                            {{-- <th>dean Comments</th> --}}
-
-                            <th style="white-space: nowrap !important;">Action</th>
+                            <th>COD Remarks</th>
+                            <th>DEAN Remarks</th>
+                            <th nowrap="">Action</th>
                         </thead>
                         <tbody>
                         @foreach($transfer as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td> {{ $item->transferApproval->studentTransfer->sname }} {{ $item->transferApproval->studentTransfer->fname }} {{ $item->transferApproval->studentTransfer->mname }}</td>
-                            <td> {{ $item->transferApproval->courseTransfer->course_name }}</td>
-                            <td> {{ $item->transferApproval->deptTransfer->name }}</td>
+                            <td> {{ $item->transferApproval->studentTransfer->reg_number }} </td>
                             <td>
-                                @if($item->cod_status == 1)
-                                    <span class="badge bg-success">Accepted</span>
+                                {{ $item->transferApproval->studentTransfer->sname.' '.$item->transferApproval->studentTransfer->fname.' '.$item->transferApproval->studentTransfer->mname }}
+                            </td>
+                            <td> {{ $item->transferApproval->courseTransfer->course_code }}</td>
+                            <td> {{ $item->transferApproval->deptTransfer->dept_code }}</td>
+                             <td> {{ $item->cod_remarks }}</td>
+                            <td>
+                                @if($item->dean_remarks == null)
+                                    <span class="badge bg-primary">Waiting approval</span>
                                 @else
-                                    <span class="badge bg-warning">Rejected</span>
+                                    <p class="text-success">{{ $item->dean_remarks }}</p>
                                 @endif
                             </td>
-                            {{-- <td> {{ $item->cod_remarks }}</td> --}}
-                            <td>
-                                @if($item->dean_status == 0)
-                                    <span class="badge bg-primary">Pending</span>
-                                @elseif($item->dean_status == 1)
-                                    <span class="badge bg-success">Accepted</span>
-                                @else
-                                    <span class="badge bg-danger">Rejected</span>
-                                @endif
-                            </td>
-                            {{-- <td> {{ $item->dean_remarks }}</td> --}}
-
                             <td nowrap="">
                                 <a class="btn btn-sm btn-outline-secondary" href="{{ route('dean.viewTransfer', $item->id) }}"> View </a>
                                 @if($item->dean_status != null)

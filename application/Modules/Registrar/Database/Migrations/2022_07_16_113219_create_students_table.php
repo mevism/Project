@@ -24,11 +24,11 @@ return new class extends Migration
             $table->string('marital_status');
             $table->string('title');
             $table->string('dob');
-            $table->string('email')->unique();
-            $table->string('student_email')->unique();
-            $table->string('mobile')->unique();
+            $table->string('email');
+            $table->string('student_email');
+            $table->string('mobile');
             $table->string('alt_mobile');
-            $table->string('id_number')->unique();
+            $table->string('id_number');
             $table->string('citizen');
             $table->string('county');
             $table->string('sub_county');
