@@ -24,7 +24,7 @@ Route::prefix('dean')->group(function() {
         Route::get('/acceptApplication/{id}', [DeanController::class, 'acceptApplication'])->name('dean.acceptApplication');
         Route::post('/rejectApplication/{id}', [DeanController::class, 'rejectApplication'])->name('dean.rejectApplication');
 
-        Route::get('/transfer', [DeanController::class, 'transfer'])->name('dean.transfer');
+        Route::get('/transfer/{year}', [DeanController::class, 'transfer'])->name('dean.transfer');
         Route::get('/batchTransfer', [DeanController::class, 'batchTransfer'])->name('dean.batchTransfer');
         Route::get('/viewTransfer/{id}', [DeanController::class, 'viewTransfer'])->name('dean.viewTransfer');
         Route::get('/preview/{id}', [DeanController::class, 'preview'])->name('dean.preview');
@@ -35,6 +35,8 @@ Route::prefix('dean')->group(function() {
         Route::get('/acceptTransferRequest/{id}', [DeanController::class, 'acceptTransferRequest'])->name('dean.acceptTransferRequest');
         Route::post('/declineTransferRequest/{id}', [DeanController::class, 'declineTransferRequest'])->name('dean.declineTransferRequest');
         Route::get('/viewUploadedDocument/{id}', [DeanController::class, 'viewUploadedDocument'])->name('dean.viewUploadedDocument');
+        Route::get('/transferRequests', [DeanController::class, 'yearly'])->name('dean.yearly');
+        Route::get('/generate-transfer-requests-report/{year}', [DeanController::class, 'requestedTransfers'])->name('dean.requestedTransfers');
 
     });
 });

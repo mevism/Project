@@ -52,18 +52,16 @@
             </tr>
             <tr>
                 <td align="auto" class="bgcolor2" style="padding: 40px 20px 40px 20px; color: #555555; font-family: Arial, sans-serif; font-size: 20px; line-height: 30px; border-bottom: 1px solid #f6f6f6;">
-                    <h5>Dear {{ $applicant->fname }} {{ $applicant->mname }} {{ $applicant->sname }}, </h5>
+                    <h5>Dear {{ $newRecord }}, </h5>
                      <p>
-                        Congratulations for being approved as successfull applicant of Technical Univerisity of Mombasa. Please visit the <a href="{{ route('root') }}"> TUM Course Application Portal </a>to download your admission documents. For any queries reach use via our email tumsupport@tum.ac.ke
-                      
- 
+                       {{-- Your course transfer to {{ $newStudent->student->studentCourse->course_name }} was successful. Login to your new student account using your new student number {{ $newStudent->reg_number }} and your ID/birth certificate/passport number as your password. --}}
                      </p>
                     <div>
                         <p>
                             <b>
                                 Kind regards,<br></b><br>
 
-                                Zablon Gitau <br><br>
+                                Zablon Mwaramu <br><br>
 
                                Admissions Department <br><br>
 
