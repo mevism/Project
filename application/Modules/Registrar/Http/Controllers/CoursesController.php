@@ -119,16 +119,16 @@ class CoursesController extends Controller
 
                     $my_template->saveAs($docPath);
 
-//                    $contents         =         \PhpOffice\PhpWord\IOFactory::load(storage_path(str_replace('/', '_', $refNumber).".docx"));
-//
-//                    $pdfPath          =          storage_path(str_replace('/', '_', $refNumber).".pdf");
-//
-//                    if(file_exists($pdfPath)){
-//                        unlink($pdfPath);
-//                    }
-//
-//                    $converter     =     new OfficeConverter($docPath, storage_path());
-//                    $converter->convertTo(str_replace('/', '_', $refNumber).".pdf");
+                    $contents         =         \PhpOffice\PhpWord\IOFactory::load(storage_path(str_replace('/', '_', $refNumber).".docx"));
+
+                    $pdfPath          =          storage_path(str_replace('/', '_', $refNumber).".pdf");
+
+                    if(file_exists($pdfPath)){
+                        unlink($pdfPath);
+                    }
+
+                    $converter     =     new OfficeConverter($docPath, storage_path());
+                    $converter->convertTo(str_replace('/', '_', $refNumber).".pdf");
 
                     if(file_exists($docPath)){
                         unlink($docPath);
