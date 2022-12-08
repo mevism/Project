@@ -47,14 +47,14 @@
             </tr>
             <tr>
                 <td align="center" class="bgcolor1" style="padding: 20px 20px 20px 20px; color: #ffffff; font-family: Arial, sans-serif; font-size: 36px; font-weight: bold;">
-                    <img src="{{ asset('media/tum-logo/tum-logo.png') }}" alt="Tum Logo" width="160" height="152" style="display:block;" />
+                    <img src="{{ asset('media/tum-logo/tum-logo.png') }}" alt="" width="160" height="152" style="display:block;" />
                 </td>
             </tr>
             <tr>
                 <td align="auto" class="bgcolor2" style="padding: 40px 20px 40px 20px; color: #555555; font-family: Arial, sans-serif; font-size: 20px; line-height: 30px; border-bottom: 1px solid #f6f6f6;">
-                    <h5>Dear {{ $newStudent->fname }} {{ $newStudent->mname }} {{ $newStudent->sname }}, </h5>
+                    <h5>Dear {{ $oldStud->studentTransfer->sname. ' '. $oldStud->studentTransfer->fname .' '. $oldStud->studentTransfer->mname }}, </h5>
                      <p>
-                       Your course transfer to {{ $newStudent->student->studentCourse->course_name }} was not successful. 
+                       Your course transfer to <b>{{ $oldStud->courseTransfer->course_name }}</b> was not successful. You are advised to continue with your current course <b>{{ $oldStud->studentTransfer->courseStudent->studentCourse->course_name }}</b>.
                      </p>
                     <div>
                         <p>
