@@ -14,9 +14,7 @@ use Modules\Registrar\Http\Controllers\CoursesController;
 */
 
 Route::prefix('courses')->middleware(['admin'])->group(function() {
-    
 
-    
     Route::get('/showSemFee', 'CoursesController@showSemFee')->name('courses.showSemFee');
     Route::get('/semFee', 'CoursesController@semFee')->name('courses.semFee');
     Route::post('/storeSemFee', 'CoursesController@storeSemFee')->name('courses.storeSemFee');
@@ -47,7 +45,7 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
 
     Route::get('/importUnit','CoursesController@importUnit')->name('courses.importUnit');
     Route::post('/importUnit','CoursesController@importUnits')->name('courses.importUnits');
-    
+
     Route::get('/importExportCourses','CoursesController@importExportCourses')->name('courses.importExportCourses');
     Route::post('/importCourses','CoursesController@importCourses')->name('courses.importCourses');
 
@@ -164,9 +162,9 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
     Route::get('/schoolPreview/{id}', [CoursesController::class, 'schoolPreview'])->name('courses.schoolPreview');
     Route::get('/departmentPreview/{id}', [CoursesController::class, 'departmentPreview'])->name('courses.departmentPreview');
     Route::get('/coursePreview/{id}', [CoursesController::class, 'coursePreview'])->name('courses.coursePreview');
-   
 
-    Route::post('/acceptedTransfers', 'CoursesController@acceptedTransfers')->name('courses.acceptedTransfers');
+
+    Route::post('/acceptedTransfers', [CoursesController::class, 'acceptedTransfers'])->name('courses.acceptedTransfers');
 
 });
 
