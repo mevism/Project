@@ -68,7 +68,6 @@ class CoursesController extends Controller
 
      $request->validate(['submit' => 'required']);
 
-
         foreach($request->submit as $id){
 
             $approval = CourseTransferApproval::find($id);
@@ -120,16 +119,16 @@ class CoursesController extends Controller
 
                     $my_template->saveAs($docPath);
 
-                    $contents         =         \PhpOffice\PhpWord\IOFactory::load(storage_path(str_replace('/', '_', $refNumber).".docx"));
-
-                    $pdfPath          =          storage_path(str_replace('/', '_', $refNumber).".pdf");
-
-                    if(file_exists($pdfPath)){
-                        unlink($pdfPath);
-                    }
-
-                    $converter     =     new OfficeConverter($docPath, storage_path());
-                    $converter->convertTo(str_replace('/', '_', $refNumber).".pdf");
+//                    $contents         =         \PhpOffice\PhpWord\IOFactory::load(storage_path(str_replace('/', '_', $refNumber).".docx"));
+//
+//                    $pdfPath          =          storage_path(str_replace('/', '_', $refNumber).".pdf");
+//
+//                    if(file_exists($pdfPath)){
+//                        unlink($pdfPath);
+//                    }
+//
+//                    $converter     =     new OfficeConverter($docPath, storage_path());
+//                    $converter->convertTo(str_replace('/', '_', $refNumber).".pdf");
 
                     if(file_exists($docPath)){
                         unlink($docPath);
@@ -179,49 +178,35 @@ class CoursesController extends Controller
                     $newStudCourse->course_duration =           $course->courseRequirements->course_duration;
                     $newStudCourse->save();
 
-                    // $newStudLogin    =  new StudentLogin;
-                    // $newStudLogin->student_id       =   $newStudent->id;
-                    // $newStudLogin->username         =   $newStudent->reg_number;
-                    // $newStudLogin->password         =   Hash::make($newStudent->id_number);
-                    // $newStudLogin->save();
+                     $newStudLogin    =  new StudentLogin;
+                     $newStudLogin->student_id       =   $newStudent->id;
+                     $newStudLogin->username         =   $newStudent->reg_number;
+                     $newStudLogin->password         =   Hash::make($newStudent->id_number);
+                     $newStudLogin->save();
 
-                    
-
-//                    Generate Email
                     Mail::to($newStudent->email)->send(new CourseTransferMails($newStudent));
- //                    Change Status Course Transfer Approval
-                    $approval->registrar_status  =  1;
-                    $approval->status  =  1;
-                    $approval->save();
 
+                        $approval->registrar_status  =  1;
+                        $approval->status  =  1;
+                        $approval->save();
 
-//                      Registrar status 1
-//                    Change Status Course Transfer
-//                     2 ->successful
-                    $transferStatus =  CourseTransfer::find($approval->id);
-                    $transferStatus->status = 2;
-                    $transferStatus->save();
+                        $transferStatus =  CourseTransfer::find($approval->course_transfer_id);
+                        $transferStatus->status = 2;
+                        $transferStatus->save();
 
-                }
-               else{
-    $rejectedMail       =      CourseTransferApproval::find($id);
-    $oldStud    =  $rejectedMail->transferApproval;
-// return $oldStud;
-    Mail::to($oldStud->studentTransfer->email)->send(new CourseTransferRejectedMails($oldStud));
+                }else{
+                        $rejectedMail       =      CourseTransferApproval::find($id);
+                        $oldStud    =  $rejectedMail->transferApproval;
 
+                        Mail::to($oldStud->studentTransfer->email)->send(new CourseTransferRejectedMails($oldStud));
 
-//                    Generate Email
-                    $approval->registrar_status  =  1;
-                    $approval->status  =  2;
-                    $approval->save();
+                        $approval->registrar_status  =  1;
+                        $approval->status  =  2;
+                        $approval->save();
 
-//                    Change Status Course Transfer
-//                    3 -> unsuccessful
-//                    Change Status Course Transfer Approval
-//                      Registrar status 1
-                    $transferStatus =  CourseTransfer::find($approval->id);
-                    $transferStatus->status = 3;
-                    $transferStatus->save();
+                        $transferStatus =  CourseTransfer::find($approval->course_transfer_id);
+                        $transferStatus->status = 3;
+                        $transferStatus->save();
                }
             }
 
@@ -249,7 +234,7 @@ class CoursesController extends Controller
 
     public function transfer(){
 
-        $transfer  =  CourseTransferApproval::where('registrar_status', '=', null)->get();
+        $transfer  =  CourseTransferApproval::latest()->get();
 
         return view('registrar::transfers.index')->with(['transfer' => $transfer]);
     }
