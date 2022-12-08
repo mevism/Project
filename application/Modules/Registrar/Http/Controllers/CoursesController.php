@@ -58,6 +58,7 @@ use Modules\Registrar\Entities\CourseRequirement;
 use Modules\Registrar\Entities\DepartmentHistory;
 use Modules\Application\Entities\AdmissionApproval;
 use Modules\Student\Entities\CourseTransferApproval;
+use Modules\Registrar\emails\CourseTransferRejectedMails;
 
 class CoursesController extends Controller
 {
@@ -134,12 +135,12 @@ class CoursesController extends Controller
                         unlink($docPath);
                     }
 
-                    // $record = Student::find($id);
-                    // $record->delete();
-                    // StudentCourse::where('student_id', $id)->delete();
-                    // StudentLogin::where('student_id', $id)->delete();
+                    $record = Student::find($id);
+                    $record->delete();
+                    StudentCourse::where('student_id', $id)->delete();
+                    StudentLogin::where('student_id', $id)->delete();
 
-                    // $oldstudent = Student::withTrashed()->find($id);
+                    $oldstudent = Student::withTrashed()->find($id);
                     $newStudent               =             new Student;
 
                     $newStudent->reg_number   =             $regNumber;
@@ -178,31 +179,50 @@ class CoursesController extends Controller
                     $newStudCourse->course_duration =           $course->courseRequirements->course_duration;
                     $newStudCourse->save();
 
-                    $newStudLogin    =  new StudentLogin;
-                    $newStudLogin->student_id       =   $newStudent->id;
-                    $newStudLogin->username         =   $newStudent->reg_number;
-                    $newStudLogin->password         =   Hash::make($newStudent->id_number);
-                    $newStudLogin->save();
+                    // $newStudLogin    =  new StudentLogin;
+                    // $newStudLogin->student_id       =   $newStudent->id;
+                    // $newStudLogin->username         =   $newStudent->reg_number;
+                    // $newStudLogin->password         =   Hash::make($newStudent->id_number);
+                    // $newStudLogin->save();
 
-                    $newRecord = $newStudent;
+                    
 
 //                    Generate Email
-                    Mail::to($newStudent->email)->send(new CourseTransferMails($newRecord));
+                    Mail::to($newStudent->email)->send(new CourseTransferMails($newStudent));
  //                    Change Status Course Transfer Approval
+                    $approval->registrar_status  =  1;
+                    $approval->status  =  1;
+                    $approval->save();
+
 
 //                      Registrar status 1
 //                    Change Status Course Transfer
 //                     2 ->successful
-//
+                    $transferStatus =  CourseTransfer::find($approval->id);
+                    $transferStatus->status = 2;
+                    $transferStatus->save();
+
                 }
-//                else{
+               else{
+    $rejectedMail       =      CourseTransferApproval::find($id);
+    $oldStud    =  $rejectedMail->transferApproval;
+// return $oldStud;
+    Mail::to($oldStud->studentTransfer->email)->send(new CourseTransferRejectedMails($oldStud));
+
 
 //                    Generate Email
+                    $approval->registrar_status  =  1;
+                    $approval->status  =  2;
+                    $approval->save();
+
 //                    Change Status Course Transfer
 //                    3 -> unsuccessful
 //                    Change Status Course Transfer Approval
 //                      Registrar status 1
-//                }
+                    $transferStatus =  CourseTransfer::find($approval->id);
+                    $transferStatus->status = 3;
+                    $transferStatus->save();
+               }
             }
 
     return redirect()->back()->with('success', 'Report Generated');

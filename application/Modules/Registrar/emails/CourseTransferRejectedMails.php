@@ -7,20 +7,19 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class CourseTransferMails extends Mailable
+class CourseTransferRejectedMails extends Mailable
 {
-
     use Queueable, SerializesModels;
-    public $newStudent;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($newStudent)
+    public $oldStud;
+    public function __construct($oldStud)
     {
-         $this->newStudent =  $newStudent;
+        $this->oldStud  =  $oldStud;
     }
 
     /**
@@ -30,6 +29,5 @@ class CourseTransferMails extends Mailable
      */
     public function build()
     {
-        return $this->subject(' Course Transfer')->view('registrar::transfers.transferAcceptedmail');
-    }
+        return $this->subject(' Course Transfer')->view('registrar::transfers.transferRejected');    }
 }
