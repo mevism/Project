@@ -53,6 +53,7 @@ use Modules\Registrar\Entities\ClusterSubjects;
 use Modules\Registrar\Entities\CourseLevelMode;
 use Modules\Registrar\Entities\KuccpsApplicant;
 use Modules\Registrar\Entities\CalenderOfEvents;
+use Modules\Registrar\emails\CourseTransferMails;
 use Modules\Registrar\Entities\CourseRequirement;
 use Modules\Registrar\Entities\DepartmentHistory;
 use Modules\Application\Entities\AdmissionApproval;
@@ -133,12 +134,12 @@ class CoursesController extends Controller
                         unlink($docPath);
                     }
 
-                    $record = Student::find($id);
-                    $record->delete();
-                    StudentCourse::where('student_id', $id)->delete();
-                    StudentLogin::where('student_id', $id)->delete();
+                    // $record = Student::find($id);
+                    // $record->delete();
+                    // StudentCourse::where('student_id', $id)->delete();
+                    // StudentLogin::where('student_id', $id)->delete();
 
-                    $oldstudent = Student::withTrashed()->find($id);
+                    // $oldstudent = Student::withTrashed()->find($id);
                     $newStudent               =             new Student;
 
                     $newStudent->reg_number   =             $regNumber;
@@ -165,7 +166,6 @@ class CoursesController extends Controller
                     $newStudent->disability   =             $data->transferApproval->studentTransfer->disability;
                     $newStudent->save();
 
-
                     $newStudCourse                =             new StudentCourse;
                     $newStudCourse->student_id    =             $newStudent->id;
                     $newStudCourse->student_type  =             2;
@@ -184,8 +184,12 @@ class CoursesController extends Controller
                     $newStudLogin->password         =   Hash::make($newStudent->id_number);
                     $newStudLogin->save();
 
+                    $newRecord = $newStudent;
+
 //                    Generate Email
+                    Mail::to($newStudent->email)->send(new CourseTransferMails($newRecord));
  //                    Change Status Course Transfer Approval
+
 //                      Registrar status 1
 //                    Change Status Course Transfer
 //                     2 ->successful

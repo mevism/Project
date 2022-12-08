@@ -26,7 +26,7 @@
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
             <div class="flex-grow-0">
                 <h5 class="h5 fw-bold mb-0" >
-                   COURSE TRANSFER
+                    {{ $year }} COURSE TRANSFER
                 </h5>
             </div>
             <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -43,10 +43,14 @@
     </div>
 </div>
 <div class="block block-rounded">
+
     <div class="block-content block-content-full">
         <div class="row">
-            <div class="col-lg-12">
-                <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
+            <div class="col-12">
+                <div class="d-flex justify-content-end m-2">
+                    <a class="btn  btn-alt-primary btn-sm" href="{{ route('dean.requestedTransfers', ['year' => Crypt::encrypt($year)]) }}">Generate report</a>
+                </div>
+                <table id="example" class="table table-bordered table-striped fs-sm">
                     @if(count($transfer)>0)
                         <thead>
                             <th>#</th>
@@ -62,22 +66,22 @@
                         @foreach($transfer as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td> {{ $item->transferApproval->studentTransfer->reg_number }} </td>
+                            <td> {{ $item->studentTransfer->reg_number }} </td>
                             <td>
-                                {{ $item->transferApproval->studentTransfer->sname.' '.$item->transferApproval->studentTransfer->fname.' '.$item->transferApproval->studentTransfer->mname }}
+                                {{ $item->studentTransfer->sname.' '.$item->studentTransfer->fname.' '.$item->studentTransfer->mname }}
                             </td>
-                            <td> {{ $item->transferApproval->courseTransfer->course_code }}</td>
-                            <td> {{ $item->transferApproval->deptTransfer->dept_code }}</td>
-                             <td> {{ $item->cod_remarks }}</td>
+                            <td> {{ $item->courseTransfer->course_code }}</td>
+                            <td> {{ $item->deptTransfer->dept_code }}</td>
+                             <td> {{ $item->approveTransfer->cod_remarks }}</td>
                             <td>
-                                @if($item->dean_remarks == null)
+                                @if($item->approveTransfer->dean_remarks == null)
                                     <span class="badge bg-primary">Waiting approval</span>
                                 @else
-                                    <p class="text-success">{{ $item->dean_remarks }}</p>
+                                    <p class="text-success">{{ $item->approveTransfer->dean_remarks }}</p>
                                 @endif
                             </td>
                             <td nowrap="">
-                                <a class="btn btn-sm btn-outline-secondary" href="{{ route('dean.viewTransfer', $item->id) }}"> View </a>
+                                <a class="btn btn-sm btn-outline-secondary" href="{{ route('dean.viewTransfer', [ 'id' => Crypt::encrypt($item->id)]) }}"> View </a>
                                 @if($item->dean_status != null)
                                 <i class="fa fa-check text-primary"></i>
                                 @endif

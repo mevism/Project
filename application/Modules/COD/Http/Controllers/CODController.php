@@ -615,7 +615,7 @@ class CODController extends Controller
     public function transferRequests(){
 
         $transfers = CourseTransfer::where('department_id', Auth::guard('user')->user()->department_id)
-            ->where('status', '<=', 1)
+            // ->where('status', '<=', 1)
             ->latest()
             ->get()
             ->groupBy('academic_year');
@@ -820,7 +820,18 @@ class CODController extends Controller
         $docPath = 'Fees/'.'Transfers'.time().".docx";
         $my_template->saveAs($docPath);
 
-        return response()->download($docPath)->deleteFileAfterSend(true);
+        $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
+
+        $pdfPath = 'Fees/'.'Transfers'.time().".pdf"; 
+
+        $converter =  new OfficeConverter($docPath, 'Fees/');
+        $converter->convertTo('Transfers'.time().".pdf");
+
+                    if(file_exists($docPath)){
+                        unlink($docPath);
+                    }
+
+        return response()->download($pdfPath)->deleteFileAfterSend(true);
     }
 
 

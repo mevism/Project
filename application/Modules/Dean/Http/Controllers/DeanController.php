@@ -7,19 +7,170 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Dean\Entities\DeanLog;
 use Illuminate\Support\Facades\Crypt;
+use Modules\Registrar\Entities\Courses;
+use PhpOffice\PhpWord\TemplateProcessor;
+use Modules\Registrar\Entities\Department;
 use Modules\Application\Entities\Education;
+use NcJoes\OfficeConverter\OfficeConverter;
 use Illuminate\Contracts\Support\Renderable;
 use Modules\Student\Entities\CourseTransfer;
 use Modules\Application\Entities\Application;
 use Modules\Student\Entities\CourseTransferApproval;
+use PhpOffice\PhpWord\Element\Table;
+use PhpOffice\PhpWord\SimpleType\TblWidth;
+
 
 class DeanController extends Controller
 {
+
+    public function requestedTransfers($year){
+        $hashedYear = Crypt::decrypt($year);
+
+        $user = Auth::guard('user')->user();
+        // return $user;
+        $by = $user->name;
+        $school = $user->getSch->name;
+        $role = $user->userRoles->name;
+        
+        $departments   =   Department::where('school_id',auth()->guard('user')->user()->school_id)->get();
+        foreach($departments as $department){
+        $transfers = CourseTransfer::where('department_id', $department->id)
+                    ->where('academic_year', $hashedYear)
+                    ->latest()
+                    ->get()
+                    ->groupBy('course_id');
+                 
+        $school = Auth::guard('user')->user()->getSch->name;
+        $courses = Courses::all(); 
+        
+        $domPdfPath = base_path('vendor/dompdf/dompdf');
+        \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
+        \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+
+        $center = ['bold' => true];
+
+        $table = new Table(array('unit' => TblWidth::TWIP));
+
+        foreach ($transfers as $course => $transfer) {
+            
+            foreach ($courses as $listed){
+                if ($listed->id == $course){
+                    $courseName =  $listed->course_name;
+                    $courseCode = $listed->course_code;
+                }
+            }
+
+            $headers = ['bold' => true, 'space' => ['before' => 2000, 'after' => 2000, 'rule' => 'exact']];
+
+            $table->addRow(600);
+            $table->addCell(5000, [ 'gridSpan' => 9, ])->addText($courseName.' '.'('.$courseCode.')', $headers, ['spaceAfter' => 300,'spaceBefore' => 300]);
+            $table->addRow();
+            $table->addCell(200, ['borderSize' => 1])->addText('#');
+            $table->addCell(2800, ['borderSize' => 1])->addText('Student Name/ Reg. Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+            $table->addCell(1900, ['borderSize' => 1])->addText('Programme/ Course Admitted', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1900, ['borderSize' => 1])->addText('Programme/ Course Transferring', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1750, ['borderSize' => 1])->addText('Programme/ Course Cut-off Points', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1000, ['borderSize' => 1])->addText('Student Cut-off Points', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(2600, ['borderSize' => 1])->addText('COD Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1500, ['borderSize' => 1])->addText('Dean Remarks',  $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1750, ['borderSize' => 1])->addText('Deans Committee Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+
+            foreach ($transfer as $key => $list) {
+                $name = $list->studentTransfer->reg_number.'<w:br/>'.$list->studentTransfer->sname.' '.$list->studentTransfer->fname.' '.$list->studentTransfer->mname;
+                if ($list->approveTransfer == null){
+                    $remarks = 'Missed Deadline';
+                    $deanRemark = 'Declined';
+                }else{
+                    $remarks = $list->approveTransfer->cod_remarks;
+                    $deanRemark = $list->approveTransfer->dean_remarks;
+                }
+                $table->addRow();
+                $table->addCell(200, ['borderSize' => 1])->addText(++$key);
+                $table->addCell(2800, ['borderSize' => 1])->addText($name);
+                $table->addCell(1900, ['borderSize' => 1])->addText($list->studentTransfer->courseStudent->studentCourse->course_code);
+                $table->addCell(1900, ['borderSize' => 1])->addText($list->courseTransfer->course_code);
+                $table->addCell(1750, ['borderSize' => 1])->addText($list->class_points);
+                $table->addCell(1000, ['borderSize' => 1])->addText($list->student_points);
+                $table->addCell(2600, ['borderSize' => 1])->addText($remarks);
+                $table->addCell(1500, ['borderSize' => 1])->addText($deanRemark);
+                $table->addCell(1750, ['borderSize' => 1])->addText();
+
+            }
+        }
+
+        $summary = new Table(array('unit' => TblWidth::TWIP));
+        $total = 0;
+        foreach ($transfers as $group => $transfer){
+            foreach ($courses as $listed){
+                if ($listed->id == $group){
+                    $courseName =  $listed->course_name;
+                    $courseCode = $listed->course_code;
+                }
+            }
+
+            $summary->addRow();
+            $summary->addCell(5000, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
+            $summary->addCell(1250, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
+            $summary->addCell(1250, ['borderSize' => 1])->addText($transfer->count());
+
+            $total += $transfer->count();
+
+
+        }
+        $summary->addRow();
+        $summary->addCell(6250, ['borderSize' => 1])->addText('Totals', ['bold' => true]);
+        $summary->addCell(1250, ['borderSize' => 1])->addText($transfers->count(), ['bold' => true]);
+        $summary->addCell(1250, ['borderSize' => 1])->addText($total, ['bold' => true]);
+
+        $my_template = new TemplateProcessor(storage_path('course_transfers.docx'));
+
+        $my_template->setValue('school', $school);
+        $my_template->setValue('by', $by);
+        $my_template->setValue('dept', $school);
+        $my_template->setValue('role', $role);
+        $my_template->setComplexBlock('{table}', $table);
+        $my_template->setComplexBlock('{summary}', $summary);
+        $docPath = 'Fees/'.'Transfers'.time().".docx";
+        $my_template->saveAs($docPath);
+
+        $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
+
+        $pdfPath = 'Fees/'.'Transfers'.time().".pdf"; 
+
+        $converter =  new OfficeConverter($docPath, 'Fees/');
+        $converter->convertTo('Transfers'.time().".pdf");
+
+                    if(file_exists($docPath)){
+                        unlink($docPath);
+                    }
+
+        return response()->download($pdfPath)->deleteFileAfterSend(true);        
+        }
+        
+    }
+
+    public function yearly(){
+        $departments   =   Department::where('school_id',auth()->guard('user')->user()->school_id)->get();
+        foreach($departments as $department){
+            $data = CourseTransfer::where('department_id', $department->id)
+                    ->latest()
+                    ->get()
+                    ->groupBy('academic_year');
+                 
+
+        }
+        
+        return  view('dean::transfers.yearly')->with(['data'=> $data, 'departments'=>$departments]);
+    }
+
+
     public function declineTransferRequest(Request $request, $id){
+        $hashedId = Crypt::decrypt($id);
+        $year = CourseTransfer::find($hashedId)->academic_year;
 
-        if (CourseTransferApproval::find($id)->exists()){
+        if (CourseTransferApproval::find($hashedId)->exists()){
 
-            $approval = CourseTransferApproval::find($id);
+            $approval = CourseTransferApproval::find($hashedId);
             $approval->dean_status = 2;
             $approval->dean_remarks = $request->remarks;
             $approval->save();
@@ -34,14 +185,15 @@ class DeanController extends Controller
 
         }
 
-        return redirect()->route('dean.transfer')->with('success', 'Course transfer request accepted');
+        return redirect()->route('dean.transfer',['year' => Crypt::encrypt($year)])->with('success', 'Course transfer request accepted');
     }
 
     public function acceptTransferRequest($id){
-        //  return $id;
-        if (CourseTransferApproval::find($id)->exists()){
+        $hashedId = Crypt::decrypt($id);
+        $year = CourseTransfer::find($hashedId)->academic_year;
+        if (CourseTransferApproval::find($hashedId)->exists()){
 
-            $approval = CourseTransferApproval::find($id);
+            $approval = CourseTransferApproval::find($hashedId);
             $approval->dean_status = 1;
             $approval->dean_remarks = 'Admit Student';
             $approval->save();
@@ -55,41 +207,43 @@ class DeanController extends Controller
             $approval->save();
         }
 
-        return redirect()->route('dean.transfer')->with('success', 'Course transfer request accepted');
+        return redirect()->route('dean.transfer',['year' => Crypt::encrypt($year)])->with('success', 'Course transfer request accepted');
 
     }
 
     public function viewUploadedDocument($id){
 
-        // $hashedId = Crypt::decrypt($id);
+        $hashedId = Crypt::decrypt($id);
 
-        $course = CourseTransferApproval::find($id);
+        $course = CourseTransferApproval::find($hashedId);
 
              $document = Application::where('reg_number', $course->transferApproval->studentTransfer->reg_number)->first();
 
-//        return $document;
-//
-//         return $document->admDocuments;
 
         return response()->file('Admissions/Certificates/'.$document->admissionDoc->certificates);
 
     }
 
-    public function transfer(){
+    public function transfer($year){
+        $hashedYear = Crypt::decrypt($year);
+        $departments   =   Department::where('school_id',auth()->guard('user')->user()->school_id)->get();
+        foreach($departments as $department){
+            $transfer = CourseTransfer::where('department_id', $department->id)
+                             ->where('academic_year', $hashedYear)
+                            ->latest()
+                            ->get();
+        }
 
-        $transfer  =  CourseTransferApproval::where('cod_status', '>=', 1)
-        ->where('registrar_status', null)
-        ->get();
-
-        return view('dean::transfers.index')->with(['transfer' => $transfer]);
+        return view('dean::transfers.index')->with(['transfer' => $transfer, 'departments' => $departments, 'year'=>$hashedYear]);
     }
 
     public function viewTransfer($id){
 
-        //  $hashedId = Crypt::decrypt($id);
-        //  return $hashedId;
+        $hashedId = Crypt::decrypt($id);
+    
 
-        $data = CourseTransferApproval::find($id);
+        $data = CourseTransfer::find($hashedId);
+        // return $data->transferApproval;
         return view('dean::transfers.viewTransfer')->with(['data' => $data]);
     }
 
