@@ -3,14 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/.env" beforeDir="false" afterPath="$PROJECT_DIR$/application/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/1PXqGCGf0BJuZf61X1HG5iuik6GZ6AdA9K1AowYP" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/251lR5x9MyOEWnevxIC73YmOpoIJQDD2Bwawfc40" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/P6dvDGcGzpdkUeISr3MGfVIo4n26cDnId1Pk95kh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/XG0a9a9PfWuE9JmovnKRcYBPSr9mrh3BMLTinjJf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/dYYPvW5sGy4elbTVYe24Te44zNURrWhVeTkwXYI0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/o4liPdmUpaCAfGqmmhvq9AVGIpMWv25WOnC0n7Ww" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
