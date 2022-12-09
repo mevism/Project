@@ -49,8 +49,6 @@ class StudentController extends Controller
     {
         $courses = StudentCourse::where('student_id', Auth::guard('student')->user()->student_id)->get();
 
-
-
         return view('student::student.index')->with(['courses' => $courses]);
     }
 
@@ -79,8 +77,6 @@ class StudentController extends Controller
 
         $transfers = CourseTransfer::where('student_id', Auth::guard('student')->user()->student_id)->latest()->get();
 
-        $today = Carbon::now()->format('Y-m-d');
-
         $current = Carbon::now()->format('Y-m-d');
 
         $sem_date = Intake::where('intake_from', '<=', $current, )
@@ -94,6 +90,7 @@ class StudentController extends Controller
             ->where('intake_id', strtoupper($semester))
             ->where('event_id', 5)
             ->first();
+
         if ($event->start_date <= $current && $current <= $event->end_date){
 
             $invoices = StudentInvoice::where('student_id', $student->id)
@@ -247,74 +244,6 @@ class StudentController extends Controller
 
     }
 
-    public function editRequest($id){
-
-        $hashedId = Crypt::decrypt($id);
-
-        $transfer = CourseTransfer::find($hashedId);
-
-        $departments = Department::all();
-
-        return view('student::courses.edittransfer')->with(['transfer' => $transfer, 'departments' => $departments]);
-
-    }
-
-    public function updateRequest(Request $request, $id)
-    {
-
-        $request->validate([
-            'dept' => 'required',
-            'course' => 'required',
-            'class' => 'required',
-            'points' => 'required|numeric'
-        ]);
-
-        if (Auth::guard('student')->user()->loggedStudent->courseStudent->course_id == $request->course) {
-
-            return redirect()->route('student.coursetransfers')->with('error', 'You are already admitted to this course');
-
-        } else {
-
-            $hashedId = Crypt::decrypt($id);
-
-            $transfer = CourseTransfer::find($hashedId);
-            $transfer->student_id = Auth::guard('student')->user()->student_id;
-            $transfer->department_id = $request->dept;
-            $transfer->course_id = $request->course;
-            $transfer->class_id = $request->class;
-            $transfer->points = $request->points;
-            $transfer->save();
-
-            return redirect()->route('student.coursetransfers')->with('success', 'Course transfer request updated successfully');
-        }
-    }
-
-    public function deleteRequest($id){
-
-        $hashedId = Crypt::decrypt($id);
-
-        CourseTransfer::find($hashedId)->delete();
-
-        return redirect()->route('student.coursetransfers')->with('success', 'Course transfer request deleted successfully');
-    }
-
-    public function storeRequest($id){
-
-        $hashedId = Crypt::decrypt($id);
-
-        CourseTransfer::find($hashedId)->update(['status' => 0]);
-
-        $invoice = new TransferInvoice;
-        $invoice->student_id = Auth::guard('student')->user()->student_id;
-        $invoice->reg_number = Auth::guard('student')->user()->loggedStudent->reg_number;
-        $invoice->invoice_number = 'INV'.time();
-        $invoice->amount = 500;
-        $invoice->description = 'Invoice for Course Transfer Fee';
-        $invoice->save();
-
-        return redirect()->back()->with('success', 'Your course transfer request submitted successfully');
-    }
-
     public function academicLeave(){
 
         $leaves = AcademicLeave::where('student_id', Auth::guard('student')->user()->student_id)->get();
@@ -324,7 +253,9 @@ class StudentController extends Controller
 
     public function requestLeave(){
 
-        return view('student::academic.requestleave');
+        $stage = Nominalroll::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)->latest()->first();
+
+        return view('student::academic.requestleave')->with(['stage' => $stage]);
     }
 
     public function submitLeaveRequest(Request $request){
