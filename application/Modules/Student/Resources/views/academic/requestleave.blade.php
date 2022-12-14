@@ -67,10 +67,10 @@
                                     </span>
                                 @else
                                 <span class="h5 fs-sm"> YEAR OF STUDY : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->nominalRoll->year_study }}</span>
+                                <span class="h6 fs-sm fw-normal"> {{ $stage->year_study }}</span>
 
                                 <span class="h5 fs-sm"> SEMESTER OF STUDY : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->nominalRoll->semester_study }}</span>
+                                <span class="h6 fs-sm fw-normal"> {{ $stage->semester_study }} ({{ $stage->patternRoll->season }})</span>
                                 @endif
                             </div>
                             </fieldset>
