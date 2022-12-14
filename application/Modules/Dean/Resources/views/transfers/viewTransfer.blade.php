@@ -37,34 +37,34 @@
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Reg. Number </div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $data->studentTransfer->reg_number }}
+                                        {{ $data->transferApproval->studentTransfer->reg_number }}
                                     </div>  
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Student Name</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $data->studentTransfer->sname.' '.$data->studentTransfer->fname.' '.$data->studentTransfer->mname }}
+                                        {{ $data->transferApproval->studentTransfer->sname.' '.$data->transferApproval->studentTransfer->fname.' '.$data->transferApproval->studentTransfer->mname }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Current Class</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $data->studentTransfer->courseStudent->class_code }}
+                                        {{ $data->transferApproval->studentTransfer->courseStudent->class_code }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Current Course</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $data->studentTransfer->courseStudent->studentCourse->course_name }}
+                                        {{ $data->transferApproval->studentTransfer->courseStudent->studentCourse->course_name }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Current Department</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $data->studentTransfer->courseStudent->studentCourse->getCourseDept->name }}
+                                        {{ $data->transferApproval->studentTransfer->courseStudent->studentCourse->getCourseDept->name }}
                                     </div>
                                 </div>
-                                @if($data->courseTransfer->level == 2)
+                                @if($data->transferApproval->courseTransfer->level == 2)
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">KCSE Results</div>
                                     <div class="col-md-9 fs-sm">
@@ -80,42 +80,43 @@
                             <div class="row mb-3">
                                 <div class="col-md-4 fw-bold">New Department</div>
                                 <div class="col-md-8 fs-sm">
-                                    {{ $data->deptTransfer->name }}
+                                    {{ $data->transferApproval->deptTransfer->name }}
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-4 fw-bold">New Course</div>
                                 <div class="col-md-8 fs-sm">
-                                    {{ $data->courseTransfer->course_name }}
+                                    {{ $data->transferApproval->courseTransfer->course_name }}
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <div class="col-md-4 fw-bold">New Class</div>
                                 <div class="col-md-8 fs-sm">
-                                    {{ $data->classTransfer->name }}
+                                    {{ $data->id }}
+                                    {{ $data->transferApproval->classTransfer->name }}
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <div class="col-md-4 fw-bold">Course Requirement</div>
                                 <div class="col-md-8 fs-sm">
-                                    {{ $data->class_points }}
+                                    {{ $data->transferApproval->class_points }}
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <div class="col-md-4 fw-bold">Student Points/Grade</div>
                                 <div class="col-md-8 fs-sm">
-                                    {{ $data->student_points}}
+                                    {{ $data->transferApproval->student_points}}
                                 </div>
                             </div>
 
-                            @if( $data->courseTransfer->level == 3)
+                            @if( $data->transferApproval->courseTransfer->level == 3)
                                     <div class="row mb-3">
                                         <div class="col-md-4 fw-bold">Recommendation</div>
                                         <div class="col-md-8 fs-sm">
-                                            @if( $data->student_points >=  $data->class_points)
+                                            @if( $data->transferApproval->student_points >=  $data->class_points)
                                                 <span class="badge bg-success"> Meets all minimum requirements </span>
                                             @else
                                                 <span class="badge bg-danger"> Does not meet all minimum requirements </span>
@@ -125,15 +126,15 @@
                                     </div>
                             @endif
 
-                            @if($data->courseTransfer->level == 2)
+                            @if($data->transferApproval->courseTransfer->level == 2)
 
                                 <div class="row mb-3">
                                     <div class="col-md-4 fw-bold">Subject Requirements</div>
                                     <div class="col-md-8 fs-sm">
-                                        {{ $data->courseTransfer->courseRequirements->subject1 }} <br>
-                                        {{ $data->courseTransfer->courseRequirements->subject2 }} <br>
-                                        {{ $data->courseTransfer->courseRequirements->subject3 }} <br>
-                                        {{ $data->courseTransfer->courseRequirements->subject4 }}
+                                        {{ $data->transferApproval->courseTransfer->courseRequirements->subject1 }} <br>
+                                        {{ $data->transferApproval->courseTransfer->courseRequirements->subject2 }} <br>
+                                        {{ $data->transferApproval->courseTransfer->courseRequirements->subject3 }} <br>
+                                        {{ $data->transferApproval->courseTransfer->courseRequirements->subject4 }}
 
                                     </div>
                                 </div>
@@ -142,6 +143,7 @@
                         </fieldset>
                     </div>
                 </div>
+
                 <div class="d-flex justify-content-center m-2">
                     @if($data->dean_status == null)
                         <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('dean.acceptTransferRequest', [ 'id' => Crypt::encrypt($data->id)]) }}"> Accept Transfer </a>

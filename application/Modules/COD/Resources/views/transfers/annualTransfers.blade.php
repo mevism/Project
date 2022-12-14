@@ -78,9 +78,13 @@
                                     <td> {{ $transfer->class_points }} </td>
                                     <td> {{ $transfer->student_points }} </td>
                                     <td nowrap="">
-                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewTransferRequest', ['id' => Crypt::encrypt($transfer->id)]) }}">View</a>
-                                        @if($transfer->approveTransfer != null)
-                                            <i class="fa fa-check text-primary"></i>
+                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewTransferRequest', ['id' => Crypt::encrypt($transfer->id)]) }}">View </a>
+                                        @if($transfer->approvedTransfer != null)
+                                            @if($transfer->approvedTransfer->cod_status == 1)
+                                             <i class="fa fa-check text-success m-2"></i>
+                                            @else
+                                            <i class="fa fa-times text-danger m-2"></i>   
+                                            @endif
                                         @endif
                                     </td>
                                 </tr>

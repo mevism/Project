@@ -46,7 +46,7 @@ class KuccpsImport implements ToCollection
             }
 
             $exit_date = preg_replace('/&/', '', substr($row[1], -4));
-            
+            // return $exit_date;
 
             $applicant = KuccpsApplicant::create([
                 'index_number' => preg_replace('/&/', 'AND', $row[1]),
@@ -77,7 +77,7 @@ class KuccpsImport implements ToCollection
                 'level' => 'SECONDARY',
                 'qualification' => 'KUCCPS',
                 'exit_date' => $exit_date,
-                'start_date' => $exit_date - 3,
+                // 'start_date' => $exit_date - 3,
             ]);
         }
     }

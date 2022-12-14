@@ -27,19 +27,19 @@ class DeanController extends Controller
         $hashedYear = Crypt::decrypt($year);
 
         $user = Auth::guard('user')->user();
-        // return $user;
         $by = $user->name;
-        $school = $user->getSch->name;
+        $dept = $user->getSch->initials;
         $role = $user->userRoles->name;
         
-        $departments   =   Department::where('school_id',auth()->guard('user')->user()->school_id)->get();
+        $departments   =   Department::where('school_id', auth()->guard('user')->user()->school_id)->get();
         foreach($departments as $department){
         $transfers = CourseTransfer::where('department_id', $department->id)
                     ->where('academic_year', $hashedYear)
                     ->latest()
                     ->get()
                     ->groupBy('course_id');
-                 
+        }
+
         $school = Auth::guard('user')->user()->getSch->name;
         $courses = Courses::all(); 
         
@@ -76,13 +76,13 @@ class DeanController extends Controller
             $table->addCell(1750, ['borderSize' => 1])->addText('Deans Committee Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
 
             foreach ($transfer as $key => $list) {
-                $name = $list->studentTransfer->reg_number.'<w:br/>'.$list->studentTransfer->sname.' '.$list->studentTransfer->fname.' '.$list->studentTransfer->mname;
+                $name = $list->studentTransfer->reg_number."<w:br/>\n".$list->studentTransfer->sname.' '.$list->studentTransfer->fname.' '.$list->studentTransfer->mname;
                 if ($list->approveTransfer == null){
                     $remarks = 'Missed Deadline';
                     $deanRemark = 'Declined';
                 }else{
-                    $remarks = $list->approveTransfer->cod_remarks;
-                    $deanRemark = $list->approveTransfer->dean_remarks;
+                    $remarks = $list->approvedTransfer->cod_remarks;
+                    $deanRemark = $list->approvedTransfer->dean_remarks;
                 }
                 $table->addRow();
                 $table->addCell(200, ['borderSize' => 1])->addText(++$key);
@@ -126,7 +126,7 @@ class DeanController extends Controller
 
         $my_template->setValue('school', $school);
         $my_template->setValue('by', $by);
-        $my_template->setValue('dept', $school);
+        $my_template->setValue('dept', $dept);
         $my_template->setValue('role', $role);
         $my_template->setComplexBlock('{table}', $table);
         $my_template->setComplexBlock('{summary}', $summary);
@@ -144,68 +144,45 @@ class DeanController extends Controller
                         unlink($docPath);
                     }
 
-        return response()->download($pdfPath)->deleteFileAfterSend(true);        
-        }
-        
+        return response()->download($pdfPath)->deleteFileAfterSend(true);             
     }
 
     public function yearly(){
-        $departments   =   Department::where('school_id',auth()->guard('user')->user()->school_id)->get();
+        $departments   =   Department::where('school_id', auth()->guard('user')->user()->school_id)->get();
         foreach($departments as $department){
-            $data = CourseTransfer::where('department_id', $department->id)
+            $data[] = CourseTransfer::where('department_id', $department->id)
                     ->latest()
                     ->get()
                     ->groupBy('academic_year');
-                 
+                }
 
-        }
-        
         return  view('dean::transfers.yearly')->with(['data'=> $data, 'departments'=>$departments]);
     }
 
 
     public function declineTransferRequest(Request $request, $id){
         $hashedId = Crypt::decrypt($id);
-        $year = CourseTransfer::find($hashedId)->academic_year;
-
-        if (CourseTransferApproval::find($hashedId)->exists()){
+        $year = CourseTransferApproval::find($hashedId)->transferApproval->academic_year;
 
             $approval = CourseTransferApproval::find($hashedId);
             $approval->dean_status = 2;
             $approval->dean_remarks = $request->remarks;
             $approval->save();
 
-        }else{
-
-            $approval = new CourseTransferApproval;
-            $approval->course_transfer_id = $id;
-            $approval->dean_status = 2;
-            $approval->dean_remarks = $request->remarks;
-            $approval->save();
-
-        }
-
+        
         return redirect()->route('dean.transfer',['year' => Crypt::encrypt($year)])->with('success', 'Course transfer request accepted');
     }
 
     public function acceptTransferRequest($id){
+
         $hashedId = Crypt::decrypt($id);
-        $year = CourseTransfer::find($hashedId)->academic_year;
-        if (CourseTransferApproval::find($hashedId)->exists()){
+
+        $year = CourseTransferApproval::find($hashedId)->transferApproval->academic_year;
 
             $approval = CourseTransferApproval::find($hashedId);
             $approval->dean_status = 1;
             $approval->dean_remarks = 'Admit Student';
             $approval->save();
-
-        }else{
-
-            $approval = new CourseTransferApproval;
-            $approval->course_transfer_id = $id;
-            $approval->dean_status = 1;
-            $approval->dean_remarks = 'Admit Student';
-            $approval->save();
-        }
 
         return redirect()->route('dean.transfer',['year' => Crypt::encrypt($year)])->with('success', 'Course transfer request accepted');
 
@@ -226,12 +203,20 @@ class DeanController extends Controller
 
     public function transfer($year){
         $hashedYear = Crypt::decrypt($year);
-        $departments   =   Department::where('school_id',auth()->guard('user')->user()->school_id)->get();
+        $departments   =   Department::where('school_id', auth()->guard('user')->user()->school_id)->get();
         foreach($departments as $department){
-            $transfer = CourseTransfer::where('department_id', $department->id)
+
+            $transfers = CourseTransfer::where('department_id', $department->id)
                              ->where('academic_year', $hashedYear)
                             ->latest()
                             ->get();
+            foreach($transfers as $record){
+                $transfer[] = CourseTransferApproval::where('course_transfer_id', $record->id)
+                                ->where('cod_status', '!=', null)
+                                ->latest()
+                                ->get();
+            }
+    
         }
 
         return view('dean::transfers.index')->with(['transfer' => $transfer, 'departments' => $departments, 'year'=>$hashedYear]);
@@ -242,8 +227,8 @@ class DeanController extends Controller
         $hashedId = Crypt::decrypt($id);
     
 
-        $data = CourseTransfer::find($hashedId);
-        // return $data->transferApproval;
+        $data = CourseTransferApproval::find($hashedId);
+
         return view('dean::transfers.viewTransfer')->with(['data' => $data]);
     }
 

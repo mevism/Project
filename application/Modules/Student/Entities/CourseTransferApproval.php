@@ -13,7 +13,12 @@ class CourseTransferApproval extends Model
 
     public function transferApproval(){
 
-        return $this->belongsTo(CourseTransfer::class, 'course_transfer_id')->withTrashed();
+        return $this->belongsTo(CourseTransfer::class, 'course_transfer_id');
+    }
+
+    public function transferApproved(){
+
+        return $this->belongsTo(CourseTransfer::class, 'id');
     }
 
     protected static function newFactory()

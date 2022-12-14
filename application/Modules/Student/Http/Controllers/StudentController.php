@@ -79,13 +79,11 @@ class StudentController extends Controller
 
         $transfers = CourseTransfer::where('student_id', Auth::guard('student')->user()->student_id)->latest()->get();
 
-        $today = Carbon::now()->format('Y-m-d');
-
         $current = Carbon::now()->format('Y-m-d');
 
-        $sem_date = Intake::where('intake_from', '<=', $current, )
-            ->where('intake_to', '>=', $current)
-            ->first();
+        $sem_date = Intake::where('intake_from', '<=', $current )
+        ->where('intake_to', '>=', $current)
+        ->first();
 
         $academicYear =  Carbon::parse($sem_date->academicYear->year_start)->format('Y').'/'.Carbon::parse($sem_date->academicYear->year_end)->format('Y');
         $semester = Carbon::parse($sem_date->intake_from)->format('M').'/'.Carbon::parse($sem_date->intake_to)->format('M');
@@ -94,6 +92,8 @@ class StudentController extends Controller
             ->where('intake_id', strtoupper($semester))
             ->where('event_id', 5)
             ->first();
+            
+            
         if ($event->start_date <= $current && $current <= $event->end_date){
 
             $invoices = StudentInvoice::where('student_id', $student->id)
@@ -128,6 +128,7 @@ class StudentController extends Controller
                     }
                 }
             }
+
         }
 
         return view('student::courses.transfers')->with(['transfers' => $transfers]);
@@ -191,8 +192,10 @@ class StudentController extends Controller
             ->select('id','name', 'points')
             ->latest()
             ->first();
+            // return $classes;
 
         $cluster = [$classes->id, $classes->name, $points[$group->cluster_group], $classes->points];
+        
 
         return response()->json($cluster);
     }

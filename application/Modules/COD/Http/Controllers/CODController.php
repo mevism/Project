@@ -615,7 +615,6 @@ class CODController extends Controller
     public function transferRequests(){
 
         $transfers = CourseTransfer::where('department_id', Auth::guard('user')->user()->department_id)
-            // ->where('status', '<=', 1)
             ->latest()
             ->get()
             ->groupBy('academic_year');
@@ -629,7 +628,6 @@ class CODController extends Controller
         $hashedYear = Crypt::decrypt($year);
 
         $transfers = CourseTransfer::where('department_id', Auth::guard('user')->user()->department_id)
-            ->where('status', '<=', 1)
             ->where('academic_year', $hashedYear)
             ->latest()
             ->get();
@@ -724,13 +722,13 @@ class CODController extends Controller
         $role = $user->userRoles->name;
 
         $transfers = CourseTransfer::where('department_id', Auth::guard('user')->user()->department_id)
-            ->where('status', '<=', 1)
+            // ->where('status', '<', 1)
             ->where('academic_year', $hashedYear)
             ->latest()
             ->get()
             ->groupBy('course_id');
 
-        $school = Auth::guard('user')->user()->getDept->schools->name;
+        $school = Auth::guard('user')->user()->getDept->name;
 
         $courses = Courses::all();
 
@@ -765,11 +763,11 @@ class CODController extends Controller
             $table->addCell(1750, ['borderSize' => 1])->addText('Deans Committee Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
 
             foreach ($transfer as $key => $list) {
-                $name = $list->studentTransfer->reg_number.'<w:br/>'.$list->studentTransfer->sname.' '.$list->studentTransfer->fname.' '.$list->studentTransfer->mname;
+                $name = $list->studentTransfer->reg_number."<w:br/>\n".$list->studentTransfer->sname.' '.$list->studentTransfer->fname.' '.$list->studentTransfer->mname;
                 if ($list->approveTransfer == null){
                     $remarks = 'Missed Deadline';
                 }else{
-                    $remarks = $list->approveTransfer->cod_remarks;
+                    $remarks = $list->approvedTransfer->cod_remarks;
                 }
                 $table->addRow();
                 $table->addCell(200, ['borderSize' => 1])->addText(++$key);

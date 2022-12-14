@@ -267,7 +267,7 @@
                 </a>
                 <ul class="nav-main-submenu">
                     <li class="nav-main-item">
-                        <a class="nav-main-link{{ request()->is('transfer') ? ' active' : '' }}" href="{{ route('courses.transfer') }}">
+                        <a class="nav-main-link{{ request()->is('transfer') ? ' active' : '' }}" href="{{ route('courses.yearly') }}">
                             <i class="nav-main-link-icon si si-user"></i>
                             <span class="nav-main-link-name"> View Transfer </span>
                         </a>
