@@ -51,7 +51,7 @@
                     <a class="btn  btn-alt-primary btn-sm" href="{{ route('dean.requestedTransfers', ['year' => Crypt::encrypt($year)]) }}">Generate report</a>
                 </div>
                 <table id="example" class="table table-bordered table-striped fs-sm">
-                    @if(count($transfer)>0)
+                    {{-- @if(count($transfer)>0) --}}
                         <thead>
                             <th>#</th>
                             <th>Reg. Number</th>
@@ -63,23 +63,26 @@
                             <th nowrap="">Action</th>
                         </thead>
                         <tbody>
-                        @foreach($transfer as $item)
+                        @foreach($transfer as $key => $items)
+                            @foreach($items as $item )
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td> {{ $item->studentTransfer->reg_number }} </td>
+                            <td>{{ ++$key }}</td>
+                            <td> {{ $item->transferApproval->studentTransfer->reg_number }} </td>
                             <td>
-                                {{ $item->studentTransfer->sname.' '.$item->studentTransfer->fname.' '.$item->studentTransfer->mname }}
+                                {{ $item->transferApproval->studentTransfer->sname.' '.$item->transferApproval->studentTransfer->fname.' '.$item->transferApproval->studentTransfer->mname }}
                             </td>
-                            <td> {{ $item->courseTransfer->course_code }}</td>
-                            <td> {{ $item->deptTransfer->dept_code }}</td>
-                             <td> {{ $item->approveTransfer->cod_remarks }}</td>
+                            <td> {{ $item->transferApproval->courseTransfer->course_code }}</td>
+                            <td> {{ $item->transferApproval->deptTransfer->dept_code }}</td>
+                             <td> {{ $item->cod_remarks }}</td>
                             <td>
-                                @if($item->approveTransfer->dean_remarks == null)
+                                @if($item->dean_remarks == null)
                                     <span class="badge bg-primary">Waiting approval</span>
+                                    {{ $item->dean_remarks }}
                                 @else
-                                    <p class="text-success">{{ $item->approveTransfer->dean_remarks }}</p>
+                                    <p class="text-success">{{ $item->dean_remarks }}</p>
                                 @endif
                             </td>
+                    
                             <td nowrap="">
                                 <a class="btn btn-sm btn-outline-secondary" href="{{ route('dean.viewTransfer', [ 'id' => Crypt::encrypt($item->id)]) }}"> View </a>
                                 @if($item->dean_status != null)
@@ -88,12 +91,13 @@
                             </td>
                         </tr>
                         @endforeach
+                        @endforeach
                         </tbody>
-                    @else
-                        <tr>
+                    {{-- @else/ --}}
+                        {{-- <tr>
                             <span class="text-muted text-center fs-sm">There are no new transfers submitted</span>
                         </tr>
-                    @endif
+                    @endif --}}
                 </table>
             </div>
         </div>
