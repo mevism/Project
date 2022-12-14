@@ -1,4 +1,4 @@
-@extends('cod::layouts.backend')
+@extends('dean::layouts.backend')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
 
@@ -58,9 +58,10 @@
                                 <th>Total Request</th>
                                 <th>Action</th>
                             </thead>
-                            <tbody>
-                                
-                                @foreach($data as $academic_year => $transfer)
+                            <tbody>                                
+                                @foreach($data as $transfer)
+
+                                @foreach($transfer as $academic_year => $transfer)
 
                                     <tr>
                                         <td> {{ $loop->iteration }} </td>
@@ -70,6 +71,7 @@
                                             <a class="btn btn-sm btn-outline-secondary" href="{{ route('dean.transfer', ['year' => Crypt::encrypt($academic_year)]) }}">view requests</a>
                                         </td>
                                     </tr>
+                                    @endforeach
                                 @endforeach
                             </tbody>
                         </table>

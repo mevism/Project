@@ -107,7 +107,7 @@
             </li>
 
             <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="{{ route('dean.yearly') }}">
+              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true">
                 <i class="nav-main-link-icon si si-graduation"></i>
                 <span class="nav-main-link-name">Course Transfer</span>
               </a>

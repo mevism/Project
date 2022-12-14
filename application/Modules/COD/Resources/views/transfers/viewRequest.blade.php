@@ -160,17 +160,18 @@
                                         {{ $transfer->courseTransfer->courseRequirements->subject4 }}
 
                                     </div>
+
                                 </div>
                                 @endif
                             </fieldset>
                         </div>
                     </div>
                     <div class="d-flex justify-content-center m-2">
-                        @if($transfer->approveTransfer == null)
+                        @if($transfer->approvedTransfer == null)
                             <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('department.acceptTransferRequest', ['id' => Crypt::encrypt($transfer->id)]) }}"> Accept Transfer </a>
                             <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Transfer</a>
                         @else
-                            @if($transfer->approveTransfer->cod_status == 1)
+                            @if($transfer->approvedTransfer->cod_status == 1)
                                 <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Transfer</a>
                             @else
                                 <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('department.acceptTransferRequest', ['id' => Crypt::encrypt($transfer->id)]) }}"> Accept Transfer </a>
