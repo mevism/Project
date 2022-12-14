@@ -91,7 +91,6 @@ class StudentController extends Controller
             ->where('event_id', 5)
             ->first();
             
-            
 
         if ($event->start_date <= $current && $current <= $event->end_date){
 
