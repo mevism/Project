@@ -33,12 +33,7 @@ class DeanController extends Controller
         
         $departments   =   Department::where('school_id', auth()->guard('user')->user()->school_id)->get();
         foreach($departments as $department){
-        $transfers[] = CourseTransfer::where('department_id', $department->id)
-<<<<<<< HEAD
-        $transfers[] = CourseTransfer::where('department_id', $department->id)
-=======
-        //$transfers[] = CourseTransfer::where('department_id', $department->id)
->>>>>>> 4a8407da (student invoices)
+        $transfers = CourseTransfer::where('department_id', $department->id)
                     ->where('academic_year', $hashedYear)
                     ->latest()
                     ->get()
@@ -119,55 +114,22 @@ class DeanController extends Controller
 
         $summary = new Table(array('unit' => TblWidth::TWIP));
         $total = 0;
-
-        // foreach($transfered as $transfer){
-
-        //     // return $transfer;
-
-        //     foreach($transfer as $transfercourse){
-
-        //         foreach ($courses as $listed){
-        //             if ($listed->id == $transfercourse->course_id){
-        //                 $courseName =  $listed->course_name;
-        //                 $courseCode = $listed->course_code;
-        //             }
-        //         }
-            
-
-        foreach ($transfers as $transfered){
-            //  $number[] = $transfered; 
-            foreach($transfered as $course_id => $transfer){
-                $number[] = $transfer;
-                foreach($transfer as $transfercourse){
-
-                    foreach ($courses as $listed){
-                        if ($listed->id == $course_id){
-                            $courseName =  $listed->course_name;
-                            $courseCode = $listed->course_code;
-
-                            $arr = [ $courseName ];
-                        }
-                    }
-                }         
-
-                $summary->addRow();
-                $summary->addCell(5000, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
-                $summary->addCell(1250, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
-                $summary->addCell(1250, ['borderSize' => 1])->addText($transfer->count());
-                $summary->addRow();
-                $summary->addCell(5000, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
-                $summary->addCell(1250, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
-                $summary->addCell(1250, ['borderSize' => 1])->addText($transfer->count());
-                $summary->addRow();
-                $summary->addCell(5000, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
-                $summary->addCell(1250, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
-                $summary->addCell(1250, ['borderSize' => 1])->addText($transfer->count());
-
-                $total += $transfer->count();
+        foreach ($transfers as $group => $transfer){
+            foreach ($courses as $listed){
+                if ($listed->id == $group){
+                    $courseName =  $listed->course_name;
+                    $courseCode = $listed->course_code;
+                }
             }
-                $total += $transfer->count();
-            }
-<<<<<<< HEAD
+
+            $summary->addRow();
+            $summary->addCell(5000, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
+            $summary->addCell(1250, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
+            $summary->addCell(1250, ['borderSize' => 1])->addText($transfer->count());
+
+            $total += $transfer->count();
+
+
         }
     
        // return $number;
@@ -182,7 +144,7 @@ class DeanController extends Controller
     
         $summary->addRow();
         $summary->addCell(6250, ['borderSize' => 1])->addText('Totals', ['bold' => true]);
-        $summary->addCell(1250, ['borderSize' => 1])->addText(2, ['bold' => true]);
+        $summary->addCell(1250, ['borderSize' => 1])->addText($transfers->count(), ['bold' => true]);
         $summary->addCell(1250, ['borderSize' => 1])->addText($total, ['bold' => true]);
 
         $my_template = new TemplateProcessor(storage_path('course_transfers.docx'));
