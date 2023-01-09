@@ -26,6 +26,8 @@ use Modules\Registrar\Entities\FeeStructure;
 use Modules\Registrar\Entities\SemesterFee;
 use Modules\Registrar\Entities\Student;
 use Modules\Registrar\Entities\StudentCourse;
+use Modules\Student\Entities\AcademicLeave;
+use Modules\Student\Entities\AcademicLeaveApproval;
 use Modules\Student\Entities\CourseTransfer;
 use Modules\Student\Entities\CourseTransferApproval;
 use Modules\Student\Entities\ExamResults;
@@ -425,6 +427,8 @@ class CODController extends Controller
 
         $proformaInvoice = 0;
 
+        return $fees;
+
         foreach ($fees->invoiceProforma as $votehead){
 
             $proformaInvoice += $votehead->semesterI;
@@ -752,8 +756,8 @@ class CODController extends Controller
             $table->addRow(600);
             $table->addCell(5000, [ 'gridSpan' => 9, ])->addText($courseName.' '.'('.$courseCode.')', $headers, ['spaceAfter' => 300,'spaceBefore' => 300]);
             $table->addRow();
-            $table->addCell(200, ['borderSize' => 1])->addText('#');
-            $table->addCell(2800, ['borderSize' => 1])->addText('Student Name/ Reg. Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+            $table->addCell(400, ['borderSize' => 1])->addText('#');
+            $table->addCell(2700, ['borderSize' => 1])->addText('Student Name/ Reg. Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
             $table->addCell(1900, ['borderSize' => 1])->addText('Programme/ Course Admitted', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
             $table->addCell(1900, ['borderSize' => 1])->addText('Programme/ Course Transferring', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
             $table->addCell(1750, ['borderSize' => 1])->addText('Programme/ Course Cut-off Points', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
@@ -770,8 +774,8 @@ class CODController extends Controller
                     $remarks = $list->approvedTransfer->cod_remarks;
                 }
                 $table->addRow();
-                $table->addCell(200, ['borderSize' => 1])->addText(++$key);
-                $table->addCell(2800, ['borderSize' => 1])->addText($name);
+                $table->addCell(400, ['borderSize' => 1])->addText(++$key);
+                $table->addCell(2700, ['borderSize' => 1])->addText($name);
                 $table->addCell(1900, ['borderSize' => 1])->addText($list->studentTransfer->courseStudent->studentCourse->course_code);
                 $table->addCell(1900, ['borderSize' => 1])->addText($list->courseTransfer->course_code);
                 $table->addCell(1750, ['borderSize' => 1])->addText($list->class_points);
@@ -800,8 +804,8 @@ class CODController extends Controller
 
             $total += $transfer->count();
 
-
         }
+
         $summary->addRow();
         $summary->addCell(6250, ['borderSize' => 1])->addText('Totals', ['bold' => true]);
         $summary->addCell(1250, ['borderSize' => 1])->addText($transfers->count(), ['bold' => true]);
@@ -828,8 +832,109 @@ class CODController extends Controller
                     if(file_exists($docPath)){
                         unlink($docPath);
                     }
-
+//
+//        return response()->download($docPath)->deleteFileAfterSend(true);
         return response()->download($pdfPath)->deleteFileAfterSend(true);
+    }
+
+
+    public function academicLeave(){
+
+        $requests = AcademicLeave::latest()
+                                    ->get()
+                                    ->groupBy('academic_year');
+
+        return view('cod::leaves.index')->with(['leaves' => $requests]);
+    }
+
+    public function yearlyAcademicLeave($year){
+
+        $hashedYear = Crypt::decrypt($year);
+
+        $deptID = Auth::guard('user')->user()->department_id;
+
+        $requests = AcademicLeave::where('academic_year', $hashedYear)
+            ->latest()
+            ->get();
+
+        foreach ($requests as $leave){
+            if ($leave->studentLeave->courseStudent->department_id == $deptID) {
+                $allLeaves[] = $leave;
+            }
+        }
+
+        return view('cod::leaves.annualLeaves')->with(['leaves' => $allLeaves, 'year' => $hashedYear]);
+
+    }
+
+    public function viewLeaveRequest($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $leave = AcademicLeave::find($hashedId);
+
+        $student = Student::find($leave->student_id);
+
+        $currentStage = Nominalroll::where('student_id', $leave->student_id)
+                ->latest()
+                ->first();
+
+        return view('cod::leaves.viewLeaveRequest')->with(['leave' => $leave, 'current' => $currentStage, 'student' => $student]);
+
+    }
+
+    public function acceptLeaveRequest($id){
+
+       $hashedId = Crypt::decrypt($id);
+
+      $leave = AcademicLeave::find($hashedId);
+
+        if (AcademicLeaveApproval::where('academic_leave_id', $hashedId)->exists()){
+
+            $updateApproval = AcademicLeaveApproval::where('academic_leave_id', $hashedId)->first();
+            $updateApproval->cod_status = 1;
+            $updateApproval->cod_remarks = 'Request Accepted';
+            $updateApproval->save();
+
+        }else{
+
+            $newApproval = new AcademicLeaveApproval;
+            $newApproval->academic_leave_id = $hashedId;
+            $newApproval->cod_status = 1;
+            $newApproval->cod_remarks = 'Request Accepted';
+            $newApproval->save();
+
+        }
+
+        return redirect()->route('department.yearlyLeaves', ['year' => Crypt::encrypt($leave->academic_year)])->with('success', 'Deferment/Academic leave approved');
+
+    }
+
+    public function declineLeaveRequest(Request $request, $id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $leave = AcademicLeave::find($hashedId);
+
+        if (AcademicLeaveApproval::where('academic_leave_id', $hashedId)->exists()){
+
+            $updateApproval = AcademicLeaveApproval::where('academic_leave_id', $hashedId)->first();
+            $updateApproval->cod_status = 2;
+            $updateApproval->cod_remarks = $request->remarks;
+            $updateApproval->save();
+
+        }else{
+
+            $newApproval = new AcademicLeaveApproval;
+            $newApproval->academic_leave_id = $hashedId;
+            $newApproval->cod_status = 2;
+            $newApproval->cod_remarks = $request->remarks;
+            $newApproval->save();
+
+        }
+
+        return redirect()->route('department.yearlyLeaves', ['year' => Crypt::encrypt($leave->academic_year)])->with('success', 'Deferment/Academic leave declined.');
+
     }
 
 

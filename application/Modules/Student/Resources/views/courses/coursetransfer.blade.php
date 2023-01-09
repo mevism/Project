@@ -291,7 +291,6 @@
                     // for (var i = 0; i < data.length; i++){
 
                     op1 += '<option selected value="' + data[0] + '"> ' + data[1] + '</<option>';
-                    ''
                     // op2+='<option selected value="'+data[2]+'"> '+data[2]+'</<option>';                           ''
                     // }
 
