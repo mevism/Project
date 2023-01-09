@@ -15,6 +15,10 @@ class Attendance extends Model
         return $this->hasMany(SemesterFee::class, 'id');
     }
 
+    public function studentType(){
+        return $this->hasMany(StudentCourse::class, 'id');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Registrar\Database\factories\AttendanceFactory::new();

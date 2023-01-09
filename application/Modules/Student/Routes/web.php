@@ -40,6 +40,8 @@ Route::prefix('student')->group(function() {
     Route::post('/update-request-deffer-or-academic-leave/{id}', [StudentController::class, 'updateLeaveRequest'])->name('student.updateleaverequest');
     Route::get('/submits-request-deffer-or-academic-leave/{id}', [StudentController::class, 'submitsLeaveRequest'])->name('student.submitsleaverequest');
     Route::get('/delete-request-deffer-or-academic-leave/{id}', [StudentController::class, 'deleteLeaveRequest'])->name('student.deleteleaverequest');
+    Route::get('/get-list-of-available-class', [StudentController::class, 'leaveClasses'])->name('student.getLeaveClasses');
+    Route::get('/generate-deferment-details-for-new-student', [StudentController::class, 'defermentRequest'])->name('student.defermentRequest');
 
 
 

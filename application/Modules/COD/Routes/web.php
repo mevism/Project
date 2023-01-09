@@ -67,6 +67,12 @@ Route::prefix('department')->middleware( ['is_cod'])->group( function() {
         Route::get('/generate-list-of-all-transfer-requests/{year}', [CODController::class, 'requestedTransfers'])->name('department.requestedTransfers');
         Route::get('/view-yearly-course-transfer-requests/{year}', [CODController::class, 'viewYearRequests'])->name('department.viewYearRequests');
 
+        Route::get('/view-list-of-departmental-academic-leave-transfers', [CODController::class, 'academicLeave'])->name('department.academicLeave');
+        Route::get('/view-yearly-departmental-academic-leave-transfers/{year}', [CODController::class, 'yearlyAcademicLeave'])->name('department.yearlyLeaves');
+        Route::get('/view-academic-leave-request/{id}', [CODController::class, 'viewLeaveRequest'])->name('department.viewLeaveRequest');
+        Route::get('/accept-academic-leave/deferment-request/{id}', [CODController::class, 'acceptLeaveRequest'])->name('department.acceptLeaveRequest');
+        Route::post('/decline-academic-leave/deferment-request/{id}', [CODController::class, 'declineLeaveRequest'])->name('department.declineLeaveRequest');
+
 
 //        Route::get('/getAcademicFile/{id}', 'CODController@viewAcademicFile');
 
