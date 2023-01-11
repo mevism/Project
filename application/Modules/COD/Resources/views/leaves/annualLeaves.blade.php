@@ -1,4 +1,4 @@
-@extends('student::layouts.backend')
+@extends('cod::layouts.backend')
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
@@ -17,7 +17,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[2, 'asc']],
+            order: [[0, 'asc']],
             rowGroup: {
                 dataSrc: 2
             }
@@ -27,22 +27,21 @@
 
 
 @section('content')
-
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
                     <h5 class="h5 fw-bold mb-0">
-                        COURSE TRANSFERS
+                       {{ $year }} ACADEMIC/DEFERMENT LEAVE REQUESTS
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="{{ route('student') }}">Dashboard</a>
+                            <a class="link-fx" href="#">Leaves</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            ALL TRANSFER REQUESTS
+                            Annual deferment/academic leaves
                         </li>
                     </ol>
                 </nav>
@@ -53,50 +52,43 @@
     <div class="block block-rounded">
         <div class="block-content block-content-full">
             <div class="table-responsive">
-                <div class="d-flex justify-content-end mb-4">
-                    <a class="btn btn-sm btn-alt-primary m-2" href="{{ route('student.academicleaverequest') }}">Create request</a>
-                </div>
                 <table id="example"  class="table table-sm table-striped table-bordered fs-sm">
                     <thead>
-                        <th>#</th>
-                        <th nowrap=""> CURRENT CLASS </th>
-                        <th>Stage</th>
-                        <th nowrap="">Academic Year</th>
-                        <th nowrap="">Leave Type</th>
-                        <th nowrap="">From - To</th>
-                        <th nowrap="">Reason(s)</th>
-                        <th nowrap=""> Status</th>
+                    <th>#</th>
+                    <th> Reg. Number </th>
+                    <th> Student Name </th>
+                    <th> Current Class </th>
+                    <th> Period </th>
+                    <th> New Class </th>
+                    <th> Stage </th>
+                    <th>Action</th>
                     </thead>
                     <tbody>
                     @foreach($leaves as $key => $leave)
                         <tr>
-                            <td>{{ ++$key }} </td>
+                            <td> {{ ++$key }} </td>
+                            <td> {{ $leave->studentLeave->reg_number }} </td>
+                            <td> {{ $leave->studentLeave->sname.' '.$leave->studentLeave->fname.' '.$leave->studentLeave->mname }} </td>
                             <td> {{ $leave->studentLeave->courseStudent->class_code }} </td>
-                            <td> Y{{ $leave->year_study }} S{{ $leave->semester_study}} </td>
-                            <td> {{ $leave->academic_year }} </td>
-                            <td nowrap="">
-                                @if($leave->type == 1)
-                                    ACADEMIC LEAVE
-                                @else
-                                    DEFERMENT
-                                @endif
-                            </td>
-                            <td nowrap=""> From : {{ $leave->from }} <br> To : {{ $leave->to }}</td>
-                            <td> {{ $leave->reason }} </td>
-                            <td nowrap="">
-                                @if($leave->approveLeave == NULL)
-                                    <a class="btn btn-sm btn-alt-danger" href="{{ route('student.deleteleaverequest', ['id' => Crypt::encrypt($leave->id)]) }}"> Withdraw </a>
-                                @else
-                                    @if($leave->approveLeave->status == 1)
-                                        <span class="text-success fw-bold"> Successful </span>
-                                    @elseif($leave->approveLeave->status == 2)
-                                        <span class="text-danger fw-bold"> Unsuccessful</span>
+                            <td> {{ Carbon\Carbon::parse($leave->to)->diffInMonths(\Carbon\Carbon::parse($leave->from)) }} Months</td>
+                            <td> {{ $leave->deferredClass->deferred_class }} </td>
+                            <td> {{ $leave->deferredClass->stage }} </td>
+                            <td>
+                                <a class="btn btn-sm btn-outline-dark" href="{{ route('department.viewLeaveRequest', ['id' => Crypt::encrypt($leave->id)]) }}"> View </a>
+                                @if($leave->approveLeave != null)
+                                    @if($leave->approveLeave->cod_status == 1)
+                                        <span class="m-2 text-success">
+                                            <i class="fa fa-check"></i>
+                                        </span>
                                     @else
-                                        <span class="text-info fw-bold"> Processing</span>
+                                        <span class="m-2 text-danger">
+                                            <i class="fa fa-times"></i>
+                                        </span>
                                     @endif
                                 @endif
                             </td>
                         </tr>
+
                     @endforeach
                     </tbody>
                 </table>

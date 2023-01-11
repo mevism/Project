@@ -2,99 +2,31 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Fees/.~lock.Transfers1670574304.docx#" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Fees/Transfers1670941194.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Fees/Transfers1671014561.docx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/QrCodes/1670933503.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/QrCodes/1670933539.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BBIT001J2023-1670919510.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BBIT002J2023-1670919630.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BSCE001J2023-1670925897.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BSCE002J2023-1670925980.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BSCS001J2023-1670924048.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BSCS002J2023-1670924116.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BSCS003J2022-1670584244.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BSIT002J2022-1670584009.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BSIT002J2023-1670925011.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BSIT003J2022-1670584131.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BSMM002J2023-1670924821.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BTCE001J2023-1670925677.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BTCE002J2023-1670925740.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BTCE003J2023-1670925823.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BTIT001J2022-1670584325.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/DBCE001J2023-1670925457.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/DBCE002J2023-1670925545.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/DBCE003J2023-1670925611.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/DBTE001J2023-1670925129.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/DBTE002J2023-1670925277.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/DBTE003J2023-1670925352.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/DICT002J2023-1670924318.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/DSCS001J2023-1670924643.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/DSCS002J2023-1670924741.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/transfers/yearlyTransfers.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000001.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000002.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000003.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000004.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000005.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000006.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000007.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000008.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000009.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000010.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000011.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000012.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000013.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000014.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000015.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000016.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000017.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000018.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000019.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000020.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000021.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000023.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000024.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000025.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000026.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000027.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000028.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/APP_2022_000029.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/XFER_2022_000001.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/XFER_2022_000004.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/XFER_2022_000005.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/XFER_2022_000006.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/XFER_2022_000007.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/XFER_2022_000009.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/XFER_2022_000010.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/XFER_2022_000011.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/5YFuUDgZMVtiEdSVWqO7Yk74e24N2Fu5EDjCcIdx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/FIoAF07PU80lW1XR7dOog08d4pOb70xHekN9hZ2Y" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/reXVjcCLsO72Vy6mD1wO4epnAY3T5JZqvb49Ofy0" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/wH9U6aRz5amltBnj5TJbRaYQwOSrDtqKBQDFye20" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669797121.png" beforeDir="false" afterPath="$PROJECT_DIR$/QrCodes/1669797121.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QrCodes/1669976653.png" beforeDir="false" afterPath="$PROJECT_DIR$/QrCodes/1669976653.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/.env" beforeDir="false" afterPath="$PROJECT_DIR$/application/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/transfers/annualTransfers.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/transfers/annualTransfers.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/transfers/viewRequest.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/transfers/viewRequest.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Http/Controllers/DeanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Http/Controllers/DeanController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/transfers/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/transfers/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/transfers/preview.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/transfers/viewTransfer.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/transfers/viewTransfer.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/transfers/yearly.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/transfers/yearly.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/transfers/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/transfers/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/CourseTransfer.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/CourseTransfer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/CourseTransferApproval.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/CourseTransferApproval.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/invoices/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/invoices/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Attendance.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Attendance.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/StudentCourse.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/StudentCourse.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_28_111516_create_academic_leaves_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_28_111516_create_academic_leaves_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/AcademicLeave.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/AcademicLeave.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/app/Imports/KuccpsImport.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Imports/KuccpsImport.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/XFER_2022_000002.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/APP_2022_000022.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/course_transfers.docx" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/course_transfers.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/academicleave.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/academicleave.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/requestleave.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/requestleave.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/coursetransfer.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/coursetransfer.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/5YFuUDgZMVtiEdSVWqO7Yk74e24N2Fu5EDjCcIdx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/FIoAF07PU80lW1XR7dOog08d4pOb70xHekN9hZ2Y" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/PER4PSq345Hws2dAmNDs0ZatVXJ0vO3MTATEqZPT" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/Ys2GYh3kpUBGwnDkjTL79v4RjxW76k741WyTGXcY" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/gBfYc1Bc0cTpGm4pNxBhcn4EPDZba8sby7b11j1T" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/iLy4JkIY2bXTn2ihsY0XjFPiqdKpR2wdaFItgOCi" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/reXVjcCLsO72Vy6mD1wO4epnAY3T5JZqvb49Ofy0" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/w4ieaFRUiOJW2LlOxldOIzdpKWvgR3Dz7IPnrZhZ" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/wH9U6aRz5amltBnj5TJbRaYQwOSrDtqKBQDFye20" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/yJhxdQnWICuHuCraPgq375KduwLCo3NnBGB5CsTz" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,19 +41,19 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/inbox.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/home.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/mycourses.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/application/Modules/Application/Routes/web.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/myadmissions.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/coursetransfer.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/application/Modules/Application/Notifications/SMS.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/requestleave.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/home.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/inbox.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/myadmissions.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/mycourses.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/application/Modules/Application/Resources/views/layouts/backend.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Application/Routes/web.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/requestleave.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/coursetransfer.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -274,14 +206,13 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../onwards-fork" />
-    <property name="nodejs_package_manager_path" value="npm" />
-    <property name="vue.rearranger.settings.migration" value="true" />
-  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -304,7 +235,21 @@
       <workItem from="1670570780084" duration="2213000" />
       <workItem from="1670835182316" duration="818000" />
       <workItem from="1670914209657" duration="2183000" />
-      <workItem from="1671018615913" duration="1734000" />
+      <workItem from="1671018615913" duration="6438000" />
+      <workItem from="1671083489840" duration="8942000" />
+      <workItem from="1671176424039" duration="4457000" />
+      <workItem from="1671185225587" duration="379000" />
+      <workItem from="1671433017923" duration="18013000" />
+      <workItem from="1671520727171" duration="19408000" />
+      <workItem from="1671612111066" duration="922000" />
+      <workItem from="1671613840808" duration="4744000" />
+      <workItem from="1671637690526" duration="652000" />
+      <workItem from="1671640019892" duration="593000" />
+      <workItem from="1671701782042" duration="76000" />
+      <workItem from="1671702629774" duration="1042000" />
+      <workItem from="1671704150683" duration="18721000" />
+      <workItem from="1671732213109" duration="3482000" />
+      <workItem from="1673251160118" duration="12806000" />
     </task>
     <servers />
   </component>

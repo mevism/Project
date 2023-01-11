@@ -1,5 +1,5 @@
 @extends('student::layouts.backend')
-
+<script src="https://code.jquery.com/jquery-3.6.2.js" integrity="sha256-pkn2CUZmheSeyssYw3vMp1+xyub4m+e+QK4sQskvuo4=" crossorigin="anonymous"></script>
 @section('content')
 
     <div class="bg-body-light">
@@ -89,23 +89,75 @@
                             <form action="{{ route('student.submitacademicleaverequest') }}" method="POST">
                                 @csrf
                                 <div class="form-floating mb-2">
-                                    <select name="type" class="form-control form-control-lg form-select mb-2 department">
-                                        <option selected disabled class="text-center"> -- select leave type -- </option>
-                                        <option value="1">ACADEMIC LEAVE</option>
-                                        <option value="2">DEFERMENT</option>
+                                    <select name="type" id="type" class="form-control form-control-lg form-select mb-2 department" readonly="">
+                                        @if($stage->year_study.'.'.$stage->semester_study > 1.2)
+                                            <option value="1">ACADEMIC LEAVE </option>
+                                        @else
+                                            <option value="2">DEFERMENT</option>
+                                        @endif
                                     </select>
                                     <label>LEAVE TYPE</label>
                                 </div>
-
                                 <div class="form-floating mb-2">
-                                    <input type="date" name="start_date" value="{{ old('start_date') }}" class="form-control">
-                                    <label>START DATE</label>
+                                    @if($stage->year_study.'.'.$stage->semester_study > 1.2)
+                                    <select name="class" id="newclass" class="form-control form-select">
+                                        <option selected disabled class="text-center"> -- choose class -- </option>
+                                        @foreach($classes as $class)
+                                            @foreach($class as $name => $newClass)
+                                                <option >{{ $name }}</option>
+                                            @endforeach
+                                        @endforeach
+                                    </select>
+                                    <input type="hidden" name="stage" id="stage" value="{{ $stage->year_study.'.'.$stage->semester_study }}">
+                                    <label>UPCOMING CLASSES </label>
+                                    @else
+                                    <input type="text" readonly class="form-control" name="class" id="mynewclass">
+                                    <label>UPCOMING CLASSES </label>
+                                    @endif
+                                </div>
+                                <div class="form-floating mb-2">
+                                    <input type="text" name="start_date" value="{{ \Carbon\Carbon::now()->format('Y-M-d') }}" class="form-control" readonly>
+                                    <label>LEAVE START DATE</label>
                                 </div>
 
                                 <div class="form-floating mb-2">
-                                    <input type="date" name="end_date" value="{{ old('end_date') }}" class="form-control">
-                                    <label>END DATE</label>
+                                    <input type="text" name="end_date" id="enddate" value="{{ old('end_date') }}" class="form-control" readonly>
+                                    <label>LEAVE END DATE</label>
                                 </div>
+
+                                <div class="d-flex justify-content-center mb-2">
+                                    <div class="col-md-10">
+                                        <div class="row mb-1">
+                                            <div class="col-md-6 fs-sm fw-semibold">New Class Code</div>
+                                            <div class="col-md-6">
+                                                <input type="text" name="newClass" id="newClass" readonly style="outline: none; border: none transparent;">
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-1">
+                                            <div class="col-md-6 fs-sm fw-semibold">Academic Year </div>
+                                            <div class="col-md-6">
+                                                <input type="text" name="newAcademic" id="newacademic" readonly style="outline: none; border: none transparent;">
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-1 ">
+                                            <div class="col-md-6 fs-sm fw-semibold">Semester of Study</div>
+                                            <div class="col-md-6">
+                                                <input type="text" name="newSemester" id="newSemester" readonly style="outline: none; border: none transparent;">
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-1 ">
+                                            <div class="col-md-6 fs-sm fw-semibold">Joint at Stage</div>
+                                            <div class="col-md-6">
+                                                <input type="text" name="newStage" id="newStage" readonly style="outline: none; border: none transparent;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" name="current_class" value="{{ Auth::guard('student')->user()->loggedStudent->courseStudent->class_code }} ">
 
                                 <div class="form-floating mb-2">
                                     <textarea class="form-control" style="height: 100px;" name="reason" placeholder="reasons">{{ old('reason') }}</textarea>
@@ -113,7 +165,20 @@
                                 </div>
                                 <div class="mb-2">
                                     <div class="d-flex justify-content-center">
-                                        <button class="btn btn-success col-md-7" >SUBMIT LEAVE REQUEST</button>
+                                        @if($event == null)
+                                            <button class="btn btn-outline-primary col-md-10 disabled m-2" >NOT SCHEDULED</button>
+                                        @else
+                                            @if($event->start_date > $dates)
+
+                                                <button class="btn btn-outline-info col-md-10 disabled m-2" >SCHEDULE TO OPENS ON {{ \Carbon\Carbon::parse($event->start_date)->format('D, d-M-Y') }} </button>
+                                            @elseif($event->end_date >= $dates)
+
+                                                <button class="btn btn-outline-success col-md-10 m-2" >SUBMIT LEAVE REQUEST</button>
+
+                                            @else
+                                                <button class="btn btn-outline-danger col-md-10 disabled m-2" >SCHEDULE CLOSED {{ \Carbon\Carbon::parse($event->end_date)->format('D, d-M-Y') }} </button>
+                                            @endif
+                                        @endif
                                     </div>
                                 </div>
                             </form>
@@ -130,3 +195,156 @@
     <!-- END Floating Labels -->
 
 @endsection
+
+<script>
+    $(document).ready( function (){
+
+        var type = $('#type').val();
+
+        if(type == 1){
+
+            $(document).on('change', '#newclass', function () {
+
+                var class_code = $('#newclass').val();
+                var stage = $('#stage').val();
+
+                console.log(stage);
+
+                $.ajax({
+
+                    type: 'get',
+                    url: '{{ route('student.getLeaveClasses') }}',
+                    data: { class:class_code, stage:stage },
+                    dataType: 'json',
+                    success:function (data){
+
+                        console.log(data)
+
+                        var dates = data.period.split("/");
+                        var newDate = dates[dates.length, 0];
+
+                        if(newDate == 'SEP'){
+
+                            console.log('its sept');
+
+                            var years = data.academic_year.split("/");
+                            var newYear = years[years.length, 0];
+
+                        }else {
+
+                            console.log('its not sept');
+
+                            var years = data.academic_year.split("/");
+                            var newYear = years[years.length, 1];
+                        }
+
+                        $('#enddate').val(newYear + '-' + newDate + '-01')
+                        // $('#enddate').val(newDate)
+                        $('#newClass').val(data.class_code)
+                        $('#newacademic').val(data.academic_year)
+                        $('#newSemester').val(data.period)
+                        $('#newStage').val(data.semester)
+
+                    },
+
+                    error: function (){
+
+                    },
+
+                });
+
+            });
+        }else {
+
+            var stage = {{ $stage->year_study.'.'.$stage->semester_study }};
+
+            console.log(stage)
+
+            if(stage == 1.1) {
+
+                var studentNumber = '{{ Auth::guard('student')->user()->loggedStudent->reg_number }}'.match(/\//);
+                var studNumber = studentNumber.input;
+
+                $.ajax({
+
+                    type: 'get',
+                    url: '{{ route('student.defermentRequest') }}',
+                    data: {studNumber: studNumber},
+                    dataType: 'json',
+                    success: function (data) {
+
+                        var oldclass = data.class_code.split("/")
+                        var edittedclass = oldclass[oldclass.length, 1].slice(-4)
+                        var newcls = data.class_code.replace(edittedclass, parseInt(edittedclass) + 1)
+                        var newyear = data.academic_year.split("/")
+                        var yearstart = parseInt(newyear[newyear.length, 0]) + 1
+                        var yearend = parseInt(newyear[newyear.length, 1]) + 1
+                        var enddates = data.academic_semester.split("/")
+                        var dated = enddates[enddates.length, 0]
+
+
+                        console.log(yearend);
+
+                        $('#mynewclass').val(newcls)
+                        $('#newClass').val(newcls)
+                        $('#newStage').val(data.year_study + '.' + data.semester_study)
+                        $('#newSemester').val(data.academic_semester)
+                        $('#newacademic').val(yearstart + '/' + yearend)
+                        $('#enddate').val(yearstart + '-' + dated + '-01')
+                    }
+
+                });
+
+            }else {
+
+                console.log('hello')
+
+                var studentNumber = '{{ Auth::guard('student')->user()->loggedStudent->reg_number }}'.match(/\//);
+                var studNumber = studentNumber.input;
+
+                var semesters = ['SEP/DEC', 'JAN/APR', 'MAY/AUG'];
+
+                console.log(semesters)
+
+                $.ajax({
+
+                    type: 'get',
+                    url: '{{ route('student.defermentRequest') }}',
+                    data: {studNumber: studNumber},
+                    dataType: 'json',
+                    success: function (data) {
+
+                        var oldclass = data.class_code.split("/")
+                        var edittedclass = oldclass[oldclass.length, 1].slice(-4)
+                        var newcls = data.class_code.replace(edittedclass, parseInt(edittedclass) + 1)
+                        var newyear = data.academic_year.split("/")
+                        var yearstart = parseInt(newyear[newyear.length, 0]) + 1
+                        var yearend = parseInt(newyear[newyear.length, 1]) + 1
+                        var enddates = data.academic_semester.split("/")
+                        var dated = enddates[enddates.length, 0]
+
+                        console.log(data.academic_semester)
+
+
+                        index = semesters.indexOf(data.academic_semester);
+                        if(index >= 0 && index < semesters.length - 1)
+                            nextItem = semesters[index + 1]
+
+                        var newsemesters = nextItem.split("/");
+
+                            console.log(nextItem);
+
+                        $('#mynewclass').val(newcls)
+                        $('#newClass').val(newcls)
+                        $('#newStage').val(stage)
+                        $('#newSemester').val(nextItem)
+                        $('#newacademic').val(yearstart + '/' + yearend)
+                        $('#enddate').val(yearend + '-' + newsemesters[newsemesters.length, 0] + '-01')
+                    }
+
+                });
+            }
+        }
+
+    });
+</script>

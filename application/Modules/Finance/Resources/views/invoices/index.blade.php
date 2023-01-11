@@ -34,7 +34,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="d-flex justify-content-end m-2">
-                        <a class="btn btn-sm btn-alt-primary" data-toggle="click-ripple" href="{{ route('finance.addInvoice') }}">Add Invoice</a>
+                        <a class="btn btn-sm btn-alt-primary" data-toggle="click-ripple" href="{{ route('finance.addInvoice') }}">Add Credit Invoice</a>
                     </div>
                     <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
                             <thead>

@@ -27,7 +27,9 @@ use Modules\Registrar\Entities\Student;
 use Modules\Registrar\Entities\StudentCourse;
 use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Student\Entities\AcademicLeave;
+use Modules\Student\Entities\AcademicLeaveApproval;
 use Modules\Student\Entities\CourseTransfer;
+use Modules\Student\Entities\DeferredClass;
 use Modules\Student\Entities\ExamResults;
 use Modules\Student\Entities\Readmission;
 use Modules\Student\Entities\StudentDeposit;
@@ -90,7 +92,6 @@ class StudentController extends Controller
             ->where('intake_id', strtoupper($semester))
             ->where('event_id', 5)
             ->first();
-            
 
         if ($event->start_date <= $current && $current <= $event->end_date){
 
@@ -257,48 +258,84 @@ class StudentController extends Controller
 
     public function requestLeave(){
 
-        $stage = Nominalroll::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)->latest()->first();
+       $stage = Nominalroll::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+//                            ->where('activation', 1)
+                            ->latest()
+                            ->first();
 
-        return view('student::academic.requestleave')->with(['stage' => $stage]);
+       $current_date = Carbon::now()->format('Y-m-d');
+
+       $dates = Intake::where('intake_from', '<=', $current_date)->where('intake_to', '>=', $current_date)->first();
+
+       $academicYear =  Carbon::parse($dates->academicYear->year_start)->format('Y').'/'.Carbon::parse($dates->academicYear->year_end)->format('Y');
+       $semester = Carbon::parse($dates->intake_from)->format('M').'/'.Carbon::parse($dates->intake_to)->format('M');
+
+       $event = CalenderOfEvents::where('academic_year_id', $academicYear)
+            ->where('intake_id', strtoupper($semester))
+            ->where('event_id', 4)
+            ->first();
+
+
+       $currentStage = $stage->year_study.'.'.$stage->semester_study;
+
+        $classes = ClassPattern::where('class_code', $stage->class_code)->get();
+
+        foreach ($classes as $class){
+
+            $list[] = $class->semester;
+        }
+
+        $id_collection = collect($list);
+        $this_key = $id_collection->search($currentStage);
+        $next_id = $id_collection->get($this_key + 1);
+
+        if ( (float)$currentStage > (float)'1.1'){
+
+           $currently = $stage->year_study.'.'.$stage->semester_study;
+            $classPattern =  ClassPattern::where('academic_year', $stage->academic_year)
+                        ->where('period', $stage->academic_semester)
+                        ->where('semester', '<',  $currently)
+                        ->get()
+                        ->groupBy('class_code');
+
+            foreach ($classPattern as $class_code => $pattern) {
+
+                $data[] = Classes::where('name', $class_code)
+                    ->where('course_id', Auth::guard('student')->user()->loggedStudent->courseStudent->course_id)
+                    ->where('attendance_code', Auth::guard('student')->user()->loggedStudent->courseStudent->typeStudent->attendance_code)
+                    ->where('name', '!=', Auth::guard('student')->user()->loggedStudent->courseStudent->class_code)
+                    ->get()
+                    ->groupBy('name');
+            }
+
+        }else{
+
+            $data = [];
+        }
+
+        return view('student::academic.requestleave')->with(['stage' => $stage, 'classes' => $data, 'nextStage' => $next_id, 'event' => $event, 'dates' => $current_date]);
+    }
+
+    public function leaveClasses(Request $request){
+
+        $data = ClassPattern::where('class_code', $request->class)
+                            ->where('semester', $request->stage)
+                            ->first();
+
+        return response()->json($data);
+    }
+
+    public function defermentRequest(Request $request){
+
+        $deferment = Nominalroll::where('reg_number', $request->studNumber)
+            ->first();
+
+        return response()->json($deferment);
+
     }
 
     public function submitLeaveRequest(Request $request){
 
-        $request->validate([
-            'type' => 'required',
-            'start_date' => 'required',
-            'end_date' => 'required',
-            'reason' => 'required|string'
-        ]);
-
-        $year = Auth::guard('student')->user()->loggedStudent->nominalRoll->academic_year;
-
-        $leave = new AcademicLeave;
-        $leave->student_id = Auth::guard('student')->user()->student_id;
-        $leave->type = $request->type;
-        $leave->course_id = Auth::guard('student')->user()->loggedStudent->courseStudent->course_id;
-        $leave->year_study = Auth::guard('student')->user()->loggedStudent->nominalRoll->year_study;
-        $leave->semester_study = Auth::guard('student')->user()->loggedStudent->nominalRoll->semester_study;
-        $leave->academic_year = $year;
-        $leave->from = $request->start_date;
-        $leave->to = $request->end_date;
-        $leave->reason = $request->reason;
-        $leave->save();
-
-        return redirect()->route('student.requestacademicleave')->with('success', 'Leave request created successfully');
-    }
-
-    public function editLeaveRequest($id){
-
-        $hashedId = Crypt::decrypt($id);
-
-        $leave = AcademicLeave::find($hashedId);
-
-        return view('student::academic.editleaverequest')->with(['leave' => $leave]);
-
-    }
-
-    public function updateLeaverequest(Request $request, $id){
 
         $request->validate([
             'type' => 'required',
@@ -307,17 +344,36 @@ class StudentController extends Controller
             'reason' => 'required|string'
         ]);
 
-        $hashedId = Crypt::decrypt($id);
+        $currentStage = Nominalroll::where('student_id', Auth::guard('student')->user()->student_id)
+                                    ->latest()
+                                    ->first();
+        if (AcademicLeave::where('student_id', $currentStage->student_id)->where('type', $request->type)->where('year_study', $currentStage->year_study)->where('semester_study', $currentStage->semester_study)->exists()){
 
-        $leave = AcademicLeave::find($hashedId);
+            return redirect()->back()->with('info', 'You have already requested leave for this stage');
+        }else {
 
-        $leave->type = $request->type;
-        $leave->from = $request->start_date;
-        $leave->to = $request->end_date;
-        $leave->reason = $request->reason;
-        $leave->save();
+            $leave = new AcademicLeave;
+            $leave->student_id = Auth::guard('student')->user()->student_id;
+            $leave->type = $request->type;
+            $leave->current_class = $currentStage->class_code;
+            $leave->year_study = $currentStage->year_study;
+            $leave->semester_study = $currentStage->semester_study;
+            $leave->academic_year = $currentStage->academic_year;
+            $leave->from = $request->start_date;
+            $leave->to = $request->end_date;
+            $leave->reason = $request->reason;
+            $leave->save();
 
-        return redirect()->route('student.requestacademicleave')->with('success', 'Leave request updated successfully');
+            $deferredClass = new DeferredClass;
+            $deferredClass->academic_leave_id = $leave->id;
+            $deferredClass->deferred_class = $request->newClass;
+            $deferredClass->academic_year = $request->newAcademic;
+            $deferredClass->semester_study = $request->newSemester;
+            $deferredClass->stage = $request->newStage;
+            $deferredClass->save();
+
+            return redirect()->route('student.requestacademicleave')->with('success', 'Leave request created successfully');
+        }
     }
 
     public function deleteLeaveRequest($id){
@@ -325,18 +381,9 @@ class StudentController extends Controller
         $hashedId = Crypt::decrypt($id);
 
         AcademicLeave::find($hashedId)->delete();
+        DeferredClass::where('academic_leave_id', $hashedId)->delete();
 
         return redirect()->back()->with('success', 'Leave request deleted successfully');
-    }
-
-    public function submitsLeaveRequest($id){
-
-        $hashedId = Crypt::decrypt($id);
-
-        AcademicLeave::find($hashedId)->update(['status' => 0]);
-
-        return redirect()->back()->with('success', 'Leave request submitted successfully');
-
     }
 
     public function requestReadmission(){
@@ -804,7 +851,7 @@ class StudentController extends Controller
 
         unlink('QrCodes/'.$image);
 
-         return response()->download($pdfPath)->deleteFileAfterSend(true);
+         return response()->download($docPath)->deleteFileAfterSend(true);
     }
 
     /**
@@ -867,5 +914,3 @@ class StudentController extends Controller
         //
     }
 }
-
-

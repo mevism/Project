@@ -17,6 +17,15 @@ class AcademicLeave extends Model
         return $this->belongsTo(Student::class, 'student_id');
     }
 
+    public function approveLeave(){
+
+        return $this->hasOne(AcademicLeaveApproval::class, 'academic_leave_id');
+    }
+
+    public function deferredClass(){
+        return $this->hasOne(DeferredClass::class, 'id');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Student\Database\factories\AcademicLeaveFactory::new();

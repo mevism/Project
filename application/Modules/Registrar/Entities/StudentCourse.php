@@ -34,6 +34,10 @@ class StudentCourse extends Model
         return $this->belongsTo(Intake::class, 'intake_id');
     }
 
+    public function typeStudent(){
+        return $this->belongsTo(Attendance::class, 'student_type');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Registrar\Database\factories\StudentCourseFactory::new();
