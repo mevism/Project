@@ -1,4 +1,3 @@
-@extends('registrar::layouts.backend')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
 
@@ -23,7 +22,7 @@
     } );
 </script>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
@@ -59,23 +58,57 @@
                                 <th>Action</th>
                             </thead>
                             <tbody>
-                                
-                                @foreach($data as $academic_year => $transfer)
-
+                                <?php $__currentLoopData = $transfers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $academic_year => $transfer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
-                                        <td> {{ $loop->iteration }} </td>
-                                        <td> {{ $academic_year }} </td>
-                                        <td> {{ $transfer->count() }}</td>
+                                        <td> <?php echo e($loop->iteration); ?> </td>
+                                        <td> <?php echo e($academic_year); ?> </td>
+                                        <td> <?php echo e($transfer->count()); ?></td>
                                         <td>
-                                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.transfer', ['year' => Crypt::encrypt($academic_year)]) }}">view requests</a>
+                                            <a class="btn btn-sm btn-outline-secondary" href="<?php echo e(route('department.viewYearRequests', ['year' => Crypt::encrypt($academic_year)])); ?>">view requests</a>
                                         </td>
                                     </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 </div>
             </div>
         </div>
         <!-- Dynamic Table Responsive -->
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('cod::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/html/Registrar/application/Modules/COD/Resources/views/transfers/index.blade.php ENDPATH**/ ?>

@@ -417,11 +417,12 @@ class CODController extends Controller
         $student = Student::find($hashedId);
 
         $student_fee = $student->courseStudent;
-
+        // return $student_fee;
         $fees = CourseLevelMode::where('attendance_id', $student_fee->student_type)
             ->where('course_id', $student_fee->course_id)
             ->where('level_id', $student_fee->studentCourse->level)
             ->first();
+            
 
         $proformaInvoice = 0;
 

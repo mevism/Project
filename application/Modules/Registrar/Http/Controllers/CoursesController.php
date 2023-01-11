@@ -57,8 +57,10 @@ use Modules\Registrar\emails\CourseTransferMails;
 use Modules\Registrar\Entities\CourseRequirement;
 use Modules\Registrar\Entities\DepartmentHistory;
 use Modules\Application\Entities\AdmissionApproval;
+use Modules\Finance\Entities\StudentInvoice;
 use Modules\Student\Entities\CourseTransferApproval;
 use Modules\Registrar\emails\CourseTransferRejectedMails;
+use Modules\Student\Entities\StudentDeposit;
 
 class CoursesController extends Controller
 {
@@ -141,6 +143,9 @@ class CoursesController extends Controller
                     StudentCourse::where('student_id', $id)->delete();
                     StudentLogin::where('student_id', $id)->delete();
 
+                    $invoices  =  StudentInvoice::withTrashed()->where('reg_number', $record->reg_number)->get();
+                    $deposits  =  StudentDeposit::withTrashed()->where('reg_number', $record->reg_number)->get();
+
                     $oldstudent = Student::withTrashed()->find($id);
 
                     $newStudent               =             new Student;
@@ -181,11 +186,41 @@ class CoursesController extends Controller
                     $newStudCourse->course_duration =           $course->courseRequirements->course_duration;
                     $newStudCourse->save();
 
-                     $newStudLogin    =  new StudentLogin;
-                     $newStudLogin->student_id       =   $newStudent->id;
-                     $newStudLogin->username         =   $newStudent->reg_number;
-                     $newStudLogin->password         =   Hash::make($newStudent->id_number);
-                     $newStudLogin->save();
+                    $newStudLogin    =  new StudentLogin;
+                    $newStudLogin->student_id       =   $newStudent->id;
+                    $newStudLogin->username         =   $newStudent->reg_number;
+                    $newStudLogin->password         =   Hash::make($newStudent->id_number);
+                    $newStudLogin->save();
+
+                    $oldStudentInvoice  =  StudentInvoice::find($id);
+
+                    foreach($invoices as $invoice){
+
+                        $newInvoice  =  new StudentInvoice;
+                        $newInvoice->student_id  =  $newStudent->id;
+                        $newInvoice->reg_number  =  $newStudent->reg_number;
+                        $newInvoice->invoice_number = $oldStudentInvoice->invoice_number;
+                        $newInvoice->stage = $oldStudentInvoice->stage;
+                        $newInvoice->amount = $oldStudentInvoice->amount;
+                        $newInvoice->description = $oldStudentInvoice->description;
+                        $newInvoice->save();
+
+                        StudentInvoice::find($invoice->id)->delete();
+
+                    }
+
+                    $oldStudentDeposit  =  StudentDeposit::find($id);
+                    foreach($deposits as $deposit){
+
+                        $newDeposit  =  new StudentDeposit;
+                        $newDeposit->reg_number  =  $newStudent->reg_number;
+                        $newDeposit->deposit = $oldStudentDeposit->deposit;
+                        $newDeposit->description = $oldStudentDeposit->description;
+                        $newDeposit->invoice_number = $oldStudentDeposit->invoice_number;
+                        $newDeposit->save();
+
+                        StudentDeposit::find($deposit->id)->delete();
+                    }
 
                     Mail::to($newStudent->email)->send(new CourseTransferMails($newStudent));
 
@@ -258,6 +293,7 @@ class CoursesController extends Controller
     }
 
     public function yearly(){
+        
         $schools   =   School::all();
         foreach($schools as $school){
             $data = CourseTransfer::all()->groupBy('academic_year');
@@ -826,7 +862,7 @@ class CoursesController extends Controller
                                 $app_course->ref_number     =            'APP/'.date('Y')."/".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT);
                                 $app_course->reg_number     =            $applicant->kuccpsApplication->course_code."/".str_pad($regNumber + 1, 3, "0", STR_PAD_LEFT)."J"."/".Carbon::parse($applicant->kuccpsApplication->kuccpsIntake->intake_from)->format('Y');
                                 $app_course->adm_letter     =            'APP'."_".date('Y')."_".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT).'.pdf';
-                                    $app_course->save();
+                                $app_course->save();
 
                     $domPdfPath     =    base_path('vendor/dompdf/dompdf');
                     \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
