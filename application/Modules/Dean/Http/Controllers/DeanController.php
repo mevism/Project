@@ -78,6 +78,21 @@ class DeanController extends Controller
                     }
                 }
 
+            // return $transfered;
+
+            foreach($transfered as $transfer){
+                // return $transfer;
+
+                foreach($transfer as $transfercourse){
+
+                    foreach ($courses as $listed){
+                        if ($listed->id == $transfercourse->course_id){
+                            $courseName =  $listed->course_name;
+                            $courseCode = $listed->course_code;
+                        }
+                    }
+                }
+
                 $headers = ['bold' => true, 'space' => ['before' => 2000, 'after' => 2000, 'rule' => 'exact']];
 
                 $table->addRow(600);
@@ -139,14 +154,41 @@ class DeanController extends Controller
 
         $summary = new Table(array('unit' => TblWidth::TWIP));
         $total = 0;
-        foreach ($transfers as $group => $transfer){
-            foreach ($courses as $listed){
-                if ($listed->id == $group){
-                    $courseName =  $listed->course_name;
-                    $courseCode = $listed->course_code;
-                }
-            }
 
+        // foreach($transfered as $transfer){
+
+        //     // return $transfer;
+
+        //     foreach($transfer as $transfercourse){
+
+        //         foreach ($courses as $listed){
+        //             if ($listed->id == $transfercourse->course_id){
+        //                 $courseName =  $listed->course_name;
+        //                 $courseCode = $listed->course_code;
+        //             }
+        //         }
+            
+
+        foreach ($transfers as $transfered){
+            //  $number[] = $transfered; 
+            foreach($transfered as $course_id => $transfer){
+                $number[] = $transfer;
+                foreach($transfer as $transfercourse){
+
+                    foreach ($courses as $listed){
+                        if ($listed->id == $course_id){
+                            $courseName =  $listed->course_name;
+                            $courseCode = $listed->course_code;
+
+                            $arr = [ $courseName ];
+                        }
+                    }
+                }         
+
+                $summary->addRow();
+                $summary->addCell(5000, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
+                $summary->addCell(1250, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
+                $summary->addCell(1250, ['borderSize' => 1])->addText($transfer->count());
                 $summary->addRow();
                 $summary->addCell(5000, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
                 $summary->addCell(1250, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
@@ -160,6 +202,7 @@ class DeanController extends Controller
             }
                 $total += $transfer->count();
             }
+
         }
 
         //return $number;
@@ -168,7 +211,7 @@ class DeanController extends Controller
     
         $summary->addRow();
         $summary->addCell(6250, ['borderSize' => 1])->addText('Totals', ['bold' => true]);
-        $summary->addCell(1250, ['borderSize' => 1])->addText($transfers->count(), ['bold' => true]);
+        $summary->addCell(1250, ['borderSize' => 1])->addText(2, ['bold' => true]);
         $summary->addCell(1250, ['borderSize' => 1])->addText($total, ['bold' => true]);
 
         $my_template = new TemplateProcessor(storage_path('course_transfers.docx'));
