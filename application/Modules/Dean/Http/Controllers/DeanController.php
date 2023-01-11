@@ -45,6 +45,11 @@ class DeanController extends Controller
         // foreach
         
 
+        // return $transfers;
+
+        // foreach
+        
+
         $school = Auth::guard('user')->user()->getSch->name;
         $courses = Courses::all(); 
         
@@ -108,7 +113,6 @@ class DeanController extends Controller
                     $table->addCell(1500, ['borderSize' => 1])->addText($deanRemark);
                     $table->addCell(1750, ['borderSize' => 1])->addText();
 
-                }
             }
         }
 
@@ -131,14 +135,8 @@ class DeanController extends Controller
 
 
         }
-    
-       // return $number;
-=======
-        
-    
 
         //return $number;
->>>>>>> 4a8407da (student invoices)
 
         // return $arr;
     

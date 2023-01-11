@@ -57,6 +57,8 @@ class StudentController extends Controller
 
 
 
+
+
         return view('student::student.index')->with(['courses' => $courses]);
     }
 
@@ -311,22 +313,22 @@ class StudentController extends Controller
         return redirect()->route('student.coursetransfers')->with('success', 'Course transfer request deleted successfully');
     }
 
-    // public function storeRequest($id){
+    public function storeRequest($id){
 
-    //     $hashedId = Crypt::decrypt($id);
+        $hashedId = Crypt::decrypt($id);
 
-    //     CourseTransfer::find($hashedId)->update(['status' => 0]);
+        CourseTransfer::find($hashedId)->update(['status' => 0]);
 
-    //     $invoice = new TransferInvoice;
-    //     $invoice->student_id = Auth::guard('student')->user()->student_id;
-    //     $invoice->reg_number = Auth::guard('student')->user()->loggedStudent->reg_number;
-    //     $invoice->invoice_number = 'INV'.time();
-    //     $invoice->amount = 500;
-    //     $invoice->description = 'Invoice for Course Transfer Fee';
-    //     $invoice->save();
+        $invoice = new TransferInvoice;
+        $invoice->student_id = Auth::guard('student')->user()->student_id;
+        $invoice->reg_number = Auth::guard('student')->user()->loggedStudent->reg_number;
+        $invoice->invoice_number = 'INV'.time();
+        $invoice->amount = 500;
+        $invoice->description = 'Invoice for Course Transfer Fee';
+        $invoice->save();
 
-    //     return redirect()->back()->with('success', 'Your course transfer request submitted successfully');
-    // }
+        return redirect()->back()->with('success', 'Your course transfer request submitted successfully');
+    }
 
     public function academicLeave(){
 

@@ -150,6 +150,9 @@ class CoursesController extends Controller
                      $invoices  =  StudentInvoice::where('reg_number', 'BSIT/002J/2023')->get();
                      $deposits  =  StudentDeposit::where('reg_number', $oldRecord->reg_number)->get();
 
+                    $invoices  =  StudentInvoice::withTrashed()->where('reg_number', $record->reg_number)->get();
+                    $deposits  =  StudentDeposit::withTrashed()->where('reg_number', $record->reg_number)->get();
+
                     $oldstudent = Student::withTrashed()->find($id);
 
                     $newStudent               =             new Student;
