@@ -2,18 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/smis.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/smis.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/classes/classList.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/classes/classList.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Student.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Student.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/StudentCourse.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/StudentCourse.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/requestleave.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/requestleave.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/application/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/s3XSNpipPuwQPh494Ygyj1yYN4xARVAooDrF2NFd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/zoNd9uPU0pjLC1SuHoOo8tbYhqsk6gm0GuDKsZOj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/classes/classPattern.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/classes/classPattern.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/classes/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/classes/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/classes/viewClassPattern.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/classes/semesterUnits.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/4VqDJFjaDBhMY8o3QWXZlntQnUJngdkw3tMukK8u" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/GIbXt5k1VQvy7BQ5mI9l4WI95kYVbXeo79z7ShCG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/tZNI7pQB5Qy81zkh64IESOIuCgjW4w17WSj9JRVX" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -238,7 +235,7 @@
       <workItem from="1671704150683" duration="18721000" />
       <workItem from="1671732213109" duration="3482000" />
       <workItem from="1673251160118" duration="12806000" />
-      <workItem from="1673592461828" duration="9186000" />
+      <workItem from="1673592461828" duration="17788000" />
     </task>
     <servers />
   </component>

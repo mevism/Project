@@ -36,6 +36,8 @@ Route::prefix('department')->middleware( ['is_cod'])->group( function() {
         Route::post('/submit-class-pattern', [CODController::class, 'storeClassPattern'])->name('cod.storeClassPattern');
         Route::post('/update-class-pattern/{id}', [CODController::class, 'updateClassPattern'])->name('cod.updateClassPattern');
         Route::get('/delete-class-pattern/{id}', [CODController::class, 'deleteClassPattern'])->name('cod.deleteClassPattern');
+        Route::get('/view-classes-per-intake/{intake}', [CODController::class, 'viewIntakeClasses'])->name('department.viewIntakeClasses');
+        Route::get('/view-semester-units-per-class/{id}', [CODController::class, 'viewSemesterUnits'] )->name('department.viewSemesterUnits');
 
 
         Route::get('/courses', [CODController::class, 'courses'])->name('department.courses');
