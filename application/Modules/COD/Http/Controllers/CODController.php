@@ -407,7 +407,7 @@ class CODController extends Controller
 
         $class = Classes::find($hashedId);
 
-        $classList = StudentCourse::where('class_code', $class->name)->get();
+       $classList = StudentCourse::withTrashed()->where('class_code', $class->name)->get();
 
         return view('cod::classes.classList')->with(['classList' => $classList, 'class' => $class]);
     }
@@ -427,8 +427,6 @@ class CODController extends Controller
             
 
         $proformaInvoice = 0;
-
-        return $fees;
 
         foreach ($fees->invoiceProforma as $votehead){
 
@@ -825,7 +823,7 @@ class CODController extends Controller
 
         $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
 
-        $pdfPath = 'Fees/'.'Transfers'.time().".pdf"; 
+        $pdfPath = 'Fees/'.'Transfers'.time().".pdf";
 
         $converter =  new OfficeConverter($docPath, 'Fees/');
         $converter->convertTo('Transfers'.time().".pdf");
