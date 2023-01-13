@@ -21,11 +21,13 @@ use Modules\Finance\Entities\FinanceLog;
 use Modules\COD\Entities\CODLog;
 use Auth;
 use Modules\Finance\Entities\StudentInvoice;
+use Modules\Registrar\Entities\AcademicYear;
 use Modules\Registrar\Entities\CourseLevelMode;
 use Modules\Registrar\Entities\FeeStructure;
 use Modules\Registrar\Entities\SemesterFee;
 use Modules\Registrar\Entities\Student;
 use Modules\Registrar\Entities\StudentCourse;
+use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Student\Entities\AcademicLeave;
 use Modules\Student\Entities\AcademicLeaveApproval;
 use Modules\Student\Entities\CourseTransfer;
@@ -373,32 +375,46 @@ class CODController extends Controller
 
     public function deptClasses(){
 
-        $courses = Courses::where('department_id', auth()->guard('user')->user()->department_id)->get();
+            $classes = Classes::latest()->get()->groupBy('intake_from');
+            $intakes = Intake::all();
+            return view('cod::classes.index')->with(['intakes' => $intakes, 'classes' => $classes]);
 
-        if (count($courses) == 0){
 
-            $classes = $courses;
+    }
 
-            return view('cod::classes.index')->with('classes', $classes);
-        }else {
+    public function viewIntakeClasses($intake){
 
-            foreach ($courses as $course) {
+        $intakeId = Crypt::decrypt($intake);
 
-                $class[] = Classes::where('course_id', $course->id)->get();
+        $intake = Intake::find($intakeId);
 
+        $courses = Courses::where('department_id', Auth::guard('user')->user()->department_id)->get();
+
+            foreach ($courses as $course){
+                $classes[] = Classes::where('intake_from', $intakeId)
+                    ->where('course_id', $course->id)
+                    ->latest()
+                    ->get();
             }
 
-            $collection = collect($class);
+            return view('cod::classes.intakeClasses')->with(['intake' => $intake, 'classes' => $classes]);
+    }
 
-            $classes = $collection->sortBy( function ($created_at){
+    public function viewSemesterUnits($id){
 
-                return $created_at;
+        $hashedId = Crypt::decrypt($id);
 
-            })->values()->all();
+        $pattern = ClassPattern::find($hashedId);
 
-            return view('cod::classes.index')->with('classes', $classes);
-        }
+        $class = Classes::where('name', $pattern->class_code)->first();
 
+        $units = UnitProgramms::where('course_code', $class->classCourse->course_code)
+                            ->orderByRaw("FIELD(stage, $pattern->stage) DESC")
+                            ->orderByRaw("FIELD(semester, $pattern->pattern_id) DESC")
+                            ->get();
+
+
+        return view('cod::classes.semesterUnits')->with(['pattern' => $pattern, 'units' => $units]);
     }
 
     public function classList($id){
@@ -407,7 +423,7 @@ class CODController extends Controller
 
         $class = Classes::find($hashedId);
 
-       $classList = StudentCourse::withTrashed()->where('class_code', $class->name)->get();
+       $classList = StudentCourse::where('class_code', $class->name)->get();
 
         return view('cod::classes.classList')->with(['classList' => $classList, 'class' => $class]);
     }

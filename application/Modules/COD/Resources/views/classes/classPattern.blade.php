@@ -86,14 +86,15 @@
                     </div>
 
                         <div class="table table-responsive">
-                            <table class="table table-responsive-sm table-borderless table-striped fs-sm" id="example">
+                            <table class="table table-sm table-borderless table-striped fs-sm" id="example">
                                 <thead>
                                     <th>#</th>
                                     <th>Class Code</th>
                                     <th>Academic Year</th>
-                                    <th>Semester Period</th>
+                                    <th>Period</th>
                                     <th>Stage</th>
                                     <th>Semester</th>
+                                    <th>Semester Units</th>
                                     <th>Start date</th>
                                     <th>End Date</th>
                                     <th>Action</th>
@@ -107,9 +108,12 @@
                                             <td>{{ $pattern->period }}</td>
                                             <td>{{ $pattern->stage }}</td>
                                             <td>{{ $pattern->pattern->season }}</td>
+                                            <td>
+                                                <a class="btn btn-sm btn-outline-primary" href="{{ route('department.viewSemesterUnits', ['id' => Crypt::encrypt($pattern->id)]) }}">view units</a>
+                                            </td>
                                             <td>{{ $pattern->start_date }}</td>
                                             <td>{{ $pattern->end_date }}</td>
-                                            <td>
+                                            <td nowrap="">
                                                 <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $pattern->id }}">
                                                     Edit
                                                 </button>
