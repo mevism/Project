@@ -194,7 +194,7 @@ class StudentController extends Controller
             // return $classes;
 
         $cluster = [$classes->id, $classes->name, $points[$group->cluster_group], $classes->points];
-        
+
 
         return response()->json($cluster);
     }
@@ -258,7 +258,7 @@ class StudentController extends Controller
 
     public function requestLeave(){
 
-       $stage = Nominalroll::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+      $stage = Nominalroll::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
 //                            ->where('activation', 1)
                             ->latest()
                             ->first();
@@ -278,7 +278,7 @@ class StudentController extends Controller
 
        $currentStage = $stage->year_study.'.'.$stage->semester_study;
 
-        $classes = ClassPattern::where('class_code', $stage->class_code)->get();
+       $classes = ClassPattern::where('class_code', $stage->class_code)->get();
 
         foreach ($classes as $class){
 
@@ -289,7 +289,9 @@ class StudentController extends Controller
         $this_key = $id_collection->search($currentStage);
         $next_id = $id_collection->get($this_key + 1);
 
-        if ( (float)$currentStage > (float)'1.1'){
+        $data = [];
+
+        if ( (float)$currentStage > (float)'1.3'){
 
            $currently = $stage->year_study.'.'.$stage->semester_study;
             $classPattern =  ClassPattern::where('academic_year', $stage->academic_year)

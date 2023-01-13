@@ -19,7 +19,7 @@ class Student extends Model
 
     public function courseStudent(){
 
-        return $this->hasOne(StudentCourse::class)->withTrashed();
+        return $this->hasOne(StudentCourse::class, 'id')->withTrashed();
     }
 
     public function signNominal(){
