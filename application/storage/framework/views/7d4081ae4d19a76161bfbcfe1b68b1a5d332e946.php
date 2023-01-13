@@ -73,7 +73,7 @@
                                                         ✔
                                                     <?php endif; ?> 
                                                 </td>
-                                                <td> <?php echo e(++$key); ?> </td>
+                                                <td> <?php echo e(++$key); ?> <?php echo e($item->transferApproval->studentTransfer->id); ?></td>
                                                 <td> <?php echo e($item->transferApproval->studentTransfer->reg_number); ?> </td>
                                                 <td> <?php echo e($item->transferApproval->studentTransfer->sname.' '.$item->transferApproval->studentTransfer->fname.' '.$item->transferApproval->studentTransfer->mname); ?> </td>
                                                 <td> <?php echo e($item->transferApproval->deptTransfer->dept_code); ?> </td>

@@ -72,6 +72,7 @@ class CoursesController extends Controller
 
         foreach($request->submit as $id){
             
+            
            $approvedID = CourseTransferApproval::find($id);
 
             $approval = CourseTransfer::find($approvedID->course_transfer_id);
@@ -150,8 +151,18 @@ class CoursesController extends Controller
                      $invoices  =  StudentInvoice::where('reg_number', 'BSIT/002J/2023')->get();
                      $deposits  =  StudentDeposit::where('reg_number', $oldRecord->reg_number)->get();
 
-                    $invoices  =  StudentInvoice::withTrashed()->where('reg_number', $record->reg_number)->get();
-                    $deposits  =  StudentDeposit::withTrashed()->where('reg_number', $record->reg_number)->get();
+
+                    $record = Student::withTrashed()->find($approval->student_id)->delete();
+
+                    $oldRecord = Student::withTrashed()->find($approval->student_id);
+
+                    StudentCourse::where('student_id', $approval->student_id)->delete();
+                    StudentLogin::where('student_id', $approval->student_id)->delete();
+
+                    // return $s = StudentInvoice::where($record->reg_number)->get(); 
+
+                     $invoices  =  StudentInvoice::where('reg_number', 'BSIT/002J/2023')->get();
+                     $deposits  =  StudentDeposit::where('reg_number', $oldRecord->reg_number)->get();
 
                     $oldstudent = Student::withTrashed()->find($id);
 

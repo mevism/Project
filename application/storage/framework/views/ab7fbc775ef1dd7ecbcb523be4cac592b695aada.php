@@ -52,9 +52,9 @@
             </tr>
             <tr>
                 <td align="auto" class="bgcolor2" style="padding: 40px 20px 40px 20px; color: #555555; font-family: Arial, sans-serif; font-size: 20px; line-height: 30px; border-bottom: 1px solid #f6f6f6;">
-                    <h5>Dear <?php echo e($oldStud->studentTransfer->sname. ' '. $oldStud->studentTransfer->fname .' '. $oldStud->studentTransfer->mname); ?>, </h5>
+                    <h5>Dear <?php echo e($newStudent->sname .' '.$newStudent->fname.' '. $newStudent->mname); ?>, </h5>
                      <p>
-                       Your course transfer to <b><?php echo e($oldStud->courseTransfer->course_name); ?></b> was not successful. You are advised to continue with your current course <b><?php echo e($oldStud->studentTransfer->courseStudent->studentCourse->course_name); ?></b>.
+                       Your course transfer to <b> <?php echo e($newStudent->courseStudent->studentCourse->course_name); ?></b> was successful. Login to your new student account using your new student number <b><?php echo e($newStudent->reg_number); ?></b>  and your <b>ID/birth certificate/passport number</b> as your password.
                      </p>
                     <div>
                         <p>
@@ -90,4 +90,4 @@
             </tr>
         </table>
     </body>
-</html><?php /**PATH /var/www/html/Registrar/application/Modules/Registrar/Resources/views/transfers/transferRejected.blade.php ENDPATH**/ ?>
+</html><?php /**PATH /var/www/html/Registrar/application/Modules/Registrar/Resources/views/transfers/transferAcceptedmail.blade.php ENDPATH**/ ?>

@@ -10,7 +10,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
                     <h5 class="h5 fw-bold mb-0">
-                        Courses
+                        Exam Results
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -19,7 +19,7 @@
                             <a class="link-fx" href="javascript:void(0)">Department</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            Courses
+                            Student Results
                         </li>
                     </ol>
                 </nav>
@@ -30,31 +30,38 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-lg-12">
+                    <div class="d-flex justify-content-end m-2">
+                        <a class="btn btn-sm btn-alt-primary" data-toggle="click-ripple" href="<?php echo e(route('department.addResults')); ?>">Add Exam Results </a>
+                    </div>
                     <table id="example" class="table table-responsive table-md table-striped table-bordered table-vcenter fs-sm">
-                        <?php if(count($courses)>0): ?>
                             <thead>
                             <th>#</th>
-                            <th>Course Code</th>
-                            <th>Course Name</th>
-                            <th> Amend </th>
+                            <th>Reg. Number</th>
+                            <th>Name</th>
+                            <th>Stage</th>
+                            <th>Status</th>
+                            <th> Action </th>
                             </thead>
                             <tbody>
-                            <?php $__currentLoopData = $courses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $course): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php $__currentLoopData = $exams; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $exam): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
                                     <td><?php echo e($loop->iteration); ?></td>
-                                    <td> <?php echo e($course->course_code); ?> </td>
-                                    <td> <?php echo e($course->course_name); ?></td>
+                                    <td> <?php echo e($exam->reg_number); ?></td>
+                                    <td> <?php echo e($exam->studentResults->sname.' '.$exam->studentResults->fname.' '.$exam->studentResults->mname); ?> </td>
+                                    <td> <?php echo e($exam->stage); ?></td>
                                     <td>
-                                        <a class="btn btn-sm btn-alt-info" href="#" data-toggle="click-ripple" title="Propose some changes"> Amend </a>
+                                        <?php if($exam->status == 1): ?>
+                                            <span class="text-success">Pass</span>
+                                        <?php else: ?>
+                                            <span class="text-warning">Fail</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-sm btn-alt-info" data-toggle="click-ripple" href="<?php echo e(route('department.editResults', [ 'id' => Crypt::encrypt($exam->id)])); ?>"> Edit </a>
                                     </td>
                                 </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
-                        <?php else: ?>
-                            <tr>
-                                <span class="text-muted text-center fs-sm">There are no new applications submitted</span>
-                            </tr>
-                        <?php endif; ?>
                     </table>
                 </div>
             </div>
@@ -78,4 +85,4 @@
     } );
 </script>
 
-<?php echo $__env->make('cod::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/html/Registrar/application/Modules/COD/Resources/views/courses/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('cod::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/html/Registrar/application/Modules/COD/Resources/views/exams/index.blade.php ENDPATH**/ ?>

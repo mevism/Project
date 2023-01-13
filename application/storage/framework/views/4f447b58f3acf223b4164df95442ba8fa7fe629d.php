@@ -31,7 +31,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
                     <h5 class="h5 fw-bold mb-0">
-                        FEE INVOICES
+                        SEMESTER REGISTRATION
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -40,7 +40,7 @@
                             <a class="link-fx" href="<?php echo e(route('student')); ?>">Dashboard</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            Print Statement
+                            Registration Details
                         </li>
                     </ol>
                 </nav>
@@ -52,26 +52,40 @@
         <div class="block-content block-content-full">
             <div class="table-responsive">
                 <div class="d-flex justify-content-end mb-4">
-                    <a class="btn btn-sm btn-alt-primary m-2" href="<?php echo e(route('student.printStatement')); ?>"><i class="fa fa-print"></i> Print</a>
+                    <a class="btn btn-sm btn-alt-primary m-2" href="<?php echo e(route('student.requestRegistration')); ?>">Create request</a>
                 </div>
                 <table id="example" class="table table-responsive-sm table-striped table-borderless fs-sm">
                     <thead>
-                    <th>#</th>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Invoice Number</th>
-                    <th>Invoice</th>
-                    <th>Payments</th>
+                        <th>#</th>
+                        <th>Academic Year</th>
+                        <th>Academic Semester</th>
+                        <th>Stage</th>
+                        <th>Semester</th>
+                        <th>Season </th>
+                        <th>Registration</th>
+                        <th>Sem Units</th>
                     </thead>
                     <tbody>
-                        <?php $__currentLoopData = $statement; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $record): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php $__currentLoopData = $reg; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $register): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
-                                <td><?php echo e(++$key); ?></td>
-                                <td><?php echo e(\Carbon\Carbon::parse($record->created_at)->format('d M Y')); ?></td>
-                                <td><?php echo e($record->description); ?></td>
-                                <td><?php echo e($record->invoice_number); ?></td>
-                                <td><?php echo e(number_format($record->amount, 2)); ?></td>
-                                <td><?php echo e(number_format($record->deposit, 2)); ?></td>
+                                <td> <?php echo e(++$key); ?> </td>
+                                <td> <?php echo e($register->academic_year); ?> </td>
+                                <td> <?php echo e($register->academic_semester); ?> </td>
+                                <td> <?php echo e($register->year_study); ?> </td>
+                                <td> <?php echo e($register->semester_study); ?> </td>
+                                <td> <?php echo e($register->patternRoll->season); ?> </td>
+                                <td>
+                                    <?php if($register->activation == 0): ?>
+                                        <span class="text-info"> Pending </span>
+                                    <?php elseif($register->registration == 1): ?>
+                                        <span class="text-success"> Successful </span>
+                                    <?php else: ?>
+                                        <span class="text-danger"> Unsuccessful</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td nowrap="">
+                                    <a class="btn btn-sm btn-outline-info" href="<?php echo e(route('student.viewSemesterUnits', ['id' => Crypt::encrypt($register->id)])); ?>">View units</a>
+                                </td>
                             </tr>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
@@ -82,4 +96,4 @@
 
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('student::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/html/Registrar/application/Modules/Student/Resources/views/invoice/statement.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('student::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/html/Registrar/application/Modules/Student/Resources/views/semester/index.blade.php ENDPATH**/ ?>

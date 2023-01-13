@@ -25,22 +25,21 @@
 
 
 <?php $__env->startSection('content'); ?>
-
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
                     <h5 class="h5 fw-bold mb-0">
-                        FEE INVOICES
+                        ACADEMIC/DEFERMENT LEAVE REQUESTS
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="<?php echo e(route('student')); ?>">Dashboard</a>
+                            <a class="link-fx" href="#">Leaves</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            Print Statement
+                            All deferment/academic leaves
                         </li>
                     </ol>
                 </nav>
@@ -51,28 +50,24 @@
     <div class="block block-rounded">
         <div class="block-content block-content-full">
             <div class="table-responsive">
-                <div class="d-flex justify-content-end mb-4">
-                    <a class="btn btn-sm btn-alt-primary m-2" href="<?php echo e(route('student.printStatement')); ?>"><i class="fa fa-print"></i> Print</a>
-                </div>
-                <table id="example" class="table table-responsive-sm table-striped table-borderless fs-sm">
+                <table id="example"  class="table table-sm table-striped table-bordered fs-sm">
                     <thead>
-                    <th>#</th>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Invoice Number</th>
-                    <th>Invoice</th>
-                    <th>Payments</th>
+                        <th>#</th>
+                        <th>Academic Year</th>
+
+                        <th>Action</th>
                     </thead>
                     <tbody>
-                        <?php $__currentLoopData = $statement; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $record): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php $__currentLoopData = $leaves; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $academicYear => $leave): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
-                                <td><?php echo e(++$key); ?></td>
-                                <td><?php echo e(\Carbon\Carbon::parse($record->created_at)->format('d M Y')); ?></td>
-                                <td><?php echo e($record->description); ?></td>
-                                <td><?php echo e($record->invoice_number); ?></td>
-                                <td><?php echo e(number_format($record->amount, 2)); ?></td>
-                                <td><?php echo e(number_format($record->deposit, 2)); ?></td>
+                                <td> <?php echo e($loop->iteration); ?> </td>
+                                <td> <?php echo e($academicYear); ?> </td>
+
+                                <td>
+                                    <a class="btn btn-sm btn-outline-dark" href="<?php echo e(route('department.yearlyLeaves', ['year' => Crypt::encrypt($academicYear)])); ?>"> View </a>
+                                </td>
                             </tr>
+
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
@@ -82,4 +77,4 @@
 
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('student::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/html/Registrar/application/Modules/Student/Resources/views/invoice/statement.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('cod::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/html/Registrar/application/Modules/COD/Resources/views/leaves/index.blade.php ENDPATH**/ ?>
