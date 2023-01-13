@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use App\Imports\CourseImport;
 use App\Imports\KuccpsImport;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 use App\Imports\UnitProgrammsImport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -28,7 +27,6 @@ use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Student;
 use Modules\Registrar\Entities\VoteHead;
 use PhpOffice\PhpWord\TemplateProcessor;
-// use Modules\Dean\Entities\CourseTransfer;
 use Modules\Registrar\emails\KuccpsMails;
 use Modules\Registrar\Entities\Attendance;
 use Modules\Registrar\Entities\Department;
@@ -73,7 +71,7 @@ class CoursesController extends Controller
     //  return $request->all();
 
         foreach($request->submit as $id){
-
+            
            $approvedID = CourseTransferApproval::find($id);
 
             $approval = CourseTransfer::find($approvedID->course_transfer_id);
@@ -131,20 +129,26 @@ class CoursesController extends Controller
                         unlink($pdfPath);
                     }
 
-                    $converter     =     new OfficeConverter($docPath, storage_path());
-                    $converter->convertTo(str_replace('/', '_', $refNumber).".pdf");
+                    // $converter     =     new OfficeConverter($docPath, storage_path());
+                    // $converter->convertTo(str_replace('/', '_', $refNumber).".pdf");
 
-                    if(file_exists($docPath)){
-                        unlink($docPath);
-                    }
+                    // if(file_exists($docPath)){
+                    //     unlink($docPath);
+                    // }
 
-                    $record = Student::find($id);
-                    $record->delete();
-                    StudentCourse::where('student_id', $id)->delete();
-                    StudentLogin::where('student_id', $id)->delete();
 
-                    $invoices  =  StudentInvoice::withTrashed()->where('reg_number', $record->reg_number)->get();
-                    $deposits  =  StudentDeposit::withTrashed()->where('reg_number', $record->reg_number)->get();
+
+                    $record = Student::withTrashed()->find($approval->student_id)->delete();
+
+                    $oldRecord = Student::withTrashed()->find($approval->student_id);
+
+                    StudentCourse::where('student_id', $approval->student_id)->delete();
+                    StudentLogin::where('student_id', $approval->student_id)->delete();
+
+                    // return $s = StudentInvoice::where($record->reg_number)->get(); 
+
+                     $invoices  =  StudentInvoice::where('reg_number', 'BSIT/002J/2023')->get();
+                     $deposits  =  StudentDeposit::where('reg_number', $oldRecord->reg_number)->get();
 
                     $oldstudent = Student::withTrashed()->find($id);
 

@@ -39,7 +39,7 @@ class Student extends Model
 
     public function loginStudent(){
 
-        return $this->hasOne(StudentLogin::class, 'student_id');
+        return $this->hasOne(StudentLogin::class, 'id');
 
     }
 

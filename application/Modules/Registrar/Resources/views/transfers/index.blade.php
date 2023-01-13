@@ -74,7 +74,7 @@
                                                         ✔
                                                     @endif 
                                                 </td>
-                                                <td> {{ ++$key }} </td>
+                                                <td> {{ ++$key }} {{ $item->transferApproval->studentTransfer->id }}</td>
                                                 <td> {{  $item->transferApproval->studentTransfer->reg_number }} </td>
                                                 <td> {{  $item->transferApproval->studentTransfer->sname.' '.$item->transferApproval->studentTransfer->fname.' '.$item->transferApproval->studentTransfer->mname }} </td>
                                                 <td> {{  $item->transferApproval->deptTransfer->dept_code }} </td>

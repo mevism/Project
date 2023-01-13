@@ -70,7 +70,7 @@
                             <td> {{ $leave->studentLeave->reg_number }} </td>
                             <td> {{ $leave->studentLeave->sname.' '.$leave->studentLeave->fname.' '.$leave->studentLeave->mname }} </td>
                             <td> {{ $leave->studentLeave->courseStudent->class_code }} </td>
-                            <td> {{ Carbon\Carbon::parse($leave->to)->diffInMonths(\Carbon\Carbon::parse($leave->from)) }} Months</td>
+                            <td> {{ Carbon\Carbon::parse($leave->to)->diffInMonths(Carbon\Carbon::parse($leave->from)) }} Months</td>
                             <td> {{ $leave->deferredClass->deferred_class }} </td>
                             <td> {{ $leave->deferredClass->stage }} </td>
                             <td>
