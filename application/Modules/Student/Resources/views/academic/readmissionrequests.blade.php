@@ -31,9 +31,9 @@
             <!-- Labels on top -->
             <div class="block block-rounded">
                 <div class="block-content block-content-full">
-                    <div class="row">
+                    <div class="row ">
                         <div class="col-lg-6">
-                            <fieldset class="border p-2">
+                            <fieldset class="border p-2" style="height: 100% !important;">
                                 <legend class="float-none w-auto">
                                     <h6 class="fw-bold text-center"> CURRENT COURSE DETAILS</h6>
                                 </legend>
@@ -62,21 +62,26 @@
                                 <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->courseStudent-> studentCourse->course_name }} </span>
                             </div>
 
+                                <div class="mb-2">
+                                    <span class="h5 fs-sm">CURRENT CLASS : </span>
+                                    <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->courseStudent->class_code }} </span>
+                                </div>
+
                             <div class="mb-2">
                                 @if(Auth::guard('student')->user()->loggedStudent->nominalRoll == null)
                                     <span class="text-warning">Not registered</span>
                                 @else
                                 <span class="h5 fs-sm"> YEAR OF STUDY : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->nominalRoll->year_study }}</span>
+                                <span class="h6 fs-sm fw-normal"> {{ $current->year_study }}</span>
 
                                 <span class="h5 fs-sm"> SEMESTER OF STUDY : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->nominalRoll->semester_study }}</span>
+                                <span class="h6 fs-sm fw-normal"> {{ $current->semester_study }} {{ "( ".$current->patternRoll->season." ) " }}</span>
                                 @endif
                             </div>
                             </fieldset>
                         </div>
                         <div class="col-lg-6 space-y-4">
-                            <fieldset class="border p-2">
+                            <fieldset class="border p-2"  style="height: 100% !important;">
                                 <legend class="float-none w-auto">
                             <h6 class="fw-bold text-center"> RE-ADMISSION DETAILS</h6>
                                 </legend>
@@ -85,40 +90,91 @@
                                         You can not request for readmission unless you are registered
                                     </span>
                                 @else
-                            <!-- Form Labels on top - Default Style -->
-                            <form action="{{ route('student.storereadmissionrequest') }}" method="POST">
-                                @csrf
-                                <div class="mb-0">
-                                    <label class="mb-2">DEPARTMENT</label>
 
-                                    <select name="dept" class="form-control form-control-lg form-select mb-2 department">
-                                        <option selected disabled class="text-center"> -- select department -- </option>
-                                        @foreach($departments as $key => $department)
-                                            <option value="{{ $department->id }}"> {{ $department->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    @if($admission == null)
 
-                                    <label class="mb-2">COURSE</label>
+                                        <span class="text-center text-info">
+                                            Oop! You cannot request for readmission. You have no records of deferment, suspension or discontinuation
+                                        </span>
 
-                                    <select name="course" class="form-control form-control-lg form-select mb-3 course">
-                                        <option selected disabled class="text-center"> -- select course -- </option>
-                                    </select>
-                                </div>
-                                    <div class="form-floating mb-2">
-                                        <textarea class="form-control" name="reason" style="height: 100px;" placeholder="reason">{{ old('reason') }}</textarea>
-                                        <label>Reason(s)</label>
-                                    </div>
-                                <div class="mb-4">
-                                    <div class="d-flex justify-content-center">
-                                        <button class="btn btn-success col-md-7" >SUBMIT TRANSFER REQUEST</button>
-                                    </div>
-                                </div>
-                            </form>
+                                    @else
+
+                                        <div class="row mb-2">
+                                            <div class="col-md-4">
+                                                <h1 class="h6 fs-sm">LEAVE TYPE</h1>
+                                            </div>
+                                            <div class="col-md-8 fs-sm">
+                                                @if($admission->type == 1)
+                                                    ACADEMIC LEAVE
+                                                @elseif($admission->type == 2)
+                                                    DEFERMENT
+                                                @elseif($admission->type == 3)
+                                                    SUSPENSION
+                                                @else
+                                                    DISCONTINUATION
+                                                @endif
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <h1 class="h6 fs-sm">LEAVE EXPIRY DATE</h1>
+                                            </div>
+                                            <div class="col-md-8 fs-sm">
+                                                {{ $admission->to }}
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <h1 class="h6 fs-sm">READMISSION CLASS</h1>
+                                            </div>
+                                            <div class="col-md-8 fs-sm">
+                                                {{ $admission->deferredClass->deferred_class }}
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <h1 class="h6 fs-sm">JOINING AT </h1>
+                                            </div>
+                                            <div class="col-md-8 fs-sm">
+                                                <p>ACADEMIC YEAR : {{ $admission->deferredClass->academic_year }}</p>
+                                                <p>YEAR OF STUDY : {{ $admission->deferredClass->stage }}</p>
+                                                <p>ACADEMIC SEM. : {{ $admission->deferredClass->semester_study }}</p>
+                                            </div>
+                                        </div>
+
+                                    @endif
                             @endif
                             <!-- END Form Labels on top - Default Style -->
                             </fieldset>
                         </div>
                     </div>
+
+                    @if($admission != null)
+                        <div class="d-flex justify-content-center mt-4">
+                            @if($dates == null)
+                                <a class="btn btn-outline-info col-md-7" disabled="">Readmissions not scheduled</a>
+                            @else
+                                @if(in_array(Auth::guard('student')->user()->loggedStudent->status, ['1', '2'], true))
+                                    <a class="btn btn-outline-warning col-md-7"> You are not eligible to apply for admission </a>
+                                @else
+                                    @if($dates->start_date > \Carbon\Carbon::today())
+
+                                        <a class="btn btn-outline-info col-md-7" disabled="">Readmission's schedule to open on {{ \Carbon\Carbon::parse($dates->start_date)->format('D, d-M-Y') }}</a>
+
+                                    @elseif($dates->end_date < Carbon\Carbon::today())
+                                        <a class="btn btn-outline-danger col-md-7" disabled="">Readmission's schedule closed on {{ \Carbon\Carbon::parse($dates->end_date)->format('D, d-M-Y') }}</a>
+                                    @else
+                                        <a class="btn btn-outline-success col-md-7" href="{{ route('student.storereadmissionrequest', ['id' => Crypt::encrypt($admission->id)]) }}">Request readmission </a>
+                                    @endif
+
+                                @endif
+                            @endif
+                        </div>
+                    @endif
                 </div>
                 <!-- END Labels on top -->
             </div>

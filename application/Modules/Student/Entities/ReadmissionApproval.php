@@ -5,19 +5,19 @@ namespace Modules\Student\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class DeferredClass extends Model
+class ReadmissionApproval extends Model
 {
     use HasFactory;
 
     protected $fillable = [];
 
-    public function classDiferred(){
+    public function approvedReadmission(){
 
-        return $this->belongsTo(AcademicLeave::class, 'academic_leave_id');
+        return $this->belongsTo(Readmission::class, 'id');
     }
 
     protected static function newFactory()
     {
-        return \Modules\Student\Database\factories\DeferredClassFactory::new();
+        return \Modules\Student\Database\factories\ReadmissionApprovalFactory::new();
     }
 }

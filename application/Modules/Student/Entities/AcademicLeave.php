@@ -26,6 +26,11 @@ class AcademicLeave extends Model
         return $this->hasOne(DeferredClass::class, 'id');
     }
 
+    public function readmissions(){
+
+        return $this->hasMany(Readmission::class, 'leave_id');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Student\Database\factories\AcademicLeaveFactory::new();

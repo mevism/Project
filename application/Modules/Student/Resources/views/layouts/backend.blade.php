@@ -242,8 +242,9 @@
 
                   <ul class="nav-main-submenu">
                       <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{ route('student.discontinuationstatus') }}">
+                          <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="#">
                               <span class="nav-main-link-name">My Status</span>
+{{--                              {{ route('student.discontinuationstatus') }}--}}
                           </a>
                       </li>
                   </ul>
@@ -256,15 +257,17 @@
                   </a>
                   <ul class="nav-main-submenu">
                       <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{ route('student.examresults') }}">
+                          <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="#">
                               <span class="nav-main-link-name">Exam Results</span>
+{{--                              {{ route('student.examresults') }}--}}
                           </a>
                       </li>
                   </ul>
                   <ul class="nav-main-submenu">
                       <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{ route('student.retakes') }}">
+                          <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="#">
                               <span class="nav-main-link-name">Apply Retakes</span>
+{{--                              {{ route('student.retakes') }}--}}
                           </a>
                       </li>
                   </ul>

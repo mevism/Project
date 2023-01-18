@@ -30,7 +30,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <div class="flex-grow-1">
                     <h5 class="h5 fw-bold mb-0">
-                        Classes Per Intake
+                        {{ strtoupper(\Carbon\Carbon::parse($intake->intake_from)->format('MY') ) }} CLASSES
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -39,7 +39,7 @@
                             <a class="link-fx" href="javascript:void(0)">Department</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            Intake Classes
+                            Classes
                         </li>
                     </ol>
                 </nav>
@@ -55,24 +55,33 @@
                     <table id="example" class="table table-sm table-bordered table-striped table-vcenter js-dataTable-responsive fs-sm">
                         <thead>
                         <td>#</td>
-                        <th>Intake Name</th>
+                        <th>Class Name</th>
+                        <th>Course Code</th>
+                        <th>Study Mode</th>
+                        <th>Class Pattern</th>
                         <th>Action</th>
                         </thead>
                         <tbody>
-                        @foreach ($classes as $academic_year => $class)
-                            <tr>
-                                <td> {{ $loop->iteration }} </td>
-                                <td>
-                                    @foreach($intakes as $intake)
-                                        @if($intake->id == $academic_year)
-                                            {{ strtoupper(\Carbon\Carbon::parse($intake->intake_from)->format('MY')) }}
-                                        @endif
-                                    @endforeach
-                                </td>
-                                <td>
-                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('department.viewIntakeClasses', ['intake' => Crypt::encrypt($academic_year)]) }}">Intake Classes</a>
-                                </td>
-                            </tr>
+                            @php $i = 0; @endphp
+
+                        @foreach ($classes as $key => $intakes)
+                            @foreach($intakes as $class)
+                                @php ++$i @endphp
+                                <tr>
+                                  <td> {{ $i }} </td>
+                                  <td> {{ $class->name }} </td>
+                                  <td> {{ $class->classCourse->course_code }} </td>
+                                  <td> {{ $class->attendance_code }} </td>
+                                    <td>
+                                        <a class="btn btn-sm btn-outline-info" href="{{ route('cod.classPattern', ['id' => Crypt::encrypt($class->id)]) }}">View Pattern</a>
+                                    </td>
+                                    <td nowrap="">
+                                        <a class="btn btn-sm btn-alt-info disabled" href="{{ route('courses.editClasses', ['id' => Crypt::encrypt($class->id)]) }}">edit</a>
+                                        <a class="btn btn-sm btn-alt-danger disabled" onclick="return confirm('Are you sure you want to delete this course ?')" href="{{ route('courses.destroyClasses', ['id' => Crypt::encrypt($class->id)]) }}">delete</a>
+                                        <a class="btn btn-sm btn-alt-secondary" href="{{ route('department.classList', ['id' => Crypt::encrypt($class->id)]) }}">View</a>
+                                    </td>
+                                </tr>
+                            @endforeach
                         @endforeach
 
                         </tbody>

@@ -33,7 +33,7 @@
                 <div class="block-content block-content-full">
                     <div class="row">
                         <div class="col-lg-6">
-                            <fieldset class="border p-2">
+                            <fieldset class="border p-2" style="height: 100% !important;">
                                 <legend class="float-none w-auto"><h6 class="fw-bold text-center"> CURRENT COURSE DETAILS</h6></legend>
                             <div class="mb-2">
                                 <span class="h5 fs-sm">STUDENT NAME : </span>
@@ -74,7 +74,7 @@
                             </fieldset>
                         </div>
                         <div class="col-lg-6 space-y-4">
-                            <fieldset class="border p-2">
+                            <fieldset class="border p-2" style="height: 100% !important;">
                                 <legend class="float-none w-auto"><h6 class="fw-bold text-center"> NEW COURSE DETAILS</h6></legend>
                             <!-- Form Labels on top - Default Style -->
                                 @if(Auth::guard('student')->user()->loggedStudent->nominalRoll == null)
