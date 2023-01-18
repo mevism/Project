@@ -47,7 +47,7 @@ Route::prefix('student')->group(function() {
 
     Route::get('/request-readmission', [StudentController::class, 'requestReadmission'])->name('student.requestreadmission');
     Route::get('/request-course-readmission', [StudentController::class, 'readmissionRequests'])->name('student.readmisionrequest');
-    Route::post('/store-readmission-request', [StudentController::class, 'storeReadmissionRequest'])->name('student.storereadmissionrequest');
+    Route::get('/store-readmission-request/{id}', [StudentController::class, 'storeReadmissionRequest'])->name('student.storereadmissionrequest');
 
 
 
