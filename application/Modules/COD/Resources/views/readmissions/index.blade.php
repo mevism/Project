@@ -54,21 +54,21 @@
             <div class="table-responsive">
                 <table id="example"  class="table table-sm table-striped table-bordered fs-sm">
                     <thead>
-                        <th>#</th>
-                        <th>Academic Year</th>
-                        <th>Action</th>
+                    <th>#</th>
+                    <th>Academic Year</th>
+                    <th>Action</th>
                     </thead>
                     <tbody>
-                        @foreach($leaves as $academicYear => $leave)
-                            <tr>
-                                <td> {{ $loop->iteration }} </td>
-                                <td> {{ $academicYear }} </td>
-                                <td>
-                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('department.yearlyLeaves', ['year' => Crypt::encrypt($academicYear)]) }}"> View </a>
-                                </td>
-                            </tr>
+                    @foreach($readmissions as $academicYear => $readmission)
+                        <tr>
+                            <td> {{ $loop->iteration }} </td>
+                            <td> {{ $academicYear }} </td>
+                            <td>
+                                <a class="btn btn-sm btn-outline-dark" href="{{ route('department.yearlyReadmissions', ['year' => Crypt::encrypt($academicYear)]) }}"> View </a>
+                            </td>
+                        </tr>
 
-                        @endforeach
+                    @endforeach
                     </tbody>
                 </table>
             </div>

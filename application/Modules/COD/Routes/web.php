@@ -37,7 +37,9 @@ Route::prefix('department')->middleware( ['is_cod'])->group( function() {
         Route::post('/update-class-pattern/{id}', [CODController::class, 'updateClassPattern'])->name('cod.updateClassPattern');
         Route::get('/delete-class-pattern/{id}', [CODController::class, 'deleteClassPattern'])->name('cod.deleteClassPattern');
         Route::get('/view-classes-per-intake/{intake}', [CODController::class, 'viewIntakeClasses'])->name('department.viewIntakeClasses');
-        Route::get('/view-semester-units-per-class/{id}', [CODController::class, 'viewSemesterUnits'] )->name('department.viewSemesterUnits');
+        Route::get('/view-semester-units-per-class/{id}', [CODController::class, 'viewSemesterUnits'])->name('department.viewSemesterUnits');
+        Route::get('/add-semester-unit-per-class/{id}/{unit}', [CODController::class, 'addSemesterUnit'])->name('department.addSemesterUnit');
+        Route::get('/drop-semester-unit-per-class/{id}', [CODController::class, 'dropSemesterUnit'])->name('department.dropSemesterUnit');
 
 
         Route::get('/courses', [CODController::class, 'courses'])->name('department.courses');
@@ -74,6 +76,11 @@ Route::prefix('department')->middleware( ['is_cod'])->group( function() {
         Route::get('/view-academic-leave-request/{id}', [CODController::class, 'viewLeaveRequest'])->name('department.viewLeaveRequest');
         Route::get('/accept-academic-leave/deferment-request/{id}', [CODController::class, 'acceptLeaveRequest'])->name('department.acceptLeaveRequest');
         Route::post('/decline-academic-leave/deferment-request/{id}', [CODController::class, 'declineLeaveRequest'])->name('department.declineLeaveRequest');
+
+
+        Route::get('/get-readmission-requests-per-academic-year', [CODController::class, 'readmissions'])->name('department.readmissions');
+        Route::get('/get-annual-readmission-requests-per-department/{year}', [CODController::class, 'yearlyReadmissions'])->name('department.yearlyReadmissions');
+        Route::get('/get-intake-readmission-requests-per-department/{intake}/{year}', [CODController::class, 'intakeReadmissions'])->name('department.intakeReadmissions');
 
 
 //        Route::get('/getAcademicFile/{id}', 'CODController@viewAcademicFile');

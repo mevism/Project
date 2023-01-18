@@ -33,17 +33,17 @@
                 <div class="block-content block-content-full">
                     <div class="row">
                         <div class="col-lg-6">
-                            <fieldset class="border p-2">
+                            <fieldset class="border p-2" style="height: 100% !important;">
                                 <legend class="float-none w-auto"><h6 class="fw-bold text-center"> CURRENT STUDENT COURSE DETAILS</h6></legend>
-                            <div class="mb-2">
+                            <div class="mb-4">
                                 <span class="h5 fs-sm">STUDENT NAME : </span>
                                 <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->sname }} {{ Auth::guard('student')->user()->loggedStudent->fname }} {{ Auth::guard('student')->user()->loggedStudent->mname }} </span>
                             </div>
-                            <div class="mb-2">
+                            <div class="mb-4">
                                 <span class="h5 fs-sm">PHONE NUMBER : </span>
                                 <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->mobile }} </span>
                             </div>
-                            <div class="mb-2">
+                            <div class="mb-4">
                                 <span class="h5 fs-sm">EMAIL ADDRESS : </span>
                                 <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->email }} </span>
                             </div>
@@ -51,16 +51,21 @@
                                 <span class="h5 fs-sm">PHYSICAL ADDRESS : </span>
                                 <span class="h6 fs-sm fw-normal"> P.O BOX {{ Auth::guard('student')->user()->loggedStudent->address }}-{{ Auth::guard('student')->user()->loggedStudent->postal_code }} {{ Auth::guard('student')->user()->loggedStudent->town }}</span>
                             </div>
-                            <div class="mb-2">
+                            <div class="mb-4">
                                 <span class="h5 fs-sm">REG. NUMBER : </span>
                                 <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->reg_number }} </span>
                             </div>
-                            <div class="mb-2">
+                            <div class="mb-4">
                                 <span class="h5 fs-sm">COURSE ADMITTED : </span>
                                 <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->courseStudent-> studentCourse->course_name }} </span>
                             </div>
 
-                            <div class="mb-2">
+                            <div class="mb-4">
+                                    <span class="h5 fs-sm">COURSE ADMITTED : </span>
+                                    <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->courseStudent->class_code }} </span>
+                            </div>
+
+                            <div class="mb-4">
                                 @if(Auth::guard('student')->user()->loggedStudent->nominalRoll == null)
                                     <span class="text-warning">
                                         Not registered
@@ -76,7 +81,7 @@
                             </fieldset>
                         </div>
                         <div class="col-lg-6 space-y-4">
-                            <fieldset class="border p-2">
+                            <fieldset class="border p-2" style="height: 100% !important;">
                                 <legend class="float-none w-auto">
                                     <h5 class="fw-bold text-center"> LEAVE/DEFERMENT DETAILS</h5>
                                 </legend>

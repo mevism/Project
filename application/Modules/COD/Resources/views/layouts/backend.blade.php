@@ -161,27 +161,29 @@
               <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
                   <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="{{ route('cod.applications') }}">
                       <i class="nav-main-link-icon si si-graduation"></i>
-                      <span class="nav-main-link-name">Course Transfers</span>
+                      <span class="nav-main-link-name">Student Progression</span>
                   </a>
                   <ul class="nav-main-submenu">
                       <li class="nav-main-item">
                           <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('department.courseTransfers') }}">
                               <i class="nav-main-link-icon si si-calendar"></i>
-                              <span class="nav-main-link-name">Transfer Requests</span>
+                              <span class="nav-main-link-name">Course Transfers</span>
                           </a>
                       </li>
                   </ul>
-              </li>
-              <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
-                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="{{ route('cod.applications') }}">
-                      <i class="nav-main-link-icon si si-graduation"></i>
-                      <span class="nav-main-link-name">Deferment & Leaves</span>
-                  </a>
                   <ul class="nav-main-submenu">
                       <li class="nav-main-item">
                           <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('department.academicLeave') }}">
                               <i class="nav-main-link-icon si si-calendar"></i>
-                              <span class="nav-main-link-name">View requests</span>
+                              <span class="nav-main-link-name">Academic Leaves </span>
+                          </a>
+                      </li>
+                  </ul>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('department.readmissions') }}">
+                              <i class="nav-main-link-icon si si-calendar"></i>
+                              <span class="nav-main-link-name">Readmissions</span>
                           </a>
                       </li>
                   </ul>

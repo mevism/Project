@@ -55,45 +55,45 @@
             <div class="row row-cols-sm-2 g-2">
 
                 <div class="">
-                    <fieldset class="border p-2 mb-4">
+                    <fieldset class="border p-2 mb-4" style="height: 100% !important;">
                         <legend  class="float-none w-auto"> <h6> CURRENT DETAILS </h6></legend>
-                    <div class="mb-2">
-                        <span class="h5 fs-sm">STUDENT NAME : </span>
-                        <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->sname }} {{ Auth::guard('student')->user()->loggedStudent->fname }} {{ Auth::guard('student')->user()->loggedStudent->mname }} </span>
-                    </div>
-                    <div class="mb-2">
-                        <span class="h5 fs-sm">PHONE NUMBER : </span>
-                        <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->mobile }} </span>
-                    </div>
-                    <div class="mb-2">
-                        <span class="h5 fs-sm">EMAIL ADDRESS : </span>
-                        <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->email }} </span>
+                    <div class="mb-4">
+                        <span class="h5 fs-sm mb-3">STUDENT NAME : </span>
+                        <span class="h6 fs-sm fw-normal mb-3"> {{ Auth::guard('student')->user()->loggedStudent->sname }} {{ Auth::guard('student')->user()->loggedStudent->fname }} {{ Auth::guard('student')->user()->loggedStudent->mname }} </span>
                     </div>
                     <div class="mb-4">
-                        <span class="h5 fs-sm">PHYSICAL ADDRESS : </span>
-                        <span class="h6 fs-sm fw-normal"> P.O BOX {{ Auth::guard('student')->user()->loggedStudent->address }}-{{ Auth::guard('student')->user()->loggedStudent->postal_code }} {{ Auth::guard('student')->user()->loggedStudent->town }}</span>
+                        <span class="h5 fs-sm mb-3">PHONE NUMBER : </span>
+                        <span class="h6 fs-sm fw-normal mb-3"> {{ Auth::guard('student')->user()->loggedStudent->mobile }} </span>
                     </div>
-                    <div class="mb-2">
-                        <span class="h5 fs-sm">REG. NUMBER : </span>
+                    <div class="mb-4">
+                        <span class="h5 fs-sm mb-3">EMAIL ADDRESS : </span>
+                        <span class="h6 fs-sm fw-normal mb-3"> {{ Auth::guard('student')->user()->loggedStudent->email }} </span>
+                    </div>
+                    <div class="mb-4">
+                        <span class="h5 fs-sm mb-3">PHYSICAL ADDRESS : </span>
+                        <span class="h6 fs-sm fw-normal mb-3"> P.O BOX {{ Auth::guard('student')->user()->loggedStudent->address }}-{{ Auth::guard('student')->user()->loggedStudent->postal_code }} {{ Auth::guard('student')->user()->loggedStudent->town }}</span>
+                    </div>
+                    <div class="mb-4">
+                        <span class="h5 fs-sm mb-3">REG. NUMBER : </span>
                         <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->reg_number }} </span>
                     </div>
-                    <div class="mb-2">
-                        <span class="h5 fs-sm">COURSE ADMITTED : </span>
+                    <div class="mb-4">
+                        <span class="h5 fs-sm mb-3">COURSE ADMITTED : </span>
                         <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->courseStudent-> studentCourse->course_name }} </span>
                     </div>
 
-                    <div class="mb-2">
+                    <div class="mb-4">
                         @if($reg == null)
-                            <span class="text-warning">Not registered</span>
+                            <span class="text-warning mb-3">Not registered</span>
                         @else
-                        <span class="h5 fs-sm"> YEAR OF STUDY : </span>
-                        <span class="h6 fs-sm fw-normal"> {{ $reg->year_study }}</span>
+                        <span class="h5 fs-sm mb-3"> YEAR OF STUDY : </span>
+                        <span class="h6 fs-sm fw-normal mb-3"> {{ $reg->year_study }}</span>
 
-                        <span class="h5 fs-sm"> SEMESTER OF STUDY : </span>
-                        <span class="h6 fs-sm fw-normal"> {{ $reg->semester_study }} ({{ $reg->patternRoll->season }})</span>
+                        <span class="h5 fs-sm mb-3"> SEMESTER OF STUDY : </span>
+                        <span class="h6 fs-sm fw-normal mb-3"> {{ $reg->semester_study }} ({{ $reg->patternRoll->season }})</span>
 
-                        <span class="h5 fs-sm"> ACADEMIC YEAR : </span>
-                        <span class="h6 fs-sm fw-normal"> {{ $reg->academic_year }}</span>
+                        <span class="h5 fs-sm mb-3"> ACADEMIC YEAR : </span>
+                        <span class="h6 fs-sm fw-normal mb-3"> {{ $reg->academic_year }}</span>
                         @endif
                     </div>
                     </fieldset>
@@ -103,7 +103,7 @@
                 <div class="">
 
                     @if($next != NULL )
-                        <fieldset class="border p-3 mb-4">
+                        <fieldset class="border p-3 mb-4" style="height: 100% !important;">
                             <legend  class="float-none w-auto"> <h6> NEXT SEMESTER DETAILS </h6></legend>
                             <div class="row row-cols-sm-3 g-1 fs-sm">
                                 <div class="mb-4">
@@ -131,7 +131,7 @@
                                 <fieldset class="border p-2 mb-0">
                                     <legend  class="float-none w-auto"> <h6>  SEMESTER UNITS </h6></legend>
                                     @foreach($units as $key => $one)
-                                        <p> {{ ++$key }}. {{ $one->course_unit_code }} - {{ $one->unit_name }}</p>
+                                        <p> {{ ++$key }}. {{ $one->unit_code }} - {{ $one->unit_name }}</p>
                                     @endforeach
                                 </fieldset>
                                 @endif
@@ -178,7 +178,7 @@
                     <input type="hidden" name="period" value="{{ $next->period }}">
                     <input type="hidden" name="academicyear" value="{{ $next->academic_year }}">
                     <input type="hidden" name="pattern" value="{{ $next->pattern_id }}">
-                    <div class="d-flex justify-content-center">
+                    <div class="d-flex justify-content-center mt-4">
                         @if(in_array($next->semester, ['1.3', '2.3', '3.3', '4.3', '5.3', '6.3', '7.3'], true))
                             @if($dates == null)
                                 <button class="btn btn-outline-warning col-md-5 disabled"> Semester registration not scheduled </button>

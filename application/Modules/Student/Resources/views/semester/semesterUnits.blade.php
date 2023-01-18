@@ -66,7 +66,7 @@
                     @foreach($units as $key => $unit)
                         <tr>
                             <td> {{ ++$key }} </td>
-                            <td> {{ $unit->course_unit_code }} </td>
+                            <td> {{ $unit->unit_code }} </td>
                             <td> {{ $unit->unit_name }} </td>
                             <td> {{ $unit->type }} </td>
                         </tr>

@@ -75,6 +75,21 @@
                             <th>Semester</th>
                             <th>Action</th>
                             </thead>
+                            <tbody>
+                                @foreach($semesterUnits as $key => $unit)
+                                    <tr>
+                                        <td>{{ ++$key }}</td>
+                                        <td>{{ $unit->unit_code }}</td>
+                                        <td>{{ $unit->unit_name }}</td>
+                                        <td>{{ $unit->stage }}</td>
+                                        <td>{{ $unit->semester }}</td>
+                                        <td>{{ $unit->type }}</td>
+                                        <td>
+                                            <a class="btn btn-sm btn-alt-danger" href="{{ route('department.dropSemesterUnit', ['id' => Crypt::encrypt($unit->id)]) }}">drop unit</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
                         </table>
 
                         <h6 class="h6 fw-semibold fs-sm mb-2 mt-4">Course Units</h6>
@@ -99,7 +114,7 @@
                                             <td> {{ $unit->stage }} </td>
                                             <td> {{ $unit->semester }} </td>
                                             <td>
-                                                <a class="btn btn-sm btn-alt-success">add unit</a>
+                                                <a class="btn btn-sm btn-alt-success" href="{{ route('department.addSemesterUnit', ['id' => Crypt::encrypt($pattern->id), 'unit' => Crypt::encrypt($unit->id)]) }}">add unit</a>
                                             </td>
                                         </tr>
                                 @endforeach

@@ -59,10 +59,11 @@
                 <table id="example"  class="table table-sm table-striped table-bordered fs-sm">
                     <thead>
                     <th>#</th>
-                    <th nowrap=""> Course Name </th>
-                    <th>Year of Study</th>
-                    <th>Academic Year</th>
-                    <th nowrap="">Reason(s)</th>
+                    <th nowrap=""> Leave Type </th>
+                    <th>REQUEST TO JOIN</th>
+                    <th>JOIN AT STAGE</th>
+                    <th>JOIN ON </th>
+                    <th nowrap="">REQUESTED ON</th>
                     <th nowrap=""> Status</th>
                     <th nowrap=""> Action</th>
                     </thead>
@@ -70,19 +71,38 @@
                     @foreach($readmits as $key => $readmit)
                         <tr>
                             <td>{{ ++$key }} </td>
-                            <td>{{ $readmit }}</td>
-                            <td>{{ $readmit }}</td>
-                            <td>{{ $readmit }}</td>
-                            <td>{{ $readmit }}</td>
-                            <td nowrap="">
-                                @if($readmit->status == NULL)
-                                    <span class="text-primary fw-bold">Not Submitted</span>
-                                @elseif($readmit->status == 0)
-                                    <span class="text-info fw-bold"> Submitted</span>
-                                @elseif($readmit->status == 1)
-                                    <span class="text-success fw-bold"> Successful</span>
+                            <td>
+                                @if($readmit->leaves->type == 1)
+                                    ACADEMIC LEAVE
+                                @elseif($readmit->leaves->type == 2)
+                                    DEFERMENT
+                                @elseif($readmit->leaves->type == 3)
+                                    SUSPENSION
                                 @else
-                                    <span class="text-danger fw-bold"> Unsuccessful</span>
+                                    DISCONTINUATION
+                                @endif
+                            </td>
+                            <td>{{ $readmit->leaves->deferredClass->deferred_class }}</td>
+                            <td>{{ $readmit->leaves->deferredClass->stage }}</td>
+                            <td>
+                                <span class="fw-semibold"> Academic Year : </span> {{ $readmit->leaves->deferredClass->academic_year }} <br>
+                                <span class="fw-semibold"> Academic Sem. : </span> {{ $readmit->leaves->deferredClass->semester_study }}
+                            </td>
+                            <td>
+                                <span class="fw-semibold"> Academic Year : </span> {{ $readmit->academic_year }} <br>
+                                <span class="fw-semibold"> Academic Sem. : </span> {{ $readmit->academic_semester }}
+                            </td>
+                            <td nowrap="">
+                                @if($readmit->status == 0)
+                                    @if($readmit->readmissionApproval == null)
+                                        <span class="text-info">Pending</span>
+                                    @else
+                                        <span class="text-primary">Processing</span>
+                                    @endif
+                                @elseif($readmit->status == 1)
+                                    <span class="text-success"> Successful</span>
+                                @else
+                                    <span class="text-danger"> Unsuccessful</span>
                                 @endif
                             </td>
                             <td nowrap="">
@@ -93,9 +113,7 @@
                                         <a class="btn btn-sm btn-outline-success" disabled=""> Processed </a>
                                     @endif
                                 @else
-                                    <a class="btn btn-sm btn-alt-success" href="#">Submit</a> |
-                                    <a class="btn btn-sm btn-alt-info" href="{{ route('student.editleaverequest', ['id' => Crypt::encrypt($readmit->id)]) }}">Edit</a> |
-                                    <a class="btn btn-sm btn-alt-danger" href="#">Delete</a>
+                                    <a class="btn btn-sm btn-alt-danger" href="#">Withdraw</a>
                                 @endif
                             </td>
                         </tr>

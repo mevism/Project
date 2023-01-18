@@ -17,6 +17,7 @@ use Modules\COD\Entities\ClassPattern;
 use Modules\COD\Entities\Nominalroll;
 use Modules\COD\Entities\Pattern;
 use Modules\COD\Entities\Progression;
+use Modules\COD\Entities\SemesterUnit;
 use Modules\Finance\Entities\FinanceLog;
 use Modules\COD\Entities\CODLog;
 use Auth;
@@ -33,6 +34,7 @@ use Modules\Student\Entities\AcademicLeaveApproval;
 use Modules\Student\Entities\CourseTransfer;
 use Modules\Student\Entities\CourseTransferApproval;
 use Modules\Student\Entities\ExamResults;
+use Modules\Student\Entities\Readmission;
 use NcJoes\OfficeConverter\OfficeConverter;
 use PhpOffice\PhpWord\Element\Table;
 use PhpOffice\PhpWord\SimpleType\TblWidth;
@@ -406,7 +408,15 @@ class CODController extends Controller
 
         $pattern = ClassPattern::find($hashedId);
 
+//        return $pattern->pattern_id;
+
         $class = Classes::where('name', $pattern->class_code)->first();
+
+       $semesterUnits = SemesterUnit::where('class_code', $class->name)
+                        ->where('stage', $pattern->stage)
+                        ->where('semester', $pattern->pattern_id)
+                        ->latest()
+                        ->get();
 
         $units = UnitProgramms::where('course_code', $class->classCourse->course_code)
                             ->orderByRaw("FIELD(stage, $pattern->stage) DESC")
@@ -414,7 +424,47 @@ class CODController extends Controller
                             ->get();
 
 
-        return view('cod::classes.semesterUnits')->with(['pattern' => $pattern, 'units' => $units]);
+        return view('cod::classes.semesterUnits')->with(['pattern' => $pattern, 'units' => $units, 'semesterUnits' => $semesterUnits]);
+    }
+
+    public function addSemesterUnit($id, $unit){
+        $hashedId = Crypt::decrypt($id);
+
+        $hashedUnit = Crypt::decrypt($unit);
+
+        $pattern = ClassPattern::find($hashedId);
+
+        $semesterUnit = UnitProgramms::find($hashedUnit);
+
+        if (SemesterUnit::where('unit_code', $semesterUnit->course_unit_code)
+                            ->where('class_code', $pattern->class_code)
+                            ->where('semester', $pattern->pattern_id)
+                            ->exists()){
+
+            return redirect()->back()->with('info', 'Unit has already been mounted to the selected class pattern');
+
+        }else{
+            $addUnit = new SemesterUnit;
+            $addUnit->class_code = $pattern->class_code;
+            $addUnit->unit_code = $semesterUnit->course_unit_code;
+            $addUnit->unit_name = $semesterUnit->unit_name;
+            $addUnit->stage = $pattern->stage;
+            $addUnit->semester = $pattern->pattern_id;
+            $addUnit->type = $semesterUnit->type;
+            $addUnit->save();
+        }
+
+            return redirect()->back()->with('success', 'Unit mounted to the selected class pattern');
+    }
+
+    public function dropSemesterUnit($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        SemesterUnit::find($hashedId)->delete();
+
+        return redirect()->back()->with('success', 'Unit dropped successfully');
+
     }
 
     public function classList($id){
@@ -950,6 +1000,43 @@ class CODController extends Controller
 
         return redirect()->route('department.yearlyLeaves', ['year' => Crypt::encrypt($leave->academic_year)])->with('success', 'Deferment/Academic leave declined.');
 
+    }
+
+    public function readmissions(){
+
+        $readmissions = Readmission::latest()->get()->groupBy('academic_year');
+
+        return view('cod::readmissions.index')->with(['readmissions' => $readmissions]);
+    }
+
+    public function yearlyReadmissions($year){
+
+       $hashedYear = Crypt::decrypt($year);
+
+       $admissions = Readmission::where('academic_year', $hashedYear)->latest()->get()->groupBy('academic_semester');
+
+       return view('cod::readmissions.yearlyReadmissions')->with(['admissions' => $admissions, 'year' => $hashedYear]);
+
+    }
+
+    public function intakeReadmissions($intake, $year){
+
+        $hashedIntake = Crypt::decrypt($intake);
+        $hashedYear = Crypt::decrypt($year);
+
+        $readmissions = AcademicLeave::all();
+
+        $leaves = [];
+
+            foreach ($readmissions as $readmission){
+                if ($readmission->studentLeave->courseStudent->department_id == Auth::guard('user')->user()->department_id){
+                   $leaves[] = $readmission;
+                }
+            }
+
+            return $leaves;
+
+            return view('cod::readmissions.intakeReadmissions')->with(['admissions' => $requests]);
     }
 
 

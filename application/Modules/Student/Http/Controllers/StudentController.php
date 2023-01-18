@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Modules\COD\Entities\ClassPattern;
 use Modules\COD\Entities\Nominalroll;
+use Modules\COD\Entities\SemesterUnit;
 use Modules\Finance\Entities\StudentInvoice;
 use Modules\Registrar\Entities\CalenderOfEvents;
 use Modules\Registrar\Entities\Classes;
@@ -34,6 +35,7 @@ use Modules\Student\Entities\DeferredClass;
 use Modules\Student\Entities\DeferredClass;
 use Modules\Student\Entities\ExamResults;
 use Modules\Student\Entities\Readmission;
+use Modules\Student\Entities\ReadmissionApproval;
 use Modules\Student\Entities\StudentDeposit;
 use Modules\Student\Entities\TransferInvoice;
 use NcJoes\OfficeConverter\OfficeConverter;
@@ -96,43 +98,48 @@ class StudentController extends Controller
             ->where('intake_id', strtoupper($semester))
             ->where('event_id', 5)
             ->first();
-            
-        if ($event->start_date <= $current && $current <= $event->end_date){
 
-            $invoices = StudentInvoice::where('student_id', $student->id)
-                ->where('reg_number', $student->reg_number)
-                ->latest()
-                ->get();
-            $deposits = StudentDeposit::where('reg_number', $student->reg_number)
-                ->latest()
-                ->get();
+        if ($event != null){
 
-            $invoice = 0;
-            $deposit = 0;
+            if ($event->start_date <= $current && $current <= $event->end_date){
 
-            foreach ($invoices as $record){
+                $invoices = StudentInvoice::where('student_id', $student->id)
+                    ->where('reg_number', $student->reg_number)
+                    ->latest()
+                    ->get();
+                $deposits = StudentDeposit::where('reg_number', $student->reg_number)
+                    ->latest()
+                    ->get();
 
-                $invoice += $record->amount;
-            }
+                $invoice = 0;
+                $deposit = 0;
 
-            foreach ($deposits as $record){
+                foreach ($invoices as $record){
 
-                $deposit += $record->deposit;
-            }
+                    $invoice += $record->amount;
+                }
 
-            if ($deposit >= $invoice){
+                foreach ($deposits as $record){
 
-                foreach ($transfers as $transfer){
+                    $deposit += $record->deposit;
+                }
 
-                    if (!$transfer->status){
+                if ($deposit >= $invoice){
 
-                        $transfer->status = 1;
-                        $transfer->save();
+                    foreach ($transfers as $transfer){
+
+                        if (!$transfer->status){
+
+                            $transfer->status = 1;
+                            $transfer->save();
+                        }
                     }
                 }
+
             }
 
         }
+
 
         return view('student::courses.transfers')->with(['transfers' => $transfers]);
     }
@@ -470,39 +477,59 @@ class StudentController extends Controller
 
     public function readmissionRequests(){
 
-        $departments = Department::all();
+       $currentStage = Nominalroll::where('student_id', Auth::guard('student')->user()->student_id)
+                                    ->latest()
+                                    ->first();
 
-        return view('student::academic.readmissionrequests')->with(['departments' => $departments]);
+       $readmit = AcademicLeave::where('student_id', Auth::guard('student')->user()->student_id)
+                                   ->latest()
+                                   ->first();
+
+       $today = Carbon::now();
+
+      $intake = Intake::where('intake_from', '<=', $today)->where('intake_to', '>=', $today)->latest()->first();
+      $semester = Carbon::parse($intake->intake_from)->format('M').'/'.Carbon::parse($intake->intake_to)->format('M');
+      $academic_year = Carbon::parse($intake->academicYear->year_start)->format('Y').'/'. Carbon::parse($intake->academicYear->year_end)->format('Y');
+
+      $dates = CalenderOfEvents::where('academic_year_id', $academic_year)->where('intake_id', strtoupper($semester))->where('event_id', 3)->first();
+
+        return view('student::academic.readmissionrequests')->with(['admission' => $readmit, 'current' => $currentStage, 'dates' => $dates]);
 
     }
 
-    public function storeReadmissionRequest(Request $request){
+    public function storeReadmissionRequest($id){
 
-        $request->validate([
-            'dept' => 'required',
-            'course' => 'required',
-            'reason' => 'required|string'
-        ]);
+        $hashedId = Crypt::decrypt($id);
 
-        if (Auth::guard('student')->user()->loggedStudent->courseStudent->course_id == $request->course){
+        $today = Carbon::now()->format('Y-m-d');
 
-            $readmit = new Readmission;
-            $readmit->student_id = Auth::guard('student')->user()->student_id;
-            $readmit->department_id = $request->dept;
-            $readmit->course_id = $request->course;
-            $readmit->reason = $request->reason;
-            $readmit->save();
+        $intake = Intake::where('intake_from', '<=', $today)
+                            ->where('intake_to', '>=', $today)
+                            ->latest()
+                            ->first();
+        $season = Carbon::parse($intake->intake_from)->format('M').'/'.Carbon::parse($intake->intake_to)->format('M');
 
-            return redirect()->route('student.requestreadmission')->with('success', 'Readmission request was created successfully');
+       $academicYear = Carbon::parse($intake->academicYear->year_start)->format('Y').'/'.Carbon::parse($intake->academicYear->year_end)->format('Y');
 
-        }else{
+       if (Readmission::where('student_id', Auth::guard('student')->user()->id)
+                        ->where('leave_id', $hashedId)
+                        ->where('status', 0)->exists()){
 
-            return redirect()->back()->with('error', 'You are not enrolled to this course');
+           return redirect()->back()->with('info', 'You have already requested to be admitted');
 
-        }
+       }else{
 
+           $readmission = new Readmission;
+           $readmission->student_id = Auth::guard('student')->user()->id;
+           $readmission->leave_id = $hashedId;
+           $readmission->academic_year = $academicYear;
+           $readmission->academic_semester = strtoupper($season);
+           $readmission->status = 0;
+           $readmission->save();
 
+           return redirect()->route('student.requestreadmission')->with('success', 'Readmission request created successfully');
 
+       }
     }
 
     public function unitRegistration(){
@@ -672,8 +699,6 @@ class StudentController extends Controller
 
             $current = $reg->year_study.'.'.$reg->semester_study;
 
-            $course_code = Auth::guard('student')->user()->loggedStudent->courseStudent->studentCourse->course_code;
-
             $class_code = Auth::guard('student')->user()->loggedStudent->courseStudent->class_code;
 
             $classes = ClassPattern::where('class_code', $class_code)->get();
@@ -710,7 +735,7 @@ class StudentController extends Controller
 
                 $new = explode('.', $next_id);
 
-                $units = UnitProgramms::where('course_code', $course_code)
+                $units = SemesterUnit::where('class_code', $class_code)
                     ->where('stage', $new[0])
                     ->where('semester', $new[1])
                     ->get();
@@ -799,10 +824,10 @@ class StudentController extends Controller
 
         $season = Nominalroll::find($hashedId);
 
-        $course_code = Auth::guard('student')->user()->loggedStudent->courseStudent->studentCourse->course_code;
+        $class_code = Auth::guard('student')->user()->loggedStudent->courseStudent->class_code;
 
 
-        $units = UnitProgramms::where('course_code', $course_code)
+        $units = SemesterUnit::where('class_code', $class_code)
             ->where('stage', $season->year_study)
             ->where('semester', $season->semester_study)
             ->get();
