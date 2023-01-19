@@ -4,24 +4,13 @@
     <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/classes/semesterUnits.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/classes/semesterUnits.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/leaves/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/leaves/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/readmissions/intakeReadmissions.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/readmissions/intakeReadmissions.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/AcademicLeave.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/AcademicLeave.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/DeferredClass.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/DeferredClass.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_28_111516_create_academic_leaves_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_28_111516_create_academic_leaves_table.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/Readmission.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/Readmission.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/editleaverequest.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/readmissionrequests.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/readmissionrequests.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/readmissions.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/readmissions.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/requestleave.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/requestleave.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/coursetransfer.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/coursetransfer.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/semester/requestRegistration.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/semester/requestRegistration.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/semester/semesterUnits.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/semester/semesterUnits.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/dSKyf7i2sKLKnQQnuRjihxcH62XvNU8bCJ2IlhW6" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/ZIfVfO8W3yyHkpgslPb4vL2ogV20S8xZJj7LhpMA" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/m5rukmxzBchalnRcxffPLkBn2xDO1A8wVJbIHpXT" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -258,6 +247,7 @@
       <workItem from="1673592461828" duration="17788000" />
       <workItem from="1673851404203" duration="22379000" />
       <workItem from="1674023005095" duration="15904000" />
+      <workItem from="1674106715736" duration="17217000" />
     </task>
     <servers />
   </component>

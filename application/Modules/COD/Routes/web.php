@@ -81,6 +81,9 @@ Route::prefix('department')->middleware( ['is_cod'])->group( function() {
         Route::get('/get-readmission-requests-per-academic-year', [CODController::class, 'readmissions'])->name('department.readmissions');
         Route::get('/get-annual-readmission-requests-per-department/{year}', [CODController::class, 'yearlyReadmissions'])->name('department.yearlyReadmissions');
         Route::get('/get-intake-readmission-requests-per-department/{intake}/{year}', [CODController::class, 'intakeReadmissions'])->name('department.intakeReadmissions');
+        Route::get('/view-selected-readmission-request/{id}', [CODController::class, 'selectedReadmission'])->name('department.selectedReadmission');
+        Route::post('/accept-selected-readmission-request/{id}', [CODController::class, 'acceptReadmission'])->name('department.acceptReadmission');
+        Route::post('/decline-selected-readmission-request/{id}', [CODController::class, 'declineReadmission'])->name('department.declineReadmission');
 
 
 //        Route::get('/getAcademicFile/{id}', 'CODController@viewAcademicFile');
