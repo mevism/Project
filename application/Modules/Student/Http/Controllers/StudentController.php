@@ -499,7 +499,7 @@ class StudentController extends Controller
 
     public function storeReadmissionRequest($id){
 
-        $hashedId = Crypt::decrypt($id);
+       return $hashedId = Crypt::decrypt($id);
 
         $today = Carbon::now()->format('Y-m-d');
 

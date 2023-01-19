@@ -17,6 +17,7 @@ use Modules\COD\Entities\ClassPattern;
 use Modules\COD\Entities\Nominalroll;
 use Modules\COD\Entities\Pattern;
 use Modules\COD\Entities\Progression;
+use Modules\COD\Entities\ReadmissionClass;
 use Modules\COD\Entities\SemesterUnit;
 use Modules\Finance\Entities\FinanceLog;
 use Modules\COD\Entities\CODLog;
@@ -35,6 +36,7 @@ use Modules\Student\Entities\CourseTransfer;
 use Modules\Student\Entities\CourseTransferApproval;
 use Modules\Student\Entities\ExamResults;
 use Modules\Student\Entities\Readmission;
+use Modules\Student\Entities\ReadmissionApproval;
 use NcJoes\OfficeConverter\OfficeConverter;
 use PhpOffice\PhpWord\Element\Table;
 use PhpOffice\PhpWord\SimpleType\TblWidth;
@@ -1024,19 +1026,129 @@ class CODController extends Controller
         $hashedIntake = Crypt::decrypt($intake);
         $hashedYear = Crypt::decrypt($year);
 
-        $readmissions = AcademicLeave::all();
+        $readmissions = Readmission::where('academic_year', $hashedYear)
+                        ->where('academic_semester', $hashedIntake)
+                        ->get();
 
         $leaves = [];
 
             foreach ($readmissions as $readmission){
-                if ($readmission->studentLeave->courseStudent->department_id == Auth::guard('user')->user()->department_id){
+
+               if ($readmission->leaves->studentLeave->courseStudent->department_id == Auth::guard('user')->user()->department_id){
+
                    $leaves[] = $readmission;
-                }
+
+               }
             }
 
-            return $leaves;
+            return view('cod::readmissions.intakeReadmissions')->with(['admissions' => $leaves]);
+    }
 
-            return view('cod::readmissions.intakeReadmissions')->with(['admissions' => $requests]);
+    public function selectedReadmission($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $leave = Readmission::find($hashedId);
+
+        $stage = Nominalroll::where('student_id', $leave->leaves->studentLeave->id)
+                                ->where('activation', 0)
+                                ->latest()
+                                ->first();
+       $studentStage = $stage->year_study.'.'.$stage->semester_study;
+
+       $patterns = ClassPattern::where('academic_year', $stage->academic_year)
+                                ->where('period', $stage->academic_semester)
+                                ->where('semester', '<', $studentStage)
+                                ->get()
+                                ->groupBy('class_code');
+
+        foreach ($patterns as $class_code => $pattern) {
+
+            $classes[] = Classes::where('name', $class_code)
+                ->where('course_id', $leave->leaves->studentLeave->courseStudent->course_id)
+                ->where('attendance_code', $leave->leaves->studentLeave->courseStudent->typeStudent->attendance_code)
+                ->where('name', '!=', $leave->leaves->studentLeave->courseStudent->class_code)
+                ->get()
+                ->groupBy('name');
+        }
+
+        return view('cod::readmissions.viewSelectedReadmission')->with(['classes' => $classes, 'leave' => $leave, 'stage' => $stage]);
+
+    }
+
+    public function acceptReadmission(Request $request, $id){
+
+        $request->validate([
+            'class' => 'required'
+        ]);
+
+        $hashedId = Crypt::decrypt($id);
+
+        $route = Readmission::find($hashedId);
+
+        if (ReadmissionApproval::where('readmission_id', $hashedId)->exists()){
+
+            $placement = new ReadmissionClass;
+            $placement->readmission_id = $hashedId;
+            $placement->class_code = $request->class;
+            $placement->save();
+
+
+            $readmission = ReadmissionApproval::where('readmission_id', $hashedId)->first();
+            $readmission->cod_status = 1;
+            $readmission->cod_remarks = 'Admit student to ' . $request->class . ' class.';
+            $readmission->save();
+
+
+        }else {
+
+            $placement = new ReadmissionClass;
+            $placement->readmission_id = $hashedId;
+            $placement->class_code = $request->class;
+            $placement->save();
+
+            $readmission = new ReadmissionApproval;
+            $readmission->readmission_id = $hashedId;
+            $readmission->cod_status = 1;
+            $readmission->cod_remarks = 'Admit student to ' . $request->class . ' class.';
+            $readmission->save();
+        }
+
+        return redirect()->route('department.intakeReadmissions', ['intake' => Crypt::encrypt($route->academic_semester), 'year' => Crypt::encrypt($route->academic_year)])->with('success', 'Readmission request accepted');
+
+    }
+
+    public function declineReadmission(Request $request, $id){
+
+        $request->validate([
+            'remarks' => 'required'
+        ]);
+
+        $hashedId = Crypt::decrypt($id);
+
+        $route = Readmission::find($hashedId);
+
+        if (ReadmissionApproval::where('readmission_id', $hashedId)->exists()){
+
+            ReadmissionClass::where('readmission_id', $hashedId)->delete();
+
+            $readmission = ReadmissionApproval::where('readmission_id', $hashedId)->first();
+            $readmission->cod_status = 2;
+            $readmission->cod_remarks = $request->remarks;
+            $readmission->save();
+
+
+        }else {
+
+            $readmission = new ReadmissionApproval;
+            $readmission->readmission_id = $hashedId;
+            $readmission->cod_status = 2;
+            $readmission->cod_remarks = $request->remarks;
+            $readmission->save();
+        }
+
+        return redirect()->route('department.intakeReadmissions', ['intake' => Crypt::encrypt($route->academic_semester), 'year' => Crypt::encrypt($route->academic_year)])->with('success', 'Readmission request declined');
+
     }
 
 

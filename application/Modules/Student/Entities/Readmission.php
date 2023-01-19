@@ -25,4 +25,6 @@ class Readmission extends Model
     {
         return \Modules\Student\Database\factories\ReadmissionFactory::new();
     }
+
+
 }
