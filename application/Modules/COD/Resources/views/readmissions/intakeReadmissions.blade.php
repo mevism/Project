@@ -55,20 +55,46 @@
                 <table id="example"  class="table table-sm table-striped table-bordered fs-sm">
                     <thead>
                     <th>#</th>
-                    <th>Academic Year</th>
+                    <th>Reg. NUMBER</th>
+                    <th>NAME</th>
+                    <th>LEAVE TYPE</th>
+                    <th>CURRENT STAGE</th>
+                    <th>PERIOD</th>
                     <th>Action</th>
                     </thead>
                     <tbody>
                     @foreach($admissions as $admission)
-                        @foreach($records as $admission)
                             <tr>
                                 <td> {{ $loop->iteration }} </td>
-                                <td> {{ $admission }} </td>
+                                <td> {{ $admission->leaves->studentLeave->reg_number }} </td>
+                                <td> {{ $admission->leaves->studentLeave->sname.' '.$admission->leaves->studentLeave->fname.' '.$admission->leaves->studentLeave->mname }} </td>
+                                <td> @if($admission->leaves->type == 1)
+                                        ACADEMIC LEAVE
+                                    @elseif($admission->leaves->type == 2)
+                                        DEFERMENT
+                                    @elseif($admission->leaves->type == 3)
+                                        SUSPENSION
+                                    @else
+                                        DISCONTINUATION
+                                    @endif </td>
                                 <td>
-                                    <a class="btn btn-sm btn-outline-dark" href=""> View </a>
+                                    Year : {{ $admission->leaves->year_study }} Semester : {{ $admission->leaves->semester_study }}
+                                </td>
+                                <td>
+                                    From : {{ $admission->leaves->from }} <br>
+                                    To : {{ $admission->leaves->to }} <br>
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('department.selectedReadmission', ['id' => Crypt::encrypt($admission->id)]) }}"> View </a>
+                                    @if($admission->readmissionApproval != null)
+                                        @if($admission->readmissionApproval->cod_status == 1)
+                                            <i class="fa fa-check text-success"></i>
+                                        @else
+                                            <i class="fa fa-times text-danger"></i>
+                                        @endif
+                                    @endif
                                 </td>
                             </tr>
-                        @endforeach
                     @endforeach
                     </tbody>
                 </table>
