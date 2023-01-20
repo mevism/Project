@@ -45,9 +45,13 @@ class Student extends Model
 
     public function leaveStudent(){
 
-        return $this->hasMany(AcademicLeave::class, 'id');
+        return $this->hasMany(AcademicLeave::class, 'student_id');
     }
 
+    public function leaveStud(){
+
+        return $this->hasMany(AcademicLeave::class, 'student_id');
+    }
     public function examResults(){
         return $this->hasMany(ExamResults::class, 'id');
     }

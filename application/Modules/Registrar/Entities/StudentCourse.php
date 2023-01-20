@@ -23,6 +23,11 @@ class StudentCourse extends Model
 
         return $this->belongsTo(Courses::class, 'course_id');
     }
+    
+    public function deptStudCourse(){
+
+        return $this->belongsTo(Department::class, 'department_id');
+    }
 
     public function courseEntry(){
 

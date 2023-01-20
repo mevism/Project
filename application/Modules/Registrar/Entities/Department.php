@@ -56,6 +56,9 @@ class Department extends Model
         return $this->hasMany(CourseTransfer::class, 'id');
     }
 
+    public function studCourseDept(){
+        return $this->hasMany(StudentCourse::class, 'id');
+    }
     protected static function newFactory()
     {
         return \Modules\Courses\Database\factories\DepartmentFactory::new();

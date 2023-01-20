@@ -17,6 +17,7 @@ class AcademicLeave extends Model
         return $this->belongsTo(Student::class, 'student_id');
     }
 
+
     public function approveLeave(){
 
         return $this->hasOne(AcademicLeaveApproval::class, 'academic_leave_id');

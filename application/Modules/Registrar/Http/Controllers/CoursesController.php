@@ -34,11 +34,15 @@ use PhpOffice\PhpWord\SimpleType\TblWidth;
 use Modules\Application\Entities\Applicant;
 use Modules\Application\Entities\Education;
 use Modules\Registrar\Entities\SemesterFee;
+use Modules\Student\Entities\AcademicLeave;
+use Modules\Student\Entities\DeferredClass;
 use NcJoes\OfficeConverter\OfficeConverter;
+use Modules\Finance\Entities\StudentInvoice;
 use Modules\Registrar\Entities\AcademicYear;
 use Modules\Registrar\Entities\RegistrarLog;
 use Modules\Registrar\Entities\StudentLogin;
 use Modules\Student\Entities\CourseTransfer;
+use Modules\Student\Entities\StudentDeposit;
 use Modules\Application\Entities\Application;
 use Modules\Registrar\Entities\CourseHistory;
 use Modules\Registrar\Entities\SchoolHistory;
@@ -46,6 +50,7 @@ use Modules\Registrar\Entities\StudentCourse;
 use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Application\Entities\Notification;
 use Modules\Registrar\Entities\ClusterWeights;
+use Modules\Registrar\emails\AcademicLeaveMail;
 use Modules\Registrar\Entities\AvailableCourse;
 use Modules\Registrar\Entities\ClusterSubjects;
 use Modules\Registrar\Entities\CourseLevelMode;
@@ -54,16 +59,66 @@ use Modules\Registrar\Entities\CalenderOfEvents;
 use Modules\Registrar\emails\CourseTransferMails;
 use Modules\Registrar\Entities\CourseRequirement;
 use Modules\Registrar\Entities\DepartmentHistory;
+use Modules\Registrar\emails\RejectedAcademicMail;
 use Modules\Application\Entities\AdmissionApproval;
-use Modules\Finance\Entities\StudentInvoice;
+use Modules\Student\Entities\AcademicLeaveApproval;
 use Modules\Student\Entities\CourseTransferApproval;
 use Modules\Registrar\emails\CourseTransferRejectedMails;
-use Modules\Student\Entities\StudentDeposit;
 
 class CoursesController extends Controller
 {
 
+    public function leaves(){
+        
+        $schools   =   School::all();
+        foreach($schools as $school){
+            $data = AcademicLeave::all()->groupBy('academic_year');
+                 
+        }
+        
+        return  view('registrar::leaves.yearlyLeaves')->with(['data'=> $data, 'schools'=>$schools]);
+    }
 
+    public function academicLeave($year){
+        $hashedYear = Crypt::decrypt($year);
+        $schools   =   School::all();
+        $leaves  =  AcademicLeave::where('academic_year', $hashedYear)->get();
+    
+        return view('registrar::leaves.index')->with(['leaves' => $leaves,'schools'=>$schools, 'year'=>$hashedYear]);
+    }
+
+    public function acceptedAcademicLeaves(Request $request){
+
+        $request->validate(['submit' => 'required']);
+   
+           foreach($request->submit as $id){    
+
+            $approval = AcademicLeave::find($id);
+
+                   if ($approval->approveLeave->dean_status == 1){
+   
+                        Mail::to($approval->studentLeave->student_email)->send(new AcademicLeaveMail($approval));
+                        
+                        $approved = AcademicLeaveApproval::find($id);
+                        $approved->registrar_status  =  1;
+                        $approved->status  =  1;
+                        $approved->save(); 
+                    }
+                    else{
+
+                        Mail::to($approval->studentLeave->student_email)->send(new RejectedAcademicMail($approval));
+                        
+                        $rejected = AcademicLeaveApproval::find($id);
+                        $rejected->registrar_status  =  1;
+                        $rejected->status  =  2;
+                        $rejected->save();
+                    }
+            }
+   
+       return redirect()->back()->with( 'success', 'Email sent successfuly.');
+   
+    }
+    
     public function acceptedTransfers(Request $request){
 
      $request->validate(['submit' => 'required']);
@@ -836,10 +891,12 @@ class CoursesController extends Controller
 
     public function accepted(){
 
-        $kuccps         =          KuccpsApplicant::where('status', 0)->get();
+         $kuccps         =          KuccpsApplicant::where('status', 0)->get();
             foreach ($kuccps as $applicant){
-                $course        =          Courses::where('course_code', $applicant->kuccpsApplication->course_code)->first();
+                // return $applicant->kuccpsApplication->course_code;
 
+                $course        =          Courses::where('course_code', $applicant->kuccpsApplication->course_code)->first();
+                // return $course;
                 $regNumber     = Application::where('course_id', $course->id)
                         ->where('intake_id', $applicant->kuccpsApplication->intake_id)
                         ->where('student_type', 2)

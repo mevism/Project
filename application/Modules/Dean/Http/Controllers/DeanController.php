@@ -6,22 +6,126 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Dean\Entities\DeanLog;
+use PhpOffice\PhpWord\Element\Table;
 use Illuminate\Support\Facades\Crypt;
+use Modules\COD\Entities\Nominalroll;
 use Modules\Registrar\Entities\Courses;
+use Modules\Registrar\Entities\Student;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Modules\Registrar\Entities\Department;
+use PhpOffice\PhpWord\SimpleType\TblWidth;
 use Modules\Application\Entities\Education;
+use Modules\Student\Entities\AcademicLeave;
 use NcJoes\OfficeConverter\OfficeConverter;
 use Illuminate\Contracts\Support\Renderable;
 use Modules\Student\Entities\CourseTransfer;
 use Modules\Application\Entities\Application;
+use Modules\Student\Entities\AcademicLeaveApproval;
 use Modules\Student\Entities\CourseTransferApproval;
-use PhpOffice\PhpWord\Element\Table;
-use PhpOffice\PhpWord\SimpleType\TblWidth;
 
 
 class DeanController extends Controller
 {
+
+    public function academicLeave(){
+
+        $requests = AcademicLeave::latest()
+                                    ->get()
+                                    ->groupBy('academic_year');
+
+        return view('dean::defferment.index')->with(['leaves' => $requests]);
+    }
+
+    public function yearlyAcademicLeave($year){
+
+        $hashedYear = Crypt::decrypt($year);
+
+        $deptID   =   Department::where('school_id', auth()->guard('user')->user()->school_id)->get();
+// return $deptID;
+        $requests = AcademicLeave::where('academic_year', $hashedYear)
+            ->latest()
+            ->get();
+
+        foreach ($requests as $leave){
+            // return $leave->studentLeave->courseStudent->department_id = $deptID;
+            if ($leave->studentLeave->courseStudent->department_id = $deptID) {
+                $allLeaves[] = $leave;
+            }
+        }
+
+        return view('dean::defferment.annualLeaves')->with(['leaves' => $allLeaves, 'year' => $hashedYear]);
+
+    }
+
+    public function viewLeaveRequest($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $leave = AcademicLeave::find($hashedId);
+
+        $student = Student::find($leave->student_id);
+
+        $currentStage = Nominalroll::where('student_id', $leave->student_id)
+                ->latest()
+                ->first();
+
+        return view('dean::defferment.viewRequests')->with(['leave' => $leave, 'current' => $currentStage, 'student' => $student]);
+
+    }
+
+    public function acceptLeaveRequest($id){
+
+       $hashedId = Crypt::decrypt($id);
+
+      $leave = AcademicLeave::find($hashedId);
+
+        if (AcademicLeaveApproval::where('academic_leave_id', $hashedId)->exists()){
+
+            $updateApproval = AcademicLeaveApproval::where('academic_leave_id', $hashedId)->first();
+            $updateApproval->dean_status = 1;
+            $updateApproval->dean_remarks = 'Request Accepted';
+            $updateApproval->save();
+
+        }else{
+
+            $newApproval = new AcademicLeaveApproval;
+            $newApproval->academic_leave_id = $hashedId;
+            $newApproval->dean_status = 1;
+            $newApproval->dean_remarks = 'Request Accepted';
+            $newApproval->save();
+
+        }
+
+        return redirect()->route('dean.yearlyLeaves', ['year' => Crypt::encrypt($leave->academic_year)])->with('success', 'Deferment/Academic leave approved');
+
+    }
+
+    public function declineLeaveRequest(Request $request, $id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $leave = AcademicLeave::find($hashedId);
+
+        if (AcademicLeaveApproval::where('academic_leave_id', $hashedId)->exists()){
+
+            $updateApproval = AcademicLeaveApproval::where('academic_leave_id', $hashedId)->first();
+            $updateApproval->dean_status = 2;
+            $updateApproval->dean_remarks = $request->remarks;
+            $updateApproval->save();
+
+        }else{
+
+            $newApproval = new AcademicLeaveApproval;
+            $newApproval->academic_leave_id = $hashedId;
+            $newApproval->dean_status = 2;
+            $newApproval->dean_remarks = $request->remarks;
+            $newApproval->save();
+
+        }
+
+        return redirect()->route('dean.yearlyLeaves', ['year' => Crypt::encrypt($leave->academic_year)])->with('success', 'Deferment/Academic leave declined.');
+
+    }
 
     public function requestedTransfers($year){
         $hashedYear = Crypt::decrypt($year);

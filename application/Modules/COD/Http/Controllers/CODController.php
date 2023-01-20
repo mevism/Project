@@ -496,7 +496,7 @@ class CODController extends Controller
 
         $proformaInvoice = 0;
 
-        return $fees;
+        //return $fees;
 
         foreach ($fees->invoiceProforma as $votehead){
 

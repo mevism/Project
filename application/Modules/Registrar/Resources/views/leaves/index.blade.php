@@ -26,16 +26,16 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
                     <h5 class="h5 fw-bold mb-0" >
-                    {{$year}} COURSE TRANSFER REQUESTS
+                     ACADEMIC/DEFERMENT LEAVE REQUESTS
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="javascript:void(0)">Transfer</a>
+                            <a class="link-fx" href="javascript:void(0)">Schools</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            Transfer
+                            ACADEMIC/DEFERMENT
                         </li>
                     </ol>
                 </nav>
@@ -47,65 +47,62 @@
             <div class="row">
                 <div class="col-12">
                     <div class="d-flex justify-content-end m-2">
-                        <a class="btn  btn-alt-primary btn-sm" href="{{ route('courses.requestedTransfers', ['year' => Crypt::encrypt($year)]) }}">Generate report</a>
+                        <a class="btn  btn-alt-primary btn-sm" href="">Generate report</a>
                     </div>
-                    <form action="{{ route('courses.acceptedTransfers') }}" method="post">
+                    <form action="{{ route('courses.acceptedAcademicLeaves') }}" method="post">
                         @csrf
                         <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
-                            @if(count($transfer)>0)
+                            {{-- @if(count($leaves)>0) --}}
                                 <thead>
                                     <th>✔</th>
                                     <th>#</th>
-                                    <th nowrap="">Old Stud. Number</th>
+                                    <th nowrap=""> Student Number</th>
                                     <th nowrap="">Student name</th>
-                                    <th nowrap="">New  Dept.</th>
-                                    <th nowrap="">New Course</th>
+                                    <th nowrap="">Department</th>
                                     <th>COD Remarks</th>
                                     <th>DEAN STATUS</th>
                                 </thead>
                                 <tbody>
-                                @foreach($transfer as $key => $items)
-                                    @foreach($items as $item)
+                                @foreach($leaves as $key => $item)
+                                     
                                             <tr>
                                                 <td>
                                                     @if($item->registrar_status == NULL )
-                                                    <input class="transfer" type="checkbox" name="submit[]" value="{{ $item->id }}">
+                                                    <input class="leaves" type="checkbox" name="submit[]" value="{{ $item->id }}">
                                                         @else
                                                         ✔
                                                     @endif 
                                                 </td>
-                                                <td> {{ ++$key }} {{ $item->transferApproval->studentTransfer->id }}</td>
-                                                <td> {{  $item->transferApproval->studentTransfer->reg_number }} </td>
-                                                <td> {{  $item->transferApproval->studentTransfer->sname.' '.$item->transferApproval->studentTransfer->fname.' '.$item->transferApproval->studentTransfer->mname }} </td>
-                                                <td> {{  $item->transferApproval->deptTransfer->dept_code }} </td>
-                                                <td> {{  $item->transferApproval->courseTransfer->course_name }} </td>
-                                                <td> {{  $item->cod_remarks }} </td>
+                                                <td> {{ ++$key }} </td>
+                                                <td>{{ $item->studentLeave->reg_number }}</td>
+                                                <td>{{ $item->studentLeave->sname.' '. $item->studentLeave->fname.' '. $item->studentLeave->mname }} </td>
+                                                <td>{{ $item->studentLeave->courseStudent->deptStudCourse->dept_code }}</td>
+                                                <td> {{ $item->approveLeave->cod_remarks }} </td>
                                                 <td> 
-                                                    @if($item->dean_status == 1)
+                                                    @if($item->approveLeave->dean_status == 1)
                                                         <span class="badge bg-success">Accepted</span>
                                                     @else
                                                         <span class="badge bg-danger">Rejected</span>
                                                     @endif 
                                                 </td>
                                             </tr>
-                                    @endforeach
-                           
+                               
                                 @endforeach
                                 </tbody>
-                            @else
+                            {{-- @else
                                 <tr>
-                                    <span class="text-muted text-center fs-sm">There are no new transfers submitted</span>
+                                    <span class="text-muted text-center fs-sm">There are no new leaves submitted</span>
                                 </tr>
-                            @endif
+                            @endif --}}
                         </table>
-                        @if(count($transfer) > 0)
+                        @if(count($leaves) > 0)
                         <div>
-                            <input type="checkbox" onclick="for(c in document.getElementsByClassName('transfer')) document.getElementsByClassName('transfer').item(c).checked = this.checked"> Select all
+                            <input type="checkbox" onclick="for(c in document.getElementsByClassName('leaves')) document.getElementsByClassName('leaves').item(c).checked = this.checked"> Select all
                         </div>
                        
                         @endif
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-outline-success col-md-3 m-2" data-toggle="click-ripple">Generate letters</button>
+                            <button type="submit" class="btn btn-outline-success col-md-3 m-2" data-toggle="click-ripple">Send Mail</button>
                         </div>
                     </form>
                 </div>
