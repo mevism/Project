@@ -339,32 +339,31 @@ class StudentController extends Controller
 
     public function requestLeave(){
 
-        $stage = Nominalroll::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
-        //                            ->where('activation', 1)
-                                    ->latest()
-                                    ->first();
-        
-               $current_date = Carbon::now()->format('Y-m-d');
-        
-               $dates = Intake::where('intake_from', '<=', $current_date)->where('intake_to', '>=', $current_date)->first();
-        
-               $academicYear =  Carbon::parse($dates->academicYear->year_start)->format('Y').'/'.Carbon::parse($dates->academicYear->year_end)->format('Y');
-               $semester = Carbon::parse($dates->intake_from)->format('M').'/'.Carbon::parse($dates->intake_to)->format('M');
-        
-               $event = CalenderOfEvents::where('academic_year_id', $academicYear)
-                    ->where('intake_id', strtoupper($semester))
-                    ->where('event_id', 4)
-                    ->first();
-        
-        
-               $currentStage = $stage->year_study.'.'.$stage->semester_study;
-        
-                $classes = ClassPattern::where('class_code', $stage->class_code)->get();
-        
-                foreach ($classes as $class){
-        
-                    $list[] = $class->semester;
-                }
+      $stage = Nominalroll::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+                            ->latest()
+                            ->first();
+
+       $current_date = Carbon::now()->format('Y-m-d');
+
+       $dates = Intake::where('intake_from', '<=', $current_date)->where('intake_to', '>=', $current_date)->first();
+
+       $academicYear =  Carbon::parse($dates->academicYear->year_start)->format('Y').'/'.Carbon::parse($dates->academicYear->year_end)->format('Y');
+       $semester = Carbon::parse($dates->intake_from)->format('M').'/'.Carbon::parse($dates->intake_to)->format('M');
+
+       $event = CalenderOfEvents::where('academic_year_id', $academicYear)
+            ->where('intake_id', strtoupper($semester))
+            ->where('event_id', 4)
+            ->first();
+
+
+       $currentStage = $stage->year_study.'.'.$stage->semester_study;
+
+       $classes = ClassPattern::where('class_code', $stage->class_code)->get();
+
+        foreach ($classes as $class){
+
+            $list[] = $class->semester;
+        }
 
         $id_collection = collect($list);
         $this_key = $id_collection->search($currentStage);

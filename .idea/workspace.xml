@@ -11,6 +11,29 @@
       <change beforePath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/ZIfVfO8W3yyHkpgslPb4vL2ogV20S8xZJj7LhpMA" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/m5rukmxzBchalnRcxffPLkBn2xDO1A8wVJbIHpXT" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Http/Controllers/DeanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Http/Controllers/DeanController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/invoices/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/invoices/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Attendance.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Attendance.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/StudentCourse.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/StudentCourse.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_28_111516_create_academic_leaves_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_28_111516_create_academic_leaves_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/AcademicLeave.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/AcademicLeave.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/academicleave.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/academicleave.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/requestleave.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/requestleave.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/coursetransfer.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/coursetransfer.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/5YFuUDgZMVtiEdSVWqO7Yk74e24N2Fu5EDjCcIdx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/FIoAF07PU80lW1XR7dOog08d4pOb70xHekN9hZ2Y" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/PER4PSq345Hws2dAmNDs0ZatVXJ0vO3MTATEqZPT" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/Ys2GYh3kpUBGwnDkjTL79v4RjxW76k741WyTGXcY" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/gBfYc1Bc0cTpGm4pNxBhcn4EPDZba8sby7b11j1T" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/iLy4JkIY2bXTn2ihsY0XjFPiqdKpR2wdaFItgOCi" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/reXVjcCLsO72Vy6mD1wO4epnAY3T5JZqvb49Ofy0" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/w4ieaFRUiOJW2LlOxldOIzdpKWvgR3Dz7IPnrZhZ" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/wH9U6aRz5amltBnj5TJbRaYQwOSrDtqKBQDFye20" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/yJhxdQnWICuHuCraPgq375KduwLCo3NnBGB5CsTz" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +68,19 @@
     <setting file="file://$PROJECT_DIR$/application/Modules/Application/Notifications/SMS.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Application/Notifications/SMS.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/home.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/inbox.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/myadmissions.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/mycourses.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/application/Modules/Application/Resources/views/layouts/backend.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Application/Routes/web.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Student/Resources/views/academic/requestleave.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/coursetransfer.blade.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -207,6 +242,13 @@
     <property name="settings.editor.selected.configurable" value="preferences.editor" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

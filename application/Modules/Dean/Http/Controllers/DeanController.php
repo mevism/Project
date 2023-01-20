@@ -113,6 +113,27 @@ class DeanController extends Controller
                     $table->addCell(1500, ['borderSize' => 1])->addText($deanRemark);
                     $table->addCell(1750, ['borderSize' => 1])->addText();
 
+                foreach ($transfer as $key => $list) {
+                    $name = $list->studentTransfer->reg_number . "<w:br/>\n" . $list->studentTransfer->sname . ' ' . $list->studentTransfer->fname . ' ' . $list->studentTransfer->mname;
+                    if ($list->approveTransfer == null) {
+                        $remarks = 'Missed Deadline';
+                        $deanRemark = 'Declined';
+                    } else {
+                        $remarks = $list->approvedTransfer->cod_remarks;
+                        $deanRemark = $list->approvedTransfer->dean_remarks;
+                    }
+                    $table->addRow();
+                    $table->addCell(400, ['borderSize' => 1])->addText(++$key);
+                    $table->addCell(2700, ['borderSize' => 1])->addText($name);
+                    $table->addCell(1900, ['borderSize' => 1])->addText($list->studentTransfer->courseStudent->studentCourse->course_code);
+                    $table->addCell(1900, ['borderSize' => 1])->addText($list->courseTransfer->course_code);
+                    $table->addCell(1750, ['borderSize' => 1])->addText($list->class_points);
+                    $table->addCell(1000, ['borderSize' => 1])->addText($list->student_points);
+                    $table->addCell(2600, ['borderSize' => 1])->addText($remarks);
+                    $table->addCell(1500, ['borderSize' => 1])->addText($deanRemark);
+                    $table->addCell(1750, ['borderSize' => 1])->addText();
+
+                }
             }
         }
 
@@ -126,14 +147,19 @@ class DeanController extends Controller
                 }
             }
 
-            $summary->addRow();
-            $summary->addCell(5000, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
-            $summary->addCell(1250, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
-            $summary->addCell(1250, ['borderSize' => 1])->addText($transfer->count());
+                $summary->addRow();
+                $summary->addCell(5000, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
+                $summary->addCell(1250, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
+                $summary->addCell(1250, ['borderSize' => 1])->addText($transfer->count());
+                $summary->addRow();
+                $summary->addCell(5000, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
+                $summary->addCell(1250, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
+                $summary->addCell(1250, ['borderSize' => 1])->addText($transfer->count());
 
-            $total += $transfer->count();
-
-
+                $total += $transfer->count();
+            }
+                $total += $transfer->count();
+            }
         }
 
         //return $number;

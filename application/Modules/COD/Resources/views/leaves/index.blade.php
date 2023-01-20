@@ -56,6 +56,7 @@
                     <thead>
                         <th>#</th>
                         <th>Academic Year</th>
+{{--                        <th>Totals</th>--}}
                         <th>Action</th>
                     </thead>
                     <tbody>
@@ -63,6 +64,7 @@
                             <tr>
                                 <td> {{ $loop->iteration }} </td>
                                 <td> {{ $academicYear }} </td>
+{{--                                <td> {{ $academicYear }}</td>--}}
                                 <td>
                                     <a class="btn btn-sm btn-outline-dark" href="{{ route('department.yearlyLeaves', ['year' => Crypt::encrypt($academicYear)]) }}"> View </a>
                                 </td>
