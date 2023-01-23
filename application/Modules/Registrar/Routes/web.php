@@ -173,7 +173,7 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
 
     Route::get('/leave-requests', [CoursesController::class, 'leaves'])->name('courses.leaves');
     Route::get('/academicLeave/{year}', [CoursesController::class, 'academicLeave'])->name('courses.academicLeave');
-    Route::get('/generate-requests-academic-leave-report/{year}', [CoursesController::class, 'requestedAcademicLeaves'])->name('courses.requestedTransfers');
+    // Route::get('/generate-requests-academic-leave-report/{year}', [CoursesController::class, 'requestedAcademicLeaves'])->name('courses.requestedAcademicLeaves');
     Route::post('/acceptedAcademicLeaves', 'CoursesController@acceptedAcademicLeaves')->name('courses.acceptedAcademicLeaves');
 
 });

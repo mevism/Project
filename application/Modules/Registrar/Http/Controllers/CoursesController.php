@@ -89,14 +89,14 @@ class CoursesController extends Controller
 
     public function acceptedAcademicLeaves(Request $request){
 
-        $request->validate(['submit' => 'required']);
+       $request->validate(['submit' => 'required']);
    
            foreach($request->submit as $id){    
 
             $approval = AcademicLeave::find($id);
 
                    if ($approval->approveLeave->dean_status == 1){
-   
+
                         Mail::to($approval->studentLeave->student_email)->send(new AcademicLeaveMail($approval));
                         
                         $approved = AcademicLeaveApproval::find($id);
@@ -222,7 +222,7 @@ class CoursesController extends Controller
                     $oldstudent = Student::withTrashed()->find($id);
 
                     $newStudent               =             new Student;
-
+                  
                     $newStudent->reg_number   =             $regNumber;
                     $newStudent->ref_number   =             $refNumber;
                     $newStudent->sname        =             $student->sname;
@@ -247,6 +247,7 @@ class CoursesController extends Controller
                     $newStudent->disability   =             $student->disability;
                     $newStudent->save();
 
+                   
                     $newStudCourse                =             new StudentCourse;
                     $newStudCourse->student_id    =             $newStudent->id;
                     $newStudCourse->student_type  =             2;
@@ -294,6 +295,7 @@ class CoursesController extends Controller
 
                         StudentDeposit::find($deposit->id)->delete();
                     }
+
 
                     Mail::to($newStudent->email)->send(new CourseTransferMails($newStudent));
 

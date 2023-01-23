@@ -29,9 +29,7 @@ use Modules\Registrar\Entities\StudentCourse;
 use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Student\Entities\AcademicLeave;
 use Modules\Student\Entities\AcademicLeaveApproval;
-use Modules\Student\Entities\AcademicLeaveApproval;
 use Modules\Student\Entities\CourseTransfer;
-use Modules\Student\Entities\DeferredClass;
 use Modules\Student\Entities\DeferredClass;
 use Modules\Student\Entities\ExamResults;
 use Modules\Student\Entities\Readmission;
@@ -180,9 +178,10 @@ class StudentController extends Controller
     public function getCourseClasses(Request $request){
 
         $student = Auth::guard('student')->user()->loggedStudent;
-
+        
+        // return $student;
         $group = Courses::where('id', $request->id)->first();
-
+        // return $group;
         if ($group->level == 2){
 
             $classes = Classes::where('course_id', $request->id)

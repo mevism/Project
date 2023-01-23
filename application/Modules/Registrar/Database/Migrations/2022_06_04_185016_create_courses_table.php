@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('course_code')->unique();
             $table->string('course_name');
             $table->string('level');
+            $table->string('cluster_group');
             $table->timestamps();
             $table->softDeletes();
         });

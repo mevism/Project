@@ -929,6 +929,7 @@ class CODController extends Controller
         foreach ($requests as $leave){
             if ($leave->studentLeave->courseStudent->department_id == $deptID) {
                 $allLeaves[] = $leave;
+        
             }
         }
 
