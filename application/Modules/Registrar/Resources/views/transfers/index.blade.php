@@ -89,37 +89,7 @@
                                                 </td>
                                             </tr>
                                     @endforeach
-                                {{-- <tr>
-                                    <td>
-                                        @if($item->registrar_status == NULL )
-                                        <input class="transfer" type="checkbox" name="submit[]" value="{{ $item->id }}">
-                                            @else
-                                            ✔
-                                        @endif
-                                    </td>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td> {{ $item->studentTransfer->reg_number }}</td>
-                                    <td>{{  $item->studentTransfer->sname.' '.$item->studentTransfer->fname.' '.$item->studentTransfer->mname }}</td>
-                                    <td> {{ $item->deptTransfer->name }}</td> 
-                                    <td> {{ $item->courseTransfer->course_code }}</td>
-                                    <td>
-                                        @if($item->approvedTransfer->cod_status == 1)
-                                            <span class="badge bg-success">Accepted</span>
-                                        @else
-                                            <span class="badge bg-warning">Rejected</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($item->approveTransfer->dean_status == 0)
-                                            <span class="badge bg-primary">Pending</span>
-                                        @elseif($item->approveTransfer->dean_status == 1)
-                                            <span class="badge bg-success">Accepted</span>
-                                        @else
-                                            <span class="badge bg-danger">Rejected</span>
-                                        @endif
-                                    </td>
-                                
-                                </tr> --}}
+                           
                                 @endforeach
                                 </tbody>
                             @else
@@ -135,7 +105,7 @@
                        
                         @endif
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-outline-success col-md-3 m-2" data-toggle="click-ripple">Generate Admission letters</button>
+                            <button type="submit" class="btn btn-outline-success col-md-3 m-2" data-toggle="click-ripple">Generate letters</button>
                         </div>
                     </form>
                 </div>

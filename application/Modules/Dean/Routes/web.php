@@ -38,5 +38,10 @@ Route::prefix('dean')->group(function() {
         Route::get('/transferRequests', [DeanController::class, 'yearly'])->name('dean.yearly');
         Route::get('/generate-transfer-requests-report/{year}', [DeanController::class, 'requestedTransfers'])->name('dean.requestedTransfers');
 
+        Route::get('/view-list-of-academic-leaves', [DeanController::class, 'academicLeave'])->name('dean.academicLeave');
+        Route::get('/view-yearly-academic-leave-transfers/{year}', [DeanController::class, 'yearlyAcademicLeave'])->name('dean.yearlyLeaves');
+        Route::get('/view-academic-leave-request/{id}', [DeanController::class, 'viewLeaveRequest'])->name('dean.viewLeaveRequest');
+        Route::get('/accept-academic-leave/deferment-request/{id}', [DeanController::class, 'acceptLeaveRequest'])->name('dean.acceptLeaveRequest');
+        Route::post('/decline-academic-leave/deferment-request/{id}', [DeanController::class, 'declineLeaveRequest'])->name('dean.declineLeaveRequest');
     });
 });
