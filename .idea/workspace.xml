@@ -2,15 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b8892f7f-76fb-46c0-8553-cdcd09bdddeb" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/smis.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/smis.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/COD/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/COD/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/readmissions/intakeReadmissions.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/readmissions/intakeReadmissions.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_28_111516_create_academic_leaves_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_28_111516_create_academic_leaves_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/Readmission.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/Readmission.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/ZIfVfO8W3yyHkpgslPb4vL2ogV20S8xZJj7LhpMA" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/m5rukmxzBchalnRcxffPLkBn2xDO1A8wVJbIHpXT" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/app/Models/Role.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Models/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/application/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/application/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/config/auth.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/config/auth.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/database/migrations/2022_05_18_101003_create_roles_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/database/seeders/DatabaseSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/AdSkzN6wzWS821HvFCZWFlh4zbk9FZE1csJPfWt7" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -188,6 +195,7 @@
       <path value="$PROJECT_DIR$/application/vendor/laravelcollective/html" />
       <path value="$PROJECT_DIR$/application/vendor/laravel-notification-channels/africastalking" />
       <path value="$PROJECT_DIR$/application/vendor/doctrine/deprecations" />
+      <path value="$PROJECT_DIR$/application/vendor/spatie/laravel-permission" />
     </include_path>
   </component>
   <component name="ProjectId" id="2I0JWi0XXxtegXRrNvw97FmFmGE" />
@@ -248,6 +256,11 @@
       <workItem from="1673851404203" duration="22379000" />
       <workItem from="1674023005095" duration="15904000" />
       <workItem from="1674106715736" duration="17217000" />
+      <workItem from="1674205758129" duration="2820000" />
+      <workItem from="1674458311040" duration="4071000" />
+      <workItem from="1674463839358" duration="4756000" />
+      <workItem from="1674713829192" duration="8876000" />
+      <workItem from="1674724016651" duration="4195000" />
     </task>
     <servers />
   </component>

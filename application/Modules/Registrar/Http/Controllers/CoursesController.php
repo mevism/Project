@@ -88,7 +88,7 @@ class CoursesController extends Controller
                         ->where('intake_id', $intakes->id)
                         ->where('course_id', $approval->course_id)
                         ->count();
-                    
+
                     $course = Courses::find($approval->course_id);
 
                     $regNumber = $course->course_code.'/'.str_pad($registered + 1, 3, "0", STR_PAD_LEFT)."J/".Carbon::parse($intakes->academicYear->year_start)->format('Y');
@@ -205,7 +205,7 @@ class CoursesController extends Controller
                         // return $oldStud;
 
                         Mail::to($oldStud->studentTransfer->email)->send(new CourseTransferRejectedMails($oldStud));
-                        
+
 
                         $rejectedMail->registrar_status  =  1;
                         $rejectedMail->status  =  2;
@@ -242,7 +242,7 @@ class CoursesController extends Controller
     public function transfer($year){
         $hashedYear = Crypt::decrypt($year);
         $schools   =   School::all();
-        
+
         $transfers  =  CourseTransfer::where('academic_year', $hashedYear)->get();
             foreach($transfers as $record){
 
@@ -252,7 +252,7 @@ class CoursesController extends Controller
                 ->get();
                 // ->groupBy($record->department_id);
             }
-        // return $transfer;    
+        // return $transfer;
 
         return view('registrar::transfers.index')->with(['transfer' => $transfer,'schools'=>$schools, 'year'=>$hashedYear, 'year'=>$hashedYear]);
     }
@@ -261,9 +261,9 @@ class CoursesController extends Controller
         $schools   =   School::all();
         foreach($schools as $school){
             $data = CourseTransfer::all()->groupBy('academic_year');
-                 
+
         }
-        
+
         return  view('registrar::transfers.yearlyTransfers')->with(['data'=> $data, 'schools'=>$schools]);
     }
 
@@ -280,7 +280,7 @@ class CoursesController extends Controller
                     ->get()
                     ->groupBy('course_id');
 
-        $courses = Courses::all(); 
+        $courses = Courses::all();
         $domPdfPath = base_path('vendor/dompdf/dompdf');
         \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
         \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
@@ -290,7 +290,7 @@ class CoursesController extends Controller
         $table = new Table(array('unit' => TblWidth::TWIP));
 
         foreach ($transfers as $course => $transfer) {
-            
+
             foreach ($courses as $listed){
                 if ($listed->id == $course){
                     $courseName =  $listed->course_name;
@@ -373,7 +373,7 @@ class CoursesController extends Controller
 
         $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
 
-        $pdfPath = 'Fees/'.'Transfers'.time().".pdf"; 
+        $pdfPath = 'Fees/'.'Transfers'.time().".pdf";
 
         $converter =  new OfficeConverter($docPath, 'Fees/');
         $converter->convertTo('Transfers'.time().".pdf");
@@ -382,8 +382,8 @@ class CoursesController extends Controller
                         unlink($docPath);
                     }
 
-        return response()->download($pdfPath)->deleteFileAfterSend(true);        
-        
+        return response()->download($pdfPath)->deleteFileAfterSend(true);
+
     }
 
     /**
