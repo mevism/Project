@@ -85,7 +85,14 @@
                                     To : {{ $admission->leaves->to }} <br>
                                 </td>
                                 <td>
+                                    <?php
+
+                                    $user = auth()->guard('user')->user();
+
+                                    ?>
+                                    @if($user->can('approve-application'))
                                     <a class="btn btn-sm btn-outline-dark" href="{{ route('department.selectedReadmission', ['id' => Crypt::encrypt($admission->id)]) }}"> View </a>
+                                        @endif
                                     @if($admission->readmissionApproval != null)
                                         @if($admission->readmissionApproval->cod_status == 1)
                                             <i class="fa fa-check text-success"></i>
