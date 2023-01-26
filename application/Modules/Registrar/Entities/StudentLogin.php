@@ -33,7 +33,7 @@ class StudentLogin extends Authenticatable
 
     public function loggedStudent(){
 
-        return $this->belongsTo(Student::class, 'id');
+        return $this->belongsTo(Student::class, 'student_id');
     }
 
     protected static function newFactory()

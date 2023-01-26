@@ -16,12 +16,17 @@ class StudentCourse extends Model
 
     public function student(){
 
-        return $this->belongsTo(Student::class, 'student_id');
+        return $this->belongsTo(Student::class)->withTrashed();
     }
 
     public function studentCourse(){
 
         return $this->belongsTo(Courses::class, 'course_id');
+    }
+    
+    public function deptStudCourse(){
+
+        return $this->belongsTo(Department::class, 'department_id');
     }
 
     public function courseEntry(){

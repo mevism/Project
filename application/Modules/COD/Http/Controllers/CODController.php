@@ -17,13 +17,10 @@ use Modules\COD\Entities\ClassPattern;
 use Modules\COD\Entities\Nominalroll;
 use Modules\COD\Entities\Pattern;
 use Modules\COD\Entities\Progression;
-use Modules\COD\Entities\ReadmissionClass;
-use Modules\COD\Entities\SemesterUnit;
 use Modules\Finance\Entities\FinanceLog;
 use Modules\COD\Entities\CODLog;
 use Auth;
 use Modules\Finance\Entities\StudentInvoice;
-use Modules\Registrar\Entities\AcademicYear;
 use Modules\Registrar\Entities\CourseLevelMode;
 use Modules\Registrar\Entities\FeeStructure;
 use Modules\Registrar\Entities\SemesterFee;
@@ -489,13 +486,16 @@ class CODController extends Controller
         $student = Student::find($hashedId);
 
         $student_fee = $student->courseStudent;
-
+        // return $student_fee;
         $fees = CourseLevelMode::where('attendance_id', $student_fee->student_type)
             ->where('course_id', $student_fee->course_id)
             ->where('level_id', $student_fee->studentCourse->level)
             ->first();
+            
 
         $proformaInvoice = 0;
+
+        //return $fees;
 
         foreach ($fees->invoiceProforma as $votehead){
 
@@ -928,6 +928,7 @@ class CODController extends Controller
         foreach ($requests as $leave){
             if ($leave->studentLeave->courseStudent->department_id == $deptID) {
                 $allLeaves[] = $leave;
+        
             }
         }
 

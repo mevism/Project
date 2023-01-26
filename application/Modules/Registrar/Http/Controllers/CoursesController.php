@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use App\Imports\CourseImport;
 use App\Imports\KuccpsImport;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 use App\Imports\UnitProgrammsImport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -28,7 +27,6 @@ use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Student;
 use Modules\Registrar\Entities\VoteHead;
 use PhpOffice\PhpWord\TemplateProcessor;
-// use Modules\Dean\Entities\CourseTransfer;
 use Modules\Registrar\emails\KuccpsMails;
 use Modules\Registrar\Entities\Attendance;
 use Modules\Registrar\Entities\Department;
@@ -36,11 +34,15 @@ use PhpOffice\PhpWord\SimpleType\TblWidth;
 use Modules\Application\Entities\Applicant;
 use Modules\Application\Entities\Education;
 use Modules\Registrar\Entities\SemesterFee;
+use Modules\Student\Entities\AcademicLeave;
+use Modules\Student\Entities\DeferredClass;
 use NcJoes\OfficeConverter\OfficeConverter;
+use Modules\Finance\Entities\StudentInvoice;
 use Modules\Registrar\Entities\AcademicYear;
 use Modules\Registrar\Entities\RegistrarLog;
 use Modules\Registrar\Entities\StudentLogin;
 use Modules\Student\Entities\CourseTransfer;
+use Modules\Student\Entities\StudentDeposit;
 use Modules\Application\Entities\Application;
 use Modules\Registrar\Entities\CourseHistory;
 use Modules\Registrar\Entities\SchoolHistory;
@@ -48,6 +50,7 @@ use Modules\Registrar\Entities\StudentCourse;
 use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Application\Entities\Notification;
 use Modules\Registrar\Entities\ClusterWeights;
+use Modules\Registrar\emails\AcademicLeaveMail;
 use Modules\Registrar\Entities\AvailableCourse;
 use Modules\Registrar\Entities\ClusterSubjects;
 use Modules\Registrar\Entities\CourseLevelMode;
@@ -56,14 +59,66 @@ use Modules\Registrar\Entities\CalenderOfEvents;
 use Modules\Registrar\emails\CourseTransferMails;
 use Modules\Registrar\Entities\CourseRequirement;
 use Modules\Registrar\Entities\DepartmentHistory;
+use Modules\Registrar\emails\RejectedAcademicMail;
 use Modules\Application\Entities\AdmissionApproval;
+use Modules\Student\Entities\AcademicLeaveApproval;
 use Modules\Student\Entities\CourseTransferApproval;
 use Modules\Registrar\emails\CourseTransferRejectedMails;
 
 class CoursesController extends Controller
 {
 
+    public function leaves(){
+        
+        $schools   =   School::all();
+        foreach($schools as $school){
+            $data = AcademicLeave::all()->groupBy('academic_year');
+                 
+        }
+        
+        return  view('registrar::leaves.yearlyLeaves')->with(['data'=> $data, 'schools'=>$schools]);
+    }
 
+    public function academicLeave($year){
+        $hashedYear = Crypt::decrypt($year);
+        $schools   =   School::all();
+        $leaves  =  AcademicLeave::where('academic_year', $hashedYear)->get();
+    
+        return view('registrar::leaves.index')->with(['leaves' => $leaves,'schools'=>$schools, 'year'=>$hashedYear]);
+    }
+
+    public function acceptedAcademicLeaves(Request $request){
+
+       $request->validate(['submit' => 'required']);
+   
+           foreach($request->submit as $id){    
+
+            $approval = AcademicLeave::find($id);
+
+                   if ($approval->approveLeave->dean_status == 1){
+
+                        Mail::to($approval->studentLeave->student_email)->send(new AcademicLeaveMail($approval));
+                        
+                        $approved = AcademicLeaveApproval::find($id);
+                        $approved->registrar_status  =  1;
+                        $approved->status  =  1;
+                        $approved->save(); 
+                    }
+                    else{
+
+                        Mail::to($approval->studentLeave->student_email)->send(new RejectedAcademicMail($approval));
+                        
+                        $rejected = AcademicLeaveApproval::find($id);
+                        $rejected->registrar_status  =  1;
+                        $rejected->status  =  2;
+                        $rejected->save();
+                    }
+            }
+   
+       return redirect()->back()->with( 'success', 'Email sent successfuly.');
+   
+    }
+    
     public function acceptedTransfers(Request $request){
 
      $request->validate(['submit' => 'required']);
@@ -71,7 +126,8 @@ class CoursesController extends Controller
     //  return $request->all();
 
         foreach($request->submit as $id){
-
+            
+            
            $approvedID = CourseTransferApproval::find($id);
 
             $approval = CourseTransfer::find($approvedID->course_transfer_id);
@@ -129,22 +185,44 @@ class CoursesController extends Controller
                         unlink($pdfPath);
                     }
 
-                    $converter     =     new OfficeConverter($docPath, storage_path());
-                    $converter->convertTo(str_replace('/', '_', $refNumber).".pdf");
+                    // $converter     =     new OfficeConverter($docPath, storage_path());
+                    // $converter->convertTo(str_replace('/', '_', $refNumber).".pdf");
 
-                    if(file_exists($docPath)){
-                        unlink($docPath);
-                    }
+                    // if(file_exists($docPath)){
+                    //     unlink($docPath);
+                    // }
 
-                    $record = Student::find($id);
-                    $record->delete();
-                    StudentCourse::where('student_id', $id)->delete();
-                    StudentLogin::where('student_id', $id)->delete();
+
+
+                    $record = Student::withTrashed()->find($approval->student_id)->delete();
+
+                    $oldRecord = Student::withTrashed()->find($approval->student_id);
+
+                    StudentCourse::where('student_id', $approval->student_id)->delete();
+                    StudentLogin::where('student_id', $approval->student_id)->delete();
+
+                    // return $s = StudentInvoice::where($record->reg_number)->get(); 
+
+                     $invoices  =  StudentInvoice::where('reg_number', 'BSIT/002J/2023')->get();
+                     $deposits  =  StudentDeposit::where('reg_number', $oldRecord->reg_number)->get();
+
+
+                    $record = Student::withTrashed()->find($approval->student_id)->delete();
+
+                    $oldRecord = Student::withTrashed()->find($approval->student_id);
+
+                    StudentCourse::where('student_id', $approval->student_id)->delete();
+                    StudentLogin::where('student_id', $approval->student_id)->delete();
+
+                    // return $s = StudentInvoice::where($record->reg_number)->get(); 
+
+                     $invoices  =  StudentInvoice::where('reg_number', 'BSIT/002J/2023')->get();
+                     $deposits  =  StudentDeposit::where('reg_number', $oldRecord->reg_number)->get();
 
                     $oldstudent = Student::withTrashed()->find($id);
 
                     $newStudent               =             new Student;
-
+                  
                     $newStudent->reg_number   =             $regNumber;
                     $newStudent->ref_number   =             $refNumber;
                     $newStudent->sname        =             $student->sname;
@@ -169,6 +247,7 @@ class CoursesController extends Controller
                     $newStudent->disability   =             $student->disability;
                     $newStudent->save();
 
+                   
                     $newStudCourse                =             new StudentCourse;
                     $newStudCourse->student_id    =             $newStudent->id;
                     $newStudCourse->student_type  =             2;
@@ -181,11 +260,42 @@ class CoursesController extends Controller
                     $newStudCourse->course_duration =           $course->courseRequirements->course_duration;
                     $newStudCourse->save();
 
-                     $newStudLogin    =  new StudentLogin;
-                     $newStudLogin->student_id       =   $newStudent->id;
-                     $newStudLogin->username         =   $newStudent->reg_number;
-                     $newStudLogin->password         =   Hash::make($newStudent->id_number);
-                     $newStudLogin->save();
+                    $newStudLogin    =  new StudentLogin;
+                    $newStudLogin->student_id       =   $newStudent->id;
+                    $newStudLogin->username         =   $newStudent->reg_number;
+                    $newStudLogin->password         =   Hash::make($newStudent->id_number);
+                    $newStudLogin->save();
+
+                    $oldStudentInvoice  =  StudentInvoice::find($id);
+
+                    foreach($invoices as $invoice){
+
+                        $newInvoice  =  new StudentInvoice;
+                        $newInvoice->student_id  =  $newStudent->id;
+                        $newInvoice->reg_number  =  $newStudent->reg_number;
+                        $newInvoice->invoice_number = $oldStudentInvoice->invoice_number;
+                        $newInvoice->stage = $oldStudentInvoice->stage;
+                        $newInvoice->amount = $oldStudentInvoice->amount;
+                        $newInvoice->description = $oldStudentInvoice->description;
+                        $newInvoice->save();
+
+                        StudentInvoice::find($invoice->id)->delete();
+
+                    }
+
+                    $oldStudentDeposit  =  StudentDeposit::find($id);
+                    foreach($deposits as $deposit){
+
+                        $newDeposit  =  new StudentDeposit;
+                        $newDeposit->reg_number  =  $newStudent->reg_number;
+                        $newDeposit->deposit = $oldStudentDeposit->deposit;
+                        $newDeposit->description = $oldStudentDeposit->description;
+                        $newDeposit->invoice_number = $oldStudentDeposit->invoice_number;
+                        $newDeposit->save();
+
+                        StudentDeposit::find($deposit->id)->delete();
+                    }
+
 
                     Mail::to($newStudent->email)->send(new CourseTransferMails($newStudent));
 
@@ -258,6 +368,7 @@ class CoursesController extends Controller
     }
 
     public function yearly(){
+        
         $schools   =   School::all();
         foreach($schools as $school){
             $data = CourseTransfer::all()->groupBy('academic_year');
@@ -782,10 +893,12 @@ class CoursesController extends Controller
 
     public function accepted(){
 
-        $kuccps         =          KuccpsApplicant::where('status', 0)->get();
+         $kuccps         =          KuccpsApplicant::where('status', 0)->get();
             foreach ($kuccps as $applicant){
-                $course        =          Courses::where('course_code', $applicant->kuccpsApplication->course_code)->first();
+                // return $applicant->kuccpsApplication->course_code;
 
+                $course        =          Courses::where('course_code', $applicant->kuccpsApplication->course_code)->first();
+                // return $course;
                 $regNumber     = Application::where('course_id', $course->id)
                         ->where('intake_id', $applicant->kuccpsApplication->intake_id)
                         ->where('student_type', 2)
@@ -826,7 +939,7 @@ class CoursesController extends Controller
                                 $app_course->ref_number     =            'APP/'.date('Y')."/".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT);
                                 $app_course->reg_number     =            $applicant->kuccpsApplication->course_code."/".str_pad($regNumber + 1, 3, "0", STR_PAD_LEFT)."J"."/".Carbon::parse($applicant->kuccpsApplication->kuccpsIntake->intake_from)->format('Y');
                                 $app_course->adm_letter     =            'APP'."_".date('Y')."_".str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT).'.pdf';
-                                    $app_course->save();
+                                $app_course->save();
 
                     $domPdfPath     =    base_path('vendor/dompdf/dompdf');
                     \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);

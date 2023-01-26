@@ -53,6 +53,10 @@ class StudentController extends Controller
     {
         $courses = StudentCourse::where('student_id', Auth::guard('student')->user()->student_id)->get();
 
+
+
+
+
         return view('student::student.index')->with(['courses' => $courses]);
     }
 
@@ -174,9 +178,10 @@ class StudentController extends Controller
     public function getCourseClasses(Request $request){
 
         $student = Auth::guard('student')->user()->loggedStudent;
-
+        
+        // return $student;
         $group = Courses::where('id', $request->id)->first();
-
+        // return $group;
         if ($group->level == 2){
 
             $classes = Classes::where('course_id', $request->id)
@@ -256,6 +261,74 @@ class StudentController extends Controller
 
     }
 
+    public function editRequest($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $transfer = CourseTransfer::find($hashedId);
+
+        $departments = Department::all();
+
+        return view('student::courses.edittransfer')->with(['transfer' => $transfer, 'departments' => $departments]);
+
+    }
+
+    public function updateRequest(Request $request, $id)
+    {
+
+        $request->validate([
+            'dept' => 'required',
+            'course' => 'required',
+            'class' => 'required',
+            'points' => 'required|numeric'
+        ]);
+
+        if (Auth::guard('student')->user()->loggedStudent->courseStudent->course_id == $request->course) {
+
+            return redirect()->route('student.coursetransfers')->with('error', 'You are already admitted to this course');
+
+        } else {
+
+            $hashedId = Crypt::decrypt($id);
+
+            $transfer = CourseTransfer::find($hashedId);
+            $transfer->student_id = Auth::guard('student')->user()->student_id;
+            $transfer->department_id = $request->dept;
+            $transfer->course_id = $request->course;
+            $transfer->class_id = $request->class;
+            $transfer->points = $request->points;
+            $transfer->save();
+
+            return redirect()->route('student.coursetransfers')->with('success', 'Course transfer request updated successfully');
+        }
+    }
+
+    public function deleteRequest($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        CourseTransfer::find($hashedId)->delete();
+
+        return redirect()->route('student.coursetransfers')->with('success', 'Course transfer request deleted successfully');
+    }
+
+    // public function storeRequest($id){
+
+    //     $hashedId = Crypt::decrypt($id);
+
+    //     CourseTransfer::find($hashedId)->update(['status' => 0]);
+
+    //     $invoice = new TransferInvoice;
+    //     $invoice->student_id = Auth::guard('student')->user()->student_id;
+    //     $invoice->reg_number = Auth::guard('student')->user()->loggedStudent->reg_number;
+    //     $invoice->invoice_number = 'INV'.time();
+    //     $invoice->amount = 500;
+    //     $invoice->description = 'Invoice for Course Transfer Fee';
+    //     $invoice->save();
+
+    //     return redirect()->back()->with('success', 'Your course transfer request submitted successfully');
+    // }
+
     public function academicLeave(){
 
         $leaves = AcademicLeave::where('student_id', Auth::guard('student')->user()->student_id)->get();
@@ -265,10 +338,7 @@ class StudentController extends Controller
 
     public function requestLeave(){
 
-      $stage = Nominalroll::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
-//                            ->where('activation', 1)
-                            ->latest()
-                            ->first();
+        $stage = Nominalroll::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)->latest()->first();
 
        $current_date = Carbon::now()->format('Y-m-d');
 
@@ -307,17 +377,10 @@ class StudentController extends Controller
                         ->get()
                         ->groupBy('class_code');
 
-            foreach ($classPattern as $class_code => $pattern) {
+        return redirect()->route('student.requestacademicleave')->with('success', 'Leave request created successfully');
+    }
 
-                $data[] = Classes::where('name', $class_code)
-                    ->where('course_id', Auth::guard('student')->user()->loggedStudent->courseStudent->course_id)
-                    ->where('attendance_code', Auth::guard('student')->user()->loggedStudent->courseStudent->typeStudent->attendance_code)
-                    ->where('name', '!=', Auth::guard('student')->user()->loggedStudent->courseStudent->class_code)
-                    ->get()
-                    ->groupBy('name');
-            }
-
-        }else{
+    public function editLeaveRequest($id){
 
             $data = [];
         }

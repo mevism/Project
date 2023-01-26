@@ -15,6 +15,10 @@ class AcademicLeaveApproval extends Model
 
         return $this->belongsTo(AcademicLeave::class, 'id');
     }
+    // public function leaveApp(){
+
+    //     return $this->belongsTo(AcademicLeave::class, 'academic_leave_id');
+    // }
     
     protected static function newFactory()
     {
