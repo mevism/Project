@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->integer('student_id');
             $table->string('reg_number');
-            $table->string('invoice_number')->unique();
+            $table->string('invoice_number');
             $table->string('stage');
             $table->string('amount');
             $table->mediumText('description');

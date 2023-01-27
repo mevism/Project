@@ -15,12 +15,13 @@ class CourseImport implements ToCollection
     */
     public function collection(Collection $collection)
     {
+        
         foreach($collection as $row){
-
+            // dd($row);
         $depts[] = $row[0];
 
         foreach($depts as $dept){
-
+        //    dd($dept);
             if( $row[3] ==  'CERTIFICATE'){
                 $level  =  1 ;
 
@@ -45,16 +46,20 @@ class CourseImport implements ToCollection
 
             $deptID = Department::where('dept_code', $dept)->first();
 
-        } 
+            $id = $deptID->id;
 
+   
+            
+        }       
         Courses::create([
 
-            'department_id' => $deptID->id,
+            'department_id' => $id,
             'course_code' => $row[1],
             'course_name' => $row[2],
             'level' => $level,
 
         ]);
+        
          
     }
 

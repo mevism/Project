@@ -1,4 +1,4 @@
-@extends('cod::layouts.backend')
+@extends('registrar::layouts.backend')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
 
@@ -35,7 +35,7 @@
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="javascript:void(0)">Department</a>
+                            <a class="link-fx" href="javascript:void(0)">Schools</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
                             Course Transfers

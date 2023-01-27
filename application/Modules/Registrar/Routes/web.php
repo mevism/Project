@@ -170,6 +170,12 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
     Route::get('/transfer-requests', [CoursesController::class, 'yearly'])->name('courses.yearly');
     Route::get('/transfer/{year}', [CoursesController::class, 'transfer'])->name('courses.transfer');
     Route::get('/generate-requests-transfer-report/{year}', [CoursesController::class, 'requestedTransfers'])->name('courses.requestedTransfers');
+
+    Route::get('/leave-requests', [CoursesController::class, 'leaves'])->name('courses.leaves');
+    Route::get('/academicLeave/{year}', [CoursesController::class, 'academicLeave'])->name('courses.academicLeave');
+    // Route::get('/generate-requests-academic-leave-report/{year}', [CoursesController::class, 'requestedAcademicLeaves'])->name('courses.requestedAcademicLeaves');
+    Route::post('/acceptedAcademicLeaves', 'CoursesController@acceptedAcademicLeaves')->name('courses.acceptedAcademicLeaves');
+
 });
 
 

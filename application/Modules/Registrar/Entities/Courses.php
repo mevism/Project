@@ -60,6 +60,7 @@ class Courses extends Model
         return $this->hasOne(StudentCourse::class, 'id');
     }
 
+
     public function transferCourse(){
         return $this->hasMany(CourseTransfer::class, 'id');
     }

@@ -200,6 +200,7 @@
                         </a>
                     </li>
                 </ul>
+                {{-- @dd(Auth::guard('student')->user()->loggedStudent) --}}
               @if(Auth::guard('student')->user()->loggedStudent->courseStudent->student_type == 2)
                     <ul class="nav-main-submenu">
                         <li class="nav-main-item">
