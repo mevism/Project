@@ -21,7 +21,7 @@ class StudentCourse extends Model
 
     public function studentCourse(){
 
-        return $this->belongsTo(Courses::class, 'course_id');
+        return $this->belongsTo(Courses::class, 'course_id')->withTrashed();
     }
     
     public function deptStudCourse(){

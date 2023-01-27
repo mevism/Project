@@ -33,7 +33,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
                     <h5 class="h5 fw-bold mb-0">
-                        COURSE TRANSFERS
+                        READMISSION
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -42,7 +42,7 @@
                             <a class="link-fx" href="{{ route('student') }}">Dashboard</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            ALL TRANSFER REQUESTS
+                            ALL READMISSION REQUESTS
                         </li>
                     </ol>
                 </nav>
@@ -54,7 +54,7 @@
         <div class="block-content block-content-full">
             <div class="table-responsive">
                 <div class="d-flex justify-content-end mb-4">
-                    <a class="btn btn-sm btn-alt-primary" href="{{ route('student.readmisionrequest') }}">Create request</a>
+                    <a class="btn btn-sm btn-alt-primary m-2" href="{{ route('student.readmisionrequest') }}">Create request</a>
                 </div>
                 <table id="example"  class="table table-sm table-striped table-bordered fs-sm">
                     <thead>

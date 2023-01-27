@@ -75,15 +75,17 @@
                             <td> {{ $leave->deferredClass->stage }} </td>
                             <td>
                                 <a class="btn btn-sm btn-outline-dark" href="{{ route('dean.viewLeaveRequest', ['id' => Crypt::encrypt($leave->id)]) }}"> View </a>
-                                @if($leave->approveLeave->dean_status != null)
-                                    @if($leave->approveLeave->dean_status == 1)
-                                        <span class="m-2 text-success">
-                                            <i class="fa fa-check"></i>
-                                        </span>
-                                    @else
-                                        <span class="m-2 text-danger">
-                                            <i class="fa fa-times"></i>
-                                        </span>
+                                @if($leave->approveLeave != null)
+                                    @if($leave->approveLeave->dean_status != null)
+                                        @if($leave->approveLeave->dean_status == 1)
+                                            <span class="m-2 text-success">
+                                                <i class="fa fa-check"></i>
+                                            </span>
+                                        @else
+                                            <span class="m-2 text-danger">
+                                                <i class="fa fa-times"></i>
+                                            </span>
+                                        @endif
                                     @endif
                                 @endif
                             </td>

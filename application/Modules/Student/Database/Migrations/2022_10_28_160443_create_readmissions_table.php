@@ -16,14 +16,9 @@ return new class extends Migration
         Schema::create('readmissions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('student_id');
-            $table->bigInteger('course_id');
-            $table->longText('reason');
-            $table->tinyInteger('cod_status')->nullable();
-            $table->longText('cod_remarks')->nullable();
-            $table->tinyInteger('dean_status')->nullable();
-            $table->longText('dean_remarks')->nullable();
-            $table->tinyInteger('registrar_status')->nullable();
-            $table->longText('registrar_remarks')->nullable();
+            $table->bigInteger('leave_id');
+            $table->varchar('academic_year');
+            $table->varchar('academic_semester');
             $table->tinyInteger('status')->nullable();
             $table->timestamps();
             $table->softDeletes();

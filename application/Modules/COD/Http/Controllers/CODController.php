@@ -2,50 +2,53 @@
 
 namespace Modules\COD\Http\Controllers;
 
-use Carbon\Carbon;
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\DB;
-use Modules\Application\Entities\AdmissionApproval;
-use Modules\Application\Entities\AdmissionDocument;
-use Modules\Application\Entities\Application;
-use Modules\Application\Entities\Education;
-use Modules\Application\Entities\Notification;
-use Modules\COD\Entities\ClassPattern;
-use Modules\COD\Entities\Nominalroll;
-use Modules\COD\Entities\Pattern;
-use Modules\COD\Entities\Progression;
-use Modules\Finance\Entities\FinanceLog;
-use Modules\COD\Entities\CODLog;
 use Auth;
-use Modules\Finance\Entities\StudentInvoice;
-use Modules\Registrar\Entities\CourseLevelMode;
-use Modules\Registrar\Entities\FeeStructure;
-use Modules\Registrar\Entities\SemesterFee;
+use Response;
+use Validator;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Modules\COD\Entities\CODLog;
+use Modules\COD\Entities\Pattern;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpWord\Element\Table;
+use Illuminate\Support\Facades\Crypt;
+use Modules\COD\Entities\Nominalroll;
+use Modules\COD\Entities\Progression;
+use Modules\COD\Entities\ClassPattern;
+use Modules\COD\Entities\SemesterUnit;
+use Modules\Registrar\Entities\Campus;
+use Modules\Registrar\Entities\Intake;
+use Modules\Registrar\Entities\Classes;
+use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Student;
-use Modules\Registrar\Entities\StudentCourse;
-use Modules\Registrar\Entities\UnitProgramms;
-use Modules\Student\Entities\AcademicLeave;
-use Modules\Student\Entities\AcademicLeaveApproval;
-use Modules\Student\Entities\CourseTransfer;
-use Modules\Student\Entities\CourseTransferApproval;
+use Modules\Finance\Entities\FinanceLog;
+use PhpOffice\PhpWord\TemplateProcessor;
 use Modules\Student\Entities\ExamResults;
 use Modules\Student\Entities\Readmission;
-use Modules\Student\Entities\ReadmissionApproval;
-use NcJoes\OfficeConverter\OfficeConverter;
-use PhpOffice\PhpWord\Element\Table;
-use PhpOffice\PhpWord\SimpleType\TblWidth;
-use PhpOffice\PhpWord\TemplateProcessor;
-use Validator;
-use Modules\Registrar\Entities\AvailableCourse;
-use Modules\Registrar\Entities\Classes;
-use Modules\Registrar\Entities\Intake;
-use Modules\Registrar\Entities\Courses;
+use Modules\COD\Entities\ReadmissionClass;
 use Modules\Registrar\Entities\Attendance;
-use Modules\Registrar\Entities\Campus;
-use Response;
+use PhpOffice\PhpWord\SimpleType\TblWidth;
+use Modules\Application\Entities\Education;
+use Modules\Registrar\Entities\SemesterFee;
+use Modules\Student\Entities\AcademicLeave;
+use NcJoes\OfficeConverter\OfficeConverter;
+use Illuminate\Contracts\Support\Renderable;
+use Modules\Finance\Entities\StudentInvoice;
+use Modules\Registrar\Entities\FeeStructure;
+use Modules\Student\Entities\CourseTransfer;
+use Modules\Application\Entities\Application;
+use Modules\Registrar\Entities\StudentCourse;
+use Modules\Registrar\Entities\UnitProgramms;
+use Modules\Application\Entities\Notification;
+use Modules\Registrar\Entities\AvailableCourse;
+use Modules\Registrar\Entities\CourseLevelMode;
+use Modules\Registrar\Entities\KuccpsApplication;
+use Modules\Student\Entities\ReadmissionApproval;
+use Modules\Application\Entities\AdmissionApproval;
+use Modules\Application\Entities\AdmissionDocument;
+use Modules\Student\Entities\AcademicLeaveApproval;
+use Modules\Student\Entities\CourseTransferApproval;
 
 class CODController extends Controller
 {
@@ -921,11 +924,13 @@ class CODController extends Controller
 
         $deptID = Auth::guard('user')->user()->department_id;
 
-        $requests = AcademicLeave::where('academic_year', $hashedYear)
+      $requests = AcademicLeave::where('academic_year', $hashedYear)
             ->latest()
             ->get();
 
         foreach ($requests as $leave){
+
+            // return $leave->studentLeave->courseStudent->department_id;
             if ($leave->studentLeave->courseStudent->department_id == $deptID) {
                 $allLeaves[] = $leave;
         
@@ -1049,29 +1054,37 @@ class CODController extends Controller
     public function selectedReadmission($id){
 
         $hashedId = Crypt::decrypt($id);
+        // $classes = [];
 
         $leave = Readmission::find($hashedId);
 
         $stage = Nominalroll::where('student_id', $leave->leaves->studentLeave->id)
-                                ->where('activation', 0)
+                                // ->where('activation', 0)
                                 ->latest()
                                 ->first();
        $studentStage = $stage->year_study.'.'.$stage->semester_study;
 
-       $patterns = ClassPattern::where('academic_year', $stage->academic_year)
+       $patterns = ClassPattern::where('academic_year', '>', $stage->academic_year)
                                 ->where('period', $stage->academic_semester)
-                                ->where('semester', '<', $studentStage)
+                                ->where('semester', $studentStage)
                                 ->get()
                                 ->groupBy('class_code');
 
-        foreach ($patterns as $class_code => $pattern) {
+        if(count($patterns) == 0){
 
-            $classes[] = Classes::where('name', $class_code)
-                ->where('course_id', $leave->leaves->studentLeave->courseStudent->course_id)
-                ->where('attendance_code', $leave->leaves->studentLeave->courseStudent->typeStudent->attendance_code)
-                ->where('name', '!=', $leave->leaves->studentLeave->courseStudent->class_code)
-                ->get()
-                ->groupBy('name');
+            $classes = [];
+
+        }else{
+
+            foreach ($patterns as $class_code => $pattern) {
+
+                $classes[] = Classes::where('name', $class_code)
+                    ->where('course_id', $leave->leaves->studentLeave->courseStudent->course_id)
+                    ->where('attendance_code', $leave->leaves->studentLeave->courseStudent->typeStudent->attendance_code)
+                    ->where('name', '!=', $leave->leaves->studentLeave->courseStudent->class_code)
+                    ->get()
+                    ->groupBy('name');
+            }
         }
 
         return view('cod::readmissions.viewSelectedReadmission')->with(['classes' => $classes, 'leave' => $leave, 'stage' => $stage]);

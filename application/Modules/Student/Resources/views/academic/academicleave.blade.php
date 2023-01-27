@@ -33,7 +33,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
                     <h5 class="h5 fw-bold mb-0">
-                        COURSE TRANSFERS
+                        ACADEMIC LEAVE
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -42,7 +42,7 @@
                             <a class="link-fx" href="{{ route('student') }}">Dashboard</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            ALL TRANSFER REQUESTS
+                            ALL ACADEMIC LEAVES
                         </li>
                     </ol>
                 </nav>

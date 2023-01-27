@@ -47,36 +47,36 @@ class RolesAndPermissions extends Seeder
         $lecturerRole = Role::firstOrCreate(['name' => 'Lecturer', 'guard_name' => 'user']);
         $adminAssistantRole = Role::firstOrCreate(['name' => 'Admin Assistant', 'guard_name' => 'user']);
 
-//        $registrarRole->givePermissionTo([
-//            'generate-admission-letters',
-//            'approve-admission',
-//            'approve-application'
-//        ]);
-//
-//        $codRole->givePermissionTo([
-//            'approve-admission',
-//            'approve-application',
-//            'view-workload',
-//            'print-class-list',
-//            'view-exams'
-//        ]);
-//
-//        $lecturerRole->givePermissionTo([
-//            'enter-student-marks',
-//            'view-workload',
-//            'print-class-list',
-//
-//        ]);
-//
-//        $accommodationRole->givePermissionTo([
-//            'book-hostel',
-//            'allocate-hostel',
-//        ]);
-//
-//        $examsRole->givePermissionTo([
-//            'publish-results',
-//            'view-exams'
-//        ]);
+       $registrarRole->givePermissionTo([
+           'generate-admission-letters',
+           'approve-admission',
+           'approve-application'
+       ]);
+
+       $codRole->givePermissionTo([
+           'approve-admission',
+           'approve-application',
+           'view-workload',
+           'print-class-list',
+           'view-exams'
+       ]);
+
+       $lecturerRole->givePermissionTo([
+           'enter-student-marks',
+           'view-workload',
+           'print-class-list',
+
+       ]);
+
+       $accommodationRole->givePermissionTo([
+           'book-hostel',
+           'allocate-hostel',
+       ]);
+
+       $examsRole->givePermissionTo([
+           'publish-results',
+           'view-exams'
+       ]);
 
         $users = User::where('role_id', 2)->get();
         foreach ($users as $user){

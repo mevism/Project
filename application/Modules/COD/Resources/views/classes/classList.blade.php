@@ -67,7 +67,7 @@
                                         @if(count($student->student->signNominal) > 0)
                                             <a class="btn btn-sm btn-alt-info disabled">More</a>
                                         @else
-                                            <a class="btn btn-sm btn-alt-success" onclick="return confirm('Are you sure you want to admit this student?')" data-toggle="click-ripple" href="{{ route('department.admitStudent', ['id' => Crypt::encrypt($student->id)]) }}">Admit</a>
+                                            <a class="btn btn-sm btn-alt-success" onclick="return confirm('Are you sure you want to admit this student?')" data-toggle="click-ripple" href="{{ route('department.admitStudent', ['id' => Crypt::encrypt($student->student_id)]) }}">Admit</a>
 {{----}}
                                         @endif
                                     </td> 
