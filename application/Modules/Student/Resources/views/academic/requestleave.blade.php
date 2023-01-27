@@ -1,5 +1,165 @@
 @extends('student::layouts.backend')
 <script src="https://code.jquery.com/jquery-3.6.2.js" integrity="sha256-pkn2CUZmheSeyssYw3vMp1+xyub4m+e+QK4sQskvuo4=" crossorigin="anonymous"></script>
+
+@if($stage != null)
+
+
+<script>
+
+$(document).ready( function (){
+
+    var type = $('#type').val();
+
+    if(type == 1){
+
+        $(document).on('change', '#newclass', function () {
+
+            var class_code = $('#newclass').val();
+            var stage = $('#stage').val();
+
+            console.log(stage);
+
+            $.ajax({
+
+                type: 'get',
+                url: '{{ route('student.getLeaveClasses') }}',
+                data: { class:class_code, stage:stage },
+                dataType: 'json',
+                success:function (data){
+
+                    console.log(data)
+
+                    var dates = data.period.split("/");
+                    var newDate = dates[dates.length, 0];
+
+                    if(newDate == 'SEP'){
+
+                        console.log('its sept');
+
+                        var years = data.academic_year.split("/");
+                        var newYear = years[years.length, 0];
+
+                    }else {
+
+                        console.log('its not sept');
+
+                        var years = data.academic_year.split("/");
+                        var newYear = years[years.length, 1];
+                    }
+
+                    $('#enddate').val(newYear + '-' + newDate + '-01')
+                    // $('#enddate').val(newDate)
+                    $('#newClass').val(data.class_code)
+                    $('#newacademic').val(data.academic_year)
+                    $('#newSemester').val(data.period)
+                    $('#newStage').val(data.semester)
+
+                },
+
+                error: function (){
+
+                },
+
+            });
+
+        });
+    }else {
+
+        var stage = {{ $stage->year_study.'.'.$stage->semester_study }}
+
+        console.log(stage)
+
+        if(stage == 1.1) {
+
+            var studentNumber = '{{ Auth::guard('student')->user()->loggedStudent->reg_number }}'.match(/\//);
+            var studNumber = studentNumber.input;
+
+            $.ajax({
+
+                type: 'get',
+                url: '{{ route('student.defermentRequest') }}',
+                data: {studNumber: studNumber},
+                dataType: 'json',
+                success: function (data) {
+
+                    var oldclass = data.class_code.split("/")
+                    var edittedclass = oldclass[oldclass.length, 1].slice(-4)
+                    var newcls = data.class_code.replace(edittedclass, parseInt(edittedclass) + 1)
+                    var newyear = data.academic_year.split("/")
+                    var yearstart = parseInt(newyear[newyear.length, 0]) + 1
+                    var yearend = parseInt(newyear[newyear.length, 1]) + 1
+                    var enddates = data.academic_semester.split("/")
+                    var dated = enddates[enddates.length, 0]
+
+
+                    console.log(yearend);
+
+                    $('#mynewclass').val(newcls)
+                    $('#newClass').val(newcls)
+                    $('#newStage').val(data.year_study + '.' + data.semester_study)
+                    $('#newSemester').val(data.academic_semester)
+                    $('#newacademic').val(yearstart + '/' + yearend)
+                    $('#enddate').val(yearstart + '-' + dated + '-01')
+                }
+
+            });
+
+        }else {
+
+            console.log('hello')
+
+            var studentNumber = '{{ Auth::guard('student')->user()->loggedStudent->reg_number }}'.match(/\//);
+            var studNumber = studentNumber.input;
+
+            var semesters = ['SEP/DEC', 'JAN/APR', 'MAY/AUG'];
+
+            console.log(semesters)
+
+            $.ajax({
+
+                type: 'get',
+                url: '{{ route('student.defermentRequest') }}',
+                data: {studNumber: studNumber},
+                dataType: 'json',
+                success: function (data) {
+
+                    var oldclass = data.class_code.split("/")
+                    var edittedclass = oldclass[oldclass.length, 1].slice(-4)
+                    var newcls = data.class_code.replace(edittedclass, parseInt(edittedclass) + 1)
+                    var newyear = data.academic_year.split("/")
+                    var yearstart = parseInt(newyear[newyear.length, 0]) + 1
+                    var yearend = parseInt(newyear[newyear.length, 1]) + 1
+                    var enddates = data.academic_semester.split("/")
+                    var dated = enddates[enddates.length, 0]
+
+                    console.log(data.academic_semester)
+
+
+                    index = semesters.indexOf(data.academic_semester);
+                    if(index >= 0 && index < semesters.length - 1)
+                        nextItem = semesters[index + 1]
+
+                    var newsemesters = nextItem.split("/");
+
+                        console.log(nextItem);
+
+                    $('#mynewclass').val(newcls)
+                    $('#newClass').val(newcls)
+                    $('#newStage').val(stage)
+                    $('#newSemester').val(nextItem)
+                    $('#newacademic').val(yearstart + '/' + yearend)
+                    $('#enddate').val(yearend + '-' + newsemesters[newsemesters.length, 0] + '-01')
+                }
+
+            });
+        }
+    }
+
+});
+</script>
+ 
+@endif
+
 @section('content')
 
     <div class="bg-body-light">
@@ -176,6 +336,7 @@
                                             @if($event->start_date > $dates)
 
                                                 <button class="btn btn-outline-info col-md-10 disabled m-2" >SCHEDULE TO OPENS ON {{ \Carbon\Carbon::parse($event->start_date)->format('D, d-M-Y') }} </button>
+                                            
                                             @elseif($event->end_date >= $dates)
 
                                                 <button class="btn btn-outline-success col-md-10 m-2" >SUBMIT LEAVE REQUEST</button>
@@ -198,158 +359,4 @@
         </div>
     </div>
     <!-- END Floating Labels -->
-
 @endsection
-
-<script>
-    $(document).ready( function (){
-
-        var type = $('#type').val();
-
-        if(type == 1){
-
-            $(document).on('change', '#newclass', function () {
-
-                var class_code = $('#newclass').val();
-                var stage = $('#stage').val();
-
-                console.log(stage);
-
-                $.ajax({
-
-                    type: 'get',
-                    url: '{{ route('student.getLeaveClasses') }}',
-                    data: { class:class_code, stage:stage },
-                    dataType: 'json',
-                    success:function (data){
-
-                        console.log(data)
-
-                        var dates = data.period.split("/");
-                        var newDate = dates[dates.length, 0];
-
-                        if(newDate == 'SEP'){
-
-                            console.log('its sept');
-
-                            var years = data.academic_year.split("/");
-                            var newYear = years[years.length, 0];
-
-                        }else {
-
-                            console.log('its not sept');
-
-                            var years = data.academic_year.split("/");
-                            var newYear = years[years.length, 1];
-                        }
-
-                        $('#enddate').val(newYear + '-' + newDate + '-01')
-                        // $('#enddate').val(newDate)
-                        $('#newClass').val(data.class_code)
-                        $('#newacademic').val(data.academic_year)
-                        $('#newSemester').val(data.period)
-                        $('#newStage').val(data.semester)
-
-                    },
-
-                    error: function (){
-
-                    },
-
-                });
-
-            });
-        }else {
-
-            var stage = {{ $stage->year_study.'.'.$stage->semester_study }};
-
-            console.log(stage)
-
-            if(stage == 1.1) {
-
-                var studentNumber = '{{ Auth::guard('student')->user()->loggedStudent->reg_number }}'.match(/\//);
-                var studNumber = studentNumber.input;
-
-                $.ajax({
-
-                    type: 'get',
-                    url: '{{ route('student.defermentRequest') }}',
-                    data: {studNumber: studNumber},
-                    dataType: 'json',
-                    success: function (data) {
-
-                        var oldclass = data.class_code.split("/")
-                        var edittedclass = oldclass[oldclass.length, 1].slice(-4)
-                        var newcls = data.class_code.replace(edittedclass, parseInt(edittedclass) + 1)
-                        var newyear = data.academic_year.split("/")
-                        var yearstart = parseInt(newyear[newyear.length, 0]) + 1
-                        var yearend = parseInt(newyear[newyear.length, 1]) + 1
-                        var enddates = data.academic_semester.split("/")
-                        var dated = enddates[enddates.length, 0]
-
-
-                        console.log(yearend);
-
-                        $('#mynewclass').val(newcls)
-                        $('#newClass').val(newcls)
-                        $('#newStage').val(data.year_study + '.' + data.semester_study)
-                        $('#newSemester').val(data.academic_semester)
-                        $('#newacademic').val(yearstart + '/' + yearend)
-                        $('#enddate').val(yearstart + '-' + dated + '-01')
-                    }
-
-                });
-
-            }else {
-
-                console.log('hello')
-
-                var studentNumber = '{{ Auth::guard('student')->user()->loggedStudent->reg_number }}'.match(/\//);
-                var studNumber = studentNumber.input;
-
-                var semesters = ['SEP/DEC', 'JAN/APR', 'MAY/AUG'];
-
-                console.log(semesters)
-
-                $.ajax({
-
-                    type: 'get',
-                    url: '{{ route('student.defermentRequest') }}',
-                    data: {studNumber: studNumber},
-                    dataType: 'json',
-                    success: function (data) {
-
-                        var oldclass = data.class_code.split("/")
-                        var edittedclass = oldclass[oldclass.length, 1].slice(-4)
-                        var newcls = data.class_code.replace(edittedclass, parseInt(edittedclass) + 1)
-                        var newyear = data.academic_year.split("/")
-                        var yearstart = parseInt(newyear[newyear.length, 0]) + 1
-                        var yearend = parseInt(newyear[newyear.length, 1]) + 1
-                        var enddates = data.academic_semester.split("/")
-                        var dated = enddates[enddates.length, 0]
-
-                        console.log(data.academic_semester)
-
-
-                        index = semesters.indexOf(data.academic_semester);
-                        if(index >= 0 && index < semesters.length - 1)
-                            nextItem = semesters[index + 1]
-
-                        var newsemesters = nextItem.split("/");
-
-                            console.log(nextItem);
-
-                        $('#mynewclass').val(newcls)
-                        $('#newClass').val(newcls)
-                        $('#newStage').val(stage)
-                        $('#newSemester').val(nextItem)
-                        $('#newacademic').val(yearstart + '/' + yearend)
-                        $('#enddate').val(yearend + '-' + newsemesters[newsemesters.length, 0] + '-01')
-                    }
-
-                });
-            }
-        }
-
-    });
-</script>

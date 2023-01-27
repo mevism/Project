@@ -56,6 +56,7 @@
                     <thead>
                         <th>#</th>
                         <th>Academic Year</th>
+                        <th>Total Requests</th>
                         <th>Action</th>
                     </thead>
                     <tbody>
@@ -63,6 +64,7 @@
                             <tr>
                                 <td> {{ $loop->iteration }} </td>
                                 <td> {{ $academicYear }} </td>
+                                <td>{{ $leave->count() }}</td>
                                 <td>
                                     <a class="btn btn-sm btn-outline-dark" href="{{ route('dean.yearlyLeaves', ['year' => Crypt::encrypt($academicYear)]) }}"> View </a>
                                 </td>

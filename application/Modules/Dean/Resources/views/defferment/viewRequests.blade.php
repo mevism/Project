@@ -53,7 +53,7 @@
                 <div class="col-12">
                     <div class="d-flex justify-content-center m-2">
                         <div class="col-md-6 p-2">
-                            <fieldset class="border p-2">
+                            <fieldset class="border p-2" style="height: 100% !important;">
                                 <legend class="float-none w-auto"><h6 class="fw-bold text-center"> STUDENT'S CURRENT STAGE</h6></legend>
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Reg. Number </div>
@@ -96,7 +96,7 @@
                             </fieldset>
                         </div>
                         <div class="col-md-6 p-2">
-                            <fieldset class="border p-2">
+                            <fieldset class="border p-2" style="height: 100% !important;">
                                 <legend class="float-none w-auto"><h6 class="fw-bold text-center"> DEFERMENT/ACADEMIC LEAVE DETAILS</h6></legend>
 
                                 <div class="row mb-3">
@@ -156,16 +156,17 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-center m-2">
-                        @if($leave->approveLeave->dean_status == null)
+                       
+                            @if($leave->approveLeave->dean_status == null)
                             <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('dean.acceptLeaveRequest', ['id' => Crypt::encrypt($leave->id)]) }}"> Accept Transfer </a>
                             <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Transfer</a>
-                        @else
-                            @if($leave->approveLeave->dean_status == 1)
-                                <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Transfer</a>
                             @else
-                                <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('dean.acceptLeaveRequest', ['id' => Crypt::encrypt($leave->id)]) }}"> Accept Transfer </a>
+                                @if($leave->approveLeave->dean_status == 1)
+                                    <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Transfer</a>
+                                @else
+                                    <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('dean.acceptLeaveRequest', ['id' => Crypt::encrypt($leave->id)]) }}"> Accept Transfer </a>
+                                @endif
                             @endif
-                        @endif
                     </div>
                 </div>
             </div>

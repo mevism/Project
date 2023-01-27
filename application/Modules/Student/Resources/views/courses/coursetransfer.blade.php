@@ -173,7 +173,7 @@
                                                     @if($event == NULL)
                                                         <div class="mb-4">
                                                             <div class="d-flex justify-content-center">
-                                                                <button class="btn btn-primary col-md-7 disabled" onclick="return confirm('Are you sure you want to proceed? You will be invoiced for submitting this request.')" >Course transfer not scheduled </button>
+                                                                <button class="btn btn-primary col-md-7 disabled" >{{ $event }}Course transfer not scheduled </button>
                                                             </div>
                                                         </div>
                                                     @else

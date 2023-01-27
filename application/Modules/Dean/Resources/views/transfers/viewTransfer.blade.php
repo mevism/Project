@@ -31,8 +31,8 @@
         <div class="row">
             <div class="col-12">
                 <div class="d-flex justify-content-center m-2">
-                    <div class="col-md-6">
-                        <fieldset class="border p-2">
+                    <div class="col-md-6 p-2">
+                        <fieldset class="border p-2" style="height: 100% !important;">
                             <legend class="float-none w-auto"><h6 class="fw-bold text-center"> STUDENT'S CURRENT COURSE</h6></legend>
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Reg. Number </div>
@@ -74,8 +74,8 @@
                                 @endif
                         </fieldset>
                     </div>
-                    <div class="col-md-6">
-                        <fieldset class="border p-2">
+                    <div class="col-md-6 p-2">
+                        <fieldset class="border p-2" style="height: 100% !important;">
                             <legend class="float-none w-auto"><h6 class="fw-bold text-center"> TRANSFER REQUEST DETAILS</h6></legend>
                             <div class="row mb-3">
                                 <div class="col-md-4 fw-bold">New Department</div>

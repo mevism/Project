@@ -263,13 +263,13 @@
             <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                   <i class="nav-main-link-icon si si-user"></i>
-                  <span class="nav-main-link-name">Progression</span>
+                  <span class="nav-main-link-name"> Student Progression</span>
               </a>
               <ul class="nav-main-submenu">
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('transfer') ? ' active' : '' }}" href="{{ route('courses.yearly') }}">
                         <i class="nav-main-link-icon si si-user"></i>
-                        <span class="nav-main-link-name"> Transfer </span>
+                        <span class="nav-main-link-name"> Course Transfer </span>
                     </a>
                 </li>
             </ul>
@@ -278,10 +278,19 @@
                   <li class="nav-main-item">
                       <a class="nav-main-link{{ request()->is('transfer') ? ' active' : '' }}" href="{{ route('courses.leaves') }}">
                           <i class="nav-main-link-icon si si-user"></i>
-                          <span class="nav-main-link-name"> Deferement</span>
+                          <span class="nav-main-link-name"> Academic Leave</span>
                       </a>
                   </li>
               </ul>
+              <ul class="nav-main-submenu">
+                
+                <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('transfer') ? ' active' : '' }}" href="{{ route('courses.leaves') }}">
+                        <i class="nav-main-link-icon si si-user"></i>
+                        <span class="nav-main-link-name"> Readmission</span>
+                    </a>
+                </li>
+            </ul>
           </li>
           </ul>
         </div>

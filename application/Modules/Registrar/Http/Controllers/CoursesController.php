@@ -99,10 +99,15 @@ class CoursesController extends Controller
 
                         Mail::to($approval->studentLeave->student_email)->send(new AcademicLeaveMail($approval));
                         
-                        $approved = AcademicLeaveApproval::find($id);
+                        $approved = AcademicLeaveApproval::where('academic_leave_id', $id)->first();
                         $approved->registrar_status  =  1;
                         $approved->status  =  1;
                         $approved->save(); 
+
+                        $student = Student::find($approval->student_id);
+                        $student->status = 3;
+                        $student->save();
+                        
                     }
                     else{
 
@@ -185,12 +190,12 @@ class CoursesController extends Controller
                         unlink($pdfPath);
                     }
 
-                    // $converter     =     new OfficeConverter($docPath, storage_path());
-                    // $converter->convertTo(str_replace('/', '_', $refNumber).".pdf");
+                    $converter     =     new OfficeConverter($docPath, storage_path());
+                    $converter->convertTo(str_replace('/', '_', $refNumber).".pdf");
 
-                    // if(file_exists($docPath)){
-                    //     unlink($docPath);
-                    // }
+                    if(file_exists($docPath)){
+                        unlink($docPath);
+                    }
 
 
 
@@ -216,7 +221,7 @@ class CoursesController extends Controller
 
                     // return $s = StudentInvoice::where($record->reg_number)->get(); 
 
-                     $invoices  =  StudentInvoice::where('reg_number', 'BSIT/002J/2023')->get();
+                     $invoices  =  StudentInvoice::where('reg_number', $oldRecord->reg_number)->get();
                      $deposits  =  StudentDeposit::where('reg_number', $oldRecord->reg_number)->get();
 
                     $oldstudent = Student::withTrashed()->find($id);

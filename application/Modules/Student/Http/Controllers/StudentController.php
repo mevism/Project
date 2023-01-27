@@ -338,7 +338,7 @@ class StudentController extends Controller
 
     public function requestLeave(){
 
-        $stage = Nominalroll::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)->latest()->first();
+       $stage = Nominalroll::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)->latest()->first();
 
        $current_date = Carbon::now()->format('Y-m-d');
 
@@ -352,41 +352,43 @@ class StudentController extends Controller
             ->where('event_id', 4)
             ->first();
 
-
-       $currentStage = $stage->year_study.'.'.$stage->semester_study;
-
-       $classes = ClassPattern::where('class_code', $stage->class_code)->get();
-
-        foreach ($classes as $class){
-
-            $list[] = $class->semester;
-        }
-
-        $id_collection = collect($list);
-        $this_key = $id_collection->search($currentStage);
-        $next_id = $id_collection->get($this_key + 1);
-
-        $data = [];
-
-        if ( (float)$currentStage > (float)'1.3'){
-
-           $currently = $stage->year_study.'.'.$stage->semester_study;
-            $classPattern =  ClassPattern::where('academic_year', $stage->academic_year)
-                        ->where('period', $stage->academic_semester)
-                        ->where('semester', '<',  $currently)
-                        ->get()
-                        ->groupBy('class_code');
-
-        return redirect()->route('student.requestacademicleave')->with('success', 'Leave request created successfully');
-    }
-
-    public function editLeaveRequest($id){
-
             $data = [];
-        }
+        
+            if($stage == null){
 
-        return view('student::academic.requestleave')->with(['stage' => $stage, 'classes' => $data, 'nextStage' => $next_id, 'event' => $event, 'dates' => $current_date]);
+                $currentStage = [];
+            }else{
+                $currentStage = $stage->year_study.'.'.$stage->semester_study;
+
+                $classes = ClassPattern::where('class_code', $stage->class_code)->get();
+
+                foreach ($classes as $class){
+        
+                    $list[] = $class->semester;
+                }
+        
+                $id_collection = collect($list);
+                $this_key = $id_collection->search($currentStage);
+                $next_id = $id_collection->get($this_key + 1);
+        
+               
+        
+                if ( (float)$currentStage > (float)'1.3'){
+        
+                   $currently = $stage->year_study.'.'.$stage->semester_study;
+                    $classPattern =  ClassPattern::where('academic_year', $stage->academic_year)
+                                ->where('period', $stage->academic_semester)
+                                ->where('semester', '<',  $currently)
+                                ->get()
+                                ->groupBy('class_code');
+        
+                }
+            }
+
+        return view('student::academic.requestleave')->with(['data' => $data, 'stage' => $stage, 'event' => $event, 'dates' => $current_date]);
+
     }
+
 
     public function leaveClasses(Request $request){
 
@@ -468,7 +470,7 @@ class StudentController extends Controller
 
     public function readmissionRequests(){
 
-       $currentStage = Nominalroll::where('student_id', Auth::guard('student')->user()->student_id)
+      $currentStage = Nominalroll::where('student_id', Auth::guard('student')->user()->student_id)
                                     ->latest()
                                     ->first();
 
@@ -490,7 +492,7 @@ class StudentController extends Controller
 
     public function storeReadmissionRequest($id){
 
-       return $hashedId = Crypt::decrypt($id);
+        $hashedId = Crypt::decrypt($id);
 
         $today = Carbon::now()->format('Y-m-d');
 

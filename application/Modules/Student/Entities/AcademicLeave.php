@@ -14,7 +14,7 @@ class AcademicLeave extends Model
 
     public function studentLeave(){
 
-        return $this->belongsTo(Student::class, 'student_id');
+        return $this->belongsTo(Student::class, 'student_id')->withTrashed();
     }
 
     public function approveLeave(){
