@@ -396,6 +396,8 @@ class CODController extends Controller
 
         $courses = Courses::where('department_id', Auth::guard('user')->user()->department_id)->get();
 
+        $classes = [];
+
             foreach ($courses as $course){
                 $classes[] = Classes::where('intake_from', $intakeId)
                     ->where('course_id', $course->id)
@@ -494,7 +496,7 @@ class CODController extends Controller
             ->where('course_id', $student_fee->course_id)
             ->where('level_id', $student_fee->studentCourse->level)
             ->first();
-            
+
 
         $proformaInvoice = 0;
 
@@ -928,12 +930,14 @@ class CODController extends Controller
             ->latest()
             ->get();
 
+        $allLeaves = [];
+
         foreach ($requests as $leave){
 
             // return $leave->studentLeave->courseStudent->department_id;
             if ($leave->studentLeave->courseStudent->department_id == $deptID) {
                 $allLeaves[] = $leave;
-        
+
             }
         }
 

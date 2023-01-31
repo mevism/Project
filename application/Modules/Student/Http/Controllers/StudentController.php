@@ -178,7 +178,7 @@ class StudentController extends Controller
     public function getCourseClasses(Request $request){
 
         $student = Auth::guard('student')->user()->loggedStudent;
-        
+
         // return $student;
         $group = Courses::where('id', $request->id)->first();
         // return $group;
@@ -203,9 +203,9 @@ class StudentController extends Controller
             ->select('id','name', 'points')
             ->latest()
             ->first();
-            // return $classes;
+//             return $classes;
 
-        $cluster = [$classes->id, $classes->name, $points[$group->cluster_group], $classes->points];
+       return $cluster = [$classes->id, $classes->name, $points[$group->cluster_group], $classes->points];
 
 
         return response()->json($cluster);
@@ -353,7 +353,7 @@ class StudentController extends Controller
             ->first();
 
             $data = [];
-        
+
             if($stage == null){
 
                 $currentStage = [];
@@ -363,25 +363,25 @@ class StudentController extends Controller
                 $classes = ClassPattern::where('class_code', $stage->class_code)->get();
 
                 foreach ($classes as $class){
-        
+
                     $list[] = $class->semester;
                 }
-        
+
                 $id_collection = collect($list);
                 $this_key = $id_collection->search($currentStage);
                 $next_id = $id_collection->get($this_key + 1);
-        
-               
-        
+
+
+
                 if ( (float)$currentStage > (float)'1.3'){
-        
+
                    $currently = $stage->year_study.'.'.$stage->semester_study;
                     $classPattern =  ClassPattern::where('academic_year', $stage->academic_year)
                                 ->where('period', $stage->academic_semester)
                                 ->where('semester', '<',  $currently)
                                 ->get()
                                 ->groupBy('class_code');
-        
+
                 }
             }
 
