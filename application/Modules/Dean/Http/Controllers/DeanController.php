@@ -40,18 +40,25 @@ class DeanController extends Controller
 
         $hashedYear = Crypt::decrypt($year);
 
-        $deptID   =   Department::where('school_id', auth()->guard('user')->user()->school_id)->get();
-// return $deptID;
-        $requests = AcademicLeave::where('academic_year', $hashedYear)
-            ->latest()
-            ->get();
+        $departments = Department::where('school_id', auth()->guard('user')->user()->school_id)->get();
 
-        foreach ($requests as $leave){
-            // return $leave->studentLeave->courseStudent->department_id = $deptID;
-            if ($leave->studentLeave->courseStudent->department_id = $deptID) {
+        $leaves = AcademicLeave::where('academic_year', $hashedYear)->latest()->get();
+
+        $allLeaves = [];
+
+        foreach ($departments as $department){
+            $deptIds[] = $department->id;
+        }
+
+        foreach ($leaves as $leave){
+
+            // return $leave->studentLeave->courseStudent->department_id;
+            if (in_array($leave->studentLeave->courseStudent->department_id, $deptIds, false)) {
                 $allLeaves[] = $leave;
+
             }
         }
+
 
         return view('dean::defferment.annualLeaves')->with(['leaves' => $allLeaves, 'year' => $hashedYear]);
 
@@ -134,7 +141,7 @@ class DeanController extends Controller
         $by = $user->name;
         $dept = $user->getSch->initials;
         $role = $user->userRoles->name;
-        
+
         $departments   =   Department::where('school_id', auth()->guard('user')->user()->school_id)->get();
         foreach($departments as $department){
         $transfers[] = CourseTransfer::where('department_id', $department->id)
@@ -145,8 +152,8 @@ class DeanController extends Controller
         }
 
         $school = Auth::guard('user')->user()->getSch->name;
-        $courses = Courses::all(); 
-        
+        $courses = Courses::all();
+
         $domPdfPath = base_path('vendor/dompdf/dompdf');
         \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
         \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
@@ -241,7 +248,7 @@ class DeanController extends Controller
 
         $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
 
-        $pdfPath = 'Fees/'.'Transfers'.time().".pdf"; 
+        $pdfPath = 'Fees/'.'Transfers'.time().".pdf";
 
         $converter =  new OfficeConverter($docPath, 'Fees/');
         $converter->convertTo('Transfers'.time().".pdf");
@@ -277,7 +284,7 @@ class DeanController extends Controller
             $approval->dean_remarks = $request->remarks;
             $approval->save();
 
-        
+
         return redirect()->route('dean.transfer',['year' => Crypt::encrypt($year)])->with('success', 'Course transfer request accepted');
     }
 
@@ -324,7 +331,7 @@ class DeanController extends Controller
                                 ->latest()
                                 ->get();
             }
-    
+
         }
 
         return view('dean::transfers.index')->with(['transfer' => $transfer, 'departments' => $departments, 'year'=>$hashedYear]);
@@ -333,7 +340,7 @@ class DeanController extends Controller
     public function viewTransfer($id){
 
         $hashedId = Crypt::decrypt($id);
-    
+
 
         $data = CourseTransferApproval::find($hashedId);
 

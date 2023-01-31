@@ -64,29 +64,35 @@
                                 </thead>
                                 <tbody>
                                 @foreach($leaves as $key => $item)
-                                     
+
                                             <tr>
                                                 <td>
                                                     @if($item->registrar_status == NULL )
                                                     <input class="leaves" type="checkbox" name="submit[]" value="{{ $item->id }}">
                                                         @else
                                                         ✔
-                                                    @endif 
+                                                    @endif
                                                 </td>
                                                 <td> {{ ++$key }} </td>
                                                 <td>{{ $item->studentLeave->reg_number }}</td>
                                                 <td>{{ $item->studentLeave->sname.' '. $item->studentLeave->fname.' '. $item->studentLeave->mname }} </td>
                                                 <td>{{ $item->studentLeave->courseStudent->deptStudCourse->dept_code }}</td>
-                                                <td> {{ $item->approveLeave->cod_remarks }} </td>
-                                                <td> 
-                                                    @if($item->approveLeave->dean_status == 1)
-                                                        <span class="badge bg-success">Accepted</span>
-                                                    @else
-                                                        <span class="badge bg-danger">Rejected</span>
-                                                    @endif 
+                                                <td>
+                                                    @if($item->approveLeave != null)
+                                                    {{ $item->approveLeave->cod_remarks }}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if($item->approveLeave != null)
+                                                        @if($item->approveLeave->dean_status == 1)
+                                                            <span class="badge bg-success">Accepted</span>
+                                                        @else
+                                                            <span class="badge bg-danger">Rejected</span>
+                                                        @endif
+                                                    @endif
                                                 </td>
                                             </tr>
-                               
+
                                 @endforeach
                                 </tbody>
                             {{-- @else
@@ -99,7 +105,7 @@
                         <div>
                             <input type="checkbox" onclick="for(c in document.getElementsByClassName('leaves')) document.getElementsByClassName('leaves').item(c).checked = this.checked"> Select all
                         </div>
-                       
+
                         @endif
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-outline-success col-md-3 m-2" data-toggle="click-ripple">Send Mail</button>

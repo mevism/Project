@@ -69,13 +69,13 @@ class CoursesController extends Controller
 {
 
     public function leaves(){
-        
+
         $schools   =   School::all();
         foreach($schools as $school){
             $data = AcademicLeave::all()->groupBy('academic_year');
-                 
+
         }
-        
+
         return  view('registrar::leaves.yearlyLeaves')->with(['data'=> $data, 'schools'=>$schools]);
     }
 
@@ -83,47 +83,47 @@ class CoursesController extends Controller
         $hashedYear = Crypt::decrypt($year);
         $schools   =   School::all();
         $leaves  =  AcademicLeave::where('academic_year', $hashedYear)->get();
-    
+
         return view('registrar::leaves.index')->with(['leaves' => $leaves,'schools'=>$schools, 'year'=>$hashedYear]);
     }
 
     public function acceptedAcademicLeaves(Request $request){
 
        $request->validate(['submit' => 'required']);
-   
-           foreach($request->submit as $id){    
+
+           foreach($request->submit as $id){
 
             $approval = AcademicLeave::find($id);
 
                    if ($approval->approveLeave->dean_status == 1){
 
                         Mail::to($approval->studentLeave->student_email)->send(new AcademicLeaveMail($approval));
-                        
+
                         $approved = AcademicLeaveApproval::where('academic_leave_id', $id)->first();
                         $approved->registrar_status  =  1;
                         $approved->status  =  1;
-                        $approved->save(); 
+                        $approved->save();
 
                         $student = Student::find($approval->student_id);
                         $student->status = 3;
                         $student->save();
-                        
+
                     }
                     else{
 
                         Mail::to($approval->studentLeave->student_email)->send(new RejectedAcademicMail($approval));
-                        
+
                         $rejected = AcademicLeaveApproval::find($id);
                         $rejected->registrar_status  =  1;
                         $rejected->status  =  2;
                         $rejected->save();
                     }
             }
-   
+
        return redirect()->back()->with( 'success', 'Email sent successfuly.');
-   
+
     }
-    
+
     public function acceptedTransfers(Request $request){
 
      $request->validate(['submit' => 'required']);
@@ -131,8 +131,8 @@ class CoursesController extends Controller
     //  return $request->all();
 
         foreach($request->submit as $id){
-            
-            
+
+
            $approvedID = CourseTransferApproval::find($id);
 
             $approval = CourseTransfer::find($approvedID->course_transfer_id);
@@ -190,12 +190,12 @@ class CoursesController extends Controller
                         unlink($pdfPath);
                     }
 
-                    $converter     =     new OfficeConverter($docPath, storage_path());
-                    $converter->convertTo(str_replace('/', '_', $refNumber).".pdf");
-
-                    if(file_exists($docPath)){
-                        unlink($docPath);
-                    }
+//                    $converter     =     new OfficeConverter($docPath, storage_path());
+//                    $converter->convertTo(str_replace('/', '_', $refNumber).".pdf");
+//
+//                    if(file_exists($docPath)){
+//                        unlink($docPath);
+//                    }
 
 
 
@@ -206,7 +206,7 @@ class CoursesController extends Controller
                     StudentCourse::where('student_id', $approval->student_id)->delete();
                     StudentLogin::where('student_id', $approval->student_id)->delete();
 
-                    // return $s = StudentInvoice::where($record->reg_number)->get(); 
+                    // return $s = StudentInvoice::where($record->reg_number)->get();
 
                      $invoices  =  StudentInvoice::where('reg_number', 'BSIT/002J/2023')->get();
                      $deposits  =  StudentDeposit::where('reg_number', $oldRecord->reg_number)->get();
@@ -219,7 +219,7 @@ class CoursesController extends Controller
                     StudentCourse::where('student_id', $approval->student_id)->delete();
                     StudentLogin::where('student_id', $approval->student_id)->delete();
 
-                    // return $s = StudentInvoice::where($record->reg_number)->get(); 
+                    // return $s = StudentInvoice::where($record->reg_number)->get();
 
                      $invoices  =  StudentInvoice::where('reg_number', $oldRecord->reg_number)->get();
                      $deposits  =  StudentDeposit::where('reg_number', $oldRecord->reg_number)->get();
@@ -227,7 +227,7 @@ class CoursesController extends Controller
                     $oldstudent = Student::withTrashed()->find($id);
 
                     $newStudent               =             new Student;
-                  
+
                     $newStudent->reg_number   =             $regNumber;
                     $newStudent->ref_number   =             $refNumber;
                     $newStudent->sname        =             $student->sname;
@@ -252,7 +252,7 @@ class CoursesController extends Controller
                     $newStudent->disability   =             $student->disability;
                     $newStudent->save();
 
-                   
+
                     $newStudCourse                =             new StudentCourse;
                     $newStudCourse->student_id    =             $newStudent->id;
                     $newStudCourse->student_type  =             2;
@@ -373,7 +373,7 @@ class CoursesController extends Controller
     }
 
     public function yearly(){
-        
+
         $schools   =   School::all();
         foreach($schools as $school){
             $data = CourseTransfer::all()->groupBy('academic_year');
