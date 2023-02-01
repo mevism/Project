@@ -159,7 +159,7 @@
 
 {{--                        @if($leave->approveLeave )--}}
 
-                            @if($leave->approveLeave== null)
+                            @if($leave->approveLeave->dean_status== null)
                             <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('dean.acceptLeaveRequest', ['id' => Crypt::encrypt($leave->id)]) }}"> Accept Transfer </a>
                             <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Transfer</a>
                             @else

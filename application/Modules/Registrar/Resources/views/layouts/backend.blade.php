@@ -68,135 +68,133 @@
                 <i class="nav-main-link-icon si si-cursor"></i>
                 <span class="nav-main-link-name">
                     @if(auth()->guard('user')->user()->role_id == 1)
-                        Registrar
+                        REGISTRAR
                     @endif
                 </span>
-
               </a>
             </li>
-
-
             <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                 <i class="nav-main-link-icon si si-graduation"></i>
                 <span class="nav-main-link-name">Academics</span>
               </a>
               <ul class="nav-main-submenu">
-                    <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('school/showSchool') ? ' active' : '' }}" href="{{  route('courses.showSchool') }}">
-                            <i class="nav-main-link-icon si si-graduation"></i>
-                              <span class="nav-main-link-name">Schools</span>
-                          </a>
+                <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
+                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                    <i class="nav-main-link-icon si si-graduation"></i>
+                    <span class="nav-main-link-name">Schedule</span>
+                  </a>
+                    <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                        <a class="nav-main-link{{ request()->is('school/showSchool') ? ' active' : '' }}" href="{{  route('courses.showSchool') }}">
+                          <i class="nav-main-link-icon si si-graduation"></i>
+                            <span class="nav-main-link-name">Schools</span>
+                        </a>
                       </li>
-
-                  <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('department/showDepartment') ? ' active' : '' }}" href="{{  route('courses.showDepartment') }}">
-                      <i class="nav-main-link-icon si si-user"></i>
-                      <span class="nav-main-link-name">Department</span>
-                    </a>
-                  </li>
-
+                      <li class="nav-main-item">
+                        <a class="nav-main-link{{ request()->is('department/showDepartment') ? ' active' : '' }}" href="{{  route('courses.showDepartment') }}">
+                          <i class="nav-main-link-icon si si-user"></i>
+                          <span class="nav-main-link-name">Department</span>
+                        </a>
+                      </li>        
                       <li class="nav-main-item">
                           <a class="nav-main-link{{ request()->is('courses/showCourse') ? ' active' : '' }}" href="{{  route('courses.showCourse') }}">
                             <i class="nav-main-link-icon si si-layers"></i>
                               <span class="nav-main-link-name">Courses</span>
                           </a>
-                      </li>
-
+                      </li>      
                       <li class="nav-main-item">
                         <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showAttendance')}}">
                           <i class="nav-main-link-icon si si-layers"></i>
                           <span class="nav-main-link-name">Mode of Study</span>
                         </a>
-                      </li>
-              </ul>
-            </li>
-            <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                <i class="nav-main-link-icon si si-graduation"></i>
-                <span class="nav-main-link-name">Imports</span>
-              </a>
-                <ul class="nav-main-submenu">
-                    <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importUnit')}}">
-                        <i class="nav-main-link-icon si si-layers"></i>
-                        <span class="nav-main-link-name"> Units</span>
-                      </a>
-                    </li>
-                    <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importExportCourses')}}">
-                        <i class="nav-main-link-icon si si-layers"></i>
-                        <span class="nav-main-link-name">Courses</span>
-                      </a>
-                    </li>
-                    <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importExportclusterWeights')}}">
-                        <i class="nav-main-link-icon si si-layers"></i>
-                        <span class="nav-main-link-name"> Cluster Weights</span>
-                      </a>
-                    </li>
-                    <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importUnitProgramms')}}">
-                        <i class="nav-main-link-icon si si-layers"></i>
-                        <span class="nav-main-link-name"> Unit Programs</span>
-                      </a>
-                    </li>
-
-                </ul>
-            </li>
-
-            <li class="nav-main-item{{ request()->is('calender/*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                <i class="nav-main-link-icon si si-calendar"></i>
-                <span class="nav-main-link-name">Events Calender</span>
-              </a>
-              <ul class="nav-main-submenu">
-                <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showEvent')}}">
-                    <i class="nav-main-link-icon si si-layers"></i>
-                    <span class="nav-main-link-name"> Events</span>
-                  </a>
+                      </li>    
+                    </ul>
                 </li>
-
-                <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showCalenderOfEvents')}}">
+                <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
+                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                    <i class="nav-main-link-icon si si-graduation"></i>
+                    <span class="nav-main-link-name">Imports</span>
+                  </a>
+                    <ul class="nav-main-submenu">
+                        <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importUnit')}}">
+                            <i class="nav-main-link-icon si si-layers"></i>
+                            <span class="nav-main-link-name"> Units</span>
+                          </a>
+                        </li>
+                        <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importExportCourses')}}">
+                            <i class="nav-main-link-icon si si-layers"></i>
+                            <span class="nav-main-link-name">Courses</span>
+                          </a>
+                        </li>
+                        <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importExportclusterWeights')}}">
+                            <i class="nav-main-link-icon si si-layers"></i>
+                            <span class="nav-main-link-name"> Cluster Weights</span>
+                          </a>
+                        </li>
+                        <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importUnitProgramms')}}">
+                            <i class="nav-main-link-icon si si-layers"></i>
+                            <span class="nav-main-link-name"> Unit Programs</span>
+                          </a>
+                        </li>
+    
+                    </ul>
+                </li>
+                <li class="nav-main-item{{ request()->is('calender/*') ? ' open' : '' }}">
+                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                     <i class="nav-main-link-icon si si-calendar"></i>
-                    <span class="nav-main-link-name"> Calender of Events</span>
+                    <span class="nav-main-link-name">Events Calender</span>
                   </a>
+                  <ul class="nav-main-submenu">
+                    <li class="nav-main-item">
+                      <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showEvent')}}">
+                        <i class="nav-main-link-icon si si-layers"></i>
+                        <span class="nav-main-link-name"> Events</span>
+                      </a>
+                    </li>
+    
+                    <li class="nav-main-item">
+                      <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showCalenderOfEvents')}}">
+                        <i class="nav-main-link-icon si si-calendar"></i>
+                        <span class="nav-main-link-name"> Calender of Events</span>
+                      </a>
+                    </li>
+                    <li class="nav-main-item">
+                      <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('courses.academicYear') }}">
+                          <i class="nav-main-link-icon si si-calendar"></i>
+                          <span class="nav-main-link-name">Academic Years</span>
+                      </a>
+                  </li>
+    
+                  </ul>
                 </li>
-                <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('courses.academicYear') }}">
-                      <i class="nav-main-link-icon si si-calendar"></i>
-                      <span class="nav-main-link-name">Academic Years</span>
+                <li class="nav-main-item{{ request()->is('semFee/*') ? ' open' : '' }}">
+                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                    <i class="nav-main-link-icon si si-user"></i>
+                    <span class="nav-main-link-name">Fee Structures</span>
                   </a>
-              </li>
-
+                  <ul class="nav-main-submenu">
+                    <li class="nav-main-item">
+                      <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showSemFee')}}">
+                        <i class="nav-main-link-icon si si-layers"></i>
+                        <span class="nav-main-link-name"> Course Fee Structures</span>
+                      </a>
+                    </li>
+                    <li class="nav-main-item">
+                      <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showVoteheads')}}">
+                        <i class="nav-main-link-icon si si-layers"></i>
+                        <span class="nav-main-link-name"> Voteheads</span>
+                      </a>
+                    </li>
+    
+                  </ul>
+                </li>
               </ul>
             </li>
-
-
-            <li class="nav-main-item{{ request()->is('semFee/*') ? ' open' : '' }}">
-              <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                <i class="nav-main-link-icon si si-user"></i>
-                <span class="nav-main-link-name">Fee Structures</span>
-              </a>
-              <ul class="nav-main-submenu">
-                <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showSemFee')}}">
-                    <i class="nav-main-link-icon si si-layers"></i>
-                    <span class="nav-main-link-name"> Course Fee Structures</span>
-                  </a>
-                </li>
-                <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showVoteheads')}}">
-                    <i class="nav-main-link-icon si si-layers"></i>
-                    <span class="nav-main-link-name"> Voteheads</span>
-                  </a>
-                </li>
-
-              </ul>
-            </li>
-
             <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                 <i class="nav-main-link-icon si si-user"></i>
@@ -285,7 +283,7 @@
               <ul class="nav-main-submenu">
                 
                 <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->is('transfer') ? ' active' : '' }}" href="{{ route('courses.leaves') }}">
+                    <a class="nav-main-link{{ request()->is('transfer') ? ' active' : '' }}" href="{{ route('courses.readmissions') }}">
                         <i class="nav-main-link-icon si si-user"></i>
                         <span class="nav-main-link-name"> Readmission</span>
                     </a>

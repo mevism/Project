@@ -55,7 +55,6 @@
                             <thead>
                                 <th>#</th>
                                 <th>Academic Year</th>
-                                <th>Total Request</th>
                                 <th>Action</th>
                             </thead>
                             <tbody>
@@ -66,9 +65,8 @@
                                     <tr>
                                         <td> {{ $loop->iteration }} </td>
                                         <td> {{ $academic_year }} </td>
-                                        <td> {{ $leave->count() }}</td>
                                         <td>
-                                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.academicLeave', ['year' => Crypt::encrypt($academic_year)]) }}">view requests</a>
+                                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.academicLeave', ['year' => Crypt::encrypt($academic_year)]) }}">view</a>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -10,6 +10,7 @@ use Modules\Examination\Entities\Exam;
 use Modules\Student\Entities\AcademicLeave;
 use Modules\Student\Entities\CourseTransfer;
 use Modules\Student\Entities\ExamResults;
+use Modules\Student\Entities\Readmission;
 
 class Student extends Model
 {
@@ -60,6 +61,10 @@ class Student extends Model
         return $this->hasMany(CourseTransfer::class, 'id')->withTrashed();
     }
 
+    public function readmissionStudent(){
+
+        return $this->hasMany(Readmission::class, 'id');
+    }
 
 
     protected static function newFactory()
