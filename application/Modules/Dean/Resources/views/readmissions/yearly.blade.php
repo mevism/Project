@@ -32,16 +32,16 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
                     <h5 class="h5 fw-bold mb-0">
-                        ACADEMIC/DEFERMENT LEAVE REQUESTS
+                        READMISSION REQUESTS
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="#">Leaves</a>
+                            <a class="link-fx" href="#">Readmissions</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            All deferment/academic leaves
+                            All Readmissions
                         </li>
                     </ol>
                 </nav>
@@ -54,21 +54,21 @@
             <div class="table-responsive">
                 <table id="example"  class="table table-sm table-striped table-bordered fs-sm">
                     <thead>
-                        <th>#</th>
-                        <th>Academic Year</th>
-                        <th>Action</th>
+                    <th>#</th>
+                    <th>Academic Semester</th>
+                    <th>Action</th>
                     </thead>
                     <tbody>
-                        @foreach($leaves as $academicYear => $leave)
-                            <tr>
-                                <td> {{ $loop->iteration }} </td>
-                                <td> {{ $academicYear }} </td>
-                                <td>
-                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('dean.yearlyLeaves', ['year' => Crypt::encrypt($academicYear)]) }}"> View </a>
-                                </td>
-                            </tr>
+                    @foreach($admissions as $academicSemester => $admission)
+                        <tr>
+                            <td> {{ $loop->iteration }} </td>
+                            <td> {{ $academicSemester }} </td>
+                            <td>
+                                <a class="btn btn-sm btn-outline-dark" href="{{ route('dean.intakeReadmissions', ['intake' => Crypt::encrypt($academicSemester), 'year' => Crypt::encrypt($year)]) }}"> View  {{ $academicSemester }}</a>
+                            </td>
+                        </tr>
 
-                        @endforeach
+                    @endforeach
                     </tbody>
                 </table>
             </div>

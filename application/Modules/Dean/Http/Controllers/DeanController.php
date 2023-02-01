@@ -9,9 +9,13 @@ use Modules\Dean\Entities\DeanLog;
 use PhpOffice\PhpWord\Element\Table;
 use Illuminate\Support\Facades\Crypt;
 use Modules\COD\Entities\Nominalroll;
+use Modules\COD\Entities\ClassPattern;
+use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Student;
 use PhpOffice\PhpWord\TemplateProcessor;
+use Modules\Student\Entities\Readmission;
+use Modules\COD\Entities\ReadmissionClass;
 use Modules\Registrar\Entities\Department;
 use PhpOffice\PhpWord\SimpleType\TblWidth;
 use Modules\Application\Entities\Education;
@@ -20,12 +24,170 @@ use NcJoes\OfficeConverter\OfficeConverter;
 use Illuminate\Contracts\Support\Renderable;
 use Modules\Student\Entities\CourseTransfer;
 use Modules\Application\Entities\Application;
+use Modules\Student\Entities\ReadmissionApproval;
 use Modules\Student\Entities\AcademicLeaveApproval;
 use Modules\Student\Entities\CourseTransferApproval;
 
 
 class DeanController extends Controller
 {
+    public function readmissions(){
+
+        $readmissions = Readmission::latest()->get()->groupBy('academic_year');
+
+        return view('dean::readmissions.yearlyReadmissions')->with(['readmissions' => $readmissions]);
+    }
+
+    public function yearlyReadmissions($year){
+
+        $hashedYear = Crypt::decrypt($year);
+ 
+        $admissions = Readmission::where('academic_year', $hashedYear)->latest()->get()->groupBy('academic_semester');
+ 
+        return view('dean::readmissions.yearly')->with(['admissions' => $admissions, 'year' => $hashedYear]);
+ 
+     }
+    
+
+     public function intakeReadmissions($intake, $year){
+
+        $hashedIntake = Crypt::decrypt($intake);
+        $hashedYear = Crypt::decrypt($year);
+
+          $departments = Department::where('school_id', auth()->guard('user')->user()->school_id)->get();
+
+           $readmissions = Readmission::where('academic_year', $hashedYear)
+                        ->where('academic_semester', $hashedIntake)
+                        ->get();
+
+            $allReadmissions = [];
+
+            foreach ($departments as $department){
+              $deptIds[] = $department->id;
+            }
+
+            foreach($readmissions as $readmission){
+                if (in_array($readmission->leaves->studentLeave->courseStudent->department_id, $deptIds, false)) {
+                     $allReadmissions[] = $readmission;
+    
+                }
+            }         
+           
+
+            return view('dean::readmissions.intakeReadmissions')->with(['readmissions' => $allReadmissions, 'year' => $hashedYear]);
+    }
+
+    public function selectedReadmission($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $leave = Readmission::find($hashedId);
+
+         $stage = Nominalroll::where('student_id', $leave->leaves->studentLeave->id)
+                               ->latest()
+                               ->first();
+       $studentStage = $stage->year_study.'.'.$stage->semester_study;
+
+       $patterns = ClassPattern::where('academic_year', '>', $stage->academic_year)
+                                ->where('period', $stage->academic_semester)
+                                ->where('semester', $studentStage)
+                                ->get()
+                                ->groupBy('class_code');
+
+        if(count($patterns) == 0){
+
+            $classes = [];
+
+        }else{
+
+            foreach ($patterns as $class_code => $pattern) {
+
+                $classes[] = Classes::where('name', $class_code)
+                    ->where('course_id', $leave->leaves->studentLeave->courseStudent->course_id)
+                    ->where('attendance_code', $leave->leaves->studentLeave->courseStudent->typeStudent->attendance_code)
+                    ->where('name', '!=', $leave->leaves->studentLeave->courseStudent->class_code)
+                    ->get()
+                    ->groupBy('name');
+            }
+        }
+
+        return view('dean::readmissions.selectedReadmission')->with(['classes' => $classes, 'leave' => $leave, 'stage' => $stage]);
+
+    }
+    public function acceptReadmission(Request $request, $id){
+
+        $request->validate([
+            'class' => 'required'
+        ]);
+
+        $hashedId = Crypt::decrypt($id);
+
+        $route = Readmission::find($hashedId);
+
+        if (ReadmissionApproval::where('readmission_id', $hashedId)->exists()){
+
+            $placement = new ReadmissionClass;
+            $placement->readmission_id = $hashedId;
+            $placement->class_code = $request->class;
+            $placement->save();
+
+
+            $readmission = ReadmissionApproval::where('readmission_id', $hashedId)->first();
+            $readmission->dean_status = 1;
+            $readmission->dean_remarks = 'Admit student to ' . $request->class . ' class.';
+            $readmission->save();
+
+
+        }else {
+
+            $placement = new ReadmissionClass;
+            $placement->readmission_id = $hashedId;
+            $placement->class_code = $request->class;
+            $placement->save();
+
+            $readmission = new ReadmissionApproval;
+            $readmission->readmission_id = $hashedId;
+            $readmission->dean_status = 1;
+            $readmission->dean_remarks = 'Admit student to ' . $request->class . ' class.';
+            $readmission->save();
+        }
+
+        return redirect()->route('dean.intakeReadmissions', ['intake' => Crypt::encrypt($route->academic_semester), 'year' => Crypt::encrypt($route->academic_year)])->with('success', 'Readmission request accepted');
+
+    }
+
+    public function declineReadmission(Request $request, $id){
+
+        $request->validate([
+            'remarks' => 'required'
+        ]);
+
+        $hashedId = Crypt::decrypt($id);
+
+        $route = Readmission::find($hashedId);
+
+        if (ReadmissionApproval::where('readmission_id', $hashedId)->exists()){
+
+            ReadmissionClass::where('readmission_id', $hashedId)->delete();
+
+            $readmission = ReadmissionApproval::where('readmission_id', $hashedId)->first();
+            $readmission->dean_status = 2;
+            $readmission->dean_remarks = $request->remarks;
+            $readmission->save();
+
+
+        }else {
+
+            $readmission = new ReadmissionApproval;
+            $readmission->readmission_id = $hashedId;
+            $readmission->dean_status = 2;
+            $readmission->dean_remarks = $request->remarks;
+            $readmission->save();
+        }
+
+        return redirect()->route('dean.intakeReadmissions', ['intake' => Crypt::encrypt($route->academic_semester), 'year' => Crypt::encrypt($route->academic_year)])->with('success', 'Readmission request declined');
+
+    }
 
     public function academicLeave(){
 

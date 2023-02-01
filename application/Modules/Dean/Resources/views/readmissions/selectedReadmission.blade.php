@@ -1,44 +1,20 @@
 @extends('dean::layouts.backend')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
-
-<link rel="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css">
-<link rel="https://cdn.datatables.net/rowgroup/1.2.0/css/rowGroup.dataTables.min.css">
-
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-
-<script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
-<script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script>
-
-<script>
-    $(document).ready(function() {
-        $('#example').DataTable( {
-            responsive: true,
-            order: [[0, 'asc']],
-            rowGroup: {
-                dataSrc: 2
-            }
-        } );
-    } );
-</script>
-
 @section('content')
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
                     <h5 class="h5 fw-bold mb-0">
-                        VIEW REQUEST
+                        VIEW READMISSION REQUEST
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="javascript:void(0)">Department</a>
+                            <a class="link-fx" href="javascript:void(0)">Readmission</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            Course Transfers
+                            Readmission
                         </li>
                     </ol>
                 </nav>
@@ -58,39 +34,39 @@
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Reg. Number </div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $leave->studentLeave->reg_number }}
+                                        {{ $leave->leaves->studentLeave->reg_number }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Student Name</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $leave->studentLeave->sname.' '.$leave->studentLeave->fname.' '.$leave->studentLeave->mname }}
+                                        {{ $leave->leaves->studentLeave->sname.' '.$leave->leaves->studentLeave->fname.' '.$leave->leaves->studentLeave->mname }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Current Class</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $leave->studentLeave->courseStudent->class_code }}
+                                        {{ $leave->leaves->studentLeave->courseStudent->class_code }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Current Course</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $leave->studentLeave->courseStudent->studentCourse->course_name }}
+                                        {{ $leave->leaves->studentLeave->courseStudent->studentCourse->course_name }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Current Department</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $leave->studentLeave->courseStudent->studentCourse->getCourseDept->name }}
+                                        {{ $leave->leaves->studentLeave->courseStudent->studentCourse->getCourseDept->name }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Current Stage</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ 'Year'.' '.$current->year_study.' Semester'.$current->semester_study.' '.'('.$current->patternRoll->season.')' }}
+                                        {{ 'Year'.' '.$stage->year_study.' Semester'.$stage->semester_study.' '.'('.$stage->patternRoll->season.')' }}
                                     </div>
                                 </div>
                             </fieldset>
@@ -102,7 +78,7 @@
                                 <div class="row mb-3">
                                     <div class="col-md-4 fw-bold">Leave Type</div>
                                     <div class="col-md-8 fs-sm">
-                                        @if($leave->type == 1)
+                                        @if($leave->leaves->type == 1)
                                             ACADEMIC LEAVE
                                         @else
                                             DEFERMENT
@@ -114,62 +90,76 @@
                                 <div class="row mb-3">
                                     <div class="col-md-4 fw-bold">Leave Dates</div>
                                     <div class="col-md-8 fs-sm">
-                                       From: {{ $leave->from }} - To: {{ $leave->to }}
+                                        From: {{ $leave->leaves->from }} - To: {{ $leave->leaves->to }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
-                                    <div class="col-md-4 fw-bold">New Class</div>
+                                    <div class="col-md-4 fw-bold">New Class (Requested)</div>
                                     <div class="col-md-8 fs-sm">
-                                        {{ $leave->deferredClass->deferred_class }}
+                                        {{ $leave->leaves->deferredClass->deferred_class }}
                                     </div>
                                 </div>
+
+                                <form method="POST" action="{{ route('dean.acceptReadmission', ['id' => Crypt::encrypt($leave->id)]) }}">
+                                    @csrf
+                                    <div class="row mb-3">
+                                        <div class="col-md-4 fw-bold">New Class (Placed)</div>
+                                        <div class="col-md-8 fs-sm">
+                                            <select name="class" class="form-control col-md-8">
+                                                <option class="text-center" disabled selected>-- select class --</option>
+                                                @foreach($classes as $class)
+                                                    @foreach($class as $classname => $class)
+                                                        <option value="{{ $classname }}">{{ $classname }}</option>
+                                                    @endforeach
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-4 fw-bold">New Stage</div>
                                     <div class="col-md-8 fs-sm">
-                                        {{ $leave->deferredClass->stage }}
+                                        {{ $leave->leaves->deferredClass->stage }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-4 fw-bold">Readmission Period</div>
                                     <div class="col-md-8 fs-sm">
-                                        Academic Year {{ $leave->deferredClass->academic_year }} Semester {{ $leave->deferredClass->semester_study }}
+                                        Academic Year {{ $leave->leaves->deferredClass->academic_year }} Semester {{ $leave->leaves->deferredClass->semester_study }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-4 fw-bold">Deferment Period</div>
                                     <div class="col-md-8 fs-sm">
-                                        {{ Carbon\Carbon::parse($leave->to)->diffInMonths(\Carbon\Carbon::parse($leave->from)) }} Months
+                                        {{ Carbon\Carbon::parse($leave->leaves->to)->diffInMonths(\Carbon\Carbon::parse($leave->leaves->from)) }} Months
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
-                                    <div class="col-md-4 fw-bold">Deferment Reason(s)</div>
+                                    <div class="col-md-4 fw-bold">Reason(s)</div>
                                     <div class="col-md-8 fs-sm">
-                                        {{ $leave->reason }}
+                                        {{ $leave->leaves->reason }}
                                     </div>
                                 </div>
                             </fieldset>
                         </div>
                     </div>
                     <div class="d-flex justify-content-center m-2">
-
-{{--                        @if($leave->approveLeave )--}}
-
-                            @if($leave->approveLeave->dean_status== null)
-                            <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('dean.acceptLeaveRequest', ['id' => Crypt::encrypt($leave->id)]) }}"> Accept Transfer </a>
-                            <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Transfer</a>
+                        @if($leave->readmissionApproval->dean_status == null)
+                            <button class="btn btn-outline-success col-md-2 m-2"> Accept Readmission </button>
+                            <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Readmission</a>
+                        @else
+                            @if($leave->readmissionApproval->dean_status == 1)
+                                <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Readmission </a>
                             @else
-                                @if($leave->approveLeave->dean_status == 1)
-                                    <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Transfer</a>
-                                @else
-                                    <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('dean.acceptLeaveRequest', ['id' => Crypt::encrypt($leave->id)]) }}"> Accept Transfer </a>
-                                @endif
+                                <button class="btn btn-outline-success col-md-2 m-2"> Accept Readmission </button>
                             @endif
+                        @endif
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -183,7 +173,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="{{ route('dean.declineLeaveRequest', ['id' => Crypt::encrypt($leave->id)]) }}">
+                    <form method="POST" action="{{ route('dean.declineReadmission', ['id' => Crypt::encrypt($leave->id)]) }}">
                         @csrf
                         <div class="d-flex justify-content-center mb-4">
                             <div class="col-md-11">

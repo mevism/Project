@@ -68,7 +68,7 @@
                                         <td> {{ $academic_year }} </td>
                                         <td> {{ $transfer->count() }}</td>
                                         <td>
-                                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('dean.transfer', ['year' => Crypt::encrypt($academic_year)]) }}">view requests</a>
+                                            <a class="btn btn-sm btn-outline-secondary" href="">view requests</a>
                                         </td>
                                     </tr>
                                     @endforeach
