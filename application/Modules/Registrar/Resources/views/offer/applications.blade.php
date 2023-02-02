@@ -54,7 +54,6 @@
                         @csrf
 
             <table id="example" class="table table-bordered table-striped js-dataTable-responsive fs-sm">
-                @if(count($accepted)>0)
                     <thead>
                     <tr>
                         <th>✔</th>
@@ -126,11 +125,6 @@
 
                     @endforeach
                     </tbody>
-                @else
-                <tr>
-                    <small class="text-center text-muted">There are no accepted appications</small>
-                </tr>
-                @endif
         </table>
         @if(count($accepted)>0)
             <div>

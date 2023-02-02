@@ -31,7 +31,6 @@
             <form action="{{ route('dean.batchSubmit') }}" method="post">
                 @csrf
                     <table id="example" class="table table-responsive-sm table-bordered table-striped js-dataTable-responsive fs-sm">
-                        @if(count($apps)>0)
                             <thead>
                             <th>✔</th>
                                 <th></th>
@@ -80,11 +79,6 @@
                                 </tr>
                             @endforeach
                             </tbody>
-                        @else
-                            <tr>
-                                <span class="text-muted text-center fs-sm">There are no applications awaiting batch submission</span>
-                            </tr>
-                        @endif
                     </table>
                     @if(count($apps)>0)
                         <div>
