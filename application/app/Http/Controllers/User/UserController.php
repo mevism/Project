@@ -27,8 +27,12 @@ class UserController extends Controller
             }
         }
         if (Auth::guard('web')->attempt($logins, true)) {
+
+
             if (Auth::guard('web'))
-                return redirect()->route('application.applicant')->with('success', 'Welcome' . " " . Auth::user()->email . " " . Auth::user()->role_id . "  " . 'to' . " " . config('app.name') . ".");
+
+
+            return redirect()->route('application.applicant')->with('success', 'Welcome' . " " . Auth::user()->email . " " . Auth::user()->role_id . "  " . 'to' . " " . config('app.name') . ".");
 
         }
 

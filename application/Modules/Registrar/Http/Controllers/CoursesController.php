@@ -1813,8 +1813,13 @@ class CoursesController extends Controller
             $studCourse->course_id     =             $app->appApprovals->course_id;
             $studCourse->intake_id     =             $app->appApprovals->intake_id;
             $studCourse->academic_year_id =          $app->appApprovals->app_intake->academicYear->id;
-            $studCourse->class_code    =             strtoupper($app->appApprovals->courses->course_code.'/'.Carbon::parse($app->appApprovals->app_intake->intake_from)->format('MY').'/J-FT');
-            $studCourse->class         =             strtoupper($app->appApprovals->courses->course_code.'/'.Carbon::parse($app->appApprovals->app_intake->intake_from)->format('MY').'/J-FT');
+            if($app->appApprovals->applicant->student_type == 1){
+                $studCourse->class_code    =             strtoupper($app->appApprovals->courses->course_code.'/'.Carbon::parse($app->appApprovals->app_intake->intake_from)->format('MY').'/S-FT');
+                $studCourse->class         =             strtoupper($app->appApprovals->courses->course_code.'/'.Carbon::parse($app->appApprovals->app_intake->intake_from)->format('MY').'/S-FT');
+            }else{
+                $studCourse->class_code    =             strtoupper($app->appApprovals->courses->course_code.'/'.Carbon::parse($app->appApprovals->app_intake->intake_from)->format('MY').'/J-FT');
+                $studCourse->class         =             strtoupper($app->appApprovals->courses->course_code.'/'.Carbon::parse($app->appApprovals->app_intake->intake_from)->format('MY').'/J-FT');
+            }
             $studCourse->course_duration =           $app->appApprovals->courses->courseRequirements->course_duration;
             $studCourse->save();
 

@@ -78,7 +78,7 @@ class CODController extends Controller
             ->orderby('id', 'DESC')
             ->get();
 
-        return auth()->guard('user')->user()->roles;
+//        return auth()->guard('user')->user()->roles;
 
         return view('cod::applications.index')->with('apps', $applications);
     }

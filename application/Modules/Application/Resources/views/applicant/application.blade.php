@@ -190,13 +190,13 @@
                                 <div class="col-sm-10 text-uppercase py-1">
                                     <input type="text" class="form-control form-control-md" name="department" value="{{ $course->mainCourses->getCourseDept->name }}" readonly>
                                     <input type="hidden" name="dept" value="{{ $course->mainCourses->getCourseDept->id }}">
-                                    <input type="hidden" name="school" value="{{ $course->mainCourses->getCourseDept->schools->id }}">
+                                    <input type="hidden" name="school" value="{{ $course->mainCourses->getCourseDept->schools->first()->id }}">
                                 </div>
                             </div>
                             <div class="row my-1">
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">School</label>
                                 <div class="col-sm-10 text-uppercase py-1">
-                                    <input type="text" class="form-control form-control-md" name="" value="{{ $course->mainCourses->getCourseDept->schools->name }}" readonly>
+                                    <input type="text" class="form-control form-control-md" name="" value="{{ $course->mainCourses->getCourseDept->schools->first()->name }}" readonly>
                                     <input type="hidden" name="intake" value="{{ $course->openCourse->id }}">
                                     <input type="hidden" name="course_id" value="{{ $course->mainCourses->id }}">
                                 </div>
@@ -812,7 +812,7 @@
                             <div class="block-content-full">
                                     <div class="p-sm-2 p-xl-12">
                                         <div class="row mb-2 text-center">
-                                            <span class="fw-semibold mb-2"> {{ $course->mainCourses->getCourseDept->schools->name }} </span>
+                                            <span class="fw-semibold mb-2"> {{ $course->mainCourses->getCourseDept->schools->first()->name }} </span>
                                             <span class="fw-semibold mb-2"> {{ $course->mainCourses->getCourseDept->name }}</span>
                                             <span class="fw-semibold mb-2"> {{ $course->mainCourses->course_name }} </span>
                                         </div>
