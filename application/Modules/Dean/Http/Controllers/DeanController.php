@@ -41,38 +41,40 @@ class DeanController extends Controller
     public function yearlyReadmissions($year){
 
         $hashedYear = Crypt::decrypt($year);
- 
+
         $admissions = Readmission::where('academic_year', $hashedYear)->latest()->get()->groupBy('academic_semester');
- 
+
         return view('dean::readmissions.yearly')->with(['admissions' => $admissions, 'year' => $hashedYear]);
- 
+
      }
-    
+
 
      public function intakeReadmissions($intake, $year){
 
         $hashedIntake = Crypt::decrypt($intake);
         $hashedYear = Crypt::decrypt($year);
 
-          $departments = Department::where('school_id', auth()->guard('user')->user()->school_id)->get();
+         $school_id = auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->id;
 
-           $readmissions = Readmission::where('academic_year', $hashedYear)
-                        ->where('academic_semester', $hashedIntake)
-                        ->get();
+         $departments   =   Department::where('division_id', 1)->get();
+         foreach ($departments as $department){
+             if ($department->schools->first()->id == $school_id){
+
+               $deptAdmission[] = $department->id;
+             }
+         }
+
+           $readmissions = Readmission::where('academic_year', $hashedYear)->where('academic_semester', $hashedIntake)->get();
 
             $allReadmissions = [];
 
-            foreach ($departments as $department){
-              $deptIds[] = $department->id;
+            foreach($readmissions as $readmission){
+                if (in_array($readmission->leaves->studentLeave->courseStudent->department_id, $deptAdmission, false)) {
+                     $allReadmissions[] = $readmission;
+
+                }
             }
 
-            foreach($readmissions as $readmission){
-                if (in_array($readmission->leaves->studentLeave->courseStudent->department_id, $deptIds, false)) {
-                     $allReadmissions[] = $readmission;
-    
-                }
-            }         
-           
 
             return view('dean::readmissions.intakeReadmissions')->with(['readmissions' => $allReadmissions, 'year' => $hashedYear]);
     }
@@ -499,20 +501,20 @@ class DeanController extends Controller
 
         $departments   =   Department::where('school_id', auth()->guard('user')->user()->school_id)->get();
 
-//        foreach($departments as $department){
-//
-//            $transfers = CourseTransfer::where('department_id', $department->id)
-//                             ->where('academic_year', $hashedYear)
-//                            ->latest()
-//                            ->get();
-//            foreach($transfers as $record){
-//                $transfer[] = CourseTransferApproval::where('course_transfer_id', $record->id)
-//                                ->where('cod_status', '!=', null)
-//                                ->latest()
-//                                ->get();
-//            }
-//
-//        }
+        foreach($departments as $department){
+
+            $transfers = CourseTransfer::where('department_id', $department->id)
+                             ->where('academic_year', $hashedYear)
+                            ->latest()
+                            ->get();
+            foreach($transfers as $record){
+                $transfer[] = CourseTransferApproval::where('course_transfer_id', $record->id)
+                                ->where('cod_status', '!=', null)
+                                ->latest()
+                                ->get();
+            }
+
+        }
 
         return view('dean::transfers.index')->with(['transfer' => $transfer, 'departments' => $departments, 'year'=>$hashedYear]);
     }

@@ -148,7 +148,7 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-center m-2">
-                        @if($leave->readmissionApproval->dean_status == null)
+                        @if($leave->readmissionApproval == null)
                             <button class="btn btn-outline-success col-md-2 m-2"> Accept Readmission </button>
                             <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Readmission</a>
                         @else

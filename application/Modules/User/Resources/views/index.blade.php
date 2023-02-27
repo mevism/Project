@@ -72,7 +72,7 @@
                                             <td> {{ $user->staff_number }} </td>
                                             <td> {{ $user->title }} {{  $user->last_name }} {{  $user->first_name }} {{  $user->middle_name }} </td>
                                             <td> {{ $user->office_email }} </td>
-                                            <td class="text-uppercase">
+                                            <td class="text-uppercase" nowrap="">
                                                 @foreach($user->employmentDivision as $key => $division)
                                                     <p>
                                                         {{ $division->name }}

@@ -17,7 +17,7 @@ class Finance
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::guard('user')->check() || !Auth::guard('user')->user()->role_id == 3){
+        if (!Auth::guard('user')->check() || !Auth::guard('user')->user()->roles->first()->id == 3){
 
             abort(403);
         }
