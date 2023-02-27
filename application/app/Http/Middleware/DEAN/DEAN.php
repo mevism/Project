@@ -17,8 +17,9 @@ class DEAN
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::guard('user')->check() || !Auth::guard('user')->user()->role_id == 4){
-            abort(403);
+        if (!Auth::guard('user')->check() || !Auth::guard('user')->user()->roles->first()->id == 4){
+
+            return redirect()->back()->with('error', 'Oops!! An Unauthorised attempt');
         }
         return $next($request);
     }

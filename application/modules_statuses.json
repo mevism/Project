@@ -10,5 +10,10 @@
     "Student": true,
     "Import": true,
     "KuccpsImport": true,
-    "Examination": true
+    "Examination": true,
+    "Lecturers": true,
+    "Workload": true,
+    "Lecturer": true,
+    "User": true,
+    "Administrator": true
 }

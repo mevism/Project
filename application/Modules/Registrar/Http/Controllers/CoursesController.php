@@ -1472,7 +1472,8 @@ class CoursesController extends Controller
     }
 
     public function showDepartment(){
-        $data      =       Department::latest()->get();
+
+        $data      =       Department::where('division_id', 1)->latest()->get();
         return view('registrar::department.showDepartment')->with('data',$data);
     }
 
@@ -1531,7 +1532,7 @@ class CoursesController extends Controller
     */
     public function addCourse(){
         $schools             =        School::all();
-        $departments         =        Department::all();
+        $departments         =        Department::where('division_id', 1)->latest()->get();
         $group               =        \Modules\Registrar\Entities\Group::all();
          return view('registrar::course.addCourse')->with([ 'schools'=>$schools,'departments'=>$departments,  'groups' => $group]);
     }
@@ -1559,12 +1560,14 @@ class CoursesController extends Controller
         $data1            =          implode(",", $subject1);
         $data2            =          implode(",", $subject2);
         $data3            =          implode(",", $subject3);
+
         $courses                      =          new Courses();
         $courses->department_id       =          $request->input('department');
         $courses->course_name         =          $request->input('course_name');
         $courses->course_code         =          $request->input('course_code');
         $courses->level               =          $request->input('level');
         $courses->save();
+
         $requirement                      =         new CourseRequirement;
         $requirement->course_id           =         $courses->id;
         $requirement->course_duration     =         $request->input('course_duration');
@@ -1583,6 +1586,7 @@ class CoursesController extends Controller
         $requirement->subject3            =           str_replace(',','/',$data2)." ".$request->grade2;
         $requirement->subject4            =           str_replace(',','/',$data3)." ".$request->grade3;
         $requirement->save();
+
         return redirect()->route('courses.showCourse')->with('success','Course Created');
     }
 

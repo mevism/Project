@@ -1,0 +1,11 @@
+{
+    "name": "Workload",
+    "alias": "workload",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Workload\\Providers\\WorkloadServiceProvider"
+    ],
+    "files": []
+}

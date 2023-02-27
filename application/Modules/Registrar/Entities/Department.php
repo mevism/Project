@@ -3,6 +3,7 @@
 namespace Modules\Registrar\Entities;
 
 use App\Models\User;
+use App\Models\UserEmployment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Student\Entities\CourseTransfer;
@@ -15,6 +16,15 @@ class Department extends Model
 
     public function getUser(){
         return $this->hasMany(User::class, 'id');
+    }
+
+    public function deptUser(){
+        return $this->hasMany(UserEmployment::class, 'id');
+    }
+
+    public function division(){
+
+        return $this->belongsTo(Division::class);
     }
 
 

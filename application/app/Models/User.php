@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Modules\Registrar\Entities\Department;
+use Modules\Registrar\Entities\Division;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -51,12 +54,33 @@ class User extends Authenticatable
 
     }
 
-    public function userRoles(){
+    public function roles(): BelongsToMany {
 
-        return $this->belongsTo(Role::class, 'role_id');
+        return $this->belongsToMany(Role::class, 'user_employments', 'user_id', 'role_id');
+    }
+
+
+    public function placedUser(){
+
+       return $this->hasMany(UserEmployment::class);
     }
 
     public function getSch(){
         return $this->belongsTo(\Modules\Registrar\Entities\School::class, 'school_id');
+    }
+
+    public function employmentDivision(): BelongsToMany {
+
+        return $this->belongsToMany(Division::class, 'user_employments', 'user_id', 'division_id');
+    }
+
+    public function employmentDepartment(): BelongsToMany {
+
+        return $this->belongsToMany(Department::class, 'user_employments', 'user_id', 'department_id');
+    }
+
+    public function employmentStation(): BelongsToMany {
+
+        return $this->belongsToMany(Department::class, 'user_employments', 'user_id', 'station_id');
     }
 }

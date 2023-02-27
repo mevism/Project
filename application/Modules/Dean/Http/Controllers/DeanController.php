@@ -29,9 +29,7 @@ class DeanController extends Controller
 
     public function academicLeave(){
 
-        $requests = AcademicLeave::latest()
-                                    ->get()
-                                    ->groupBy('academic_year');
+        $requests = AcademicLeave::latest()->get()->groupBy('academic_year');
 
         return view('dean::defferment.index')->with(['leaves' => $requests]);
     }
@@ -40,20 +38,28 @@ class DeanController extends Controller
 
         $hashedYear = Crypt::decrypt($year);
 
-        $departments = Department::where('school_id', auth()->guard('user')->user()->school_id)->get();
+       $school_id = auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->id;
+
+        $departments   =   Department::where('division_id', 1)->get();
+        foreach ($departments as $department){
+            if ($department->schools->first()->id == $school_id){
+
+                $deptLeaves[] = $department->id;
+            }
+        }
 
         $leaves = AcademicLeave::where('academic_year', $hashedYear)->latest()->get();
 
         $allLeaves = [];
 
-        foreach ($departments as $department){
-            $deptIds[] = $department->id;
-        }
+//        foreach ($departments as $department){
+//            $deptIds[] = $department->id;
+//        }
 
         foreach ($leaves as $leave){
 
             // return $leave->studentLeave->courseStudent->department_id;
-            if (in_array($leave->studentLeave->courseStudent->department_id, $deptIds, false)) {
+            if (in_array($leave->studentLeave->courseStudent->department_id, $deptLeaves, false)) {
                 $allLeaves[] = $leave;
 
             }
@@ -263,9 +269,19 @@ class DeanController extends Controller
 
 
     public function yearly(){
-        $departments   =   Department::where('school_id', auth()->guard('user')->user()->school_id)->get();
-        foreach($departments as $department){
-            $data[] = CourseTransfer::where('department_id', $department->id)
+
+        $school_id = auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->id;
+
+        $departments   =   Department::where('division_id', 1)->get();
+        foreach ($departments as $department){
+            if ($department->schools->first()->id == $school_id){
+
+                $deptTransfers[] = $department->schools->first()->id;
+            }
+        }
+
+        foreach($deptTransfers as $deptTransfer){
+            $data[] = CourseTransfer::where('department_id', $deptTransfer)
                     ->latest()
                     ->get()
                     ->groupBy('academic_year');
@@ -318,21 +334,23 @@ class DeanController extends Controller
 
     public function transfer($year){
         $hashedYear = Crypt::decrypt($year);
+
         $departments   =   Department::where('school_id', auth()->guard('user')->user()->school_id)->get();
-        foreach($departments as $department){
 
-            $transfers = CourseTransfer::where('department_id', $department->id)
-                             ->where('academic_year', $hashedYear)
-                            ->latest()
-                            ->get();
-            foreach($transfers as $record){
-                $transfer[] = CourseTransferApproval::where('course_transfer_id', $record->id)
-                                ->where('cod_status', '!=', null)
-                                ->latest()
-                                ->get();
-            }
-
-        }
+//        foreach($departments as $department){
+//
+//            $transfers = CourseTransfer::where('department_id', $department->id)
+//                             ->where('academic_year', $hashedYear)
+//                            ->latest()
+//                            ->get();
+//            foreach($transfers as $record){
+//                $transfer[] = CourseTransferApproval::where('course_transfer_id', $record->id)
+//                                ->where('cod_status', '!=', null)
+//                                ->latest()
+//                                ->get();
+//            }
+//
+//        }
 
         return view('dean::transfers.index')->with(['transfer' => $transfer, 'departments' => $departments, 'year'=>$hashedYear]);
     }

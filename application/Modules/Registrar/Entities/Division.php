@@ -11,6 +11,11 @@ class Division extends Model
 
     protected $fillable = ['name'];
 
+    public function divisionDepts(){
+
+        return $this->hasMany(Department::class);
+    }
+
     protected static function newFactory()
     {
         return \Modules\Registrar\Database\factories\DivisionFactory::new();

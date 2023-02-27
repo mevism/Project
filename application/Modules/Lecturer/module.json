@@ -1,0 +1,11 @@
+{
+    "name": "Lecturer",
+    "alias": "lecturer",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Lecturer\\Providers\\LecturerServiceProvider"
+    ],
+    "files": []
+}

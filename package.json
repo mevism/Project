@@ -1,12 +1,12 @@
 {
     "dependencies": {
         "autoprefixer": "10.4.5",
-        "intl-tel-input": "^17.0.18"
+        "intl-tel-input": "^17.0.18",
+        "react-intl-tel-input": "^8.2.0"
     },
     "name": "sims",
     "version": "1.0.0",
     "main": "jquery.js",
-    "devDependencies": {},
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
