@@ -1,4 +1,4 @@
-@extends('cod::layouts.backend')
+@extends('dean::layouts.backend')
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
@@ -84,10 +84,10 @@
                                     From : {{ $readmission->leaves->from }} <br>
                                     To : {{ $readmission->leaves->to }} <br>
                                 </td>
-                                <td>                        
+                                <td>
                                     <a class="btn btn-sm btn-outline-dark" href="{{ route('dean.selectedReadmission', ['id' => Crypt::encrypt($readmission->id)]) }}"> View </a>
-                                
-                                    @if($readmission->readmissionApproval->dean_status != null)
+
+                                    @if($readmission->readmissionApproval != null)
                                         @if($readmission->readmissionApproval->dean_status == 1)
                                             <i class="fa fa-check text-success"></i>
                                         @else

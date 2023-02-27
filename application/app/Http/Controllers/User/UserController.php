@@ -95,18 +95,18 @@ class UserController extends Controller
                     ->where('school_id', auth()->guard('user')->user()->school_id)->count();
                 return view('dean::dean.index')->with('apps', $apps_dean);
 
-            }elseif (auth()->guard('user')->user()->role_id == 5){
+            }elseif (auth()->guard('user')->user()->roles->first()->id == 5){
 
                 return view('hostel::hostels.index');
 
-            }elseif (auth()->guard('user')->user()->role_id == 6){
+            }elseif (auth()->guard('user')->user()->roles->first()->id == 11){
 
                 //
-            }elseif (auth()->guard('user')->user()->role_id == 7){
+            }elseif (auth()->guard('user')->user()->roles->first()->id == 6){
                 return redirect()->route('examination')->with("success",'Welcome');
 
 
-            }elseif (\auth()->guard('user')->user()->role_id == 8){
+            }elseif (\auth()->guard('user')->user()->roles->first()->id == 7){
 
                 $apps = AdmissionApproval::where('registrar_status', null)
                     ->where('finance_status', 1)->count();
