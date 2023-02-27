@@ -67,8 +67,9 @@
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
                 <i class="nav-main-link-icon si si-cursor"></i>
                 <span class="nav-main-link-name">
-                    @if(auth()->guard('user')->user()->role_id == 1)
-                        REGISTRAR
+
+                    @if(auth()->guard('user')->user()->hasRole('Registrar'))
+                        Registrar
                     @endif
                 </span>
               </a>
@@ -272,7 +273,7 @@
                 </li>
             </ul>
               <ul class="nav-main-submenu">
-                
+
                   <li class="nav-main-item">
                       <a class="nav-main-link{{ request()->is('transfer') ? ' active' : '' }}" href="{{ route('courses.leaves') }}">
                           <i class="nav-main-link-icon si si-user"></i>
@@ -281,7 +282,7 @@
                   </li>
               </ul>
               <ul class="nav-main-submenu">
-                
+
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('transfer') ? ' active' : '' }}" href="{{ route('courses.readmissions') }}">
                         <i class="nav-main-link-icon si si-user"></i>
@@ -290,6 +291,21 @@
                 </li>
             </ul>
           </li>
+
+              <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
+                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                      <i class="nav-main-link-icon si si-user"></i>
+                      <span class="nav-main-link-name">Users</span>
+                  </a>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('admin.users') }}">
+                              <i class="nav-main-link-icon si si-user"></i>
+                              <span class="nav-main-link-name"> View Users </span>
+                          </a>
+                      </li>
+                  </ul>
+              </li>
           </ul>
         </div>
         <!-- END Side Navigation -->
@@ -328,10 +344,12 @@
             <button type="button" class="btn btn-sm btn-alt-dark d-flex align-items-center" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <img class="rounded-circle" src="{{ asset('media/avatars/may.png') }}" alt="Header Avatar" style="width: 21px;">
               <span class="d-none d-sm-inline-block ms-2">
+                  @php
+                    $user = Auth::guard('user')->user();
+                  @endphp
+
                   @if(Auth::guard('user')->check())
-                      {{ Auth::guard('user')->user()->name }}
-                  @else
-                      {{ Auth::user()->name }}
+                      {{ $user->title }} {{ $user->last_name }}
                   @endif
               </span>
               <i class="fa fa-fw fa-angle-down d-none d-sm-inline-block ms-1 mt-1"></i>
@@ -342,16 +360,12 @@
                 <p class="mt-2 mb-0 fw-medium">
            {{-- {{ Auth::guard('user')->user()->name }}--}}
                     @if(Auth::guard('user')->check())
-                        {{ Auth::guard('user')->user()->name }}
-                    @else
-                        {{ Auth::user()->name }}
+                        {{ $user->title }} {{ $user->last_name }} {{ $user->first_name }} {{ $user->middle_name }}
                     @endif </p>
                 <p class="mb-0 text-muted fs-sm fw-medium">
-                    @if(Auth::guard('user')->check())
-                        {{ Auth::guard('user')->user()->role_id }}
-                    @else
-                        Applicant
-                    @endif</p>
+                    @if(auth()->guard('user')->user()->hasRole('Registrar'))
+                        Registrar
+                  @endif
               </div>
               {{-- <div class="p-2">
                 <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:void(0)">

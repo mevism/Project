@@ -17,7 +17,7 @@ class Admin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::guard('user')->check() || !Auth::guard('user')->user()->role_id == 1){
+        if (!Auth::guard('user')->check() || !Auth::guard('user')->user()->roles->first()->id == 1){
 
             abort(403);
         }

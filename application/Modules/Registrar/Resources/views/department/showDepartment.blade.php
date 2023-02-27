@@ -55,7 +55,7 @@
 
               <tr>
                 <th>#</th>
-                <th>SCHOOL NAME</th>
+                <th>DIVISION</th>
                 <th>DEPARTMENT NAME</th>
                 <th>DEPARTMENT CODE</th>
                 <th>HISTORY</th>
@@ -66,16 +66,16 @@
             <tbody>
               @foreach ($data as $key => $department)
               <tr>
-                  <td> {{ ++$key }} </td>
-                <td> {{ $department->schools->name }}</td>
+                <td> {{ ++$key }} </td>
+                <td> {{ $department->schools->first()->name }}</td>
                 <td> {{ $department->name }}</td>
-                  <td> {{ $department->dept_code }} </td>
+                <td> {{ $department->dept_code }} </td>
                   <td>
                     <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.departmentPreview', $department->id)}}"> View </a>
                   </td>
                 <td nowrap>
                   <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editDepartment', ['id'=> Crypt::encrypt($department->id)]) }}">edit</a>
-                  <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this department ?')"  href="{{ route('courses.destroyDepartment', $department->id) }}">delete</a>
+{{--                  <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this department ?')"  href="{{ route('courses.destroyDepartment', $department->id) }}">delete</a>--}}
                 </td>
               </tr>
               @endforeach

@@ -2163,7 +2163,6 @@ module.exports = {
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-
 __webpack_require__(/*! ./phone */ "./resources/js/phone.js");
 
 /***/ }),
@@ -2175,6 +2174,7 @@ __webpack_require__(/*! ./phone */ "./resources/js/phone.js");
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -2183,13 +2183,17 @@ window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
  * allows your team to easily build robust real-time web applications.
  */
+
 // import Echo from 'laravel-echo';
+
 // window.Pusher = require('pusher-js');
+
 // window.Echo = new Echo({
 //     broadcaster: 'pusher',
 //     key: process.env.MIX_PUSHER_APP_KEY,
@@ -2203,15 +2207,9 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*!*******************************!*\
   !*** ./resources/js/phone.js ***!
   \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ (() => {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-Object(function webpackMissingModule() { var e = new Error("Cannot find module 'node_modules/intl-tel-input'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
 
-var input = document.querySelector("#phone");
-Object(function webpackMissingModule() { var e = new Error("Cannot find module 'node_modules/intl-tel-input'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())(input, {// any initialisation options go here
-});
 
 /***/ }),
 
@@ -19446,7 +19444,7 @@ __webpack_require__.r(__webpack_exports__);
   \**********************************/
 /***/ (() => {
 
-throw new Error("Module build failed (from ./node_modules/mini-css-extract-plugin/dist/loader.js):\nModuleBuildError: Module build failed (from ./node_modules/css-loader/dist/cjs.js):\nError: Can't resolve 'node_modules/intl-tel-input/build/css/intlTelInput.css' in 'C:\\xampp\\htdocs\\sims\\application\\resources\\sass'\n    at finishWithoutResolve (C:\\xampp\\htdocs\\sims\\application\\node_modules\\enhanced-resolve\\lib\\Resolver.js:304:18)\n    at C:\\xampp\\htdocs\\sims\\application\\node_modules\\enhanced-resolve\\lib\\Resolver.js:381:15\n    at C:\\xampp\\htdocs\\sims\\application\\node_modules\\enhanced-resolve\\lib\\Resolver.js:430:5\n    at eval (eval at create (C:\\xampp\\htdocs\\sims\\application\\node_modules\\tapable\\lib\\HookCodeFactory.js:33:10), <anonymous>:16:1)\n    at C:\\xampp\\htdocs\\sims\\application\\node_modules\\enhanced-resolve\\lib\\Resolver.js:430:5\n    at eval (eval at create (C:\\xampp\\htdocs\\sims\\application\\node_modules\\tapable\\lib\\HookCodeFactory.js:33:10), <anonymous>:27:1)\n    at C:\\xampp\\htdocs\\sims\\application\\node_modules\\enhanced-resolve\\lib\\DescriptionFilePlugin.js:87:43\n    at C:\\xampp\\htdocs\\sims\\application\\node_modules\\enhanced-resolve\\lib\\Resolver.js:430:5\n    at eval (eval at create (C:\\xampp\\htdocs\\sims\\application\\node_modules\\tapable\\lib\\HookCodeFactory.js:33:10), <anonymous>:15:1)\n    at C:\\xampp\\htdocs\\sims\\application\\node_modules\\enhanced-resolve\\lib\\Resolver.js:430:5\n    at processResult (C:\\xampp\\htdocs\\sims\\application\\node_modules\\webpack\\lib\\NormalModule.js:753:19)\n    at C:\\xampp\\htdocs\\sims\\application\\node_modules\\webpack\\lib\\NormalModule.js:855:5\n    at C:\\xampp\\htdocs\\sims\\application\\node_modules\\loader-runner\\lib\\LoaderRunner.js:399:11\n    at C:\\xampp\\htdocs\\sims\\application\\node_modules\\loader-runner\\lib\\LoaderRunner.js:251:18\n    at context.callback (C:\\xampp\\htdocs\\sims\\application\\node_modules\\loader-runner\\lib\\LoaderRunner.js:124:13)\n    at Object.loader (C:\\xampp\\htdocs\\sims\\application\\node_modules\\css-loader\\dist\\index.js:155:5)\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)");
+throw new Error("Module build failed (from ./node_modules/mini-css-extract-plugin/dist/loader.js):\nModuleBuildError: Module build failed (from ./node_modules/css-loader/dist/cjs.js):\nError: Can't resolve 'node_modules/intl-tel-input/build/css/intlTelInput.css' in 'C:\\xampp\\htdocs\\smis\\application\\resources\\sass'\n    at finishWithoutResolve (C:\\xampp\\htdocs\\smis\\application\\node_modules\\enhanced-resolve\\lib\\Resolver.js:309:18)\n    at C:\\xampp\\htdocs\\smis\\application\\node_modules\\enhanced-resolve\\lib\\Resolver.js:386:15\n    at C:\\xampp\\htdocs\\smis\\application\\node_modules\\enhanced-resolve\\lib\\Resolver.js:435:5\n    at eval (eval at create (C:\\xampp\\htdocs\\smis\\application\\node_modules\\tapable\\lib\\HookCodeFactory.js:33:10), <anonymous>:16:1)\n    at C:\\xampp\\htdocs\\smis\\application\\node_modules\\enhanced-resolve\\lib\\Resolver.js:435:5\n    at eval (eval at create (C:\\xampp\\htdocs\\smis\\application\\node_modules\\tapable\\lib\\HookCodeFactory.js:33:10), <anonymous>:27:1)\n    at C:\\xampp\\htdocs\\smis\\application\\node_modules\\enhanced-resolve\\lib\\DescriptionFilePlugin.js:87:43\n    at C:\\xampp\\htdocs\\smis\\application\\node_modules\\enhanced-resolve\\lib\\Resolver.js:435:5\n    at eval (eval at create (C:\\xampp\\htdocs\\smis\\application\\node_modules\\tapable\\lib\\HookCodeFactory.js:33:10), <anonymous>:15:1)\n    at C:\\xampp\\htdocs\\smis\\application\\node_modules\\enhanced-resolve\\lib\\Resolver.js:435:5\n    at processResult (C:\\xampp\\htdocs\\smis\\application\\node_modules\\webpack\\lib\\NormalModule.js:758:19)\n    at C:\\xampp\\htdocs\\smis\\application\\node_modules\\webpack\\lib\\NormalModule.js:860:5\n    at C:\\xampp\\htdocs\\smis\\application\\node_modules\\loader-runner\\lib\\LoaderRunner.js:400:11\n    at C:\\xampp\\htdocs\\smis\\application\\node_modules\\loader-runner\\lib\\LoaderRunner.js:252:18\n    at context.callback (C:\\xampp\\htdocs\\smis\\application\\node_modules\\loader-runner\\lib\\LoaderRunner.js:124:13)\n    at Object.loader (C:\\xampp\\htdocs\\smis\\application\\node_modules\\css-loader\\dist\\index.js:155:5)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)");
 
 /***/ }),
 

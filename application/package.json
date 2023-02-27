@@ -17,13 +17,19 @@
         "lodash": "^4.17.19",
         "postcss": "^8.1.14",
         "sass": "^1.49.7",
-        "sass-loader": "^12.4.0"
+        "sass-loader": "^12.4.0",
+        "webpack": "^5.75.0",
+        "webpack-cli": "^5.0.1",
+        "webpack-dev-middleware": "^6.0.1",
+        "webpack-dev-server": "^4.11.1",
+        "webpack-hot-middleware": "^2.25.3"
     },
     "dependencies": {
         "@popperjs/core": "^2.11.2",
+        "@types/source-map": "^0.5.2",
         "autoprefixer": "10.4.5",
         "bootstrap": "^5.1.3",
-        "intl-tel-input": "^17.0.18",
+        "intl-tel-input": "^17.0.19",
         "simplebar": "^5.3.6"
     }
 }

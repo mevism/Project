@@ -62,7 +62,7 @@ class CODController extends Controller
 //            ->count();
 //
 //        $apps_cod = Application::where('cod_status', 0)
-//            ->where('department_id', auth()->guard('user')->user()->department_id)
+//            ->where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->id)
 //            ->orWhere('dean_status', 3)
 //            ->count();
 //
@@ -72,7 +72,7 @@ class CODController extends Controller
     public function applications(){
 
         $applications = Application::where('cod_status', '>=', 0)
-            ->where('department_id', auth()->guard('user')->user()->department_id)
+            ->where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->id)
             ->where('dean_status', null)
             ->orWhere('dean_status', 3)
             ->orderby('id', 'DESC')
@@ -177,7 +177,7 @@ class CODController extends Controller
 
     public function batch(){
         $apps = Application::where('cod_status', '>', 0)
-            ->where('department_id', auth()->guard('user')->user()->department_id)
+            ->where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->id)
             ->where('dean_status', null)
             ->orWhere('dean_status', 3)
             ->where('cod_status', '!=', 3)
@@ -232,7 +232,7 @@ class CODController extends Controller
     public function admissions(){
 
         $applicant = Application::where('cod_status', 1)
-            ->where('department_id', auth()->guard('user')->user()->department_id)
+            ->where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->id)
             ->where('registrar_status', 3)
             ->where('status', 0)
             ->get();
@@ -306,7 +306,9 @@ class CODController extends Controller
     }
 
     public function courses(){
-            $courses = Courses::where('department_id', auth()->guard('user')->user()->department_id)->get();
+
+//        return auth()->guard('user')->user()->employmentDepartment->first()->id;
+            $courses = Courses::where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->id)->get();
 
             return view('cod::courses.index')->with('courses', $courses);
     }
@@ -326,7 +328,7 @@ class CODController extends Controller
             $modes = Attendance::all();
             $campuses = Campus::all();
             $intake = Intake::find($hashedId);
-            $courses = Courses::where('department_id', auth()->guard('user')->user()->department_id)->get();
+            $courses = Courses::where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->id)->get();
 
             return view('cod::intakes.addCourses')->with(['intake' => $intake, 'courses' => $courses, 'modes' => $modes, 'campuses' => $campuses]);
 
@@ -394,7 +396,7 @@ class CODController extends Controller
 
         $intake = Intake::find($intakeId);
 
-        $courses = Courses::where('department_id', Auth::guard('user')->user()->department_id)->get();
+        $courses = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->id)->get();
 
         $classes = [];
 
@@ -691,7 +693,7 @@ class CODController extends Controller
 
     public function transferRequests(){
 
-        $transfers = CourseTransfer::where('department_id', Auth::guard('user')->user()->department_id)
+        $transfers = CourseTransfer::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->id)
             ->latest()
             ->get()
             ->groupBy('academic_year');
@@ -704,7 +706,7 @@ class CODController extends Controller
 
         $hashedYear = Crypt::decrypt($year);
 
-        $transfers = CourseTransfer::where('department_id', Auth::guard('user')->user()->department_id)
+        $transfers = CourseTransfer::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->id)
             ->where('academic_year', $hashedYear)
             ->latest()
             ->get();
@@ -798,7 +800,7 @@ class CODController extends Controller
         $dept = $user->getDept->dept_code;
         $role = $user->userRoles->name;
 
-        $transfers = CourseTransfer::where('department_id', Auth::guard('user')->user()->department_id)
+        $transfers = CourseTransfer::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->id)
             // ->where('status', '<', 1)
             ->where('academic_year', $hashedYear)
             ->latest()
@@ -924,7 +926,7 @@ class CODController extends Controller
 
         $hashedYear = Crypt::decrypt($year);
 
-        $deptID = Auth::guard('user')->user()->department_id;
+        $deptID = auth()->guard('user')->user()->employmentDepartment->first()->id;
 
       $requests = AcademicLeave::where('academic_year', $hashedYear)
             ->latest()
@@ -1045,7 +1047,7 @@ class CODController extends Controller
 
             foreach ($readmissions as $readmission){
 
-               if ($readmission->leaves->studentLeave->courseStudent->department_id == Auth::guard('user')->user()->department_id){
+               if ($readmission->leaves->studentLeave->courseStudent->department_id == auth()->guard('user')->user()->employmentDepartment->first()->id){
 
                    $leaves[] = $readmission;
 

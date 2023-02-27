@@ -33,7 +33,6 @@
             <div class="row">
                 <div class="col-lg-12">
                     <table id="example" class="table table-responsive table-md table-striped table-bordered table-vcenter fs-sm">
-                        @if(count($courses)>0)
                             <thead>
                             <th>#</th>
                             <th>Course Code</th>
@@ -52,11 +51,6 @@
                                 </tr>
                             @endforeach
                             </tbody>
-                        @else
-                            <tr>
-                                <span class="text-muted text-center fs-sm">There are no new applications submitted</span>
-                            </tr>
-                        @endif
                     </table>
                 </div>
             </div>
