@@ -28,6 +28,7 @@ use Modules\Registrar\Entities\Student;
 use Modules\Registrar\Entities\VoteHead;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Modules\Registrar\emails\KuccpsMails;
+use Modules\Student\Entities\Readmission;
 use Modules\Registrar\Entities\Attendance;
 use Modules\Registrar\Entities\Department;
 use PhpOffice\PhpWord\SimpleType\TblWidth;
@@ -59,14 +60,81 @@ use Modules\Registrar\Entities\CalenderOfEvents;
 use Modules\Registrar\emails\CourseTransferMails;
 use Modules\Registrar\Entities\CourseRequirement;
 use Modules\Registrar\Entities\DepartmentHistory;
+use Modules\Student\Entities\ReadmissionApproval;
 use Modules\Registrar\emails\RejectedAcademicMail;
 use Modules\Application\Entities\AdmissionApproval;
 use Modules\Student\Entities\AcademicLeaveApproval;
 use Modules\Student\Entities\CourseTransferApproval;
+use Modules\Registrar\emails\AcceptedReadmissionsMail;
+use Modules\Registrar\emails\RejectedReadmissionsMail;
 use Modules\Registrar\emails\CourseTransferRejectedMails;
 
 class CoursesController extends Controller
 {
+
+    public function readmissions(){
+        $schools   =   School::all();
+        foreach($schools as $school){
+            $data = Readmission::all()->groupBy('academic_year');
+
+        }
+
+        return  view('registrar::readmissions.index')->with(['data'=> $data, 'schools'=>$schools]);
+
+    }
+    public function yearlyReadmissions($year){
+        $hashedYear = Crypt::decrypt($year);
+        $schools   =   School::all();
+        $readmissions  =  Readmission::where('academic_year', $hashedYear)->get();
+    
+        return view('registrar::readmissions.yearlyReadmissions')->with(['readmissions' => $readmissions,'schools'=>$schools, 'year'=>$hashedYear]);
+    }
+
+    public function acceptedReadmissions(Request $request){
+
+        $request->validate(['submit' => 'required']);
+ 
+            foreach($request->submit as $id){
+ 
+             $approval = Readmission::find($id);
+                    //  return $approval->studentReadmission->reg_number;
+
+                    if ($approval->readmissionApproval->dean_status == 1){
+ 
+                        Mail::to($approval->studentReadmission->student_email)->send(new AcceptedReadmissionsMail($approval));
+
+                        StudentCourse::where('student_id', $approval->studentReadmission->id)->update(['class_code' => $approval->readmissionsReadmitClass->class_code,'class' => $approval->readmissionsReadmitClass->class_code ]);
+
+                        $approved = ReadmissionApproval::where('readmission_id', $id)->first();
+                        $approved->registrar_status  =  1;
+                        $approved->save();
+
+                        $student = Student::find($approval->student_id);
+                        $student->status = 1;
+                        $student->save();
+
+                        $approval->status = 1;
+                        $approval->save();
+
+                     }
+                     else{
+ 
+                        Mail::to($approval->studentLeave->student_email)->send(new RejectedReadmissionsMail($approval));
+
+                        $rejected = ReadmissionApproval::find($id);
+                        $rejected->registrar_status  =  1;
+                        $rejected->save();
+
+                        $approval->status = 2;
+                        $approval->save();
+                    }
+             }
+             
+
+ 
+        return redirect()->back()->with( 'success', 'Email sent successfuly.');
+ 
+     }
 
     public function leaves(){
 
@@ -83,7 +151,7 @@ class CoursesController extends Controller
         $hashedYear = Crypt::decrypt($year);
         $schools   =   School::all();
         $leaves  =  AcademicLeave::where('academic_year', $hashedYear)->get();
-
+    
         return view('registrar::leaves.index')->with(['leaves' => $leaves,'schools'=>$schools, 'year'=>$hashedYear]);
     }
 
@@ -118,6 +186,9 @@ class CoursesController extends Controller
                         $rejected->status  =  2;
                         $rejected->save();
                     }
+                
+               return $newStudentCourse          =       new StudentCourse;
+                
             }
 
        return redirect()->back()->with( 'success', 'Email sent successfuly.');

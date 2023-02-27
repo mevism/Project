@@ -29,16 +29,16 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
                     <h5 class="h5 fw-bold mb-0">
-                        ACADEMIC/DEFERMENT LEAVE REQUESTS
+                        READMISSION REQUESTS
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="javascript:void(0)">Schools</a>
+                            <a class="link-fx" href="javascript:void(0)">Readmissions</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            All deferment/academic leaves
+                            All Readmissions
                         </li>
                     </ol>
                 </nav>
@@ -66,7 +66,7 @@
                                         <td> {{ $loop->iteration }} </td>
                                         <td> {{ $academic_year }} </td>
                                         <td>
-                                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.academicLeave', ['year' => Crypt::encrypt($academic_year)]) }}">view</a>
+                                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.yearlyReadmissions', ['year' => Crypt::encrypt($academic_year)]) }}">view</a>
                                         </td>
                                     </tr>
                                 @endforeach

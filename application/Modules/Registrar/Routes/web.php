@@ -172,9 +172,14 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
     Route::get('/generate-requests-transfer-report/{year}', [CoursesController::class, 'requestedTransfers'])->name('courses.requestedTransfers');
 
     Route::get('/leave-requests', [CoursesController::class, 'leaves'])->name('courses.leaves');
-    Route::get('/academicLeave/{year}', [CoursesController::class, 'academicLeave'])->name('courses.academicLeave');
+    Route::get('/academic-leave/{year}', [CoursesController::class, 'academicLeave'])->name('courses.academicLeave');
     // Route::get('/generate-requests-academic-leave-report/{year}', [CoursesController::class, 'requestedAcademicLeaves'])->name('courses.requestedAcademicLeaves');
-    Route::post('/acceptedAcademicLeaves', 'CoursesController@acceptedAcademicLeaves')->name('courses.acceptedAcademicLeaves');
+    Route::post('/accepted-academic-leaves', 'CoursesController@acceptedAcademicLeaves')->name('courses.acceptedAcademicLeaves');
+
+
+    Route::get('/readmission-requests', [CoursesController::class, 'readmissions'])->name('courses.readmissions');
+    Route::get('/yearly-readmissions/{year}', [CoursesController::class, 'yearlyReadmissions'])->name('courses.yearlyReadmissions');
+    Route::post('/accepted-readmissions', 'CoursesController@acceptedReadmissions')->name('courses.acceptedReadmissions');
 
 });
 

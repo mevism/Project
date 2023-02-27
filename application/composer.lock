@@ -1941,6 +1941,7 @@
                 "doctrine/dbal": "Required to rename columns and drop SQLite columns (^2.13.3|^3.1.4).",
                 "ext-apcu": "Required to use the APC cache driver.",
                 "ext-fileinfo": "Required to use the Filesystem class.",
+
                 "ext-ftp": "Required to use the Flysystem FTP driver.",
                 "ext-gd": "Required to use Illuminate\\Http\\Testing\\FileFactory::image().",
                 "ext-memcached": "Required to use the memcache cache driver.",
@@ -2013,7 +2014,8 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2023-02-14T14:51:14+00:00"
+
+            "time": "2023-02-14T14:51:14+00:00",
         },
         {
             "name": "laravel/sanctum",
@@ -4757,6 +4759,7 @@
                 }
             ],
             "time": "2023-02-07T16:14:23+00:00"
+
         },
         {
             "name": "sabberworm/php-css-parser",
@@ -7770,6 +7773,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/sail/zipball/5ae072b182b1efbec927409e8a3ce3b1078cc42c",
                 "reference": "5ae072b182b1efbec927409e8a3ce3b1078cc42c",
+
                 "shasum": ""
             },
             "require": {

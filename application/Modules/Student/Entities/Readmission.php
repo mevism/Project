@@ -4,6 +4,8 @@ namespace Modules\Student\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\COD\Entities\ReadmissionClass;
+use Modules\Registrar\Entities\Student;
 
 class Readmission extends Model
 {
@@ -19,6 +21,15 @@ class Readmission extends Model
     public function leaves(){
 
         return $this->belongsTo(AcademicLeave::class, 'leave_id');
+    }
+
+    public function studentReadmission(){
+
+        return $this->belongsTo(Student::class, 'student_id');
+    }
+
+    public function readmissionsReadmitClass(){
+        return $this->hasOne(ReadmissionClass::class, 'readmission_id');
     }
 
     protected static function newFactory()
