@@ -11,6 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Modules\Registrar\Entities\Department;
 use Modules\Registrar\Entities\Division;
+use Modules\Workload\Entities\Workload;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -82,5 +83,10 @@ class User extends Authenticatable
     public function employmentStation(): BelongsToMany {
 
         return $this->belongsToMany(Department::class, 'user_employments', 'user_id', 'station_id');
+    }
+
+    public function workloadAllocation(){
+
+        return $this->hasMany(Workload::class, 'user_id', 'id');
     }
 }

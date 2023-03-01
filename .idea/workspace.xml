@@ -2,20 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="04f81fbc-f6d0-4a9e-be9c-20de07b71cd9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/application/Modules/Workload/Resources/views/workload/allocateUnits.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/Modules/Workload/Resources/views/workload/semesterWorkload.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/Modules/Workload/Resources/views/workload/viewSemesterWorkload.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/Modules/Workload/Resources/views/workload/viewWorkload.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/Modules/Workload/Resources/views/workload/viewYearWorkload.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/Modules/Workload/Resources/views/workload/yearlyWorkload.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/.env" beforeDir="false" afterPath="$PROJECT_DIR$/application/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Http/Controllers/DeanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Http/Controllers/DeanController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/readmissions/intakeReadmissions.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/readmissions/intakeReadmissions.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/readmissions/selectedReadmission.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/readmissions/selectedReadmission.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Medical/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Medical/Resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/User/Resources/views/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/User/Resources/views/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/app/Http/Controllers/User/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Http/Controllers/User/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/app/Http/Middleware/Finance/Finance.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Http/Middleware/Finance/Finance.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/5zA9efrCm9khUfmdxw5JSPQwOZL0wLhfBfcLaQYR" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/PnlRnCs80PnLlOR4EjgftHPtaVbGX7If7bJsnzKF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/WX8993GkwiCuSJXjalGQvUfyRMSMhTToyRKTom71" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/wQQchN8n4xfvF4pt3sVu6APupkgfqIt4CaLHOKxe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Entities/ClassPattern.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Entities/ClassPattern.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Entities/SemesterUnit.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Entities/SemesterUnit.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Classes.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/Classes.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Workload/Http/Controllers/WorkloadController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Workload/Http/Controllers/WorkloadController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Workload/Resources/views/workload/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Workload/Resources/views/workload/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Workload/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Workload/Routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Models/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/wwnfMqIN6JTo7vVFfjVjTcl5oiilOuyHx5FlV75d" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -224,7 +226,8 @@
       <workItem from="1677153278787" duration="4842000" />
       <workItem from="1677159618927" duration="3700000" />
       <workItem from="1677218299729" duration="13264000" />
-      <workItem from="1677478309905" duration="15134000" />
+      <workItem from="1677478309905" duration="15427000" />
+      <workItem from="1677563789967" duration="31897000" />
     </task>
     <servers />
   </component>
