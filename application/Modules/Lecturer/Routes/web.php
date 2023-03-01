@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Modules\Lecturer\Http\Controllers\LecturerController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,4 +15,9 @@
 
 Route::prefix('lecturer')->group(function() {
     Route::get('/', 'LecturerController@index');
+    Route::get('/viewworkload', [LecturerController::class, 'viewworkload']) ->name ('lecturer.viewWorkload');
+    Route::get('/qualifications', [LecturerController::class, 'qualifications']) ->name ('lecturer.qualifications');
+    Route::get('/add-qualifications', [LecturerController::class, 'addqualifications'])->name('lecturer.addqualifications');
+    Route::post('/store-Qualifications', [LecturerController::class, 'storeQualifications'])->name('lecturer.storeQualifications');
+
 });
