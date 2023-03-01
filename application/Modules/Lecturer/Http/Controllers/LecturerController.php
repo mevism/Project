@@ -5,6 +5,7 @@ namespace Modules\Lecturer\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Lecturer\Entities\LecturerQualification;
 
 class LecturerController extends Controller
 {
@@ -16,6 +17,50 @@ class LecturerController extends Controller
     {
         return view('lecturer::index');
     }
+     
+    public function viewworkload(){
+
+        $workloads = [];
+
+        return view('lecturer::workload.viewworkload');
+
+    }
+    
+    public function qualifications(){
+
+      $qualification = LecturerQualification::where('user_id', auth()->guard('user')->user()->id)->latest()->get();
+
+        return view('lecturer::profile.qualifications')->with ('qualifications', $qualification);
+
+    }
+    
+    public function addqualifications(){
+
+        $lecturer = [];
+
+        return view('lecturer::profile.addqualifications');
+
+    }
+    public function storeQualifications(REQUEST $request){
+
+       $request->validate([
+            'level' => 'required',
+            'qualification' =>'required',
+            'institution' => 'required'
+
+       ]);
+
+       $qualification = new LecturerQualification;
+       $qualification->user_id = auth()->guard('user')->user()->id;
+       $qualification->level = $request->level;
+       $qualification->qualification = $request->qualification;
+       $qualification->institution = $request ->institution;
+       $qualification->save();
+
+        return redirect()->route('lecturer.qualifications')->with('Success', '1 qualification added successfully');
+
+    }
+     
 
     /**
      * Show the form for creating a new resource.

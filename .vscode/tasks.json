@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "dev",
+			"path": "application",
+			"problemMatcher": [
+				"$eslint-compact"
+			],
+			"label": "npm: dev - application",
+			"detail": "npm run development"
+		}
+	]
+}
