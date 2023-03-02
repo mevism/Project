@@ -24,5 +24,5 @@ Route::prefix('lecturer')->group(function() {
     Route::get('/delete-Qualification/{id}', [LecturerController::class, 'deleteQualification'])->name('lecturer.deleteQualification'); 
     Route::get('/my-areas-of-teaching', [LecturerController::class, 'teachingAreas'])->name('lecturer.teachingAreas');
     Route::get('/add-teaching-areas', [LecturerController::class, 'addTeachingAreas'])->name('lecturer.addTeachingAreas');
-    Route::get('/store-teaching-areas', [LecturerController::class, 'storeTeachingAreas'])->name('lecturer.storeTeachingAreas');
+    Route::post('/store-teaching-areas', [LecturerController::class, 'storeTeachingAreas'])->name('lecturer.storeTeachingAreas');
 });
