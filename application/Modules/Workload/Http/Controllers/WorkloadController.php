@@ -153,7 +153,12 @@ class WorkloadController extends Controller
         return view('workload::workload.viewSemesterWorkload')->with(['semester' => $hashedSemester, 'year' => $hashedYear, 'workloads' => $workloads, 'lecturers' => $lectures]);
     }
 
-
+    public function deleteWorkload($id){
+        $hashedId           =          Crypt::decrypt($id);
+        $workload           =          Workload::where('unit_id',$hashedId)->first();
+        $workload->delete();
+        return redirect()->back()->with('success', 'Record deleted successfully');
+    }
 
     /**
      * Display a listing of the resource.

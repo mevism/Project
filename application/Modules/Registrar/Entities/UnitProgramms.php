@@ -16,6 +16,7 @@ class UnitProgramms extends Model
         return $this->belongsTo(Courses::class, 'course_code', 'course_code');
     }
 
+
     protected static function newFactory()
     {
         return \Modules\Registrar\Database\factories\UnitProgrammsFactory::new();
