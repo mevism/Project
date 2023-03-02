@@ -6,9 +6,11 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Lecturer\Entities\LecturerQualification;
+use Crypt;
 use Modules\Lecturer\Entities\TeachingArea;
 use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\UnitProgramms;
+
 
 class LecturerController extends Controller
 {
@@ -64,6 +66,45 @@ class LecturerController extends Controller
 
     }
 
+    public function editQualifications($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $qualification = LecturerQualification::find($hashedId);
+
+        return view('lecturer::profile.editqualifications')->with(['qualification' => $qualification]);
+
+    }
+
+    public function updateQualifications(Request $request, $id){
+
+        $request->validate([
+            'level' => 'required',
+            'qualification' =>'required',
+            'institution' => 'required'
+        ]);
+        
+        $qualification = LecturerQualification::find($id);
+        $qualification->user_id = auth()->guard('user')->user()->id;
+       $qualification->level = $request->level;
+       $qualification->qualification = $request->qualification;
+       $qualification->institution = $request ->institution;
+       $qualification->save();
+
+        return redirect()->route('lecturer.qualifications')->with('success', 'Updated successfully');
+
+    }
+
+    public function deleteQualification($id){
+        $hashedId = Crypt::decrypt($id);
+
+        $qualification = LecturerQualification::find($hashedId);
+        $qualification->delete();
+       
+        return redirect()->route('lecturer.qualifications')->with('success', 'Deleted successfully');
+    }
+     
+=======
     public function teachingAreas(){
 
         $myUnits = TeachingArea::where('user_id', auth()->guard('user')->user()->id)->latest()->get();
@@ -96,7 +137,6 @@ class LecturerController extends Controller
 
         return $request->all();
     }
-
 
     /**
      * Show the form for creating a new resource.

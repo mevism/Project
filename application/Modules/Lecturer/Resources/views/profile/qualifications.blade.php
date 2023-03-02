@@ -42,8 +42,8 @@
                             <div class="d-flex justify-content-end m-2">
                                 <a class="btn btn-sm btn-alt-primary" data-toggle="click-ripple" href="{{ route('lecturer.addqualifications') }}">Add Qualifications </a>
                             </div>
-
-            <table id="example" class="table table-bordered table-striped js-dataTable-responsive">
+        
+            <table id="example" class="table table-sm table-bordered table-striped js-dataTable-responsive fs-sm">
                 @csrf
                 @method('delete')
 
@@ -62,7 +62,10 @@
                                 <td>{{ $qualification->level}}</td>
                                 <td>{{ $qualification->institution}}</td>
                                 <td>{{ $qualification->qualification}}</td>
-                                <td></td>
+                                <td>
+                                    <a class="btn btn-sm btn-alt-info" href="{{ route('lecturer.editQualifications', ['id' => Crypt::encrypt($qualification->id)]) }}">Edit</a>
+                                    <a class="btn btn-sm btn-alt-danger" href="{{ route('lecturer.deleteQualification', ['id' => Crypt::encrypt($qualification->id)] ) }}">Delete</a>
+                                </td>
                             </tr>
                             @endforeach
                     </tbody>
