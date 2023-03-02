@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Lecturer\Entities\LecturerQualification;
 use Crypt;
+use Modules\Lecturer\Entities\TeachingArea;
+use Modules\Registrar\Entities\Courses;
+use Modules\Registrar\Entities\UnitProgramms;
+
 
 class LecturerController extends Controller
 {
@@ -18,7 +22,7 @@ class LecturerController extends Controller
     {
         return view('lecturer::index');
     }
-     
+
     public function viewworkload(){
 
         $workloads = [];
@@ -26,7 +30,7 @@ class LecturerController extends Controller
         return view('lecturer::workload.viewworkload');
 
     }
-    
+
     public function qualifications(){
 
       $qualification = LecturerQualification::where('user_id', auth()->guard('user')->user()->id)->latest()->get();
@@ -34,7 +38,7 @@ class LecturerController extends Controller
         return view('lecturer::profile.qualifications')->with ('qualifications', $qualification);
 
     }
-    
+
     public function addqualifications(){
 
         $lecturer = [];
@@ -100,6 +104,39 @@ class LecturerController extends Controller
         return redirect()->route('lecturer.qualifications')->with('success', 'Deleted successfully');
     }
      
+=======
+    public function teachingAreas(){
+
+        $myUnits = TeachingArea::where('user_id', auth()->guard('user')->user()->id)->latest()->get();
+
+        return view('lecturer::profile.teachingArea')->with('units', $myUnits);
+    }
+
+    public function addTeachingAreas(){
+
+        $userSchool = auth()->guard('user')->user()->employmentDepartment->first()->schools->first();
+
+        foreach ($userSchool->departments as $department){
+            $Allcourses[] = Courses::where('department_id', $department->id)->latest()->get();
+        }
+
+        foreach ($Allcourses as $courses){
+            foreach ($courses as $course){
+                $units[] = UnitProgramms::where('course_code', $course->course_code)->latest()->get();
+            }
+        }
+
+        return view('lecturer::profile.addTeachingAreas')->with(['units' => $units]);
+    }
+
+    public function storeTeachingAreas(Request $request){
+
+        $request->validate([
+           'units' => 'required'
+        ]);
+
+        return $request->all();
+    }
 
     /**
      * Show the form for creating a new resource.
