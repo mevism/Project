@@ -70,6 +70,7 @@
                                 <td> {{ $unit->unit_name }} </td>
                                 <td> {{ $unit->stage.'.'.$unit->semester }} </td>
                                 <td nowrap="">
+                                    {{-- {{ $unit->workloadUnit}} --}}
                                     @if($unit->allocateUnit == null)
                                         @foreach($lecturers as $key => $lecturer)
                                             <div class="row mb-1">
@@ -77,7 +78,7 @@
                                                     {{ ++$key }}. {{ $lecturer->title }} {{ $lecturer->last_name }}  {{ $lecturer->first_name }}  {{ $lecturer->middle_name }}
                                                 </div>
                                                 <div class="col col-md-4">
-                                                    <a class="btn btn-sm btn-outline-success" href="{{ route('department.allocateUnit', ['staff_id' =>  Crypt::encrypt($lecturer->id), 'unit_id' => Crypt::encrypt($unit->id)]) }}">Allocate</a>
+                                                    <a class="btn btn-sm btn-outline-success" href="{{ route('department.allocateUnit', ['staff_id' =>  Crypt::encrypt($lecturer->id), 'unit_id' => Crypt::encrypt($unit->id)]) }}">Allocate </a>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -87,7 +88,7 @@
                                                 {{ $unit->allocateUnit->userAllocation->title }} {{ $unit->allocateUnit->userAllocation->last_name }} {{ $unit->allocateUnit->userAllocation->first_name }} {{ $unit->allocateUnit->userAllocation->middle_name }}
                                             </div>
                                             <div class="col col-md-4">
-                                                <a class="btn btn-sm btn-outline-danger" href="#">Revoke</a>
+                                                <a class="btn btn-sm btn-outline-danger" href="{{ route('department.deleteWorkload', ['id' => Crypt::encrypt($unit->allocateUnit->unit_id)]) }}">Revoke </a>
                                             </div>
                                         </div>
                                     @endif
