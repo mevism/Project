@@ -40,26 +40,39 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="d-flex justify-content-end m-2">
-                        <a class="btn btn-sm btn-alt-primary" data-toggle="click-ripple" href="{{ route('lecturer.addTeachingAreas') }}">Add Qualifications </a>
+                        <a class="btn btn-sm btn-alt-primary" data-toggle="click-ripple" href="{{ route('lecturer.addTeachingAreas') }}">Add Teaching Areas </a>
                     </div>
 
-                    <table id="example" class="table table-bordered table-striped js-dataTable-responsive">
+                    <table id="example" class="table table-responsive-sm table-bordered table-striped js-dataTable-responsive fs-sm">
                         <thead>
                         <th></th>
+                        <th>Unit Code</th>
+                        <th>Unit Name</th>
                         <th>Level</th>
-                        <th>Institution</th>
-                        <th>Qualification</th>
-                        <th>Edit</th>
+                        <th>Remove</th>
 
                         </thead>
                         <tbody>
-                        @foreach($units as $key => $qualification)
+                        @foreach($units as $key => $unit)
                             <tr>
                                 <td>{{ ++$key }}</td>
-                                <td>{{ $qualification->level}}</td>
-                                <td>{{ $qualification->institution}}</td>
-                                <td>{{ $qualification->qualification}}</td>
-                                <td></td>
+                                <td>{{ $unit->unit_code}}</td>
+                                <td>{{ $unit->teachingArea->unit_name}}</td>
+                                <td>
+                                    @if($unit->level == 1)
+                                        CERTIFICATE
+                                    @elseif($unit->level == 2)
+                                        DIPLOMA
+                                    @elseif($unit->level == 3)
+                                        BACHELORS
+                                    @else
+                                        POST GRADUATE
+                                    @endif
+
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-alt-danger">delete</a>
+                                </td>
                             </tr>
                         @endforeach
                         </tbody>

@@ -94,7 +94,21 @@ class LecturerController extends Controller
            'units' => 'required'
         ]);
 
-        return $request->all();
+        foreach ($request->units as $id){
+
+            $unit = UnitProgramms::find($id);
+
+            $teachingArea =  new TeachingArea;
+            $teachingArea->user_id = auth()->guard('user')->user()->id;
+            $teachingArea->unit_code = $unit->course_unit_code;
+            $teachingArea->level = $unit->courseLevel->level;
+            $teachingArea->save();
+
+        }
+
+        return redirect()->route('lecturer.teachingAreas')->with('success', 'Teaching areas added successfully');
+
+
     }
 
 

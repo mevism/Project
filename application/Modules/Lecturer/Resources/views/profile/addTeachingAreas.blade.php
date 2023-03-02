@@ -93,10 +93,11 @@
                     </li>
 
                 </ul>
+                <form method="post" action="{{ route('lecturer.storeTeachingAreas') }}">
+                    @csrf
                 <div class="block-content tab-content overflow-hidden">
                     <div class="tab-pane fade fade-left show active" id="btabs-alt-static-grad" role="tabpanel" aria-labelledby="btabs-alt-static-grad-tab">
-                        <form method="post" action="{{ route('lecturer.storeTeachingAreas') }}">
-                            <table id="example" class="table table-bordered table-striped js-dataTable-responsive">
+                            <table id="example" class="table table-responsive-sm table-bordered table-striped js-dataTable-responsive fs-sm">
                                 <thead>
                                 <th>#</th>
                                 <th>Course</th>
@@ -114,7 +115,7 @@
                                             <td> {{ $unit->course_unit_code }} </td>
                                             <td>{{ $unit->unit_name }}</td>
                                             <td>
-                                                <input type="checkbox" name="units[]" value="{{ $unit->id }}" class="form-check-inline">
+                                                <input type="checkbox" name="units[]" value="{{ $unit->id }}">
                                             </td>
                                         </tr>
                                     @endif
@@ -124,7 +125,7 @@
                             </table>
                         </div>
                         <div class="tab-pane fade fade-left show" id="btabs-alt-static-under" role="tabpanel" aria-labelledby="btabs-alt-static-under-tab">
-                            <table id="example1" class="table table-bordered table-striped js-dataTable-responsive">
+                            <table id="example1" class="table table-responsive-sm table-bordered table-striped js-dataTable-responsive fs-sm">
                                 <thead>
                                 <th>#</th>
                                 <th>Course</th>
@@ -142,7 +143,7 @@
                                                 <td> {{ $unit->course_unit_code }} </td>
                                                 <td>{{ $unit->unit_name }}</td>
                                                 <td>
-                                                    <input type="checkbox" name="units[]" value="{{ $unit->id }}" class="form-check-inline">
+                                                    <input type="checkbox" name="units[]" value="{{ $unit->id }}">
                                                 </td>
                                             </tr>
                                         @endif
@@ -153,7 +154,7 @@
                         </div>
 
                         <div class="tab-pane fade fade-left show" id="btabs-alt-static-dip" role="tabpanel" aria-labelledby="btabs-alt-static-dip-tab">
-                            <table id="example2" class="table table-bordered table-striped js-dataTable-responsive">
+                            <table id="example2" class="table table-responsive-sm table-bordered table-striped js-dataTable-responsive fs-sm">
                                 <thead>
                                 <th>#</th>
                                 <th>Course</th>
@@ -171,7 +172,7 @@
                                                 <td> {{ $unit->course_unit_code }} </td>
                                                 <td>{{ $unit->unit_name }}</td>
                                                 <td>
-                                                    <input type="checkbox" name="units[]" value="{{ $unit->id }}" class="form-check-inline">
+                                                    <input type="checkbox" name="units[]" value="{{ $unit->id }}">
                                                 </td>
                                             </tr>
                                         @endif
@@ -181,7 +182,7 @@
                             </table>
                         </div>
                         <div class="tab-pane fade fade-left show" id="btabs-alt-static-cert" role="tabpanel" aria-labelledby="btabs-alt-static-cert-tab">
-                            <table id="example3" class="table table-bordered table-striped js-dataTable-responsive">
+                            <table id="example3" class="table table-bordered table-responsive-sm table-striped js-dataTable-responsive fs-sm">
                                 <thead>
                                 <th>#</th>
                                 <th>Course</th>
@@ -194,12 +195,12 @@
                                     @foreach($allunit as $key => $unit)
                                         @if($unit->courseLevel->level == 1)
                                             <tr>
-                                                <td>{{ ++$key }}</td>
+                                                <td>{{ ++$key }} </td>
                                                 <td> {{ $unit->course_code }} </td>
                                                 <td> {{ $unit->course_unit_code }} </td>
                                                 <td>{{ $unit->unit_name }}</td>
                                                 <td>
-                                                    <input type="checkbox" name="units[]" value="{{ $unit->id }}" class="form-check-inline">
+                                                    <input type="checkbox" name="units[]" value="{{ $unit->id }}">
                                                 </td>
                                             </tr>
                                         @endif
@@ -207,11 +208,13 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                        </form>
-                    </div>
+                        </div>
                 </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        <button type="submit" class="btn btn-outline-success col-md-7">Save Teaching Areas</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-
 @endsection
