@@ -19,5 +19,7 @@ Route::prefix('lecturer')->group(function() {
     Route::get('/qualifications', [LecturerController::class, 'qualifications']) ->name ('lecturer.qualifications');
     Route::get('/add-qualifications', [LecturerController::class, 'addqualifications'])->name('lecturer.addqualifications');
     Route::post('/store-Qualifications', [LecturerController::class, 'storeQualifications'])->name('lecturer.storeQualifications');
-
+    Route::get('/my-areas-of-teaching', [LecturerController::class, 'teachingAreas'])->name('lecturer.teachingAreas');
+    Route::get('/add-teaching-areas', [LecturerController::class, 'addTeachingAreas'])->name('lecturer.addTeachingAreas');
+    Route::get('/store-teaching-areas', [LecturerController::class, 'storeTeachingAreas'])->name('lecturer.storeTeachingAreas');
 });
