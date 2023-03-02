@@ -24,7 +24,7 @@
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="javascript:void(0)">Department</a>
+                            <a class="link-fx" href="javascript:void(0)">Profile</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
                             My Qualifications
@@ -43,7 +43,7 @@
                                 <a class="btn btn-sm btn-alt-primary" data-toggle="click-ripple" href="{{ route('lecturer.addqualifications') }}">Add Qualifications </a>
                             </div>
         
-            <table id="example" class="table table-bordered table-striped js-dataTable-responsive">
+            <table id="example" class="table table-sm table-bordered table-striped js-dataTable-responsive fs-sm">
                 @csrf
                 @method('delete')
                
@@ -62,7 +62,10 @@
                                 <td>{{ $qualification->level}}</td>
                                 <td>{{ $qualification->institution}}</td>
                                 <td>{{ $qualification->qualification}}</td>
-                                <td></td>
+                                <td>
+                                    <a class="btn btn-sm btn-alt-info" href="{{ route('lecturer.editQualifications', ['id' => Crypt::encrypt($qualification->id)]) }}">Edit</a>
+                                    <a class="btn btn-sm btn-alt-danger" href="{{ route('lecturer.deleteQualification', ['id' => Crypt::encrypt($qualification->id)] ) }}">Delete</a>
+                                </td>
                             </tr>
                             @endforeach
                     </tbody>
