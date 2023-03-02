@@ -17,7 +17,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
                     <h5 class="h5 fw-bold mb-0">
-                        My Qualifications
+                        My Teaching Areas
                     </h5>
                 </div>
 
@@ -27,7 +27,7 @@
                             <a class="link-fx" href="javascript:void(0)">Profile</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            My Qualifications
+                            My Teaching Area
                         </li>
                     </ol>
                 </nav>
@@ -35,28 +35,25 @@
         </div>
     </div>
 
-            <div class="block block-rounded">
-                <div class="block-content block-content-full">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="d-flex justify-content-end m-2">
-                                <a class="btn btn-sm btn-alt-primary" data-toggle="click-ripple" href="{{ route('lecturer.addqualifications') }}">Add Qualifications </a>
-                            </div>
+    <div class="block block-rounded">
+        <div class="block-content block-content-full">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="d-flex justify-content-end m-2">
+                        <a class="btn btn-sm btn-alt-primary" data-toggle="click-ripple" href="{{ route('lecturer.addTeachingAreas') }}">Add Qualifications </a>
+                    </div>
 
-            <table id="example" class="table table-bordered table-striped js-dataTable-responsive">
-                @csrf
-                @method('delete')
-
-                    <thead>
+                    <table id="example" class="table table-bordered table-striped js-dataTable-responsive">
+                        <thead>
                         <th></th>
                         <th>Level</th>
                         <th>Institution</th>
                         <th>Qualification</th>
                         <th>Edit</th>
 
-                    </thead>
-                    <tbody>
-                        @foreach($qualifications as $key => $qualification)
+                        </thead>
+                        <tbody>
+                        @foreach($units as $key => $qualification)
                             <tr>
                                 <td>{{ ++$key }}</td>
                                 <td>{{ $qualification->level}}</td>
@@ -64,23 +61,23 @@
                                 <td>{{ $qualification->qualification}}</td>
                                 <td></td>
                             </tr>
-                            @endforeach
-                    </tbody>
-                </table>
-            </div>
-                </div>
+                        @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        @endsection
+        </div>
+    </div>
+@endsection
 
-        <script>
-            $(document).ready(function() {
-                $('#example').DataTable( {
-                    responsive: true,
-                    order: [[0, 'asc']],
-                    rowGroup: {
-                        dataSrc: 2
-                    }
-                } );
-            } );
-        </script>
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable( {
+            responsive: true,
+            order: [[0, 'asc']],
+            rowGroup: {
+                dataSrc: 2
+            }
+        } );
+    } );
+</script>
