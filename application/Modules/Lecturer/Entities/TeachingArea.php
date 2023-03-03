@@ -1,3 +1,4 @@
+
 <?php
 
 namespace Modules\Lecturer\Entities;
@@ -27,3 +28,4 @@ class TeachingArea extends Model
         return \Modules\Lecturer\Database\factories\TeachingAreaFactory::new();
     }
 }
+

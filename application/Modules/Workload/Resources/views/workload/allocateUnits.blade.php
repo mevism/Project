@@ -76,6 +76,7 @@
                                             <div class="row mb-1">
                                                 <div class="col col-md-8">
                                                     {{ ++$key }}. {{ $lecturer->title }} {{ $lecturer->last_name }}  {{ $lecturer->first_name }}  {{ $lecturer->middle_name }}
+                                                    ( {{ $lecturer->placedUser->first()->employment_terms }} )
                                                 </div>
                                                 <div class="col col-md-4">
                                                     <a class="btn btn-sm btn-outline-success" href="{{ route('department.allocateUnit', ['staff_id' =>  Crypt::encrypt($lecturer->id), 'unit_id' => Crypt::encrypt($unit->id)]) }}">Allocate </a>
@@ -86,6 +87,7 @@
                                         <div class="row mb-1">
                                             <div class="col col-md-8">
                                                 {{ $unit->allocateUnit->userAllocation->title }} {{ $unit->allocateUnit->userAllocation->last_name }} {{ $unit->allocateUnit->userAllocation->first_name }} {{ $unit->allocateUnit->userAllocation->middle_name }}
+                                                ( {{ $unit->allocateUnit->userAllocation->placedUser->first()->employment_terms }} )
                                             </div>
                                             <div class="col col-md-4">
                                                 <a class="btn btn-sm btn-outline-danger" href="{{ route('department.deleteWorkload', ['id' => Crypt::encrypt($unit->allocateUnit->unit_id)]) }}">Revoke </a>
