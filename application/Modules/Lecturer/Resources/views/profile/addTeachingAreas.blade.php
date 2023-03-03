@@ -115,7 +115,11 @@
                                             <td> {{ $unit->course_unit_code }} </td>
                                             <td>{{ $unit->unit_name }}</td>
                                             <td>
-                                                <input type="checkbox" name="units[]" value="{{ $unit->id }}">
+                                                @if($unit->lecturerAreas != null)
+                                                    <input type="checkbox" @if($unit->lecturerAreas->unit_code == $unit->course_unit_code) checked disabled @endif name="units[]" value="{{ $unit->id }}">
+                                                @else
+                                                    <input type="checkbox" name="units[]" value="{{ $unit->id }}">
+                                                @endif
                                             </td>
                                         </tr>
                                     @endif
@@ -143,7 +147,11 @@
                                                 <td> {{ $unit->course_unit_code }} </td>
                                                 <td>{{ $unit->unit_name }}</td>
                                                 <td>
-                                                    <input type="checkbox" name="units[]" value="{{ $unit->id }}">
+                                                    @if($unit->lecturerAreas != null)
+                                                        <input type="checkbox" @if($unit->lecturerAreas->unit_code == $unit->course_unit_code) checked disabled @endif name="units[]" value="{{ $unit->id }}">
+                                                    @else
+                                                        <input type="checkbox" name="units[]" value="{{ $unit->id }}">
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endif
@@ -172,7 +180,11 @@
                                                 <td> {{ $unit->course_unit_code }} </td>
                                                 <td>{{ $unit->unit_name }}</td>
                                                 <td>
-                                                    <input type="checkbox" name="units[]" value="{{ $unit->id }}">
+                                                    @if($unit->lecturerAreas != null)
+                                                        <input type="checkbox" @if($unit->lecturerAreas->unit_code == $unit->course_unit_code) checked disabled @endif name="units[]" value="{{ $unit->id }}">
+                                                    @else
+                                                        <input type="checkbox" name="units[]" value="{{ $unit->id }}">
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endif
@@ -200,7 +212,11 @@
                                                 <td> {{ $unit->course_unit_code }} </td>
                                                 <td>{{ $unit->unit_name }}</td>
                                                 <td>
-                                                    <input type="checkbox" name="units[]" value="{{ $unit->id }}">
+                                                    @if($unit->lecturerAreas != null)
+                                                        <input type="checkbox" @if($unit->lecturerAreas->unit_code == $unit->course_unit_code) checked disabled @endif name="units[]" value="{{ $unit->id }}">
+                                                    @else
+                                                        <input type="checkbox" name="units[]" value="{{ $unit->id }}">
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endif

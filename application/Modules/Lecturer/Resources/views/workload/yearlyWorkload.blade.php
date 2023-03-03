@@ -27,7 +27,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
                     <h5 class="h5 fw-bold mb-0">
-                        MY WORKLOADS
+                        MY {{ $year }} WORKLOADS
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -43,36 +43,37 @@
             </div>
         </div>
     </div>
-<div class="block block-rounded">
-    <div class="block-content block-content-full">
-        <div class="row">
-            <div class="col-lg-12">
-                <table id="example" class="table table-sm table-responsive table-bordered table-striped js-dataTable-responsive fs-sm">
+    <div class="block block-rounded">
+        <div class="block-content block-content-full">
+            <div class="row">
+                <div class="col-lg-12">
+                    <table id="example" class="table table-sm table-responsive table-bordered table-striped js-dataTable-responsive fs-sm">
                         <thead>
-                            <th>#</th>
-                            <th>Academic Year</th>
-                            <th>Action</th>
+                        <th>#</th>
+                        <th>Academic Semester</th>
+                        <th>View</th>
                         </thead>
                         <tbody>
-                        @php
-                            $i = 0;
-                        @endphp
-                            @foreach($workloads as $year => $workload)
-                                <tr>
-                                    <td> {{ ++$i }} </td>
-                                    <td> {{ $year }} </td>
-                                    <td>
-                                       <a class="btn btn-sm btn-alt-secondary" href="{{ route('lecturer.yearlyWorkloads', ['id' => Crypt::encrypt($year)]) }}"> view </a>
-                                    </td>
-                                </tr>
-                            @endforeach
+                            @php
+                                $i = 0;
+                            @endphp
+
+                        @foreach($workloads as $semester => $workload)
+                            <tr>
+                                <td>  {{ ++$i }} </td>
+                                <td> {{ $semester }} </td>
+                                <td>
+                                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('lecturer.semesterWorkload', ['year' => Crypt::encrypt($year), 'semester' => Crypt::encrypt($semester)]) }}"> view </a>
+                                </td>
+                            </tr>
+                        @endforeach
                         </tbody>
 
-                </table>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 
