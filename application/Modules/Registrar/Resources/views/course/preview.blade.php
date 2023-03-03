@@ -28,7 +28,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <div class="flex-grow-1">
                     <h6 class="block-title">
-                        HISTORY OF  {{ $courseName->name }}
+                        HISTORY OF  
                     </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">

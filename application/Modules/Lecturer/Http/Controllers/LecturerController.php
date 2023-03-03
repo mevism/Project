@@ -1,3 +1,4 @@
+
 <?php
 
 namespace Modules\Lecturer\Http\Controllers;
@@ -231,3 +232,4 @@ class LecturerController extends Controller
         //
     }
 }
+
