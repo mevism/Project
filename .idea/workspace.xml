@@ -2,18 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="04f81fbc-f6d0-4a9e-be9c-20de07b71cd9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/workload/semesterWorkload.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/workload/yearlyWorkload.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/examination/index.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/examination/semesterExams.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/examination/yearlyExams.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/.env" beforeDir="false" afterPath="$PROJECT_DIR$/application/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Http/Controllers/LecturerController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Http/Controllers/LecturerController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/profile/addTeachingAreas.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/profile/addTeachingAreas.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/workload/viewworkload.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/workload/viewworkload.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/layouts/backend.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Entities/UnitProgramms.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Entities/UnitProgramms.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Models/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/CbKVK2Ku4ZHGnDHSbJkE1ibLpuP6Ugos8pnENl3V" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/WOyaIU8STYIuK55w5KAkqHHfTqgTU21cFkQC9QZE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/Ao5HT3cTtMp9dXs3tedBzph9rb5iUPUVYyTw4VfL" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/sessions/Ao5HT3cTtMp9dXs3tedBzph9rb5iUPUVYyTw4VfL" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/Ey0JDCQSfHYyb1krge9fylUZmzoEj4SzY2VWYpg5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/yFaWxAiAWL5hAPS0FlgS4O3VbXKEZfFdoV9lBMtn" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -224,7 +222,7 @@
       <workItem from="1677218299729" duration="13264000" />
       <workItem from="1677478309905" duration="15427000" />
       <workItem from="1677563789967" duration="32937000" />
-      <workItem from="1677735258643" duration="33976000" />
+      <workItem from="1677735258643" duration="40986000" />
     </task>
     <servers />
   </component>

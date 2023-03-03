@@ -15,7 +15,7 @@ use Modules\Lecturer\Http\Controllers\LecturerController;
 
 Route::prefix('lecturer')->group(function() {
     Route::get('/', 'LecturerController@index');
-    Route::get('/viewworkload', [LecturerController::class, 'viewworkload']) ->name ('lecturer.viewWorkload');
+    Route::get('/view-workload', [LecturerController::class, 'viewworkload']) ->name ('lecturer.viewWorkload');
     Route::get('/qualifications', [LecturerController::class, 'qualifications']) ->name ('lecturer.qualifications');
     Route::get('/add-qualifications', [LecturerController::class, 'addqualifications'])->name('lecturer.addqualifications');
     Route::post('/store-Qualifications', [LecturerController::class, 'storeQualifications'])->name('lecturer.storeQualifications');
@@ -27,4 +27,10 @@ Route::prefix('lecturer')->group(function() {
     Route::post('/store-teaching-areas', [LecturerController::class, 'storeTeachingAreas'])->name('lecturer.storeTeachingAreas');
     Route::get('/lecture-view-yearly-workloads/{id}', [LecturerController::class, 'yearlyWorkloads'])->name('lecturer.yearlyWorkloads');
     Route::get('/lecture-view-semester-workload/{year}/{semester}', [LecturerController::class, 'semesterWorkload'])->name('lecturer.semesterWorkload');
+    Route::get('/view-examination', [LecturerController::class, 'examination']) ->name ('lecturer.examination');
+    Route::get('/view-yearly-exams/{id}', [LecturerController::class, 'yearlyExams'])->name('lecturer.yearlyExams');
+    Route::get('/view-semester-exams/{year}/{semester}', [LecturerController::class, 'semesterExamination'])->name('lecturer.semesterExamination');
+
+    Route::get('/get-students-per-unit/{id}', [LecturerController::class, 'getClassStudents'])->name('lecturer.studentList');
+
 });

@@ -9,6 +9,7 @@ use Modules\Lecturer\Entities\LecturerQualification;
 use Crypt;
 use Modules\Lecturer\Entities\TeachingArea;
 use Modules\Registrar\Entities\Courses;
+use Modules\Registrar\Entities\StudentCourse;
 use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Workload\Entities\Workload;
 
@@ -41,8 +42,6 @@ class LecturerController extends Controller
     }
 
     public function addqualifications(){
-
-        $lecturer = [];
 
         return view('lecturer::profile.addqualifications');
 
@@ -168,6 +167,45 @@ class LecturerController extends Controller
         $workloads = Workload::where('academic_year', $hashedYear)->where('academic_semester', $hashedSemester)->latest()->get();
 
         return view('lecturer::workload.semesterWorkload')->with(['workloads' => $workloads, 'year' => $hashedYear, 'semester' => $hashedSemester]);
+
+    }
+
+    public function examination(){
+
+        $workloads = Workload::where('user_id', auth()->guard('user')->user()->id)->latest()->get()->groupBy('academic_year');
+
+        return view('lecturer::examination.index')->with(['workloads' => $workloads]);
+
+    }
+
+
+    public function yearlyExams($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $workloads = Workload::where('academic_year', $hashedId)->latest()->get()->groupBy('academic_semester');
+
+        return view('lecturer::examination.yearlyExams')->with(['workloads' => $workloads, 'year' => $hashedId]);
+    }
+
+    public function semesterExamination($year, $semester){
+
+        $hashedYear = Crypt::decrypt($year);
+        $hashedSemester = Crypt::decrypt($semester);
+
+        $workloads = Workload::where('academic_year', $hashedYear)->where('academic_semester', $hashedSemester)->latest()->get();
+
+        return view('lecturer::examination.semesterExams')->with(['workloads' => $workloads, 'year' => $hashedYear, 'semester' => $hashedSemester]);
+    }
+
+    public function getClassStudents($id){
+        $hashedId = Crypt::decrypt($id);
+
+        $class = Workload::find($hashedId)->class_code;
+
+        return $students = StudentCourse::where('class_code', $class)->get();
+
+
     }
 
 
