@@ -10,6 +10,7 @@ use Crypt;
 use Modules\Lecturer\Entities\TeachingArea;
 use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\UnitProgramms;
+use Modules\Workload\Entities\Workload;
 
 
 class LecturerController extends Controller
@@ -25,9 +26,9 @@ class LecturerController extends Controller
 
     public function viewworkload(){
 
-        $workloads = [];
+        $workloads = Workload::where('user_id', auth()->guard('user')->user()->id)->latest()->get()->groupBy('academic_year');
 
-        return view('lecturer::workload.viewworkload');
+        return view('lecturer::workload.viewworkload')->with(['workloads' => $workloads]);
 
     }
 
@@ -83,7 +84,7 @@ class LecturerController extends Controller
             'qualification' =>'required',
             'institution' => 'required'
         ]);
-        
+
         $qualification = LecturerQualification::find($id);
         $qualification->user_id = auth()->guard('user')->user()->id;
        $qualification->level = $request->level;
@@ -100,11 +101,10 @@ class LecturerController extends Controller
 
         $qualification = LecturerQualification::find($hashedId);
         $qualification->delete();
-       
+
         return redirect()->route('lecturer.qualifications')->with('success', 'Deleted successfully');
     }
-     
-=======
+
     public function teachingAreas(){
 
         $myUnits = TeachingArea::where('user_id', auth()->guard('user')->user()->id)->latest()->get();
@@ -148,9 +148,28 @@ class LecturerController extends Controller
         }
 
         return redirect()->route('lecturer.teachingAreas')->with('success', 'Teaching areas added successfully');
+    }
 
+    public function yearlyWorkloads($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $workloads = Workload::where('academic_year', $hashedId)->latest()->get()->groupBy('academic_semester');
+
+        return view('lecturer::workload.yearlyWorkload')->with(['workloads' => $workloads, 'year' => $hashedId]);
 
     }
+
+    public function semesterWorkload($year, $semester){
+
+        $hashedYear = Crypt::decrypt($year);
+        $hashedSemester = Crypt::decrypt($semester);
+
+        $workloads = Workload::where('academic_year', $hashedYear)->where('academic_semester', $hashedSemester)->latest()->get();
+
+        return view('lecturer::workload.semesterWorkload')->with(['workloads' => $workloads, 'year' => $hashedYear, 'semester' => $hashedSemester]);
+    }
+
 
     /**
      * Show the form for creating a new resource.

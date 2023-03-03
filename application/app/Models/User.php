@@ -60,7 +60,6 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'user_employments', 'user_id', 'role_id');
     }
 
-
     public function placedUser(){
 
        return $this->hasMany(UserEmployment::class);
