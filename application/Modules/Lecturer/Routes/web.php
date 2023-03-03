@@ -25,4 +25,6 @@ Route::prefix('lecturer')->group(function() {
     Route::get('/my-areas-of-teaching', [LecturerController::class, 'teachingAreas'])->name('lecturer.teachingAreas');
     Route::get('/add-teaching-areas', [LecturerController::class, 'addTeachingAreas'])->name('lecturer.addTeachingAreas');
     Route::post('/store-teaching-areas', [LecturerController::class, 'storeTeachingAreas'])->name('lecturer.storeTeachingAreas');
+    Route::get('/delete-teaching-area/{id}',[LecturerController::class, 'deleteTeachingArea'])->name('lecturer.deleteTeachingArea');
+    Route::get('/myProfile' , [LecturerController::class, 'myProfile'])->name('lecturer.myProfile');
 });
