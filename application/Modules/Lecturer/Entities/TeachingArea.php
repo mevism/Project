@@ -1,4 +1,3 @@
-
 <?php
 
 namespace Modules\Lecturer\Entities;
