@@ -71,7 +71,7 @@
 
                                 </td>
                                 <td>
-                                    <a class="btn btn-sm btn-alt-danger">delete</a>
+                                    <a class="btn btn-sm btn-alt-danger" href="{{route('lecturer.deleteTeachingArea',['id' => Crypt::encrypt($unit->id)] )}}">Drop</a>
                                 </td>
                             </tr>
                         @endforeach

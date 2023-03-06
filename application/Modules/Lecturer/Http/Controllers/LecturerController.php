@@ -104,6 +104,7 @@ class LecturerController extends Controller
         return redirect()->route('lecturer.qualifications')->with('success', 'Deleted successfully');
     }
 
+
     public function teachingAreas(){
 
         $myUnits = TeachingArea::where('user_id', auth()->guard('user')->user()->id)->latest()->get();
@@ -205,9 +206,25 @@ class LecturerController extends Controller
 
         return $students = StudentCourse::where('class_code', $class)->get();
 
-
     }
 
+    public function deleteTeachingArea($id){
+        $hashedId = Crypt::decrypt($id);
+
+        $teachingArea = TeachingArea::find($hashedId);
+        $teachingArea->delete();
+
+        return redirect()->back()->with('success', 'Deleted successfully');
+    }
+
+
+
+       public function myProfile(){
+
+            $qualifications = LecturerQualification::where ('user_id', auth()->guard('user')->user()->id)->latest()->get();
+
+             return view('lecturer::profile.myprofile')->with('qualifications',$qualifications);
+       }
 
     /**
      * Show the form for creating a new resource.
