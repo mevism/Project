@@ -3,6 +3,7 @@
 namespace Modules\Workload\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserEmployment;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -93,23 +94,52 @@ class WorkloadController extends Controller
 
     public function allocateUnit($staff_id, $unit_id){
 
-        $hashedStaff = Crypt::decrypt($staff_id);
-
+        $hashedStaff = Crypt::decrypt($staff_id);       
         $hashedUnit = Crypt::decrypt($unit_id);
 
         $unit = SemesterUnit::findorFail($hashedUnit);
 
         $class = ClassPattern::where(['class_code' => $unit->class_code, 'stage' => $unit->stage, 'pattern_id' => $unit->semester])->first();
 
-        $workload = new Workload;
-        $workload->academic_year = $class->academic_year;
-        $workload->academic_semester = $class->period;
-        $workload->user_id = $hashedStaff;
-        $workload->unit_id = $unit->id;
-        $workload->class_code = $class->class_code;
-        $workload->save();
+        $user = User::find($hashedStaff)->placedUser->first();
+        
+        $workloads  =  Workload::where('user_id', $hashedStaff)
+                            ->where('academic_year', $class->academic_year)
+                            ->where('academic_semester', $class->period)
+                            ->count();
 
-        return redirect()->back()->with('success', 'Unit allocation successful');
+        if($user->employment_terms == 'PT'){
+            if($workloads < 5 ){
+
+                // return $workloads;
+
+                $workload = new Workload;
+                $workload->academic_year = $class->academic_year;
+                $workload->academic_semester = $class->period;
+                $workload->user_id = $hashedStaff;
+                $workload->unit_id = $unit->id;
+                $workload->class_code = $class->class_code;
+                $workload->save();      
+        
+                return redirect()->back()->with('success', 'Unit allocation successful');
+            }else{
+
+                return redirect()->back()->with('info', 'Lecturer Fully Loaded.');
+            }
+
+            }else{
+
+                $workload = new Workload;
+                $workload->academic_year = $class->academic_year;
+                $workload->academic_semester = $class->period;
+                $workload->user_id = $hashedStaff;
+                $workload->unit_id = $unit->id;
+                $workload->class_code = $class->class_code;
+                $workload->save();      
+                
+                return redirect()->back()->with('success', 'Unit allocation successful');
+            }
+        
 
     }
 

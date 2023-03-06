@@ -408,7 +408,7 @@ class CoursesController extends Controller
 
     }
     public function coursePreview($id){
-        $courseName = Courses::find($id);
+        return $courseName = Courses::find($id);
         $data = CourseHistory::where('course_id', $id)->latest()->get();
        return view('registrar::course.preview')->with(['data' => $data , 'courseName'=>$courseName]);
    }
@@ -1668,6 +1668,7 @@ class CoursesController extends Controller
 
     public function editCourse($id){
 
+        
         $hashedId  =  Crypt::decrypt($id);
 
         $schools              =          School::all();
@@ -1705,7 +1706,7 @@ class CoursesController extends Controller
 
         if($request->department == $data->department_id){
 
-            $oldCourse   =   new  CourseHistory;
+            $oldCourse                      =      new  CourseHistory;
             $oldCourse->course_id           =           $data->id;
             $oldCourse->course_name         =           $data->course_name;
             $oldCourse->department_id       =           $data->department_id;
@@ -1715,13 +1716,14 @@ class CoursesController extends Controller
 
         }else{
 
-            $newCourse   =     Courses::find($id);
-            $newCourse->course_name         =           $request->input('course_name');
-            $newCourse->department_id       =           $request->input('department');
-            $newCourse->level               =           $request->input('level');
-            $newCourse->course_code         =           $request->input('course_code');
-            $newCourse->update();
+           return "null";
         }
+        $newCourse                      =     Courses::find($id);
+        $newCourse->course_name         =           $request->input('course_name');
+        $newCourse->department_id       =           $request->input('department');
+        $newCourse->level               =           $request->input('level');
+        $newCourse->course_code         =           $request->input('course_code');
+        $newCourse->save();
 
         $req              =             CourseRequirement::where('course_id', $id)->first();
         $req->course_duration           =             $request->input('course_duration');

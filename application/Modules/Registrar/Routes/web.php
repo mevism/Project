@@ -17,11 +17,11 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
     
 
     
-    Route::get('/showSemFee', 'CoursesController@showSemFee')->name('courses.showSemFee');
+    Route::get('/show-semester-fee', 'CoursesController@showSemFee')->name('courses.showSemFee');
     Route::get('/semFee', 'CoursesController@semFee')->name('courses.semFee');
-    Route::post('/storeSemFee', 'CoursesController@storeSemFee')->name('courses.storeSemFee');
-    Route::get('/viewSemFee/{id}', 'CoursesController@viewSemFee')->name('courses.viewSemFee');
-    Route::get('/printFee/{id}', 'CoursesController@printFee')->name('courses.printFee');
+    Route::post('/store-semester-fee', 'CoursesController@storeSemFee')->name('courses.storeSemFee');
+    Route::get('/view-semester--fee/{id}', 'CoursesController@viewSemFee')->name('courses.viewSemFee');
+    Route::get('/print-fee/{id}', 'CoursesController@printFee')->name('courses.printFee');
 
     //routes on fee
     Route::get('/voteheads', 'CoursesController@voteheads')->name('courses.voteheads');
@@ -45,11 +45,11 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
     Route::get('/import-unit-programms','CoursesController@importUnitProgramms')->name('courses.importUnitProgramms');
     Route::post('/import-unit-programms','CoursesController@importUnitProg')->name('courses.importUnitProg');
 
-    Route::get('/importUnit','CoursesController@importUnit')->name('courses.importUnit');
-    Route::post('/importUnit','CoursesController@importUnits')->name('courses.importUnits');
+    Route::get('/import-unit','CoursesController@importUnit')->name('courses.importUnit');
+    Route::post('/import-unit','CoursesController@importUnits')->name('courses.importUnits');
     
-    Route::get('/importExportCourses','CoursesController@importExportCourses')->name('courses.importExportCourses');
-    Route::post('/importCourses','CoursesController@importCourses')->name('courses.importCourses');
+    Route::get('/import-export-courses','CoursesController@importExportCourses')->name('courses.importExportCourses');
+    Route::post('/import-courses','CoursesController@importCourses')->name('courses.importCourses');
 
     Route::get('/create-units/{id}','CoursesController@createUnits')->name('courses.createUnits');
     Route::post('/store-created-units', 'CoursesController@storeCreatedUnits')->name('courses.storeCreatedUnits');
@@ -160,13 +160,13 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
 
 
     Route::get('/transfer', [CoursesController::class, 'transfer'])->name('courses.transfer');
-    Route::get('/batchTransfer', [CoursesController::class, 'batchTransfer'])->name('courses.batchTransfer');
-    Route::get('/schoolPreview/{id}', [CoursesController::class, 'schoolPreview'])->name('courses.schoolPreview');
-    Route::get('/departmentPreview/{id}', [CoursesController::class, 'departmentPreview'])->name('courses.departmentPreview');
-    Route::get('/coursePreview/{id}', [CoursesController::class, 'coursePreview'])->name('courses.coursePreview');
+    Route::get('/batch-transfer', [CoursesController::class, 'batchTransfer'])->name('courses.batchTransfer');
+    Route::get('/school-preview/{id}', [CoursesController::class, 'schoolPreview'])->name('courses.schoolPreview');
+    Route::get('/department-preview/{id}', [CoursesController::class, 'departmentPreview'])->name('courses.departmentPreview');
+    Route::get('/course-preview/{id}', [CoursesController::class, 'coursePreview'])->name('courses.coursePreview');
    
 
-    Route::post('/acceptedTransfers', 'CoursesController@acceptedTransfers')->name('courses.acceptedTransfers');
+    Route::post('/accepted-transfers', 'CoursesController@acceptedTransfers')->name('courses.acceptedTransfers');
     Route::get('/transfer-requests', [CoursesController::class, 'yearly'])->name('courses.yearly');
     Route::get('/transfer/{year}', [CoursesController::class, 'transfer'])->name('courses.transfer');
     Route::get('/generate-requests-transfer-report/{year}', [CoursesController::class, 'requestedTransfers'])->name('courses.requestedTransfers');
