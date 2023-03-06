@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\COD\Entities\ClassPattern;
 use Modules\COD\Entities\Progression;
 use Modules\Student\Entities\CourseTransfer;
+use Modules\Workload\Entities\Workload;
 
 class Classes extends Model
 {

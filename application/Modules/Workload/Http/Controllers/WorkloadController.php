@@ -19,12 +19,7 @@ use Modules\Workload\Entities\Workload;
 class WorkloadController extends Controller
 {
 
-    public function workloads(){
-
-        $academicYears = AcademicYear::latest()->get();
-
-        return view('workload::workload.index')->with('academicYears', $academicYears);
-    }
+   
 
     public function yearlyWorkloads($id){
 

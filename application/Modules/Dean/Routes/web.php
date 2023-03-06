@@ -50,5 +50,10 @@ Route::prefix('dean')->group(function() {
         Route::get('/view-selected-readmission-request/{id}', [DeanController::class, 'selectedReadmission'])->name('dean.selectedReadmission');
         Route::post('/accept-selected-readmission-request/{id}', [DeanController::class, 'acceptReadmission'])->name('dean.acceptReadmission');
         Route::post('/decline-selected-readmission-request/{id}', [DeanController::class, 'declineReadmission'])->name('dean.declineReadmission');
+
+        Route::get('/yearly-workload', [DeanController::class, 'yearlyWorkload'])->name('dean.workload');
+        Route::get('/workload-per-semester/{year}', [DeanController::class, 'worklordPerSemester'])->name('dean.worklordPerSemester');
+        Route::get('/workload-per-department/{year}', [DeanController::class, 'departmentalWorkload'])->name('dean.departmentalWorkload');
+        
     });
 });

@@ -53,6 +53,10 @@ class RolesAndPermissions extends Seeder
            'approve-application'
        ]);
 
+       $deanRole->givePermissionTo([
+            'approve-workload',
+            'publish-workload'
+       ]);
        $codRole->givePermissionTo([
            'approve-admission',
            'approve-application',

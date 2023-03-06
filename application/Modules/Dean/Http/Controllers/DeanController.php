@@ -22,15 +22,40 @@ use Modules\Application\Entities\Education;
 use Modules\Student\Entities\AcademicLeave;
 use NcJoes\OfficeConverter\OfficeConverter;
 use Illuminate\Contracts\Support\Renderable;
+use Modules\Registrar\Entities\AcademicYear;
 use Modules\Student\Entities\CourseTransfer;
 use Modules\Application\Entities\Application;
 use Modules\Student\Entities\ReadmissionApproval;
 use Modules\Student\Entities\AcademicLeaveApproval;
 use Modules\Student\Entities\CourseTransferApproval;
-
+use Modules\Workload\Entities\Workload;
 
 class DeanController extends Controller
 {
+
+    public function yearlyWorkload(){
+
+         $academicYears = Workload::latest()->get()->groupBy('academic_year');
+
+        return view('dean::workload.index')->with('academicYears', $academicYears);
+    }
+    
+    public function departmentalWorkload($year){
+
+        $hashedYear = Crypt::decrypt($year);
+
+        $departments = Workload::where('academic_year',$hashedYear)->latest()->get()->groupBy('class_code');
+
+        return view('dean::workload.departmentalWorkload')->with(['departments' => $departments, 'year' => $hashedYear]);
+    }
+
+    public function worklordPerSemester($year){
+
+        $hashedYear = Crypt::decrypt($year);
+
+        return view('dean::workload.workloadPerSemester');
+
+    }
     public function readmissions(){
 
         $readmissions = Readmission::latest()->get()->groupBy('academic_year');
