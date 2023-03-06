@@ -49,7 +49,7 @@
                         <th>Unit Code</th>
                         <th>Unit Name</th>
                         <th>Level</th>
-                        <th>Remove</th>
+                        <th> Action </th>
 
                         </thead>
                         <tbody>
@@ -71,7 +71,7 @@
 
                                 </td>
                                 <td>
-                                    <a class="btn btn-sm btn-alt-danger">delete</a>
+                                    <a class="btn btn-sm btn-alt-danger" href="{{route('lecturer.deleteTeachingArea', ['id' => Crypt::encrypt($unit->id)] )}}">drop</a>
                                 </td>
                             </tr>
                         @endforeach
