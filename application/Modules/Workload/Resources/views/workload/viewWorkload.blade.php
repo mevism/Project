@@ -61,7 +61,7 @@
                         <tbody>
                         @foreach ($workloads as $yearly => $workload)
                             <tr>
-                                <td> 1 </td>
+                                <td> {{ $loop->iteration }} </td>
                                 <td>
                                     {{ $yearly }}
                                 </td>

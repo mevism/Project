@@ -30,7 +30,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-1">
                     <h5 class="h6 fw-bold mb-0">
-                        SEMESTER WORKLOADS
+                        SEMESTER WORKLOADSbj
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -70,28 +70,29 @@
                                 <td> {{ $unit->unit_name }} </td>
                                 <td> {{ $unit->stage.'.'.$unit->semester }} </td>
                                 <td nowrap="">
-                                    {{-- {{ $unit->workloadUnit}} --}}
+                                    {{-- {{ $unit}} --}}
                                     @if($unit->allocateUnit == null)
-                                        @foreach($lecturers as $key => $lecturer)
+                                        @foreach($unit->unitTeacher as $key => $lecturer)
                                             <div class="row mb-1">
                                                 <div class="col col-md-8">
-                                                    {{ ++$key }}. {{ $lecturer->title }} {{ $lecturer->last_name }}  {{ $lecturer->first_name }}  {{ $lecturer->middle_name }}
-                                                    ( {{ $lecturer->placedUser->first()->employment_terms }} )
+                                                    {{ ++$key }}. {{ $lecturer->userTeachingArea->title}} {{ $lecturer->userTeachingArea->last_name}} {{ $lecturer->userTeachingArea->first_name}} {{ $lecturer->userTeachingArea->middle_name}}
                                                 </div>
                                                 <div class="col col-md-4">
-                                                    <a class="btn btn-sm btn-outline-success" href="{{ route('department.allocateUnit', ['staff_id' =>  Crypt::encrypt($lecturer->id), 'unit_id' => Crypt::encrypt($unit->id)]) }}">Allocate </a>
+                                                    <a class="btn btn-sm btn-outline-success" href="{{ route('department.allocateUnit', ['staff_id' =>  Crypt::encrypt($lecturer->userTeachingArea->id), 'unit_id' => Crypt::encrypt($unit->id)]) }}">Allocate </a>
                                                 </div>
                                             </div>
                                         @endforeach
                                     @else
                                         <div class="row mb-1">
                                             <div class="col col-md-8">
-                                                {{ $unit->allocateUnit->userAllocation->title }} {{ $unit->allocateUnit->userAllocation->last_name }} {{ $unit->allocateUnit->userAllocation->first_name }} {{ $unit->allocateUnit->userAllocation->middle_name }}
+                                                 {{ $unit->allocateUnit->userAllocation->last_name }} {{ $unit->allocateUnit->userAllocation->first_name }} {{ $unit->allocateUnit->userAllocation->middle_name }}
                                                 ( {{ $unit->allocateUnit->userAllocation->placedUser->first()->employment_terms }} )
                                             </div>
+                                            {{-- @if() --}}
                                             <div class="col col-md-4">
                                                 <a class="btn btn-sm btn-outline-danger" href="{{ route('department.deleteWorkload', ['id' => Crypt::encrypt($unit->allocateUnit->unit_id)]) }}">Revoke </a>
                                             </div>
+                                            {{-- @endif --}}
                                         </div>
                                     @endif
                                 </td>

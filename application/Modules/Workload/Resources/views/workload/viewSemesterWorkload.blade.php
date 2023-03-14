@@ -58,7 +58,7 @@
                         <th>Staff number </th>
                         <th>Staff name </th>
                         <th>Qualifications </th>
-                        <th>Roles </th>
+                        <th>Role </th>
                         <th>Class Code</th>
                         <th>Load </th>
                         <th>Stds</th>
@@ -68,6 +68,7 @@
                         </thead>
                         <tbody>
                         @foreach ($workloads as $lec => $workload)
+                        
                             <tr>
                                 <td> 1 </td>
                                 <td>

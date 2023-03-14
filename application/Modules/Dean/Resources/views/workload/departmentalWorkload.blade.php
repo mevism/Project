@@ -59,14 +59,27 @@
                         <th>Action</th>
                         </thead>
                         <tbody>
-                        @foreach ($departments as $key => $department)
-                            <tr>
-                                <td> {{ $loop->iteration }} </td>
-                                <td>  {{ $department->first()->class_code }}</td>
-                                <td nowrap="">
-                                    {{-- <a class="btn btn-sm btn-outline-secondary" href="{{route('dean.worklordPerSemester', $department->id)  }}">view</a> --}}
-                                </td>
-                            </tr>
+                        @foreach ($departments as $department)
+                            @foreach ($department as $dept => $depts)
+                                <tr>
+                                    <td> {{ $loop->iteration }}</td>
+                                    <td>                                           
+                                        @foreach($departs as $deptCode)
+                                            @if($dept == $deptCode->id )
+
+                                            {{ $deptCode->dept_code }}
+
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    {{-- <td nowrap="">
+                                        <a class="btn btn-sm btn-outline-secondary" href="{{route('dean.worklordPerSemester',['id' => Crypt::encrypt($dept)]) }}">view</a>
+                                    </td> --}}
+                                    <td nowrap="">
+                                        <a class="btn btn-sm btn-outline-secondary" href="{{route('dean.worklordPerSemester',['id' => Crypt::encrypt($dept), 'year' => Crypt::encrypt($year)]) }}">view</a>
+                                    </td>
+                                </tr>
+                            @endforeach
                         @endforeach
                         </tbody>
                     </table>

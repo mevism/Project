@@ -55,18 +55,34 @@
                     <table id="example" class="table table-bordered table-responsive-sm table-striped table-vcenter js-dataTable-responsive fs-sm">
                         <thead>
                         <th>#</th>
-                        <th>Academic Year </th>
+                        <th>Academic Semester </th>
                         <th>Action</th>
                         </thead>
                         <tbody>
                         @foreach ($workloads as $semester => $workload)
                             <tr>
-                                <td> 1 </td>
+                                <td> {{ $loop->iteration}} </td>
                                 <td>
                                     {{ $semester }}
                                 </td>
                                 <td>
+                                    @if ($workload->first()->workload_approval_id === null)
+                                        
                                     <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewSemesterWorkload', ['year' => Crypt::encrypt($year), 'semester' => Crypt::encrypt($semester)]) }}">View </a>
+
+                                    <a class="btn btn-sm btn-outline-success" href="{{ route('department.submitWorkload' ,['year' => Crypt::encrypt($year), 'id' => Crypt::encrypt($semester)]) }}">Submit </a>
+                                    
+                                    @elseif($workload->first()->workload_approval_id === 1 && $workload->first()->status === null)
+                                    <a class="btn btn-outline-info btn-sm" href=""> Processing </a>
+
+                                    @elseif($workload->first()->workload_approval_id === 1 &&  $workload->first()->status === 0)   
+                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewSemesterWorkload', ['year' => Crypt::encrypt($year), 'semester' => Crypt::encrypt($semester)]) }}">Review </a>
+
+                                    <a class="btn btn-sm btn-outline-success" href="{{ route('department.resubmitWorkload' ,['year' => Crypt::encrypt($year), 'id' => Crypt::encrypt($semester)]) }}">Resubmit </a>
+                                    @elseif($workload->first()->workload_approval_id === 1 &&  $workload->first()->status === 1)   
+                                    <a class="btn btn-outline-info btn-sm" href=""> Published </a>
+
+                                    @endif 
                                 </td>
                             </tr>
                         @endforeach

@@ -55,22 +55,106 @@
                         <table id="example" class="table table-bordered table-striped fs-sm">
                             <thead>
                                 <th>#</th>
+                                <th>DEpartment</th>
                                 <th>Academic Year</th>
+                                <th>Academic Semester</th>
                                 <th>Action</th>
                             </thead>
                             <tbody>                               
 
-                                @foreach($academicYears as $academic_year => $academicYear)
+                                @foreach($departments as $workloads)
 
-                                    <tr>
-                                        <td> {{ $loop->iteration }} </td>
-                                        <td>
-                                            {{ $academic_year }}
-                                        </td>
-                                        <td>
-                                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('dean.departmentalWorkload', ['year' => Crypt::encrypt($academic_year)]) }}">View</a>
-                                        </td>
-                                    </tr>
+                                    @foreach($workloads as $workload)
+
+                                        <tr>
+                                            <td>  {{ $loop->iteration }}</td>
+                                            <td>
+                                                {{ $workload->approveWorkload->workloadDept->dept_code }}
+                                            </td>
+                                            <td>
+                                            {{ $workload->academic_year}}
+                                            </td>
+
+                                            <td>
+                                                {{ $workload->academic_semester}}
+                                            </td>
+                                            <td nowrap>
+                                                @if($workload->dean_status == null)
+                                                <a class="btn btn-outline-success btn-sm" href="{{route('dean.approveWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Approve  </a>
+
+                                                <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $workload->id }}"> Decline </a> 
+                                                @else
+                                                    @if($workload->dean_status === 1 && $workload->registrar_status === null )
+
+                                                    <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $workload->id }}"
+                                                        > Decline </a>
+
+                                                    <a class="btn btn-outline-success btn-sm" href="{{route('dean.submitWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Submit </a>                                                        
+                                                    @elseif($workload->dean_status === 1 && $workload->registrar_status === 0 && $workload->status === null)
+                                                    <a class="btn btn-outline-info btn-sm" href=""> processing </a>
+
+                                                    @elseif($workload->dean_status === 2 && $workload->registrar_status === null && $workload->workloadProcessed->first()->status === null) 
+                                                    <a class="btn btn-outline-success btn-sm" href="{{route('dean.approveWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Approve 
+                                                    </a>
+
+                                                    <a class="btn btn-outline-primary btn-sm" href="{{route('dean.revertWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Revert to COD
+                                                    </a>                                                    
+                                                    
+                                                    @elseif($workload->dean_status === 2 && $workload->workloadProcessed->first()->status === 0)   
+                                                    <a class="btn btn-outline-primary btn-sm" href=""> Reverted to COD
+                                                    </a>
+                                                    @elseif($workload->dean_status === 1 && $workload->registrar_status === 2)
+                                                    <a class="btn btn-outline-info btn-sm" href="{{route('dean.viewWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Review </a>
+                                                    
+                                                    <a class="btn btn-outline-primary btn-sm" href="{{route('dean.revertWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Revert to COD
+                                                    </a>
+
+                                                    {{-- @elseif($workload->dean_status === 1 && $workload->registrar_status === 2 &&   $workload->workloadProcessed->first()->status === 0)  
+                                                    <a class="btn btn-outline-primary btn-sm" href=""> Reverted to COD
+                                                    </a> --}}
+
+                                                    @elseif($workload->dean_status === 1 && $workload->registrar_status === 1 && $workload->status === 1)
+                                                        @if($workload->workloadProcessed->first()->status === 0)
+                                                        <a class="btn btn-outline-info btn-sm" href="{{route('dean.workloadPublished',['id' => Crypt::encrypt($workload->id)]) }}"> publish 
+                                                         </a>
+                                                        @else
+                                                        <a class="btn btn-outline-dark btn-sm" href="">  Published  
+                                                        
+                                                         </a>
+                                                           
+                                                        @endif   
+                                                    @endif       
+                                                @endif                                          
+
+                                            
+                                            <div class="modal fade" id="staticBackdrop-{{ $workload->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="staticBackdropLabel">YOUR REMARKS</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form method="POST" action="{{ route('dean.declineWorkload', ['id' => Crypt::encrypt($workload->id)]) }}">
+                                                                @csrf
+                                                                <div class="d-flex justify-content-center mb-4">
+                                                                    <div class="col-md-11">
+                                                                        <textarea name="remarks" placeholder="Remarks" rows="6" class="form-control"></textarea>
+                                                                        {{-- <input type="hidden" value="{{ $leave->id }}" name="transfer_id"> --}}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="d-flex justify-content-center">
+                                                                    <button type="submit" class="btn btn-outline-success col-md-5">Submit Remarks</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                            
+                                            </td>
+                                        </tr>
+                                        @endforeach
                                 @endforeach
                             </tbody>
                         </table>

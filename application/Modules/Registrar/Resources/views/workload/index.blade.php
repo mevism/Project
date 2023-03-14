@@ -29,7 +29,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
                     <h5 class="h5 fw-bold mb-0">
-                        COURSE TRANSFERS
+                      YEARLY  WORKLOAD
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -38,7 +38,7 @@
                             <a class="link-fx" href="javascript:void(0)">Schools</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            Course Transfers
+                            workloads
                         </li>
                     </ol>
                 </nav>
@@ -57,15 +57,13 @@
                                 <th>Academic Year</th>
                                 <th>Action</th>
                             </thead>
-                            <tbody>
-                                
+                            <tbody>                                
                                 @foreach($data as $academic_year => $transfer)
-
                                     <tr>
                                         <td> {{ $loop->iteration }} </td>
                                         <td> {{ $academic_year }} </td>
                                         <td>
-                                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.transfer', ['year' => Crypt::encrypt($academic_year)]) }}">view requests</a>
+                                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.schoolWorkload', ['year'=> Crypt::encrypt($academic_year)]) }}">view </a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -74,6 +72,5 @@
                 </div>
             </div>
         </div>
-        <!-- Dynamic Table Responsive -->
     </div>
 @endsection

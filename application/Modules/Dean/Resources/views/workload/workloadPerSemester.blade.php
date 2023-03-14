@@ -30,16 +30,16 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-1">
                     <h5 class="h6 fw-bold mb-0">
-                        SEMESTER CLASSES
+                       {{ $year }}  WORKLOAD
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="javascript:void(0)">Workload</a>
+                            <a class="link-fx" href="javascript:void(0)">department</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            Semester Classes
+                            workload {{ $dept }}
                         </li>
                     </ol>
                 </nav>
@@ -53,27 +53,62 @@
             <div class="row">
                 <div class="col-12">
                     <table id="example" class="table table-bordered table-responsive-sm table-striped table-vcenter js-dataTable-responsive fs-sm">
+                     
                         <thead>
-                        <th>#</th>
-                        <th>Class code </th>
-                        <th>Academic Year </th>
+                        <th>#</th>                        
+                        {{-- <th>Academic Year </th> --}}
+                        <th>department </th>
                         <th>Academic semester</th>
-                        <th>Stage</th>
                         <th>Action</th>
                         </thead>
                         <tbody>
-                        {{-- @foreach ($classes as $key => $class) --}}
-                            <tr>
-                                <td>  </td>
-                                <td> </td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td nowrap="">
-                                    <a class="btn btn-sm btn-outline-secondary" href="">Class Units</a>
+                        @foreach ($intakes as $academic  => $intake)
+                            <tr>    
+                                <td>{{ $loop->iteration }}</td>                      
+                                {{-- <td> {{ $year }} </td> --}}
+                                <td>{{ $dept }}</td>
+                                {{-- <td>
+                                    @foreach($departs as $deptCode)
+                                    @if($intake->first()->department_id == $deptCode->id )
+                                    {{ $deptCode->dept_code }}
+                                    @endif
+                                @endforeach
+                                </td> --}}
+                                <td>{{  $academic }}</td>
+                                <td nowrap="">                                   
+                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('dean.viewWorkload', ['id' => Crypt::encrypt($academic), 'year' => Crypt::encrypt($year), 'dept' => Crypt::encrypt($dept)]) }}">view</a>                                   
+                                    
+                                    <a class="btn btn-sm btn-outline-success" href="{{ route('dean.approveWorkload', ['id' => Crypt::encrypt($academic), 'year' => Crypt::encrypt($year)]) }}">Approve</a>
+                                    
+                                    <a class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ preg_replace('~/~', '', $academic) }}">Decline</a>
+
+                                    <div class="modal fade" id="staticBackdrop-{{ preg_replace('~/~', '', $academic) }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="staticBackdropLabel">YOUR REMARKS {{ $academic }}</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form method="POST" action="{{ route('dean.declineWorkload', ['id' => Crypt::encrypt($academic), 'year' => Crypt::encrypt($year)]) }}">
+                                                        @csrf
+                                                        <div class="d-flex justify-content-center mb-4">
+                                                            <div class="col-md-11">
+                                                                <textarea name="remarks" placeholder="Remarks" rows="6" class="form-control"></textarea>
+                                                                {{-- <input type="hidden" value="{{ $leave->id }}" name="transfer_id"> --}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex justify-content-center">
+                                                            <button type="submit" class="btn btn-outline-success col-md-5">Submit Remarks</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
-                        {{-- @endforeach --}}
+                        @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -81,4 +116,5 @@
         </div>
     </div>
 
+   
 @endsection
