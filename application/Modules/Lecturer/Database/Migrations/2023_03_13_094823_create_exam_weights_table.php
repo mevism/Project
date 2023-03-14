@@ -13,14 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('workloads', function (Blueprint $table) {
+        Schema::create('exam_weights', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('department_id');
+            $table->string('unit_code');
             $table->string('academic_year');
             $table->string('academic_semester');
-            $table->integer('user_id');
-            $table->string('unit_id');
-            $table->string('class_code');
+            $table->integer('exam');
+            $table->integer('cat');
+            $table->integer('assignment');
+            $table->integer('practical');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -33,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('workloads');
+        Schema::dropIfExists('exam_weights');
     }
 };

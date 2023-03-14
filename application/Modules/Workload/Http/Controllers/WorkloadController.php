@@ -94,7 +94,7 @@ class WorkloadController extends Controller
 
     public function allocateUnit($staff_id, $unit_id){
 
-        $hashedStaff = Crypt::decrypt($staff_id);       
+        $hashedStaff = Crypt::decrypt($staff_id);
         $hashedUnit = Crypt::decrypt($unit_id);
 
         $unit = SemesterUnit::findorFail($hashedUnit);
@@ -102,7 +102,7 @@ class WorkloadController extends Controller
         $class = ClassPattern::where(['class_code' => $unit->class_code, 'stage' => $unit->stage, 'pattern_id' => $unit->semester])->first();
 
         $user = User::find($hashedStaff)->placedUser->first();
-        
+
         $workloads  =  Workload::where('user_id', $hashedStaff)
                             ->where('academic_year', $class->academic_year)
                             ->where('academic_semester', $class->period)
@@ -114,13 +114,14 @@ class WorkloadController extends Controller
                 // return $workloads;
 
                 $workload = new Workload;
+                $workload->department_id = auth()->guard('user')->user()->employmentDepartment->first()->id;
                 $workload->academic_year = $class->academic_year;
                 $workload->academic_semester = $class->period;
                 $workload->user_id = $hashedStaff;
                 $workload->unit_id = $unit->id;
                 $workload->class_code = $class->class_code;
-                $workload->save();      
-        
+                $workload->save();
+
                 return redirect()->back()->with('success', 'Unit allocation successful');
             }else{
 
@@ -130,17 +131,16 @@ class WorkloadController extends Controller
             }else{
 
                 $workload = new Workload;
+                $workload->department_id = auth()->guard('user')->user()->employmentDepartment->first()->id;
                 $workload->academic_year = $class->academic_year;
                 $workload->academic_semester = $class->period;
                 $workload->user_id = $hashedStaff;
                 $workload->unit_id = $unit->id;
                 $workload->class_code = $class->class_code;
-                $workload->save();      
-                
+                $workload->save();
+
                 return redirect()->back()->with('success', 'Unit allocation successful');
             }
-        
-
     }
 
     public function viewWorkload(){
@@ -178,7 +178,9 @@ class WorkloadController extends Controller
             }
         }
 
-        $workloads = Workload::where('academic_year', $hashedYear)->where('academic_semester', $hashedSemester)->get()->groupBy('user_id');
+        $workloads = Workload::where('academic_year', $hashedYear)
+            ->where('academic_semester', $hashedSemester)
+            ->where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->id)->get()->groupBy('user_id');
 
         return view('workload::workload.viewSemesterWorkload')->with(['semester' => $hashedSemester, 'year' => $hashedYear, 'workloads' => $workloads, 'lecturers' => $lectures]);
     }

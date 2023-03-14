@@ -13,9 +13,6 @@
       </div>
     </div>
     <!-- END Hero -->
-
-   
-
     <!-- Page Content -->
     <div class="content content-boxed">
       <div class="row">
@@ -37,18 +34,22 @@
                         <div class="col-md-4">Name:</div>
                         <div class="col-md-8">{{ auth()->guard('user')->user()->title }} {{ auth()->guard('user')->user()->last_name }} {{ auth()->guard('user')->user()->first_name }} {{ auth()->guard('user')->user()->middle_name }}
                         </div>
-                </div>
+                    </div>
                     <div class="row m-2 fs-sm" >
                         <div class="col-md-4">Staff No:</div>
                         <div class="col-md-8">{{ auth()->guard('user')->user()->staff_number }}</div>
-                </div>
-                <div class="row m-2 fs-sm" >
-                    <div class="col-md-4">Gender:</div>
-                    <div class="col-md-8"> @if (auth()->guard('user')->user()->gender=='F')
-                        Female
-                         @else Male
-                         @endif</div>
-            </div>
+                    </div>
+                    <div class="row m-2 fs-sm" >
+                        <div class="col-md-4">Gender:</div>
+                        <div class="col-md-8">
+                            @if (auth()->guard('user')->user()->gender=='F')
+                                Female
+                             @else
+                                Male
+                             @endif
+                        </div>
+                    </div>
+              </div>
               </div>
             </li>
             <li class="timeline-event">
@@ -57,7 +58,7 @@
               </div>
               <div class="timeline-event-block block">
                 <div class="block-header">
-                  <h3 class="block-title">Contant Details</h3>
+                  <h3 class="block-title">Contact Details</h3>
                   <div class="block-options">
                   </div>
                 </div>
@@ -65,15 +66,15 @@
                     <div class="row m-2 fs-sm" >
                         <div class="col-md-4">Phone Number:</div>
                         <div class="col-md-8">{{ auth()->guard('user')->user()->phone_number }}</div>
-                </div>
+                    </div>
                     <div class="row m-2 fs-sm" >
                         <div class="col-md-4">Office Email:</div>
                         <div class="col-md-8">{{ auth()->guard('user')->user()->office_email }}</div>
-                </div>
-                <div class="row m-2 fs-sm" >
-                    <div class="col-md-4">Personal Email:</div>
-                    <div class="col-md-8">{{ auth()->guard('user')->user()->personal_email }}</div>
-            </div>
+                    </div>
+                    <div class="row m-2 fs-sm" >
+                        <div class="col-md-4">Personal Email:</div>
+                        <div class="col-md-8">{{ auth()->guard('user')->user()->personal_email }}</div>
+                    </div>
                 </div>
               </div>
             </li>
@@ -114,11 +115,10 @@
                     </div>
                     <hr>
                     @endforeach
-            
+
                 </div>
               </div>
             </li>
-          
           </ul>
           <!-- END Updates -->
         </div>
@@ -131,7 +131,7 @@
               </h3>
               <div class="block-options">
                 <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-                  
+
                 </button>
               </div>
             </div>
@@ -140,7 +140,7 @@
               <div class="d-flex align-items-center push">
                     <div class="flex-shrink-0 me-3">
                     <a class="item item-rounded fs-lg" href="javascript:void(0)">
-                        <i class="fa fa-book"></i> 
+                        <i class="fa fa-book"></i>
                     </a>
                     </div>
                 <div class="flex-grow-1">
@@ -155,7 +155,7 @@
           <!-- END Products -->
         </div>
       </div>
-    </div>
+{{--    </div>--}}
     <!-- END Page Content -->
-  
+
 @endsection

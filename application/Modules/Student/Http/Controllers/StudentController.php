@@ -53,10 +53,6 @@ class StudentController extends Controller
     {
         $courses = StudentCourse::where('student_id', Auth::guard('student')->user()->student_id)->get();
 
-
-
-
-
         return view('student::student.index')->with(['courses' => $courses]);
     }
 
