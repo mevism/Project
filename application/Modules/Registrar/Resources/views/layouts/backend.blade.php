@@ -291,21 +291,36 @@
                 </li>
             </ul>
           </li>
+          <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
+            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                <i class="nav-main-link-icon si si-user"></i>
+                <span class="nav-main-link-name">Workloads</span>
+            </a>
+            <ul class="nav-main-submenu">
+                <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('courses.workload') }}">
+                        <i class="nav-main-link-icon si si-user"></i>
+                        <span class="nav-main-link-name"> view Workload </span>
+                    </a>
+                </li>
+            </ul>
+        </li>
 
-              <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
-                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                      <i class="nav-main-link-icon si si-user"></i>
-                      <span class="nav-main-link-name">Users</span>
-                  </a>
-                  <ul class="nav-main-submenu">
-                      <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('admin.users') }}">
-                              <i class="nav-main-link-icon si si-user"></i>
-                              <span class="nav-main-link-name"> View Users </span>
-                          </a>
-                      </li>
-                  </ul>
-              </li>
+            <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
+                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                    <i class="nav-main-link-icon si si-user"></i>
+                    <span class="nav-main-link-name">Users</span>
+                </a>
+                <ul class="nav-main-submenu">
+                    <li class="nav-main-item">
+                        <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('admin.users') }}">
+                            <i class="nav-main-link-icon si si-user"></i>
+                            <span class="nav-main-link-name"> View Users </span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+              
           </ul>
         </div>
         <!-- END Side Navigation -->

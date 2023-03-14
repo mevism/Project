@@ -1,4 +1,4 @@
-@extends('cod::layouts.backend')
+@extends('dean::layouts.backend')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
 
@@ -30,7 +30,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-1">
                     <h5 class="h6 fw-bold mb-0">
-                        VIEW WORKLOADS
+                        DARTMENTAL WORKLOAD
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -39,7 +39,7 @@
                             <a class="link-fx" href="javascript:void(0)">Workload</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            Semester Workload
+                            departmental Workload
                         </li>
                     </ol>
                 </nav>
@@ -55,20 +55,31 @@
                     <table id="example" class="table table-bordered table-responsive-sm table-striped table-vcenter js-dataTable-responsive fs-sm">
                         <thead>
                         <th>#</th>
-                        <th>Academic Year </th>
+                        <th>Department code </th>
                         <th>Action</th>
                         </thead>
                         <tbody>
-                        @foreach ($workloads as $yearly => $workload)
-                            <tr>
-                                <td> {{ $loop->iteration }} </td>
-                                <td>
-                                    {{ $yearly }}
-                                </td>
-                                <td>
-                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewYearWorkload', ['year' => Crypt::encrypt($yearly)]) }}">View</a>
-                                </td>
-                            </tr>
+                        @foreach ($departments as $department)
+                            @foreach ($department as $dept => $depts)
+                                <tr>
+                                    <td> {{ $loop->iteration }}</td>
+                                    <td>                                           
+                                        @foreach($departs as $deptCode)
+                                            @if($dept == $deptCode->id )
+
+                                            {{ $deptCode->dept_code }}
+
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    {{-- <td nowrap="">
+                                        <a class="btn btn-sm btn-outline-secondary" href="{{route('dean.worklordPerSemester',['id' => Crypt::encrypt($dept)]) }}">view</a>
+                                    </td> --}}
+                                    <td nowrap="">
+                                        <a class="btn btn-sm btn-outline-secondary" href="{{route('dean.worklordPerSemester',['id' => Crypt::encrypt($dept), 'year' => Crypt::encrypt($year)]) }}">view</a>
+                                    </td>
+                                </tr>
+                            @endforeach
                         @endforeach
                         </tbody>
                     </table>

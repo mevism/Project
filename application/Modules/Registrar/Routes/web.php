@@ -181,6 +181,14 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
     Route::get('/yearly-readmissions/{year}', [CoursesController::class, 'yearlyReadmissions'])->name('courses.yearlyReadmissions');
     Route::post('/accepted-readmissions', 'CoursesController@acceptedReadmissions')->name('courses.acceptedReadmissions');
 
+    Route::get('/workload', [CoursesController::class, 'workload'])->name('courses.workload');
+    Route::get('/school-workload/{year}', [CoursesController::class, 'schoolWorkload'])->name('courses.schoolWorkload');
+    Route::get('/departmental-workload/{id}/{year}', [CoursesController::class, 'departmentalWorkload'])->name('courses.departmentalWorkload');
+    Route::get('/view-workload/{id}', [CoursesController::class, 'viewWorkload'])->name('courses.viewWorkload');
+    Route::get('/approve-workload/{id}', [CoursesController::class, 'approveWorkload'])->name('courses.approveWorkload');
+    Route::post('/decline-workload/{id}', [CoursesController::class, 'declineWorkload'])->name('courses.declineWorkload');
+    Route::get('/view-workload/{id}', [CoursesController::class, 'viewWorkload'])->name('courses.viewWorkload');
+
 });
 
 

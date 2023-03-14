@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Modules\Lecturer\Entities\TeachingArea;
 use Modules\Registrar\Entities\Department;
 use Modules\Registrar\Entities\Division;
 use Modules\Workload\Entities\Workload;
@@ -87,5 +88,10 @@ class User extends Authenticatable
     public function workloadAllocation(){
 
         return $this->hasMany(Workload::class, 'user_id', 'id');
+    }
+
+    public function teachingAreaUser(){
+
+        return $this->hasMany(TeachingArea::class, 'id');
     }
 }

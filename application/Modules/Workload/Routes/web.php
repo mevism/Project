@@ -28,5 +28,7 @@ Route::prefix('workload')->group(function() {
     Route::get('/view-workloads-per-semester/{semester}/{year}', [WorkloadController::class, 'viewSemesterWorkload'])->name('department.viewSemesterWorkload');
 
     Route::get('/delete-workload/{id}', [WorkloadController::class,'deleteWorkload'])->name('department.deleteWorkload');
+    Route::get('/submit-workload/{id}/{year}', [WorkloadController::class,'submitWorkload'])->name('department.submitWorkload');
+    Route::get('/resubmit-workload/{id}/{year}', [WorkloadController::class,'resubmitWorkload'])->name('department.resubmitWorkload');
 
 });

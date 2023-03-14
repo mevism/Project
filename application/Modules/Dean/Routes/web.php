@@ -50,5 +50,14 @@ Route::prefix('dean')->group(function() {
         Route::get('/view-selected-readmission-request/{id}', [DeanController::class, 'selectedReadmission'])->name('dean.selectedReadmission');
         Route::post('/accept-selected-readmission-request/{id}', [DeanController::class, 'acceptReadmission'])->name('dean.acceptReadmission');
         Route::post('/decline-selected-readmission-request/{id}', [DeanController::class, 'declineReadmission'])->name('dean.declineReadmission');
+
+        Route::get('/yearly-workload', [DeanController::class, 'yearlyWorkload'])->name('dean.workload');
+        Route::get('/view-workload/{id}', [DeanController::class, 'viewWorkload'])->name('dean.viewWorkload');
+        Route::get('/approve-workload/{id}', [DeanController::class, 'approveWorkload'])->name('dean.approveWorkload');
+        Route::post('/decline-workload/{id}', [DeanController::class, 'declineWorkload'])->name('dean.declineWorkload');
+        Route::get('/published-workload/{id}', [DeanController::class, 'workloadPublished'])->name('dean.workloadPublished');
+        Route::get('/revert-workload/{id}', [DeanController::class, 'revertWorkload'])->name('dean.revertWorkload');
+        Route::get('/submit-workload/{id}', [DeanController::class, 'submitWorkload'])->name('dean.submitWorkload');
+
     });
 });

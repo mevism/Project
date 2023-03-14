@@ -2,6 +2,7 @@
 
 namespace Modules\Lecturer\Entities;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Registrar\Entities\UnitProgramms;
@@ -17,6 +18,10 @@ class TeachingArea extends Model
         return $this->belongsTo(UnitProgramms::class, 'unit_code', 'course_unit_code');
     }
 
+    public function userTeachingArea(){
+
+         return $this->belongsTo(User::class, 'user_id');
+    }
     public function userAreas(){
 
         return $this->belongsTo(User::class, 'user_id', 'id');

@@ -3,9 +3,10 @@
 namespace Modules\Workload\Entities;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\COD\Entities\SemesterUnit;
+use Illuminate\Database\Eloquent\Model;
+use Modules\Registrar\Entities\Department;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Workload extends Model
 {
@@ -26,6 +27,21 @@ class Workload extends Model
     public function workloadUnit(){
 
         return $this->belongsTo(SemesterUnit::class, 'unit_id', 'id');
+    }
+
+    public function workloadApproval(){
+
+        return $this->hasOne(ApproveWorkload::class, 'workload_approval_id');
+    }
+
+    public function workloadDept(){
+
+        return $this->belongsTo(Department::class, 'department_id', 'id');
+    }
+
+    public function processWorkload(){
+
+        return $this->belongsTo(ApproveWorkload::class, 'id');
     }
 
     protected static function newFactory()
