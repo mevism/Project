@@ -5,6 +5,9 @@ namespace Modules\Lecturer\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Validation\Rule;
+use Modules\COD\Entities\SemesterUnit;
+use Modules\Lecturer\Entities\ExamWeights;
 use Modules\Lecturer\Entities\LecturerQualification;
 use Crypt;
 use Modules\Lecturer\Entities\TeachingArea;
@@ -165,7 +168,7 @@ class LecturerController extends Controller
         $hashedYear = Crypt::decrypt($year);
         $hashedSemester = Crypt::decrypt($semester);
 
-        $workloads = Workload::where('academic_year', $hashedYear)->where('academic_semester', $hashedSemester)->latest()->get();
+        $workloads = Workload::where('academic_year', $hashedYear)->where('academic_semester', $hashedSemester)->where('user_id', auth()->guard('user')->user()->id)->latest()->get();
 
         return view('lecturer::workload.semesterWorkload')->with(['workloads' => $workloads, 'year' => $hashedYear, 'semester' => $hashedSemester]);
 
@@ -194,19 +197,102 @@ class LecturerController extends Controller
         $hashedYear = Crypt::decrypt($year);
         $hashedSemester = Crypt::decrypt($semester);
 
-        $workloads = Workload::where('academic_year', $hashedYear)->where('academic_semester', $hashedSemester)->latest()->get();
+        $workloads = Workload::where('academic_year', $hashedYear)->where('academic_semester', $hashedSemester)->where('user_id', auth()->guard('user')->user()->id)->latest()->get();
 
-        return view('lecturer::examination.semesterExams')->with(['workloads' => $workloads, 'year' => $hashedYear, 'semester' => $hashedSemester]);
+        $setting = ExamWeights::where('academic_year', $hashedYear)->where('academic_semester', $hashedSemester)->latest()->get();
+
+        return view('lecturer::examination.semesterExams')->with(['workloads' => $workloads, 'year' => $hashedYear, 'semester' => $hashedSemester, 'settings' => $setting]);
     }
 
-    public function getClassStudents($id){
+    public function getClassStudents(Request $request, $id, $unit_id){
         $hashedId = Crypt::decrypt($id);
+        $hashedUnit = Crypt::decrypt($unit_id);
 
-        $class = Workload::find($hashedId)->class_code;
+        $class = Workload::findorFail($hashedId)->class_code;
+        $unit = SemesterUnit::findorFail($hashedUnit)->id;
 
-        return $students = StudentCourse::where('class_code', $class)->get();
+        if ($request->filled('exam')){
+
+            $selectedUnit = SemesterUnit::find($hashedUnit);
+            $selectedWorkload = Workload::findorFail($hashedId);
+            $request->validate([
+
+                'exam' => 'required|numeric',
+                'cat' => 'required|numeric',
+                'assignment' => Rule::requiredIf($selectedUnit->assingment != null),
+                'practical' => Rule::requiredIf($selectedUnit->practical != null)
+            ]);
+
+            if (ExamWeights::where('academic_year', $selectedWorkload->academic_year)->where('academic_semester', $selectedWorkload->academic_semester)->where('unit_code', $selectedUnit->unit_code)->exists()){
+                $settings = ExamWeights::where('academic_year', $selectedWorkload->academic_year)->where('academic_semester', $selectedWorkload->academic_semester)->where('unit_code', $selectedUnit->unit_code)->first();
+                $settings->unit_code = $selectedUnit->unit_code;
+                $settings->class_code = $class;
+                $settings->academic_year = $selectedWorkload->academic_year;
+                $settings->academic_semester = $selectedWorkload->academic_semester;
+                $settings->cat = $request->cat;
+                $settings->exam = $request->exam;
+                $settings->assignment = $request->assignment;
+                $settings->practical = $request->practical;
+                $settings->save();
+
+            }else{
+                $setting = new ExamWeights;
+                $setting->unit_code = $selectedUnit->unit_code;
+                $setting->class_code = $class;
+                $setting->academic_year = $selectedWorkload->academic_year;
+                $setting->academic_semester = $selectedWorkload->academic_semester;
+                $setting->cat = $request->cat;
+                $setting->exam = $request->exam;
+                $setting->assignment = $request->assignment;
+                $setting->practical = $request->practical;
+                $setting->save();
+            }
+
+            return view('lecturer::examination.exam')->with(['class' => $class, 'unit' => $unit, 'success' => 'Settings Updated']);
+        }
+
+        return view('lecturer::examination.exam')->with(['class' => $class, 'unit' => $unit, 'success' => 'Settings Updated']);
 
     }
+
+    function getStudentExam(Request $request){
+
+            $data = [];
+
+            $students = StudentCourse::where('class_code', $request->classCode)->orderBy('student_id', 'asc')->get();
+
+            $unit = SemesterUnit::findorFail($request->unit);
+
+            $weights = ExamWeights::where('class_code', $request->classCode)->where('unit_code', $unit->unit_code)->first();
+
+            if ($weights == null){
+                foreach ($students as $student){
+
+                    $data[] = [
+
+                        'reg_number' => $student->student->reg_number, 'student_name' => $student->student->sname.' '.$student->student->fname.' '.$student->student->sname, 'cat' => $unit->cat, 'assignment' => $unit->assignment, 'practical' => $unit->practical, 'exam' => $unit->total_exam, 'user_cat' => $unit->cat, 'user_assignment' => $unit->assignment, 'user_practical' => $unit->practical, 'user_exam' => $unit->total_exam
+
+                    ];
+                }
+
+            }else{
+
+                foreach ($students as $student){
+
+                    $data[] = [
+
+                        'reg_number' => $student->student->reg_number, 'student_name' => $student->student->sname.' '.$student->student->fname.' '.$student->student->sname, 'cat' => $unit->cat, 'assignment' => $unit->assignment, 'practical' => $unit->practical, 'exam' => $unit->total_exam, 'user_cat' => $weights->cat, 'user_assignment' => $weights->assignment, 'user_practical' => $weights->practical, 'user_exam' => $weights->exam
+
+                    ];
+                }
+
+            }
+
+            return response()->json($data);
+
+
+    }
+
 
     public function deleteTeachingArea($id){
         $hashedId = Crypt::decrypt($id);
@@ -225,6 +311,8 @@ class LecturerController extends Controller
 
              return view('lecturer::profile.myprofile')->with('qualifications',$qualifications);
        }
+
+
 
     /**
      * Show the form for creating a new resource.
