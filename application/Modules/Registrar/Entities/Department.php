@@ -27,20 +27,11 @@ class Department extends Model
         return $this->belongsTo(Division::class);
     }
 
-
-
     public function schools(){
 
-//        return $this->belongsTo(School::class, 'school_id');
-//        return $this->hasOneThrough(SchoolDepartment::class, School::class,  'department_id', 'school_id','id', 'id');
         return $this->belongsToMany(School::class, 'school_departments', 'department_id', 'school_id');
-//        return $this->hasOneThrough(School::class, SchoolDepartment::class, 'school_id', 'id');
     }
-    // available course vs dept
-    // public function deptCourse(){
-
-    //     return $this->hasMany(AvailableCourse::class);
-    // }
+   
     public function course(){
 
         return $this->hasMany(Courses::class,'id');
