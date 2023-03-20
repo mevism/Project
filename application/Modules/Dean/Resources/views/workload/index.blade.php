@@ -69,7 +69,7 @@
                                         <tr>
                                             <td>  {{ $loop->iteration }}</td>
                                             <td>
-                                                {{ $workload->approveWorkload->workloadDept->dept_code }}
+                                                {{ $workload->workloadProcessed->first()->workloadDept->dept_code }}
                                             </td>
                                             <td>
                                             {{ $workload->academic_year}}
@@ -118,8 +118,7 @@
                                                         <a class="btn btn-outline-info btn-sm" href="{{route('dean.workloadPublished',['id' => Crypt::encrypt($workload->id)]) }}"> publish 
                                                          </a>
                                                         @else
-                                                        <a class="btn btn-outline-dark btn-sm" href="">  Published  
-                                                        
+                                                        <a class="btn btn-outline-dark btn-sm" href="">  Published                                                         
                                                          </a>
                                                            
                                                         @endif   

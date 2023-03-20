@@ -66,14 +66,13 @@
                                         <tr>
                                             <td> {{ $loop->iteration}} </td>
                                             <td>
-                                                {{ $workload->approveWorkload->workloadDept->dept_code }}
+                                                {{ $workload->workloadProcessed->first()->workloadDept->dept_code }}
                                             </td>
                                             <td>
                                                 {{ $workload->academic_semester}}
                                             </td>
                                          
-                                            <td>                                               
-
+                                            <td>
                                                 @if($workload != null)
                                                     @if($workload->dean_status  == 1)
                                                         <span class="badge bg-success">Approved</span>
@@ -88,15 +87,21 @@
                                                     @if($workload->registrar_status == null)
                                                         <a class="btn btn-outline-success btn-sm" href="{{route('courses.approveWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Approve  </a>
                                                         <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $workload->id }}"> Decline </a>
-                                                    @else
-                                                        @if($workload->dean_status === 1 &&  $workload->registrar_status === 1 &&    $workload->status === 1)
+                                                    {{-- @elseif($workload->dean_status === 1 &&  $workload->registrar_status === 1 &&    $workload->status === 1)
                                                         <a class="btn btn-outline-info btn-sm" href=""> processing </a>
-                                                    @else    
-                                                        @if($workload->workloadProcessed->first()->status === 0)
+                                                    @elseif($workload->workloadProcessed->first()->status === 1)
                                                         
-                                                        <a class="btn btn-outline-dark btn-sm" href="">  Published  </a>
-                                                    @else
-                                                        @if($workload->registrar_status == 1)
+                                                        <a class="btn btn-outline-dark btn-sm" href="">  Published  </a> --}}
+                                                        @elseif($workload->dean_status === 1 && $workload->registrar_status === 1 && $workload->status === 1)
+                                                        @if($workload->workloadProcessed->first()->status === 0)
+                                                        <a class="btn btn-outline-info btn-sm" href=""> Processing 
+                                                         </a>
+                                                        @else
+                                                        <a class="btn btn-outline-dark btn-sm" href="">  Published                                                         
+                                                         </a>
+                                                           
+                                                        @endif   
+                                                    @elseif($workload->registrar_status == 1)
                                                             <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $workload->id }}"> Decline </a>
                                                            
                                                         @else
@@ -104,7 +109,7 @@
 
                                                             <a class="btn btn-outline-primary btn-sm" href=""> Revert Dean
                                                             </a>
-                                                        @endif
+                                                        
                                                     @endif
                                                 <div class="modal fade" id="staticBackdrop-{{ $workload->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                     <div class="modal-dialog modal-lg">
@@ -129,9 +134,8 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                
-                                                </td>
+                                                </div>                                                
+                                            </td>
                                         </tr>
                                     @endforeach
                                 @endforeach
