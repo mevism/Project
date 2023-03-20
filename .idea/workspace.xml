@@ -2,23 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="08195653-74ee-4c59-8ef1-51788d10d2d9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/examination/exam.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Administrator/Entities/Staff.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Administrator/Entities/Staff.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Http/Controllers/LecturerController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Http/Controllers/LecturerController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/examination/semesterExams.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/examination/semesterExams.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/profile/myprofile.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/profile/myprofile.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/examination/exam.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/examination/exam.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Workload/Database/Migrations/2023_02_28_161841_create_workloads_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Workload/Database/Migrations/2023_02_28_161841_create_workloads_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Workload/Http/Controllers/WorkloadController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Workload/Http/Controllers/WorkloadController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/modules_statuses.json" beforeDir="false" afterPath="$PROJECT_DIR$/application/modules_statuses.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/2UvmMSxG7tRDsmy3M1au3c7FViQRHVoSZKrZl2UG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/OYcRC23U78DqITsMBcd447zSaa5XhMqC1tXnA2tH" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/lRK5DuzEdFTrsyFOPJP7HokLHsTIYbhIHfoAuz6y" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/lpcydX4Knohm7GaEiCmX5QMqWPofVKFIVjISVzZO" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/hrDn6YbvmmKIxT581cLt8fBCPYf9Mvos4r00Gjqg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -199,7 +188,10 @@
       <updated>1678345740466</updated>
       <workItem from="1678345763006" duration="11583000" />
       <workItem from="1678431111340" duration="3618000" />
-      <workItem from="1678684782311" duration="35405000" />
+      <workItem from="1678684782311" duration="63759000" />
+      <workItem from="1678948091031" duration="25354000" />
+      <workItem from="1679032792961" duration="12611000" />
+      <workItem from="1679295077165" duration="5533000" />
     </task>
     <servers />
   </component>

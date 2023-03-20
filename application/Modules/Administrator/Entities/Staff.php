@@ -12,6 +12,7 @@ class Staff extends Model
     protected $fillable = [];
 
     protected $connection = "sqlsrv";
+
     protected $table = "VIEWSTAFFACTIVE";
 
     protected static function newFactory()
