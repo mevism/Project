@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Validation\Rule;
 use Modules\COD\Entities\SemesterUnit;
+use Modules\Examination\Entities\ExamMarks;
 use Modules\Lecturer\Entities\ExamWeights;
 use Modules\Lecturer\Entities\LecturerQualification;
 use Crypt;
@@ -208,13 +209,32 @@ class LecturerController extends Controller
         $hashedId = Crypt::decrypt($id);
         $hashedUnit = Crypt::decrypt($unit_id);
 
+        $students = [];
+
+        $semester = Workload::findorFail($hashedId);
+
         $class = Workload::findorFail($hashedId)->class_code;
         $unit = SemesterUnit::findorFail($hashedUnit)->id;
+
+        $classList = StudentCourse::where('class_code', $class)->orderBy('student_id', 'asc')->get();
+
+        foreach ($classList as $student){
+
+            $students [] = $student->student;
+        }
+
+//        return $students;
+
+        $unit = SemesterUnit::findorFail($unit);
+
+        $weights = ExamWeights::where('class_code', $class)->where('unit_code', $unit->unit_code)->first();
+
 
         if ($request->filled('exam')){
 
             $selectedUnit = SemesterUnit::find($hashedUnit);
             $selectedWorkload = Workload::findorFail($hashedId);
+
             $request->validate([
 
                 'exam' => 'required|numeric',
@@ -248,48 +268,71 @@ class LecturerController extends Controller
                 $setting->save();
             }
 
-            return view('lecturer::examination.exam')->with(['class' => $class, 'unit' => $unit, 'success' => 'Settings Updated']);
+            return view('lecturer::examination.exam')->with(['class' => $class, 'unit' => $unit, 'students' => $students, 'unit' => $unit, 'weights' => $weights, 'semester' => $semester]);
         }
 
-        return view('lecturer::examination.exam')->with(['class' => $class, 'unit' => $unit, 'success' => 'Settings Updated']);
+        return view('lecturer::examination.exam')->with(['class' => $class, 'unit' => $unit, 'students' => $students, 'unit' => $unit, 'weights' => $weights, 'semester' => $semester]);
 
     }
 
-    function getStudentExam(Request $request){
+    public function storeMarks(Request $request){
 
-            $data = [];
+        $marks = $request->data;
+        $semester = $request->unit;
+        $workload = $request->workload;
 
-            $students = StudentCourse::where('class_code', $request->classCode)->orderBy('student_id', 'asc')->get();
+        if (ExamMarks::where('class_code', $semester['class_code'])->where('unit_code', $semester['unit_code'])->exists()){
 
-            $unit = SemesterUnit::findorFail($request->unit);
-
-            $weights = ExamWeights::where('class_code', $request->classCode)->where('unit_code', $unit->unit_code)->first();
-
-            if ($weights == null){
-                foreach ($students as $student){
-
-                    $data[] = [
-
-                        'reg_number' => $student->student->reg_number, 'student_name' => $student->student->sname.' '.$student->student->fname.' '.$student->student->sname, 'cat' => $unit->cat, 'assignment' => $unit->assignment, 'practical' => $unit->practical, 'exam' => $unit->total_exam, 'user_cat' => $unit->cat, 'user_assignment' => $unit->assignment, 'user_practical' => $unit->practical, 'user_exam' => $unit->total_exam
-
-                    ];
-                }
-
-            }else{
-
-                foreach ($students as $student){
-
-                    $data[] = [
-
-                        'reg_number' => $student->student->reg_number, 'student_name' => $student->student->sname.' '.$student->student->fname.' '.$student->student->sname, 'cat' => $unit->cat, 'assignment' => $unit->assignment, 'practical' => $unit->practical, 'exam' => $unit->total_exam, 'user_cat' => $weights->cat, 'user_assignment' => $weights->assignment, 'user_practical' => $weights->practical, 'user_exam' => $weights->exam
-
-                    ];
-                }
+            foreach ($marks as $mark){
+                $exams = ExamMarks::where('class_code', $semester['class_code'])->where('unit_code', $semester['unit_code'])->where('reg_number', $mark[0])->first();
+                $exams->class_code = $semester['class_code'];
+                $exams->unit_code = $semester['unit_code'];
+                $exams->reg_number = $mark[0];
+                $exams->academic_year = $workload['academic_year'];
+                $exams->academic_semester = $workload['academic_semester'];
+                $exams->stage = $semester['stage'];
+                $exams->semester = $semester['semester'];
+                $exams->cat = $mark[2];
+                $exams->assignment = $mark[3];
+                $exams->practical = $mark[4];
+                if ($mark[5] == 0){ $exams->exam = 'ABSENT'; }else{ $exams->exam = round($mark[5],0); }
+                $exams->total_cat = $mark[6];
+                if ($mark[7] == 0){ $exams->total_exam = 'ABSENT'; }else{ $exams->total_exam = round($mark[7],0); }
+                if ($mark[7] == 0){ $exams->total_mark = 'ABSENT'; }else{ $exams->total_mark = round($mark[8],0); }
+                $exams->attempt = '$mark[10]';
+                $exams->save();
 
             }
 
-            return response()->json($data);
+        }else{
 
+            foreach ($marks as $mark){
+
+                $exams = new ExamMarks;
+                $exams->class_code = $semester['class_code'];
+                $exams->unit_code = $semester['unit_code'];
+                $exams->reg_number = $mark[0];
+                $exams->academic_year = $workload['academic_year'];
+                $exams->academic_semester = $workload['academic_semester'];
+                $exams->stage = $semester['stage'];
+                $exams->semester = $semester['semester'];
+                $exams->cat = $mark[2];
+                $exams->assignment = $mark[3];
+                $exams->practical = $mark[4];
+                if ($mark[5] == 0){ $exams->exam = 'ABSENT'; }else{ $exams->exam = round($mark[5],0); }
+                $exams->total_cat = $mark[6];
+                if ($mark[7] == 0){ $exams->total_exam = 'ABSENT'; }else{ $exams->total_exam = round($mark[7],0); }
+                if ($mark[7] == 0){ $exams->total_mark = 'ABSENT'; }else{ $exams->total_mark = round($mark[8],0); }
+                $exams->attempt = '$mark[10]';
+                $exams->save();
+
+            }
+
+
+        }
+
+
+        return redirect()->back()->with('success', 'Student Marks Saved Successfully');
 
     }
 

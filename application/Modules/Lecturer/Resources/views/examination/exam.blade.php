@@ -36,157 +36,197 @@
     <div class="block block-rounded">
         <div class="block-content block-content-full">
             <div class="row">
+{{--                <small class="text-danger text-center"> Where cells are in red </small> check if you used <span class="fw-semibold">O</span> instead of <span class="fw-semibold">0</span> or the value is less than 0 or more than the set value for CAT/ASSIGNMENT/PRACTICAL/EXAM--}}
                 <div class="col-lg-12">
                     <div id="example" style="width: 100% !important; overflow: hidden !important;"></div>
-                    <div class="controls">
-                        <button id="load" class="button button--primary button--blue">Load data</button>&nbsp;
-                        <button id="save" class="button button--primary button--blue">Save data</button>
-                        <label>
-                            <input type="checkbox" name="autosave" id="autosave"/>
-                            Autosave
-                        </label>
+                    <div class="d-flex justify-content-center mt-4">
+                        <button id="save" class="btn btn-col-md-7 btn-outline-secondary">Submit Student Marks</button>
                     </div>
-
-                    <output class="console" id="output">Click "Load" to load data from server</output>
                 </div>
             </div>
         </div>
     </div>
 
 @endsection
-
 <script type="module">
 
     $(document).ready(function() {
 
-        var classCode = '{{ $class }}';
-        var unit = '{{ $unit }}';
+        const data = JSON.parse('<?php echo json_encode($students) ?>');
+        let weight = [];
+        const weights = JSON.parse('<?php echo json_encode($weights) ?>');
+        const unit = JSON.parse('<?php echo json_encode($unit) ?>');
 
-        $.ajax({
+        if (weights === null) {
 
-            type: 'get',
-            url: '{{ route('lecturer.getStudentExams') }}',
-            data: { classCode:classCode, unit:unit },
-            dataType: 'json',
-            success: function (data){
+            weight = {cat: unit.cat, assignment: unit.assignment, practical: unit.practical, exam: unit.total_exam};
 
-                const container = document.querySelector('#example');
+        } else {
 
-                function negativeValueRenderer(instance, td, row, col, prop, value, cellProperties, ) {
+            weight = {
+                cat: weights.cat,
+                assignment: weights.assignment,
+                practical: weights.practical,
+                exam: weights.exam
+            };
 
-                    Handsontable.renderers.TextRenderer.apply(this, arguments);
+        }
 
-                    if (!value || value === '' || value == null, value === '0') {
-                        td.innerHTML = null;
-                    }
+        let table = [];
 
-                    if(col === 6 || col === 7 || col === 8 ){
-                        td.innerHTML = Math.round(td.innerHTML)
-                    }
+        for (let i = 0; i < data.length; i++) {
 
-                    // if the row contains a negative number
-                    if (parseInt(value, 10) < 0) {
-                        // add class 'make-me-red'
-                        td.className = 'htCenter make-me-red';
-                    }
+            const tableData = [data[i].reg_number, data[i].sname + ' ' + data[i].fname + ' ' + data[i].mname, '0', '0', '0', '0', null, null, null, null, '1st ATTEMPT']
 
-                    if (!value || value === '' || value === null) {
-                        td.style.background = '#EEE';
+            table.push(tableData)
+        }
 
-                    } else {
 
-                        td.style.background = '';
-                    }
+            const container = document.querySelector('#example');
+            const save = document.querySelector('#save');
 
+            function negativeValueRenderer(instance, td, row, col, prop, value, cellProperties, ) {
+
+                Handsontable.renderers.TextRenderer.apply(this, arguments);
+                // Handsontable.TextCell.renderer.apply(this, arguments);
+
+                if (!value || value === '' || value == null, value === '0') {
+                    td.innerHTML = null;
                 }
 
-
-                let table = [ ];
-
-                for(let i = 0; i < data.length; i++){
-
-                    const tableData = [data[i].reg_number, data[i].student_name, '0', '0', '0', '0', ]
-
-                    table.push(tableData)
-
-                    }
-
-                let assignment =  data[0].assignment;
-                let assignmentColumn = false;
-                if(assignment == null){
-                    assignmentColumn = true;
+                if(col === 6 || col === 7 || col === 8 ){
+                    td.innerHTML = Math.round(td.innerHTML)
                 }
 
-                let practical =  data[0].practical;
-                let practicalColumn = false;
-                if(practical == null){
-                    practicalColumn = true;
+                // if the row contains a negative number
+                // if (parseInt(value, 10) < 0) {
+                //     // add class 'make-me-red'
+                //     td.className = 'htCenter make-me-red';
+                // }
+
+                if (!value || value === '' || value === null) {
+                    td.style.background = '#EEE';
+
+                } else {
+
+                    td.style.background = '';
                 }
 
-                Handsontable.renderers.registerRenderer(negativeValueRenderer );
-                const hot = new Handsontable(container, {
-                    data:table,
+            }
 
-                    fillHandle: false,
-                    minSpareCols: 0,
-                    minSpareRows: 0,
-                    width: '100%',
-                    height: 'auto',
-                    stretchH: 'all',
-                    colWidths: [120, 250, 60, 60, 60, 60, 60, 60, 60, 60, 150],
-                    className: 'htCenter',
-                    columns: [
-                        {readOnly: true, className: 'htLeft htMiddle cellText'},
-                        {readOnly: true, className: 'htLeft htMiddle cellText'},
-                        {type: 'numeric'},
-                        {type: 'numeric', readOnly:  assignmentColumn},
-                        {type: 'numeric', readOnly: practicalColumn},
-                        {type: 'numeric'},
-                        {readOnly: true, },
-                        {readOnly: true, },
-                        {readOnly: true, },
-                        {readOnly: true},
-                        {readOnly: true, className: 'htCenter htMiddle cellText'}
-                    ],
+            let assignment =  unit.assignment;
+            let assignmentColumn = false;
+            if(assignment == null){
+                assignmentColumn = 3;
+            }
 
-                    rowHeights: 30,
-                    rowHeaders: true,
-                    colHeaders: ['STUDENT NUMBER', 'STUDENT NAME', 'CAT 1', 'CAT 2', 'CAT 3', 'EXAM', 'CAT', 'EXAM', 'TOTAL', 'GRADE', 'ATTEMPT'],
-                    licenseKey: 'non-commercial-and-evaluation', // for non-commercial use only
+            let practical =  unit.practical;
+            let practicalColumn = false;
+            if(practical == null){
+                practicalColumn = 4;
+            }
 
-                    cells(row, col,  prop, value) {
-                        const cellProperties = {};
-                        const data = this.instance.getData();
-                        cellProperties.renderer = negativeValueRenderer;
-                        return cellProperties;
+            Handsontable.renderers.registerRenderer(negativeValueRenderer );
 
-                        if (col === 3 && col === 'readOnly') {
-                            cellProperties.allowRemoveColumn = true;
+             const hot = new Handsontable(container, {
+                data:table,
+
+                width: '100%',
+                height: 'auto',
+                stretchH: 'all',
+                colWidths: [120, 250, 60, 60, 60, 60, 60, 60, 60, 60, 150],
+                className: 'htCenter',
+                columns: [
+                    {readOnly: true, className: 'htLeft htMiddle cellText'},
+                    {readOnly: true, className: 'htLeft htMiddle cellText'},
+                    {type: 'numeric',
+                     validator: function(value, callback) {
+                            if (value <= weight.cat && value >= 0) {
+                                callback(true);
+                            } else {
+                                callback(false);
+                            }
                         }
-
                     },
+                    {type: 'numeric',
+                     validator: function(value, callback) {
+                            if (value <= weight.assignment && value >= 0) {
+                                callback(true);
+                            } else {
+                                callback(false);
+                            }
+                        }
+                    },
+                    {type: 'numeric',
+                     validator: function(value, callback) {
+                            if (value <= weight.practical && value >= 0) {
+                                callback(true);
+                            } else {
+                                callback(false);
+                            }
+                        }
+                    },
+                    {type: 'numeric',
+                     validator: function(value, callback) {
+                            if (value <= weight.exam && value >= 0) {
+                                callback(true);
+                            } else {
+                                callback(false);
+                            }
+                        }
+                    },
+                    {readOnly: true, },
+                    {readOnly: true, },
+                    {readOnly: true, },
+                    {readOnly: true},
+                    {readOnly: true, className: 'htCenter htMiddle cellText'}
+                ],
 
-                    afterChange: function (changes, source) {
+                 hiddenColumns: {
 
-                        // If the source of the changes is named 'sum', we do not want to update the table. (we just did).
+                    columns: [ assignmentColumn, practicalColumn ]
+                 },
+
+                rowHeights: 30,
+                rowHeaders: true,
+                colHeaders: ['STUDENT NUMBER', 'STUDENT NAME', 'CAT 1', 'CAT 2', 'CAT 3', 'EXAM', 'CAT', 'EXAM', 'TOTAL', 'GRADE', 'ATTEMPT'],
+                licenseKey: 'non-commercial-and-evaluation', // for non-commercial use only
+
+                cells(row, col,  prop, value) {
+                    const cellProperties = {};
+                    const data = this.instance.getData();
+                    cellProperties.renderer = negativeValueRenderer;
+                    return cellProperties;
+
+                },
+
+                afterChange: function (changes, source) {
+
+                    // If the source of the changes is named 'sum', we do not want to update the table. (we just did).
+                    if(changes !== null){
+
                         if (source !== 'sum') {
                             var a, b, c, d, sum, i, value;
 
-                            var cats = (data[0].cat/data[0].user_cat);
-                            var assignments = (data[0].assignment/data[0].user_assignment);
-                            var practicals = (data[0].practical/data[0].user_practical);
+                            var cats = (unit.cat / weight.cat);
+                            var assignments = (unit.assignment / weight.assignment);
+                            var practicals = (unit.practical / weight.practical);
+                            var exam = (unit.total_exam / weight.exam);
 
-                            if(assignments === null || assignments === "" || !assignments){
+
+                            if (assignments === null || assignments === "" || !assignments) {
                                 assignments = 0;
                                 b = 0;
                             }
 
-                            if(practicals === null || practicals === "" || !practicals){
+                            if (practicals === null || practicals === "" || !practicals) {
                                 practicals = 0;
                                 c = 0;
                             }
 
+
                             for (var i = 0; i < changes.length; i++) {
+                                // console.log(changes.length)
                                 var change = changes[i];
                                 var line = change[0];
 
@@ -195,52 +235,52 @@
                                 c = parseInt(this.getDataAtCell(line, 4));
                                 d = parseInt(this.getDataAtCell(line, 5));
 
-                                value = a*cats + b*assignments + c*practicals;
+                                value = a * cats + b * assignments + c * practicals;
 
                                 // We want to programmatically update the table.
                                 // Let's update it, and associate the source 'sum' to the event.
                                 this.setDataAtCell(change[0], 6, value, 'sum');
-                                this.setDataAtCell(change[0], 7, (d/data[0].user_exam)*data[0].exam, 'sum');
-                                this.setDataAtCell(change[0], 8, (d/data[0].user_exam)*data[0].exam + value, 'sum');
+                                this.setDataAtCell(change[0], 7, d * exam, 'sum');
+                                this.setDataAtCell(change[0], 8, d * exam + value, 'sum');
 
                             }
 
                         }
-
-                        fetch('https://handsontable.com/docs/scripts/json/save.json', {
-                            method: 'POST',
-                            mode: 'no-cors',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ data: change })
-                        })
-                            .then(response => {
-                                // exampleConsole.innerText = `Autosaved (${change.length} cell${change.length > 1 ? 's' : ''})`;
-                                console.log(data);
-                            });
                     }
-                });
-            }
+                }
+             });
 
-        });
+             save.addEventListener('click', () => {
 
-        save.addEventListener('click', () => {
-            // save all cell's data
-            fetch('https://handsontable.com/docs/scripts/json/save.json', {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ data: hot.getData() })
-            })
-                .then(response => {
-                    // exampleConsole.innerText = 'Data saved';
-                    console.log(data);
-                });
-        });
+                 var marks = hot.getData();
+                 var classUnit = JSON.parse('<?php echo json_encode($unit) ?>');
+                 var workload = JSON.parse('<?php echo json_encode($semester) ?>');
 
+                 $.ajax({
+
+                     type: 'get',
+                     url: '{{ route('lecturer.storeMarks') }}',
+                     data: { data:marks, unit:classUnit, workload:workload},
+                     headers: {
+                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                     },
+                     success: function (data){
+
+                         // console.log(data)
+                     }
+
+                 });
+
+
+                 {{--fetch('{{ route('lecturer.storeMarks') }}', {--}}
+                 {{--    method: 'POST',--}}
+                 {{--    mode: 'no-cors',--}}
+                 {{--    headers: {--}}
+                 {{--        'Content-Type': 'application/json'--}}
+                 {{--    },--}}
+                 {{--    body: JSON.stringify({ data: hot.getData() })--}}
+                 {{--})--}}
+             });
     });
 
 </script>

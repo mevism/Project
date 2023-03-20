@@ -30,8 +30,11 @@ Route::prefix('lecturer')->group(function() {
     Route::get('/view-examination', [LecturerController::class, 'examination']) ->name ('lecturer.examination');
     Route::get('/view-yearly-exams/{id}', [LecturerController::class, 'yearlyExams'])->name('lecturer.yearlyExams');
     Route::get('/view-semester-exams/{year}/{semester}', [LecturerController::class, 'semesterExamination'])->name('lecturer.semesterExamination');
-    Route::post('/get-students-per-unit/{id}/{unit_id}', [LecturerController::class, 'getClassStudents'])->name('lecturer.studentList');
+    Route::any('/get-students-per-unit/{id}/{unit_id}', [LecturerController::class, 'getClassStudents'])->name('lecturer.studentList');
     Route::get('/get-student-exam-marks', [LecturerController::class, 'getStudentExam'])->name('lecturer.getStudentExams');
+    Route::any('/lecturer-save-student-marks', [LecturerController::class, 'storeMarks'])->name('lecturer.storeMarks');
+
+
     Route::get('/delete-teaching-area/{id}',[LecturerController::class, 'deleteTeachingArea'])->name('lecturer.deleteTeachingArea');
     Route::get('/myProfile' , [LecturerController::class, 'myProfile'])->name('lecturer.myProfile');
 });
