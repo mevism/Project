@@ -573,7 +573,7 @@ class CoursesController extends Controller
         $hashedYear = Crypt::decrypt($year);
         $user = Auth::guard('user')->user();
         $by = $user->name;
-        $role = $user->userRoles->name;
+        $role = $user->roles->first()->name;
         $school  =  "UNIVERSITY INTER/INTRA FACULTY COURSE TRANSFERS";
         $dept = 'ACADEMIC AFFAIRS';
 
