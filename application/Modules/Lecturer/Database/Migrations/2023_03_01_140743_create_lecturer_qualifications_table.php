@@ -18,7 +18,8 @@ return new class extends Migration
             $table->integer('user_id');
             $table->string('institution');
             $table->string('qualification');
-            $table->string('level');
+            $table->integer('level');
+            $table->integer('qualification_status');
             $table->timestamps();
             $table->softDeletes();
         });

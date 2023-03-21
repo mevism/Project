@@ -5,10 +5,13 @@
       <div class="bg-black-50">
         <div class="content content-full text-center">
           <div class="my-3">
-            <img class="img-avatar img-avatar-thumb" src="{{ url('media/avatars/avatar13.jpg')}}" alt="">
+            <img class="img-avatar img-avatar-thumb" src="{{ url('media/profile', auth()->guard('user')->user()->profile_image)}}" alt="">
           </div>
           <h1 class="h2 text-white mb-0">{{ auth()->guard('user')->user()->title }} {{ auth()->guard('user')->user()->last_name }} {{ auth()->guard('user')->user()->first_name }} {{ auth()->guard('user')->user()->middle_name }}</h1>
-          <span class="text-white-75">Lecturer</span>
+          <span class="text-white-75">Lecturer</span><br>
+          <a class="btn btn-sm btn-alt-secondary mt-3" href="{{route('lecturer.editMyprofile')}}">
+            <i class=" text-danger"></i> Edit Profile
+          </a>
         </div>
       </div>
     </div>
@@ -144,7 +147,20 @@
                     </a>
                     </div>
                 <div class="flex-grow-1">
-                  <div class="fw-semibold">{{ $qualification ->level}}</div>
+                  <div class="fw-semibold">
+                    @if($qualification->level==1) 
+                    CERTIFICATE
+                    @elseif($qualification->level==2)
+                        DIPLOMA
+                    @elseif($qualification->level==3)
+                        BACHELORS
+                    @elseif($qualification->level==4)
+                        MASTERS 
+                    @elseif($qualification->level==5)
+                        PHD 
+                    @endif
+                   
+              </div>
                   <div class="fs-sm">{{ $qualification ->qualification}}</div>
                 </div>
               </div>
@@ -154,8 +170,8 @@
           </div>
           <!-- END Products -->
         </div>
-      </div>
-    </div>
+      
+    
     <!-- END Page Content -->
   
 @endsection

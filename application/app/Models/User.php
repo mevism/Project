@@ -14,6 +14,7 @@ use Modules\Registrar\Entities\Division;
 use Modules\Workload\Entities\Workload;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
+use Modules\Lecturer\Entities\LecturerQualification;
 
 class User extends Authenticatable
 {
@@ -87,5 +88,9 @@ class User extends Authenticatable
     public function workloadAllocation(){
 
         return $this->hasMany(Workload::class, 'user_id', 'id');
+    }
+
+    public function lecturerQualification(){
+        return $this->hasMany(LecturerQualification::class, 'user_id', 'id');
     }
 }

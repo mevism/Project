@@ -33,4 +33,7 @@ Route::prefix('lecturer')->group(function() {
     Route::get('/get-students-per-unit/{id}', [LecturerController::class, 'getClassStudents'])->name('lecturer.studentList');
     Route::get('/delete-teaching-area/{id}',[LecturerController::class, 'deleteTeachingArea'])->name('lecturer.deleteTeachingArea');
     Route::get('/myProfile' , [LecturerController::class, 'myProfile'])->name('lecturer.myProfile');
+    Route::get('/edit-Myprofile', [LecturerController::class, 'editMyprofile'])->name('lecturer.editMyprofile');
+    Route::post('/update-Myprofile/{id}', [LecturerController::class, 'updateMyprofile'])->name('lecturer.updateMyprofile');
+    Route::post('/change-Password/{id}', [LecturerController::class, 'changePassword'])->name('lecturer.changePassword');
 });
