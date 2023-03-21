@@ -10,7 +10,7 @@ class ExamMarks extends Model
     use HasFactory;
 
     protected $fillable = [];
-    
+
     protected static function newFactory()
     {
         return \Modules\Examination\Database\factories\ExamMarksFactory::new();

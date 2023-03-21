@@ -2,12 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="08195653-74ee-4c59-8ef1-51788d10d2d9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/examination/editExam.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/hS1Wx6dhpUcY0dAtEceFJ4v9pOt30RltekOs6kO0" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/0826f675164271c6db09d585d440efce70a695b3.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/1d6891493c95687ce237976b1669aca95705a810.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/22bdae5ef5f3667da5eb4b0425f64b353e39e1e2.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/2cdf119037c5ffb873dd1717fe55c41dd98972fa.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/45eba842c6130906e843b5d317f08065cc42fbe9.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/5ee964b5378a2b0b66b8ca220a1dcf36b52af33c.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/64492a0cf20a52b9d39e9378f28563083c4edccd.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/b350446da993b938f6db198430e71a0c552c9d84.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/b379189b8d82ac4dd866bf9a4078b5fe4683f47f.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/b53e55544c46dbb72ed05a879e4bf1d9f17c4bb6.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/baf4bfc229c7e052d8956e60af4ca635439c102a.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/c86ab5ba561b7e3c26060e266b72cd62c8ffb65c.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/d8c67ba07477e7f8d94d961e7ee8824d0efd9ac1.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Administrator/Entities/Staff.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Administrator/Entities/Staff.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/.env" beforeDir="false" afterPath="$PROJECT_DIR$/application/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Entities/ExamMarks.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Entities/ExamMarks.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Http/Controllers/LecturerController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Http/Controllers/LecturerController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/examination/exam.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/examination/exam.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/hrDn6YbvmmKIxT581cLt8fBCPYf9Mvos4r00Gjqg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/5uVsyUIMkkeUKjAt9poTubVF4ZhCBOHHC2XQoGnL" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/Zql1BKQw3E21ZXZ2DCM8Z0NVDCfNjGU7cvHJL65m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/hzaNJIfyUVzznJ0tI0DltCwkyqIuQSL9sIMEpnR9" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -167,11 +185,15 @@
     </include_path>
   </component>
   <component name="ProjectId" id="2Mlcghr9kNM3MaOnSorYHp0CwuY" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -191,11 +213,25 @@
       <workItem from="1678684782311" duration="63759000" />
       <workItem from="1678948091031" duration="25354000" />
       <workItem from="1679032792961" duration="12611000" />
-      <workItem from="1679295077165" duration="5533000" />
+      <workItem from="1679295077165" duration="28109000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>
