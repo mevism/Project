@@ -36,6 +36,9 @@
     <div class="block block-rounded">
         <div class="block-content block-content-full">
             <div class="row">
+                <div class="alert alert-info p-0">
+                    <p class="text-center fs-9 mt-2 mb-1"> <sup class="text-danger">*</sup> Cells in red means that the value entered is either less than 0 or greater than the examined CAT/Assignment/Practical/Exam weights and can also mean you keyed in a letter instead of a digit. Please confirm your entries before submissions.</p>
+                </div>
 {{--                <small class="text-danger text-center"> Where cells are in red </small> check if you used <span class="fw-semibold">O</span> instead of <span class="fw-semibold">0</span> or the value is less than 0 or more than the set value for CAT/ASSIGNMENT/PRACTICAL/EXAM--}}
                 <div class="col-lg-12">
                     <div id="example" style="width: 100% !important; overflow: hidden !important;"></div>
@@ -98,12 +101,6 @@
                     td.innerHTML = Math.round(td.innerHTML)
                 }
 
-                // if the row contains a negative number
-                // if (parseInt(value, 10) < 0) {
-                //     // add class 'make-me-red'
-                //     td.className = 'htCenter make-me-red';
-                // }
-
                 if (!value || value === '' || value === null) {
                     td.style.background = '#EEE';
 
@@ -134,7 +131,7 @@
                 width: '100%',
                 height: 'auto',
                 stretchH: 'all',
-                colWidths: [120, 250, 60, 60, 60, 60, 60, 60, 60, 60, 150],
+                colWidths: [120, 250, 60, 60, 60, 60, 60, 60, 80, 60, 150],
                 className: 'htCenter',
                 columns: [
                     {readOnly: true, className: 'htLeft htMiddle cellText'},
@@ -189,7 +186,7 @@
 
                 rowHeights: 30,
                 rowHeaders: true,
-                colHeaders: ['STUDENT NUMBER', 'STUDENT NAME', 'CAT 1', 'CAT 2', 'CAT 3', 'EXAM', 'CAT', 'EXAM', 'TOTAL', 'GRADE', 'ATTEMPT'],
+                colHeaders: ['STUDENT NUMBER', 'STUDENT NAME', 'CAT 1', 'CAT 2', 'CAT 3', 'EXAM', 'T. CAT', 'T. EXAM', 'T. MARKS', 'GRADE', 'ATTEMPT'],
                 licenseKey: 'non-commercial-and-evaluation', // for non-commercial use only
 
                 cells(row, col,  prop, value) {
@@ -206,7 +203,7 @@
                     if(changes !== null){
 
                         if (source !== 'sum') {
-                            var a, b, c, d, sum, i, value;
+                            var a, b, c, d, sum, i, value, grade, total;
 
                             var cats = (unit.cat / weight.cat);
                             var assignments = (unit.assignment / weight.assignment);
@@ -236,12 +233,26 @@
                                 d = parseInt(this.getDataAtCell(line, 5));
 
                                 value = a * cats + b * assignments + c * practicals;
+                                total = d * exam + value;
+
+                                if(total > 70 ){
+                                    grade = 'A';
+                                }else if(total >= 60){
+                                    grade = 'B';
+                                }else if(total >= 50){
+                                    grade = 'C';
+                                }else if(total >= 40){
+                                    grade = 'D';
+                                }else {
+                                    grade = 'E';
+                                }
 
                                 // We want to programmatically update the table.
                                 // Let's update it, and associate the source 'sum' to the event.
                                 this.setDataAtCell(change[0], 6, value, 'sum');
                                 this.setDataAtCell(change[0], 7, d * exam, 'sum');
-                                this.setDataAtCell(change[0], 8, d * exam + value, 'sum');
+                                this.setDataAtCell(change[0], 8, total, 'sum');
+                                this.setDataAtCell(change[0], 9, grade, 'sum');
 
                             }
 
@@ -266,7 +277,9 @@
                      },
                      success: function (data){
 
-                         // console.log(data)
+                         location.reload();
+                         toastr.success("Student marks saved successfully");
+
                      }
 
                  });
