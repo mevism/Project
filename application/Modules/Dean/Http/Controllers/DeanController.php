@@ -66,7 +66,7 @@ class DeanController extends Controller
     public function viewWorkload($id)
     {
 
-        $hashedId = Crypt::decrypt($id);
+       return $hashedId = Crypt::decrypt($id);
 
         $users = User::all();
         foreach ($users as $user) {
@@ -159,6 +159,106 @@ class DeanController extends Controller
 
         return redirect()->back()->with('success', 'Workload Reverted to COD Successfully.');
     }
+
+
+    public function printWorkload($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $user = Auth()->guard('user')->user();
+
+        $staff_number = $user->staff_number;
+
+        $name = $user->first_name.' '.$user->last_name.' '. $user->middle_name;
+
+        $school = auth()->guard('user')->user()->employmentDepartment->first()->schools->first();
+
+        $roles  =  $user->roles->first()->name;
+
+        $dept = auth()->guard('user')->user()->employmentDepartment->first()->id;
+        
+        $workloads  =  Workload::where('department_id', $dept)->where('status', 1)->where('workload_approval_id', $hashedId)->get();
+
+        $domPdfPath = base_path('vendor/dompdf/dompdf');
+        \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
+        \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+
+        $center = ['bold' => true];
+
+        $table = new Table(array('unit' => TblWidth::TWIP));
+        $headers = ['bold' => true, 'space' => ['before' => 2000, 'after' => 2000, 'rule' => 'exact']];
+        $table->addRow();
+        $table->addCell(200, ['borderSize' => 1])->addText('#', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+        $table->addCell(5000, ['borderSize' => 1])->addText('STAFF', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+        $table->addCell(5000, ['borderSize' => 1])->addText('CLASS', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+        $table->addCell(5000, ['borderSize' => 1])->addText('UNIT', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+
+        $table->addRow();
+        $table->addCell(200, ['borderSize' => 1])->addText('#');
+            $table->addCell(1500, ['borderSize' => 1])->addText('Staff Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+            $table->addCell(1500, ['borderSize' => 1])->addText('Staff Name', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1500, ['borderSize' => 1])->addText('Qualification', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1750, ['borderSize' => 1])->addText('Responsibility', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1000, ['borderSize' => 1])->addText('Class Code', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(2600, ['borderSize' => 1])->addText('Workload', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1500, ['borderSize' => 1])->addText('Students',  $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1750, ['borderSize' => 1])->addText('Unit Code', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1750, ['borderSize' => 1])->addText('Unit Name', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1750, ['borderSize' => 1])->addText('Level', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1750, ['borderSize' => 1])->addText('Signature', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+
+
+
+
+        
+        // foreach ($workloads as $key =>  $workload) {
+          
+        //     
+        //     $table->addRow(600);
+            
+
+        //     foreach ($workload as $key => $list) {
+        //         $table->addRow();
+        //         $table->addCell(200, ['borderSize' => 1])->addText(++$key);
+        //         $table->addCell(2800, ['borderSize' => 1])->addText($staff_number);
+        //         $table->addCell(1900, ['borderSize' => 1])->addText($name);
+        //         $table->addCell(1900, ['borderSize' => 1])->addText($name);
+        //         $table->addCell(1750, ['borderSize' => 1])->addText($roles);
+        //         $table->addCell(1000, ['borderSize' => 1])->addText($roles);
+        //         $table->addCell(2600, ['borderSize' => 1])->addText($roles);
+        //         $table->addCell(1500, ['borderSize' => 1])->addText($staff_number);
+        //         $table->addCell(1500, ['borderSize' => 1])->addText($staff_number);
+        //         $table->addCell(1500, ['borderSize' => 1])->addText($staff_number);
+        //         $table->addCell(1500, ['borderSize' => 1])->addText($staff_number);
+        //         $table->addCell(1750, ['borderSize' => 1])->addText();
+        //     }
+        // }
+            $workload = new TemplateProcessor(storage_path('workload_template.docx'));
+
+            $workload->setValue('initials', $school->initials);
+            $workload->setValue('name', $school->name);
+            $workload->setValue('academic_year', $workloads->first()->academic_year);
+            $workload->setValue('academic_semester', $workloads->first()->academic_semester);
+            $workload->setComplexBlock('{table}', $table);
+            $docPath = 'Fees/' . 'Workload' . time() . ".docx";
+            $workload->saveAs($docPath);
+
+            $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
+
+            // $pdfPath = 'Fees/' . 'Workload' . time() . ".pdf";
+
+            // $converter =  new OfficeConverter($docPath, 'Fees/');
+            // $converter->convertTo('Workload' . time() . ".pdf");
+
+            // if (file_exists($docPath)) {
+            //     unlink($docPath);
+            // }
+        
+
+        return response()->download($docPath)->deleteFileAfterSend(true);
+
+    }
+
 
     public function readmissions()
     {

@@ -80,9 +80,11 @@
                                             </td>
                                             <td nowrap>
                                                 @if($workload->dean_status == null)
-                                                <a class="btn btn-outline-success btn-sm" href="{{route('dean.approveWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Approve  </a>
+                                                    <a class="btn btn-outline-info btn-sm" href="{{route('dean.viewWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> view </a>
 
-                                                <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $workload->id }}"> Decline </a> 
+                                                    <a class="btn btn-outline-success btn-sm" href="{{route('dean.approveWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Approve  </a>
+
+                                                    <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $workload->id }}"> Decline </a> 
                                                 @else
                                                     @if($workload->dean_status === 1 && $workload->registrar_status === null )
 
@@ -115,11 +117,15 @@
 
                                                     @elseif($workload->dean_status === 1 && $workload->registrar_status === 1 && $workload->status === 1)
                                                         @if($workload->workloadProcessed->first()->status === 0)
+
                                                         <a class="btn btn-outline-info btn-sm" href="{{route('dean.workloadPublished',['id' => Crypt::encrypt($workload->id)]) }}"> publish 
                                                          </a>
                                                         @else
+                                                        <a class="btn btn-outline-info btn-sm" href="{{route('dean.viewWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> view </a>
+
                                                         <a class="btn btn-outline-dark btn-sm" href="">  Published                                                         
                                                          </a>
+                                                    <a class="btn btn-outline-primary btn-sm" href="{{route('dean.printWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Download </a>
                                                            
                                                         @endif   
                                                     @endif       
