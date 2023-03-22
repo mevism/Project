@@ -3,7 +3,6 @@
 namespace Modules\Dean\Http\Controllers;
 
 use Auth;
-use LDAP\Result;
 use App\Models\User;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
@@ -38,13 +37,13 @@ use Modules\Workload\Entities\ApproveWorkload;
 class DeanController extends Controller
 {
 
-    public function yearlyWorkload() 
+    public function yearlyWorkload()
     {
         $schoolId = auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->id;
         $departs   =   Department::where('division_id', 1)->get();
 
         foreach ($departs as $department) {
-            
+
             if ($department->schools->first()->id == $schoolId) {
 
               $deptWorkloads[] = $department->id;
@@ -66,7 +65,7 @@ class DeanController extends Controller
     public function viewWorkload($id)
     {
 
-       return $hashedId = Crypt::decrypt($id);
+       $hashedId = Crypt::decrypt($id);
 
         $users = User::all();
         foreach ($users as $user) {
@@ -74,7 +73,7 @@ class DeanController extends Controller
                 $lectures[] = $user;
             }
         }
-        
+
         $workloads = Workload::where('workload_approval_id', $hashedId)->get()
             ->groupBy('user_id');
 
@@ -88,7 +87,7 @@ class DeanController extends Controller
             $updateApproval = ApproveWorkload::where('id', $hashedId)->first();
             $updateApproval->dean_status = 1;
             $updateApproval->dean_remarks = 'Workload Approved';
-            $updateApproval->save();    
+            $updateApproval->save();
 
         return redirect()->back()->with('success', 'Workload Approved Successfully');
     }
@@ -101,24 +100,24 @@ class DeanController extends Controller
             $updateApproval->dean_status = 2;
             $updateApproval->dean_remarks = $request->remarks;
             $updateApproval->save();
-       
+
 
         return redirect()->back()->with('success', 'Workload Declined');
-    } 
+    }
 
     public function workloadPublished($id)
     {
 
         $hashedId = Crypt::decrypt($id);
         $workloads = Workload::where('workload_approval_id', $hashedId)->get();
-         
+
         $workload        =      ApproveWorkload::where('id', $hashedId)
                         ->where('dean_status', '!=', null)
                         ->where('registrar_status', '==', 1)
                         ->where('status', '==', 1)
                         ->latest()
                         ->get();
-                       
+
         foreach($workloads  as  $workload){
 
         $updateLoad  =  Workload::find($workload->id);
@@ -136,7 +135,7 @@ class DeanController extends Controller
 
         $submitApproval = ApproveWorkload::where('id', $hashedId)->first();
         $submitApproval->registrar_status = 0;
-        $submitApproval->save();    
+        $submitApproval->save();
 
         return redirect()->back()->with('success', 'Workload Approved Successfully');
     }
@@ -146,7 +145,7 @@ class DeanController extends Controller
         $hashedId = Crypt::decrypt($id);
 
         $revert        =      ApproveWorkload::where('id', $hashedId)->where('dean_status', '>',  1)->latest()->first();
-        
+
         $workloads = Workload::where('workload_approval_id', $hashedId)->get();
 
         foreach($workloads  as  $workload){
@@ -154,7 +153,7 @@ class DeanController extends Controller
             $updateLoad  =  Workload::find($workload->id);
             $updateLoad->status  =  0;
             $updateLoad->save();
-    
+
            }
 
         return redirect()->back()->with('success', 'Workload Reverted to COD Successfully.');
@@ -165,80 +164,128 @@ class DeanController extends Controller
 
         $hashedId = Crypt::decrypt($id);
 
-        $user = Auth()->guard('user')->user();
+        $users = User::all();
 
-        $staff_number = $user->staff_number;
+        foreach ($users as $user){
+            if ($user->hasRole('Lecturer')){
 
-        $name = $user->first_name.' '.$user->last_name.' '. $user->middle_name;
+                $lecturers[] = $user;
+            }
+        }
+
+        $dept = auth()->guard('user')->user()->employmentDepartment->first()->id;
+
+        $session = Workload::where('department_id', $dept)->where('workload_approval_id', $hashedId)->first();
 
         $school = auth()->guard('user')->user()->employmentDepartment->first()->schools->first();
 
-        $roles  =  $user->roles->first()->name;
-
-        $dept = auth()->guard('user')->user()->employmentDepartment->first()->id;
-        
-        $workloads  =  Workload::where('department_id', $dept)->where('status', 1)->where('workload_approval_id', $hashedId)->get();
+        $workloads  =  Workload::where('department_id', $dept)->where('workload_approval_id', $hashedId)->get()->groupBy('user_id');
 
         $domPdfPath = base_path('vendor/dompdf/dompdf');
         \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
         \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
 
-        $center = ['bold' => true];
-
+        $center = ['bold' => true, 'size' => 9, 'name' => 'Book Antiqua'];
         $table = new Table(array('unit' => TblWidth::TWIP));
         $headers = ['bold' => true, 'space' => ['before' => 2000, 'after' => 2000, 'rule' => 'exact']];
-        $table->addRow();
-        $table->addCell(200, ['borderSize' => 1])->addText('#', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
-        $table->addCell(5000, ['borderSize' => 1])->addText('STAFF', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
-        $table->addCell(5000, ['borderSize' => 1])->addText('CLASS', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
-        $table->addCell(5000, ['borderSize' => 1])->addText('UNIT', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
 
         $table->addRow();
-        $table->addCell(200, ['borderSize' => 1])->addText('#');
-            $table->addCell(1500, ['borderSize' => 1])->addText('Staff Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
-            $table->addCell(1500, ['borderSize' => 1])->addText('Staff Name', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1500, ['borderSize' => 1])->addText('Qualification', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1750, ['borderSize' => 1])->addText('Responsibility', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1000, ['borderSize' => 1])->addText('Class Code', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(2600, ['borderSize' => 1])->addText('Workload', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1500, ['borderSize' => 1])->addText('Students',  $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1750, ['borderSize' => 1])->addText('Unit Code', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1750, ['borderSize' => 1])->addText('Unit Name', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1750, ['borderSize' => 1])->addText('Level', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1750, ['borderSize' => 1])->addText('Signature', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+        $table->addCell(80, ['borderSize' => 1, 'vMerge' => 'restart'])->addText('#', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
+        $table->addCell(3300, ['borderSize' => 1, 'gridSpan' => 4])->addText('STAFF', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
+        $table->addCell(2730, ['borderSize' => 1, 'gridSpan' => 3])->addText('CLASS', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+        $table->addCell(10080, ['borderSize' => 1, 'gridSpan' => 3])->addText('UNIT', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+        $table->addCell(300, ['borderSize' => 1])->addText();
+
+        $table->addRow();
+        $table->addCell(80, ['borderSize' => 1, 'vMerge' => 'continue'])->addText('#');
+            $table->addCell(700, ['borderSize' => 1])->addText('Staff Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+            $table->addCell(700, ['borderSize' => 1])->addText('Staff Name', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(400, ['borderSize' => 1])->addText('Qualification', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1500, ['borderSize' => 1])->addText('Roles', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(2550, ['borderSize' => 1])->addText('Class Code', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(80, ['borderSize' => 1])->addText('Work'."\n".'load', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(100, ['borderSize' => 1])->addText('Stds',  $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(2000, ['borderSize' => 1])->addText('Unit Code', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(8000, ['borderSize' => 1])->addText('Unit Name', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(80, ['borderSize' => 1])->addText('Level', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(300, ['borderSize' => 1])->addText('Signature', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+
+                $sn = 0;
+
+         foreach ($workloads as $user_id => $workload) {
+             $qualifications = [];
+             $roles = [];
+             foreach ($lecturers as $lecturer){
+                 if ($lecturer->id === $user_id){
+                     $staff = $lecturer;
+                     foreach ($staff->lecturerQualfs as $qualification){
+                         $qualifications[] = $qualification->qualification;
+                     }
+                     foreach ($staff->roles as $role){
+                         $roles[] = $role->name;
+                     }
+                 }
+             }
+
+             $table->addRow();
+             $table->addCell(80, ['borderSize' => 1])->addText( ++$sn, ['name' => 'Book Antiqua', 'size' => 10] );
+             $table->addCell(700, ['borderSize' => 1])->addText($staff->staff_number, ['name' => 'Book Antiqua', 'size' => 10]);
+             $table->addCell(700, ['borderSize' => 1])->addText($staff->title.'. '.$staff->last_name.' '.$staff->first_name, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
+             $table->addCell(400, ['borderSize' => 1])->addText(implode(', ', $qualifications), ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
+             $table->addCell(1500, ['borderSize' => 1])->addText(implode(', ', $roles), ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
+
+             $class = $table->addCell(2550, ['borderSize' => 1]);
+             $staffLoad = $table->addCell(80, ['borderSize' => 1]);
+             $students = $table->addCell(100, ['borderSize' => 1]);
+             $unit_code = $table->addCell(2000, ['borderSize' => 1]);
+             $unit_name = $table->addCell(8000, ['borderSize' => 1]);
+             $levels = $table->addCell(80, ['borderSize' => 1]);
+             $signature = $table->addCell(300, ['borderSize' => 1]);
+
+                $userLoad = $workload->count();
+
+             foreach ($lecturers as $lecturer) {
+                 if ($lecturer->id === $user_id) {
+                     $staff = $lecturer;
+                     if ($staff->placedUser->first()->employment_terms == 'FT') {
+                         for ($i = 0; $i < $userLoad; ++$i) {
+                             if ($i < 3) {
+                                 $load = 'FT';
+                                 $staffLoad->addText($load, ['name' => 'Book Antiqua', 'size' => 10]);
+                             } else {
+                                 $load = 'PT';
+                                 $staffLoad->addText($load, ['name' => 'Book Antiqua', 'size' => 10]);
+                             }
+                         }
+
+                     } else {
+                         for ($i = 0; $i < $userLoad; ++$i) {
+                             if ($i < $userLoad) {
+                                 $load = 'PT';
+                                 $staffLoad->addText($load, ['name' => 'Book Antiqua', 'size' => 10]);
+                             }
+                         }
+                     }
+                 }
+             }
+
+             foreach ($workload as $unit) {
+                 $class->addText($unit->class_code, ['name' => 'Book Antiqua', 'size' => 10]);
+                 $students->addText($unit->classWorkload->studentClass->count(), ['name' => 'Book Antiqua', 'size' => 10]);
+                 $unit_code->addText($unit->workloadUnit->unit_code, ['name' => 'Book Antiqua', 'size' => 10]);
+                 $unit_name->addText($unit->workloadUnit->unit_name, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'left']);
+                 $levels->addText($unit->classWorkload->classCourse->level, ['name' => 'Book Antiqua', 'size' => 10]);
+                 $signature->addText();
+             }
 
 
-
-
-        
-        // foreach ($workloads as $key =>  $workload) {
-          
-        //     
-        //     $table->addRow(600);
-            
-
-        //     foreach ($workload as $key => $list) {
-        //         $table->addRow();
-        //         $table->addCell(200, ['borderSize' => 1])->addText(++$key);
-        //         $table->addCell(2800, ['borderSize' => 1])->addText($staff_number);
-        //         $table->addCell(1900, ['borderSize' => 1])->addText($name);
-        //         $table->addCell(1900, ['borderSize' => 1])->addText($name);
-        //         $table->addCell(1750, ['borderSize' => 1])->addText($roles);
-        //         $table->addCell(1000, ['borderSize' => 1])->addText($roles);
-        //         $table->addCell(2600, ['borderSize' => 1])->addText($roles);
-        //         $table->addCell(1500, ['borderSize' => 1])->addText($staff_number);
-        //         $table->addCell(1500, ['borderSize' => 1])->addText($staff_number);
-        //         $table->addCell(1500, ['borderSize' => 1])->addText($staff_number);
-        //         $table->addCell(1500, ['borderSize' => 1])->addText($staff_number);
-        //         $table->addCell(1750, ['borderSize' => 1])->addText();
-        //     }
-        // }
+         }
             $workload = new TemplateProcessor(storage_path('workload_template.docx'));
 
             $workload->setValue('initials', $school->initials);
             $workload->setValue('name', $school->name);
-            $workload->setValue('academic_year', $workloads->first()->academic_year);
-            $workload->setValue('academic_semester', $workloads->first()->academic_semester);
+            $workload->setValue('academic_year', $session->academic_year);
+            $workload->setValue('academic_semester', $session->academic_semester);
             $workload->setComplexBlock('{table}', $table);
             $docPath = 'Fees/' . 'Workload' . time() . ".docx";
             $workload->saveAs($docPath);
@@ -253,7 +300,7 @@ class DeanController extends Controller
             // if (file_exists($docPath)) {
             //     unlink($docPath);
             // }
-        
+
 
         return response()->download($docPath)->deleteFileAfterSend(true);
 

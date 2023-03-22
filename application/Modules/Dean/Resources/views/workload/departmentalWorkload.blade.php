@@ -30,7 +30,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-1">
                     <h5 class="h6 fw-bold mb-0">
-                        DARTMENTAL WORKLOAD
+                        DEPARTMENTAL WORKLOAD
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -63,7 +63,7 @@
                             @foreach ($department as $dept => $depts)
                                 <tr>
                                     <td> {{ $loop->iteration }}</td>
-                                    <td>                                           
+                                    <td>
                                         @foreach($departs as $deptCode)
                                             @if($dept == $deptCode->id )
 
