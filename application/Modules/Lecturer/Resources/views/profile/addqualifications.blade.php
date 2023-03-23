@@ -33,9 +33,11 @@
                     <div class="form-floating mb-2">
                         <select name="level" class="form-control form-select">
                               <option value="" selected disabled>-- select level --</option>
-                              <option value="PHD">PHD</option>
-                              <option value="Masters">Masters</option>
-                              <option value="Bachelors">Bachelors</option>
+                              <option value="5">PHD</option>
+                              <option value="4">Masters</option>
+                              <option value="3">Bachelors</option>
+                              <option value="2">Diploma</option>
+                              <option value="1">Certificate</option>
 
                             
                         </select>

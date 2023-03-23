@@ -53,19 +53,47 @@
                         <th>Level</th>
                         <th>Institution</th>
                         <th>Qualification</th>
-                        <th>Edit</th>
+                        <th>Status</th>
+                        <th>Action</th>
 
                     </thead>
                     <tbody>
                         @foreach($qualifications as $key => $qualification)
                             <tr>
                                 <td>{{ ++$key }}</td>
-                                <td>{{ $qualification->level}}</td>
+                                <td>
+                                    @if($qualification->level==1) 
+                                        CERTIFICATE
+                                    @elseif($qualification->level==2)
+                                         DIPLOMA
+                                    @elseif($qualification->level==3)
+                                        BACHELORS
+                                    @elseif($qualification->level==4)
+                                        MASTERS 
+                                    @elseif($qualification->level==5)
+                                        PHD 
+                                    @endif
+                                </td>
                                 <td>{{ $qualification->institution}}</td>
                                 <td>{{ $qualification->qualification}}</td>
                                 <td>
+                                    @if($qualification->qualification_status==0)
+                                    <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>
+                                    @elseif($qualification->qualification_status==1)
+                                    <span class="badge bg-success"> <i class="fa fa-check"></i> Approved</span>
+                                    @elseif($qualification->qualification_status==2)
+                                    <span class="badge bg-danger"> <i class="fa fa-ban"></i> Declined</span>
+                                    @endif 
+                                </td>
+                                <td>
+                                    @if($qualification->qualification_status==0)
+                                    <a class="btn btn-sm btn-alt-danger" href="{{ route('lecturer.deleteQualification', ['id' => Crypt::encrypt($qualification->id)] ) }}">Drop</a>
+                                    @elseif($qualification->qualification_status==1)
+                                    <a class="btn btn-sm btn-alt-success" disabled>Verified</a>
+                                    @elseif($qualification->qualification_status==2)
                                     <a class="btn btn-sm btn-alt-info" href="{{ route('lecturer.editQualifications', ['id' => Crypt::encrypt($qualification->id)]) }}">Edit</a>
-                                    <a class="btn btn-sm btn-alt-danger" href="{{ route('lecturer.deleteQualification', ['id' => Crypt::encrypt($qualification->id)] ) }}">Delete</a>
+                                    <a class="btn btn-sm btn-alt-danger" href="{{ route('lecturer.deleteQualification', ['id' => Crypt::encrypt($qualification->id)] ) }}">Drop</a>
+                                    @endif 
                                 </td>
                             </tr>
                             @endforeach

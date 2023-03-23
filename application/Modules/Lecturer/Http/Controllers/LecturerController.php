@@ -17,6 +17,8 @@ use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\StudentCourse;
 use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Workload\Entities\Workload;
+use \App\Models\User;
+use Hash;
 
 
 class LecturerController extends Controller
@@ -39,6 +41,7 @@ class LecturerController extends Controller
     }
 
     public function qualifications(){
+      
 
       $qualification = LecturerQualification::where('user_id', auth()->guard('user')->user()->id)->latest()->get();
 
@@ -109,15 +112,23 @@ class LecturerController extends Controller
         return redirect()->route('lecturer.qualifications')->with('success', 'Deleted successfully');
     }
 
-
     public function teachingAreas(){
+
+        
 
         $myUnits = TeachingArea::where('user_id', auth()->guard('user')->user()->id)->latest()->get();
 
-        return view('lecturer::profile.teachingArea')->with('units', $myUnits);
+        return view('lecturer::profile.teachingArea')->with(['units' => $myUnits]);
     }
 
     public function addTeachingAreas(){
+
+        $qualifications = Auth()->guard('user')->user()->lecturerQualification;
+        foreach($qualifications as $qualification){
+            $userQualifications[] =$qualification->level;
+        }
+
+        $highestQualification = max($userQualifications);
 
         $userSchool = auth()->guard('user')->user()->employmentDepartment->first()->schools->first();
 
@@ -131,7 +142,7 @@ class LecturerController extends Controller
             }
         }
 
-        return view('lecturer::profile.addTeachingAreas')->with(['units' => $units]);
+        return view('lecturer::profile.addTeachingAreas')->with(['units' => $units, 'highest' => $highestQualification]);
     }
 
     public function storeTeachingAreas(Request $request){
@@ -382,10 +393,64 @@ class LecturerController extends Controller
 
        public function myProfile(){
 
-            $qualifications = LecturerQualification::where ('user_id', auth()->guard('user')->user()->id)->latest()->get();
+            $qualifications = LecturerQualification::where ('user_id', auth()->guard('user')->user()->id)->where('qualification_status' ,1)->latest()->get();
 
              return view('lecturer::profile.myprofile')->with('qualifications',$qualifications);
        }
+       public function editMyprofile(){
+
+
+        return  view('lecturer::profile.editMyprofile');
+
+    }
+
+    public function updateMyprofile(Request $request, $id){
+
+        $request->validate([
+            'title' => 'required',
+            'lname' => 'required',
+            'fname' =>'required',
+            'username' => 'required',
+            'profile_image'=>'image|nullable|max:1999'
+        ]);
+        //Handle file Upload
+       
+        
+        $users = User::find($id);
+        $users->title = $request->title;
+        $users->last_name = $request->lname;
+        $users->first_name = $request ->fname;
+        $users->middle_name = $request->mname;
+        $users->phone_number = $request->phone_number;
+        if ($request->hasFile('profile_image')){
+            $filenameWithExt = $request->file('profile_image')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('profile_image')->getClientOriginalExtension();
+            $fileNameToStore = time().'.'.$extension;
+            $path = $request->profile_image->move('media/profile/', $fileNameToStore);
+            $users->profile_image = $fileNameToStore;
+        }
+        $users->office_email = $request ->office_email;
+        $users->personal_email = $request->personal_email;
+        $users->username = $request->username;
+        $users->gender = $request ->gender;
+        $users->save();
+
+        return redirect()->route('lecturer.myProfile')->with('success', 'Updated successfully');
+
+    }
+
+     public function changePassword(Request $request, $id){
+
+        $request ->validate([
+            'password' => 'required|confirmed',
+            
+        ]);
+        $users = User::find($id);
+        $users->password = Hash::make($request->password);
+        $users->save();
+        return redirect()->route('lecturer.myProfile')->with('success', 'Password Updated successfully');
+     }
 
 
 

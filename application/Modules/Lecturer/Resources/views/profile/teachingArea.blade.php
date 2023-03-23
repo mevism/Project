@@ -50,6 +50,7 @@
                         <th>Unit Code</th>
                         <th>Unit Name</th>
                         <th>Level</th>
+                        <th>Status</th>
                         <th>Remove</th>
 
                         </thead>
@@ -69,10 +70,25 @@
                                     @else
                                         POST GRADUATE
                                     @endif
-
                                 </td>
                                 <td>
+                                    @if($unit->teachingArea_status==0)
+                                    <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>
+                                    @elseif($unit->teachingArea_status==1)
+                                    <span class="badge bg-success"> <i class="fa fa-check"></i> Approved</span>
+                                    @elseif($unit->teachingArea_status==2)
+                                    <span class="badge bg-danger"> <i class="fa fa-ban"></i> Declined</span>
+                                    @endif 
+                                </td>
+                                <td>
+                                    @if($unit->teachingArea_status==0)
                                     <a class="btn btn-sm btn-alt-danger" href="{{route('lecturer.deleteTeachingArea',['id' => Crypt::encrypt($unit->id)] )}}">Drop</a>
+                                    @elseif($unit->teachingArea_status==1)
+                                    <a class="btn btn-sm btn-alt-success" disabled>Verified</a>
+                                    @elseif($unit->teachingArea_status==2)
+                                    <a class="btn btn-sm btn-alt-danger" href="{{route('lecturer.deleteTeachingArea',['id' => Crypt::encrypt($unit->id)] )}}">Drop</a>
+                                    @endif 
+                                    
                                 </td>
                             </tr>
                         @endforeach
