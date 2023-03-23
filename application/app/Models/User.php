@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Modules\Lecturer\Entities\LecturerQualification;
 use Modules\Lecturer\Entities\TeachingArea;
 use Modules\Registrar\Entities\Department;
 use Modules\Registrar\Entities\Division;
@@ -93,5 +94,10 @@ class User extends Authenticatable
     public function teachingAreaUser(){
 
         return $this->hasMany(TeachingArea::class, 'id');
+    }
+
+    public function lecturerQualfs(){
+
+        return $this->hasMany(LecturerQualification::class, 'user_id', 'id');
     }
 }

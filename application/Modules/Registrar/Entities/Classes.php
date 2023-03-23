@@ -23,7 +23,7 @@ class Classes extends Model
 
     public function classCourse(){
 
-        return $this->belongsTo(Courses::class, 'id');
+        return $this->belongsTo(Courses::class, 'course_id', 'id');
     }
 
     public function progress(){
@@ -37,6 +37,11 @@ class Classes extends Model
     public function scheduledClass(){
 
         return $this->hasMany(ClassPattern::class, 'class_code', 'name');
+    }
+
+    public function studentClass(){
+
+        return $this->hasMany(StudentCourse::class, 'class_code', 'name');
     }
 
     protected static function newFactory()

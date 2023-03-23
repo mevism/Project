@@ -5,8 +5,10 @@ namespace Modules\Workload\Entities;
 use App\Models\User;
 use Modules\COD\Entities\SemesterUnit;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\Department;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Registrar\Entities\StudentCourse;
 
 class Workload extends Model
 {
@@ -42,6 +44,11 @@ class Workload extends Model
     public function processWorkload(){
 
         return $this->belongsTo(ApproveWorkload::class, 'id');
+    }
+
+    public function classWorkload(){
+
+        return $this->belongsTo(Classes::class, 'class_code', 'name');
     }
 
     protected static function newFactory()
