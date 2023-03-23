@@ -41,4 +41,5 @@ Route::prefix('lecturer')->group(function() {
     Route::get('/edit-Myprofile', [LecturerController::class, 'editMyprofile'])->name('lecturer.editMyprofile');
     Route::post('/update-Myprofile/{id}', [LecturerController::class, 'updateMyprofile'])->name('lecturer.updateMyprofile');
     Route::post('/change-Password/{id}', [LecturerController::class, 'changePassword'])->name('lecturer.changePassword');
+
 });

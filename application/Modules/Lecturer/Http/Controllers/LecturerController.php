@@ -41,7 +41,7 @@ class LecturerController extends Controller
     }
 
     public function qualifications(){
-      
+
 
       $qualification = LecturerQualification::where('user_id', auth()->guard('user')->user()->id)->latest()->get();
 
@@ -114,7 +114,7 @@ class LecturerController extends Controller
 
     public function teachingAreas(){
 
-        
+
 
         $myUnits = TeachingArea::where('user_id', auth()->guard('user')->user()->id)->latest()->get();
 
@@ -123,12 +123,18 @@ class LecturerController extends Controller
 
     public function addTeachingAreas(){
 
+        $userQualifications = [];
+
         $qualifications = Auth()->guard('user')->user()->lecturerQualification;
         foreach($qualifications as $qualification){
             $userQualifications[] =$qualification->level;
         }
 
-        $highestQualification = max($userQualifications);
+        if ($userQualifications == null){
+            $highestQualification = 0;
+        }else{
+            $highestQualification = max($userQualifications);
+        }
 
         $userSchool = auth()->guard('user')->user()->employmentDepartment->first()->schools->first();
 
@@ -414,8 +420,8 @@ class LecturerController extends Controller
             'profile_image'=>'image|nullable|max:1999'
         ]);
         //Handle file Upload
-       
-        
+
+
         $users = User::find($id);
         $users->title = $request->title;
         $users->last_name = $request->lname;
@@ -444,7 +450,7 @@ class LecturerController extends Controller
 
         $request ->validate([
             'password' => 'required|confirmed',
-            
+
         ]);
         $users = User::find($id);
         $users->password = Hash::make($request->password);

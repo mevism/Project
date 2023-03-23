@@ -16,7 +16,6 @@ use Modules\Registrar\Entities\Division;
 use Modules\Workload\Entities\Workload;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
-use Modules\Lecturer\Entities\LecturerQualification;
 
 class User extends Authenticatable
 {
@@ -94,7 +93,7 @@ class User extends Authenticatable
 
     public function teachingAreaUser(){
 
-        return $this->hasMany(TeachingArea::class, 'id');
+        return $this->hasMany(TeachingArea::class, 'user_id','id');
     }
 
     public function lecturerQualfs(){
