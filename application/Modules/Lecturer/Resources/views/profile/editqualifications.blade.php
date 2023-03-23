@@ -32,9 +32,11 @@
                     <div class="form-floating mb-2">
                         <select name="level" class="form-control form-select">
                               <option value="" selected disabled>-- select level --</option>
-                              <option @if($qualification->level == 'PHD')selected @endif value="PHD">PHD</option>
-                              <option @if($qualification->level =='Masters')selected @endif value="Masters">Masters</option>
-                              <option @if($qualification->level == 'Bachelors')selected @endif value="Bachelors">Bachelors</option>
+                              <option @if($qualification->level == '5')selected @endif value="5">PHD</option>
+                              <option @if($qualification->level =='4')selected @endif value="4">Masters</option>
+                              <option @if($qualification->level == '3')selected @endif value="3">Bachelors</option>
+                              <option @if($qualification->level == '2')selected @endif value="2">Diploma</option>
+                              <option @if($qualification->level == '1')selected @endif value="1">Certificate</option>
 
                             
                         </select>

@@ -88,4 +88,14 @@ Route::prefix('department')->middleware( ['is_cod'])->group( function() {
 
 //        Route::get('/getAcademicFile/{id}', 'CODController@viewAcademicFile');
 
+    /*Lecturer routes */
+    Route::get('/department-lecturers', [CODController::class, 'departmentLectures'])->name('department.lecturers');
+    Route::get('/department-lecturers-qualifications', [CODController::class, 'lecturesQualification'])->name('department.lecturesQualification');
+    Route::get('/department-view-selected-lecturer-qualification/{id}', [CODController::class, 'viewLecturerQualification'])->name('department.viewQualification');
+    Route::get('/department-view-selected-lecturer-teaching-areas/{id}', [CODController::class, 'viewLecturerTeachingArea'])->name('department.viewTeachingArea');
+    Route::get('/department-approve-lecturer-qualification/{id}', [CODController::class, 'approveQualification'])->name('department.approveQualification');
+    Route::post('/department-decline-lecturer-qualification/{id}', [CODController::class, 'declineQualification'])->name('department.declineQualification');
+    Route::get('/department-approve-lecturer-teaching-area/{id}', [CODController::class, 'approveTeachingArea'])->name('department.approveTeachingArea');
+    Route::post('/department-decline-lecturer-qualification/{id}', [CODController::class, 'declineTeachingArea'])->name('department.declineTeachingArea');
+
 });

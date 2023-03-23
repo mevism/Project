@@ -107,9 +107,10 @@
                                 <th>SELECTED</th>
                                 </thead>
                                 <tbody>
+
                             @foreach($units as $allunit)
                                 @foreach($allunit as $key => $unit)
-                                    @if($unit->courseLevel->level >= 4)
+                                    @if($highest >= 5 && $unit->courseLevel->level >= 4)
                                         <tr>
                                             <td>{{ ++$key }}</td>
                                             <td> {{ $unit->course_code }} </td>
@@ -141,7 +142,7 @@
                                 <tbody>
                                 @foreach($units as $allunit)
                                     @foreach($allunit as $key => $unit)
-                                        @if($unit->courseLevel->level == 3)
+                                        @if($highest >= 4 && $unit->courseLevel->level == 3)
                                             <tr>
                                                 <td>{{ ++$key }}</td>
                                                 <td> {{ $unit->course_code }} </td>
@@ -174,7 +175,7 @@
                                 <tbody>
                                 @foreach($units as $allunit)
                                     @foreach($allunit as $key => $unit)
-                                        @if($unit->courseLevel->level == 2)
+                                        @if($highest >= 3 && $unit->courseLevel->level == 2)
                                             <tr>
                                                 <td>{{ ++$key }}</td>
                                                 <td> {{ $unit->course_code }} </td>
@@ -206,7 +207,7 @@
                                 <tbody>
                                 @foreach($units as $allunit)
                                     @foreach($allunit as $key => $unit)
-                                        @if($unit->courseLevel->level == 1)
+                                        @if($highest >= 2 && $unit->courseLevel->level == 1)
                                             <tr>
                                                 <td>{{ ++$key }} </td>
                                                 <td> {{ $unit->course_code }} </td>

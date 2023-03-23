@@ -13,12 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('teaching_areas', function (Blueprint $table) {
+        Schema::create('teaching_area_remarks', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id');
-            $table->string('unit_code');
-            $table->string('level');
-            $table->integer('teachingAreas_status');
+            $table->integer('teaching_id');
+            $table->longText('remarks');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('teaching_areas');
+        Schema::dropIfExists('teaching_area_remarks');
     }
 };

@@ -93,11 +93,15 @@ class User extends Authenticatable
 
     public function teachingAreaUser(){
 
-        return $this->hasMany(TeachingArea::class, 'id');
+        return $this->hasMany(TeachingArea::class, 'user_id','id');
     }
 
     public function lecturerQualfs(){
 
+        return $this->hasMany(LecturerQualification::class, 'user_id', 'id');
+    }
+
+    public function lecturerQualification(){
         return $this->hasMany(LecturerQualification::class, 'user_id', 'id');
     }
 }

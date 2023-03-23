@@ -2,7 +2,12 @@
 
 namespace Modules\COD\Http\Controllers;
 
+use App\Models\User;
 use Auth;
+use Modules\Lecturer\Entities\LecturerQualification;
+use Modules\Lecturer\Entities\QualificationRemarks;
+use Modules\Lecturer\Entities\TeachingArea;
+use Modules\Lecturer\Entities\TeachingAreaRemarks;
 use Response;
 use Validator;
 use Carbon\Carbon;
@@ -1172,73 +1177,112 @@ class CODController extends Controller
 
     }
 
+    public function departmentLectures(){
 
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
-    public function index()
-    {
-        return view('cod::index');
+        $dept = auth()->guard('user')->user()->employmentDepartment->first()->id;
+
+        $users = User::all();
+
+        foreach ($users as $user){
+
+            if ($user->employmentDepartment->first()->id == $dept){
+
+                $lectures [] = $user;
+            }
+        }
+
+        return view('cod::lecturers.index')->with(['lecturers' => $lectures]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
-    {
-        return view('cod::create');
+    public function lecturesQualification (){
+
+        $dept = auth()->guard('user')->user()->employmentDepartment->first()->id;
+
+        $users = User::all();
+
+        foreach ($users as $user){
+
+            if ($user->employmentDepartment->first()->id == $dept){
+
+                $lectures [] = $user;
+            }
+        }
+
+        return view('cod::lecturers.departmentalLecturers')->with(['lecturers' => $lectures]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
-    {
-        //
+    public function viewLecturerQualification($id){
+
+       $hashedId = Crypt::decrypt($id);
+
+        $user = User::find($hashedId);
+
+        return view('cod::lecturers.lecturerQualification')->with(['user' => $user]);
+
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
-    {
-        return view('cod::show');
+    public function approveQualification ($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $qualification = LecturerQualification::findorFail($hashedId);
+        $qualification->qualification_status = 1;
+        $qualification->save();
+
+        return redirect()->back()->with('success', 'Lecturer qualification verified successfully');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
+    public function declineQualification(Request $request, $id)
     {
-        return view('cod::edit');
+        $hashedId = Crypt::decrypt($id);
+
+        $qualification = LecturerQualification::findorFail($hashedId);
+        $qualification->qualification_status = 2;
+        $qualification->save();
+
+        $remark = new QualificationRemarks;
+        $remark->qualification_id = $hashedId;
+        $remark->remarks = $request->reason;
+        $remark->save();
+
+        return redirect()->back()->with('success', 'Lecturer qualification declined successfully');
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
+    public function viewLecturerTeachingArea($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $user = User::find($hashedId);
+
+        return view('cod::lecturers.teachingAreas')->with(['user' => $user]);
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
+    public function approveTeachingArea ($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $qualification = TeachingArea::findorFail($hashedId);
+        $qualification->status = 1;
+        $qualification->save();
+
+        return redirect()->back()->with('success', 'Lecturer qualification verified successfully');
     }
+
+    public function declineTeachingArea (Request $request, $id)
+    {
+        $hashedId = Crypt::decrypt($id);
+
+        $qualification = TeachingArea::findorFail($hashedId);
+        $qualification->status = 2;
+        $qualification->save();
+
+        $remark = new TeachingAreaRemarks;
+        $remark->teaching_id = $hashedId;
+        $remark->remarks = $request->reason;
+        $remark->save();
+
+        return redirect()->back()->with('success', 'Lecturer qualification declined successfully');
+    }
+
 }
