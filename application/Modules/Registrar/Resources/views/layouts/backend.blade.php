@@ -97,19 +97,19 @@
                           <i class="nav-main-link-icon si si-user"></i>
                           <span class="nav-main-link-name">Department</span>
                         </a>
-                      </li>        
+                      </li>
                       <li class="nav-main-item">
                           <a class="nav-main-link{{ request()->is('courses/showCourse') ? ' active' : '' }}" href="{{  route('courses.showCourse') }}">
                             <i class="nav-main-link-icon si si-layers"></i>
                               <span class="nav-main-link-name">Courses</span>
                           </a>
-                      </li>      
+                      </li>
                       <li class="nav-main-item">
                         <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showAttendance')}}">
                           <i class="nav-main-link-icon si si-layers"></i>
                           <span class="nav-main-link-name">Mode of Study</span>
                         </a>
-                      </li>    
+                      </li>
                     </ul>
                 </li>
                 <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
@@ -142,7 +142,7 @@
                             <span class="nav-main-link-name"> Unit Programs</span>
                           </a>
                         </li>
-    
+
                     </ul>
                 </li>
                 <li class="nav-main-item{{ request()->is('calender/*') ? ' open' : '' }}">
@@ -157,7 +157,7 @@
                         <span class="nav-main-link-name"> Events</span>
                       </a>
                     </li>
-    
+
                     <li class="nav-main-item">
                       <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showCalenderOfEvents')}}">
                         <i class="nav-main-link-icon si si-calendar"></i>
@@ -170,7 +170,7 @@
                           <span class="nav-main-link-name">Academic Years</span>
                       </a>
                   </li>
-    
+
                   </ul>
                 </li>
                 <li class="nav-main-item{{ request()->is('semFee/*') ? ' open' : '' }}">
@@ -191,7 +191,7 @@
                         <span class="nav-main-link-name"> Voteheads</span>
                       </a>
                     </li>
-    
+
                   </ul>
                 </li>
               </ul>
@@ -320,7 +320,7 @@
                     </li>
                 </ul>
             </li>
-              
+
           </ul>
         </div>
         <!-- END Side Navigation -->
@@ -357,7 +357,7 @@
           <!-- User Dropdown -->
           <div class="dropdown d-inline-block ms-2">
             <button type="button" class="btn btn-sm btn-alt-dark d-flex align-items-center" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <img class="rounded-circle" src="{{ asset('media/avatars/may.png') }}" alt="Header Avatar" style="width: 21px;">
+              <img class="rounded-circle" src="{{ asset('media/avatars/male.png') }}" alt="Header Avatar" style="width: 21px;">
               <span class="d-none d-sm-inline-block ms-2">
                   @php
                     $user = Auth::guard('user')->user();
@@ -371,7 +371,7 @@
             </button>
             <div class="dropdown-menu dropdown-menu-md dropdown-menu-end p-0 border-0" aria-labelledby="page-header-user-dropdown">
               <div class="p-3 text-center bg-body-dark border-bottom rounded-top">
-                <img class="img-avatar img-avatar48 img-avatar-thumb" src="{{ asset('media/avatars/may.png') }}" alt="">
+                <img class="img-avatar img-avatar48 img-avatar-thumb" src="{{ asset('media/avatars/male.png') }}" alt="">
                 <p class="mt-2 mb-0 fw-medium">
            {{-- {{ Auth::guard('user')->user()->name }}--}}
                     @if(Auth::guard('user')->check())

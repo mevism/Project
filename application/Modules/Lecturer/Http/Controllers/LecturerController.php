@@ -34,7 +34,7 @@ class LecturerController extends Controller
 
     public function viewworkload(){
 
-        $workloads = Workload::where('user_id', auth()->guard('user')->user()->id)->latest()->get()->groupBy('academic_year');
+        $workloads = Workload::where('user_id', auth()->guard('user')->user()->id)->where('status')->latest()->get();
 
         return view('lecturer::workload.viewworkload')->with(['workloads' => $workloads]);
 
@@ -113,8 +113,6 @@ class LecturerController extends Controller
     }
 
     public function teachingAreas(){
-
-
 
         $myUnits = TeachingArea::where('user_id', auth()->guard('user')->user()->id)->latest()->get();
 
@@ -195,9 +193,12 @@ class LecturerController extends Controller
 
     public function examination(){
 
-        $workloads = Workload::where('user_id', auth()->guard('user')->user()->id)->latest()->get()->groupBy('academic_year');
+        $workloads = Workload::where('user_id', auth()->guard('user')->user()->id)->where('status', 1)->latest()->get();
 
-        return view('lecturer::examination.index')->with(['workloads' => $workloads]);
+        $setting = ExamWeights::latest()->get();
+
+
+        return view('lecturer::examination.index')->with(['workloads' => $workloads, 'settings' => $setting]);
 
     }
 
@@ -240,7 +241,7 @@ class LecturerController extends Controller
 
         if (count($examMarks) == 0) {
 
-            $classList = StudentCourse::where('class_code', $class)->orderBy('student_id', 'asc')->get();
+           $classList = StudentCourse::where('class_code', $class)->orderBy('student_id', 'asc')->get();
 
             foreach ($classList as $student) {
 
@@ -290,6 +291,45 @@ class LecturerController extends Controller
 
 
         }else{
+
+            if ($request->filled('exam')) {
+
+                $selectedUnit = SemesterUnit::find($hashedUnit);
+                $selectedWorkload = Workload::findorFail($hashedId);
+
+                $request->validate([
+
+                    'exam' => 'required|numeric',
+                    'cat' => 'required|numeric',
+                    'assignment' => Rule::requiredIf($selectedUnit->assingment != null),
+                    'practical' => Rule::requiredIf($selectedUnit->practical != null)
+                ]);
+
+                if (ExamWeights::where('academic_year', $selectedWorkload->academic_year)->where('academic_semester', $selectedWorkload->academic_semester)->where('unit_code', $selectedUnit->unit_code)->exists()) {
+                    $settings = ExamWeights::where('academic_year', $selectedWorkload->academic_year)->where('academic_semester', $selectedWorkload->academic_semester)->where('unit_code', $selectedUnit->unit_code)->first();
+                    $settings->unit_code = $selectedUnit->unit_code;
+                    $settings->class_code = $class;
+                    $settings->academic_year = $selectedWorkload->academic_year;
+                    $settings->academic_semester = $selectedWorkload->academic_semester;
+                    $settings->cat = $request->cat;
+                    $settings->exam = $request->exam;
+                    $settings->assignment = $request->assignment;
+                    $settings->practical = $request->practical;
+                    $settings->save();
+
+                } else {
+                    $setting = new ExamWeights;
+                    $setting->unit_code = $selectedUnit->unit_code;
+                    $setting->class_code = $class;
+                    $setting->academic_year = $selectedWorkload->academic_year;
+                    $setting->academic_semester = $selectedWorkload->academic_semester;
+                    $setting->cat = $request->cat;
+                    $setting->exam = $request->exam;
+                    $setting->assignment = $request->assignment;
+                    $setting->practical = $request->practical;
+                    $setting->save();
+                }
+            }
 
             $students = new Collection;
 

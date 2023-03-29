@@ -81,7 +81,7 @@
                                 @endif
                             </td>
                             <td>
-                                @if($course->student->status == 1 && \Carbon\Carbon::parse($course->courseEntry->year_start)->addYears( explode(' ', $course->studentCourse->courseRequirements->course_duration)[0] )->format('M Y') > \Carbon\Carbon::now()->format('M Y'))
+                                @if($course->student->status == 1)
                                     <span class="text-success"> Active </span>
                                 @else
                                 <span class="text-danger">Inactive</span>
