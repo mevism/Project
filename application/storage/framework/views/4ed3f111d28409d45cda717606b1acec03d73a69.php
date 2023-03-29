@@ -1,5 +1,5 @@
 
-@extends('lecturer::layouts.backend')
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
 
@@ -12,7 +12,7 @@
 <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
 <script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
@@ -41,7 +41,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="d-flex justify-content-end m-2">
-                        <a class="btn btn-sm btn-alt-primary" data-toggle="click-ripple" href="{{ route('lecturer.addTeachingAreas') }}">Add Teaching Areas </a>
+                        <a class="btn btn-sm btn-alt-primary" data-toggle="click-ripple" href="<?php echo e(route('lecturer.addTeachingAreas')); ?>">Add Teaching Areas </a>
                     </div>
 
                     <table id="example" class="table table-responsive-sm table-bordered table-striped js-dataTable-responsive fs-sm">
@@ -55,47 +55,47 @@
 
                         </thead>
                         <tbody>
-                        @foreach($units as $key => $unit)
+                        <?php $__currentLoopData = $units; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $unit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
-                                <td>{{ ++$key }}</td>
-                                <td>{{ $unit->unit_code}}</td>
-                                <td>{{ $unit->teachingArea->unit_name}}</td>
+                                <td><?php echo e(++$key); ?></td>
+                                <td><?php echo e($unit->unit_code); ?></td>
+                                <td><?php echo e($unit->teachingArea->unit_name); ?></td>
                                 <td>
-                                    @if($unit->level == 1)
+                                    <?php if($unit->level == 1): ?>
                                         CERTIFICATE
-                                    @elseif($unit->level == 2)
+                                    <?php elseif($unit->level == 2): ?>
                                         DIPLOMA
-                                    @elseif($unit->level == 3)
+                                    <?php elseif($unit->level == 3): ?>
                                         BACHELORS
-                                    @else
+                                    <?php else: ?>
                                         POST GRADUATE
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
                                 <td>
-                                    @if($unit->status==0)
+                                    <?php if($unit->status==0): ?>
                                     <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>
-                                    @elseif($unit->status==1)
+                                    <?php elseif($unit->status==1): ?>
                                     <span class="badge bg-success"> <i class="fa fa-check"></i> Approved</span>
-                                    @elseif($unit->status==2)
+                                    <?php elseif($unit->status==2): ?>
                                     <span class="badge bg-danger"> <i class="fa fa-ban"></i> Declined</span>
                                     <span> 
-                                        <a class="link m-3" data-bs-toggle="modal" data-bs-target="#exampleModal-{{$unit->id}}"> Why? </a>
+                                        <a class="link m-3" data-bs-toggle="modal" data-bs-target="#exampleModal-<?php echo e($unit->id); ?>"> Why? </a>
                                         </span>
                                   
-                                    @endif 
+                                    <?php endif; ?> 
                                 </td>
                                 <td>
-                                    @if($unit->status==0)
-                                    <a class="btn btn-sm btn-alt-danger" href="{{route('lecturer.deleteTeachingArea',['id' => Crypt::encrypt($unit->id)] )}}">Drop</a>
-                                    @elseif($unit->status==1)
+                                    <?php if($unit->status==0): ?>
+                                    <a class="btn btn-sm btn-alt-danger" href="<?php echo e(route('lecturer.deleteTeachingArea',['id' => Crypt::encrypt($unit->id)] )); ?>">Drop</a>
+                                    <?php elseif($unit->status==1): ?>
                                     <a class="btn btn-sm btn-alt-success" disabled>Verified</a>
-                                    @elseif($unit->status==2)
-                                    <a class="btn btn-sm btn-alt-danger" href="{{route('lecturer.deleteTeachingArea',['id' => Crypt::encrypt($unit->id)] )}}">Drop</a>
-                                    @endif 
+                                    <?php elseif($unit->status==2): ?>
+                                    <a class="btn btn-sm btn-alt-danger" href="<?php echo e(route('lecturer.deleteTeachingArea',['id' => Crypt::encrypt($unit->id)] )); ?>">Drop</a>
+                                    <?php endif; ?> 
                                     
                                 </td>
                                 <!-- Modal -->
-                                <div class="modal fade" id="exampleModal-{{$unit->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="exampleModal-<?php echo e($unit->id); ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -103,23 +103,23 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            @foreach($unit->getTeachingAreaRemarks as $remark )
-                                            <p>{{\Carbon\Carbon::parse($remark->created_at)->format('d-M-y')}} - {{$remark->remarks}}</p>
-                                            @endforeach
+                                            <?php $__currentLoopData = $unit->getTeachingAreaRemarks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $remark): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <p><?php echo e(\Carbon\Carbon::parse($remark->created_at)->format('d-M-y')); ?> - <?php echo e($remark->remarks); ?></p>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         
                                         </div>
                                     </div>
                                     </div>
                                 </div>
                             </tr>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
 <script>
     $(document).ready(function() {
@@ -132,3 +132,5 @@
         } );
     } );
 </script>
+
+<?php echo $__env->make('lecturer::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\project\application\Modules/Lecturer\Resources/views/profile/teachingArea.blade.php ENDPATH**/ ?>

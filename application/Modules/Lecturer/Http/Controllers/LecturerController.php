@@ -11,6 +11,7 @@ use Modules\COD\Entities\SemesterUnit;
 use Modules\Examination\Entities\ExamMarks;
 use Modules\Lecturer\Entities\ExamWeights;
 use Modules\Lecturer\Entities\LecturerQualification;
+use Modules\Lecturer\Entities\QualificationRemarks;
 use Crypt;
 use Modules\Lecturer\Entities\TeachingArea;
 use Modules\Registrar\Entities\Courses;
@@ -42,8 +43,10 @@ class LecturerController extends Controller
 
     public function qualifications(){
 
+        $qualification = LecturerQualification::where('user_id', auth()->guard('user')->user()->id)->latest()->get();
 
-      $qualification = LecturerQualification::where('user_id', auth()->guard('user')->user()->id)->latest()->get();
+       
+
 
         return view('lecturer::profile.qualifications')->with ('qualifications', $qualification);
 
@@ -111,6 +114,12 @@ class LecturerController extends Controller
 
         return redirect()->route('lecturer.qualifications')->with('success', 'Deleted successfully');
     }
+
+    public function qualificationRemark (){
+       
+    
+    }
+
 
     public function teachingAreas(){
 

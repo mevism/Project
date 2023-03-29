@@ -1232,7 +1232,7 @@ class CODController extends Controller
         return redirect()->back()->with('success', 'Lecturer qualification verified successfully');
     }
 
-    public function declineQualification(Request $request, $id)
+    public function rejectQualification(Request $request, $id)
     {
         $hashedId = Crypt::decrypt($id);
 
