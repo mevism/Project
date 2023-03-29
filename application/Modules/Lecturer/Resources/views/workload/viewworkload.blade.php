@@ -51,7 +51,11 @@
                         <thead>
                             <th>#</th>
                             <th>Academic Year</th>
-                            <th>Action</th>
+                            <th>Academic Semester</th>
+                            <th>Class</th>
+                            <th>Unit code</th>
+                            <th>Unit name</th>
+                            <th>Class list</th>
                         </thead>
                         <tbody>
                         @php
@@ -60,9 +64,14 @@
                             @foreach($workloads as $year => $workload)
                                 <tr>
                                     <td> {{ ++$i }} </td>
-                                    <td> {{ $year }} </td>
+                                    <td> {{ $workload->academic_year }} </td>
+                                    <td> {{ $workload->academic_semester }} </td>
+                                    <td> {{ $workload->class_code }} </td>
+                                    <td> {{ $workload->workloadUnit->unit_code }} </td>
+                                    <td> {{ $workload->workloadUnit->unit_name }} </td>
                                     <td>
-                                       <a class="btn btn-sm btn-alt-secondary" href="{{ route('lecturer.yearlyWorkloads', ['id' => Crypt::encrypt($year)]) }}"> view </a>
+{{--                                       <a class="btn btn-sm btn-alt-secondary" href="{{ route('lecturer.yearlyWorkloads', ['id' => Crypt::encrypt($year)]) }}"> view </a>--}}
+                                       <a class="btn btn-sm btn-alt-secondary" href="#"> Download </a>
                                     </td>
                                 </tr>
                             @endforeach

@@ -504,44 +504,50 @@ class CODController extends Controller
             ->where('level_id', $student_fee->studentCourse->level)
             ->first();
 
+        if ($fees == null){
 
-        $proformaInvoice = 0;
+            return redirect()->back()->with('error', 'Oops! Course fee structure not found. Please contact the registrar');
+        }else {
 
-        //return $fees;
 
-        foreach ($fees->invoiceProforma as $votehead){
+            $proformaInvoice = 0;
 
-            $proformaInvoice += $votehead->semesterI;
+            //return $fees;
+
+            foreach ($fees->invoiceProforma as $votehead) {
+
+                $proformaInvoice += $votehead->semesterI;
+            }
+
+            $academic = Carbon::parse($student->courseStudent->courseEntry->year_start)->format('Y') . '/' . Carbon::parse($student->courseStudent->courseEntry->year_end)->format('Y');
+            $period = Carbon::parse($student->courseStudent->coursesIntake->intake_from)->format('M') . '/' . Carbon::parse($student->courseStudent->coursesIntake->intake_to)->format('M');
+
+
+            $signed = new Nominalroll;
+            $signed->student_id = $student->id;
+            $signed->reg_number = $student->reg_number;
+            $signed->class_code = $student->courseStudent->class_code;
+            $signed->year_study = 1;
+            $signed->semester_study = 1;
+            $signed->academic_year = $academic;
+            $signed->academic_semester = strtoupper($period);
+            $signed->pattern_id = 1;
+            $signed->registration = 1;
+            $signed->activation = 1;
+            $signed->save();
+
+            $invoice = new StudentInvoice;
+            $invoice->student_id = $student->id;
+            $invoice->reg_number = $student->reg_number;
+            $invoice->invoice_number = 'INV' . time();
+            $invoice->stage = '1.1';
+            $invoice->amount = $proformaInvoice;
+            $invoice->description = 'New Student Registration Invoice for 1.1 ' . 'Academic Year ' . $academic;
+            $invoice->save();
+
+
+            return redirect()->back()->with('success', 'Student admitted and invoiced successfully');
         }
-
-        $academic = Carbon::parse($student->courseStudent->courseEntry->year_start)->format('Y').'/'.Carbon::parse($student->courseStudent->courseEntry->year_end)->format('Y');
-       $period = Carbon::parse($student->courseStudent->coursesIntake->intake_from)->format('M').'/'.Carbon::parse($student->courseStudent->coursesIntake->intake_to)->format('M');
-
-
-        $signed = new Nominalroll;
-        $signed->student_id = $student->id;
-        $signed->reg_number = $student->reg_number;
-        $signed->class_code = $student->courseStudent->class_code;
-        $signed->year_study = 1;
-        $signed->semester_study = 1;
-        $signed->academic_year = $academic;
-        $signed->academic_semester = strtoupper($period );
-        $signed->pattern_id = 1;
-        $signed->registration = 1;
-        $signed->activation = 1;
-        $signed->save();
-
-        $invoice = new StudentInvoice;
-        $invoice->student_id = $student->id;
-        $invoice->reg_number = $student->reg_number;
-        $invoice->invoice_number = 'INV'.time();
-        $invoice->stage = '1.1';
-        $invoice->amount = $proformaInvoice;
-        $invoice->description = 'New Student Registration Invoice for 1.1 '.'Academic Year '.$academic;
-        $invoice->save();
-
-
-        return redirect()->back()->with('success', 'Student admitted and invoiced successfully');
 
     }
 

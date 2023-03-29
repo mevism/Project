@@ -349,10 +349,12 @@ class StudentController extends Controller
             ->first();
 
             $data = [];
+            $list = [];
 
             if($stage == null){
 
                 $currentStage = [];
+
             }else{
                 $currentStage = $stage->year_study.'.'.$stage->semester_study;
 
@@ -381,7 +383,7 @@ class StudentController extends Controller
                 }
             }
 
-        return view('student::academic.requestleave')->with(['data' => $data, 'stage' => $stage, 'event' => $event, 'dates' => $current_date]);
+        return view('student::academic.requestleave')->with(['data' => $data, 'stage' => $stage, 'event' => $event, 'dates' => $current_date, 'list' => $list]);
 
     }
 
@@ -673,6 +675,7 @@ class StudentController extends Controller
             ->where('registration', 1)
             ->where('activation', 1)
             ->latest()->first();
+        $list = [];
 
         if ($reg == null){
 
@@ -696,6 +699,7 @@ class StudentController extends Controller
 
                 $list[] = $class->semester;
             }
+
 
             $id_collection = collect($list);
             $this_key = $id_collection->search($current);
