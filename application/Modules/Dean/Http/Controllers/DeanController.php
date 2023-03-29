@@ -136,6 +136,7 @@ class DeanController extends Controller
         $submitApproval = ApproveWorkload::where('id', $hashedId)->first();
         $submitApproval->registrar_status = 0;
         $submitApproval->save();
+        $submitApproval->save();
 
         return redirect()->back()->with('success', 'Workload Approved Successfully');
     }
@@ -153,6 +154,7 @@ class DeanController extends Controller
             $updateLoad  =  Workload::find($workload->id);
             $updateLoad->status  =  0;
             $updateLoad->save();
+
 
            }
 
@@ -292,17 +294,17 @@ class DeanController extends Controller
 
             $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
 
-            // $pdfPath = 'Fees/' . 'Workload' . time() . ".pdf";
+            $pdfPath = 'Fees/' . 'Workload' . time() . ".pdf";
 
-            // $converter =  new OfficeConverter($docPath, 'Fees/');
-            // $converter->convertTo('Workload' . time() . ".pdf");
+            $converter =  new OfficeConverter($docPath, 'Fees/');
+            $converter->convertTo('Workload' . time() . ".pdf");
 
-            // if (file_exists($docPath)) {
-            //     unlink($docPath);
-            // }
+            if (file_exists($docPath)) {
+                unlink($docPath);
+            }
+        
 
-
-        return response()->download($docPath)->deleteFileAfterSend(true);
+        return response()->download($pdfPath)->deleteFileAfterSend(true);
 
     }
 
