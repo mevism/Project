@@ -76,13 +76,16 @@
                                 </td>
                                 <td>{{ $qualification->institution}}</td>
                                 <td>{{ $qualification->qualification}}</td>
-                                <td>
-                                    @if($qualification->qualification_status==0)
+                                <td nowrap>
+                                    @if($qualification->qualification_status == 0)
                                     <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>
                                     @elseif($qualification->qualification_status==1)
                                     <span class="badge bg-success"> <i class="fa fa-check"></i> Approved</span>
                                     @elseif($qualification->qualification_status==2)
-                                    <span class="badge bg-danger"> <i class="fa fa-ban"></i> Declined</span>
+                                    <span class="badge bg-danger" > <i class="fa fa-ban" ></i> Declined </span> 
+                                    <span> 
+                                    <a class="link m-3" data-bs-toggle="modal" data-bs-target="#exampleModal-{{$qualification->id}}"> Why? </a>
+                                    </span>
                                     @endif 
                                 </td>
                                 <td>
@@ -95,6 +98,28 @@
                                     <a class="btn btn-sm btn-alt-danger" href="{{ route('lecturer.deleteQualification', ['id' => Crypt::encrypt($qualification->id)] ) }}">Drop</a>
                                     @endif 
                                 </td>
+
+{{-- modal --}}
+
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal-{{$qualification->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h6 class="modal-title fs-5" id="exampleModalLabel">Qualification Remarks</h6>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            @foreach($qualification->getQualificationRemark as $remark )
+                                            <p>{{\Carbon\Carbon::parse($remark->created_at)->format('d-M-y')}} - {{$remark->remarks}}</p>
+                                            @endforeach
+                                        
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+
                             </tr>
                             @endforeach
                     </tbody>

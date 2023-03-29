@@ -1,4 +1,4 @@
-@extends('cod::layouts.backend')
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
 
@@ -23,23 +23,23 @@
     } );
 </script>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-1">
                     <h5 class="h6 fw-bold mb-0">
-                        {{ $user->title }} {{ $user->last_name.' '.$user->first_name }} QUALIFICATIONS
+                        <?php echo e($user->title); ?> <?php echo e($user->last_name.' '.$user->first_name); ?> TEACHING AREAS
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="javascript:void(0)">Qualifications</a>
+                            <a class="link-fx" href="javascript:void(0)">Teaching Areas</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            Lecturer Qualifications
+                            Lecturer Teaching Areas
                         </li>
                     </ol>
                 </nav>
@@ -56,43 +56,58 @@
                         <thead>
                         <th>#</th>
                         <th> LEVEL OF STUDY </th>
-                        <th> INSTITUTION NAME </th>
-                        <th> QUALIFICATION </th>
+                        <th> UNIT CODE </th>
+                        <th> UNIT NAME </th>
                         <th> status </th>
                         <th>Action</th>
                         </thead>
                         <tbody>
-                        @foreach($user->lecturerQualification as $key => $qualification)
+                        <?php $__currentLoopData = $user->teachingAreaUser; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $area): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
-                                <td> {{ ++$key }} </td>
-                                <td> {{ $qualification->level }} </td>
-                                <td> {{ $qualification->institution }} </td>
-                                <td> {{ $qualification->qualification }} </td>
+                                <td> <?php echo e(++$key); ?> </td>
+                                <td>
+                                    <?php if($area->level == 1): ?>
+                                        CERTIFICATE
+                                    <?php elseif($area->level == 2): ?>
+                                        DIPLOMA
+                                    <?php elseif($area->level == 3): ?>
+                                        BACHELORS
+                                    <?php elseif($area->level == 4): ?>
+                                        MASTERS
+                                    <?php else: ?>
+                                        PHD
+                                    <?php endif; ?>
+                                </td>
+                                <td> <?php echo e($area->unit_code); ?> </td>
+                                <td> <?php echo e($area->teachingArea->unit_name); ?> </td>
 
                                 <td>
-                                    @if($qualification->qualification_status == 0)
+                                    <?php if($area->status == 0): ?>
                                         <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending </span>
-                                    @elseif($qualification->qualification_status == 1)
+                                    <?php elseif($area->status == 1): ?>
                                         <span class="badge bg-success"> <i class="fa fa-check"></i> approved </span>
-                                    @else
+                                    <?php else: ?>
                                         <span class="badge bg-warning"> <i class="fa fa-ban"></i> declined </span>
-                                    @endif
+                                        <span> 
+                                        <a class="link m-3" data-bs-toggle="modal" data-bs-target="#exampleModal-<?php echo e($area->id); ?>"> Why? </a>
+                                        </span>
+                                    <?php endif; ?>
 
                                 </td>
                                 <td>
-                                    @if($qualification->qualification_status == 0)
-                                        <a class="btn btn-sm btn-alt-success" href="{{ route('department.approveQualification', ['id' => Crypt::encrypt($qualification->id)]) }}">Approve</a>
-                                        <a class="btn btn-sm btn-alt-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $qualification->id }}" >Decline</a>
-                                    @elseif($qualification->qualification_status == 1)
-                                        <a class="btn btn-sm btn-alt-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $qualification->id }}" >Decline</a>
-                                    @else
-                                        <a class="btn btn-sm btn-alt-success" href="{{ route('department.approveQualification', ['id' => Crypt::encrypt($qualification->id)]) }}">Approve</a>
-                                    @endif
+                                    <?php if($area->status == 0): ?>
+                                        <a class="btn btn-sm btn-alt-success" href="<?php echo e(route('department.approveTeachingArea', ['id' => Crypt::encrypt($area->id)])); ?>">Approve</a>
+                                        <a class="btn btn-sm btn-alt-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-<?php echo e($area->id); ?>" >Decline</a>
+                                    <?php elseif($area->status == 1): ?>
+                                        <a class="btn btn-sm btn-alt-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-<?php echo e($area->id); ?>" >Decline</a>
+                                    <?php else: ?>
+                                        <a class="btn btn-sm btn-alt-success" href="<?php echo e(route('department.approveTeachingArea', ['id' => Crypt::encrypt($area->id)])); ?>">Approve</a>
+                                    <?php endif; ?>
 
                                 </td>
 
                                 <!-- Modal -->
-                                <div class="modal fade" id="staticBackdrop-{{ $qualification->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal fade" id="staticBackdrop-<?php echo e($area->id); ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -102,8 +117,8 @@
                                             <div class="modal-body">
                                                 <div class="d-flex justify-content-center">
                                                     <div class="col-md-12">
-                                                        <form method="post" action="{{ route('department.rejectQualification', ['id' => Crypt::encrypt($qualification->id)]) }}">
-                                                            @csrf
+                                                        <form method="post" action="<?php echo e(route('department.declineTeachingArea', ['id' => Crypt::encrypt($area->id)])); ?>">
+                                                            <?php echo csrf_field(); ?>
                                                             <div class="mb-4 form-floating">
                                                                 <textarea name="reason" class="form-control" placeholder="hello" rows="5" style="min-height: 150px !important;"></textarea>
                                                                 <label>Why are you rejecting this qualification</label>
@@ -119,11 +134,13 @@
                                     </div>
                                 </div>
                             </tr>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('cod::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\project\application\Modules/COD\Resources/views/lecturers/teachingAreas.blade.php ENDPATH**/ ?>

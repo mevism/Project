@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('user_id');
             $table->string('unit_code');
             $table->string('level');
-            $table->integer('teachingAreas_status');
+            $table->integer('status');
             $table->timestamps();
             $table->softDeletes();
         });

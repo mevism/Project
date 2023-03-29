@@ -104,4 +104,5 @@ class User extends Authenticatable
     public function lecturerQualification(){
         return $this->hasMany(LecturerQualification::class, 'user_id', 'id');
     }
+   
 }

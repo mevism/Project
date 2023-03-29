@@ -10,6 +10,10 @@ class LecturerQualification extends Model
     use HasFactory;
 
     protected $fillable = [];
+
+    public function getQualificationRemark(){
+        return $this->hasMany(QualificationRemarks::class, 'qualification_id', 'id');
+     }
     
     protected static function newFactory()
     {

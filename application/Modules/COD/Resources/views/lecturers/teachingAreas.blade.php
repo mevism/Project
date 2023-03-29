@@ -88,7 +88,7 @@
                                         <span class="badge bg-success"> <i class="fa fa-check"></i> approved </span>
                                     @else
                                         <span class="badge bg-warning"> <i class="fa fa-ban"></i> declined </span>
-                                    @endif
+                                          @endif
 
                                 </td>
                                 <td>
