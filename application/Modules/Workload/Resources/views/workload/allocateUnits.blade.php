@@ -30,7 +30,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-1">
                     <h5 class="h6 fw-bold mb-0">
-                        SEMESTER WORKLOADSbj
+                        SEMESTER WORKLOADS
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -72,27 +72,32 @@
                                 <td nowrap="">
                                     {{-- {{ $unit}} --}}
                                     @if($unit->allocateUnit == null)
-                                        @foreach($unit->unitTeacher as $key => $lecturer)
-                                            <div class="row mb-1">
-                                                <div class="col col-md-8">
-                                                    {{ ++$key }}. {{ $lecturer->userTeachingArea->title}} {{ $lecturer->userTeachingArea->last_name}} {{ $lecturer->userTeachingArea->first_name}} {{ $lecturer->userTeachingArea->middle_name}}
+                                        @php $loaded = $unit->unitTeacher()->where('status', 1)->get(); @endphp
+                                        @if(count($loaded) < 1)
+                                              No Unit Lecturer
+                                        @else
+                                            @foreach($unit->unitTeacher()->where('status', 1)->get() as $key => $lecturer)
+                                                <div class="row mb-1">
+                                                    <div class="col col-md-8">
+                                                        {{ ++$key }}. {{ $lecturer->userTeachingArea->title}} {{ $lecturer->userTeachingArea->last_name}} {{ $lecturer->userTeachingArea->first_name}} {{ $lecturer->userTeachingArea->middle_name}}
+                                                    </div>
+                                                    <div class="col col-md-4">
+                                                        <a class="btn btn-sm btn-outline-success" href="{{ route('department.allocateUnit', ['staff_id' =>  Crypt::encrypt($lecturer->userTeachingArea->id), 'unit_id' => Crypt::encrypt($unit->id)]) }}">Allocate </a>
+                                                    </div>
                                                 </div>
-                                                <div class="col col-md-4">
-                                                    <a class="btn btn-sm btn-outline-success" href="{{ route('department.allocateUnit', ['staff_id' =>  Crypt::encrypt($lecturer->userTeachingArea->id), 'unit_id' => Crypt::encrypt($unit->id)]) }}">Allocate </a>
-                                                </div>
-                                            </div>
-                                        @endforeach
+                                            @endforeach
+                                        @endif
                                     @else
                                         <div class="row mb-1">
                                             <div class="col col-md-8">
                                                  {{ $unit->allocateUnit->userAllocation->last_name }} {{ $unit->allocateUnit->userAllocation->first_name }} {{ $unit->allocateUnit->userAllocation->middle_name }}
                                                 ( {{ $unit->allocateUnit->userAllocation->placedUser->first()->employment_terms }} )
                                             </div>
-                                            {{-- @if() --}}
                                             <div class="col col-md-4">
+                                                @if($unit->allocateUnit->workload_approval_id === 0 || $unit->allocateUnit->status == 2)
                                                 <a class="btn btn-sm btn-outline-danger" href="{{ route('department.deleteWorkload', ['id' => Crypt::encrypt($unit->allocateUnit->unit_id)]) }}">Revoke </a>
+                                                @endif
                                             </div>
-                                            {{-- @endif --}}
                                         </div>
                                     @endif
                                 </td>

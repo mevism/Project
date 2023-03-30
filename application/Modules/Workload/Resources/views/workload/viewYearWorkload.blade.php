@@ -66,23 +66,30 @@
                                     {{ $semester }}
                                 </td>
                                 <td>
-                                    @if ($workload->first()->workload_approval_id === null)
-                                        
-                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewSemesterWorkload', ['year' => Crypt::encrypt($year), 'semester' => Crypt::encrypt($semester)]) }}">View </a>
+                                    @if ($workload->first()->workload_approval_id === 0)
+
+                                    <a class="btn btn-sm btn-outline-info" href="{{ route('department.viewSemesterWorkload', ['year' => Crypt::encrypt($year), 'semester' => Crypt::encrypt($semester)]) }}">View </a>
 
                                     <a class="btn btn-sm btn-outline-success" href="{{ route('department.submitWorkload' ,['year' => Crypt::encrypt($year), 'id' => Crypt::encrypt($semester)]) }}">Submit </a>
-                                    
-                                    @elseif($workload->first()->workload_approval_id != null && $workload->first()->status === null)
-                                    <a class="btn btn-outline-info btn-sm" href=""> Processing </a>
 
-                                    @elseif($workload->first()->workload_approval_id != null &&  $workload->first()->status === 0)   
-                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewSemesterWorkload', ['year' => Crypt::encrypt($year), 'semester' => Crypt::encrypt($semester)]) }}">Review </a>
+                                        <a class="btn btn-sm btn-outline-secondary">Download</a>
 
-                                    <a class="btn btn-sm btn-outline-success" href="{{ route('department.resubmitWorkload' ,['year' => Crypt::encrypt($year), 'id' => Crypt::encrypt($semester)]) }}">Resubmit </a>
-                                    @elseif($workload->first()->workload_approval_id != null &&  $workload->first()->status === 1)   
-                                    <a class="btn btn-outline-info btn-sm" href=""> Published </a>
+                                    @elseif($workload->first()->workload_approval_id > 0 && $workload->first()->status === 0)
+                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewSemesterWorkload', ['year' => Crypt::encrypt($year), 'semester' => Crypt::encrypt($semester)]) }}">View </a>
+                                    <a class="btn btn-outline-info btn-sm" href="" disabled=""> Processing </a>
+                                        <a class="btn btn-sm btn-outline-secondary">Download</a>
 
-                                    @endif 
+                                    @elseif($workload->first()->workload_approval_id > 0 &&  $workload->first()->status === 2)
+                                    <a class="btn btn-sm btn-outline-info" href="{{ route('department.viewSemesterWorkload', ['year' => Crypt::encrypt($year), 'semester' => Crypt::encrypt($semester)]) }}">Review </a>
+                                    <a class="btn btn-sm btn-outline-success" href="{{ route('department.submitWorkload' ,['year' => Crypt::encrypt($year), 'id' => Crypt::encrypt($semester)]) }}">Resubmit </a>
+                                        <a class="btn btn-sm btn-outline-secondary">Download</a>
+                                    @elseif($workload->first()->workload_approval_id > 0 &&  $workload->first()->status === 1)
+                                    <a class="btn btn-sm btn-outline-info" href="{{ route('department.viewSemesterWorkload', ['year' => Crypt::encrypt($year), 'semester' => Crypt::encrypt($semester)]) }}">View </a>
+                                    <a class="btn btn-outline-success btn-sm" disabled="" href=""> Published </a>
+                                        <a class="btn btn-sm btn-outline-secondary">Download</a>
+
+
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

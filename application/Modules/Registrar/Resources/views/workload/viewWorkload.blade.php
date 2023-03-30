@@ -66,7 +66,7 @@
                                 <th>unit name</th>
                                 <th>level</th>
                             </thead>
-                            <tbody>                               
+                            <tbody>
 
                                 @foreach($workloads as $lec => $workload)
                                 {{-- {{ $lec }} --}}
@@ -87,7 +87,13 @@
                                              @endforeach
                                         </td>
                                         <td>
-                                            BTIT, MsIT, PhD
+                                            @foreach($lecturers as $lecturer)
+                                                @if($lecturer->id == $lec)
+                                                    @foreach( $lecturer->lecturerQualfs()->where('status', 1)->get() as $qualification)
+                                                        <p>{{ $qualification->qualification }}</p>
+                                                    @endforeach
+                                                @endif
+                                            @endforeach
                                         </td>
                                         <td>
                                             @foreach($lecturers as $lecturer)
@@ -103,15 +109,39 @@
                                                 <p>{{ $class->class_code }}</p>
                                             @endforeach
                                         </td>
-        
+
                                         <td>
-                                            @foreach($workload as $class)
-                                                <p>FT</p>
+                                            @php  $userLoad = $workload->count();  @endphp
+                                            @foreach ($lecturers as $lecturer)
+                                                @if ($lecturer->id === $lec)
+                                                    @php $staff = $lecturer; @endphp
+
+                                                    @if ($staff->placedUser->first()->employment_terms == 'FT')
+                                                        @for ($i = 0; $i < $userLoad; ++$i)
+                                                            @if ($i < 3)
+                                                                @php $load = 'FT'; @endphp
+                                                                <p>{{ $load }}</p>
+                                                            @else
+                                                                @php $load = 'PT'; @endphp
+                                                                <p>{{ $load }}</p>
+                                                            @endif
+                                                        @endfor
+
+                                                    @else
+                                                        @for ($i = 0; $i < $userLoad; ++$i)
+                                                            @if ($i < $userLoad)
+                                                                @php $load = 'PT'; @endphp
+                                                                <p>{{ $load }}</p>
+                                                            @endif
+                                                        @endfor
+
+                                                    @endif
+                                                @endif
                                             @endforeach
                                         </td>
                                         <td>
                                             @foreach($workload as $class)
-                                                <p>50</p>
+                                                <p>{{ $class->classWorkload->studentClass->count() }}</p>
                                             @endforeach
                                         </td>
                                         <td nowrap="">
@@ -126,10 +156,10 @@
                                         </td>
                                         <td>
                                             @foreach($workload as $class)
-                                                <p>4</p>
+                                                <p>{{ $class->classWorkload->classCourse->level }}</p>
                                             @endforeach
                                         </td>
-                                    </tr>                               
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>

@@ -144,14 +144,12 @@ class DeanController extends Controller
 
         $hashedId = Crypt::decrypt($id);
 
-        $revert        =      ApproveWorkload::where('id', $hashedId)->where('dean_status', '>',  1)->latest()->first();
-
         $workloads = Workload::where('workload_approval_id', $hashedId)->get();
 
         foreach($workloads  as  $workload){
 
             $updateLoad  =  Workload::find($workload->id);
-            $updateLoad->status  =  0;
+            $updateLoad->status  =  2;
             $updateLoad->save();
 
            }
@@ -218,7 +216,7 @@ class DeanController extends Controller
              foreach ($lecturers as $lecturer){
                  if ($lecturer->id === $user_id){
                      $staff = $lecturer;
-                     foreach ($staff->lecturerQualfs as $qualification){
+                     foreach ($staff->lecturerQualfs()->where('status', 1)->get() as $qualification){
                          $qualifications[] = $qualification->qualification;
                      }
                      foreach ($staff->roles as $role){
@@ -295,17 +293,17 @@ class DeanController extends Controller
 
             $pdfPath = 'Fees/' . 'Workload' . time() . ".pdf";
 
-            $converter =  new OfficeConverter($docPath, 'Fees/');
-            $converter->convertTo('Workload' . time() . ".pdf");
+//            $converter =  new OfficeConverter($docPath, 'Fees/');
+//            $converter->convertTo('Workload' . time() . ".pdf");
 
-            if (file_exists($docPath)) {
-                unlink($docPath);
-            }
+//            if (file_exists($docPath)) {
+//                unlink($docPath);
+//            }
 
 
-        return response()->download($pdfPath)->deleteFileAfterSend(true);
+//        return response()->download($pdfPath)->deleteFileAfterSend(true);
 
-        // return response()->download($docPath)->deleteFileAfterSend(true);
+         return response()->download($docPath)->deleteFileAfterSend(true);
 
     }
 

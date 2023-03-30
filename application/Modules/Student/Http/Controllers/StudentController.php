@@ -906,16 +906,16 @@ class StudentController extends Controller
         $table = new Table(array('unit' => TblWidth::TWIP));
 
         $table->addRow();
-        $table->addCell(7600, ['borderSize' => 1])->addText('Student Name : '.strtoupper($student->sname." ".$student->mname." ".$student->fname), ['bold' => true, 'name' => 'Book Antiqua']);
-        $table->addCell(4000, ['borderSize' => 1])->addText('Prited On : '.date('d-M-Y'), ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 3])->addText('Student Name : '.strtoupper($student->sname." ".$student->mname." ".$student->fname), ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 2])->addText('Prited On : '.date('d-M-Y'), ['bold' => true, 'name' => 'Book Antiqua']);
 
         $table->addRow();
-        $table->addCell(7600, ['borderSize' => 1])->addText('Registration Number : '. $student->reg_number, ['bold' => true, 'name' => 'Book Antiqua']);
-        $table->addCell(4000, ['borderSize' => 1])->addText('Class Code : '.$student->courseStudent->class_code, ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 3])->addText('Registration Number : '. $student->reg_number, ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 2])->addText('Class Code : '.$student->courseStudent->class_code, ['bold' => true, 'name' => 'Book Antiqua']);
 
         $table->addRow();
-        $table->addCell(7600, ['borderSize' => 1])->addText('Course Name : '.$student->courseStudent->studentCourse->course_name, ['bold' => true, 'name' => 'Book Antiqua']);
-        $table->addCell(4000, ['borderSize' => 1])->addText();
+        $table->addCell(11600, ['borderSize' => 1, 'gridSpan' => 5])->addText('Course Name : '.$student->courseStudent->studentCourse->course_name, ['bold' => true, 'name' => 'Book Antiqua']);
+
 
         $table->addRow();
         $table->addCell(1600, ['borderSize' => 1])->addText('Date', ['bold' => true, 'name' => 'Book Antiqua']);
@@ -946,25 +946,22 @@ class StudentController extends Controller
         $my_template = new TemplateProcessor(storage_path('fee_statement.docx'));
 
         $my_template->setComplexBlock('{table}', $table);
-        $my_template->setValue('total', number_format($total, 2));
-        $my_template->setValue('settled', number_format($settled, 2));
-        $my_template->setValue('balance', number_format($balance, 2));
         $my_template->setImageValue('qr', array('path' => 'QrCodes/'.$image, 'width' => 80, 'height' => 80, 'ratio' => true));
         $docPath = 'Fees/'.preg_replace('~/~', '', $student->reg_number).".docx";
         $my_template->saveAs($docPath);
 
         $pdfPath = 'Fees/'.preg_replace('~/~', '', $student->reg_number).".pdf";
 
-        $convert = new OfficeConverter('Fees/'.preg_replace('~/~', '', $student->reg_number).".docx", 'Fee/');
-        $convert->convertTo(preg_replace('~/~', '', $student->reg_number).".pdf");
+//        $convert = new OfficeConverter('Fees/'.preg_replace('~/~', '', $student->reg_number).".docx", 'Fee/');
+//        $convert->convertTo(preg_replace('~/~', '', $student->reg_number).".pdf");
 
-        if(file_exists($docPath)){
-            unlink($docPath);
-        }
+//        if(file_exists($docPath)){
+//            unlink($docPath);
+//        }
 
         unlink('QrCodes/'.$image);
 
-         return response()->download($pdfPath)->deleteFileAfterSend(true);
+         return response()->download($docPath)->deleteFileAfterSend(true);
     }
 
     /**
