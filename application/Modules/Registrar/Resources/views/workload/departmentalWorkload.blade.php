@@ -83,6 +83,7 @@
                                             </td>
                                             <td nowrap>
                                                 <a class="btn btn-sm btn-outline-secondary" href="{{route('courses.viewWorkload',['id' => Crypt::encrypt($workload->id)]) }}">view</a>
+                                                <a class="btn btn-outline-primary btn-sm" href="{{route('courses.printWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Download </a>
     
                                                     @if($workload->registrar_status == null)
                                                         <a class="btn btn-outline-success btn-sm" href="{{route('courses.approveWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Approve  </a>
@@ -97,6 +98,7 @@
                                                         <a class="btn btn-outline-info btn-sm" href=""> Processing 
                                                          </a>
                                                         @else
+
                                                         <a class="btn btn-outline-dark btn-sm" href="">  Published                                                         
                                                          </a>
                                                            
