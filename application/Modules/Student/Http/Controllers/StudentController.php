@@ -349,12 +349,10 @@ class StudentController extends Controller
             ->first();
 
             $data = [];
-            $list = [];
 
             if($stage == null){
 
                 $currentStage = [];
-
             }else{
                 $currentStage = $stage->year_study.'.'.$stage->semester_study;
 
@@ -383,7 +381,7 @@ class StudentController extends Controller
                 }
             }
 
-        return view('student::academic.requestleave')->with(['data' => $data, 'stage' => $stage, 'event' => $event, 'dates' => $current_date, 'list' => $list]);
+        return view('student::academic.requestleave')->with(['data' => $data, 'stage' => $stage, 'event' => $event, 'dates' => $current_date]);
 
     }
 
@@ -675,7 +673,6 @@ class StudentController extends Controller
             ->where('registration', 1)
             ->where('activation', 1)
             ->latest()->first();
-        $list = [];
 
         if ($reg == null){
 
@@ -699,7 +696,6 @@ class StudentController extends Controller
 
                 $list[] = $class->semester;
             }
-
 
             $id_collection = collect($list);
             $this_key = $id_collection->search($current);
@@ -908,22 +904,47 @@ class StudentController extends Controller
         \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
 
         $table = new Table(array('unit' => TblWidth::TWIP));
+
+        $table->addRow();
+        $table->addCell(7600, ['borderSize' => 1])->addText('Student Name : '.strtoupper($student->sname." ".$student->mname." ".$student->fname), ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(4000, ['borderSize' => 1])->addText('Prited On : '.date('d-M-Y'), ['bold' => true, 'name' => 'Book Antiqua']);
+
+        $table->addRow();
+        $table->addCell(7600, ['borderSize' => 1])->addText('Registration Number : '. $student->reg_number, ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(4000, ['borderSize' => 1])->addText('Class Code : '.$student->courseStudent->class_code, ['bold' => true, 'name' => 'Book Antiqua']);
+
+        $table->addRow();
+        $table->addCell(7600, ['borderSize' => 1])->addText('Course Name : '.$student->courseStudent->studentCourse->course_name, ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(4000, ['borderSize' => 1])->addText();
+
+        $table->addRow();
+        $table->addCell(1600, ['borderSize' => 1])->addText('Date', ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(5000, ['borderSize' => 1])->addText('Description', ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(2000, ['borderSize' => 1])->addText('Invoice Number', ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(1500, ['borderSize' => 1])->addText('Debit', ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(1500, ['borderSize' => 1])->addText('Credit', ['bold' => true, 'name' => 'Book Antiqua']);
+
         foreach ($statement as $detail) {
             $table->addRow();
-            $table->addCell(1750, ['borderSize' => 2])->addText(Carbon::parse($detail->created_at)->format('d-M-Y'));
-            $table->addCell(8800, ['borderSize' => 2])->addText($detail->description, 'Book Antiqua', 'none');
-            $table->addCell(1450, ['borderSize' => 2])->addText($detail->invoice_number);
-            $table->addCell(980, ['borderSize' => 2])->addText(number_format($detail->amount, 2));
-            $table->addCell(980, ['borderSize' => 2])->addText(number_format($detail->deposit, 2));
+            $table->addCell(1600, ['borderSize' => 1])->addText(Carbon::parse($detail->created_at)->format('d-M-Y'));
+            $table->addCell(5000, ['borderSize' => 1])->addText($detail->description, ['name' => 'Book Antiqua']);
+            $table->addCell(2000, ['borderSize' => 1])->addText($detail->invoice_number);
+            $table->addCell(1500, ['borderSize' => 1])->addText(number_format($detail->amount, 2));
+            $table->addCell(1500, ['borderSize' => 1])->addText(number_format($detail->deposit, 2));
         }
+
+        $table->addRow();
+        $table->addCell(7600, ['gridSpan' => 3])->addText();
+        $table->addCell(1500)->addText( number_format($total, 2), ['underline' => 'single', 'bold' => true]);
+        $table->addCell(1500)->addText( number_format($settled, 2), ['underline' => 'single', 'bold' => true]);
+
+        $table->addRow();
+        $table->addCell(7600, ['gridSpan' => 3])->addText();
+        $table->addCell(3000, ['gridSpan' => 2])->addText('Balance : '.number_format($balance, 2), ['underline' => 'single', 'bold' => true]);
+
 
         $my_template = new TemplateProcessor(storage_path('fee_statement.docx'));
 
-        $my_template->setValue('name', strtoupper($student->sname." ".$student->mname." ".$student->fname));
-        $my_template->setValue('date', date('d M Y'));
-        $my_template->setValue('reg_number', $student->reg_number);
-        $my_template->setValue('class_code', $student->courseStudent->class_code);
-        $my_template->setValue('course', $student->courseStudent->studentCourse->course_name);
         $my_template->setComplexBlock('{table}', $table);
         $my_template->setValue('total', number_format($total, 2));
         $my_template->setValue('settled', number_format($settled, 2));
@@ -943,7 +964,7 @@ class StudentController extends Controller
 
         unlink('QrCodes/'.$image);
 
-         return response()->download($docPath)->deleteFileAfterSend(true);
+         return response()->download($pdfPath)->deleteFileAfterSend(true);
     }
 
     /**
