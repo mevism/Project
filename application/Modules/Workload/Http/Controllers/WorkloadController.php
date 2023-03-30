@@ -118,7 +118,7 @@ class WorkloadController extends Controller
                             ->where('academic_semester', $class->period)
                             ->count();
 
-       
+
 
         if ($user->employment_terms == 'PT') {
             if ($workloads < 5) {
@@ -153,13 +153,11 @@ class WorkloadController extends Controller
             return redirect()->back()->with('success', 'Unit allocation successful');
         }
 
-                // $workload->save();
-
                 return redirect()->back()->with('success', 'Unit allocation successful');
             }
-        
-        
-  
+
+
+
 
     public function viewWorkload()
     {
@@ -258,6 +256,7 @@ class WorkloadController extends Controller
 
                 $newId   =   Workload::find($workload->id);
                 $newId->workload_approval_id  =   $ApproveWorkload->id;
+                $newId->status = 0;
                 $newId->save();
             }
         } else {
@@ -279,70 +278,70 @@ class WorkloadController extends Controller
 
         return redirect()->back()->with('success', 'Workload Submitted Successfully');
     }
-    public function resubmitWorkload($id, $year)
-    {
-
-        $hashedId   =   Crypt::decrypt($id);
-
-        $hashedYear   =   Crypt::decrypt($year);
-
-        $deptId = auth()->guard('user')->user()->employmentDepartment->first()->id;
-
-        $departments   =   Department::where('division_id', 1)->get();
-
-        foreach ($departments as $department) {
-            if ($department->id == $deptId) {
-
-                $work[] = $department->id;
-            }
-        }
-        $workloads   =   Workload::where('academic_year', $hashedYear)
-            ->where('academic_semester', $hashedId)
-            ->where('department_id', $work)
-            ->get();
-
-        if (ApproveWorkload::where('academic_year', $hashedYear)->where('academic_semester', $hashedId)->where('department_id', $work)->exists()) {
-
-            $ApproveWorkload   =   ApproveWorkload::where('academic_year', $hashedYear)->where('academic_semester', $hashedId)->where('department_id', $work)->first();
-            $ApproveWorkload->academic_year  =  $hashedYear;
-            $ApproveWorkload->academic_semester  =  $hashedId;
-            $ApproveWorkload->department_id  = implode($work);
-            $ApproveWorkload->dean_status  = 0;
-            $ApproveWorkload->dean_remarks  = null;
-            $ApproveWorkload->registrar_status  = null;
-            $ApproveWorkload->registrar_remarks  = null;
-            $ApproveWorkload->save();
-
-            foreach ($workloads as $workload) {
-
-                $newId   =   Workload::find($workload->id);
-                $newId->workload_approval_id  =   $ApproveWorkload->id;
-                $newId->status  =   null;
-                $newId->save();
-            }
-        } else {
-
-            $newWorkload   =  new  ApproveWorkload;
-            $newWorkload->academic_year  =  $hashedYear;
-            $newWorkload->academic_semester  =  $hashedId;
-            $newWorkload->department_id  = implode($work);
-            $newWorkload->dean_status  = 0;
-            $newWorkload->dean_remarks  = null;
-            $newWorkload->registrar_status  = null;
-            $newWorkload->registrar_remarks  = null;
-            $newWorkload->save();
-
-            foreach ($workloads as $workload) {
-
-                $newId   =   Workload::find($workload->id);
-                $newId->workload_approval_id  =   $newWorkload->id;
-                $newId->status  =   null;
-                $newId->save();
-            }
-        }
-
-        return redirect()->back()->with('success', 'Workload Resubmitted Successfully');
-    }
+//    public function resubmitWorkload($id, $year)
+//    {
+//
+//        $hashedId   =   Crypt::decrypt($id);
+//
+//        $hashedYear   =   Crypt::decrypt($year);
+//
+//        $deptId = auth()->guard('user')->user()->employmentDepartment->first()->id;
+//
+//        $departments   =   Department::where('division_id', 1)->get();
+//
+//        foreach ($departments as $department) {
+//            if ($department->id == $deptId) {
+//
+//                $work[] = $department->id;
+//            }
+//        }
+//        $workloads   =   Workload::where('academic_year', $hashedYear)
+//            ->where('academic_semester', $hashedId)
+//            ->where('department_id', $work)
+//            ->get();
+//
+//        if (ApproveWorkload::where('academic_year', $hashedYear)->where('academic_semester', $hashedId)->where('department_id', $work)->exists()) {
+//
+//            $ApproveWorkload   =   ApproveWorkload::where('academic_year', $hashedYear)->where('academic_semester', $hashedId)->where('department_id', $work)->first();
+//            $ApproveWorkload->academic_year  =  $hashedYear;
+//            $ApproveWorkload->academic_semester  =  $hashedId;
+//            $ApproveWorkload->department_id  = implode($work);
+//            $ApproveWorkload->dean_status  = 0;
+//            $ApproveWorkload->dean_remarks  = null;
+//            $ApproveWorkload->registrar_status  = null;
+//            $ApproveWorkload->registrar_remarks  = null;
+//            $ApproveWorkload->save();
+//
+//            foreach ($workloads as $workload) {
+//
+//                $newId   =   Workload::find($workload->id);
+//                $newId->workload_approval_id  =   $ApproveWorkload->id;
+//                $newId->status  =   null;
+//                $newId->save();
+//            }
+//        } else {
+//
+//            $newWorkload   =  new  ApproveWorkload;
+//            $newWorkload->academic_year  =  $hashedYear;
+//            $newWorkload->academic_semester  =  $hashedId;
+//            $newWorkload->department_id  = implode($work);
+//            $newWorkload->dean_status  = 0;
+//            $newWorkload->dean_remarks  = null;
+//            $newWorkload->registrar_status  = null;
+//            $newWorkload->registrar_remarks  = null;
+//            $newWorkload->save();
+//
+//            foreach ($workloads as $workload) {
+//
+//                $newId   =   Workload::find($workload->id);
+//                $newId->workload_approval_id  =   $newWorkload->id;
+//                $newId->status  =   null;
+//                $newId->save();
+//            }
+//        }
+//
+//        return redirect()->back()->with('success', 'Workload Resubmitted Successfully');
+//    }
 
     public function deleteWorkload($id)
     {

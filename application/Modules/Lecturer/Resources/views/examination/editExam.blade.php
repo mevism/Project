@@ -97,8 +97,10 @@
                 grade = 'C';
             }else if(data[i].total_mark >= 40){
                 grade = 'D';
-            }else {
+            }else if(data[i].total_mark >= 1) {
                 grade = 'E';
+            }else{
+                grade = '';
             }
 
             const tableData = [data[i].reg_number, data[i]['sname']+' '+data[i]['fname']+' '+data[i]['mname'], data[i].cat, data[i].assignment, data[i].practical, newExam, data[i].total_cat, data[i].total_exam, data[i].total_mark, grade, '1st ATTEMPT']
