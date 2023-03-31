@@ -122,28 +122,33 @@
                                                                                 <input type="number" class="form-control-sm form-control" @if($userSetting != null) value="{{ $userSetting->cat }}" @endif name="cat">
                                                                             </div>
                                                                         </div>
-                                                                        <div class="row mb-4">
-                                                                            <div class="col-md-5">
-                                                                                CAT2/Assignment Marks
+                                                                        @if($workload->workloadUnit->assignment != null)
+                                                                            <div class="row mb-4">
+                                                                                <div class="col-md-5">
+                                                                                    CAT2/Assignment Marks
+                                                                                </div>
+                                                                                <div class="col-md-2">
+                                                                                    : {{ $workload->workloadUnit->assignment }}
+                                                                                </div>
+                                                                                <div class="col-md-5">
+                                                                                    <input type="number" class="form-control-sm form-control" @if($userSetting != null) value="{{ $userSetting->assignment }}" @endif name="assignment">
+                                                                                </div>
                                                                             </div>
-                                                                            <div class="col-md-2">
-                                                                                : {{ $workload->workloadUnit->assignment }}
+                                                                        @endif
+
+                                                                        @if($workload->workloadUnit->practical != null)
+                                                                            <div class="row mb-4">
+                                                                                <div class="col-md-5">
+                                                                                    <p>CAT3/Practicals Marks</p>
+                                                                                </div>
+                                                                                <div class="col-md-2">
+                                                                                    : {{ $workload->workloadUnit->practical }}
+                                                                                </div>
+                                                                                <div class="col-md-5">
+                                                                                    <input type="number" class="form-control-sm form-control" @if($userSetting != null) value="{{ $userSetting->practical }}" @endif name="practical">
+                                                                                </div>
                                                                             </div>
-                                                                            <div class="col-md-5">
-                                                                                <input type="number" class="form-control-sm form-control" @if($userSetting != null) value="{{ $userSetting->assignment }}" @endif name="assignment">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row mb-4">
-                                                                            <div class="col-md-5">
-                                                                                <p>CAT3/Practicals Marks</p>
-                                                                            </div>
-                                                                            <div class="col-md-2">
-                                                                                : {{ $workload->workloadUnit->practical }}
-                                                                            </div>
-                                                                            <div class="col-md-5">
-                                                                                <input type="number" class="form-control-sm form-control" @if($userSetting != null) value="{{ $userSetting->practical }}" @endif name="practical">
-                                                                            </div>
-                                                                        </div>
+                                                                        @endif
                                                                     </div>
                                                                 </div>
                                                                 <div class="d-flex justify-content-center">
@@ -199,28 +204,32 @@
                                                                         <input type="number" class="form-control-sm form-control" value="{{ old('cat') }}" name="cat">
                                                                     </div>
                                                                 </div>
-                                                                <div class="row mb-4">
-                                                                    <div class="col-md-5">
-                                                                        CAT2/Assignment Marks
+                                                                @if($workload->workloadUnit->assignment != null)
+                                                                    <div class="row mb-4">
+                                                                        <div class="col-md-5">
+                                                                            CAT2/Assignment Marks
+                                                                        </div>
+                                                                        <div class="col-md-2">
+                                                                            : {{ $workload->workloadUnit->assignment }}
+                                                                        </div>
+                                                                        <div class="col-md-5">
+                                                                            <input type="number" class="form-control-sm form-control" value="{{ old('assignment') }}" name="assignment">
+                                                                        </div>
                                                                     </div>
-                                                                    <div class="col-md-2">
-                                                                        : {{ $workload->workloadUnit->assignment }}
+                                                                @endif
+                                                                @if($workload->workloadUnit->practical != null)
+                                                                    <div class="row mb-4">
+                                                                        <div class="col-md-5">
+                                                                            <p>CAT3/Practicals Marks</p>
+                                                                        </div>
+                                                                        <div class="col-md-2">
+                                                                            : {{ $workload->workloadUnit->practical }}
+                                                                        </div>
+                                                                        <div class="col-md-5">
+                                                                            <input type="number" class="form-control-sm form-control" value="{{ old('practical') }}" name="practical">
+                                                                        </div>
                                                                     </div>
-                                                                    <div class="col-md-5">
-                                                                        <input type="number" class="form-control-sm form-control" value="{{ old('assignment') }}" name="assignment">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row mb-4">
-                                                                    <div class="col-md-5">
-                                                                        <p>CAT3/Practicals Marks</p>
-                                                                    </div>
-                                                                    <div class="col-md-2">
-                                                                        : {{ $workload->workloadUnit->practical }}
-                                                                    </div>
-                                                                    <div class="col-md-5">
-                                                                        <input type="number" class="form-control-sm form-control" value="{{ old('practical') }}" name="practical">
-                                                                    </div>
-                                                                </div>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                         <div class="d-flex justify-content-center">
