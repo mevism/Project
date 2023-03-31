@@ -109,19 +109,21 @@
                                                     </a>
                                                         <a class="btn btn-outline-secondary btn-sm" href="{{route('dean.printWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Download </a>
 
-                                                    @elseif($workload->dean_status === 2 && $workload->workloadProcessed->first()->status === 2)
+                                                    @elseif($workload->dean_status === 2 && $workload->workloadProcessed->first()->status === 2 )
                                                     <a class="btn btn-outline-info btn-sm" href="{{route('dean.viewWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> view </a>
                                                     <a class="btn btn-outline-warning btn-sm" disabled=""> Reverted to COD </a>
-                                                        <a class="btn btn-outline-secondary btn-sm" href="{{route('dean.printWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Download </a>
+                                                    <a class="btn btn-outline-secondary btn-sm" href="{{route('dean.printWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Download </a>
+
+                                                    @elseif($workload->dean_status === 2 && $workload->registrar_status === 2 && $workload->workloadProcessed->first()->status === 2)
+                                                    <a class="btn btn-outline-info btn-sm" href="{{route('dean.viewWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> view </a>
+                                                    <a class="btn btn-outline-warning btn-sm" disabled=""> Reverted to COD </a>
+                                                    <a class="btn btn-outline-secondary btn-sm" href="{{route('dean.printWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Download </a>
+
                                                     @elseif($workload->dean_status === 1 && $workload->registrar_status === 2)
                                                     <a class="btn btn-outline-info btn-sm" href="{{route('dean.viewWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Review </a>
 
                                                     <a class="btn btn-outline-primary btn-sm" href="{{route('dean.revertWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Revert to COD
                                                     </a>
-
-                                                    {{-- @elseif($workload->dean_status === 1 && $workload->registrar_status === 2 &&   $workload->workloadProcessed->first()->status === 0)
-                                                    <a class="btn btn-outline-primary btn-sm" href=""> Reverted to COD
-                                                    </a> --}}
 
                                                     @elseif($workload->dean_status === 1 && $workload->registrar_status === 1 && $workload->status === 1)
                                                         @if($workload->workloadProcessed->first()->status === 0)
@@ -129,6 +131,8 @@
 
                                                         <a class="btn btn-outline-info btn-sm" href="{{route('dean.workloadPublished',['id' => Crypt::encrypt($workload->id)]) }}"> publish
                                                          </a>
+                                                    <a class="btn btn-outline-secondary btn-sm" href="{{route('dean.printWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Download </a>
+
                                                         @else
                                                         <a class="btn btn-outline-success btn-sm" disabled="">  Published </a>
                                                             <a class="btn btn-outline-secondary btn-sm" href="{{route('dean.viewWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> view </a>

@@ -142,20 +142,24 @@ class DeanController extends Controller
 
     public function revertWorkload($id){
 
-        $hashedId = Crypt::decrypt($id);
-
-        $workloads = Workload::where('workload_approval_id', $hashedId)->get();
-
-        foreach($workloads  as  $workload){
-
-            $updateLoad  =  Workload::find($workload->id);
-            $updateLoad->status  =  2;
-            $updateLoad->save();
-
-           }
-
-        return redirect()->back()->with('success', 'Workload Reverted to COD Successfully.');
-    }
+          $hashedId = Crypt::decrypt($id);
+  
+          $revert        =      ApproveWorkload::find($hashedId);
+          $revert->dean_status = 2;
+          $revert->save();
+  
+          $workloads = Workload::where('workload_approval_id', $hashedId)->get();
+  
+          foreach($workloads  as  $workload){
+  
+              $updateLoad  =  Workload::find($workload->id);
+              $updateLoad->status  =  2;
+              $updateLoad->save();
+  
+             }
+  
+          return redirect()->back()->with('success', 'Workload Reverted to COD Successfully.');
+      }
 
 
     public function printWorkload($id){

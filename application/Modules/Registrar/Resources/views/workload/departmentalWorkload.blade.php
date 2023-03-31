@@ -83,34 +83,40 @@
                                             </td>
                                             <td nowrap>
                                                 <a class="btn btn-sm btn-outline-secondary" href="{{route('courses.viewWorkload',['id' => Crypt::encrypt($workload->id)]) }}">view</a>
-                                                <a class="btn btn-outline-primary btn-sm" href="{{route('courses.printWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Download </a>
+                                                
     
                                                     @if($workload->registrar_status == null)
                                                         <a class="btn btn-outline-success btn-sm" href="{{route('courses.approveWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Approve  </a>
                                                         <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $workload->id }}"> Decline </a>
-                                                    {{-- @elseif($workload->dean_status === 1 &&  $workload->registrar_status === 1 &&    $workload->status === 1)
-                                                        <a class="btn btn-outline-info btn-sm" href=""> processing </a>
-                                                    @elseif($workload->workloadProcessed->first()->status === 1)
-                                                        
-                                                        <a class="btn btn-outline-dark btn-sm" href="">  Published  </a> --}}
+                                                        <a class="btn btn-outline-secondary btn-sm" href="{{route('courses.printWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Download </a>
+                                               
                                                         @elseif($workload->dean_status === 1 && $workload->registrar_status === 1 && $workload->status === 1)
                                                         @if($workload->workloadProcessed->first()->status === 0)
                                                         <a class="btn btn-outline-info btn-sm" href=""> Processing 
                                                          </a>
                                                         @else
 
-                                                        <a class="btn btn-outline-dark btn-sm" href="">  Published                                                         
+                                                        <a class="btn btn-outline-success btn-sm" href="">  Published                                                         
                                                          </a>
-                                                           
-                                                        @endif   
+                                                         <a class="btn btn-outline-secondary btn-sm" href="{{route('courses.printWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Download </a>
+                                                        @endif  
+                                                        
+                                                    @elseif($workload->workloadProcessed->first()->status === 2 && $workload->registrar_status === 2)
+                                                    <a class="btn btn-outline-info btn-sm" href="{{route('courses.viewWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> view </a>
+
+                                                    <a class="btn btn-outline-warning btn-sm" disabled> Reverted to Dean </a>
+
+                                                       <a class="btn btn-outline-secondary btn-sm" href="{{route('courses.printWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Download </a>
+
                                                     @elseif($workload->registrar_status == 1)
                                                             <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $workload->id }}"> Decline </a>
                                                            
                                                         @else
                                                             <a class="btn btn-outline-success btn-sm" href="{{route('courses.approveWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Approve </a>
 
-                                                            <a class="btn btn-outline-primary btn-sm" href=""> Revert Dean
+                                                            <a class="btn btn-outline-primary btn-sm" href="{{route('courses.revertWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Revert to Dean
                                                             </a>
+                                                            <a class="btn btn-outline-secondary btn-sm" href="{{route('courses.printWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Download </a>
                                                         
                                                     @endif
                                                 <div class="modal fade" id="staticBackdrop-{{ $workload->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
