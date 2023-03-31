@@ -45,7 +45,7 @@ class LecturerController extends Controller
 
         $qualification = LecturerQualification::where('user_id', auth()->guard('user')->user()->id)->latest()->get();
 
-       
+
 
 
         return view('lecturer::profile.qualifications')->with ('qualifications', $qualification);
@@ -116,8 +116,8 @@ class LecturerController extends Controller
     }
 
     public function qualificationRemark (){
-       
-    
+
+
     }
 
 
@@ -448,7 +448,7 @@ class LecturerController extends Controller
 
        public function myProfile(){
 
-            $qualifications = LecturerQualification::where ('user_id', auth()->guard('user')->user()->id)->where('qualification_status' ,1)->latest()->get();
+            $qualifications = LecturerQualification::where ('user_id', auth()->guard('user')->user()->id)->where('status' ,1)->latest()->get();
 
              return view('lecturer::profile.myprofile')->with('qualifications',$qualifications);
        }
