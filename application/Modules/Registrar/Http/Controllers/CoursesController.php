@@ -98,6 +98,23 @@ class CoursesController extends Controller
         return view('registrar::workload.schoolWorkload')->with(['year' => $hashedYear])->with(['schools'  =>  $schools]);
     }
 
+    public function revertWorkload($id){
+
+        $hashedId = Crypt::decrypt($id);
+
+        $workloads = Workload::where('workload_approval_id', $hashedId)->get();
+
+        foreach($workloads  as  $workload){
+
+            $updateLoad  =  Workload::find($workload->id);
+            $updateLoad->status  =  2;
+            $updateLoad->save();
+
+           }
+
+        return redirect()->back()->with('success', 'Workload Reverted to Dean Successfully.');
+    }
+
     public function departmentalWorkload($id, $year)
     {
 
