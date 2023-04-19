@@ -83,7 +83,7 @@
 
             table.push(tableData)
         }
-
+            console.log(table)
 
             const container = document.querySelector('#example');
             const save = document.querySelector('#save');
@@ -141,7 +141,9 @@
                             if (value <= weight.cat && value >= 0) {
                                 callback(true);
                             } else {
-                                callback(false);
+                                // callback(false);
+                                document.querySelector('#save').disabled = true;
+
                             }
                         }
                     },
@@ -243,8 +245,10 @@
                                     grade = 'C';
                                 }else if(total >= 40){
                                     grade = 'D';
-                                }else {
+                                }else if(total >= 1) {
                                     grade = 'E';
+                                }else{
+                                    grade = '';
                                 }
 
                                 // We want to programmatically update the table.

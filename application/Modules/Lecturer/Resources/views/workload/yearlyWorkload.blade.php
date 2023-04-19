@@ -58,10 +58,10 @@
                                 $i = 0;
                             @endphp
 
-                        @foreach($workloads as $semester => $workload)
+                        @foreach($workloads as $key => $workload)
                             <tr>
-                                <td>  {{ ++$i }} </td>
-                                <td> {{ $semester }} </td>
+                                <td>  {{ ++$key }} </td>
+                                <td> {{ $workload->academic_year }} </td>
                                 <td>
                                     <a class="btn btn-sm btn-alt-secondary" href="{{ route('lecturer.semesterWorkload', ['year' => Crypt::encrypt($year), 'semester' => Crypt::encrypt($semester)]) }}"> view </a>
                                 </td>

@@ -51,8 +51,8 @@
 
         <div class="block-content block-content-full">
             <div class="row">
-                <div class="col-12">
-                    <table id="example" class="table table-bordered table-responsive-sm table-striped table-vcenter js-dataTable-responsive fs-sm">
+                <div class="col-12 table-responsive">
+                    <table id="example" class="table table-bordered sm table-striped table-vcenter js-dataTable-responsive fs-sm">
                         <thead>
                         <th>#</th>
                         <th>Staff number </th>
@@ -61,16 +61,16 @@
                         <th>Role </th>
                         <th>Class Code</th>
                         <th>Load </th>
-                        <th>Stds</th>
+                        <th>Std</th>
                         <th>Unit Code</th>
                         <th>Unit Name</th>
                         <th>Level</th>
                         </thead>
                         <tbody>
                         @foreach ($workloads as $lec => $workload)
-                        
+
                             <tr>
-                                <td> 1 </td>
+                                <td> {{ $loop->iteration }} </td>
                                 <td>
                                     @foreach($lecturers as $lecturer)
                                         @if($lecturer->id == $lec)
@@ -86,7 +86,13 @@
                                     @endforeach
                                 </td>
                                 <td>
-                                    BTIT, MsIT, PhD
+                                    @foreach($lecturers as $lecturer)
+                                        @if($lecturer->id == $lec)
+                                            @foreach( $lecturer->lecturerQualfs()->where('status', 1)->get() as $qualification)
+                                                <p>{{ $qualification->qualification }}</p>
+                                            @endforeach
+                                        @endif
+                                    @endforeach
                                 </td>
                                 <td>
                                     @foreach($lecturers as $lecturer)
@@ -104,13 +110,37 @@
                                 </td>
 
                                 <td>
-                                    @foreach($workload as $class)
-                                        <p>FT</p>
+                                    @php  $userLoad = $workload->count();  @endphp
+                                    @foreach ($lecturers as $lecturer)
+                                        @if ($lecturer->id === $lec)
+                                            @php $staff = $lecturer; @endphp
+
+                                            @if ($staff->placedUser->first()->employment_terms == 'FT')
+                                                @for ($i = 0; $i < $userLoad; ++$i)
+                                                    @if ($i < 3)
+                                                        @php $load = 'FT'; @endphp
+                                                        <p>{{ $load }}</p>
+                                                    @else
+                                                        @php $load = 'PT'; @endphp
+                                                        <p>{{ $load }}</p>
+                                                    @endif
+                                                @endfor
+
+                                            @else
+                                                @for ($i = 0; $i < $userLoad; ++$i)
+                                                    @if ($i < $userLoad)
+                                                        @php $load = 'PT'; @endphp
+                                                        <p>{{ $load }}</p>
+                                                    @endif
+                                                @endfor
+
+                                            @endif
+                                        @endif
                                     @endforeach
                                 </td>
                                 <td>
                                     @foreach($workload as $class)
-                                        <p>50</p>
+                                        <p>{{ $class->classWorkload->studentClass->count() }}</p>
                                     @endforeach
                                 </td>
                                 <td nowrap="">
@@ -125,7 +155,7 @@
                                 </td>
                                 <td>
                                     @foreach($workload as $class)
-                                        <p>4</p>
+                                        <p>{{ $class->classWorkload->classCourse->level }}</p>
                                     @endforeach
                                 </td>
                             </tr>

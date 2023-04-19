@@ -61,7 +61,7 @@
                         @foreach($workloads as $semester => $workload)
                             <tr>
                                 <td>  {{ ++$i }} </td>
-                                <td> {{ $semester }} </td>
+                                <td> {{ $workload }} </td>
                                 <td>
                                     <a class="btn btn-sm btn-alt-secondary" href="{{ route('lecturer.semesterExamination', ['year' => Crypt::encrypt($year), 'semester' => Crypt::encrypt($semester)]) }}"> view </a>
                                 </td>

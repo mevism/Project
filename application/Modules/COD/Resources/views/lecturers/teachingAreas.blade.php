@@ -62,7 +62,7 @@
                         <th>Action</th>
                         </thead>
                         <tbody>
-                        @foreach($user->teachingAreaUser as $key => $area)
+                        @foreach($user->teachingAreaUser()->latest()->get() as $key => $area)
                             <tr>
                                 <td> {{ ++$key }} </td>
                                 <td>

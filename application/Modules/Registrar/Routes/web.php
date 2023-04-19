@@ -188,6 +188,8 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
     Route::get('/approve-workload/{id}', [CoursesController::class, 'approveWorkload'])->name('courses.approveWorkload');
     Route::post('/decline-workload/{id}', [CoursesController::class, 'declineWorkload'])->name('courses.declineWorkload');
     Route::get('/view-workload/{id}', [CoursesController::class, 'viewWorkload'])->name('courses.viewWorkload');
+    Route::get('/print-workload/{id}', [CoursesController::class, 'printWorkload'])->name('courses.printWorkload');
+    Route::get('/revert-workload/{id}', [CoursesController::class, 'revertWorkload'])->name('courses.revertWorkload');
 
 });
 

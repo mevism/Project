@@ -67,8 +67,8 @@
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
                 <i class="nav-main-link-icon si si-cursor"></i>
                 <span class="nav-main-link-name">
-                    @if(auth()->guard('user')->user()->role_id == 7)
-                        Examination
+                    @if(auth()->guard('user')->user()->hasRole('Exam Coordinator'))
+                        Exam Coordinator
                     @endif
                 </span>
 
@@ -127,31 +127,27 @@
           <!-- User Dropdown -->
           <div class="dropdown d-inline-block ms-2">
             <button type="button" class="btn btn-sm btn-alt-dark d-flex align-items-center" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <img class="rounded-circle" src="{{ asset('media/avatars/may.png') }}" alt="Header Avatar" style="width: 21px;">
+              <img class="rounded-circle" src="{{ asset('media/avatars/male.png') }}" alt="Header Avatar" style="width: 21px;">
               <span class="d-none d-sm-inline-block ms-2">
                   @if(Auth::guard('user')->check())
-                      {{ Auth::guard('user')->user()->name }}
-                  @else
-                      {{ Auth::user()->name }}
+                      {{ Auth::guard('user')->user()->last_name.' '.Auth::guard('user')->user()->first_name.' '.Auth::guard('user')->user()->middle_name }}
                   @endif
               </span>
               <i class="fa fa-fw fa-angle-down d-none d-sm-inline-block ms-1 mt-1"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-md dropdown-menu-end p-0 border-0" aria-labelledby="page-header-user-dropdown">
               <div class="p-3 text-center bg-body-dark border-bottom rounded-top">
-                <img class="img-avatar img-avatar48 img-avatar-thumb" src="{{ asset('media/avatars/may.png') }}" alt="">
+                <img class="img-avatar img-avatar48 img-avatar-thumb" src="{{ asset('media/avatars/male.png') }}" alt="">
                 <p class="mt-2 mb-0 fw-medium">
            {{-- {{ Auth::guard('user')->user()->name }}--}}
                     @if(Auth::guard('user')->check())
-                        {{ Auth::guard('user')->user()->name }}
-                    @else
-                        {{ Auth::user()->name }}
+                        {{ Auth::guard('user')->user()->last_name.' '.Auth::guard('user')->user()->first_name.' '.Auth::guard('user')->user()->middle_name }}
                     @endif </p>
                 <p class="mb-0 text-muted fs-sm fw-medium">
                     @if(Auth::guard('user')->check())
-                        {{ Auth::guard('user')->user()->role_id }}
-                    @else
-                        Applicant
+                        @if(auth()->guard('user')->user()->hasRole('Exam Coordinator'))
+                            Exam Coordinator
+                        @endif
                     @endif</p>
               </div>
               {{-- <div class="p-2">

@@ -30,5 +30,6 @@ Route::prefix('workload')->group(function() {
     Route::get('/delete-workload/{id}', [WorkloadController::class,'deleteWorkload'])->name('department.deleteWorkload');
     Route::get('/submit-workload/{id}/{year}', [WorkloadController::class,'submitWorkload'])->name('department.submitWorkload');
     Route::get('/resubmit-workload/{id}/{year}', [WorkloadController::class,'resubmitWorkload'])->name('department.resubmitWorkload');
+    Route::get('/print-workload/{id}/{year}', [WorkloadController::class,'printWorkload'])->name('department.printWorkload');
 
 });

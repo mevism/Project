@@ -10,7 +10,9 @@ class ExamWeights extends Model
     use HasFactory;
 
     protected $fillable = [];
-    
+
+//    public function
+
     protected static function newFactory()
     {
         return \Modules\Lecturer\Database\factories\ExamWeightsFactory::new();

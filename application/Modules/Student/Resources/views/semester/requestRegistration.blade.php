@@ -142,7 +142,7 @@
                             <legend class="float-none w-auto"><h6> NEXT SEMESTER DETAILS </h6></legend>
 
                             @if($reg == null)
-                                <p class="text-warning text-center">Oops! You are not a bona fide student</p>
+                                <p class="text-warning text-center h6">Oops! You are not a bona fide student</p>
                             @else
 
                                 @php
@@ -153,11 +153,18 @@
                                     $current = $reg->year_study.'.'.$reg->semester_study;
                                     @endphp
 
-                                @if($finished = $current)
+                                @if($imploded == null)
 
-                                    <h5 class="text-success fw-bold text-center">
+                                    <h6 class="text-info text-center">
+                                       Oops! Class Schedule not created. Please contact your COD.
+                                    </h6>
+
+                                @elseif($finished = $current)
+
+                                    <h6 class="text-success text-center">
                                         Congrats!!! You made it to the last semester of study.
-                                    </h5>
+                                    </h6>
+{{--                                @elseif()--}}
                                 @endif
 
                             @endif

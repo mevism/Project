@@ -119,6 +119,7 @@
                                                                                 <input type="number" class="form-control-sm form-control" @if($userSetting != null) value="{{ $userSetting->cat }}" @endif name="cat">
                                                                             </div>
                                                                         </div>
+
                                                                         <div class="row mb-4">
                                                                             <div class="col-md-5">
                                                                                 CAT2/Assignment Marks
@@ -141,6 +142,7 @@
                                                                                 <input type="number" class="form-control-sm form-control" @if($userSetting != null) value="{{ $userSetting->practical }}" @endif name="practical">
                                                                             </div>
                                                                         </div>
+
                                                                     </div>
                                                                 </div>
                                                                 <div class="d-flex justify-content-center">
@@ -162,7 +164,7 @@
                                         <div class="modal-dialog modal-md modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title fs-10" id="staticBackdropLabel">{{ $workload->workloadUnit->unit_code.' - '. $workload->workloadUnit->unit_name  }}</h5>
+                                                    <h5 class="modal-title fs-10" id="staticBackdropLabel">{{ $workload->workloadUnit->unit_code.' - '. $workload->workloadUnit->unit_name  }} </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
@@ -196,9 +198,10 @@
                                                                         <input type="number" class="form-control-sm form-control" value="{{ old('cat') }}" name="cat">
                                                                     </div>
                                                                 </div>
+                                                                @if($workload->workloadUnit->assignment != null)
                                                                 <div class="row mb-4">
                                                                     <div class="col-md-5">
-                                                                        CAT2/Assignment Marks
+                                                                        CAT2/Assignment Mark
                                                                     </div>
                                                                     <div class="col-md-2">
                                                                         : {{ $workload->workloadUnit->assignment }}
@@ -207,6 +210,7 @@
                                                                         <input type="number" class="form-control-sm form-control" value="{{ old('assignment') }}" name="assignment">
                                                                     </div>
                                                                 </div>
+                                                                @endif
                                                                 <div class="row mb-4">
                                                                     <div class="col-md-5">
                                                                         <p>CAT3/Practicals Marks</p>

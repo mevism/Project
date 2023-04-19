@@ -13,10 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('qualification_remarks', function (Blueprint $table) {
+        Schema::create('exam_workflows', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('qualification_id');
-            $table->longText('remarks');
+            $table->string('academic_year');
+            $table->string('academic_semester');
+            $table->integer('cod_status')->nullable();
+            $table->integer('dean_status')->nullable();
+            $table->integer('registrar_status')->nullable();
+            $table->integer('status')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('qualification_remarks');
+        Schema::dropIfExists('exam_workflows');
     }
 };
