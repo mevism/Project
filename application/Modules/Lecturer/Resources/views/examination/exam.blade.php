@@ -83,7 +83,7 @@
 
             table.push(tableData)
         }
-
+            console.log(table)
 
             const container = document.querySelector('#example');
             const save = document.querySelector('#save');

@@ -16,9 +16,9 @@
   $(document).ready(function() {
       $('#example').DataTable( {
           responsive: true,
-          order: [[2, 'asc']],
+          order: [[0, 'asc']],
           rowGroup: {
-              dataSrc: 2
+              dataSrc: 0
           }
       } );
   } );
@@ -26,13 +26,22 @@
 @section('content')
     <div class="bg-body-light">
         <div class="content content-full">
-            <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-                <div class="flex-grow-1">
+            <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
+                <div class="flex-grow-0">
                     <h5 class="h5 fw-bold mb-0">
-                       EXAMS
+                        Exams
                     </h5>
                 </div>
-                
+                <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-alt">
+                        <li class="breadcrumb-item">
+                            <a class="link-fx" href="javascript:void(0)">Exams</a>
+                        </li>
+                        <li class="breadcrumb-item" aria-current="page">
+                            All Exams
+                        </li>
+                    </ol>
+                </nav>
             </div>
         </div>
     </div>
@@ -44,30 +53,28 @@
              <div class="col-12">
                 <table id="example" class="table table-bordered table-striped table-vcenter js-dataTable-responsive fs-sm">
                     <thead>
-                        <th></th>
-                        <th>Name</th>
-                        <th>RegNo. </th>
-                        <th>Cat </th>
-                        <th>Exam </th>
-                        <th>Total </th>
-                        <th>Grade </th>
-                        <th>status</th>
+                        <th> # </th>
+                        <th> Academic Semester </th>
+                        <th> Academic Year </th>
+                        <th> Action </th>
                     </thead>
                     <tbody>
-                        @foreach ($data as $key => $item)
-                        <tr>
-                            <td style="text-transform: uppercase" >{{ ++$key }} </td>
-                            <td nowrap="" style="text-transform: uppercase"class="fw-semibold fs-sm"> {{ $item->student->sname  }} {{ $item->student->fname }} {{ $item->student->mname  }}</td>
-                            <td style="text-transform: uppercase"class="fw-semibold fs-sm">{{ $item->student->reg_number }}</td>
-                            <td style="text-transform: uppercase"class="fw-semibold fs-sm"><input type="text" id="cat" class="input form-control form-control-sm"></td>
-                            <td style="text-transform: uppercase"class="fw-semibold fs-sm"><input type="text" id="exam" class="input form-control form-control-sm"></td>
-                            <td style="text-transform: uppercase"class="fw-semibold fs-sm"><input type="text" id="total" disabled class="form-control form-control-sm"></td>
-                            <td style="text-transform: uppercase"class="fw-semibold fs-sm" ><input type="text" id="grade" disabled class="form-control form-control-sm"></td>
-                            <td style="text-transform: uppercase"class="fw-semibold fs-sm">
-                            </td>
-                        </tr>
+                        @php
+                         $i = 0;
+                        @endphp
+                        @foreach ($data as $items)
+                           @foreach($items as $year => $item)
+                               <tr>
+                                   <td> {{ ++$i }} </td>
+                                   <td> {{ $item->first()->academic_semester }} </td>
+                                   <td> {{ $year }} </td>
+                                   <td>
+                                        <a class="btn btn-sm btn-outline-dark" href="{{ route('examination.semesterExams', ['year' => Crypt::encrypt($year), 'semester' => Crypt::encrypt($item->first()->academic_semester)]) }}"> Open </a>
+                                   </td>
+                               </tr>
+                            @endforeach
                         @endforeach
-                
+
                     </tbody>
                 </table>
             </div>
@@ -79,7 +86,7 @@
 
 <script>
     $(".input").on('input', function(){
-         
+
         var x = document.getElementById('cat').value;
         x = parseFloat(x);
 
@@ -95,10 +102,10 @@
         x = 0;
         else if(Number.isNaN(y))
         y = 0;
-        
+
         w = x + y;
         document.getElementById('total').value = w;
-       
+
        if(w >= 70){
         document.getElementById('grade').value = "A";
        }

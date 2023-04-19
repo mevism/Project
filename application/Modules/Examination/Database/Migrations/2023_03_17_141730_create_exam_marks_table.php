@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('exam_marks', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('workflow_id')->nullable();
             $table->string('class_code');
             $table->string('unit_code');
             $table->string('reg_number');

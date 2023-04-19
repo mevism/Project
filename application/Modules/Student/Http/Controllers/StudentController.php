@@ -907,7 +907,7 @@ class StudentController extends Controller
 
         $table->addRow();
         $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 3])->addText('Student Name : '.strtoupper($student->sname." ".$student->mname." ".$student->fname), ['bold' => true, 'name' => 'Book Antiqua']);
-        $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 2])->addText('Prited On : '.date('d-M-Y'), ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 2])->addText('Printed On : '.date('d-M-Y'), ['bold' => true, 'name' => 'Book Antiqua']);
 
         $table->addRow();
         $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 3])->addText('Registration Number : '. $student->reg_number, ['bold' => true, 'name' => 'Book Antiqua']);
