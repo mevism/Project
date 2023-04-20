@@ -76,7 +76,7 @@
 
                                     @elseif($workload->first()->workload_approval_id > 0 && $workload->first()->status === 0)
                                     <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewSemesterWorkload', ['year' => Crypt::encrypt($year), 'semester' => Crypt::encrypt($semester)]) }}">View </a>
-                                    <a class="btn btn-outline-info btn-sm" href="" disabled=""> Processing </a>
+                                    <a class="btn btn-outline-info btn-sm" href="" disabled=""> Submitted to Dean </a>
                                         <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.printWorkload', ['year' => Crypt::encrypt($year), 'id' => Crypt::encrypt($semester)]) }}">Download</a>
 
                                     @elseif($workload->first()->workload_approval_id > 0 &&  $workload->first()->status === 2)

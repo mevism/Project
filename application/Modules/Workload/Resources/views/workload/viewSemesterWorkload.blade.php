@@ -114,28 +114,36 @@
                                     @foreach ($lecturers as $lecturer)
                                         @if ($lecturer->id === $lec)
                                             @php $staff = $lecturer; @endphp
-
-                                            @if ($staff->placedUser->first()->employment_terms == 'FT')
-                                                @for ($i = 0; $i < $userLoad; ++$i)
-                                                    @if ($i < 3)
-                                                        @php $load = 'FT'; @endphp
-                                                        <p>{{ $load }}</p>
-                                                    @else
-                                                        @php $load = 'PT'; @endphp
-                                                        <p>{{ $load }}</p>
-                                                    @endif
-                                                @endfor
-
-                                            @else
-                                                @for ($i = 0; $i < $userLoad; ++$i)
-                                                    @if ($i < $userLoad)
-                                                        @php $load = 'PT'; @endphp
-                                                        <p>{{ $load }}</p>
-                                                    @endif
-                                                @endfor
-
-                                            @endif
+                                               
+                                            @if ($staff->placedUser->first()->employment_terms == 'FT' && $staff->hasRole(['Chairperson of Department', 'Exam Coordinator', 'Director/Dean']) )
+                                            @for ($i = 0; $i < $userLoad; ++$i)
+                                                @if ($i < 2)
+                                                    @php $load = 'FT'; @endphp
+                                                    <p>{{ $load }}</p>
+                                                @else
+                                                    @php $load = 'PT'; @endphp
+                                                    <p>{{ $load }}</p>
+                                                @endif
+                                            @endfor
+                                        @elseif ($staff->placedUser->first()->employment_terms == 'FT')
+                                            @for ($i = 0; $i < $userLoad; ++$i)
+                                                @if ($i < 4)
+                                                    @php $load = 'FT'; @endphp
+                                                    <p>{{ $load }}</p>
+                                                @else
+                                                    @php $load = 'PT'; @endphp
+                                                    <p>{{ $load }}</p>
+                                                @endif
+                                            @endfor
+                                        @else
+                                            @for ($i = 0; $i < $userLoad; ++$i)
+                                                @if ($i < $userLoad)
+                                                    @php $load = 'PT'; @endphp
+                                                    <p>{{ $load }}</p>
+                                                @endif
+                                            @endfor
                                         @endif
+                                        @endif                                            
                                     @endforeach
                                 </td>
                                 <td>

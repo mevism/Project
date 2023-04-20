@@ -25,6 +25,7 @@
     } );
 </script>
 @section('content')
+
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">

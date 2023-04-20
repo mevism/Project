@@ -1,5 +1,26 @@
 @extends('examination::layouts.backend')
 @section('content')
+<div class="bg-body-light">
+    <div class="content content-full">
+        <div class="d-flex flex-column flex-sm-row  align-items-sm-center">
+            <div class="flex-grow-1">
+                <h5 class="h5 fw-bold mb-0">
+                     Dashboard | Examination
+                </h5>
+            </div>
+            <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-alt">
+                    <li class="breadcrumb-item">
+                        <a class="link-fx" href="javascript:void(0)">Exams</a>
+                    </li>
+                    <li class="breadcrumb-item" aria-current="page" >
+                        Dashboard
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
     <!-- Page Content -->
     <div class="content">
         <!-- Stats -->

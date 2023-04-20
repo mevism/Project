@@ -134,7 +134,7 @@
                                                     <a class="btn btn-outline-secondary btn-sm" href="{{route('dean.printWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Download </a>
 
                                                         @else
-                                                        <a class="btn btn-outline-success btn-sm" disabled="">  Published </a>
+                                                        <a class="btn btn-outline-success btn-sm" disabled>  Published </a>
                                                             <a class="btn btn-outline-secondary btn-sm" href="{{route('dean.viewWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> view </a>
 
                                                             <a class="btn btn-outline-primary btn-sm" href="{{route('dean.printWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Download </a>

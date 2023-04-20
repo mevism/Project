@@ -1207,7 +1207,7 @@ class CODController extends Controller
         $users = User::all();
 
         foreach ($users as $user){
-
+// return $user->employmentDepartment->first();
             if ($user->employmentDepartment->first()->id == $dept){
 
                 $lectures [] = $user;
@@ -1232,7 +1232,7 @@ class CODController extends Controller
         $hashedId = Crypt::decrypt($id);
 
         $qualification = LecturerQualification::findorFail($hashedId);
-        $qualification->qualification_status = 1;
+        $qualification->status = 1;
         $qualification->save();
 
         return redirect()->back()->with('success', 'Lecturer qualification verified successfully');
@@ -1243,7 +1243,7 @@ class CODController extends Controller
         $hashedId = Crypt::decrypt($id);
 
         $qualification = LecturerQualification::findorFail($hashedId);
-        $qualification->qualification_status = 2;
+        $qualification->status = 2;
         $qualification->save();
 
         $remark = new QualificationRemarks;
