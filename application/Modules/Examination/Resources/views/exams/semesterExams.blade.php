@@ -96,7 +96,7 @@
                                                 <a class="btn btn-sm btn-outline-secondary" href="{{ route('examination.previewExam', ['class' => Crypt::encrypt($class), 'code' => Crypt::encrypt($code)]) }}"> View </a>
                                                 <a class="btn btn-sm btn-outline-primary" onclick="return confirm('Are you sure you want to receive this exam?')" href="{{ route('examination.receiveExam', ['class' => Crypt::encrypt($class), 'code' => Crypt::encrypt($code)]) }}"> Receive </a>
                                             @else
-                                                <a class="btn btn-sm btn-outline-secondary" href="{{ route('examination.previewExam', ['class' => Crypt::encrypt($class), 'code' => Crypt::encrypt($code)]) }}"> Process </a>
+                                                <a class="btn btn-sm btn-outline-secondary" href="{{ route('examination.processExam', ['class' => Crypt::encrypt($class), 'code' => Crypt::encrypt($code)]) }}"> Process </a>
                                                 <a class="btn btn-sm btn-outline-primary" onclick="return confirm('Are you sure you want to receive this exam?')" href="{{ route('examination.receiveExam', ['class' => Crypt::encrypt($class), 'code' => Crypt::encrypt($code)]) }}"> Submit to COD </a>
                                             @endif
                                         </p>

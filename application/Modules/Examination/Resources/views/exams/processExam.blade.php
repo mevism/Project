@@ -1,4 +1,4 @@
-@extends('lecturer::layouts.backend')
+@extends('examination::layouts.backend')
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css" />
 <style>
@@ -43,11 +43,7 @@
                 <div class="col-lg-12">
                     <div id="example" style="width: 100% !important; overflow: hidden !important;"></div>
                     <div class="d-flex justify-content-center mt-4">
-                        @if($marks->where('status', 1)->first())
-                            <button id="save" class="btn btn-col-md-7 btn-outline-secondary" disabled>Students Marks Submitted</button>
-                        @else
-                            <button id="save" class="btn btn-col-md-7 btn-outline-secondary">Submit Students Marks</button>
-                        @endif
+                        <button id="save" class="btn btn-col-md-7 btn-outline-secondary">Submit Student Marks</button>
                     </div>
                 </div>
             </div>
@@ -127,16 +123,17 @@
             Handsontable.renderers.TextRenderer.apply(this, arguments);
             // Handsontable.TextCell.renderer.apply(this, arguments);
 
-            if (!value || value === '' || value == null ) {
+            if (!value || value === '' || value == null) {
 
                 td.innerHTML = null;
             }
+
 
             if(col === 5){
 
                 if (value === null){
 
-                        td.innerHTML = 'ABSENT';
+                    td.innerHTML = 'ABSENT';
                 }
             }
 
@@ -146,7 +143,7 @@
 
             if(col === 7 || col === 8 ){
                 if (value === null){
-                    td.innerHTML = "ABSENT";
+                    td.innerHTML = 'ABSENT';
                 }else {
                     td.innerHTML = Math.round(td.innerHTML)
                 }
@@ -208,7 +205,6 @@
                 {type: 'numeric',
                     validator: function(value, callback) {
                         if (value <= weight.practical && value >= 0) {
-
                             callback(true);
                         } else {
                             callback(false);
@@ -257,6 +253,7 @@
                     if (source !== 'sum') {
                         var a, b, c, d, sum, i, value, grade, total;
 
+
                         var cats = (unit.cat / weight.cat);
                         var assignments = (unit.assignment / weight.assignment);
                         var practicals = (unit.practical / weight.practical);
@@ -273,6 +270,11 @@
                             c = 0;
                         }
 
+                        if (exam === null || exam === "" || !exam) {
+                            practicals = 0;
+                            c = 0;
+                        }
+
 
                         for (var i = 0; i < changes.length; i++) {
                             // console.log(changes.length)
@@ -283,15 +285,6 @@
                             b = parseInt(this.getDataAtCell(line, 3));
                             c = parseInt(this.getDataAtCell(line, 4));
                             d = parseInt(this.getDataAtCell(line, 5));
-
-                            // if (a[i] <= weight.cat && a[i] >= 0){
-                            //     var but = document.getElementById('save');
-                            //     but.disabled = false;
-                            //
-                            // }else {
-                            //     var but = document.getElementById('save');
-                            //     but.disabled = true;
-                            // }
 
                             value = a * cats + b * assignments + c * practicals;
                             total = d * exam + value;
@@ -326,19 +319,21 @@
 
             var marks = hot.getData();
             var classUnit = JSON.parse('<?php echo json_encode($unit) ?>');
-            var workload = JSON.parse('<?php echo json_encode($semester) ?>');
+            var workload = JSON.parse('<?php echo json_encode($workload) ?>');
 
             $.ajax({
 
                 type: 'get',
-                url: '{{ route('lecturer.storeMarks') }}',
+                url: '{{ route('examination.updateMarks') }}',
                 data: { data:marks, unit:classUnit, workload:workload},
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (data){
+
                     location.reload();
                     toastr.success("Student marks updated successfully");
+
                 }
 
             });

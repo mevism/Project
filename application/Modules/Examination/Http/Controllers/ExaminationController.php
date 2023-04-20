@@ -3,13 +3,19 @@
 namespace Modules\Examination\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Validation\Rule;
+use Modules\COD\Entities\SemesterUnit;
 use Modules\Examination\Entities\Exam;
 use Modules\Examination\Entities\ExamMarks;
+use Modules\Lecturer\Entities\ExamWeights;
 use Modules\Registrar\Entities\Student;
+use Modules\Registrar\Entities\StudentCourse;
 use Modules\Student\Entities\ExamResults;
+use Modules\Workload\Entities\Workload;
 
 class ExaminationController extends Controller
 {
@@ -59,6 +65,65 @@ class ExaminationController extends Controller
         }
 
         return redirect()->back()->with('success', 'Exam received successfully');
+
+    }
+
+    public function processExam($class, $code){
+
+        $students = [];
+
+        $weights = ExamWeights::where('class_code', Crypt::decrypt($class))->where('unit_code', Crypt::decrypt($code))->first();
+        $exams = ExamMarks::where('class_code', Crypt::decrypt($class))->where('unit_code', Crypt::decrypt($code))->first();
+        $unit = SemesterUnit::where('unit_code', Crypt::decrypt($code))->where('class_code',Crypt::decrypt($class))->first();
+        $workload = Workload::where('unit_id', $unit->id)->first();
+
+            $students = new Collection;
+
+            $classList = StudentCourse::where('class_code', Crypt::decrypt($class))->orderBy('student_id', 'asc')->get();
+
+            foreach ($classList as $student) {
+
+                $mark = ExamMarks::where('class_code', Crypt::decrypt($class))->where('unit_code', Crypt::decrypt($code))->where('reg_number', $student->student->reg_number)->first();
+
+                $studentList = $student->student;
+
+                $students[] = collect($mark)->merge($studentList);
+
+                }
+
+        return view('examination::exams.processExam')->with(['class' => $class, 'students' => $students, 'unit' => $unit, 'weights' => $weights, 'workload' => $workload, 'exams' => $exams]);
+
+    }
+
+    public function processMarks(Request $request){
+
+        $marks = $request->data;
+        $semester = $request->unit;
+        $workload = $request->workload;
+
+        foreach ($marks as $mark){
+//            return $mark;
+                $exams = ExamMarks::where('class_code', $semester['class_code'])->where('unit_code', $semester['unit_code'])->where('reg_number', $mark[0])->first();
+                $exams->class_code = $semester['class_code'];
+                $exams->unit_code = $semester['unit_code'];
+                $exams->reg_number = $mark[0];
+                $exams->academic_year = $workload['academic_year'];
+                $exams->academic_semester = $workload['academic_semester'];
+                $exams->stage = $semester['stage'];
+                $exams->semester = $semester['semester'];
+                $exams->cat = $mark[2];
+                $exams->assignment = $mark[3];
+                $exams->practical = $mark[4];
+                if ($mark[5] == null){ $exams->exam = 'ABSENT'; }else{ $exams->exam = round(intval($mark[5]),0); }
+                $exams->total_cat = $mark[6];
+                if ($mark[7] == 'NaN' || $mark[7] == 'ABSENT'){ $exams->total_exam = 'ABSENT'; }else{ $exams->total_exam = round($mark[7],0); }
+                if ($mark[7] == 'NaN' || $mark[7] == 'ABSENT'){ $exams->total_mark = 'ABSENT'; }else{ $exams->total_mark = round($mark[8],0); }
+                $exams->attempt = '$mark[10]';
+                $exams->save();
+
+//                return $mark;
+
+            }
 
     }
 

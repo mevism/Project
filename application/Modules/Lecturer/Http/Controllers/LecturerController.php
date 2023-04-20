@@ -356,7 +356,7 @@ class LecturerController extends Controller
 
 //            return $students->sname;
 
-            return view('lecturer::examination.editExam')->with(['class' => $class, 'unit' => $unit, 'students' => $students, 'unit' => $unit, 'weights' => $weights, 'semester' => $semester]);
+            return view('lecturer::examination.editExam')->with(['class' => $class, 'unit' => $unit, 'students' => $students, 'unit' => $unit, 'weights' => $weights, 'semester' => $semester, 'marks' => $examMarks]);
         }
 
     }
@@ -382,10 +382,10 @@ class LecturerController extends Controller
                     $exams->cat = $mark[2];
                     $exams->assignment = $mark[3];
                     $exams->practical = $mark[4];
-                    if ($mark[5] == 0){ $exams->exam = 'ABSENT'; }else{ $exams->exam = round(intval($mark[5]),0); }
+                    if ($mark[5] == null){ $exams->exam = 'ABSENT'; }else{ $exams->exam = round(intval($mark[5]),0); }
                     $exams->total_cat = $mark[6];
-                    if ($mark[7] == 0 || $mark[7] == 'ABSENT'){ $exams->total_exam = 'ABSENT'; }else{ $exams->total_exam = round($mark[7],0); }
-                    if ($mark[7] == 0 || $mark[7] == 'ABSENT'){ $exams->total_mark = 'ABSENT'; }else{ $exams->total_mark = round($mark[8],0); }
+                    if ($mark[7] == 'NaN' || $mark[7] == 'ABSENT'){ $exams->total_exam = 'ABSENT'; }else{ $exams->total_exam = round($mark[7],0); }
+                    if ($mark[7] == 'NaN' || $mark[7] == 'ABSENT'){ $exams->total_mark = 'ABSENT'; }else{ $exams->total_mark = round($mark[8],0); }
                     $exams->attempt = '$mark[10]';
                     $exams->save();
 
@@ -402,10 +402,10 @@ class LecturerController extends Controller
                     $exams->cat = $mark[2];
                     $exams->assignment = $mark[3];
                     $exams->practical = $mark[4];
-                    if ($mark[5] == 0){ $exams->exam = 'ABSENT'; }else{ $exams->exam = round($mark[5],0); }
+                    if ($mark[5] == null){ $exams->exam = 'ABSENT'; }else{ $exams->exam = round($mark[5],0); }
                     if ($mark[6] == 0){ $exams->total_cat = 0; }else{ $exams->total_cat = $mark[6]; }
-                    if ($mark[7] == 0 || $mark[7] == 'ABSENT'){ $exams->total_exam = 'ABSENT'; }else{ $exams->total_exam = round($mark[7],0); }
-                    if ($mark[7] == 0 || $mark[7] == 'ABSENT'){ $exams->total_mark = 'ABSENT'; }else{ $exams->total_mark = round($mark[8],0); }
+                    if ($mark[7] == 'NaN' || $mark[7] == 'ABSENT'){ $exams->total_exam = 'ABSENT'; }else{ $exams->total_exam = round($mark[7],0); }
+                    if ($mark[7] == 'NaN' || $mark[7] == 'ABSENT'){ $exams->total_mark = 'ABSENT'; }else{ $exams->total_mark = round($mark[8],0); }
                     $exams->attempt = '$mark[10]';
                     $exams->save();
 
@@ -424,11 +424,7 @@ class LecturerController extends Controller
         $workload = $request->workload;
 
             foreach ($marks as $mark){
-
 //                return $mark[5];
-
-
-
             }
 
         return redirect()->back()->with('success', 'Student Marks Updated Successfully');
