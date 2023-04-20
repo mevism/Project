@@ -185,7 +185,7 @@
             <li class="nav-main-item">
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('student') }}">
                 <i class="nav-main-link-icon si si-cursor"></i>
-                <span class="nav-main-link-name">Home </span>
+                <span class="nav-main-link-name">Student </span>
               </a>
             </li>
             <li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">

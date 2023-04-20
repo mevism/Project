@@ -69,7 +69,7 @@
                 <span class="nav-main-link-name">
 
                     @if(auth()->guard('user')->user()->hasRole('Registrar'))
-                        Registrar
+                        Dashboard
                     @endif
                 </span>
               </a>

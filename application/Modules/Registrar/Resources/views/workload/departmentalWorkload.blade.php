@@ -92,11 +92,11 @@
                                                
                                                         @elseif($workload->dean_status === 1 && $workload->registrar_status === 1 && $workload->status === 1)
                                                         @if($workload->workloadProcessed->first()->status === 0)
-                                                        <a class="btn btn-outline-info btn-sm" href=""> Processing 
+                                                        <a class="btn btn-outline-info btn-sm" disabled> submitted to Dean 
                                                          </a>
                                                         @else
 
-                                                        <a class="btn btn-outline-success btn-sm" href="">  Published                                                         
+                                                        <a class="btn btn-outline-success btn-sm" disabled>  Published                                                         
                                                          </a>
                                                          <a class="btn btn-outline-secondary btn-sm" href="{{route('courses.printWorkload',['id' => Crypt::encrypt($workload->id)]) }}"> Download </a>
                                                         @endif  

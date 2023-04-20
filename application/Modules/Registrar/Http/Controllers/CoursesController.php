@@ -2059,7 +2059,7 @@ class CoursesController extends Controller
 
             return "null";
         }
-        $newCourse                      =     Courses::find($id);
+        $newCourse                      =           Courses::find($id);
         $newCourse->course_name         =           $request->input('course_name');
         $newCourse->department_id       =           $request->input('department');
         $newCourse->level               =           $request->input('level');
