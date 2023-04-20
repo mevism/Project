@@ -20,5 +20,7 @@ Route::prefix('examination')->group(function() {
     Route::get('/semester-exam/{year}/{semester}', [ExaminationController::class, 'semesterExams'])->name('examination.semesterExams');
     Route::get('/preview-exam-marks/{class}/{code}', [ExaminationController::class, 'previewExam'])->name('examination.previewExam');
     Route::get('/receive-exam/{class}/{code}', [ExaminationController::class, 'receiveExam'])->name('examination.receiveExam');
+    Route::get('/process-exam/{class}/{code}', [ExaminationController::class, 'processExam'])->name('examination.processExam');
+    Route::any('/save-processed-exam-marks/', [ExaminationController::class, 'processMarks'])->name('examination.updateMarks');
 
 });
