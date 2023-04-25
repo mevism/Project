@@ -114,6 +114,7 @@
             table.push(tableData)
         }
 
+        console.log(table)
 
         const container = document.querySelector('#example');
         const save = document.querySelector('#save');
@@ -121,19 +122,17 @@
         function negativeValueRenderer(instance, td, row, col, prop, value, cellProperties, ) {
 
             Handsontable.renderers.TextRenderer.apply(this, arguments);
-            // Handsontable.TextCell.renderer.apply(this, arguments);
 
-            if (!value || value === '' || value == null) {
-
-                td.innerHTML = null;
+            if (col === 2 || col === 3 || col === 4 ){
+                if (value === "" || value === null){
+                    td.innerHTML = "-";
+                }
             }
 
-
-            if(col === 5){
-
+            if (col === 5){
                 if (value === null){
-
                     td.innerHTML = 'ABSENT';
+                    td.style.background = '#EEE'
                 }
             }
 
@@ -147,14 +146,6 @@
                 }else {
                     td.innerHTML = Math.round(td.innerHTML)
                 }
-            }
-
-            if (!value || value === '' || value === null) {
-                td.style.background = '#EEE';
-
-            } else {
-
-                td.style.background = '';
             }
 
         }
@@ -182,13 +173,15 @@
             colWidths: [120, 250, 60, 60, 60, 60, 60, 60, 80, 60, 150],
             className: 'htCenter',
             columns: [
-                {readOnly: true, className: 'htLeft htMiddle cellText'},
-                {readOnly: true, className: 'htLeft htMiddle cellText'},
+                {readOnly: true, editor:false, className: 'htLeft htMiddle cellText'},
+                {readOnly: true, editor:false, className: 'htLeft htMiddle cellText'},
                 {type: 'numeric',
                     validator: function(value, callback) {
                         if (value <= weight.cat && value >= 0) {
                             callback(true);
                         } else {
+                            // document.getElementById('save').disabled = true;
+                            // toastr.error("The cat mark is outside your set mark range");
                             callback(false);
                         }
                     }
@@ -198,6 +191,8 @@
                         if (value <= weight.assignment && value >= 0) {
                             callback(true);
                         } else {
+                            document.getElementById('save').disabled = true;
+                            toastr.error("The assignment mark is outside your set mark range");
                             callback(false);
                         }
                     }
@@ -207,6 +202,8 @@
                         if (value <= weight.practical && value >= 0) {
                             callback(true);
                         } else {
+                            document.getElementById('save').disabled = true;
+                            toastr.error("The practical mark is outside your set mark range");
                             callback(false);
                         }
                     }
@@ -216,6 +213,8 @@
                         if (value <= weight.exam && value >= 0) {
                             callback(true);
                         } else {
+                            document.getElementById('save').disabled = true;
+                            toastr.error("The exam mark is outside your set mark range");
                             callback(false);
                         }
                     }
@@ -286,19 +285,32 @@
                             c = parseInt(this.getDataAtCell(line, 4));
                             d = parseInt(this.getDataAtCell(line, 5));
 
-                            value = a * cats + b * assignments + c * practicals;
-                            total = d * exam + value;
-
-                            if(Math.round(total) > 70 ){
-                                grade = 'A';
-                            }else if(Math.round(total) >= 60){
-                                grade = 'B';
-                            }else if(Math.round(total) >= 50){
-                                grade = 'C';
-                            }else if(Math.round(total) >= 40){
-                                grade = 'D';
+                            if( !a ){ a = 0; } if( !b ){ b = 0; } if( !c ){ c = 0; } if( !d ){ d = 0; }
+                            if (a <= weight.cat && a >= 0){
+                                document.getElementById('save').disabled = false;
                             }else {
-                                grade = 'E';
+                                document.getElementById('save').disabled = true;
+                                toastr.error("The cat mark is outside your set mark range");
+                            }
+                            value = a * cats + b * assignments + c * practicals;
+
+                            if (!d ){ total = null } else {total = d * exam + value;}
+
+                            if (!d){
+                                grade = "-";
+                            }else {
+
+                                if (Math.round(total) >= 70) {
+                                    grade = 'A';
+                                } else if (Math.round(total) >= 60) {
+                                    grade = 'B';
+                                } else if (Math.round(total) >= 50) {
+                                    grade = 'C';
+                                } else if (Math.round(total) >= 40) {
+                                    grade = 'D';
+                                } else {
+                                    grade = 'E';
+                                }
                             }
 
                             // We want to programmatically update the table.

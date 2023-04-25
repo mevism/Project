@@ -399,13 +399,13 @@ class LecturerController extends Controller
                     $exams->academic_semester = $workload['academic_semester'];
                     $exams->stage = $semester['stage'];
                     $exams->semester = $semester['semester'];
-                    $exams->cat = $mark[2];
+                    if ($mark[2] == null){ $exams->cat = 0; }else{ $exams->cat = $mark[2]; }
                     $exams->assignment = $mark[3];
                     $exams->practical = $mark[4];
                     if ($mark[5] == null){ $exams->exam = 'ABSENT'; }else{ $exams->exam = round($mark[5],0); }
                     if ($mark[6] == 0){ $exams->total_cat = 0; }else{ $exams->total_cat = $mark[6]; }
-                    if ($mark[7] == 'NaN' || $mark[7] == 'ABSENT'){ $exams->total_exam = 'ABSENT'; }else{ $exams->total_exam = round($mark[7],0); }
-                    if ($mark[7] == 'NaN' || $mark[7] == 'ABSENT'){ $exams->total_mark = 'ABSENT'; }else{ $exams->total_mark = round($mark[8],0); }
+                    if ($mark[5] == null){ $exams->total_exam = 'ABSENT'; }else{ $exams->total_exam = round($mark[7],0); }
+                    if ($mark[5] == null){ $exams->total_mark = 'ABSENT'; }else{ $exams->total_mark = round($mark[8],0); }
                     $exams->attempt = '$mark[10]';
                     $exams->save();
 
