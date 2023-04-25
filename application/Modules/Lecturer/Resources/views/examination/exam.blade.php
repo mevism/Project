@@ -78,8 +78,7 @@
         let table = [];
 
         for (let i = 0; i < data.length; i++) {
-
-            const tableData = [data[i].reg_number, data[i].sname + ' ' + data[i].fname + ' ' + data[i].mname, '0', '0', '0', '0', null, null, null, null, '1st ATTEMPT']
+            const tableData = [data[i].reg_number, data[i].sname + ' ' + data[i].fname + ' ' + data[i].mname, '0', '0', '0', null, '0', '0', '0', null, '1st ATTEMPT']
 
             table.push(tableData)
         }
@@ -93,22 +92,29 @@
                 Handsontable.renderers.TextRenderer.apply(this, arguments);
                 // Handsontable.TextCell.renderer.apply(this, arguments);
 
-                if (!value || value === '' || value == null, value === '0') {
-                    td.innerHTML = null;
+                if (col === 2 || col === 3 || col === 4 || col === 5){
+                    if (value === '0' ){
+                        td.innerHTML = '-';
+                    }
+                    if (value === "" || value === null){
+                        td.innerHTML = "-";
+                    }
                 }
 
                 if(col === 6 || col === 7 || col === 8 ){
-                    td.innerHTML = Math.round(td.innerHTML)
+                    if (value === '0' ){
+                        td.innerHTML = null;
+                        td.style.background = '#EEE';
+
+                    }else {
+                        td.style.background = '#EEE';
+                        td.innerHTML = Math.round(td.innerHTML)
+                    }
                 }
 
-                if (!value || value === '' || value === null) {
+                if (col === 9 || col === 10){
                     td.style.background = '#EEE';
-
-                } else {
-
-                    td.style.background = '';
                 }
-
             }
 
             let assignment =  unit.assignment;
@@ -141,9 +147,7 @@
                             if (value <= weight.cat && value >= 0) {
                                 callback(true);
                             } else {
-                                // callback(false);
-                                document.querySelector('#save').disabled = true;
-
+                                callback(false);
                             }
                         }
                     },
@@ -229,27 +233,31 @@
                                 var change = changes[i];
                                 var line = change[0];
 
+
                                 a = parseInt(this.getDataAtCell(line, 2));
                                 b = parseInt(this.getDataAtCell(line, 3));
                                 c = parseInt(this.getDataAtCell(line, 4));
                                 d = parseInt(this.getDataAtCell(line, 5));
 
+
+                                if( !a ){ a = 0; } if( !b ){ b = 0; } if( !c ){ c = 0; } if( !d ){ d = 0; }
+
                                 value = a * cats + b * assignments + c * practicals;
                                 total = d * exam + value;
 
-                                if(total > 70 ){
-                                    grade = 'A';
-                                }else if(total >= 60){
-                                    grade = 'B';
-                                }else if(total >= 50){
-                                    grade = 'C';
-                                }else if(total >= 40){
-                                    grade = 'D';
-                                }else if(total >= 1) {
-                                    grade = 'E';
-                                }else{
-                                    grade = '';
-                                }
+                                    if (total >= 70) {
+                                        grade = 'A';
+                                    } else if (total >= 60) {
+                                        grade = 'B';
+                                    } else if (total >= 50) {
+                                        grade = 'C';
+                                    } else if (total >= 40) {
+                                        grade = 'D';
+                                    } else if (total >= 1) {
+                                        grade = 'E';
+                                    } else {
+                                        grade = 'ABSENT';
+                                    }
 
                                 // We want to programmatically update the table.
                                 // Let's update it, and associate the source 'sum' to the event.
@@ -257,7 +265,6 @@
                                 this.setDataAtCell(change[0], 7, d * exam, 'sum');
                                 this.setDataAtCell(change[0], 8, total, 'sum');
                                 this.setDataAtCell(change[0], 9, grade, 'sum');
-
                             }
 
                         }

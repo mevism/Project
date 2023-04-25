@@ -92,6 +92,7 @@
                 newExam = null;
                 newTotalExam = null;
                 newTotalMark = null;
+
             }else {
 
                 newExam = data[i].exam;
@@ -110,13 +111,16 @@
             }else if(data[i].total_mark >= 1) {
                 grade = 'E';
             }else{
-                grade = 'ABSENT';
+                grade = '-';
             }
+
 
             const tableData = [data[i].reg_number, data[i]['sname']+' '+data[i]['fname']+' '+data[i]['mname'], data[i].cat, data[i].assignment, data[i].practical, newExam, data[i].total_cat, newTotalExam, newTotalMark, grade, '1st ATTEMPT']
 
             table.push(tableData)
         }
+
+        console.log(table)
 
 
         const container = document.querySelector('#example');
@@ -125,18 +129,19 @@
         function negativeValueRenderer(instance, td, row, col, prop, value, cellProperties, ) {
 
             Handsontable.renderers.TextRenderer.apply(this, arguments);
-            // Handsontable.TextCell.renderer.apply(this, arguments);
 
-            if (!value || value === '' || value == null ) {
-
-                td.innerHTML = null;
+            if (col === 2 || col === 3 || col === 4 ){
+                if (value === '0' ){
+                    td.innerHTML = '-';
+                }
+                if (value === "" || value === null){
+                    td.innerHTML = "-";
+                }
             }
 
-            if(col === 5){
-
+            if (col === 5){
                 if (value === null){
-
-                        td.innerHTML = 'ABSENT';
+                    td.innerHTML = "-";
                 }
             }
 
@@ -146,13 +151,13 @@
 
             if(col === 7 || col === 8 ){
                 if (value === null){
-                    td.innerHTML = "ABSENT";
+                    td.innerHTML = "-";
                 }else {
                     td.innerHTML = Math.round(td.innerHTML)
                 }
             }
 
-            if (!value || value === '' || value === null) {
+            if ( value === '' || value === null || col === 7 ||col === 6 || col === 8 || col === 9 || col === 10) {
                 td.style.background = '#EEE';
 
             } else {
@@ -284,14 +289,7 @@
                             c = parseInt(this.getDataAtCell(line, 4));
                             d = parseInt(this.getDataAtCell(line, 5));
 
-                            // if (a[i] <= weight.cat && a[i] >= 0){
-                            //     var but = document.getElementById('save');
-                            //     but.disabled = false;
-                            //
-                            // }else {
-                            //     var but = document.getElementById('save');
-                            //     but.disabled = true;
-                            // }
+                            if (!a){ a = 0} if (!b){ b = 0} if (!c){ c = 0} if (!d){ d = 0}
 
                             value = a * cats + b * assignments + c * practicals;
                             total = d * exam + value;
