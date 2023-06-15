@@ -99,4 +99,10 @@ Route::prefix('department')->middleware( ['is_cod'])->group( function() {
     Route::post('/department-decline-lecturer-qualification/{id}', [CODController::class, 'declineTeachingArea'])->name('department.declineTeachingArea');
 
 
+    Route::get('/yearly-results', [CODController::class, 'yearlyResults'])->name('department.yearlyResults');
+    Route::get('/semester-results/{year}', [CODController::class, 'semesterResults'])->name('department.semesterResults');
+    Route::get('/download-results/{sem}/{year}', [CODController::class, 'downloadResults'])->name('department.downloadResults');
+    Route::get('/view-students-results/{class}/{sem}/{year}', [CODController::class, 'viewStudentResults'])->name('department.viewStudentResults');
+    Route::get('/submit-exam-results/{sem}/{year}', [CODController::class, 'submitExamResults'])->name('department.submitExamResults');
+
 });

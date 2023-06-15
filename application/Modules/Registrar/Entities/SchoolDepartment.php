@@ -10,6 +10,15 @@ class SchoolDepartment extends Model
     use HasFactory;
 
     protected $fillable = [];
+
+    public function deptSchoolDepartment(){
+
+        return $this->hasOne(Department::class, 'department_id', 'id');
+    }
+
+    public function schoolProcessed(){
+        return $this->hasMany(School::class, 'id');
+    }
     
     protected static function newFactory()
     {

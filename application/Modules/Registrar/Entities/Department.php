@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\UserEmployment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Examination\Entities\ExamMarks;
 use Modules\Student\Entities\CourseTransfer;
 
 class Department extends Model
@@ -54,6 +55,10 @@ class Department extends Model
 
     public function useCourse(){
         return $this->hasMany(Courses::class);
+    }
+
+    public function exams(){
+        return $this->hasMany(ExamMarks::class);
     }
 
     public function transferDept(){

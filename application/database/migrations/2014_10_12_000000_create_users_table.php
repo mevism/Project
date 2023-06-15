@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('gender');
             $table->string('username')->unique();
             $table->string('password');
-            $table->string('remember_token');
+            // $table->string('remember_token');
             $table->timestamps();
             $table->softDeletes();
         });

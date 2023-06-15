@@ -3,9 +3,11 @@
 namespace Modules\Examination\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Registrar\Entities\Student;
+use Modules\Registrar\Entities\Department;
 use Modules\Registrar\Entities\UnitProgramms;
+use Modules\Examination\Entities\ExamWorkflow;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ExamMarks extends Model
 {
@@ -21,6 +23,22 @@ class ExamMarks extends Model
     public function studentMark(){
 
         return $this->belongsTo(Student::class, 'reg_number', 'reg_number');
+    }
+
+    public function examProcessed(){
+
+        return $this->hasMany(ExamWorkflow::class, 'workflow_id');
+    }
+  
+     public function marksApproval(){
+
+        return $this->hasOne(ExamWorkflow::class, 'workflow_id');
+    }
+
+
+    public function examDept(){
+
+        return $this->belongsTo(Department::class, 'department_id', 'id');
     }
 
     protected static function newFactory()

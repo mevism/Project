@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('stage')->nullable();
             $table->string('semester')->nullable();
             $table->string('type')->nullable();
+            $table->string('version')->nullable();
             $table->timestamps();
         });
     }
