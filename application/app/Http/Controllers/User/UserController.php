@@ -2,18 +2,38 @@
 
 namespace App\Http\Controllers\User;
 
+use Illuminate\Support\Facades\Session;
 use Modules\Application\Entities\AdmissionApproval;
-use Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Modules\Application\Entities\ApplicationApproval;
 use Modules\Application\Entities\VerifyUser;
 use Modules\Application\Entities\Application;
+use Modules\COD\Entities\ApplicationsView;
 use Modules\Registrar\Entities\AvailableCourse;
 
 class UserController extends Controller
 {
+//    public function __construct(){
+//        \auth()->setDefaultDriver('web');
+//        $this->middleware(['auth'], ['only' => ['dashboard']]);
+//    }
+
+    public function signOut(){
+
+        Session::flush();
+        $guards = array_keys(config('auth.guards'));
+        foreach ($guards as $guard) {
+            if(Auth::guard($guard)->check()) {
+                Auth::guard($guard)->logout();
+            }
+        }
+
+        return redirect()->route('root')->with('success', 'You are now logged out');
+
+    }
     public function login(Request $request)
     {
         $logins = $request->only('username', 'password');
@@ -23,21 +43,17 @@ class UserController extends Controller
             $name = Auth::guard('user')->user()->name;
 
             if (Auth::guard('user')->user()) {
+
                 return redirect()->intended('/dashboard')->with('success', 'Welcome' . " " . $name . " " . 'to' . " " . config('app.name') . ".");
             }
         }
         if (Auth::guard('web')->attempt($logins, true)) {
-
-
-            if (Auth::guard('web'))
-
 
             return redirect()->route('application.applicant')->with('success', 'Welcome' . " " . Auth::user()->email . " " . Auth::user()->role_id . "  " . 'to' . " " . config('app.name') . ".");
 
         }
 
         if (Auth::guard('student')->attempt($logins, true)) {
-
             if (Auth::guard('student')) {
 
                 return redirect()->route('student')->with('success', 'You have logged in');
@@ -51,6 +67,8 @@ class UserController extends Controller
     }
     public function dashboard(){
 
+//        return \auth()->guard('user')->user()->roles;
+
         if (auth()->guard('user')->check()){
             if (\auth()->guard('user')->user()->roles->first()->id == 0){
                 $courses = AvailableCourse::count();
@@ -61,38 +79,36 @@ class UserController extends Controller
             } elseif (\auth()->guard('user')->user()->roles->first()->id == 1){
 
                 $courses = AvailableCourse::where('status', 1)->count();
-                $applications = Application::where('registrar_status',0)->count();
+                $applications = ApplicationsView::where('registrar_status',0)->count();
                 $admissions = AdmissionApproval::where('registrar_status',0)->count();
 
                 return view('admin.index')->with(['courses'=>$courses,'applications'=>$applications,'admissions'=>$admissions]);
 
             } elseif (\auth()->guard('user')->user()->roles->first()->id == 2){
 
-                $admissions = Application::where('cod_status', 1)
-                    ->where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->id)
-                    ->where('registrar_status',3)
-                    ->where('status',0)
-                    ->count();
+//                return auth()->guard('user')->user()->employmentDepartment->first()->department_id;
+               $apps_cod = ApplicationsView::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+                   ->where('cod_status', null )
+                   ->count();
+               $classes = DB::table('CLASSESVIEW')
+                   ->where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+                   ->count();
+                $admissions = 0;
 
-                $apps_cod = Application::where('cod_status', 0)
-                    ->where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->id)
-                    ->orWhere('dean_status', 3)
-                    ->count();
-
-                return view('cod::COD.index')->with(['apps'=>$apps_cod, 'admissions'=>$admissions]);
+                return view('cod::COD.index')->with(['apps'=>$apps_cod, 'admissions'=>$admissions, 'classes' => $classes]);
 
             }elseif (\auth()->guard('user')->user()->roles->first()->id == 3){
 
-                $apps_finance = Application::where('cod_status', null)
-                    ->where('finance_status', '!=', 3)
+                $apps_finance = Application::where('finance_status', '!=', 3)
                     ->count();
 
                 return view('applications::finance.index')->with('apps', $apps_finance);
 
             }elseif (auth()->guard('user')->user()->roles->first()->id == 4){
 
-                $apps_dean = Application::where('dean_status', 0)
-                    ->where('school_id', auth()->guard('user')->user()->school_id)->count();
+                $apps_dean = ApplicationsView::where('dean_status', 0)
+                    ->where('school_id', auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->school_id)
+                    ->count();
                 return view('dean::dean.index')->with('apps', $apps_dean);
 
             }elseif (auth()->guard('user')->user()->roles->first()->id == 5){
@@ -119,6 +135,8 @@ class UserController extends Controller
 
 
             }elseif (\auth()->guard('student')->check()){
+
+                return 'looged in';
 
                 return redirect()->route('student')->with('success', 'You are now logged in');
 

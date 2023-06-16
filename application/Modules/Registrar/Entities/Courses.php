@@ -5,6 +5,7 @@ namespace Modules\Registrar\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\COD\Entities\CourseCluster;
 use Modules\Student\Entities\CourseTransfer;
 
 class Courses extends Model
@@ -43,13 +44,13 @@ class Courses extends Model
 
     public function courseRequirements(){
 
-        return $this->hasOne(CourseRequirement::class, 'course_id');
+        return $this->hasOne(CourseRequirement::class, 'course_id', 'course_id');
     }
 
 
     public function getCourseDept(){
 
-        return $this->belongsTo(Department::class, 'department_id');
+        return $this->belongsTo(Department::class, 'department_id', 'department_id');
     }
 
     public function useDept(){
@@ -63,6 +64,10 @@ class Courses extends Model
 
     public function transferCourse(){
         return $this->hasMany(CourseTransfer::class, 'id');
+    }
+
+    public function courseCluster(){
+        return $this->hasOne(CourseCluster::class, 'course_id', 'course_id');
     }
 
     protected static function newFactory()
@@ -82,5 +87,10 @@ class Courses extends Model
     public function fee(){
 
         return $this->hasOne(FeeStructure::class);
+    }
+
+
+    public function courseRequirement(){
+        return $this->hasOne(CourseRequirement::class, 'course_id', 'course_id');
     }
 }

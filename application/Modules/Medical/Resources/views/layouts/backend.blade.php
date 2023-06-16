@@ -127,7 +127,7 @@
               <img class="rounded-circle" src="{{ asset('media/avatars/male.png') }}" alt="Header Avatar" style="width: 21px;">
               <span class="d-none d-sm-inline-block ms-2">
                   @php
-                      $user = Auth::guard('user')->user();
+                      $user = auth()->guard('user')->user()->staffInfos;
                   @endphp
 
                   @if(Auth::guard('user')->check())
@@ -157,7 +157,7 @@
               </div> --}}
               <div role="separator" class="dropdown-divider m-0"></div>
               <div class="p-2">
-                <a class="dropdown-item d-flex align-items-center justify-content-between" href="{{ route('application.logout') }}">
+                <a class="dropdown-item d-flex align-items-center justify-content-between" href="{{ route('logout') }}">
                   <span class="fs-sm fw-medium">Log Out</span>
                 </a>
               </div>

@@ -18,6 +18,10 @@ use Modules\Student\Entities\StudentDeposit;
 
 class FinanceController extends Controller
 {
+//    public function __construct(){
+//        auth()->setDefaultDriver('user');
+//        $this->middleware(['web','auth', 'finance']);
+//    }
     /**
      * Display a listing of the resource.
      * @return Renderable

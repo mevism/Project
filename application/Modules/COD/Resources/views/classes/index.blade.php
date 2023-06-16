@@ -59,18 +59,18 @@
                         <th>Action</th>
                         </thead>
                         <tbody>
-                        @foreach ($classes as $academic_year => $class)
+                        @foreach ($classes as $intake_id => $classes)
                             <tr>
                                 <td> {{ $loop->iteration }} </td>
                                 <td>
                                     @foreach($intakes as $intake)
-                                        @if($intake->id == $academic_year)
+                                        @if($intake->intake_id == $intake_id)
                                             {{ strtoupper(\Carbon\Carbon::parse($intake->intake_from)->format('MY')) }}
                                         @endif
                                     @endforeach
                                 </td>
                                 <td>
-                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('department.viewIntakeClasses', ['intake' => Crypt::encrypt($academic_year)]) }}">Intake Classes</a>
+                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('department.viewIntakeClasses', $intake_id) }}"> Intake Classes </a>
                                 </td>
                             </tr>
                         @endforeach

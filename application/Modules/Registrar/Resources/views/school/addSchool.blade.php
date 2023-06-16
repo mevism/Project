@@ -6,7 +6,7 @@
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
           <div class="flex-grow-1">
               <h6 class="block-title">ADD SCHOOL</h6>
-       
+
           </div>
           <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
               <ol class="breadcrumb breadcrumb-alt">
@@ -23,34 +23,34 @@
 </div>
 
 <div class="content">
-  <div class="block block-rounded col-md-12 col-lg-12 col-xl-12">
+  <div class="block block-rounded ">
         <div class="block-content block-content-full">
           <div class="row">
             <div class="d-flex justify-content-center">
-                <div class="col-lg-6 space-y-0">
+                <div class="col-md-6 col-lg-6 col-xl-6 space-y-0">
 
                    <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.storeSchool') }}" method="POST">
-                    @csrf 
+                    @csrf
                     <div class="form-floating col-12 col-xl-12">
-                      <input type="text" value="{{ old('initials') }}"  class="form-control form-control-alt text-uppercase" id="initials" name="initials" placeholder="School Code">
+                      <input type="text" value="{{ old('initials') }}"  class="form-control text-uppercase" id="initials" name="initials" placeholder="School Code">
                       <label class="form-label">SCHOOL CODE</label>
                     </div>
                     <div class="form-floating col-12 col-xl-12">
-                      <input type="text" value="{{ old('name') }}"  class="form-control form-control-alt text-uppercase" id="name" name="name" placeholder="School Name">
+                      <input type="text" value="{{ old('name') }}"  class="form-control text-uppercase" id="name" name="name" placeholder="School Name">
                       <label class="form-label">SCHOOL NAME</label>
                     </div>
-                 
-                    <div class="col-12 text-center p-3">
+
+                    <div class="col-12">
                       <button type="submit"  class="btn btn-alt-success" data-toggle="click-ripple">Create School</button>
                     </div>
                   </form>
-                 
+
                 </div>
             </div>
           </div>
         </div>
   </div>
-</div> 
-    
+</div>
+
 @endsection
 

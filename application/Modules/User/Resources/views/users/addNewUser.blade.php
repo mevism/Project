@@ -8,9 +8,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0" >
+                    <h6 class="h6 fw-bold mb-0" >
                         ADD USERS
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -34,60 +34,49 @@
                         <h5>Personal Information</h5>
                         <div class="row mb-2">
                             <div class="col-3 fw-semibold">Staff Number </div>
-                            <div class="col-9">: {{ $staff->STAFFNO }}</div>
+                            <div class="col-9">: {{ $staff['dataPayload']['data']['staff_number'] }} </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col-3 fw-semibold">Staff Name </div>
-                            <div class="col-9">: {{ $staff->SLTCODE }} {{ $staff->STAFFNAME }}</div>
-                        </div>
-
-                        <div class="row mb-2">
-                            <div class="col-3 fw-semibold">Marital Status </div>
-                            <div class="col-9">: {{ $staff->MSTNAME }}</div>
+                            <div class="col-9">: {{ $staff['dataPayload']['data']['full_name'] }} </div>
                         </div>
 
                         <div class="row mb-2">
                             <div class="col-3 fw-semibold">Gender </div>
-                            <div class="col-9">: {{ $staff->GNDNAME }}</div>
+                            <div class="col-9">: {{ $staff['dataPayload']['data']['gender'] }}</div>
                         </div>
 
                         <div class="row mb-4">
                             <div class="col-3 fw-semibold">ID Number </div>
-                            <div class="col-9">: {{ $staff->NATIONALID }}</div>
+                            <div class="col-9">: {{ $staff['dataPayload']['data']['id_number'] }} </div>
                         </div>
 
                         <h5>Contact Information</h5>
 
                         <div class="row mb-2">
                             <div class="col-3 fw-semibold">Phone Number </div>
-                            <div class="col-9">: {{ $staff->MOBILE }}</div>
+                            <div class="col-9">: {{ $staff['dataPayload']['data']['mobile_number'] }} </div>
                         </div>
 
                         <div class="row mb-2">
                             <div class="col-3 fw-semibold">Alt. Number</div>
-                            <div class="col-9">: {{ $staff->ALTCNTMOBILE }}</div>
+                            <div class="col-9">: {{ $staff['dataPayload']['data']['mobile_number'] }} </div>
                         </div>
 
                         <div class="row mb-2">
                             <div class="col-3 fw-semibold">Official Email</div>
-                            <div class="col-9">: {{ $staff->EMAILO }}</div>
+                            <div class="col-9">: {{ $staff['dataPayload']['data']['work_email'] }} </div>
                         </div>
 
                         <div class="row mb-2">
                             <div class="col-3 fw-semibold">Personal Email</div>
-                            <div class="col-9">: {{ $staff->EMAILP }}</div>
+                            <div class="col-9">: {{ $staff['dataPayload']['data']['personal_email'] }} </div>
                         </div>
-
-                        <div class="row mb-2">
-                            <div class="col-3 fw-semibold">Address</div>
-                            <div class="col-9">: {{ $staff->POSTALADDESS }}</div>
-                        </div>
-
                     </fieldset>
                 </div>
 
                     <div class="col-md-6">
-                        <form method="post" action="{{ route('admin.importUsers', ['id' => Crypt::encrypt($staff->STAFFNO)]) }}">
+                        <form method="post" action="{{ route('admin.importUsers') }}">
                             @csrf
                         <fieldset class="border p-2" style="height: 100% !important;">
                         <legend class="float-none w-auto"><h6>Employment Details</h6></legend>
@@ -95,16 +84,18 @@
                                 <select class="form-control" name="campus" id="#campus">
                                     <option disabled selected class="text-center">-- select campus --</option>
                                     @foreach($campuses as $campus)
-                                        <option value="{{ $campus->id }}">{{ $campus->name }}</option>
+                                        <option value="{{ $campus->campus_id }}">{{ $campus->name }}</option>
                                     @endforeach
                                 </select>
                                 <label>CAMPUS NAME</label>
+                                <input type="hidden" name="userId" value="{{ $staff['dataPayload']['data']['id_number'] }}">
+                                <input type="hidden" name="staffNumber" value="{{ $staff['dataPayload']['data']['staff_number'] }}">
                             </div>
                             <div class="form-floating mb-2">
                                 <select class="form-control" name="division" id="division">
                                     <option disabled selected class="text-center">-- select division --</option>
                                     @foreach($divisions as $division)
-                                        <option value="{{ $division->id }}">{{ $division->name }}</option>
+                                        <option value="{{ $division->division_id }}">{{ $division->name }}</option>
                                     @endforeach
                                 </select>
                                 <label>DIVISION NAME</label>
@@ -157,58 +148,115 @@
 <script>
     $(document).ready(function () {
         $(document).on('change', '#division', function () {
+            var division = $(this).val();
+            var departmentDropdown = $('#department');
+            var stationDropdown = $('#station');
 
-            var division = $('#division').val();
-            var op = '';
+            // Clear previous options
+            departmentDropdown.empty();
+            stationDropdown.empty();
+
+            // Add default option
+            departmentDropdown.append('<option disabled selected class="text-center">-- select department --</option>');
+            stationDropdown.append('<option disabled selected class="text-center">-- select station --</option>');
+
+            // Make AJAX request
             $.ajax({
-
                 type: 'get',
                 url: '{{ route('admin.divisionDepartment') }}',
-                data: {division: division},
+                data: { division: division },
                 dataType: 'json',
                 success: function (data) {
-
-                    var op = '';
-
-                    op += '<option value="0" selected disabled class="text-center"> -- select -- </option>';
-
+                    // Populate department dropdown
                     for (var i = 0; i < data.length; i++) {
-                        op += '<option value="' + data[i].id + '">' + data[i].name + '</input>';
-
+                        departmentDropdown.append('<option value="' + data[i].department_id + '">' + data[i].name + '</option>');
                     }
-
-                    $('#department').append(op);
-
                 }
             });
-
-            $(document).on('change', '#department', function () {
-
-                var deptID = $('#department').val();
-                var op1 = '';
-
-                $.ajax({
-
-                    type: 'get',
-                    url: '{{ route('admin.getDepartment') }}',
-                    data: {deptID: deptID},
-                    dataType: 'json',
-                    success: function (data) {
-
-                        console.log(data)
-
-                        op1 += '<option value="0" selected disabled class="text-center"> -- select section -- </option>';
-
-                        op1 += '<option value="' + data.id + '"> ' + data.name + ' </option>';
-
-                        $('#station').append(op1);
-                    }
-                });
-
-            });
-
         });
 
+        $(document).on('change', '#department', function () {
+            var departmentID = $(this).val();
+            var stationDropdown = $('#station');
+
+            // Clear previous options
+            stationDropdown.empty();
+
+            // Add default option
+            stationDropdown.append('<option disabled selected class="text-center">-- select station --</option>');
+
+            // Make AJAX request
+            $.ajax({
+                type: 'get',
+                url: '{{ route('admin.getDepartment') }}',
+                data: { deptID: departmentID },
+                dataType: 'json',
+                success: function (data) {
+                    // Populate station dropdown
+                    stationDropdown.append('<option value="' + data.department_id + '">' + data.name + '</option>');
+                }
+            });
+        });
     });
 
 </script>
+
+{{--<script>--}}
+{{--    $(document).ready(function () {--}}
+{{--        $(document).on('change', '#division', function () {--}}
+
+{{--            var division = $('#division').val();--}}
+{{--            var op = '';--}}
+{{--            $.ajax({--}}
+
+{{--                type: 'get',--}}
+{{--                url: '{{ route('admin.divisionDepartment') }}',--}}
+{{--                data: {division: division},--}}
+{{--                dataType: 'json',--}}
+{{--                success: function (data) {--}}
+
+{{--                    var op = '';--}}
+
+{{--                    op += '<option value="0" selected disabled class="text-center"> -- select -- </option>';--}}
+
+{{--                    for (var i = 0; i < data.length; i++) {--}}
+{{--                        op += '<option value="' + data[i].department_id + '">' + data[i].name + '</input>';--}}
+{{--                    }--}}
+
+{{--                    $('#department').append(op);--}}
+
+{{--                }--}}
+{{--            });--}}
+
+{{--            $(document).on('change', '#department', function () {--}}
+
+{{--                var deptID = $('#department').val();--}}
+{{--                var op1 = '';--}}
+
+{{--                console.log(deptID)--}}
+
+{{--                $.ajax({--}}
+
+{{--                    type: 'get',--}}
+{{--                    url: '{{ route('admin.getDepartment') }}',--}}
+{{--                    data: {deptID: deptID},--}}
+{{--                    dataType: 'json',--}}
+{{--                    success: function (data) {--}}
+
+{{--                        console.log(data)--}}
+
+{{--                        op1 += '<option value="0" selected disabled class="text-center"> -- select section -- </option>';--}}
+
+{{--                        op1 += '<option value="' + data.department_id + '"> ' + data.name + ' </option>';--}}
+
+{{--                        $('#station').append(op1);--}}
+{{--                    }--}}
+{{--                });--}}
+
+{{--            });--}}
+
+{{--        });--}}
+
+{{--    });--}}
+
+{{--</script>--}}

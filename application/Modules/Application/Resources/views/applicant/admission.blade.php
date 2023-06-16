@@ -49,7 +49,7 @@
                             <form method="POST" action="{{ route('application.academicDoc') }}" enctype="multipart/form-data">
                                 @csrf
                                 <input type="file" class="form-control-sm" name="academicDoc" @if($admission->admissionDoc != null && $admission->admissionDoc->status == 1) disabled @endif>
-                                <input type="hidden" name="academicDocId" value="{{ $admission->id }}">
+                                <input type="hidden" name="academicDocId" value="{{ $admission->application_id }}">
                                 <button type="submit" class="btn btn-sm btn-success" @if($admission->admissionDoc != null && $admission->admissionDoc->status == 1) disabled @endif ><i class="fa fa-file-upload"></i> upload</button>
                             </form>
                         </td>
@@ -79,7 +79,7 @@
                             <form method="POST" action="{{ route('application.bankReceipt') }}" enctype="multipart/form-data">
                                 @csrf
                                 <input type="file" name="bankReceipt" class="form-control-sm" @if($admission->admissionDoc != null && $admission->admissionDoc->status == 1) disabled @endif>
-                                <input type="hidden" name="bankReceiptId" value="{{ $admission->id }}">
+                                <input type="hidden" name="bankReceiptId" value="{{ $admission->application_id }}">
                                 <button type="submit" class="btn btn-sm btn-success" @if($admission->admissionDoc != null && $admission->admissionDoc->status == 1) disabled @endif ><i class="fa fa-file-upload"></i> upload</button>
                             </form>
                         </td>
@@ -109,7 +109,7 @@
                             <form method="POST" action="{{ route('application.medicalForm') }}" enctype="multipart/form-data">
                                 @csrf
                                 <input type="file" name="medicalForm" class="form-control-sm" @if($admission->admissionDoc != null && $admission->admissionDoc->status == 1) disabled @endif>
-                                <input type="hidden" name="medicalFormId" value="{{ $admission->id }}">
+                                <input type="hidden" name="medicalFormId" value="{{ $admission->application_id }}">
                                 <button type="submit" class="btn btn-sm btn-success" @if($admission->admissionDoc != null && $admission->admissionDoc->status == 1) disabled @endif ><i class="fa fa-file-upload"></i> upload</button>
                             </form>
                         </td>
@@ -139,7 +139,7 @@
                             <form method="POST" action="{{ route('application.passportPhoto') }}" enctype="multipart/form-data">
                                 @csrf
                                 <input type="file" name="passPort" class="form-control-sm" @if($admission->admissionDoc != null && $admission->admissionDoc->status == 1) disabled @endif>
-                                <input type="hidden" name="passPortId" value="{{ $admission->id }}">
+                                <input type="hidden" name="passPortId" value="{{ $admission->application_id }}">
                                 <button type="submit" class="btn btn-sm btn-success" @if($admission->admissionDoc != null && $admission->admissionDoc->status == 1) disabled @endif ><i class="fa fa-file-upload"></i> upload</button>
                             </form>
                         </td>
@@ -171,7 +171,7 @@
                 @if($admission->admissionDoc->certificates &&  $admission->admissionDoc->bank_receipt && $admission->admissionDoc->medical_form && $admission->admissionDoc->passport_photo != null)
                     @if($admission->admissionDoc->status == 0)
             <div class="d-flex justify-content-center m-3">
-                <a class="btn btn-sm btn-alt-success" data-toggle="click-ripple" onclick="return confirm('You are about to submit your documents. Once submitted cannot be changed. Are you sure you want to proceed?')" href="{{ route('application.submitDocuments', ['id' => Crypt::encrypt($admission->id)]) }}">Submit documents</a>
+                <a class="btn btn-sm btn-alt-success" data-toggle="click-ripple" onclick="return confirm('You are about to submit your documents. Once submitted cannot be changed. Are you sure you want to proceed?')" href="{{ route('application.submitDocuments', $admission->application_id) }}">Submit documents</a>
             </div>
                     @else
                         <p class="h6 text-center text-success m-4">Your documents are being processed</p>

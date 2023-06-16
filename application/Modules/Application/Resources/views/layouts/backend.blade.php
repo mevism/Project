@@ -111,7 +111,10 @@
 
         <!-- User Info -->
         <div class="ms-2">
-          <a class="text-dark fw-semibold fs-sm" href="javascript:void(0)">{{ Auth::user()->name }}</a>
+          <a class="text-dark fw-semibold fs-sm" href="javascript:void(0)">
+              @if(auth()->guard('web')->user()->infoApplicant != null)
+              {{ auth()->guard('web')->user()->infoApplicant->name }}</a>
+            @endif
         </div>
         <!-- END User Info -->
 
@@ -257,14 +260,22 @@
           <!-- User Dropdown -->
           <div class="dropdown d-inline-block ms-2">
             <button type="button" class="btn btn-sm btn-alt-dark d-flex align-items-center" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <img class="rounded-circle" src="{{ asset('media/avatars/ava.jpg') }}" alt="Header Avatar" style="width: 21px;">
-              <span class="d-none d-sm-inline-block ms-2"> {{ Auth::user()->title }} {{ Auth::user()->sname }}</span>
+              <img class="rounded-circle" src="{{ asset('media/avatars/avatar14.jpg') }}" alt="Header Avatar" style="width: 21px;">
+              <span class="d-none d-sm-inline-block ms-2">
+                  @if(auth()->guard('web')->user()->infoApplicant != null)
+                  {{ auth()->guard('web')->user()->infoApplicant->title }} {{ auth()->guard('web')->user()->infoApplicant->sname }}
+                  @endif
+              </span>
               <i class="fa fa-fw fa-angle-down d-none d-sm-inline-block ms-1 mt-1"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-md dropdown-menu-end p-0 border-0" aria-labelledby="page-header-user-dropdown">
               <div class="p-3 text-center bg-body-light border-bottom rounded-top">
-                <img class="img-avatar img-avatar48 img-avatar-thumb" src="{{ asset('media/avatars/ava.jpg') }}" alt="">
-                <p class="mt-2 mb-0 fw-medium">{{ Auth::user()->fname }} {{ Auth::user()->mname }} {{ Auth::user()->sname }}</p>
+                <img class="img-avatar img-avatar48 img-avatar-thumb" src="{{ asset('media/avatars/avatar14.jpg') }}" alt="">
+                <p class="mt-2 mb-0 fw-medium">
+                    @if(auth()->guard('web')->user()->infoApplicant != null)
+                    {{ auth()->guard('web')->user()->infoApplicant->fname }} {{ auth()->guard('web')->user()->infoApplicant->mname }} {{ auth()->guard('web')->user()->infoApplicant->sname }}
+                    @endif
+                </p>
                 <p class="mb-0 text-muted fs-sm fw-medium">Applicant</p>
               </div>
               <div class="p-2">
@@ -282,8 +293,8 @@
 {{--                <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:void(0)">--}}
 {{--                  <span class="fs-sm fw-medium">Lock Account</span>--}}
 {{--                </a>--}}
-                <a class="dropdown-item d-flex align-items-center justify-content-between" href="{{ route('application.logout') }}">
-                  <span class="fs-sm fw-medium">Log Out</span>
+                <a class="dropdown-item d-flex align-items-center justify-content-between" href="{{ route('logout') }}">
+                  <span class="fs-sm fw-medium">Sign Out</span>
                 </a>
               </div>
             </div>

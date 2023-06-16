@@ -15,11 +15,10 @@ return new class extends Migration
     {
         Schema::create('kuccps_applications', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('applicant_id');
-            $table->integer('intake_id');
+            $table->string('applicant_id');
+            $table->string('intake_id');
             $table->string('course_code');
             $table->string('course_name');
-            $table->integer('status')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

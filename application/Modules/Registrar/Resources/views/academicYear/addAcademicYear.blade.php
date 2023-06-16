@@ -22,11 +22,9 @@
             </div>
         </div>
 </div>
-
     <div class="content">
-
-<div class="block block-rounded">
-        <div class="block-content block-content-full">
+        <div class="block block-rounded">
+          <div class="block-content block-content-full">
                 <div class="d-flex justify-content-center">
                     <div class="col-lg-6 space-y-0">
 
@@ -51,7 +49,8 @@
                     </div>
                 </div>
         </div>
-</div>
+        </div>
+    </div>
 @endsection
 
 

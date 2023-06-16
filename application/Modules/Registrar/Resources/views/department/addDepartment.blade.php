@@ -32,24 +32,24 @@
 
                    <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.storeDepartment') }}" method="POST">
                     @csrf
-                    
+
                       <div class="form-floating col-12 col-xl-12">
-                      <select name="school" class="form-control form-control-alt text-uppercase">
+                      <select name="school" class="form-control text-uppercase">
                         <option selected disabled> Select School </option>
                         @foreach ($schools as $school)
-                        <option value="{{ $school->id }}">{{ $school->name }}</option>        
+                        <option value="{{ $school->school_id }}">{{ $school->name }}</option>
                         @endforeach
-                        <label class="form-label">SCHOOL NAME</label>
                       </select>
-                    </div>
+                          <label class="form-label">SCHOOL NAME</label>
+                      </div>
 
                     <div class="form-floating col-12 col-xl-12">
-                      <input type="text" value="{{ old('dept_code') }}"  class="form-control form-control-alt text-uppercase" id="dept_code" name="dept_code" placeholder="Department code">
+                      <input type="text" value="{{ old('dept_code') }}"  class="form-control text-uppercase" id="dept_code" name="dept_code" placeholder="Department code">
                       <label class="form-label">DEPARTMENT CODE</label>
                     </div>
 
                     <div class="form-floating col-12 col-xl-12">
-                      <input type="text" value="{{ old('name') }}"  class="form-control form-control-alt text-uppercase" id="name" name="name" placeholder="Department Name">
+                      <input type="text" value="{{ old('name') }}"  class="form-control text-uppercase" id="name" name="name" placeholder="Department Name">
                       <label class="form-label">DEPARTMENT NAME</label>
                     </div>
 
@@ -62,5 +62,5 @@
               </div>
             </div>
           </div>
-    </div> 
+    </div>
 @endsection

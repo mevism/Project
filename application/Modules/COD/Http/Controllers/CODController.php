@@ -3,7 +3,12 @@
 namespace Modules\COD\Http\Controllers;
 
 use App\Models\User;
+use App\Service\CustomIds;
 use Auth;
+use Modules\Application\Entities\ApplicationApproval;
+use Modules\COD\Entities\AdmissionsView;
+use Modules\COD\Entities\ApplicationsView;
+use Modules\COD\Entities\CourseOnOfferView;
 use Modules\Lecturer\Entities\LecturerQualification;
 use Modules\Lecturer\Entities\QualificationRemarks;
 use Modules\Lecturer\Entities\TeachingArea;
@@ -57,6 +62,10 @@ use Modules\Student\Entities\CourseTransferApproval;
 
 class CODController extends Controller
 {
+    public function __construct(){
+//        auth()->setDefaultDriver();
+//        $this->middleware(['web', 'auth', 'is_cod']);
+    }
 
 //    public function index(){
 //
@@ -76,52 +85,41 @@ class CODController extends Controller
 
     public function applications(){
 
-        $applications = Application::where('cod_status', '>=', 0)
-            ->where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->id)
-            ->where('dean_status', null)
-            ->orWhere('dean_status', 3)
-            ->orderby('id', 'DESC')
-            ->get();
-
-//        return auth()->guard('user')->user()->roles;
-
+     $applications = ApplicationsView::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+           ->where('dean_status', null)
+           ->where('declaration', '!=', null)
+           ->latest()
+           ->get();
         return view('cod::applications.index')->with('apps', $applications);
     }
 
     public function viewApplication($id){
 
-        $hashedId = Crypt::decrypt($id);
-
-        $app = Application::find($hashedId);
-        $school = Education::where('applicant_id', $app->applicant->id)->get();
+        $app = ApplicationsView::where('application_id', $id)->first();
+        $school = Education::where('applicant_id', $app->applicant_id)->get();
 
         return view('cod::applications.viewApplication')->with(['app' => $app, 'school' => $school]);
     }
 
     public function previewApplication($id){
-
-        $hashedId = Crypt::decrypt($id);
-
-        $app = Application::find($hashedId);
-        $school = Education::where('applicant_id', $app->applicant->id)->get();
+        $app = ApplicationsView::where('application_id', $id)->first();
+        $school = Education::where('applicant_id', $app->applicant_id)->get();
         return view('cod::applications.preview')->with(['app' => $app, 'school' => $school]);
     }
 
     public function acceptApplication($id){
 
-        $hashedId = Crypt::decrypt($id);
-
-        $app = Application::find($hashedId);
+        $app = ApplicationApproval::where('application_id', $id)->first();
         $app->cod_status = 1;
-        $app->cod_comments = NULL;
+        $app->cod_comments = 'Application accepted by department';
         $app->save();
 
-        $logs = new CODLog;
-        $logs->application_id = $app->id;
-        $logs->user = Auth::guard('user')->user()->name;
-        $logs->user_role = Auth::guard('user')->user()->role_id;
-        $logs->activity = 'Application accepted';
-        $logs->save();
+//        $logs = new CODLog;
+//        $logs->application_id = $app->id;
+//        $logs->user = Auth::guard('user')->user()->name;
+//        $logs->user_role = Auth::guard('user')->user()->role_id;
+//        $logs->activity = 'Application accepted';
+//        $logs->save();
 
         return redirect()->route('cod.applications')->with('success', '1 applicant approved');
     }
@@ -132,47 +130,43 @@ class CODController extends Controller
                 'comment' => 'required|string'
             ]);
 
-        $hashedId = Crypt::decrypt($id);
-
-        $app = Application::find($hashedId);
+        $app = ApplicationApproval::where('application_id', $id)->first();
         $app->cod_status = 2;
         $app->cod_comments = $request->comment;
         $app->save();
 
-        $logs = new CODLog;
-        $logs->application_id = $app->id;
-        $logs->user = Auth::guard('user')->user()->name;
-        $logs->user_role = Auth::guard('user')->user()->role_id;
-        $logs->comments = $request->comment;
-        if ($app->dean_status == 3){
-            $logs->activity = 'Application reviewed by COD';
-        }
-        $logs->activity = 'Application rejected';
-        $logs->save();
+//        $logs = new CODLog;
+//        $logs->application_id = $app->id;
+//        $logs->user = Auth::guard('user')->user()->name;
+//        $logs->user_role = Auth::guard('user')->user()->role_id;
+//        $logs->comments = $request->comment;
+//        if ($app->dean_status == 3){
+//            $logs->activity = 'Application reviewed by COD';
+//        }
+//        $logs->activity = 'Application rejected';
+//        $logs->save();
 
         return redirect()->route('cod.applications')->with('success', 'Application declined');
     }
 
     public function reverseApplication(Request $request, $id){
 
-        $hashedId = Crypt::decrypt($id);
-
-        $app = Application::find($hashedId);
+        $app = ApplicationApproval::where('application_id', $id)->first();
         $app->cod_status = 4;
         $app->cod_comments = $request->comment;
         $app->save();
 
-        $logs = new CODLog;
-        $logs->application_id = $app->id;
-        $logs->user = Auth::guard('user')->user()->name;
-        $logs->user_role = Auth::guard('user')->user()->role_id;
-        $logs->comments = $request->comment;
-        $logs->activity = 'Application reversed for corrections';
-        $logs->save();
-
+//        $logs = new CODLog;
+//        $logs->application_id = $app->id;
+//        $logs->user = Auth::guard('user')->user()->name;
+//        $logs->user_role = Auth::guard('user')->user()->role_id;
+//        $logs->comments = $request->comment;
+//        $logs->activity = 'Application reversed for corrections';
+//        $logs->save();
+//
         $comms = new Notification;
-        $comms->application_id = $hashedId;
-        $comms->role_id = Auth::guard('user')->user()->role_id;
+        $comms->application_id = $id;
+        $comms->role_id = \auth()->guard('user')->user()->roles->first()->id;
         $comms->subject = 'Application Approval Process';
         $comms->comment = $request->comment;
         $comms->save();
@@ -181,11 +175,12 @@ class CODController extends Controller
     }
 
     public function batch(){
-        $apps = Application::where('cod_status', '>', 0)
-            ->where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->id)
+        $apps = ApplicationsView::where('cod_status', '>', 0)
+            ->where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->department_id)
             ->where('dean_status', null)
             ->orWhere('dean_status', 3)
             ->where('cod_status', '!=', 3)
+            ->latest()
             ->get();
 
         return view('cod::applications.batch')->with('apps', $apps);
@@ -195,51 +190,52 @@ class CODController extends Controller
 
         foreach ($request->submit as $item){
 
-            $app = Application::find($item);
+            $app = ApplicationApproval::where('application_id', $item)->first();
 
             if ($app->cod_status == 4){
 
-                $app = Application::find($item);
+                $app = ApplicationApproval::where('application_id', $item)->first();
                 $app->cod_status = NULL;
-                $app->finance_status = NULL;
-                $app->declaration = 0;
+                $app->dean_status = NULL;
                 $app->save();
 
-                $logs = new CODLog;
-                $logs->application_id = $app->id;
-                $logs->user = Auth::guard('user')->user()->name;
-                $logs->user_role = Auth::guard('user')->user()->role_id;
-                $logs->activity = "Application awaiting Dean's Verification";
-                $logs->save();
+                $revert = Application::where('application_id', $item)->first();
+                $revert->declaration = NULL;
+                $revert->save();
+
+//                $logs = new CODLog;
+//                $logs->application_id = $app->id;
+//                $logs->user = Auth::guard('user')->user()->name;
+//                $logs->user_role = Auth::guard('user')->user()->role_id;
+//                $logs->activity = "Application awaiting Dean's Verification";
+//                $logs->save();
 
                 $notify = Notification::where('application_id', $item)->latest()->first();
-                $notify->status = 1;
+                $notify->status = '1';
                 $notify->save();
 
             }else{
-                $app = Application::find($item);
+                $app = ApplicationApproval::where('application_id', $item)->first();
                 $app->dean_status = 0;
                 $app->save();
 
-                $logs = new CODLog;
-                $logs->application_id = $app->id;
-                $logs->user = Auth::guard('user')->user()->name;
-                $logs->user_role = Auth::guard('user')->user()->role_id;
-                $logs->activity = "Application awaiting Dean's Verification";
-                $logs->save();
+//                $logs = new CODLog;
+//                $logs->application_id = $app->id;
+//                $logs->user = Auth::guard('user')->user()->name;
+//                $logs->user_role = Auth::guard('user')->user()->role_id;
+//                $logs->activity = "Application awaiting Dean's Verification";
+//                $logs->save();
             }
         }
 
         return redirect()->route('cod.batch')->with('success', '1 Batch elevated for Dean approval');
     }
 
-
     public function admissions(){
 
-        $applicant = Application::where('cod_status', 1)
-            ->where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->id)
-            ->where('registrar_status', 3)
-            ->where('status', 0)
+        $applicant = AdmissionsView::where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+            ->where('medical_status', null)
+            ->latest()
             ->get();
 
         return view('cod::admissions.index')->with('applicant', $applicant);
@@ -247,11 +243,9 @@ class CODController extends Controller
 
     public function reviewAdmission($id){
 
-        $hashedId = Crypt::decrypt($id);
-
-        $app = Application::find($hashedId);
-        $documents = AdmissionDocument::where('application_id', $hashedId)->first();
-        $school = Education::where('applicant_id', $app->applicant->id)->get();
+        $app = AdmissionsView::where('application_id', $id)->first();
+        $documents = AdmissionDocument::where('application_id', $app->application_id)->first();
+        $school = Education::where('applicant_id', $app->applicant_id)->get();
 
         return view('cod::admissions.review')->with(['app' => $app, 'documents' => $documents, 'school' => $school]);
 
@@ -259,81 +253,54 @@ class CODController extends Controller
 
     public function acceptAdmission($id){
 
-        $hashedId = Crypt::decrypt($id);
-
-        AdmissionApproval::where('application_id', $hashedId)->update(['cod_status' => 1]);
+        AdmissionApproval::where('application_id', $id)->update(['cod_status' => 1, 'cod_comments' => 'Admission accepted at department level']);
 
         return redirect()->route('cod.Admissions')->with('success', 'New student admitted successfully');
     }
 
     public function rejectAdmission(Request $request, $id){
 
-        $hashedId = Crypt::decrypt($id);
+        AdmissionApproval::where('application_id', $id)->update(['cod_status' => 2, 'cod_comments' => $request->comment]);
 
-        AdmissionApproval::where('application_id', $hashedId)->update(['cod_status' => 2, 'cod_comments' => $request->comment]);
-
-        return redirect()->route('cod.Admissions')->with('warning', 'Admission request rejected');
+        return redirect()->route('cod.Admissions')->with('danger', 'Admission request rejected');
     }
 
 
     public function withholdAdmission(Request $request, $id){
 
-        $hashedId = Crypt::decrypt($id);
+        AdmissionApproval::where('application_id', $id)->update(['cod_status' => 3, 'cod_comments' => $request->comment]);
 
-        AdmissionApproval::where('application_id', $hashedId)->update(['cod_status' => 3, 'cod_comments' => $request->comment]);
-
-        return redirect()->route('cod.Admissions')->with('warning', 'Admission request rejected');
+        return redirect()->route('cod.Admissions')->with('info', 'Admission has been withheld');
     }
 
 
 
     public function submitAdmission($id){
 
-        $hashedId = Crypt::decrypt($id);
+        AdmissionApproval::where('application_id', $id)->update(['medical_status' => 0]);
 
-        AdmissionApproval::where('application_id', $hashedId)->update(['finance_status' => 0]);
+        Application::where('application_id', $id)->update(['status' => 1]);
 
-        Application::where('id', $hashedId)->update(['status' => 1]);
-
-        return redirect()->back()->with('success', 'Record submitted to finance');
+        return redirect()->back()->with('success', 'Admission sent to medical desk for verification');
     }
 
-
-    public function submitAdmJab($id){
-
-        $hashedId = Crypt::decrypt($id);
-
-        AdmissionApproval::where('application_id', $hashedId)->update(['finance_status' => 0]);
-
-        KuccpsApplication::where('applicant_id', $hashedId)->update(['registered' => Carbon::now()]);
-
-        return redirect()->back()->with('success', 'Record submitted to finance');
-    }
 
     public function courses(){
-
-//        return auth()->guard('user')->user()->employmentDepartment->first()->id;
-            $courses = Courses::where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->id)->get();
+         $courses = Courses::where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->department_id)->get();
 
             return view('cod::courses.index')->with('courses', $courses);
     }
 
     public function intakes(){
-
             $intakes = Intake::latest()->get();
-
             return view('cod::intakes.index')->with('intakes', $intakes);
     }
 
     public function intakeCourses($id){
-
-
-        $hashedId = Crypt::decrypt($id);
-
             $modes = Attendance::all();
             $campuses = Campus::all();
-            $intake = Intake::find($hashedId);
-            $courses = Courses::where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->id)->get();
+            $intake = Intake::where('intake_id', $id)->first();
+            $courses = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->latest()->get();
 
             return view('cod::intakes.addCourses')->with(['intake' => $intake, 'courses' => $courses, 'modes' => $modes, 'campuses' => $campuses]);
 
@@ -341,78 +308,98 @@ class CODController extends Controller
 
 
     public function addAvailableCourses(Request $request){
-            $var = $request->json()->all();
-            $validation = Validator::make($var['value'][0], [
-                'campus' => 'required'
-            ]);
 
-            if($validation->passes()) {
+//        return $request->intake;
+        $payload = json_decode($request->input('payload'), true);
 
-                foreach ($var['value'] as $data) {
-                    foreach ($data['campus'] as $camp) {
+        // Check if JSON decoding was successful
+        if (is_null($payload)) {
+            return response()->json(['error' => 'Invalid payload format'], 400);
+        }
 
-                        $course = new AvailableCourse;
-                        $course->intake_id = $data['intake'];
-                        $course->course_id = $data['course'];
-                        $course->campus_id = $camp;
-                        $course->save();
+        // Laravel validation rules
+        $rules = [
+            'payload' => 'required',
+            'payload.*.course' => 'required',
+            'payload.*.modes' => 'required_if:payload.*.course,' . true . '|array',
+            'payload.*.campus' => 'required_if:payload.*.course,' . true . '|array',
+        ];
 
-                    }
+        // Validate the request
+        $validatedData = $request->validate($rules);
 
-                    foreach ($data['attendance_code'] as $code) {
+        // Filter the payload to include only selected courses
+        $selectedCourses = array_filter($payload, function ($item) {
+            return !empty($item['modes']) && !empty($item['campus']);
+        });
 
+        foreach ($selectedCourses as $selectedCourse) {
+            if (AvailableCourse::where('course_id', $selectedCourse['course'])->where('intake_id', $request->intake)->exists()){
+                return redirect()->back()->with('info', 'Some of the course may already have been uploaded');
+            }else{
+                foreach ($selectedCourse['campus'] as $campus) {
+                    $availableId = new CustomIds();
+                    $availableCourse = new AvailableCourse;
+                    $availableCourse->available_id = $availableId->generateId();
+                    $availableCourse->intake_id = $request->intake;
+                    $availableCourse->course_id = $selectedCourse['course'];
+                    $availableCourse->campus_id = $campus;
+                    $availableCourse->save();
+                }
 
-                        $intakes = Intake::where('id', $data['intake'])->first();
+                foreach ($selectedCourse['modes'] as $mode){
 
-                        $deptClass = Classes::where('name', $data['course_code'].'/'.strtoupper(Carbon::parse($intakes->intake_from)->format('MY')).'/'.$code)->exists();
+                    $intakes = Intake::where('intake_id', $request->intake)->first();
+                    $course = Courses::where('course_id', $selectedCourse['course'])->first();
+                    $code = Attendance::find($mode);
+                    $classEx = $course->course_code.'/'.strtoupper(Carbon::parse($intakes->intake_from)->format('MY')).'/'.$code->attendance_code;
 
-                        if ($deptClass == null){
+                    $classId = new CustomIds();
 
-                            $class = new Classes;
-                            $class->name = $data['course_code'].'/'.strtoupper(Carbon::parse($intakes->intake_from)->format('MY')).'/'. $code;
-                            $class->attendance_id = $code;
-                            $class->course_id = $data['course'];
-                            $class->intake_from = $data['intake'];
-                            $class->attendance_code = $code;
-                            $class->save();
-
-                        }
-
+                    $deptClass = Classes::where('name', $classEx)->exists();
+                    if ($deptClass == null){
+                        $class = new Classes;
+                        $class->class_id = $classId->generateId();
+                        $class->name = $classEx;
+                        $class->attendance_id = $code->attendance_code;
+                        $class->course_id = $selectedCourse['course'];
+                        $class->intake_id = $request->intake;
+                        $class->save();
                     }
                 }
-                return json_encode([ 'success' => true ]);
-            }else
-                return json_encode([ 'error' => $validation->errors() ]);
+            }
+        }
 
+        return redirect()->back()->with('success', 'New courses are ready for applications');
+    }
+
+    public function viewDeptIntakeCourses($intake){
+
+       $courses = CourseOnOfferView::where('intake_id', $intake)
+           ->where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+           ->latest()
+           ->get();
+
+        return view('cod::intakes.intakeCourses')->with(['courses' => $courses]);
     }
 
     public function deptClasses(){
-
-            $classes = Classes::latest()->get()->groupBy('intake_from');
-            $intakes = Intake::all();
+        $intakes = Intake::all();
+        $classes = DB::table('classesVIEW')
+                ->where('department_id',  auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+                ->latest()->get()->groupBy('intake_id');
             return view('cod::classes.index')->with(['intakes' => $intakes, 'classes' => $classes]);
-
-
     }
 
     public function viewIntakeClasses($intake){
 
-        $intakeId = Crypt::decrypt($intake);
+        $intakes = Intake::where('intake_id', $intake)->first();
+        $classes = DB::table('classesVIEW')
+            ->where('department_id',  auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+            ->where('intake_id', $intake)
+            ->latest()->get();
 
-        $intake = Intake::find($intakeId);
-
-        $courses = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->id)->get();
-
-        $classes = [];
-
-            foreach ($courses as $course){
-                $classes[] = Classes::where('intake_from', $intakeId)
-                    ->where('course_id', $course->id)
-                    ->latest()
-                    ->get();
-            }
-
-            return view('cod::classes.intakeClasses')->with(['intake' => $intake, 'classes' => $classes]);
+            return view('cod::classes.intakeClasses')->with(['intake' => $intakes, 'classes' => $classes]);
     }
 
     public function viewSemesterUnits($id){
@@ -549,12 +536,6 @@ class CODController extends Controller
             return redirect()->back()->with('success', 'Student admitted and invoiced successfully');
         }
 
-    }
-
-
-    public function downstream(){
-        $callbackResponse = file_get_contents('./js/oneui.app.json');
-        print_r(json_encode(['nut' => json_decode($callbackResponse), 'imgs' => [ asset('Images/success-tick.gif'), asset('Images/error-tick.jpg'), asset('Images/question.gif') ], 'route' => [ route('department.addAvailableCourses') ] ]));
     }
 
     public function classPattern($id){

@@ -12,9 +12,8 @@ use Modules\Dean\Http\Controllers\DeanController;
 |
 */
 
-Route::prefix('dean')->group(function() {
-//    Route::get('/', 'DeanController@index');
-    Route::group(['middleware' => 'dean'], function (){
+Route::prefix('dean')->middleware(['web'])->group(function() {
+
         Route::get('/dean', [DeanController::class, 'index'])->name('dean.dashboard');
         Route::get('/applications', [DeanController::class, 'applications'])->name('dean.applications');
         Route::get('/viewApplication/{id}', [DeanController::class, 'viewApplication'])->name('dean.viewApplication');
@@ -60,5 +59,4 @@ Route::prefix('dean')->group(function() {
         Route::get('/revert-workload/{id}', [DeanController::class, 'revertWorkload'])->name('dean.revertWorkload');
         Route::get('/submit-workload/{id}', [DeanController::class, 'submitWorkload'])->name('dean.submitWorkload');
 
-    });
 });

@@ -14,33 +14,18 @@ return new class extends Migration
     public function up()
     {
         Schema::create('applications', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('applicant_id');
-            $table->integer('intake_id');
-            $table->integer('student_type');
-            $table->string('campus_id')->nullable();
-            $table->integer('school_id');
-            $table->integer('department_id');
-            $table->bigInteger('course_id');
-            $table->string('subject_1')->nullable();
-            $table->string('subject_2')->nullable();
-            $table->string('subject_3')->nullable();
-            $table->string('subject_4')->nullable();
-            $table->string('receipt')->nullable();
-            $table->string('receipt_file')->nullable();
-            $table->tinyInteger('declaration')->nullable();
-            $table->integer('finance_status')->nullable();
-            $table->string('finance_comments')->nullable();
-            $table->integer('cod_status')->nullable();
-            $table->string('cod_comments')->nullable();
-            $table->integer('dean_status')->nullable();
-            $table->string('dean_comments')->nullable();
-            $table->integer('registrar_comments')->nullable();
-            $table->integer('registrar_status')->nullable();
-            $table->integer('status')->nullable();
+            $table->bigIncrements('id');
+            $table->string('application_id');
+            $table->string('applicant_id');
             $table->string('ref_number')->nullable();
-            $table->string('reg_number')->nullable();
-            $table->string('adm_letter')->nullable();
+            $table->string('intake_id');
+            $table->string('student_type');
+            $table->string('campus_id')->nullable();
+            $table->string('school_id');
+            $table->string('department_id');
+            $table->string('course_id');
+            $table->tinyInteger('declaration')->nullable();
+            $table->integer('status')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

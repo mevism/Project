@@ -47,7 +47,7 @@
                                 <!-- Header -->
                                 <div class="text-center mb-5">
                                     <h5 class="fw-bold mb-2 text-uppercase">
-                                        Phone Verification | {{ Auth::user()->mobile }}
+                                        Phone Verification | {{ auth()->guard('web')->user()->applicantContact->mobile }}
                                     </h5>
                                 </div>
                                 <!-- END Header -->
@@ -56,7 +56,7 @@
                                         <form class="js-validation-signin" action="{{ route('application.phonereverification') }}" method="POST">
                                             @csrf
                                             <div class="form-floating mb-4">
-                                                <input type="hidden" class="form-control form-control-alt" name="phone_number" value="{{ Auth::user()->mobile }}">
+                                                <input type="hidden" class="form-control form-control-alt" name="phone_number" value="{{ auth()->guard('web')->user()->applicantContact->mobile }}">
                                             </div>
                                             <div class="form-floating mb-4">
                                                 <input type="text" class="form-control form-control-alt" name="verification_code">

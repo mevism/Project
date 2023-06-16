@@ -24,8 +24,6 @@ use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Department;
 use Modules\Registrar\Entities\FeeStructure;
 use Modules\Registrar\Entities\Intake;
-use Modules\Registrar\Entities\Student;
-use Modules\Registrar\Entities\StudentCourse;
 use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Student\Entities\AcademicLeave;
 use Modules\Student\Entities\AcademicLeaveApproval;
@@ -34,6 +32,7 @@ use Modules\Student\Entities\DeferredClass;
 use Modules\Student\Entities\ExamResults;
 use Modules\Student\Entities\Readmission;
 use Modules\Student\Entities\ReadmissionApproval;
+use Modules\Student\Entities\StudentCourse;
 use Modules\Student\Entities\StudentDeposit;
 use Modules\Student\Entities\TransferInvoice;
 use NcJoes\OfficeConverter\OfficeConverter;
@@ -45,6 +44,10 @@ use SimpleSoftwareIO\QrCode\Facade;
 
 class StudentController extends Controller
 {
+    public function __construct(){
+//        auth()->setDefaultDriver('student');
+//        $this->middleware(['web','auth', 'is_student']);
+    }
     /**
      * Display a listing of the resource.
      * @return Renderable

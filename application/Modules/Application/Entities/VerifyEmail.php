@@ -9,12 +9,13 @@ use Modules\Application\Entities\Applicant;
 class VerifyEmail extends Model
 {
     use HasFactory;
+    public $incrementing = false;
 
     protected $fillable = ['applicant_id', 'verification_code'];
 
-    public function userEmail(){
+    public function emailVerify(){
 
-        return $this->belongsTo(Applicant::class, 'applicant_id');
+        return $this->hasOne(ApplicantInfo::class, 'applicant_id', 'applicant_id');
     }
 
     protected static function newFactory()

@@ -34,9 +34,10 @@
         </div>
         <div class="block block-rounded">
             <div class="block-content block-content-full">
-                <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
+                <table id="example" class="table table-responsive table-sm table-md table-striped table-bordered fs-sm">
         <thead>
         <tr>
+            <th>#</th>
             <th>Course Name</th>
             <th>Department</th>
             <th>Period</th>
@@ -48,20 +49,22 @@
         </thead>
         <tbody>
         @foreach($courses as $course)
-            @foreach($course as $item)
-
-                <tr>
-                    <td> {{ $item->mainCourses->course_name }}</td>
-                    <td> {{ $item->mainCourses->getCourseDept->name }}</td>
-                    <td> {{ $item->mainCourses->courseRequirements->course_duration }}</td>
-                    <td nowrap="">
-                        {{ Carbon\carbon::parse($item->openCourse->intake_from)->format('M')}} - {{ Carbon\carbon::parse($item->openCourse->intake_to)->format('M Y') }}
-                    </td>
-                    <td nowrap=""> {{ $item->courseXCampus->name }} </td>
-                    <td nowrap=""> <a class="btn btn-sm btn-alt-secondary" href="{{ route('application.viewOne', ['id' => Crypt::encrypt($item->id)]) }}">View </a> </td>
-                    <td nowrap=""> <a class="btn btn-sm btn-alt-info" href="{{ route('application.apply', ['id' => Crypt::encrypt($item->id)]) }}">Apply now </a> </td>
-                </tr>
-            @endforeach
+          <tr>
+            <td> {{ $loop->iteration }} </td>
+            <td> {{ $course->course_name }}</td>
+            <td> {{ $course->dept_code }}</td>
+            <td> {{ $course->course_duration }}</td>
+            <td nowrap="">
+            {{ Carbon\carbon::parse($course->intake_from)->format('M')}} - {{ Carbon\carbon::parse($course->intake_to)->format('M Y') }}
+            </td>
+            <td nowrap=""> {{ $course->name }} </td>
+            <td nowrap="">
+                <a class="btn btn-sm btn-alt-secondary" href="{{ route('application.viewOne', $course->available_id) }}">View </a>
+            </td>
+            <td nowrap="">
+                <a class="btn btn-sm btn-alt-info" href="{{ route('application.apply', $course->available_id) }}">Apply now </a>
+            </td>
+          </tr>
         @endforeach
         </tbody>
     </table>

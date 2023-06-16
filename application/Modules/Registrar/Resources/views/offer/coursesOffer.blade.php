@@ -36,30 +36,33 @@
     <div class="block block-rounded">
         <div class="block-content block-content-full">
             <div class="row">
-                <div class="col-lg-12">
-            <table id="example" class="table table-bordered table-striped js-dataTable-responsive">
+                <div class="table-responsive col-lg-12">
+            <table id="example" class="table table-bordered table-striped table-sm fs-sm">
                 @csrf
                 @method('delete')
 
                     <thead>
+                        <th>#</th>
                         <th>Department</th>
                         <th>Course name</th>
                         <th>Intake</th>
                         <th>Duration</th>
+                        <th>Campus</th>
                        <th>Action</th>
                     </thead>
                     <tbody>
                     @foreach($courses as $course)
-
-                        @foreach($course as $item)
-                            <tr>
-                                <td> {{ $item->mainCourses->getCourseDept->name }}</td>
-                                <td> {{ $item->mainCourses->course_name }}</td>
-                                <td nowrap=""> {{ Carbon\carbon::parse($item->openCourse->intake_from)->format('M')}} - {{ Carbon\carbon::parse($item->openCourse->intake_to)->format('M Y') }}</td>
-                                <td> {{ $item->mainCourses->courseRequirements->course_duration }}</td>
-                               <td nowrap=""> <a class="btn btn-sm btn-alt-danger" href="{{ route('courses.destroyCoursesAvailable', $item->id) }}">delete </a> </td>
-                            </tr>
-                        @endforeach
+                         <tr>
+                             <td> {{ $loop->iteration }} </td>
+                           <td> {{ $course->dept_code }}</td>
+                           <td> {{ $course->course_name }}</td>
+                           <td nowrap=""> {{ strtoupper(Carbon\carbon::parse($course->intake_from)->format('MY')) }} </td>
+                           <td> {{ $course->course_duration }}</td>
+                           <td> {{ $course->name }}</td>
+                           <td nowrap="">
+                               <a class="btn btn-sm btn-alt-danger" href="{{ route('courses.destroyCoursesAvailable', $course->available_id) }}">delete </a>
+                           </td>
+                         </tr>
                     @endforeach
                 </tbody>
         </table>
@@ -74,7 +77,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[2, 'asc']],
+            order: [[0, 'asc']],
             rowGroup: {
                 dataSrc: 2
             }

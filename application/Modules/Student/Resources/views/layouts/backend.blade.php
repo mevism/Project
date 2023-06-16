@@ -111,7 +111,7 @@
 
           @php
 
-          $user = Auth::guard('student')->user();
+          $user = auth()->guard('student')->user();
 
           @endphp
 
@@ -200,8 +200,7 @@
                         </a>
                     </li>
                 </ul>
-                {{-- @dd(Auth::guard('student')->user()->loggedStudent) --}}
-              @if(Auth::guard('student')->user()->loggedStudent->courseStudent->student_type == 2)
+              @if($user->enrolledCourse->student_type == 2)
                     <ul class="nav-main-submenu">
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="{{ route('student.coursetransfers') }}">
@@ -354,8 +353,8 @@
 {{--                <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:void(0)">--}}
 {{--                  <span class="fs-sm fw-medium">Lock Account</span>--}}
 {{--                </a>--}}
-                <a class="dropdown-item d-flex align-items-center justify-content-between" href="{{ route('application.logout') }}">
-                  <span class="fs-sm fw-medium">Log Out</span>
+                <a class="dropdown-item d-flex align-items-center justify-content-between" href="{{ route('logout') }}">
+                  <span class="fs-sm fw-medium">Sign Out</span>
                 </a>
               </div>
             </div>

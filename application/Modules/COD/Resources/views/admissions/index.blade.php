@@ -30,11 +30,12 @@
     <div class="block block-rounded">
         <div class="block-content block-content-full">
             <div class="row">
-                <div class="col-lg-12">
-                    <table id="example" class="table table-responsive table-md table-striped table-bordered table-vcenter fs-sm">
+                <div class="col-lg-12 table-responsive">
+                    <table id="example" class="table table-responsive table-sm table-striped table-bordered fs-sm">
                             <thead>
-                                <th></th>
+                            <th>#</th>
                             <th>Applicant Name</th>
+                            <th>gender</th>
                             <th>Course Name</th>
                             <th>Student Type</th>
                             <th>Status</th>
@@ -44,12 +45,13 @@
                             @foreach($applicant as $key => $app)
                                 <tr>
                                     <td> {{ ++$key }}</td>
-                                    <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }} </td>
-                                    <td> {{ $app->courses->course_name }}</td>
+                                    <td> {{ $app->sname }} {{ $app->fname }} {{ $app->mname }} </td>
+                                    <td> {{ $app->gender }} </td>
+                                    <td> {{ $app->admissionCourse->course_name }}</td>
                                     <td>
-                                        @if($app->applicant->student_type == 1)
+                                        @if($app->student_type == 1)
                                             S-FT
-                                        @elseif($app->applicant->student_type == 2)
+                                        @elseif($app->student_type == 2)
                                             J-FT
                                         @else
                                             S-PT
@@ -57,14 +59,14 @@
                                     </td>
                                     <td>
 
-                                        @if($app->approveAdm == NULL)
+                                        @if($app->certificates == NULL || $app->bank_receipt == NULL || $app->medical_form == NULL || $app->passport_photo == NULL)
                                             <span class="badge bg-warning"> <i class="fa fa-clock-o"></i> Not submitted</span>
                                         @else
-                                            @if($app->approveAdm->cod_status == 0)
+                                            @if($app->cod_status == 0)
                                                 <span class="badge bg-primary"> <i class="fa fa-spinner"></i> Awaiting </span>
-                                            @elseif($app->approveAdm->cod_status == 1)
+                                            @elseif($app->cod_status == 1)
                                                 <span class="badge bg-success"> <i class="fa fa-check-double"></i> Accepted </span>
-                                                @elseif($app->approveAdm->cod_status == 2)
+                                                @elseif($app->cod_status == 2)
                                                 <span class="badge bg-danger"> <i class="fa fa-ban"></i> Rejected </span>
                                             @else
                                                 <span class="badge bg-info"> <i class="fa fa-ban"></i> Withheld </span>
@@ -72,15 +74,13 @@
                                         @endif
                                     </td>
                                     <td nowrap="">
-                                            @if($app->approveAdm == NULL)
-                                                    <a class="btn btn-sm btn-alt-info disabled" href="{{ route('cod.reviewAdmission', ['id' => Crypt::encrypt($app->id)]) }}"> Verify </a>
-                                            @elseif($app->approveAdm->cod_status == 0)
-                                            <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', ['id' => Crypt::encrypt($app->id)]) }}"> Verify </a>
-                                            @elseif($app->approveAdm->cod_status == 1)
-                                                <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', ['id' => Crypt::encrypt($app->id)]) }}"> Edit </a>
-                                                <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('cod.submitAdmission', ['id' => Crypt::encrypt($app->id)]) }}"> Submit </a>
+                                            @if($app->cod_status == 0)
+                                            <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->application_id) }}"> Verify </a>
+                                            @elseif($app->cod_status == 1)
+                                                <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->application_id) }}"> Edit </a>
+                                                <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('cod.submitAdmission', $app->application_id) }}"> Submit </a>
                                             @else
-                                                    <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', ['id' => Crypt::encrypt($app->id)]) }}"> Edit </a>
+                                                <a class="btn btn-sm btn-alt-info" href="{{ route('cod.reviewAdmission', $app->application_id) }}"> Edit </a>
 
                                             @endif
                                     </td>

@@ -10,18 +10,21 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+use App\Http\Middleware\COD\COD;
 use Modules\COD\Http\Controllers\CODController;
 
-Route::prefix('department')->middleware( ['is_cod'])->group( function() {
+Route::middleware(['is_cod'])->prefix('department')->group( function() {
+
         Route::get('/cod', [CODController::class, 'index'])->name('cod.dashboard');
         Route::get('/applications', [CODController::class, 'applications'])->name('cod.applications');
-        Route::get('/viewApplication/{id}', [CODController::class, 'viewApplication'])->name('cod.viewApplication');
-        Route::get('/previewApplication/{id}', [CODController::class, 'previewApplication'])->name('cod.previewApplication');
+        Route::get('/view-application/{id}', [CODController::class, 'viewApplication'])->name('cod.viewApplication');
+        Route::get('/preview-application/{id}', [CODController::class, 'previewApplication'])->name('cod.previewApplication');
         Route::get('/batch', [CODController::class, 'batch'])->name('cod.batch');
-        Route::post('/batchSubmit', [CODController::class, 'batchSubmit'])->name('cod.batchSubmit');
-        Route::get('/acceptApplication/{id}', [CODController::class, 'acceptApplication'])->name('cod.acceptApplication');
-        Route::post('/rejectApplication/{id}', [CODController::class, 'rejectApplication'])->name('cod.rejectApplication');
-        Route::post('/reverseApplication/{id}', [CODController::class, 'reverseApplication'])->name('cod.reverseApplication');
+        Route::post('/batch-bubmit', [CODController::class, 'batchSubmit'])->name('cod.batchSubmit');
+        Route::get('/accept-application/{id}', [CODController::class, 'acceptApplication'])->name('cod.acceptApplication');
+        Route::post('/reject-application/{id}', [CODController::class, 'rejectApplication'])->name('cod.rejectApplication');
+        Route::post('/reverse-application/{id}', [CODController::class, 'reverseApplication'])->name('cod.reverseApplication');
 
         Route::get('/admissions', [CODController::class, 'admissions'])->name('cod.Admissions');
         Route::get('/review/{id}', [CODController::class, 'reviewAdmission'])->name('cod.reviewAdmission');
@@ -29,8 +32,6 @@ Route::prefix('department')->middleware( ['is_cod'])->group( function() {
         Route::post('/reject/{id}', [CODController::class, 'rejectAdmission'])->name('cod.rejectAdmission');
         Route::post('/withhold/{id}', [CODController::class, 'withholdAdmission'])->name('cod.withholdAdmission');
         Route::get('/submit/{id}', [CODController::class, 'submitAdmission'])->name('cod.submitAdmission');
-        Route::get('/submitAdmJab/{id}', [CODController::class, 'submitAdmJab'])->name('cod.submitAdmJab');
-
 
         Route::get('/create-class-pattern/{id}', [CODController::class, 'classPattern'])->name('cod.classPattern');
         Route::post('/submit-class-pattern', [CODController::class, 'storeClassPattern'])->name('cod.storeClassPattern');
@@ -41,18 +42,14 @@ Route::prefix('department')->middleware( ['is_cod'])->group( function() {
         Route::get('/add-semester-unit-per-class/{id}/{unit}', [CODController::class, 'addSemesterUnit'])->name('department.addSemesterUnit');
         Route::get('/drop-semester-unit-per-class/{id}', [CODController::class, 'dropSemesterUnit'])->name('department.dropSemesterUnit');
 
-
         Route::get('/courses', [CODController::class, 'courses'])->name('department.courses');
-
-
         Route::get('/intakes', [CODController::class, 'intakes'])->name('department.intakes');
-        Route::get('/addCourse/{id}', [CODController::class, 'intakeCourses'])->name('department.intakeCourses');
-        Route::post('/addAvailableCourses', [CODController::class, 'addAvailableCourses'])->name('department.addAvailableCourses');
-        Route::get('/downstream', [CODController::class, 'downstream'])->name('raw.route');
+        Route::get('/add-course/{id}', [CODController::class, 'intakeCourses'])->name('department.intakeCourses');
+        Route::post('/add-available-courses', [CODController::class, 'addAvailableCourses'])->name('department.addAvailableCourses');
+        Route::get('/courses-available-per-intake/{intake}', [CODController::class, 'viewDeptIntakeCourses'])->name('department.availableCourses');
 
-
-        Route::get('/getClasses', [CODController::class, 'deptClasses'])->name('department.classes');
-        Route::get('/classList/{id}', [CODController::class, 'classList'])->name('department.classList');
+        Route::get('/get-Classes', [CODController::class, 'deptClasses'])->name('department.classes');
+        Route::get('/class-List/{id}', [CODController::class, 'classList'])->name('department.classList');
 
 
         Route::get('/admitStudent/{id}', [CODController::class, 'admitStudent'])->name('department.admitStudent');

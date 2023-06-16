@@ -23,41 +23,42 @@ class Updatedprofile
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->email_verified_at == NULL){
+        if (\auth()->guard('web')->user()->email_verified_at == NULL){
+
+//           return \auth()->guard('web')->user();
 
             VerifyEmail::create([
-                'applicant_id' => Auth::user()->id,
+                'applicant_id' => \auth()->guard('web')->user()->applicant_id,
                 'verification_code' => Str::random(100),
             ]);
 
-            $app = Auth::user();
+            $app = \auth()->guard('web')->user();
 
-            Mail::to($app->email)->send(new VerifyEmails($app));
+            Mail::to($app->applicantContact->email)->send(new VerifyEmails($app));
 
-            Auth::logout();
+            \auth()->guard('web')->logout();
 
             return redirect()->route('root')->with('warning', 'Visit your email to verify your account');
 
         }
 
-        if (Auth::user()->phone_verification == NULL){
+        if (\auth()->guard('web')->user()->phone_verification == NULL){
+
             $verification_code = rand(1, 999999);
 
-            $number = Auth::user()->mobile;
-
             VerifyUser::create([
-                'applicant_id' => Auth::user()->id,
+                'applicant_id' => \auth()->guard('web')->user()->applicant_id,
                 'verification_code' => $verification_code,
             ]);
 
-            $user = Auth::user();
+            $user = \auth()->guard('web')->user();
 
-            $user->notify(new \Modules\Application\Notifications\SMS($verification_code));
+//            $user->notify(new \Modules\Application\Notifications\SMS($verification_code));
 
             return redirect(route('application.reverify'))->with(['info' => 'Enter the code send to your phone']);
         }
 
-        if (Auth::user()->user_status == 0){
+        if (\auth()->guard('web')->user()->user_status == 0){
             return redirect()->route('application.details')->with('warning', 'First update your user profile to continue');
         }
 

@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\User\UserController;
+use App\Http\Middleware\COD\COD;
+use App\Http\Middleware\DEAN\DEAN;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,10 +18,12 @@ use Illuminate\Support\Facades\Route;
 
 // Example Routes
 
+//Route::middleware('auth')->group(function() {
 
-Route::view('/', 'userauth.login')->name('root');
-Route::post('/login', [\App\Http\Controllers\User\UserController::class, 'login'])->name('user.login');
-Route::get('/dashboard', [App\Http\Controllers\User\UserController::class, 'dashboard'])->name('dashboard');;
-Route::get('/logout', [\App\Http\Controllers\User\UserController::class, 'logout'])->name('logout');
+    Route::view('/', 'userauth.login')->name('root');
+    Route::post('/login', [UserController::class, 'login'])->name('user.login');
+
+    Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+    Route::get('/logout', [UserController::class, 'signOut'])->name('logout');
 
 //Route::get('/mail', function (){ return view('mail'); });

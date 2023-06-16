@@ -30,9 +30,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0" >
+                    <h6 class="h6 fw-bold mb-0" >
                         SYSTEM USERS
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -55,44 +55,38 @@
 {{--                        <a class="btn  btn-alt-primary btn-sm" href="{{ route('admin.addNewUser') }}">Add User</a>--}}
                         <a type="button" class="btn btn-sm btn-alt-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Add User</a>
                     </div>
-                        @csrf
-                        <table id="example" class="table table-md table-striped table-striped-columns table-bordered table-vcenter fs-sm">
-                                <thead>
-                                <th>#</th>
-                                <th nowrap="">Staff No.</th>
-                                <th nowrap="">Name</th>
-                                <th nowrap="">Official Email</th>
-                                <th nowrap="">Division</th>
-                                <th nowrap="">Role</th>
-                                <th nowrap="">Manage</th>
-                                </thead>
-                                <tbody>
-                                @foreach($users as $key => $user)
-                                        <tr>
-                                            <td> {{ ++$key }} </td>
-                                            <td> {{ $user->staff_number }} </td>
-                                            <td> {{ $user->title }} {{  $user->last_name }} {{  $user->first_name }} {{  $user->middle_name }} </td>
-                                            <td> {{ $user->office_email }} </td>
-                                            <td class="text-uppercase" nowrap="">
-                                                @foreach($user->employmentDivision as $key => $division)
-                                                    <p>
-                                                        {{ $division->name }}
-                                                    </p>
-                                                @endforeach
-                                            </td>
-                                            <td nowrap="">
-                                                @foreach($user->roles as $key => $role)
-                                                    <p>{{ ++$key }}. {{ $role->name }}</p>
-                                                @endforeach
-                                            </td>
-                                            <td nowrap="">
-                                                <a class="btn btn-sm btn-outline-secondary" href="{{ route('admin.addUserRole', ['id' => Crypt::encrypt($user->id)]) }}">roles</a>
-                                                <a class="btn btn-sm btn-outline-primary">permissions</a>
-                                            </td>
-                                        </tr>
-                                @endforeach
-                                </tbody>
+                    <div class="table-responsive">
+                        <table id="example" class="table table-sm table-md table-striped table-bordered fs-sm">
+                            <thead>
+                            <th>#</th>
+                            <th>Staff No.</th>
+                            <th>Staff Name</th>
+                            <th>Gender</th>
+                            <th>Official Email</th>
+                            <th>Department</th>
+                            <th>Role</th>
+                            <th>Manage Users</th>
+                            </thead>
+                            <tbody>
+                            @foreach($users as $key => $user)
+                                <tr>
+                                    <td> {{ ++$key }} </td>
+                                    <td> {{ $user->staff_number }} </td>
+                                    <td> {{ $user->title }} {{  $user->last_name }} {{  $user->first_name }} {{  $user->middle_name }} </td>
+                                    <td> {{ $user->gender }} </td>
+                                    <td> {{ $user->office_email }} </td>
+                                    <td class="text-uppercase"> {{ $user->name }} </td>
+                                    <td> {{ $user->staffRole->name }} </td>
+                                    <td nowrap="">
+                                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('admin.addUserRole', $user->user_id) }}">roles</a>
+                                        <a class="btn btn-sm btn-outline-primary">permissions</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
                         </table>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -103,26 +97,28 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">FETCH USERS FROM TUMHRMS</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">FETCH USER FROM TUMHRMS</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="get" action="{{ route('admin.addNewUser') }}">
+            <form method="get" action="{{ route('admin.userById') }}">
                 @csrf
                 <div class="modal-body">
                     <div class="d-flex justify-content-center">
                         <div class="col-md-10 mb-3">
-                            <select class="form-control" id="search" name="search" style="width: 100% !important;">
-                                <option SELECTED DISABLED class="text-center"> -- Search staff by staff/ID number -- </option>
-                                @foreach($staff as $user)
-                                    <option value="{{ $user->STAFFNO }}">{{ $user->STAFFNO }} - {{ $user->STAFFNAME }}</option>
-                                @endforeach
-                            </select>
+                          <div class="form-floating mb-4">
+                              <input type="text" name="userId" class="form-control" placeholder="id number">
+                              <label>STAFF ID NUMBER</label>
+                          </div>
+                            <div class="form-floating mb-4">
+                                <input type="text" name="staffNumber" class="form-control" placeholder="staff number">
+                                <label>STAFF STAFF NUMBER</label>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn btn-md btn-alt-primary col-md-7">NEXT STEPS</button>
+                        <button type="submit" class="btn btn-md btn-alt-primary col-md-7">Validate staff</button>
                 </div>
             </form>
         </div>

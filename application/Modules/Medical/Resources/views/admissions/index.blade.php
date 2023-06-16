@@ -5,6 +5,25 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.2.0/css/rowGroup.dataTables.min.css">
 
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable( {
+            responsive: true,
+            order: [[5, 'asc']],
+            rowGroup: {
+                dataSrc: 2
+            },
+
+        } );
+    } );
+
+</script>
+
 @section('content')
     <div class="bg-body-light">
         <div class="content content-full">
@@ -31,13 +50,12 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-lg-12">
-                    <table id="example" class="table table-responsive table-md table-striped table-bordered table-vcenter fs-sm">
+                    <table id="example" class="table table-responsive table-striped table-bordered fs-sm">
                         <thead>
-                        <th></th>
+                        <th>#</th>
                         <th>Applicant Name</th>
-                        <th>Department</th>
-                        <th>Course Name</th>
-                        <th>Student Type</th>
+                        <th>Gender</th>
+                        <th>Disability</th>
                         <th>Status</th>
                         <th style="white-space: nowrap !important;">Action</th>
                         </thead>
@@ -45,16 +63,13 @@
                         @foreach($admission as $app)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td nowrap="">{{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->mname }} {{ $app->appApprovals->applicant->fname }}</td>
-                                <td>{{ $app->appApprovals->courses->getCourseDept->name }}</td>
-                                <td>{{ $app->appApprovals->courses->course_name }}</td>
+                                <td nowrap="">{{ $app->sname }} {{ $app->mname }} {{ $app->fname }}</td>
+                                <td>{{ $app->gender }}</td>
                                 <td>
-                                    @if($app->appApprovals->student_type == 1)
-                                        S-FT
-                                    @elseif($app->appApprovals->student_type == 2)
-                                        J-FT
+                                    @if($app->disabled == 'NO')
+                                        {{ $app->disabled }}
                                     @else
-                                        S-PT
+                                        {{ $app->disabled }}, {{ $app->disability }}
                                     @endif
                                 </td>
                                 <td>
@@ -70,12 +85,12 @@
                                 </td>
                                 <td nowrap="">
                                     @if($app->medical_status == 0)
-                                        <a class="btn btn-sm btn-alt-primary" href="{{ route('medical.reviewAdmission', ['id' => Crypt::encrypt($app->id) ]) }}" data-toggle="click-ripple">Verify</a>
+                                        <a class="btn btn-sm btn-alt-primary" href="{{ route('medical.reviewAdmission', $app->application_id) }}" data-toggle="click-ripple">Verify</a>
                                     @elseif($app->medical_status == 1)
-                                        <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('medical.submitAdmission', ['id' => Crypt::encrypt($app->id) ]) }}"> submit</a>
-                                        <a class="btn btn-sm btn-alt-info" href="{{ route('medical.reviewAdmission', ['id' => Crypt::encrypt($app->id) ]) }}" data-toggle="click-ripple"> Edit</a>
+                                        <a class="btn btn-sm btn-alt-success" data-toogle="click-ripple" onclick="return confirm('Are you sure you want to submit this record?')" href="{{ route('medical.submitAdmission', $app->application_id) }}"> submit</a>
+                                        <a class="btn btn-sm btn-alt-info" href="{{ route('medical.reviewAdmission', $app->application_id) }}" data-toggle="click-ripple"> Edit</a>
                                     @else
-                                        <a class="btn btn-sm btn-alt-info" href="{{ route('medical.reviewAdmission', ['id' => Crypt::encrypt($app->id) ]) }}" data-toggle="click-ripple"> Edit</a>
+                                        <a class="btn btn-sm btn-alt-info" href="{{ route('medical.reviewAdmission', $app->application_id) }}" data-toggle="click-ripple"> Edit</a>
                                     @endif
                                 </td>
                             </tr>
@@ -88,20 +103,5 @@
     </div>
 
 @endsection
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 
-<script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
-<script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#example').DataTable( {
-            responsive: true,
-            order: [[6, 'desc']],
-            rowGroup: {
-                dataSrc: 2
-            }
-        } );
-    } );
-</script>
 

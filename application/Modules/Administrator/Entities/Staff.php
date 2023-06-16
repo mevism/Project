@@ -4,6 +4,7 @@ namespace Modules\Administrator\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Permission\Models\Role;
 
 class Staff extends Model
 {
@@ -11,9 +12,11 @@ class Staff extends Model
 
     protected $fillable = [];
 
-    protected $connection = "sqlsrv";
+    protected $table = "STAFFVIEW";
 
-    protected $table = "VIEWSTAFFACTIVE";
+    public function staffRole(){
+        return $this->belongsTo(Role::class, 'role_id', 'id');
+    }
 
     protected static function newFactory()
     {

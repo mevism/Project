@@ -1,7 +1,5 @@
 @extends('application::layouts.backend')
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
-
 @section('content')
     <!-- Modal -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -36,6 +34,17 @@
         $(window).on('load', function() {
             $('#staticBackdrop').modal('show');
         });
+
+        $(document).ready(function() {
+            $('#example').DataTable( {
+                responsive: true,
+                order: [[0, 'asc']],
+                rowGroup: {
+                    dataSrc: 2
+                }
+            } );
+        } );
+
     </script>
 
     <div class="bg-body-light">
@@ -61,52 +70,38 @@
     </div>
     <div class="block block-rounded">
         <div class="block-content block-content-full">
-            <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
-                @if(count($courses)>0)
-                    <thead>
+            <table id="example" class="table table-sm table-striped table-bordered fs-sm">
+                <thead>
+                <th>#</th>
+                <th>Department</th>
+                <th>Course</th>
+                <th>Action</th>
+                </thead>
+                <tbody>
+                @foreach($courses as $course)
                     <tr>
-                        <th>Department</th>
-                        <th>Course</th>
-                        <th>Action</th>
+                        <td> {{ $loop->iteration }} </td>
+                        <td>{{ $course->DepartmentCourse->getCourseDept->name }}</td>
+                        <td>{{ $course->DepartmentCourse->course_name }}</td>
+                        <td nowrap="">
+                            @if($course->registrar_status == 3 && $course->cod_status == 1)
+                                <a class="btn btn-sm btn-alt-info" data-toggle="click-ripple" href="{{ route('application.uploadDocuments', $course->application_id) }}"><i class="fa fa-file-upload"></i> upload docs</a>
+                            @elseif($course->registrar_status == NULL && $course->finance_status == NULL)
+                                <a class="btn btn-sm btn-alt-info" href="{{ route('application.edit', ['id' => Crypt::encrypt($course->id)]) }}">
+                                    <i class="fa fa-pen-to-square"></i> update</a>
+                            @elseif($course->registrar_status == 1 && $course->cod_status == 2)
+                                <a class="btn btn-sm btn-alt-danger" href="#">
+                                    <i class="fa fa-ban"></i> rejected</a>
+                            @else
+                                <a class="btn btn-sm btn-alt-secondary disabled" href="{{ route('application.progress', ['id' => Crypt::encrypt($course->id)]) }}"> <i class="fa fa-spinner"></i> in progress</a>
+                            @endif
+                        </td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($courses as $course)
-                        <tr>
-                            <td>{{ $course->courses->getCourseDept->name }}</td>
-                            <td>{{ $course->courses->course_name }}</td>
-                            <td nowrap="">
-                                @if($course->registrar_status == 3 && $course->cod_status == 1)
-                                    <a class="btn btn-sm btn-alt-info" data-toggle="click-ripple" href="{{ route('application.uploadDocuments', ['id' => Crypt::encrypt($course->id)]) }}"><i class="fa fa-file-upload"></i> upload docs</a>
-                                @elseif($course->registrar_status == NULL && $course->finance_status == NULL)
-                                    <a class="btn btn-sm btn-alt-info" href="{{ route('application.edit', ['id' => Crypt::encrypt($course->id)]) }}">
-                                        <i class="fa fa-pen-to-square"></i> update</a>
-                                @elseif($course->registrar_status == 1 && $course->cod_status == 2)
-                                    <a class="btn btn-sm btn-alt-danger" href="#">
-                                        <i class="fa fa-ban"></i> rejected</a>
-                                @else
-                                    <a class="btn btn-sm btn-alt-secondary disabled" href="{{ route('application.progress', ['id' => Crypt::encrypt($course->id)]) }}"> <i class="fa fa-spinner"></i> in progress</a>
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                @else
-                    <small class="text-center text-muted"> You have not submitted any applications</small>
-                @endif
+                @endforeach
+                </tbody>
             </table>
         </div>
     </div>
 
 @endsection
-<script>
-    $(document).ready(function() {
-        $('#example').DataTable( {
-            responsive: true,
-            order: [[2, 'asc']],
-            rowGroup: {
-                dataSrc: 2
-            }
-        } );
-    } );
-</script>
+{{--<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>--}}

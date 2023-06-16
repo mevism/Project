@@ -4,44 +4,60 @@ namespace Modules\User\Http\Controllers;
 
 use App\Models\User;
 use App\Models\UserEmployment;
+use App\Service\CustomIds;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Modules\Administrator\Entities\Staff;
+use Modules\Administrator\Http\API\StaffInfoAPI;
 use Modules\Registrar\Entities\Campus;
 use Modules\Registrar\Entities\Department;
 use Modules\Registrar\Entities\Division;
+use Modules\User\Entities\StaffInfo;
 use Spatie\Permission\Models\Role;
+use GuzzleHttp;
 
 class UserController extends Controller
 {
+    protected $staffInfoAPI;
+
+    public function __construct(StaffInfoAPI $staffInfoAPI){
+
+        $this->staffInfoAPI = $staffInfoAPI;
+
+    }
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
     public function index()
     {
+        $users = Staff::latest()->get();
 
-        $users = User::latest()->get();
-        $staff = Staff::all();
-        return view('user::index')->with(['users' => $users, 'staff' => $staff]);
+        return view('user::index')->with(['users' => $users]);
     }
 
-    public function addNewUser(Request $request){
+    public function fetchById(Request $request){
 
-        $request->validate([
-            'search' => 'required'
-        ]);
+        $userId = $request->userId;
+        $staffNumber = $request->staffNumber;
+        $data = $this->staffInfoAPI->fetchStaff($staffNumber, $userId);
         $campuses = Campus::all();
         $divisions = Division::all();
-        $staff = Staff::where('STAFFNO', $request->search)->first();
         $roles = Role::all();
-        return view('user::users.addNewUser')->with(['staff' => $staff, 'campuses' => $campuses, 'divisions' => $divisions, 'roles' => $roles]);
+
+        if (count($data) == 0){
+            return  redirect()->back()->with('error', 'Oops!! Details provided do not match any records');
+        }
+
+        return view('user::users.addNewUser')->with(['staff' => $data, 'campuses' => $campuses, 'divisions' => $divisions, 'roles' => $roles]);
 
     }
+
 
     public function divisionDepartment(Request $request){
 
@@ -52,12 +68,12 @@ class UserController extends Controller
 
     public function getDepartment(Request $request){
 
-        $data = Department::findorFail($request->deptID);
+      $data = Department::where('department_id', $request->deptID)->first();
 
         return response()->json($data);
     }
 
-    public function importUsers(Request $request, $id){
+    public function importUsers(Request $request){
 
         $request->validate([
            'campus' => 'required',
@@ -68,26 +84,32 @@ class UserController extends Controller
            'contract' => 'required',
         ]);
 
-        $staffNo = Crypt::decrypt($id);
+        $userId = $request->input('userId');
+        $staffNumber = $request->input('staffNumber');
+        $data = $this->staffInfoAPI->fetchStaff($staffNumber, $userId);
 
-        $staff = Staff::where('STAFFNO', $staffNo)->first();
+        $userID = new CustomIds();
+        $staffInfo = new StaffInfo;
+        $staffInfo->user_id = $userID->generateId();
+        $staffInfo->staff_number = $data['dataPayload']['data']['staff_number'];
+        $staffInfo->title = 'NA';
+        $staffInfo->first_name = $data['dataPayload']['data']['first_name'];
+        $staffInfo->middle_name =$data['dataPayload']['data']['middle_name'];
+        $staffInfo->last_name = $data['dataPayload']['data']['last_name'];
+        $staffInfo->personal_email = $data['dataPayload']['data']['personal_email'];
+        $staffInfo->office_email = $data['dataPayload']['data']['work_email'];
+        $staffInfo->gender = $data['dataPayload']['data']['gender'];
+        $staffInfo->phone_number = $data['dataPayload']['data']['mobile_number'];
+        $staffInfo->save();
 
         $user = new User;
-        $user->staff_number = $staffNo;
-        $user->title = $staff->SLTCODE;
-        $user->first_name = $staff->NAMEFIRST;
-        $user->middle_name = $staff->NAMEMID;
-        $user->last_name = $staff->NAMELAST;
-        $user->personal_email = $staff->EMAILP;
-        $user->office_email = $staff->EMAIL0;
-        $user->gender = $staff->GNDCODE;
-        $user->phone_number = $staff->MOMBILE;
-        $user->username = $staffNo;
-        $user->password = Hash::make($staff->NATIONALID);
+        $user->user_id = $staffInfo->user_id;
+        $user->username = $data['dataPayload']['data']['staff_number'];
+        $user->password = Hash::make($data['dataPayload']['data']['id_number']);
         $user->save();
 
         $userDept = new UserEmployment;
-        $userDept->user_id = $user->id;
+        $userDept->user_id = $staffInfo->user_id;
         $userDept->role_id = $request->role;
         $userDept->campus_id = $request->campus;
         $userDept->division_id = $request->division;
@@ -102,19 +124,16 @@ class UserController extends Controller
 
     public function addUserRole($id){
 
-        $hashedId = Crypt::decrypt($id);
         $campuses = Campus::all();
         $divisions = Division::all();
         $roles = Role::all();
 
-        $user = User::findorFail($hashedId);
+        $user = Staff::where('user_id', $id)->first();
 
         return view('user::users.addUserRoles')->with(['user' => $user, 'campuses' => $campuses, 'divisions' => $divisions, 'roles' => $roles]);
     }
 
     public function storeUserRole(Request $request, $id){
-
-        $hashedId = Crypt::decrypt($id);
 
         $request->validate([
             'campus' => 'required',
@@ -126,7 +145,7 @@ class UserController extends Controller
         ]);
 
         $newEmployment = new UserEmployment;
-        $newEmployment->user_id = $hashedId;
+        $newEmployment->user_id = $id;
         $newEmployment->role_id = $request->role;
         $newEmployment->campus_id = $request->campus;
         $newEmployment->division_id = $request->division;

@@ -69,7 +69,7 @@
                 <span class="nav-main-link-name">
 
                     @if(auth()->guard('user')->user()->hasRole('Registrar'))
-                        Dashboard
+                        Registry
                     @endif
                 </span>
               </a>
@@ -309,13 +309,19 @@
             <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                     <i class="nav-main-link-icon si si-user"></i>
-                    <span class="nav-main-link-name">Users</span>
+                    <span class="nav-main-link-name">Admin</span>
                 </a>
                 <ul class="nav-main-submenu">
                     <li class="nav-main-item">
                         <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('admin.users') }}">
                             <i class="nav-main-link-icon si si-user"></i>
-                            <span class="nav-main-link-name"> View Users </span>
+                            <span class="nav-main-link-name"> Users </span>
+                        </a>
+                    </li>
+                    <li class="nav-main-item">
+                        <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('admin.showDepartment') }}">
+                            <i class="nav-main-link-icon si si-user"></i>
+                            <span class="nav-main-link-name"> Departments </span>
                         </a>
                     </li>
                 </ul>
@@ -360,10 +366,10 @@
               <img class="rounded-circle" src="{{ asset('media/avatars/male.png') }}" alt="Header Avatar" style="width: 21px;">
               <span class="d-none d-sm-inline-block ms-2">
                   @php
-                    $user = Auth::guard('user')->user();
+                    $user = auth()->guard('user')->user()->staffInfos;
                   @endphp
 
-                  @if(Auth::guard('user')->check())
+                  @if(auth()->guard('user')->check())
                       {{ $user->title }} {{ $user->last_name }}
                   @endif
               </span>
@@ -374,7 +380,7 @@
                 <img class="img-avatar img-avatar48 img-avatar-thumb" src="{{ asset('media/avatars/male.png') }}" alt="">
                 <p class="mt-2 mb-0 fw-medium">
            {{-- {{ Auth::guard('user')->user()->name }}--}}
-                    @if(Auth::guard('user')->check())
+                    @if(auth()->guard('user')->check())
                         {{ $user->title }} {{ $user->last_name }} {{ $user->first_name }} {{ $user->middle_name }}
                     @endif </p>
                 <p class="mb-0 text-muted fs-sm fw-medium">
@@ -389,8 +395,8 @@
               </div> --}}
               <div role="separator" class="dropdown-divider m-0"></div>
               <div class="p-2">
-                <a class="dropdown-item d-flex align-items-center justify-content-between" href="{{ route('application.logout') }}">
-                  <span class="fs-sm fw-medium">Log Out</span>
+                <a class="dropdown-item d-flex align-items-center justify-content-between" href="{{ route('logout') }}">
+                  <span class="fs-sm fw-medium">Sign Out</span>
                 </a>
               </div>
             </div>

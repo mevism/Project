@@ -24,14 +24,14 @@ class Department extends Model
 
     public function division(){
 
-        return $this->belongsTo(Division::class);
+        return $this->belongsTo(Division::class, 'division_id', 'division_id');
     }
 
     public function schools(){
 
-        return $this->belongsToMany(School::class, 'school_departments', 'department_id', 'school_id');
+        return $this->belongsToMany(School::class, 'school_departments', 'department_id', 'school_id', 'department_id', 'school_id');
     }
-   
+
     public function course(){
 
         return $this->hasMany(Courses::class,'id');
@@ -63,6 +63,7 @@ class Department extends Model
     public function studCourseDept(){
         return $this->hasMany(StudentCourse::class, 'id');
     }
+
     protected static function newFactory()
     {
         return \Modules\Courses\Database\factories\DepartmentFactory::new();

@@ -20,6 +20,7 @@ class COD
         if (!Auth::guard('user')->check() || !Auth::guard('user')->user()->roles->first()->id == 2){
             abort(403);
         }
+
         return $next($request);
     }
 }

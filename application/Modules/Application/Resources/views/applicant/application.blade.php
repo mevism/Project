@@ -132,11 +132,13 @@
                         </li>
 {{--                        {{ $mycourse->receipt }}--}}
                         <li class="nav-item d-md-flex flex-md-column">
-                            <button class="nav-link text-md-start @if($mycourse != null && $mycourse->receipt == null && count($education) >= 1) active @endif " id="btabs-vertical-fee-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-fee" role="tab" aria-controls="btabs-vertical-fee" aria-selected="false">
+                            <button class="nav-link text-md-start" id="btabs-vertical-fee-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-fee" role="tab" aria-controls="btabs-vertical-fee" aria-selected="false">
                                 <i class="fa fa-fw fa-money-bill opacity-50 me-1 d-none d-sm-inline-block"></i> Application Fees
 {{--                                @if($mycourse != null)--}}
-                                @if($mycourse != null && $mycourse->receipt != null)
+                                @if($mycourse != null && $mycourse->applicationApproval != null && $mycourse->applicationApproval->finance_status == 1)
                                     <span class="badge bg-success"><i class="fa fa-check-circle"></i> Complete </span>
+                                @else
+                                    <span class="badge bg-info"><i class="fa fa-circle-info"></i> How to pay</span>
                                 @endif
 {{--                                @endif--}}
                             </button>
@@ -150,9 +152,9 @@
                             </button>
                         </li>
                         <li class="nav-item d-md-flex flex-md-column">
-                            <button class="nav-link text-md-start @if($mycourse != null && $mycourse->receipt != null && count($education) > 0) active @endif " id="btabs-vertical-submit-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-submit" role="tab" aria-controls="btabs-vertical-submit" aria-selected="false">
+                            <button class="nav-link text-md-start @if($mycourse != null && $mycourse->applicationApproval == null && count($education) > 0) active @endif " id="btabs-vertical-submit-tab" data-bs-toggle="tab" data-bs-target="#btabs-vertical-submit" role="tab" aria-controls="btabs-vertical-submit" aria-selected="false">
                                 <i class="fa fa-fw fa-check-double opacity-50 me-1 d-none d-sm-inline-block"></i> Complete Application
-                                @if($mycourse != null && $mycourse->receipt != null && count($education) > 0)
+                                @if($mycourse != null && $mycourse->applicationApproval != null && count($education) > 0)
                                     <span class="badge bg-success"><i class="fa fa-check-circle"></i> Submit </span>
                                 @endif
                             </button>
@@ -163,13 +165,13 @@
                             <h4 class="fw-semibold"> Course Requirements </h4>
                             <h4 class="fs-sm fw-semibold">Minimum Course Requirements</h4>
 
-                            <p class="text-amethyst-darker">{{ $course->mainCourses->courseRequirements->course_requirements }} </p>
+                            <p class="text-amethyst-darker">{{ $course->course_requirements }} </p>
 
                             <h4 class="fs-sm fw-semibold"> Minmimum Subject Requirements</h4>
-                            <span class="h4 fs-sm">Subject 1</span> - <span class="ml-4">{{ $course->mainCourses->courseRequirements->subject1 }}</span> <br>
-                            <span class="h4 fs-sm">Subject 2</span> - <span class="ml-4">{{ $course->mainCourses->courseRequirements->subject2 }}</span> <br>
-                            <span class="h4 fs-sm">Subject 3</span> - <span class="ml-4">{{ $course->mainCourses->courseRequirements->subject3 }}</span> <br>
-                            <span class="h4 fs-sm">Subject 4</span> - <span class="ml-4">{{ $course->mainCourses->courseRequirements->subject4 }}</span>
+                            <span class="h4 fs-sm">Subject 1</span> - <span class="ml-4">{{ $course->subject1 }}</span> <br>
+                            <span class="h4 fs-sm">Subject 2</span> - <span class="ml-4">{{ $course->subject2 }}</span> <br>
+                            <span class="h4 fs-sm">Subject 3</span> - <span class="ml-4">{{ $course->subject3 }}</span> <br>
+                            <span class="h4 fs-sm">Subject 4</span> - <span class="ml-4">{{ $course->subject4 }}</span>
 
                             <p class="text-danger mt-4">
                                 Disclaimer here!!!!!!!!!!!!!!!!!!!!!
@@ -182,23 +184,23 @@
                             <div class="row my-1">
                                 <label class="col-sm-2 col-form-label" for="example-hf-password">Course Name</label>
                                 <div class="col-sm-10 text-uppercase py-1">
-                                    <input type="text" class="form-control form-control-md" name="course" value="{{ $course->mainCourses->course_name }}" readonly>
+                                    <input type="text" class="form-control form-control-md" name="course" value="{{ $course->course_name }}" readonly>
                                 </div>
                             </div>
                             <div class="row my-1">
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">Department</label>
                                 <div class="col-sm-10 text-uppercase py-1">
-                                    <input type="text" class="form-control form-control-md" name="department" value="{{ $course->mainCourses->getCourseDept->name }}" readonly>
-                                    <input type="hidden" name="dept" value="{{ $course->mainCourses->getCourseDept->id }}">
-                                    <input type="hidden" name="school" value="{{ $course->mainCourses->getCourseDept->schools->first()->id }}">
+                                    <input type="text" class="form-control form-control-md" name="department" value="{{ $course->OnofferDepartment->name }}" readonly>
+                                    <input type="hidden" name="dept" value="{{ $course->department_id }}">
+                                    <input type="hidden" name="school" value="{{ $course->school_id }}">
                                 </div>
                             </div>
                             <div class="row my-1">
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">School</label>
                                 <div class="col-sm-10 text-uppercase py-1">
-                                    <input type="text" class="form-control form-control-md" name="" value="{{ $course->mainCourses->getCourseDept->schools->first()->name }}" readonly>
-                                    <input type="hidden" name="intake" value="{{ $course->openCourse->id }}">
-                                    <input type="hidden" name="course_id" value="{{ $course->mainCourses->id }}">
+                                    <input type="text" class="form-control form-control-md" name="" value="{{ $course->OnofferSchool->name }}" readonly>
+                                    <input type="hidden" name="intake" value="{{ $course->intake_id }}">
+                                    <input type="hidden" name="course_id" value="{{ $course->course_id }}">
                                 </div>
                             </div>
                             <div class="row" style="padding: 5px !important;">
@@ -206,8 +208,8 @@
                                 <div class="col-sm-10 text-uppercase mb-4" style="padding: 5px !important;">
                                     <div class="space-x-0">
                                         <div class="form-check form-check-inline">
-                                            <label class="form-check-label">{{ $course->courseXCampus->name }}</label>
-                                            <input class="form-check-input" type="radio" name="campus" value="{{ $course->courseXCampus->id }}" checked readonly="readonly">
+                                            <label class="form-check-label">{{ $course->name }}</label>
+                                            <input class="form-check-input" type="radio" name="campus" value="{{ $course->campus_id }}" checked readonly="readonly">
                                         </div>
                                         <h6 class="fs-sm text-info fw-normal mt-2"> You can go courses list to see if this course is offered in another campus </h6>
                                     </div>
@@ -219,7 +221,7 @@
                                         <span class="h6">KCSE OR Equivalent</span>
                                     </div>
                                     <div class="col-md-8">
-                                        <span class="h5 text-info"> {{ $course->mainCourses->courseRequirements->course_requirements }} </span>
+                                        <span class="h5 text-info"> {{ $course->course_requirements }} </span>
                                      </div>
                                 </div>
                             <span class="h5 fw-semibold">Cluster Subject</span>
@@ -231,14 +233,14 @@
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 1</label>
                                 <div class="col-sm-10 text-uppercase py-1">
                                     <div class="form-floating input-group">
-                                        <span class="input-group-text input-group-text-sm col-md-4">{{ Str::limit( $course->mainCourses->courseRequirements->subject1, $limit = 15 , $end='' )  }}</span>
+                                        <span class="input-group-text input-group-text-sm col-md-4">{{ Str::limit( $course->subject1, $limit = 15 , $end='' )  }}</span>
 
                                         <select class="form-control form-control-sm text-uppercase" name="subject1" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                             <option disabled selected> -- select subject-- </option>
                                                 @if($mycourse != null)
-                                                    <option value="@if($mycourse != null) {{ explode(' ', $mycourse->subject_1)[0] }} @endif" selected> {{ explode(' ', $mycourse->subject_1)[0] }}</option>
+                                                    <option value="@if($mycourse != null) {{ explode(' ', $subject->subject_1)[0] }} @endif" selected> {{ explode(' ', $subject->subject_1)[0] }}</option>
                                                 @endif
-                                            @foreach(explode('/', explode(' ', $course->mainCourses->courseRequirements->subject1)[0]) as $option)
+                                            @foreach(explode('/', explode(' ', $course->subject1)[0]) as $option)
                                                 <option value="{{ $option }}"> {{ $option }} </option>
                                             @endforeach
 
@@ -248,7 +250,7 @@
                                             <select name="grade1" class="dept form-control form-control-md text-uppercase fs-sm" @if($mycourse != null && $mycourse->declaration == 1) disabled @endif>
                                                 <option selected disabled > -- select grade -- </option>
                                                     @if($mycourse != null)
-                                                        <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_1)[1]  }} @endif" selected> {{ explode(' ', $mycourse->subject_1)[1] }}</option>
+                                                        <option value=" @if($mycourse != null) {{ explode(' ', $subject->subject_1)[1]  }} @endif" selected> {{ explode(' ', $subject->subject_1)[1] }}</option>
                                                     @endif
                                                 <option value="A"> A </option>
                                                 <option value="A-"> A- </option>
@@ -271,13 +273,13 @@
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 2</label>
                                 <div class="col-sm-10 text-uppercase py-1">
                                     <div class="form-floating input-group">
-                                        <span class="input-group-text input-group-text-sm col-md-4">{{ Str::limit( $course->mainCourses->courseRequirements->subject2, $limit = 15 , $end='' )  }}</span>
+                                        <span class="input-group-text input-group-text-sm col-md-4">{{ Str::limit( $course->subject2, $limit = 15 , $end='' )  }}</span>
                                         <select class="form-control form-control-sm text-uppercase" name="subject2" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                             <option disabled selected> -- select subject-- </option>
                                                 @if($mycourse != null)
-                                                    <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_2)[0] }} @endif" selected> {{ explode(' ', $mycourse->subject_2)[0] }}</option>
+                                                    <option value=" @if($mycourse != null) {{ explode(' ', $subject->subject_2)[0] }} @endif" selected> {{ explode(' ', $subject->subject_2)[0] }}</option>
                                                 @endif
-                                            @foreach(explode('/', explode(' ', $course->mainCourses->courseRequirements->subject2)[0]) as $option)
+                                            @foreach(explode('/', explode(' ', $course->subject2)[0]) as $option)
                                                 <option value="{{ $option }}"> {{ $option }} </option>
                                             @endforeach
 
@@ -287,7 +289,7 @@
                                             <select name="grade2" class="dept form-control form-control-md text-uppercase m-1 fs-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                                 <option selected disabled > -- select grade -- </option>
                                                     @if($mycourse != null)
-                                                        <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_2)[1] }} @endif" selected> {{ explode(' ', $mycourse->subject_2)[1] }}</option>
+                                                        <option value=" @if($mycourse != null) {{ explode(' ', $subject->subject_2)[1] }} @endif" selected> {{ explode(' ', $subject->subject_2)[1] }}</option>
                                                     @endif
                                                 <option value="A"> A </option>
                                                 <option value="A-"> A- </option>
@@ -310,14 +312,14 @@
                                 <label class="col-sm-2 col-form-label" for="example-hf-password">Subject 3</label>
                                 <div class="form-floating col-sm-10 text-uppercase py-1">
                                     <div class="form-floating input-group">
-                                        <span class="input-group-text input-group-text-sm col-md-4">{{ Str::limit( $course->mainCourses->courseRequirements->subject3, $limit = 15 , $end='' )  }}</span>
+                                        <span class="input-group-text input-group-text-sm col-md-4">{{ Str::limit( $course->subject3, $limit = 15 , $end='' )  }}</span>
 
                                         <select class="form-control form-control-sm text-uppercase" name="subject3" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                             <option disabled selected> -- select subject-- </option>
                                                 @if($mycourse != null)
-                                                    <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_3)[0]}} @endif" selected> {{ explode(' ', $mycourse->subject_3)[0] }}</option>
+                                                    <option value=" @if($mycourse != null) {{ explode(' ', $subject->subject_3)[0]}} @endif" selected> {{ explode(' ', $subject->subject_3)[0] }}</option>
                                                 @endif
-                                            @foreach(explode('/', explode(' ', $course->mainCourses->courseRequirements->subject3)[0]) as $option)
+                                            @foreach(explode('/', explode(' ', $course->subject3)[0]) as $option)
                                                 <option value="{{ $option }}"> {{ $option }} </option>
                                             @endforeach
 
@@ -328,7 +330,7 @@
                                             <select name="grade3" class="dept form-control form-control-md text-uppercase m-1 fs-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                                 <option selected disabled > -- select grade -- </option>
                                                     @if($mycourse != null)
-                                                        <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_3)[1] }} @endif" selected> {{ explode(' ', $mycourse->subject_3)[1] }}</option>
+                                                        <option value=" @if($mycourse != null) {{ explode(' ', $subject->subject_3)[1] }} @endif" selected> {{ explode(' ', $subject->subject_3)[1] }}</option>
                                                     @endif
                                                 <option value="A"> A </option>
                                                 <option value="A-"> A- </option>
@@ -352,14 +354,14 @@
                                 <label class="col-sm-2 col-form-label" for="example-hf-email">Subject 4 </label>
                                 <div class="col-sm-10 text-uppercase py-1">
                                     <div class="form-floating input-group">
-                                        <span class="input-group-text input-group-text-sm col-md-4">{{ Str::limit( $course->mainCourses->courseRequirements->subject4, $limit = 15 , $end='' )  }}</span>
+                                        <span class="input-group-text input-group-text-sm col-md-4">{{ Str::limit( $course->subject4, $limit = 15 , $end='' )  }}</span>
 
                                         <select class="form-control form-control-sm text-uppercase" name="subject4" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                             <option disabled selected> -- select subject-- </option>
                                                 @if($mycourse != null)
-                                                    <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_4)[0] }} @endif" selected>{{ explode(' ', $mycourse->subject_4)[0] }}</option>
+                                                    <option value=" @if($mycourse != null) {{ explode(' ', $subject->subject_4)[0] }} @endif" selected>{{ explode(' ', $subject->subject_4)[0] }}</option>
                                                 @endif
-                                            @foreach(explode('/', explode(' ', $course->mainCourses->courseRequirements->subject4)[0]) as $option)
+                                            @foreach(explode('/', explode(' ', $course->subject4)[0]) as $option)
                                                 <option value="{{ $option }}"> {{ $option }} </option>
                                             @endforeach
 
@@ -369,7 +371,7 @@
                                             <select name="grade4" class="dept form-control form-control-md text-uppercase m-1 fs-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                                 <option selected disabled > -- select grade -- </option>
                                                     @if($mycourse != null)
-                                                        <option value=" @if($mycourse != null) {{ explode(' ', $mycourse->subject_4)[1] }} @endif" selected> {{ explode(' ', $mycourse->subject_4)[1] }}</option>
+                                                        <option value=" @if($mycourse != null) {{ explode(' ', $subject->subject_4)[1] }} @endif" selected> {{ explode(' ', $subject->subject_4)[1] }}</option>
                                                     @endif
                                                 <option value="A"> A </option>
                                                 <option value="A-"> A- </option>
@@ -706,42 +708,64 @@
 
                             </div>
                         </div>
-                        <div class="block-content tab-pane @if($mycourse != null && $mycourse->receipt == null && count($education) >= 1) active @endif" id="btabs-vertical-fee" role="tabpanel" aria-labelledby="btabs-vertical-fee-tab">
+                        <div class="block-content tab-pane @if($mycourse != null && $mycourse->receipt == null && count($education) >= 1 && $mycourse->declaration == 1) active @endif" id="btabs-vertical-fee" role="tabpanel" aria-labelledby="btabs-vertical-fee-tab">
                             <h4 class="fw-semibold">Application Fees</h4>
                             <form action="{{ route('application.payment') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                             <div class="row">
                                 <div class="col-md-4">
                                     <p class="text-muted">To complete application you must pay and add payment details to this form</p>
+                                    <p> You are required to pay <span class="fw-bold"> Ksh. {{ $course->application_fee }} </span> to complete this application.</p>
+                                    @if($mycourse != null)
+                                    <p>To complete application payment use <b>{{ $mycourse->ref_number }}</b> as account number for any of the preferred payment method</p>
+                                    @else
+                                    @endif
+
                                 </div>
                                 <div class="col-md-8">
-                                    <div class="py-2 mb-0">
-                                        You are required to pay <span class="fw-bold">Ksh. {{ $course->mainCourses->courseRequirements->fee }} </span> to complete this application.
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> How do I pay?</a>
+                                    <div class="block-content fs-sm">
+                                        Fee is payable through the following bank and branches:
+                                        <ul>
+                                            <li>Cooperative Bank of Kenya <b>Acc. No 01129079001600 </b> (Nkrumah Rd Branch).</li>
+                                            <li>Standard Chartered Bank <b>Acc. No. 0102092728000 </b>(Treasury Square).</li>
+                                            <li>Equity Bank <b> Acc. No. 0460297818058 </b> (Digo Rd Branch).</li>
+                                            <li>National Bank <b> Acc. No. 01038074211700 </b> (TUM Branch).</li>
+                                            <li>KCB Lamu Campus: <b> Acc. No. 1118817192 </b> (Mvita Branch).</li>
+                                            <li>KCB (TUM) Fee Collection <b> Acc No. 1169329578 </b> (Mvita Branch).</li>
+                                            <li>Barclays Bank <b> Acc. No. 2034098894 </b> (Nkrumah Rd Branch).</li>
+                                            or
+                                            <li>Via MPesa <b>pay bill number XXXXXX </b></li>
+                                        </ul>
+
+                                        <span class="text-muted text-center" style="color: red !important;">Application fee is non refundable</span>
                                     </div>
-                                    <div class="form-floating text-uppercase py-1">
-                                        <input type="text" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif required value="{{ old('receipt') }} @if($mycourse != null && $mycourse->receipt != null) {{ $mycourse->receipt }} @endif" name="receipt" placeholder="Enter RECEIPT NUMBER">
-                                        <label class="form-label">TRANSACTION CODE</label>
-                                    </div>
-                                    <div class="form-floating text-uppercase py-1">
-                                        <input type="file" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif required value="{{ old('receipt_file') }} " name="receipt_file">
-                                    </div>
-                                        <input type="hidden" value="{{ $course->mainCourses->id }}" name="course_id">
-                                    <small class="text-muted">upload your bank reciept (format .pdf only )</small>
-                                    <div class="d-flex justify-content-center my-4">
-                                        @if($mycourse != null && $mycourse->receipt != null)
-                                            @if($mycourse != null && $mycourse->declaration== 1)
-                                        <button class="btn btn-sm btn-success" disabled data-toggle="click-ripple"><i class="fa fa-check-circle"></i>
-                                            Payments Details Updated
-                                        </button>
-                                            @else
-                                        <button class="btn btn-sm btn-success" disabled data-toggle="click-ripple"><i class="fa fa-check-circle"></i>  Payments Details Updated</button>
-                                        <button class="btn btn-sm btn-alt-success" style="margin-left: 1rem;" data-toggle="click-ripple">Update payments</button>
-                                            @endif
-                                        @else
-                                        <button class="btn btn-sm btn-alt-success" data-toggle="click-ripple">Submit payments</button>
-                                        @endif
-                                    </div>
+{{--                                    <div class="py-2 mb-0">--}}
+
+{{--                                        <a href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> How do I pay?</a>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="form-floating text-uppercase py-1">--}}
+{{--                                        <input type="text" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif required value="{{ old('receipt') }} @if($mycourse != null && $mycourse->receipt != null) {{ $mycourse->receipt }} @endif" name="receipt" placeholder="Enter RECEIPT NUMBER">--}}
+{{--                                        <label class="form-label">TRANSACTION CODE</label>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="form-floating text-uppercase py-1">--}}
+{{--                                        <input type="file" class="form-control form-control-sm" @if($mycourse != null && $mycourse->declaration== 1) disabled @endif required value="{{ old('receipt_file') }} " name="receipt_file">--}}
+{{--                                    </div>--}}
+{{--                                        <input type="hidden" value="{{ $course->id }}" name="course_id">--}}
+{{--                                    <small class="text-muted">upload your bank reciept (format .pdf only )</small>--}}
+{{--                                    <div class="d-flex justify-content-center my-4">--}}
+{{--                                        @if($mycourse != null && $mycourse->receipt != null)--}}
+{{--                                            @if($mycourse != null && $mycourse->declaration== 1)--}}
+{{--                                        <button class="btn btn-sm btn-success" disabled data-toggle="click-ripple"><i class="fa fa-check-circle"></i>--}}
+{{--                                            Payments Details Updated--}}
+{{--                                        </button>--}}
+{{--                                            @else--}}
+{{--                                        <button class="btn btn-sm btn-success" disabled data-toggle="click-ripple"><i class="fa fa-check-circle"></i>  Payments Details Updated</button>--}}
+{{--                                        <button class="btn btn-sm btn-alt-success" style="margin-left: 1rem;" data-toggle="click-ripple">Update payments</button>--}}
+{{--                                            @endif--}}
+{{--                                        @else--}}
+{{--                                        <button class="btn btn-sm btn-alt-success" data-toggle="click-ripple">Submit payments</button>--}}
+{{--                                        @endif--}}
+{{--                                    </div>--}}
                                 </div>
                         </div>
                             </form>
@@ -806,19 +830,19 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="block-content tab-pane @if($mycourse != null && $mycourse->receipt != null && count($education) > 0) active @endif " id="btabs-vertical-submit" role="tabpanel" aria-labelledby="btabs-vertical-submit-tab">
+                        <div class="block-content tab-pane @if($mycourse != null && $mycourse->applicationApproval == null && count($education) > 0) active @endif " id="btabs-vertical-submit" role="tabpanel" aria-labelledby="btabs-vertical-submit-tab">
                             <h4 class="fw-semibold">Finish application</h4>
                             <p class="fs-sm">
                             <div class="block-content-full">
                                     <div class="p-sm-2 p-xl-12">
                                         <div class="row mb-2 text-center">
-                                            <span class="fw-semibold mb-2"> {{ $course->mainCourses->getCourseDept->schools->first()->name }} </span>
-                                            <span class="fw-semibold mb-2"> {{ $course->mainCourses->getCourseDept->name }}</span>
-                                            <span class="fw-semibold mb-2"> {{ $course->mainCourses->course_name }} </span>
+                                            <span class="fw-semibold mb-2"> {{ $course->name }} </span>
+                                            <span class="fw-semibold mb-2"> {{ $course->name }}</span>
+                                            <span class="fw-semibold mb-2"> {{ $course->course_name }} </span>
                                         </div>
 
                                         <table class="table table-sm table-bordered table-striped table-responsive-md">
-                                            @if($mycourse != null && $mycourse->receipt != null)
+                                            @if($mycourse != null)
                                                 <thead>
                                                 <th>Receipt Number</th>
                                                 <th>Amount</th>
@@ -826,16 +850,33 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr>
-                                                    <td>{{ $mycourse->receipt }}</td>
-                                                    <td>{{ $course->mainCourses->courseRequirements->fee }}</td>
-                                                    <td><span class="badge bg-success"><i class="fa fa-check-circle"> Paid </i> </span> </td>
+                                                    <td>
+                                                        @if($mycourse->applicationApproval != null)
+                                                        {{ $mycourse->applicationApproval->invoice_number}}
+                                                        @else
+                                                            Visit <b>Application Fee </b> menu to pay
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ $course->fee }}</td>
+                                                    <td>
+                                                        @if($mycourse->applicationApproval != null && $mycourse->applicationApproval->finance_status == 1)
+                                                         <span class="badge bg-success"> <i class="fa fa-check-circle"> Paid </i> </span>
+                                                        @else
+                                                            <span class="badge bg-warning"> <i class="fa fa-spinner"> Pending </i> </span>
+                                                        @endif
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             @endif
                                                 @if($mycourse != null)
                                                     <thead>
                                                         <th colspan="1">Course Requirements</th>
-                                                        <th colspan="2"> {{ $course->mainCourses->courseRequirements->course_requirements }} </th>
+                                                        <th colspan="2"> {{ $course->course_requirements }} </th>
+                                                    </thead>
+
+                                                    <thead>
+                                                    <th colspan="1">Application Reference Number</th>
+                                                    <th colspan="2"> {{ $mycourse->ref_number }} </th>
                                                     </thead>
                                                 @endif
                                             @if($mycourse != null)
@@ -846,59 +887,59 @@
                                                         </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>{{ $course->mainCourses->courseRequirements->subject1 }}</td>
-                                                            <td>{{ $mycourse->subject_1 }}</td>
+                                                            <td>{{ $course->subject1 }}</td>
+                                                            <td>{{ $subject->subject_1 }}</td>
                                                             <td>
                                                                 @php
 
-                                                                    if(explode(' ', $course->mainCourses->courseRequirements->subject1)[1] == 'A'){
+                                                                    if(explode(' ', $course->subject1)[1] == 'A'){
                                                                         $grade1 = 12;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject1)[1] == 'A-'){
+                                                                    }elseif(explode(' ', $course->subject1)[1] == 'A-'){
                                                                         $grade1 = 11;
 
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject1)[1] == 'B+'){
+                                                                    }elseif(explode(' ', $course->subject1)[1] == 'B+'){
                                                                         $grade1 = 10;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject1)[1] == 'B'){
+                                                                    }elseif(explode(' ', $course->subject1)[1] == 'B'){
                                                                         $grade1 = 9;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject1)[1] == 'B-'){
+                                                                    }elseif(explode(' ', $course->subject1)[1] == 'B-'){
                                                                         $grade1 = 8;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject1)[1] == 'C+'){
+                                                                    }elseif(explode(' ', $course->subject1)[1] == 'C+'){
                                                                         $grade1 = 7;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject1)[1] == 'C'){
+                                                                    }elseif(explode(' ', $course->subject1)[1] == 'C'){
                                                                         $grade1 = 6;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject1)[1] == 'C-'){
+                                                                    }elseif(explode(' ', $course->subject1)[1] == 'C-'){
                                                                         $grade1 = 5;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject1)[1] == 'D+'){
+                                                                    }elseif(explode(' ', $course->subject1)[1] == 'D+'){
                                                                         $grade1 = 4;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject1)[1] == 'D'){
+                                                                    }elseif(explode(' ', $course->subject1)[1] == 'D'){
                                                                         $grade1 = 3;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject1)[1] == 'D-'){
+                                                                    }elseif(explode(' ', $course->subject1)[1] == 'D-'){
                                                                         $grade1 = 2;
                                                                     }else{
                                                                         $grade1 = 1;
                                                                     }
 
-                                                                  if(explode(' ', $mycourse->subject_1)[1] == 'A'){
+                                                                  if(explode(' ', $subject->subject_1)[1] == 'A'){
                                                                         $score1 = 12;
-                                                                    }elseif(explode(' ', $mycourse->subject_1)[1] == 'A-'){
+                                                                    }elseif(explode(' ', $subject->subject_1)[1] == 'A-'){
                                                                         $score1 = 11;
-                                                                    }elseif(explode(' ', $mycourse->subject_1)[1] == 'B+'){
+                                                                    }elseif(explode(' ', $subject->subject_1)[1] == 'B+'){
                                                                         $score1 = 10;
-                                                                    }elseif(explode(' ', $mycourse->subject_1)[1] == 'B'){
+                                                                    }elseif(explode(' ', $subject->subject_1)[1] == 'B'){
                                                                         $score1 = 9;
-                                                                    }elseif(explode(' ', $mycourse->subject_1)[1] == 'B-'){
+                                                                    }elseif(explode(' ', $subject->subject_1)[1] == 'B-'){
                                                                         $score1 = 8;
-                                                                    }elseif(explode(' ', $mycourse->subject_1)[1] == 'C+'){
+                                                                    }elseif(explode(' ', $subject->subject_1)[1] == 'C+'){
                                                                         $score1 = 7;
-                                                                    }elseif(explode(' ', $mycourse->subject_1)[1] == 'C'){
+                                                                    }elseif(explode(' ', $subject->subject_1)[1] == 'C'){
                                                                         $score1 = 6;
-                                                                    }elseif(explode(' ', $mycourse->subject_1)[1] == 'C-'){
+                                                                    }elseif(explode(' ', $subject->subject_1)[1] == 'C-'){
                                                                         $score1 = 5;
-                                                                    }elseif(explode(' ', $mycourse->subject_1)[1] == 'D+'){
+                                                                    }elseif(explode(' ', $subject->subject_1)[1] == 'D+'){
                                                                         $score1 = 4;
-                                                                    }elseif(explode(' ', $mycourse->subject_1)[1] == 'D'){
+                                                                    }elseif(explode(' ', $subject->subject_1)[1] == 'D'){
                                                                         $score1 = 3;
-                                                                    }elseif(explode(' ', $mycourse->subject_1)[1] == 'D-'){
+                                                                    }elseif(explode(' ', $subject->subject_1)[1] == 'D-'){
                                                                         $score1 = 2;
                                                                     }else{
                                                                         $score1 = 1;
@@ -913,59 +954,59 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td>{{ $course->mainCourses->courseRequirements->subject2 }}</td>
-                                                            <td>{{ $mycourse->subject_2 }}</td>
+                                                            <td>{{ $course->subject2 }}</td>
+                                                            <td>{{ $subject->subject_2 }}</td>
                                                             <td>
                                                                 @php
 
-                                                                    if(explode(' ', $course->mainCourses->courseRequirements->subject2)[1] == 'A'){
+                                                                    if(explode(' ', $course->subject2)[1] == 'A'){
                                                                         $grade2 = 12;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject2)[1] == 'A-'){
+                                                                    }elseif(explode(' ', $course->subject2)[1] == 'A-'){
                                                                         $grade2 = 11;
 
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject2)[1] == 'B+'){
+                                                                    }elseif(explode(' ', $course->subject2)[1] == 'B+'){
                                                                         $grade2 = 10;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject2)[1] == 'B'){
+                                                                    }elseif(explode(' ', $course->subject2)[1] == 'B'){
                                                                         $grade2 = 9;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject2)[1] == 'B-'){
+                                                                    }elseif(explode(' ', $course->subject2)[1] == 'B-'){
                                                                         $grade2 = 8;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject2)[1] == 'C+'){
+                                                                    }elseif(explode(' ', $course->subject2)[1] == 'C+'){
                                                                         $grade2 = 7;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject2)[1] == 'C'){
+                                                                    }elseif(explode(' ', $course->subject2)[1] == 'C'){
                                                                         $grade2 = 6;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject2)[1] == 'C-'){
+                                                                    }elseif(explode(' ', $course->subject2)[1] == 'C-'){
                                                                         $grade2 = 5;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject2)[1] == 'D+'){
+                                                                    }elseif(explode(' ', $course->subject2)[1] == 'D+'){
                                                                         $grade2 = 4;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject2)[1] == 'D'){
+                                                                    }elseif(explode(' ', $course->subject2)[1] == 'D'){
                                                                         $grade2 = 3;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject2)[1] == 'D-'){
+                                                                    }elseif(explode(' ', $course->subject2)[1] == 'D-'){
                                                                         $grade2 = 2;
                                                                     }else{
                                                                         $grade2 = 1;
                                                                     }
 
-                                                                  if(explode(' ', $mycourse->subject_2)[1] == 'A'){
+                                                                  if(explode(' ', $subject->subject_2)[1] == 'A'){
                                                                         $score2 = 12;
-                                                                    }elseif(explode(' ', $mycourse->subject_2)[1] == 'A-'){
+                                                                    }elseif(explode(' ', $subject->subject_2)[1] == 'A-'){
                                                                         $score2 = 11;
-                                                                    }elseif(explode(' ', $mycourse->subject_2)[1] == 'B+'){
+                                                                    }elseif(explode(' ', $subject->subject_2)[1] == 'B+'){
                                                                         $score2 = 10;
-                                                                    }elseif(explode(' ', $mycourse->subject_2)[1] == 'B'){
+                                                                    }elseif(explode(' ', $subject->subject_2)[1] == 'B'){
                                                                         $score2 = 9;
-                                                                    }elseif(explode(' ', $mycourse->subject_2)[1] == 'B-'){
+                                                                    }elseif(explode(' ', $subject->subject_2)[1] == 'B-'){
                                                                         $score2 = 8;
-                                                                    }elseif(explode(' ', $mycourse->subject_2)[1] == 'C+'){
+                                                                    }elseif(explode(' ', $subject->subject_2)[1] == 'C+'){
                                                                         $score2 = 7;
-                                                                    }elseif(explode(' ', $mycourse->subject_2)[1] == 'C'){
+                                                                    }elseif(explode(' ', $subject->subject_2)[1] == 'C'){
                                                                         $score2 = 6;
-                                                                    }elseif(explode(' ', $mycourse->subject_2)[1] == 'C-'){
+                                                                    }elseif(explode(' ', $subject->subject_2)[1] == 'C-'){
                                                                         $score2 = 5;
-                                                                    }elseif(explode(' ', $mycourse->subject_2)[1] == 'D+'){
+                                                                    }elseif(explode(' ', $subject->subject_2)[1] == 'D+'){
                                                                         $score2 = 4;
-                                                                    }elseif(explode(' ', $mycourse->subject_2)[1] == 'D'){
+                                                                    }elseif(explode(' ', $subject->subject_2)[1] == 'D'){
                                                                         $score2 = 3;
-                                                                    }elseif(explode(' ', $mycourse->subject_2)[1] == 'D-'){
+                                                                    }elseif(explode(' ', $subject->subject_2)[1] == 'D-'){
                                                                         $score2 = 2;
                                                                     }else{
                                                                         $score2 = 1;
@@ -980,60 +1021,60 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td>{{ $course->mainCourses->courseRequirements->subject3 }}</td>
-                                                            <td>{{ $mycourse->subject_3 }}</td>
+                                                            <td>{{ $course->subject3 }}</td>
+                                                            <td>{{ $subject->subject_3 }}</td>
                                                             <td>
                                                                 @php
 
-                                                                    if(explode(' ', $course->mainCourses->courseRequirements->subject3)[1] == 'A'){
+                                                                    if(explode(' ', $course->subject3)[1] == 'A'){
                                                                         $grade3 = 12;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject3)[1] == 'A-'){
+                                                                    }elseif(explode(' ', $course->subject3)[1] == 'A-'){
                                                                         $grade3 = 11;
 
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject3)[1] == 'B+'){
+                                                                    }elseif(explode(' ', $course->subject3)[1] == 'B+'){
                                                                         $grade3 = 10;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject3)[1] == 'B'){
+                                                                    }elseif(explode(' ', $course->subject3)[1] == 'B'){
                                                                         $grade3 = 9;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject3)[1] == 'B-'){
+                                                                    }elseif(explode(' ', $course->subject3)[1] == 'B-'){
                                                                         $grade3 = 8;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject3)[1] == 'C+'){
+                                                                    }elseif(explode(' ', $course->subject3)[1] == 'C+'){
                                                                         $grade3 = 7;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject3)[1] == 'C'){
+                                                                    }elseif(explode(' ', $course->subject3)[1] == 'C'){
                                                                         $grade3 = 6;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject3)[1] == 'C-'){
+                                                                    }elseif(explode(' ', $course->subject3)[1] == 'C-'){
                                                                         $grade3 = 5;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject3)[1] == 'D+'){
+                                                                    }elseif(explode(' ', $course->subject3)[1] == 'D+'){
                                                                         $grade3 = 4;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject3)[1] == 'D'){
+                                                                    }elseif(explode(' ', $course->subject3)[1] == 'D'){
                                                                         $grade3 = 3;
-                                                                    }elseif(explode(' ', $course->mainCourses->courseRequirements->subject3)[1] == 'D-'){
+                                                                    }elseif(explode(' ', $course->subject3)[1] == 'D-'){
                                                                         $grade3 = 2;
                                                                     }else{
                                                                         $grade3 = 1;
                                                                     }
 
-                                                                  if(explode(' ', $mycourse->subject_3)[1] == 'A'){
+                                                                  if(explode(' ', $subject->subject_3)[1] == 'A'){
                                                                         $score3 = 12;
-                                                                    }elseif(explode(' ', $mycourse->subject_3)[1] == 'A-'){
+                                                                    }elseif(explode(' ', $subject->subject_3)[1] == 'A-'){
                                                                         $score3 = 11;
 
-                                                                    }elseif(explode(' ', $mycourse->subject_3)[1] == 'B+'){
+                                                                    }elseif(explode(' ', $subject->subject_3)[1] == 'B+'){
                                                                         $score3 = 10;
-                                                                    }elseif(explode(' ', $mycourse->subject_3)[1] == 'B'){
+                                                                    }elseif(explode(' ', $subject->subject_3)[1] == 'B'){
                                                                         $score3 = 9;
-                                                                    }elseif(explode(' ', $mycourse->subject_3)[1] == 'B-'){
+                                                                    }elseif(explode(' ', $subject->subject_3)[1] == 'B-'){
                                                                         $score3 = 8;
-                                                                    }elseif(explode(' ', $mycourse->subject_3)[1] == 'C+'){
+                                                                    }elseif(explode(' ', $subject->subject_3)[1] == 'C+'){
                                                                         $score3 = 7;
-                                                                    }elseif(explode(' ', $mycourse->subject_3)[1] == 'C'){
+                                                                    }elseif(explode(' ', $subject->subject_3)[1] == 'C'){
                                                                         $score3 = 6;
-                                                                    }elseif(explode(' ', $mycourse->subject_3)[1] == 'C-'){
+                                                                    }elseif(explode(' ', $subject->subject_3)[1] == 'C-'){
                                                                         $score3 = 5;
-                                                                    }elseif(explode(' ', $mycourse->subject_3)[1] == 'D+'){
+                                                                    }elseif(explode(' ', $subject->subject_3)[1] == 'D+'){
                                                                         $score3 = 4;
-                                                                    }elseif(explode(' ', $mycourse->subject_3)[1] == 'D'){
+                                                                    }elseif(explode(' ', $subject->subject_3)[1] == 'D'){
                                                                         $score3 = 3;
-                                                                    }elseif(explode(' ', $mycourse->subject_3)[1] == 'D-'){
+                                                                    }elseif(explode(' ', $subject->subject_3)[1] == 'D-'){
                                                                         $score3 = 2;
                                                                     }else{
                                                                         $score3 = 1;
@@ -1048,60 +1089,60 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td>{{ $course->mainCourses->courseRequirements->subject4 }}</td>
-                                                            <td>{{ $mycourse->subject_4 }}</td>
+                                                            <td>{{ $course->subject4 }}</td>
+                                                            <td>{{ $subject->subject_4 }}</td>
                                                             <td>
                                                                 @php
 
-                                                                  if(explode(' ', $course->mainCourses->courseRequirements->subject4)[1] == 'A'){
+                                                                  if(explode(' ', $course->subject4)[1] == 'A'){
                                                                       $grade4 = 12;
-                                                                  }elseif(explode(' ', $course->mainCourses->courseRequirements->subject4)[1] == 'A-'){
+                                                                  }elseif(explode(' ', $course->subject4)[1] == 'A-'){
                                                                       $grade4 = 11;
 
-                                                                  }elseif(explode(' ', $course->mainCourses->courseRequirements->subject4)[1] == 'B+'){
+                                                                  }elseif(explode(' ', $course->subject4)[1] == 'B+'){
                                                                       $grade4 = 10;
-                                                                  }elseif(explode(' ', $course->mainCourses->courseRequirements->subject4)[1] == 'B'){
+                                                                  }elseif(explode(' ', $course->subject4)[1] == 'B'){
                                                                       $grade4 = 9;
-                                                                  }elseif(explode(' ', $course->mainCourses->courseRequirements->subject4)[1] == 'B-'){
+                                                                  }elseif(explode(' ', $course->subject4)[1] == 'B-'){
                                                                       $grade4 = 8;
-                                                                  }elseif(explode(' ', $course->mainCourses->courseRequirements->subject4)[1] == 'C+'){
+                                                                  }elseif(explode(' ', $course->subject4)[1] == 'C+'){
                                                                       $grade4 = 7;
-                                                                  }elseif(explode(' ', $course->mainCourses->courseRequirements->subject4)[1] == 'C'){
+                                                                  }elseif(explode(' ', $course->subject4)[1] == 'C'){
                                                                       $grade4 = 6;
-                                                                  }elseif(explode(' ', $course->mainCourses->courseRequirements->subject4)[1] == 'C-'){
+                                                                  }elseif(explode(' ', $course->subject4)[1] == 'C-'){
                                                                       $grade4 = 5;
-                                                                  }elseif(explode(' ', $course->mainCourses->courseRequirements->subject4)[1] == 'D+'){
+                                                                  }elseif(explode(' ', $course->subject4)[1] == 'D+'){
                                                                       $grade4 = 4;
-                                                                  }elseif(explode(' ', $course->mainCourses->courseRequirements->subject4)[1] == 'D'){
+                                                                  }elseif(explode(' ', $course->subject4)[1] == 'D'){
                                                                       $grade4 = 3;
-                                                                  }elseif(explode(' ', $course->mainCourses->courseRequirements->subject4)[1] == 'D-'){
+                                                                  }elseif(explode(' ', $course->subject4)[1] == 'D-'){
                                                                       $grade4 = 2;
                                                                   }else{
                                                                       $grade4 = 1;
                                                                   }
 
-                                                                if(explode(' ', $mycourse->subject_4)[1] == 'A'){
+                                                                if(explode(' ', $subject->subject_4)[1] == 'A'){
                                                                       $score4 = 12;
-                                                                  }elseif(explode(' ', $mycourse->subject_4)[1] == 'A-'){
+                                                                  }elseif(explode(' ', $subject->subject_4)[1] == 'A-'){
                                                                       $score4 = 11;
 
-                                                                  }elseif(explode(' ', $mycourse->subject_4)[1] == 'B+'){
+                                                                  }elseif(explode(' ', $subject->subject_4)[1] == 'B+'){
                                                                       $score4 = 10;
-                                                                  }elseif(explode(' ', $mycourse->subject_4)[1] == 'B'){
+                                                                  }elseif(explode(' ', $subject->subject_4)[1] == 'B'){
                                                                       $score4 = 9;
-                                                                  }elseif(explode(' ', $mycourse->subject_4)[1] == 'B-'){
+                                                                  }elseif(explode(' ', $subject->subject_4)[1] == 'B-'){
                                                                       $score4 = 8;
-                                                                  }elseif(explode(' ', $mycourse->subject_4)[1] == 'C+'){
+                                                                  }elseif(explode(' ', $subject->subject_4)[1] == 'C+'){
                                                                       $score4 = 7;
-                                                                  }elseif(explode(' ', $mycourse->subject_4)[1] == 'C'){
+                                                                  }elseif(explode(' ', $subject->subject_4)[1] == 'C'){
                                                                       $score4 = 6;
-                                                                  }elseif(explode(' ', $mycourse->subject_4)[1] == 'C-'){
+                                                                  }elseif(explode(' ', $subject->subject_4)[1] == 'C-'){
                                                                       $score4 = 5;
-                                                                  }elseif(explode(' ', $mycourse->subject_4)[1] == 'D+'){
+                                                                  }elseif(explode(' ', $subject->subject_4)[1] == 'D+'){
                                                                       $score4 = 4;
-                                                                  }elseif(explode(' ', $mycourse->subject_4)[1] == 'D'){
+                                                                  }elseif(explode(' ', $subject->subject_4)[1] == 'D'){
                                                                       $score4 = 3;
-                                                                  }elseif(explode(' ', $mycourse->subject_4)[1] == 'D-'){
+                                                                  }elseif(explode(' ', $subject->subject_4)[1] == 'D-'){
                                                                       $score4 = 2;
                                                                   }else{
                                                                       $score4 = 1;
@@ -1118,11 +1159,11 @@
                                                         <td colspan="3">
                                                             @if($score1 >= $grade1 && $score2 >= $grade2 && $score3 >= $grade3 && $score4 >= $grade4)
                                                                 <p class="text-success text-center fs-sm m-2">
-                                                                    Congratulations!! You meet the minimum course subject requirements to pursue {{ $course->mainCourses->course_name }} Course. Please proceed to submit your application for approval.
+                                                                    Congratulations!! You meet the minimum course subject requirements to pursue {{ $course->course_name }} Course. Please proceed to submit your application for approval.
                                                                 </p>
                                                             @else
                                                                 <p class="text-warning text-center fs-sm m-2">
-                                                                    Oops! You do not meet the minimum course subject requirements to pursue {{ $course->mainCourses->course_name }} Course. Please try looking for a course that you meet the minimum course subject requirements. Submiting this application will not guarantee you selection.
+                                                                    Oops! You do not meet the minimum course subject requirements to pursue {{ $course->course_name }} Course. Please try looking for a course that you meet the minimum course subject requirements. Submiting this application will not guarantee you selection.
                                                                 </p>
                                                             @endif
                                                         </td>
@@ -1133,24 +1174,27 @@
                                         </table>
 
                             <div class="row">
-                                @if($mycourse != null && $mycourse->receipt != null)
+                                @if($mycourse != null)
                                 <form action="{{ route('application.finish') }}" method="POST">
                                     @csrf
+                                    @if(count($education) > 0)
                                 <div class="col-md-12">
                                     <span>Applicant Declaration</span>
                                     <div class="" style="padding: 7px !important;">
                                         <input type="checkbox" name="declare" required @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
-                                        <input hidden name="course_id" value="@if($mycourse != null) {{ $mycourse->id }} @endif">
-                                        I <span class="text-decoration-underline"> {{ Auth::user()->sname }} {{ Auth::user()->mname }} {{ Auth::user()->fname }}</span> declare that the information given in this application form is correct. I further certify that I have read, understood and agreed to comply with the terms stipulated herein.
+                                        <input hidden name="course_id" value="@if($mycourse != null) {{ $mycourse->course_id }} @endif">
+                                        <input hidden name="intake_id" value="@if($mycourse != null) {{ $mycourse->intake_id }} @endif">
+                                        I <span class="text-decoration-underline"> {{ auth()->guard('web')->user()->infoApplicant->sname }} {{ auth()->guard('web')->user()->infoApplicant->mname }} {{ auth()->guard('web')->user()->infoApplicant->fname }}</span> declare that the information given in this application form is correct. I further certify that I have read, understood and agreed to comply with the terms stipulated herein.
                                     </div>
                                 </div>
                                     <div class="d-flex justify-content-center mb-1 mt-4">
-                                        @if($mycourse != null && $mycourse->declaration== 1)
+                                        @if($mycourse != null && $mycourse->declaration == 1)
                                             <button class="btn btn-success" disabled> <i class="fa fa-check-circle"></i> Submitted </button>
                                         @else
                                         <button onclick='confirm("Once this application has been submitted cannot be changed. Are you sure you want to submit the application?")' class="btn btn-sm btn-alt-success">Submit Application</button>
                                         @endif
                                     </div>
+                                    @endif
                                 </form>
                                 @endif
                             </div>
@@ -1162,42 +1206,6 @@
             </div>
         </div>
     </div>
-    <!-- Pop In Block Modal -->
-    <div class="modal fade" id="modal-block-popin" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-popin" role="document">
-            <div class="modal-content">
-                <div class="block block-rounded block-transparent mb-0">
-                    <div class="block-header block-header-default">
-                        <h3 class="block-title">Application fee payment</h3>
-                        <div class="block-options">
-                            <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
-                                <i class="fa fa-fw fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="block-content fs-sm">
-                        Fee is payable through the following bank and branches:
-                        <ul>
-                            <li>Cooperative Bank of Kenya <b>Acc. No 01129079001600 </b> (Nkrumah Rd Branch).</li>
-                            <li>Standard Chartered Bank <b>Acc. No. 0102092728000 </b>(Treasury Square).</li>
-                            <li>Equity Bank <b> Acc. No. 0460297818058 </b> (Digo Rd Branch).</li>
-                            <li>National Bank <b> Acc. No. 01038074211700 </b> (TUM Branch).</li>
-                            <li>KCB Lamu Campus: <b> Acc. No. 1118817192 </b> (Mvita Branch).</li>
-                            <li>KCB (TUM) Fee Collection <b> Acc No. 1169329578 </b> (Mvita Branch).</li>
-                            <li>Barclays Bank <b> Acc. No. 2034098894 </b> (Nkrumah Rd Branch).</li>
-                        </ul>
-
-                            <span class="text-muted text-center" style="color: red !important;">Application fee is non refundable</span>
-                    </div>
-                    <div class="block-content block-content-full text-end bg-body">
-                        <button type="button" class="btn btn-sm btn-alt-secondary me-1" data-bs-dismiss="modal">Close</button>
-{{--                        <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Okay</button>--}}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END Pop In Block Modal -->
 @endsection
 
 

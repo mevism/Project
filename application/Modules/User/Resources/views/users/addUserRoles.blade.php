@@ -66,19 +66,18 @@
                                     <th>Role</th>
                                 </thead>
                                 <tbody>
-                                @foreach($user->placedUser as $department)
                                     <tr>
-                                        <td>{{ $department->userDepartment->name }}</td>
-                                        <td>{{ $department->userRole->name }}</td>
+                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $user->staffRole->name }}</td>
                                     </tr>
-                                @endforeach
+
                                 </tbody>
                             </table>
                     </fieldset>
                 </div>
 
                 <div class="col-md-6">
-                    <form method="post" action="{{ route('admin.storeUserRole', ['id' => Crypt::encrypt($user->id)]) }}">
+                    <form method="post" action="{{ route('admin.storeUserRole', $user->user_id) }}">
                         @csrf
                         <fieldset class="border p-2" style="height: 100% !important;">
                             <legend class="float-none w-auto"><h6>Employment Details</h6></legend>
@@ -148,58 +147,114 @@
 <script>
     $(document).ready(function () {
         $(document).on('change', '#division', function () {
+            var division = $(this).val();
+            var departmentDropdown = $('#department');
+            var stationDropdown = $('#station');
 
-            var division = $('#division').val();
-            var op = '';
+            // Clear previous options
+            departmentDropdown.empty();
+            stationDropdown.empty();
+
+            // Add default option
+            departmentDropdown.append('<option disabled selected class="text-center">-- select department --</option>');
+            stationDropdown.append('<option disabled selected class="text-center">-- select station --</option>');
+
+            // Make AJAX request
             $.ajax({
-
                 type: 'get',
                 url: '{{ route('admin.divisionDepartment') }}',
-                data: {division: division},
+                data: { division: division },
                 dataType: 'json',
                 success: function (data) {
-
-                    var op = '';
-
-                    op += '<option value="0" selected disabled class="text-center"> -- select -- </option>';
-
+                    // Populate department dropdown
                     for (var i = 0; i < data.length; i++) {
-                        op += '<option value="' + data[i].id + '">' + data[i].name + '</input>';
-
+                        departmentDropdown.append('<option value="' + data[i].department_id + '">' + data[i].name + '</option>');
                     }
-
-                    $('#department').append(op);
-
                 }
             });
-
-            $(document).on('change', '#department', function () {
-
-                var deptID = $('#department').val();
-                var op1 = '';
-
-                $.ajax({
-
-                    type: 'get',
-                    url: '{{ route('admin.getDepartment') }}',
-                    data: {deptID: deptID},
-                    dataType: 'json',
-                    success: function (data) {
-
-                        console.log(data)
-
-                        op1 += '<option value="0" selected disabled class="text-center"> -- select section -- </option>';
-
-                        op1 += '<option value="' + data.id + '"> ' + data.name + ' </option>';
-
-                        $('#station').append(op1);
-                    }
-                });
-
-            });
-
         });
 
+        $(document).on('change', '#department', function () {
+            var departmentID = $(this).val();
+            var stationDropdown = $('#station');
+
+            // Clear previous options
+            stationDropdown.empty();
+
+            // Add default option
+            stationDropdown.append('<option disabled selected class="text-center">-- select station --</option>');
+
+            // Make AJAX request
+            $.ajax({
+                type: 'get',
+                url: '{{ route('admin.getDepartment') }}',
+                data: { deptID: departmentID },
+                dataType: 'json',
+                success: function (data) {
+                    // Populate station dropdown
+                    stationDropdown.append('<option value="' + data.department_id + '">' + data.name + '</option>');
+                }
+            });
+        });
     });
 
 </script>
+
+{{--<script>--}}
+{{--    $(document).ready(function () {--}}
+{{--        $(document).on('change', '#division', function () {--}}
+
+{{--            var division = $('#division').val();--}}
+{{--            var op = '';--}}
+{{--            $.ajax({--}}
+
+{{--                type: 'get',--}}
+{{--                url: '{{ route('admin.divisionDepartment') }}',--}}
+{{--                data: {division: division},--}}
+{{--                dataType: 'json',--}}
+{{--                success: function (data) {--}}
+
+{{--                    var op = '';--}}
+
+{{--                    op += '<option value="0" selected disabled class="text-center"> -- select -- </option>';--}}
+
+{{--                    for (var i = 0; i < data.length; i++) {--}}
+{{--                        op += '<option value="' + data[i].id + '">' + data[i].name + '</input>';--}}
+
+{{--                    }--}}
+
+{{--                    $('#department').append(op);--}}
+
+{{--                }--}}
+{{--            });--}}
+
+{{--            $(document).on('change', '#department', function () {--}}
+
+{{--                var deptID = $('#department').val();--}}
+{{--                var op1 = '';--}}
+
+{{--                $.ajax({--}}
+
+{{--                    type: 'get',--}}
+{{--                    url: '{{ route('admin.getDepartment') }}',--}}
+{{--                    data: {deptID: deptID},--}}
+{{--                    dataType: 'json',--}}
+{{--                    success: function (data) {--}}
+
+{{--                        console.log(data)--}}
+
+{{--                        op1 += '<option value="0" selected disabled class="text-center"> -- select section -- </option>';--}}
+
+{{--                        op1 += '<option value="' + data.id + '"> ' + data.name + ' </option>';--}}
+
+{{--                        $('#station').append(op1);--}}
+{{--                    }--}}
+{{--                });--}}
+
+{{--            });--}}
+
+{{--        });--}}
+
+{{--    });--}}
+
+{{--</script>--}}

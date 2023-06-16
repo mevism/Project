@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('student_points');
             $table->integer('status')->default(0);
             $table->timestamps();
-            $table->softDeletes();
+//            $table->softDeletes();
         });
     }
 

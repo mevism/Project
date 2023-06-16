@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Service\CustomIds;
 use Illuminate\Support\Collection;
 use Modules\Application\Entities\Education;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -27,7 +28,6 @@ class KuccpsImport implements ToCollection
 
         foreach($collection as $row){
 
-
             $names = preg_replace('/\s+/', ' ',$row[2]);
             $name = explode(' ', $names);
 
@@ -45,10 +45,13 @@ class KuccpsImport implements ToCollection
                 $mname = $name[2];
             }
 
-            $exit_date = preg_replace('/&/', '', substr($row[1], -4));
-            // return $exit_date;
+            $id = new CustomIds();
+            $applcant_id = $id->generateId();
 
-            $applicant = KuccpsApplicant::create([
+            $exit_date = preg_replace('/&/', '', substr($row[1], -4));
+
+            KuccpsApplicant::create([
+                'applicant_id' => $applcant_id,
                 'index_number' => preg_replace('/&/', 'AND', $row[1]),
                 'sname' => preg_replace('/&/', 'AND', $sname),
                 'fname' => preg_replace('/&/', 'AND', $fname) ,
@@ -65,19 +68,19 @@ class KuccpsImport implements ToCollection
             ]);
 
             KuccpsApplication::create([
-                'applicant_id' => $applicant->id,
+                'applicant_id' => $applcant_id,
                 'intake_id' => $this->intake_id,
                 'course_code' => preg_replace('/&/', 'AND', $row[11]) ,
                 'course_name' => preg_replace('/&/', 'AND', $row[12])
             ]);
 
             Education::create([
-                'applicant_id' => $applicant->id,
+                'applicant_id' => $applcant_id,
                 'institution' => preg_replace('/&/', 'AND', $row[13]),
                 'level' => 'SECONDARY',
                 'qualification' => 'KUCCPS',
                 'exit_date' => $exit_date,
-                // 'start_date' => $exit_date - 3,
+                'start_date' => $exit_date - 3,
             ]);
         }
     }

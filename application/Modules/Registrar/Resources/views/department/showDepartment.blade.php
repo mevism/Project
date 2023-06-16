@@ -47,17 +47,18 @@
         <div class="block-content block-content-full">
           <div class="row">
             <div class="col-12 table-responsive">
-          <table id="example" class="table table-bordered table-striped table-vcenter js-dataTable-responsive fs-sm">
-            <span class="d-flex justify-content-end m-2">
+                <span class="d-flex justify-content-end m-2">
                 <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addDepartment') }}">Create</a>
-            </span>
+                </span>
+          <table id="example" class="table table-sm table-bordered table-striped fs-sm">
             <thead>
 
               <tr>
                 <th>#</th>
-                <th>DIVISION</th>
+                <th>SCHOOL</th>
                 <th>DEPARTMENT NAME</th>
-                <th>DEPARTMENT CODE</th>
+                <th nowrap="">DEPT CODE</th>
+                <th>DIVISION</th>
                 <th>HISTORY</th>
                 <th>Action</th>
               </tr>
@@ -67,14 +68,15 @@
               @foreach ($data as $key => $department)
               <tr>
                 <td> {{ ++$key }} </td>
-                <td> {{ $department->schools->first()->name }}</td>
+                <td> {{ $department->deptSchool->name }}</td>
                 <td> {{ $department->name }}</td>
                 <td> {{ $department->dept_code }} </td>
+                  <td> {{ strtoupper($department->deptDivision->name) }} </td>
                   <td>
-                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.departmentPreview', $department->id)}}"> View </a>
+                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.departmentPreview', $department->department_id)}}"> View </a>
                   </td>
                 <td nowrap>
-                  <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editDepartment', ['id'=> Crypt::encrypt($department->id)]) }}">edit</a>
+                  <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editDepartment', $department->department_id) }}">  edit <i class="fa fa-pencil"></i> </a>
 {{--                  <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this department ?')"  href="{{ route('courses.destroyDepartment', $department->id) }}">delete</a>--}}
                 </td>
               </tr>

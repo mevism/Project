@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('work_experiences', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('applicant_id');
+            $table->string('applicant_id');
             $table->string('organization')->nullable();
             $table->string('post')->nullable();
             $table->string('start_date')->nullable();

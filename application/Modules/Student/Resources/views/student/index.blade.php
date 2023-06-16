@@ -15,7 +15,7 @@
                         <a class="link-fx" href="javascript:void(0)">Student</a>
                     </li>
                     <li class="breadcrumb-item" aria-current="page" >
-                        Dashboard
+                        Dashboard 
                     </li>
                 </ol>
             </nav>

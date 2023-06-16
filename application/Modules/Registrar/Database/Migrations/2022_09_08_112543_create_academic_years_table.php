@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('academic_years', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('year_id');
             $table->string('year_start')->unique();
             $table->string('year_end')->unique();
             $table->integer('status');

@@ -7,6 +7,8 @@ use App\Models\User;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Application\Entities\ApplicationApproval;
+use Modules\COD\Entities\ApplicationsView;
 use Modules\Dean\Entities\DeanLog;
 use PhpOffice\PhpWord\Element\Table;
 use Illuminate\Support\Facades\Crypt;
@@ -36,6 +38,10 @@ use Modules\Workload\Entities\ApproveWorkload;
 
 class DeanController extends Controller
 {
+//    public function __construct(){
+//        auth()->setDefaultDriver('user');
+//        $this->middleware(['web','auth', 'is_dean']);
+//    }
 
     public function yearlyWorkload()
     {
@@ -143,21 +149,21 @@ class DeanController extends Controller
     public function revertWorkload($id){
 
           $hashedId = Crypt::decrypt($id);
-  
+
           $revert        =      ApproveWorkload::find($hashedId);
           $revert->dean_status = 2;
           $revert->save();
-  
+
           $workloads = Workload::where('workload_approval_id', $hashedId)->get();
-  
+
           foreach($workloads  as  $workload){
-  
+
               $updateLoad  =  Workload::find($workload->id);
               $updateLoad->status  =  2;
               $updateLoad->save();
-  
+
              }
-  
+
           return redirect()->back()->with('success', 'Workload Reverted to COD Successfully.');
       }
 
@@ -816,11 +822,11 @@ class DeanController extends Controller
     public function applications()
     {
 
-        $applications = Application::where('dean_status', '!=', 3)
-            ->where('school_id', auth()->guard('user')->user()->school_id)
+       $applications = ApplicationsView::where('dean_status', '!=', 3)
+            ->where('school_id', auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->school_id)
             ->where('registrar_status', null)
             ->orWhere('registrar_status', 4)
-            ->orderBy('id', 'DESC')
+            ->latest()
             ->get();
 
         return view('dean::applications.index')->with('apps', $applications);
@@ -829,75 +835,68 @@ class DeanController extends Controller
     public function viewApplication($id)
     {
 
-        $hashedId = Crypt::decrypt($id);
-
-        $app = Application::find($hashedId);
-        $school = Education::where('applicant_id', $app->applicant->id)->get();
+        $app = ApplicationsView::where('application_id', $id)->first();
+        $school = Education::where('applicant_id', $app->applicant_id)->get();
 
         return view('dean::applications.viewApplication')->with(['app' => $app, 'school' => $school]);
     }
 
     public function previewApplication($id)
     {
-
-        $hashedId = Crypt::decrypt($id);
-
-        $app = Application::find($hashedId);
-        $school = Education::where('applicant_id', $app->applicant->id)->get();
+        $app = ApplicationsView::where('application_id', $id)->first();
+        $school = Education::where('applicant_id', $app->applicant_id)->get();
         return view('dean::applications.preview')->with(['app' => $app, 'school' => $school]);
     }
 
     public function acceptApplication($id)
     {
-
-        $hashedId = Crypt::decrypt($id);
-
-        $app = Application::find($hashedId);
+        $app = ApplicationApproval::where('application_id', $id)->first();
         $app->dean_status = 1;
+        $app->dean_comments = 'Application Accepted';
         if ($app->registrar_status != NULL) {
             $app->registrar_status = NULL;
         }
         $app->save();
 
-        $logs = new DeanLog;
-        $logs->application_id = $app->id;
-        $logs->user = Auth::guard('user')->user()->name;
-        $logs->user_role = Auth::guard('user')->user()->role_id;
-        $logs->activity = 'Application accepted';
-        $logs->save();
+//        $logs = new DeanLog;
+//        $logs->application_id = $app->id;
+//        $logs->user = Auth::guard('user')->user()->name;
+//        $logs->user_role = Auth::guard('user')->user()->role_id;
+//        $logs->activity = 'Application accepted';
+//        $logs->save();
 
         return redirect()->route('dean.applications')->with('success', '1 applicant approved');
     }
 
     public function rejectApplication(Request $request, $id)
     {
-
-        $hashedId = Crypt::decrypt($id);
-
-        $app = Application::find($hashedId);
+        $app = ApplicationApproval::where('application_id', $id)->first();
         $app->dean_status = 2;
         $app->dean_comments = $request->comment;
+        if ($app->registrar_status != NULL) {
+            $app->registrar_status = NULL;
+        }
         $app->save();
 
-        $logs = new DeanLog;
-        $logs->application_id = $app->id;
-        $logs->user = Auth::guard('user')->user()->name;
-        $logs->user_role = Auth::guard('user')->user()->role_id;
-        $logs->activity = 'Application rejected';
-        $logs->comments = $request->comment;
-        $logs->save();
+//        $logs = new DeanLog;
+//        $logs->application_id = $app->id;
+//        $logs->user = Auth::guard('user')->user()->name;
+//        $logs->user_role = Auth::guard('user')->user()->role_id;
+//        $logs->activity = 'Application rejected';
+//        $logs->comments = $request->comment;
+//        $logs->save();
 
         return redirect()->route('dean.applications')->with('success', 'Application declined');
     }
 
     public function batch()
     {
-        $apps = Application::where('dean_status', '>', 0)
-            ->where('school_id', auth()->guard('user')->user()->school_id)
+        $apps = ApplicationsView::where('dean_status', '>', 0)
+            ->where('school_id', auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->school_id)
             ->where('registrar_status', null)
-            ->where('dean_status', '!=', 3)
+            ->where('dean_status', '<=', 3)
             ->where('cod_status', '<=', 2)
-            ->orwhere('registrar_status', 4)
+            ->latest()
             ->get();
 
         return view('dean::applications.batch')->with('apps', $apps);
@@ -907,9 +906,10 @@ class DeanController extends Controller
     {
 
         foreach ($request->submit as $item) {
-            $app = Application::find($item);
+            $app = ApplicationApproval::where('application_id', $item)->first();
             if ($app->dean_status == 2) {
-                $app->dean_status = 3;
+                $app->dean_status = null;
+                $app->registrar_status = null;
                 $app->cod_status = 3;
             }
             if ($app->dean_status == 1) {
@@ -917,19 +917,19 @@ class DeanController extends Controller
             }
             $app->save();
 
-            $logs = new DeanLog;
-            $logs->application_id = $app->id;
-            $logs->user = Auth::guard('user')->user()->name;
-            $logs->user_role = Auth::guard('user')->user()->role_id;
-
-            if ($app->dean_status == 3) {
-
-                $logs->activity = 'Your application has been reverted to COD office for review';
-            } else {
-                $logs->activity = 'Your Application has been forwarded to registry office';
-            }
-
-            $logs->save();
+//            $logs = new DeanLog;
+//            $logs->application_id = $app->id;
+//            $logs->user = Auth::guard('user')->user()->name;
+//            $logs->user_role = Auth::guard('user')->user()->role_id;
+//
+//            if ($app->dean_status == 3) {
+//
+//                $logs->activity = 'Your application has been reverted to COD office for review';
+//            } else {
+//                $logs->activity = 'Your Application has been forwarded to registry office';
+//            }
+//
+//            $logs->save();
         }
 
         return redirect()->route('dean.batch')->with('success', '1 Batch send to next level of approval');

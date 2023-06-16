@@ -10,39 +10,46 @@
                 EDIT COURSE
               </h4>
           </div>
-
+          <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
+              <ol class="breadcrumb breadcrumb-alt">
+                  <li class="breadcrumb-item">
+                      <a class="link-fx" href="javascript:void(0)">Courses</a>
+                  </li>
+                  <li class="breadcrumb-item" aria-current="page">
+                      <a  href="showCourse">Edit Course</a>
+                  </li>
+              </ol>
+          </nav>
       </div>
   </div>
 </div>
     <div class="content">
         <div  class="block block-rounded">
-            <div class="block-header block-header-default">
-            </div>
             <div class="block-content block-content-full">
-                <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.updateCourse',$data->id) }}" method="POST">
+                <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.updateCourse', $data->course_id) }}" method="POST">
                     @csrf
                     @method('PUT')
-              <div class="row">
+              <div class="row mt-2">
                 <div class="col-lg-5 space-y-0">
-
                     <div class="form-floating col-12 col-xl-12 mb-4">
                       <select name="department" id="department"  class="form-control form-control-sm text-uppercase">
                         <option selected value="{{ $data->department_id }}"> {{ $data->getCourseDept->name }}</option>
                         @foreach ($departments as $department)
                         <option value="{{ $department->id }}">{{ $department->name }}</option>
                       @endforeach
-                      <label class="form-label">DEPARTMENT</label>
                       </select>
+                      <label class="form-label">DEPARTMENT</label>
                     </div>
                     <div class="form-floating  col-12 col-xl-12 mb-4">
-                    <select name="level" id="level" class="form-control form-control-sm text-uppercase form-select">
+                        <input type="hidden" name="level" value="{{ $data->level }}">
+                    <select name="level" id="level" class="form-control form-control-sm text-uppercase form-select ">
                       <option @if($data->level == 1) selected @endif value="1"> Certificate </option>
                       <option @if($data->level == 2) selected @endif value="2"> Diploma </option>
                       <option @if($data->level == 3) selected @endif value="3"> Degree </option>
                       <option @if($data->level == 4) selected @endif value="4"> Masters </option>
                       <option @if($data->level == 5) selected @endif value="5"> PhD </option>
-                      <label class="form-label">LEVEL</label>
                     </select>
+                        <label class="form-label">LEVEL</label>
                     </div>
                     <div class="form-floating  col-12 col-xl-12 mb-4">
                       <input type = "text" class = "form-control form-control-sm text-uppercase" id = "course_name" value="{{$data->course_name }}" name="course_name" placeholder="Course Name">
@@ -162,6 +169,20 @@
                                 <option value="D"> D </option>
                                 <option value="D-"> D- </option>
                             </select>
+                    </div>
+
+                    <div class="form-floating">
+                        <select class="form-control form-control-sm text-uppercase category3 m-1 fs-sm" name="cluster_group" id="cluster">
+                            @if($data->courseCluster == null )
+                                <option class="text-center" disabled selected> -- select course cluster group -- </option>
+                            @else
+                            @foreach($clusters as $cluster)
+                                <option @if($cluster->group == $data->courseCluster->cluster) selected @endif value="{{ $cluster->group }}">{{ $cluster->group }}</option>
+                            @endforeach
+                            @endif
+                        </select>
+                        <label>CLUSTER GROUPS </label>
+                        <small class="text-danger">All undergrad courses must have a cluster group</small>
                     </div>
 
                 </div>
@@ -303,6 +324,24 @@
 
                     });
                 });
+            });
+
+            $(document).ready(function() {
+                var $cluster = $("#cluster");
+                var $level = $("#level");
+
+                $level.prop("disabled", true);
+                // $cluster.prop("disabled", true);
+
+                // $level.on("change", function() {
+
+                    if ($level.val() === '3') {
+
+                        $cluster.prop("disabled", false);
+                    } else {
+                        $cluster.prop("disabled", true);
+                    }
+                // });
             });
 
         </script>

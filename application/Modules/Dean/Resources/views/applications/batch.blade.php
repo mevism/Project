@@ -45,15 +45,15 @@
                                 <tr>
                                     <td>
                                         @if($app->registrar_status == null || 4)
-                                           <input class="batch" type="checkbox" name="submit[]" value="{{ $app->id }}" required>
+                                           <input class="batch" type="checkbox" name="submit[]" value="{{ $app->application_id }}" required>
                                               @else
                                                  ✔
                                         @endif
                                     </td>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</td>
-                                    <td> {{ $app->courses->getCourseDept->name }}</td>
-                                    <td> {{ $app->courses->course_name }}</td>
+                                    <td> {{ $app->sname }} {{ $app->fname }} {{ $app->mname }}</td>
+                                    <td> {{ $app->DepartmentCourse->getCourseDept->name }}</td>
+                                    <td> {{ $app->DepartmentCourse->course_name }}</td>
                                     <td>
                                         @if($app->cod_status == 0)
                                             <span class="badge bg-primary">Awaiting</span>
@@ -88,9 +88,7 @@
                             <button type="submit" class="btn btn-sm btn-alt-primary" data-toggle="click-ripple">Submit batch</button>
                         </div>
                         @endif
-                        </form>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 @endsection
@@ -103,7 +101,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[2, 'asc']],
+            order: [[0, 'asc']],
             rowGroup: {
                 dataSrc: 2
             }

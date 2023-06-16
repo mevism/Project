@@ -16,12 +16,18 @@
 //});
 
 
+//use Illuminate\Routing\Route;
 use Modules\User\Http\Controllers\UserController;
 
-Route::get('/system-users', [UserController::class, 'index'])->name('admin.users');
-Route::get('/add-new-system-user', [UserController::class, 'addNewUser'])->name('admin.addNewUser');
-Route::post('/import-users-from-hr/{id}', [UserController::class, 'importUsers'])->name('admin.importUsers');
-Route::get('/get-departments-in-a-division', [UserController::class, 'divisionDepartment'])->name('admin.divisionDepartment');
-Route::get('/get-selected-department', [UserController::class, 'getDepartment'])->name('admin.getDepartment');
-Route::get('/update-selected-user/{id}', [UserController::class, 'addUserRole'])->name('admin.addUserRole');
-Route::post('/add-new-user-role/{id}', [UserController::class, 'storeUserRole'])->name('admin.storeUserRole');
+Route::prefix('user')
+//    ->middleware(['user', 'auth', 'admin'])
+    ->group(function() {
+    Route::get('/system-users', [UserController::class, 'index'])->name('admin.users');
+    Route::get('/fetchUser', [UserController::class,'fetchById'])->name('admin.userById');
+    Route::get('/add-new-system-user', [UserController::class, 'addNewUser'])->name('admin.addNewUser');
+    Route::post('/import-users-from-hr', [UserController::class, 'importUsers'])->name('admin.importUsers');
+    Route::get('/get-departments-in-a-division', [UserController::class, 'divisionDepartment'])->name('admin.divisionDepartment');
+    Route::get('/get-selected-department', [UserController::class, 'getDepartment'])->name('admin.getDepartment');
+    Route::get('/update-selected-user/{id}', [UserController::class, 'addUserRole'])->name('admin.addUserRole');
+    Route::post('/add-new-user-role/{id}', [UserController::class, 'storeUserRole'])->name('admin.storeUserRole');
+});

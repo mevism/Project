@@ -24,6 +24,11 @@ use Modules\Workload\Entities\ApproveWorkload;
 
 class WorkloadController extends Controller
 {
+    public function __construct(){
+        auth()->setDefaultDriver('user');
+        $this->middleware(['is_cod']);
+    }
+
     public function workloads()
     {
 
@@ -120,7 +125,7 @@ class WorkloadController extends Controller
             ->where('academic_semester', $class->period)
             ->count();
 
-     
+
         if ($user->employment_terms == 'PT') {
             if ($workloads <= 3) {
 
@@ -206,7 +211,7 @@ class WorkloadController extends Controller
 
                 $lectures[] = $user;
             }
-            
+
         }
 
         $workloads = Workload::where('academic_year', $hashedYear)

@@ -28,11 +28,11 @@
                 <!-- Developer Plan -->
                 <a class="block block-rounded block-link-shadow text-center" href="javascript:void(0)">
                     <div class="block-header">
-                        <h2 class="block-title fw-bold">{{ $course->mainCourses->course_name }} | {{ $course->mainCourses->courseRequirements->course_duration }}</h2>
+                        <h2 class="block-title fw-bold">{{ $course->course_name }} | {{ $course->course_duration }}</h2>
                     </div>
                     <div class="block-content bg-body-light">
                         <div class="py-2">
-                            <p class="mb-2">{{ $course->mainCourses->courseRequirements->course_requirements }}</p>
+                            <p class="mb-2">{{ $course->course_requirements }}</p>
                         </div>
                     </div>
                     <div class="block-content">
@@ -40,24 +40,24 @@
                         <div class="fs-sm py-2">
                             <div class="row">
                                 <div class="col-md-6"> Subject 1</div>
-                                <div class="col-md-6">{{ $course->mainCourses->courseRequirements->subject1 }}</div>
+                                <div class="col-md-6">{{ $course->subject1 }}</div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6"> Subject 2 </div>
-                                <div class="col-md-6">{{ $course->mainCourses->courseRequirements->subject2 }}</div>
+                                <div class="col-md-6">{{ $course->subject2 }}</div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">Subject 3 </div>
-                                <div class="col-md-6">{{ $course->mainCourses->courseRequirements->subject3 }}</div>
+                                <div class="col-md-6">{{ $course->subject3 }}</div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">Subject 4 </div>
-                                <div class="col-md-6">{{ $course->mainCourses->courseRequirements->subject4 }}</div>
+                                <div class="col-md-6">{{ $course->subject4 }}</div>
                             </div>
                         </div>
                     </div>
                     <div class="block-content block-content-full bg-body-light text-center">
-                        <a href="{{ route('application.apply', ['id' => Crypt::encrypt($course->id)]) }}" class="btn btn-alt-success btn-sm" data-toggle="click-ripple">Apply now</a>
+                        <a href="{{ route('application.apply', $course->available_id) }}" class="btn btn-alt-success btn-sm" data-toggle="click-ripple">Apply now</a>
                     </div>
                 </a>
                 <!-- END Developer Plan -->

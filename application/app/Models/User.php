@@ -13,6 +13,7 @@ use Modules\Lecturer\Entities\LecturerQualification;
 use Modules\Lecturer\Entities\TeachingArea;
 use Modules\Registrar\Entities\Department;
 use Modules\Registrar\Entities\Division;
+use Modules\User\Entities\StaffInfo;
 use Modules\Workload\Entities\Workload;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -59,7 +60,7 @@ class User extends Authenticatable
 
     public function roles(): BelongsToMany {
 
-        return $this->belongsToMany(Role::class, 'user_employments', 'user_id', 'role_id');
+        return $this->belongsToMany(Role::class, 'user_employments', 'user_id', 'role_id', 'user_id', 'id');
     }
 
     public function placedUser(){
@@ -72,13 +73,12 @@ class User extends Authenticatable
     }
 
     public function employmentDivision(): BelongsToMany {
-
-        return $this->belongsToMany(Division::class, 'user_employments', 'user_id', 'division_id');
+        return $this->belongsToMany(Division::class, 'user_employments', 'user_id', 'division_id', 'user_id','division_id');
     }
 
     public function employmentDepartment(): BelongsToMany {
 
-        return $this->belongsToMany(Department::class, 'user_employments', 'user_id', 'department_id');
+        return $this->belongsToMany(Department::class, 'user_employments', 'user_id', 'department_id', 'user_id', 'department_id');
     }
 
     public function employmentStation(): BelongsToMany {
@@ -104,5 +104,9 @@ class User extends Authenticatable
     public function lecturerQualification(){
         return $this->hasMany(LecturerQualification::class, 'user_id', 'id');
     }
-   
+
+    public function staffInfos(){
+        return $this->belongsTo(StaffInfo::class, 'user_id', 'user_id');
+    }
+
 }

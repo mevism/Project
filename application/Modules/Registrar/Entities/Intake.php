@@ -29,7 +29,7 @@ class Intake extends Model
     //rlship between an intake and academic year
     public function academicYear(){
 
-        return $this->belongsTo(AcademicYear::class, 'academic_year_id');
+        return $this->belongsTo(AcademicYear::class, 'academic_year_id', 'year_id');
     }
 
     public function IntakeEvents(){
