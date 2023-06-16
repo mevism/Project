@@ -10,6 +10,18 @@ class ExamWorkflow extends Model
     use HasFactory;
 
     protected $fillable = [];
+
+    
+    public function processExams(){
+
+        return $this->belongsTo(ExamMarks::class, 'id');
+    }
+
+  public function marksProcessed(){
+
+        return $this->hasMany(ExamMarks::class, 'workflow_id');
+    }
+
     
     protected static function newFactory()
     {

@@ -51,7 +51,7 @@ Route::prefix('dean')->middleware(['web'])->group(function() {
         Route::post('/decline-selected-readmission-request/{id}', [DeanController::class, 'declineReadmission'])->name('dean.declineReadmission');
 
         Route::get('/yearly-workload', [DeanController::class, 'yearlyWorkload'])->name('dean.workload');
-       Route::get('/print-workload/{id}', [DeanController::class, 'printWorkload'])->name('dean.printWorkload');
+        Route::get('/print-workload/{id}', [DeanController::class, 'printWorkload'])->name('dean.printWorkload');
         Route::get('/view-workload/{id}', [DeanController::class, 'viewWorkload'])->name('dean.viewWorkload');
         Route::get('/approve-workload/{id}', [DeanController::class, 'approveWorkload'])->name('dean.approveWorkload');
         Route::post('/decline-workload/{id}', [DeanController::class, 'declineWorkload'])->name('dean.declineWorkload');
@@ -59,4 +59,15 @@ Route::prefix('dean')->middleware(['web'])->group(function() {
         Route::get('/revert-workload/{id}', [DeanController::class, 'revertWorkload'])->name('dean.revertWorkload');
         Route::get('/submit-workload/{id}', [DeanController::class, 'submitWorkload'])->name('dean.submitWorkload');
 
+
+        Route::get('/yearly-exams', [DeanController::class, 'yearlyExams'])->name('dean.yearlyExams');
+        Route::get('/exams/{sem}/{year}', [DeanController::class, 'exams'])->name('dean.exams');
+        Route::get('/view-yearly-exams/{year}', [DeanController::class, 'viewYearlyExams'])->name('dean.viewYearlyExams');
+        Route::get('/approve-marks/{id}', [DeanController::class, 'approveExamMarks'])->name('dean.approveExamMarks');
+        Route::post('/decline-marks/{id}', [DeanController::class, 'declineExams'])->name('dean.declineExams');
+        Route::get('/submit-marks/{id}', [DeanController::class, 'submitExamMarks'])->name('dean.submitExamMarks');
+        Route::get('/revert-marks/{id}', [DeanController::class, 'revertExamMarks'])->name('dean.revertExamMarks');
+        Route::get('/download-exam-results/{sem}/{year}', [DeanController::class, 'downloadExamResults'])->name('dean.downloadExamResults');
+
 });
+

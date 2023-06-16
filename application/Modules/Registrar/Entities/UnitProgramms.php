@@ -10,7 +10,7 @@ class UnitProgramms extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['course_code','unit_name','course_unit_code','stage','semester','type'];
+    protected $fillable = ['course_code','unit_name','course_unit_code','stage','semester','type','version'];
 
     public function courseLevel(){
 

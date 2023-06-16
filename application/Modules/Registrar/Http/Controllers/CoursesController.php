@@ -23,8 +23,10 @@ use Modules\Registrar\Entities\SchoolDepartment;
 use Modules\Student\Entities\CourseClusterGroups;
 use Modules\Student\Entities\StudentAddress;
 use Modules\Student\Entities\StudentContact;
+use Modules\Student\Entities\StudentCourse;
 use Modules\Student\Entities\StudentDisability;
 use Modules\Student\Entities\StudentInfo;
+use Modules\Student\Entities\StudentLogin;
 use QrCode;
 use Carbon\Carbon;
 use App\Models\User;
@@ -59,27 +61,24 @@ use Modules\Registrar\Entities\Department;
 use PhpOffice\PhpWord\SimpleType\TblWidth;
 use Modules\Application\Entities\Applicant;
 use Modules\Application\Entities\Education;
+use Modules\Examination\Entities\ExamMarks;
 use Modules\Registrar\Entities\SemesterFee;
 use Modules\Student\Entities\AcademicLeave;
-use Modules\Student\Entities\DeferredClass;
 use NcJoes\OfficeConverter\OfficeConverter;
 use Modules\Finance\Entities\StudentInvoice;
 use Modules\Registrar\Entities\AcademicYear;
 use Modules\Registrar\Entities\RegistrarLog;
-use Modules\Registrar\Entities\StudentLogin;
 use Modules\Student\Entities\CourseTransfer;
 use Modules\Student\Entities\StudentDeposit;
 use Modules\Application\Entities\Application;
 use Modules\Registrar\Entities\CourseHistory;
 use Modules\Registrar\Entities\SchoolHistory;
-use Modules\Registrar\Entities\StudentCourse;
 use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Application\Entities\Notification;
 use Modules\Registrar\Entities\ClusterWeights;
 use Modules\Workload\Entities\ApproveWorkload;
 use Modules\Registrar\emails\AcademicLeaveMail;
 use Modules\Registrar\Entities\AvailableCourse;
-use Modules\Registrar\Entities\ClusterSubjects;
 use Modules\Registrar\Entities\CourseLevelMode;
 use Modules\Registrar\Entities\KuccpsApplicant;
 use Modules\Registrar\Entities\CalenderOfEvents;
@@ -89,11 +88,13 @@ use Modules\Registrar\Entities\DepartmentHistory;
 use Modules\Student\Entities\ReadmissionApproval;
 use Modules\Registrar\emails\RejectedAcademicMail;
 use Modules\Application\Entities\AdmissionApproval;
+use Modules\Examination\Entities\ExamWorkflow;
 use Modules\Student\Entities\AcademicLeaveApproval;
 use Modules\Student\Entities\CourseTransferApproval;
 use Modules\Registrar\emails\AcceptedReadmissionsMail;
 use Modules\Registrar\emails\RejectedReadmissionsMail;
 use Modules\Registrar\emails\CourseTransferRejectedMails;
+use PhpParser\Node\Stmt\Return_;
 
 class CoursesController extends Controller
 {
@@ -101,7 +102,226 @@ class CoursesController extends Controller
 //        auth()->setDefaultDriver('user');
 //        $this->middleware(['web','auth', 'admin']);
 //    }
+    /*
+     * exam marks
+    */
+    public function  yearlyExamMarks()
+    {
+        $academicYears = ExamWorkflow::latest()->get()->groupBy('academic_year');
+        return view('registrar::marks.index')->with(['academicYears' => $academicYears]);
+    }
 
+    public function semesterExamMarks($year)
+    {
+        $hashedYear = Crypt::decrypt($year);
+
+        $semesters = ExamMarks::where('academic_year', $hashedYear)->latest()->get()->groupBy('academic_semester');
+
+        return view('registrar::marks.semesterExamMarks')->with(['semesters' => $semesters, 'year' => $hashedYear]);
+    }
+
+
+    public function schoolExamMarks($sem, $year)
+    {
+        $hashedSem = Crypt::decrypt($sem);
+
+        $hashedYear = Crypt::decrypt($year);
+
+        $schools =  School::all();
+
+        //  $marks = ExamWorkflow::where('academic_year', $hashedYear)
+        //             ->where('academic_semester', $hashedSem)
+        //             ->first();
+
+
+
+        return view('registrar::marks.schoolExamMarks')->with(['schools'  =>  $schools, 'year'  =>  $hashedYear, 'sem'  =>  $hashedSem /* , 'marks'  =>  $marks */]);
+    }
+
+    public function approveExamMarks($id, $year, $sem)
+    {
+        $hashedId = Crypt::decrypt($id);
+        $hashedYear = Crypt::decrypt($year);
+        $hashedSem = Crypt::decrypt($sem);
+
+        $school = School::find($hashedId);
+
+        $depts = $school->departments;
+
+        foreach ($depts as $dept) {
+
+            if (ExamWorkflow::where('academic_year', $hashedYear)->where('academic_semester', $hashedSem)->where('department_id', $dept->id)->exists()) {
+                $result = ExamWorkflow::where('academic_year', $hashedYear)
+                    ->where('academic_semester', $hashedSem)
+                    ->where('department_id', $dept->id)
+                    ->first();
+
+                $result->registrar_status = '1';
+                $result->registrar_remarks = 'Workload Approved';
+                $result->status =  '1';
+                $result->save();
+            }
+        }
+
+        return redirect()->back()->with('success', 'Exam Marks Approved Successfully');
+    }
+
+    public function declineExamMarks(Request $request, $id, $year, $sem)
+    {
+        $hashedId = Crypt::decrypt($id);
+        $hashedYear = Crypt::decrypt($year);
+        $hashedSem = Crypt::decrypt($sem);
+
+        $school = School::find($hashedId);
+
+        $depts = $school->departments;
+
+        foreach ($depts as $dept) {
+
+            if (ExamWorkflow::where('academic_year', $hashedYear)->where('academic_semester', $hashedSem)->where('department_id', $dept->id)->exists()) {
+                $result = ExamWorkflow::where('academic_year', $hashedYear)
+                    ->where('academic_semester', $hashedSem)
+                    ->where('department_id', $dept->id)
+                    ->first();
+                $result->registrar_status = '2';
+                $result->registrar_remarks = $request->remarks;
+                $result->status = '2';
+                $result->save();
+            }
+        }
+
+
+        return redirect()->back()->with('success', 'Exam Marks Declined');
+    }
+
+    public function downloadExamMarks($id, $year, $sem)
+    {
+
+        $hashedId = Crypt::decrypt($id);
+        $hashedYear = Crypt::decrypt($year);
+        $hashedSem = Crypt::decrypt($sem);
+
+        $school = School::find($hashedId);
+
+        $depts = $school->departments;
+
+        $domPdfPath = base_path('vendor/dompdf/dompdf');
+        \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
+        \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+
+        $center = ['bold' => true, 'size' => 9, 'name' => 'Book Antiqua'];
+        $table = new Table(array('unit' => TblWidth::TWIP));
+        $headers = ['bold' => true, 'space' => ['before' => 2000, 'after' => 2000, 'rule' => 'exact']];
+
+        foreach ($depts as $dept) {
+
+            if (ExamMarks::where('department_id', $dept->id)->where('academic_year', $hashedYear)->where('academic_semester', $hashedSem)->exists()) {
+                $results = ExamMarks::where('department_id', $dept->id)
+                    ->where('academic_year', $hashedYear)
+                    ->where('academic_semester', $hashedSem)
+                    ->get()
+                    ->groupBy('class_code');
+
+                foreach ($results as $class => $result) {
+                    // $table = new Table(array('unit' => TblWidth::TWIP));
+                    $table->addRow();
+                    $table->addCell(5900, ['borderSize' => 1, 'gridSpan' => 4])->addText($dept->name, $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
+                    $table->addCell(5900, ['borderSize' => 1, 'gridSpan' => 4])->addText($class, $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
+
+                    foreach ($result as $student) {
+                        $table->addRow();
+                        $table->addCell(5900, ['borderSize' => 1, 'gridSpan' => 4])->addText($student->id, $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
+                        $table->addCell(5900, ['borderSize' => 1, 'gridSpan' => 4])->addText($student->reg_number, $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
+                    }
+                }
+            }
+        }
+
+        // return $results;
+
+        $logedUser  =  auth()->guard('user')->user()->roles->first();
+
+        $session = ExamMarks::where('department_id', $dept->id)
+            ->where('academic_year', $hashedYear)
+            ->where('academic_semester', $hashedSem)
+            ->first();
+
+
+        $exams = ExamMarks::/* where('class_code', $result) */
+            // ->where('workflow_id', $hashedId)
+            /* -> */where('academic_year', $hashedYear)
+            ->where('academic_semester', $hashedSem)
+            ->latest()
+            ->get()
+            ->groupBy('reg_number');
+
+
+
+
+
+
+
+        // $table->addRow();
+        // $table->addCell(5900, ['borderSize' => 1, 'gridSpan' => 4])->addText('SEMESTER UNITS AND MARKS', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
+        // // $table->addCell(800, ['borderSize' => 1])->addText();
+
+        // $table->addRow();
+        // $table->addCell(400, ['borderSize' => 1])->addText('#', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+        // $table->addCell(1700, ['borderSize' => 1])->addText('Reg No:', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+        // $table->addCell(3100, ['borderSize' => 1])->addText(trim('Names'), $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+
+        // $table->addCell(700, ['borderSize' => 1])->addText('Sex', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+
+        // $sn = 0;
+
+        // foreach ($students as $student) {
+        //     $regNo  =  $student->reg_number;
+
+        //     $studentsDetails = Student::where('reg_number', $regNo)->first();
+
+        //     $table->addRow();
+        //     $table->addCell(400, ['borderSize' => 1])->addText(++$sn, ['name' => 'Book Antiqua', 'size' => 10]);
+        //     $table->addCell(1200, ['borderSize' => 1])->addText($student->reg_number, ['name' => 'Book Antiqua', 'size' => 10]);
+        //     $table->addCell(1400, ['borderSize' => 1])->addText($studentsDetails->sname . ' ' . $studentsDetails->fname . ' ' . $studentsDetails->mname, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
+        //     $table->addCell(1400, ['borderSize' => 1])->addText($studentsDetails->gender, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
+        // }
+
+        $class = $session->first()->class_code;
+        $parts = explode("/", $class);
+
+        $courses = Courses::where('course_code', $parts[0])->first();
+
+        $results = new TemplateProcessor(storage_path('results_template.docx'));
+
+        $results->setValue('initials', $logedUser->name);
+        $results->setValue('name', $school->name);
+        $results->setValue('department', $depts->first()->name);
+        $results->setValue('year', $session->first()->academic_year);
+        $results->setValue('academic_semester', $session->first()->academic_semester);
+        $results->setValue('class', $session->first()->class_code);
+        $results->setValue('course', $courses->course_name);
+        $results->setComplexBlock('{table}', $table);
+        $docPath = 'Results/' . 'Results' . time() . ".docx";
+        $results->saveAs($docPath);
+
+        $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
+
+        $pdfPath = 'Results/' . 'Results' . time() . ".pdf";
+
+        //            $converter =  new OfficeConverter($docPath, 'Results/');
+        //            $converter->convertTo('Results' . time() . ".pdf");
+
+        //            if (file_exists($docPath)) {
+        //                unlink($docPath);
+        //            }
+
+
+        //        return response()->download($pdfPath)->deleteFileAfterSend(true);
+
+        return response()->download($docPath)->deleteFileAfterSend(true);
+    }
+
+    /* Workload */
     public function workload()
     {
 
@@ -120,24 +340,22 @@ class CoursesController extends Controller
 
         $schools =  School::all();
 
-
-
         return view('registrar::workload.schoolWorkload')->with(['year' => $hashedYear])->with(['schools'  =>  $schools]);
     }
 
-    public function revertWorkload($id){
+    public function revertWorkload($id)
+    {
 
         $hashedId = Crypt::decrypt($id);
 
         $workloads = Workload::where('workload_approval_id', $hashedId)->get();
 
-        foreach($workloads  as  $workload){
+        foreach ($workloads  as  $workload) {
 
             $updateLoad  =  Workload::find($workload->id);
             $updateLoad->status  =  2;
             $updateLoad->save();
-
-           }
+        }
 
         return redirect()->back()->with('success', 'Workload Reverted to Dean Successfully.');
     }
@@ -169,7 +387,6 @@ class CoursesController extends Controller
                 ->get();
         }
 
-
         return view('registrar::workload.departmentalWorkload')->with(['departs' => $departs, 'year'  =>  $hashedYear, 'departments' => $departments]);
     }
 
@@ -196,45 +413,43 @@ class CoursesController extends Controller
 
         $hashedId = Crypt::decrypt($id);
 
-         $workloadId  = Workload::where('workload_approval_id',$hashedId)->get();
+        $workloadId  = Workload::where('workload_approval_id', $hashedId)->get();
 
-            $updateApproval = ApproveWorkload::where('id', $hashedId)
-                ->where('dean_status', '!=', null)
-                ->first();
-            $updateApproval->registrar_status = 1;
-            $updateApproval->registrar_remarks = 'Workload Approved';
-            $updateApproval->status = 1;
-            $updateApproval->save();
+        $updateApproval = ApproveWorkload::where('id', $hashedId)
+            ->where('dean_status', '!=', null)
+            ->first();
+        $updateApproval->registrar_status = 1;
+        $updateApproval->registrar_remarks = 'Workload Approved';
+        $updateApproval->status = 1;
+        $updateApproval->save();
 
-            foreach($workloadId  as  $workload){
+        foreach ($workloadId  as  $workload) {
 
-                $updateWorkload  =   Workload::find($workload->id);
-                $updateWorkload->status  =  0;
-                $updateWorkload->save();
-            }
+            $updateWorkload  =   Workload::find($workload->id);
+            $updateWorkload->status  =  0;
+            $updateWorkload->save();
+        }
 
         return redirect()->back()->with('success', 'Workload Approved Successfully');
     }
 
     public function declineWorkload(Request $request, $id)
     {
-
         $hashedId = Crypt::decrypt($id);
 
-            $updateApproval = ApproveWorkload::where('id', $hashedId)
-                ->where('dean_status', '!=', null)
-                ->first();
-
-            $updateApproval->registrar_status = 2;
-            $updateApproval->registrar_remarks = $request->remarks;
-            $updateApproval->status = 2;
-            $updateApproval->save();
+        $updateApproval = ApproveWorkload::where('id', $hashedId)
+            ->where('dean_status', '!=', null)
+            ->first();
+        $updateApproval->registrar_status = 2;
+        $updateApproval->registrar_remarks = $request->remarks;
+        $updateApproval->status = 2;
+        $updateApproval->save();
 
         return redirect()->back()->with('success', 'Workload Declined');
     }
 
-     public function printWorkload($id){
-
+    public function printWorkload($id)
+    {
         $hashedId = Crypt::decrypt($id);
 
         $load = ApproveWorkload::find($hashedId);
@@ -247,15 +462,14 @@ class CoursesController extends Controller
 
         $users = User::all();
 
-        foreach ($users as $user){
-            if ($user->hasRole('Lecturer')){
+        foreach ($users as $user) {
+            if ($user->hasRole('Lecturer')) {
 
                 $lecturers[] = $user;
             }
         }
 
         $session = Workload::where('department_id', $dept->id)->where('workload_approval_id', $hashedId)->first();
-
 
         $workloads  =  Workload::where('department_id', $dept->id)->where('workload_approval_id', $hashedId)->get()->groupBy('user_id');
 
@@ -276,115 +490,108 @@ class CoursesController extends Controller
 
         $table->addRow();
         $table->addCell(400, ['borderSize' => 1, 'vMerge' => 'continue'])->addText('#');
-            $table->addCell(1200, ['borderSize' => 1])->addText('Staff Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
-            $table->addCell(1400, ['borderSize' => 1])->addText('Staff Name', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1000, ['borderSize' => 1])->addText('Qualification', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1000, ['borderSize' => 1])->addText('Roles', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(2100, ['borderSize' => 1])->addText('Class Code', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(700, ['borderSize' => 1])->addText('Work'."\n".'load', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(600, ['borderSize' => 1])->addText('Stds',  $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1500, ['borderSize' => 1])->addText('Unit Code', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(4200, ['borderSize' => 1])->addText('Unit Name', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(700, ['borderSize' => 1])->addText('Level', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(800, ['borderSize' => 1])->addText('Signature', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+        $table->addCell(1200, ['borderSize' => 1])->addText('Staff Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+        $table->addCell(1400, ['borderSize' => 1])->addText('Staff Name', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+        $table->addCell(1000, ['borderSize' => 1])->addText('Qualification', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+        $table->addCell(1000, ['borderSize' => 1])->addText('Roles', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+        $table->addCell(2100, ['borderSize' => 1])->addText('Class Code', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+        $table->addCell(700, ['borderSize' => 1])->addText('Work' . "\n" . 'load', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+        $table->addCell(600, ['borderSize' => 1])->addText('Stds',  $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+        $table->addCell(1500, ['borderSize' => 1])->addText('Unit Code', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+        $table->addCell(4200, ['borderSize' => 1])->addText('Unit Name', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+        $table->addCell(700, ['borderSize' => 1])->addText('Level', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+        $table->addCell(800, ['borderSize' => 1])->addText('Signature', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
 
-                $sn = 0;
+        $sn = 0;
 
-         foreach ($workloads as $user_id => $workload) {
-             $qualifications = [];
-             $roles = [];
-             foreach ($lecturers as $lecturer){
-                 if ($lecturer->id === $user_id){
-                     $staff = $lecturer;
-                     foreach ($staff->lecturerQualfs as $qualification){
-                         $qualifications[] = $qualification->qualification;
-                     }
-                     foreach ($staff->roles as $role){
-                         $roles[] = $role->name;
-                     }
-                 }
-             }
-
-             $table->addRow();
-             $table->addCell(400, ['borderSize' => 1])->addText( ++$sn, ['name' => 'Book Antiqua', 'size' => 10] );
-             $table->addCell(1200, ['borderSize' => 1])->addText($staff->staff_number, ['name' => 'Book Antiqua', 'size' => 10]);
-             $table->addCell(1400, ['borderSize' => 1])->addText($staff->title.'. '.$staff->last_name.' '.$staff->first_name, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
-             $table->addCell(1000, ['borderSize' => 1])->addText(implode(', ', $qualifications), ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
-             $table->addCell(1000, ['borderSize' => 1])->addText(implode(', ', $roles), ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
-
-             $class = $table->addCell(2100, ['borderSize' => 1]);
-             $staffLoad = $table->addCell(700, ['borderSize' => 1]);
-             $students = $table->addCell(600, ['borderSize' => 1]);
-             $unit_code = $table->addCell(1500, ['borderSize' => 1]);
-             $unit_name = $table->addCell(4200, ['borderSize' => 1]);
-             $levels = $table->addCell(700, ['borderSize' => 1]);
-             $signature = $table->addCell(800, ['borderSize' => 1]);
-
-                $userLoad = $workload->count();
-
-             foreach ($lecturers as $lecturer) {
-                 if ($lecturer->id === $user_id) {
-                     $staff = $lecturer;
-                     if ($staff->placedUser->first()->employment_terms == 'FT') {
-                         for ($i = 0; $i < $userLoad; ++$i) {
-                             if ($i < 3) {
-                                 $load = 'FT';
-                                 $staffLoad->addText($load, ['name' => 'Book Antiqua', 'size' => 10]);
-                             } else {
-                                 $load = 'PT';
-                                 $staffLoad->addText($load, ['name' => 'Book Antiqua', 'size' => 10]);
-                             }
-                         }
-
-                     } else {
-                         for ($i = 0; $i < $userLoad; ++$i) {
-                             if ($i < $userLoad) {
-                                 $load = 'PT';
-                                 $staffLoad->addText($load, ['name' => 'Book Antiqua', 'size' => 10]);
-                             }
-                         }
-                     }
-                 }
-             }
-
-             foreach ($workload as $unit) {
-                 $class->addText($unit->class_code, ['name' => 'Book Antiqua', 'size' => 10]);
-                 $students->addText($unit->classWorkload->studentClass->count(), ['name' => 'Book Antiqua', 'size' => 10]);
-                 $unit_code->addText($unit->workloadUnit->unit_code, ['name' => 'Book Antiqua', 'size' => 10]);
-                 $unit_name->addText(substr($unit->workloadUnit->unit_name, 0, 40), ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'left']);
-                 $levels->addText($unit->classWorkload->classCourse->level, ['name' => 'Book Antiqua', 'size' => 10]);
-                 $signature->addText();
-             }
-
-
-         }
-            $workload = new TemplateProcessor(storage_path('workload_template.docx'));
-
-            $workload->setValue('initials', $logedUser->name);
-            $workload->setValue('name', $school->name);
-            $workload->setValue('department', $dept->name);
-            $workload->setValue('academic_year', $session->academic_year);
-            $workload->setValue('academic_semester', $session->academic_semester);
-            $workload->setComplexBlock('{table}', $table);
-            $docPath = 'Fees/' . 'Workload' . time() . ".docx";
-            $workload->saveAs($docPath);
-
-            $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
-
-            $pdfPath = 'Fees/' . 'Workload' . time() . ".pdf";
-
-            $converter =  new OfficeConverter($docPath, 'Fees/');
-            $converter->convertTo('Workload' . time() . ".pdf");
-
-            if (file_exists($docPath)) {
-                unlink($docPath);
+        foreach ($workloads as $user_id => $workload) {
+            $qualifications = [];
+            $roles = [];
+            foreach ($lecturers as $lecturer) {
+                if ($lecturer->id === $user_id) {
+                    $staff = $lecturer;
+                    foreach ($staff->lecturerQualfs as $qualification) {
+                        $qualifications[] = $qualification->qualification;
+                    }
+                    foreach ($staff->roles as $role) {
+                        $roles[] = $role->name;
+                    }
+                }
             }
 
+            $table->addRow();
+            $table->addCell(400, ['borderSize' => 1])->addText(++$sn, ['name' => 'Book Antiqua', 'size' => 10]);
+            $table->addCell(1200, ['borderSize' => 1])->addText($staff->staff_number, ['name' => 'Book Antiqua', 'size' => 10]);
+            $table->addCell(1400, ['borderSize' => 1])->addText($staff->title . '. ' . $staff->last_name . ' ' . $staff->first_name, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
+            $table->addCell(1000, ['borderSize' => 1])->addText(implode(', ', $qualifications), ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
+            $table->addCell(1000, ['borderSize' => 1])->addText(implode(', ', $roles), ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
+
+            $class = $table->addCell(2100, ['borderSize' => 1]);
+            $staffLoad = $table->addCell(700, ['borderSize' => 1]);
+            $students = $table->addCell(600, ['borderSize' => 1]);
+            $unit_code = $table->addCell(1500, ['borderSize' => 1]);
+            $unit_name = $table->addCell(4200, ['borderSize' => 1]);
+            $levels = $table->addCell(700, ['borderSize' => 1]);
+            $signature = $table->addCell(800, ['borderSize' => 1]);
+
+            $userLoad = $workload->count();
+
+            foreach ($lecturers as $lecturer) {
+                if ($lecturer->id === $user_id) {
+                    $staff = $lecturer;
+                    if ($staff->placedUser->first()->employment_terms == 'FT') {
+                        for ($i = 0; $i < $userLoad; ++$i) {
+                            if ($i < 3) {
+                                $load = 'FT';
+                                $staffLoad->addText($load, ['name' => 'Book Antiqua', 'size' => 10]);
+                            } else {
+                                $load = 'PT';
+                                $staffLoad->addText($load, ['name' => 'Book Antiqua', 'size' => 10]);
+                            }
+                        }
+                    } else {
+                        for ($i = 0; $i < $userLoad; ++$i) {
+                            if ($i < $userLoad) {
+                                $load = 'PT';
+                                $staffLoad->addText($load, ['name' => 'Book Antiqua', 'size' => 10]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach ($workload as $unit) {
+                $class->addText($unit->class_code, ['name' => 'Book Antiqua', 'size' => 10]);
+                $students->addText($unit->classWorkload->studentClass->count(), ['name' => 'Book Antiqua', 'size' => 10]);
+                $unit_code->addText($unit->workloadUnit->unit_code, ['name' => 'Book Antiqua', 'size' => 10]);
+                $unit_name->addText(substr($unit->workloadUnit->unit_name, 0, 40), ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'left']);
+                $levels->addText($unit->classWorkload->classCourse->level, ['name' => 'Book Antiqua', 'size' => 10]);
+                $signature->addText();
+            }
+        }
+        $workload = new TemplateProcessor(storage_path('workload_template.docx'));
+
+        $workload->setValue('initials', $logedUser->name);
+        $workload->setValue('name', $school->name);
+        $workload->setValue('department', $dept->name);
+        $workload->setValue('academic_year', $session->academic_year);
+        $workload->setValue('academic_semester', $session->academic_semester);
+        $workload->setComplexBlock('{table}', $table);
+        $docPath = 'Results/' . 'Workload' . time() . ".docx";
+        $workload->saveAs($docPath);
+
+        $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
+
+        $pdfPath = 'Results/' . 'Workload' . time() . ".pdf";
+
+        $converter =  new OfficeConverter($docPath, 'Results/');
+        $converter->convertTo('Workload' . time() . ".pdf");
+
+        if (file_exists($docPath)) {
+            unlink($docPath);
+        }
 
         return response()->download($pdfPath)->deleteFileAfterSend(true);
-
-        // return response()->download($docPath)->deleteFileAfterSend(true);
-
     }
 
     public function readmissions()
@@ -396,6 +603,7 @@ class CoursesController extends Controller
 
         return  view('registrar::readmissions.index')->with(['data' => $data, 'schools' => $schools]);
     }
+
     public function yearlyReadmissions($year)
     {
         $hashedYear = Crypt::decrypt($year);
@@ -407,13 +615,11 @@ class CoursesController extends Controller
 
     public function acceptedReadmissions(Request $request)
     {
-
         $request->validate(['submit' => 'required']);
 
         foreach ($request->submit as $id) {
 
             $approval = Readmission::find($id);
-            //  return $approval->studentReadmission->reg_number;
 
             if ($approval->readmissionApproval->dean_status == 1) {
 
@@ -444,14 +650,11 @@ class CoursesController extends Controller
             }
         }
 
-
-
         return redirect()->back()->with('success', 'Email sent successfuly.');
     }
 
     public function leaves()
     {
-
         $schools   =   School::all();
         foreach ($schools as $school) {
             $data = AcademicLeave::all()->groupBy('academic_year');
@@ -471,7 +674,6 @@ class CoursesController extends Controller
 
     public function acceptedAcademicLeaves(Request $request)
     {
-
         $request->validate(['submit' => 'required']);
 
         foreach ($request->submit as $id) {
@@ -508,13 +710,9 @@ class CoursesController extends Controller
 
     public function acceptedTransfers(Request $request)
     {
-
         $request->validate(['submit' => 'required']);
 
-        //  return $request->all();
-
         foreach ($request->submit as $id) {
-
 
             $approvedID = CourseTransferApproval::find($id);
 
@@ -580,8 +778,6 @@ class CoursesController extends Controller
                 //                        unlink($docPath);
                 //                    }
 
-
-
                 $record = Student::withTrashed()->find($approval->student_id)->delete();
 
                 $oldRecord = Student::withTrashed()->find($approval->student_id);
@@ -594,15 +790,12 @@ class CoursesController extends Controller
                 $invoices  =  StudentInvoice::where('reg_number', 'BSIT/002J/2023')->get();
                 $deposits  =  StudentDeposit::where('reg_number', $oldRecord->reg_number)->get();
 
-
                 $record = Student::withTrashed()->find($approval->student_id)->delete();
 
                 $oldRecord = Student::withTrashed()->find($approval->student_id);
 
                 StudentCourse::where('student_id', $approval->student_id)->delete();
                 StudentLogin::where('student_id', $approval->student_id)->delete();
-
-                // return $s = StudentInvoice::where($record->reg_number)->get();
 
                 $invoices  =  StudentInvoice::where('reg_number', $oldRecord->reg_number)->get();
                 $deposits  =  StudentDeposit::where('reg_number', $oldRecord->reg_number)->get();
@@ -634,7 +827,6 @@ class CoursesController extends Controller
                 $newStudent->disabled     =             $student->disabled;
                 $newStudent->disability   =             $student->disability;
                 $newStudent->save();
-
 
                 $newStudCourse                =             new StudentCourse;
                 $newStudCourse->student_id    =             $newStudent->id;
@@ -683,7 +875,6 @@ class CoursesController extends Controller
                     StudentDeposit::find($deposit->id)->delete();
                 }
 
-
                 Mail::to($newStudent->email)->send(new CourseTransferMails($newStudent));
 
                 $approved = CourseTransferApproval::find($id);
@@ -698,10 +889,7 @@ class CoursesController extends Controller
                 $rejectedMail = CourseTransferApproval::find($id);
                 $oldStud =  $rejectedMail->transferApproval;
 
-                // return $oldStud;
-
                 Mail::to($oldStud->studentTransfer->email)->send(new CourseTransferRejectedMails($oldStud));
-
 
                 $rejectedMail->registrar_status  =  1;
                 $rejectedMail->status  =  2;
@@ -737,7 +925,6 @@ class CoursesController extends Controller
 
     public function yearly()
     {
-
         $schools   =   School::all();
         foreach ($schools as $school) {
             $data = CourseTransfer::all()->groupBy('academic_year');
@@ -870,7 +1057,6 @@ class CoursesController extends Controller
 
     public function addCalenderOfEvents()
     {
-
         $academicyear  =  AcademicYear::latest()->get();
         $events        =  Event::all();
 
@@ -879,7 +1065,6 @@ class CoursesController extends Controller
 
     public function showCalenderOfEvents()
     {
-
         $calender  = CalenderOfEvents::latest()->get();
 
         return view('registrar::eventsCalender.showCalenderOfEvents')->with(['calender' => $calender]);
@@ -887,8 +1072,6 @@ class CoursesController extends Controller
 
     public function storeCalenderOfEvents(Request $request)
     {
-
-
         $data = new CalenderOfEvents();
         $data->academic_year_id =  $request->input('academicyear');
         $data->intake_id =  $request->input('semester');
@@ -903,7 +1086,6 @@ class CoursesController extends Controller
 
     public function editCalenderOfEvents($id)
     {
-
         $hashedId  =  Crypt::decrypt($id);
         $academicyear  =  AcademicYear::latest()->get();
         $intakes =  Intake::all();
@@ -930,7 +1112,6 @@ class CoursesController extends Controller
 
     public function destroyCalenderOfEvents($id)
     {
-
         $data         =       CalenderOfEvents::find($id)->delete();
 
         return redirect()->route('courses.showCalenderOfEvents');
@@ -943,20 +1124,17 @@ class CoursesController extends Controller
      */
     public function addEvent()
     {
-
         return view('registrar::events.addEvent');
     }
 
     public function showEvent()
     {
-
         $events   =  Event::latest()->get();
         return view('registrar::events.showEvent', compact('events'));
     }
 
     public function storeEvent(Request $request)
     {
-
         $events = new Event();
         $events->name =  $request->input('name');
         $events->save();
@@ -973,7 +1151,6 @@ class CoursesController extends Controller
 
     public function updateEvent(Request $request, $id)
     {
-
         $data              =      Event::find($id);
         $data->name        =      $request->input('name');
         $data->update();
@@ -994,7 +1171,6 @@ class CoursesController extends Controller
      */
     public function voteheads()
     {
-
         return view('registrar::fee.voteheads');
     }
 
@@ -1007,7 +1183,6 @@ class CoursesController extends Controller
 
     public function storeVoteheads(Request $request)
     {
-
         $voteheads  = new VoteHead();
         $voteheads->name  =  $request->input('name');
         $voteheads->save();
@@ -1024,7 +1199,6 @@ class CoursesController extends Controller
 
     public function updateVotehead(Request $request, $id)
     {
-
         $data                  =         VoteHead::find($id);
         $data->name            =         $request->input('name');
         $data->update();
@@ -1054,7 +1228,6 @@ class CoursesController extends Controller
     }
     public function showSemFee()
     {
-
         $courses  = CourseLevelMode::latest()->get();
 
         return view('registrar::fee.showsemFee')->with(['courses' => $courses]);
@@ -1062,7 +1235,6 @@ class CoursesController extends Controller
 
     public function storeSemFee(Request $request)
     {
-
         $request->validate([
 
             'course' => 'required',
@@ -1076,7 +1248,6 @@ class CoursesController extends Controller
         $courseFee->level_id = $request->input('level');
         $courseFee->attendance_id = $request->input('attendance');
         $courseFee->save();
-
 
         $voteheads = $request->voteheads;
         $semester1_amount = $request->semester1;
@@ -1268,13 +1439,11 @@ class CoursesController extends Controller
     public function viewApplication($id) {
         $app = ApplicationsView::where('application_id', $id)->first();
         $school = Education::where('applicant_id', $app->applicant_id)->get();
-
         return view('registrar::offer.viewApplication')->with(['app' => $app, 'school' => $school]);
     }
 
     public function accepted(){
         $kuccps = KuccpsApplicant::where('status', 0)->get();
-
         foreach ($kuccps as $applicant) {
 
             $campus = Campus::where('name', 'MAIN CAMPUS')->first();
@@ -1936,6 +2105,7 @@ class CoursesController extends Controller
 
     public function updateDepartment(Request $request, $id) {
         $data = ACADEMICDEPARTMENTS::where('department_id', $id)->first();
+
         $oldDepartment  =  new DepartmentHistory;
         $oldDepartment->department_id = $data->department_id;
         $oldDepartment->school_id  = $data->school_id;
@@ -2236,21 +2406,18 @@ class CoursesController extends Controller
 
     public function rejectAdmission(Request $request, $id)
     {
-
         AdmissionApproval::where('id', $id)->update(['registrar_status' => 2, 'registrar_comments' => $request->comment]);
         return redirect()->route('medical.admissions')->with('error', 'Admission request rejected');
     }
 
     public function studentID($id)
     {
-
         $studentID          =          AdmissionApproval::find($id);
         return view('registrar::admissions.studentID')->with('app', $studentID);
     }
 
     public function storeStudentID(Request $request, $id)
     {
-
         $request->validate([
             'image'             =>          'required'
         ]);
@@ -2272,8 +2439,10 @@ class CoursesController extends Controller
 
         return redirect()->route('courses.admissions')->with('success', 'ID photo uploaded successfully');
     }
+
     public function fetchSubjects(Request $request) {
         $data = ClusterSubject::where('group_id', $request->id)->get();
+
         return response()->json($data);
     }
 }
