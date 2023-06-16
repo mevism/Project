@@ -29,23 +29,33 @@
                     <div class="col-lg-5 mb-0 fs-sm">
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Applicant Name </div>
-                            <div class="col-md-8"> {{ $admission->appApprovals->applicant->sname }} {{ $admission->appApprovals->applicant->fname }} {{ $admission->appApprovals->applicant->mname }}</div>
+                            <div class="col-md-8"> {{ $admission->sname }} {{ $admission->fname }} {{ $admission->mname }}</div>
                         </div>
                         <div class="row p-1">
-                            <div class="col-md-4 fw-bolder text-start">Course Name</div>
-                            <div class="col-md-8"> {{ $admission->appApprovals->courses->course_name }} </div>
+                            <div class="col-md-4 fw-bolder text-start">Gender</div>
+                            <div class="col-md-8"> {{ $admission->gender }} </div>
+                        </div>
+                        <div class="row p-1">
+                            <div class="col-md-4 fw-bolder text-start">Disabled</div>
+                            <div class="col-md-8">
+                                @if($admission->disabled == 'NO')
+                                    {{ $admission->disabled }}
+                                @else
+                                    {{ $admission->disabled }}, {{ $admission->disability }}
+                                @endif
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-7 space-y-1">
                         <div class="content-boxed block-content-full">
-                            <iframe src="{{ url('Admissions/MedicalForms/', $admission->appApprovals->admissionDoc->medical_form ) }}" type="application/pdf" style="width: 100% !important; height: 80vh !important;"> </iframe>
+                            <iframe src="{{ url('Admissions/MedicalForms/', $admission->medical_form ) }}" type="application/pdf" style="width: 100% !important; height: 80vh !important;"> </iframe>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="d-flex justify-content-center py-1">
                 @if($admission->medical_status== 0)
-                    <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('medical.acceptAdmission', ['id' => Crypt::encrypt($admission->id)]) }}">Approve</a>
+                    <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('medical.acceptAdmission', $admission->application_id) }}">Approve</a>
                     <a class="btn btn-sm btn-alt-info m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin1"> Withhold</a>
                     <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
                     <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('medical.admissions') }}">Close</a>
@@ -54,11 +64,11 @@
                     <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
                     <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('medical.admissions') }}">Close</a>
                 @elseif($admission->medical_status== 2)
-                    <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('medical.acceptAdmission', ['id' => Crypt::encrypt($admission->id)]) }}">Approve</a>
+                    <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('medical.acceptAdmission', $admission->application_id) }}">Approve</a>
                     <a class="btn btn-sm btn-alt-info m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin1"> Withhold</a>
                     <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('medical.admissions') }}">Close</a>
                 @else
-                    <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('medical.acceptAdmission', ['id' => Crypt::encrypt($admission->id)]) }}">Approve</a>
+                    <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('medical.acceptAdmission', $admission->application_id) }}">Approve</a>
                     <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
                     <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('medical.admissions') }}">Close</a>
                 @endif
@@ -71,7 +81,7 @@
             <div class="modal-content">
                 <div class="block block-rounded block-transparent mb-0">
                     <div class="block-header block-header-default">
-                        <h3 class="block-title">Reason(s) for rejecting {{  $admission->appApprovals->applicant->sname }}'s admission</h3>
+                        <h3 class="block-title">Reason(s) for rejecting {{  $admission->sname }}'s admission</h3>
                         <div class="block-options">
                             <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                                 <i class="fa fa-fw fa-times"></i>
@@ -79,12 +89,12 @@
                         </div>
                     </div>
                     <div class="block-content fs-sm">
-                        <form action="{{ route('medical.rejectAdmission', ['id' => Crypt::encrypt($admission->id)]) }}" method="post">
+                        <form action="{{ route('medical.rejectAdmission', $admission->application_id) }}" method="post">
                             @csrf
                             <div class="row col-md-12 mb-3">
                                 <div class="d-flex justify-content-center">
                                     <textarea class="form-control" placeholder="Write down the reasons for withholding this admission" name="comment" required rows="6"></textarea>
-                                    <input type="hidden" name="{{ $admission->id }}">
+                                    <input type="hidden" name="{{ $admission->application_id }}">
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center mb-2">
@@ -106,7 +116,7 @@
             <div class="modal-content">
                 <div class="block block-rounded block-transparent mb-0">
                     <div class="block-header block-header-default">
-                        <h3 class="block-title">Reason(s) for withholding {{  $admission->appApprovals->applicant->sname }}'s admission</h3>
+                        <h3 class="block-title">Reason(s) for withholding {{  $admission->sname }}'s admission</h3>
                         <div class="block-options">
                             <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                                 <i class="fa fa-fw fa-times"></i>
@@ -114,12 +124,12 @@
                         </div>
                     </div>
                     <div class="block-content fs-sm">
-                        <form action="{{ route('medical.withholdAdmission', ['id' => Crypt::encrypt($admission->id)]) }}" method="post">
+                        <form action="{{ route('medical.withholdAdmission', $admission->application_id) }}" method="post">
                             @csrf
                             <div class="row col-md-12 mb-3">
                                 <div class="d-flex justify-content-center">
                                     <textarea class="form-control" placeholder="Write down the reasons for withholding this admission" name="comment" required rows="6"></textarea>
-                                    <input type="hidden" name="{{ $admission->id }}">
+                                    <input type="hidden" name="{{ $admission->application_id }}">
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center mb-2">
@@ -134,6 +144,4 @@
             </div>
         </div>
     </div>
-
-
 @endsection

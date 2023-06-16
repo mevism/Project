@@ -50,11 +50,12 @@
 
         <div class="block-content block-content-full">
             <div class="row">
-                <div class="col-12">
-                    <table id="example" class="table table-bordered table-striped fs-sm">
+                <div class="table-responsive col-12">
+                    <table id="example" class="table table-bordered table-striped table-sm fs-sm">
                         <thead>
-                        <th>#</th>
+                            <th>#</th>
                             <th>Intakes</th>
+                            <th>SEMESTER DATES</th>
                             <th>Status</th>
                             <th>Action</th>
                         </thead>
@@ -62,7 +63,8 @@
                         @foreach ($intakes as $intake)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td class="text-uppercase">{{ Carbon\carbon::parse($intake->intake_from)->format('M')}} - {{ Carbon\carbon::parse($intake->intake_to)->format('M Y') }}</td>
+                                <td><b class="text-uppercase">{{ Carbon\carbon::parse($intake->intake_from)->format('MY')}}</b></td>
+                                <td class="text-uppercase"><b>From : </b> {{ Carbon\carbon::parse($intake->intake_from)->format('d-M-Y')}} <b>To : </b> {{ Carbon\carbon::parse($intake->intake_to)->format('d-M-Y') }}</td>
                                 <td>
                                     @if ($intake->status == 0)
                                         <span class="badge bg-primary">Intake Pending</span>
@@ -79,9 +81,9 @@
                                 </td>
                                 <td>
                                     @if($intake->status == 0 )
-                                    <a class="btn btn-sm btn-alt-info" href="{{ route('department.intakeCourses', ['id' => Crypt::encrypt($intake->id)]) }}">Add courses</a>
+                                    <a class="btn btn-sm btn-alt-info" href="{{ route('department.intakeCourses', $intake->intake_id) }}">Add courses</a>
                                     @else
-                                    <a class="btn btn-sm btn-alt-secondary disabled" onclick="return confirm('Are you sure you want to delete this intake ?')" href="{{ route('courses.destroyIntake', ['id' => Crypt::encrypt($intake->id)]) }}">View details</a>
+                                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('department.availableCourses', $intake->intake_id) }}">Courses on offer</a>
                                     @endif
                                 </td>
                             </tr>

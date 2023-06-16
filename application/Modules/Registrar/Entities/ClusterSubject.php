@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class ClusterSubject extends Model
 {
     use HasFactory;
+//    protected $table = 'cluster_subjects';
 
-    protected $fillable = [];
-    
+    protected $fillable = ['group_id', 'subject'];
+
     protected static function newFactory()
     {
         return \Modules\Registrar\Database\factories\ClusterSubjectFactory::new();

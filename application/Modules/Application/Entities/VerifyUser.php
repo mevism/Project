@@ -10,11 +10,14 @@ class VerifyUser extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = ['applicant_id', 'verification_code'];
 
-    public function verifyUser(){
+    public function userVerification(){
 
-        return $this->belongsTo(Applicant::class, 'applicant_id');
+        return $this->hasOne(ApplicantLogin::class, 'applicant_id', 'applicant_id');
     }
 
     protected static function newFactory()

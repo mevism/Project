@@ -15,15 +15,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('staff_number')->unique();
-            $table->text('title');
-            $table->text('first_name');
-            $table->text('middle_name');
-            $table->text('last_name');
-            $table->string('phone_number')->unique();
-            $table->string('office_email')->unique();
-            $table->string('personal_email')->unique();
-            $table->string('gender');
+            $table->string('user_id');
             $table->string('username')->unique();
             $table->string('password');
             $table->string('remember_token');

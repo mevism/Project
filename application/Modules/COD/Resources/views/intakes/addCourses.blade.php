@@ -1,6 +1,5 @@
 @extends('cod::layouts.backend')
-
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 @section('content')
 
     <div class="bg-body-light">
@@ -44,57 +43,76 @@
 
                         <form action="{{ route('department.addAvailableCourses') }}" method="POST">
                             @csrf
-
                             <table class="table table-striped table-sm-responsive fs-sm">
                                 <thead>
-                                    <th>#</th>
-                                    <th>Course Name</th>
-                                    <th>Mode of Study</th>
-                                    <th>Offered in</th>
+                                <th>#</th>
+                                <th>Course Name</th>
+                                <th>Mode of Study</th>
+                                <th>Offered in</th>
                                 </thead>
-                                <tbody >
+                                <tbody>
                                 @foreach($courses as $key => $course)
-                                    <tr>
+                                    <tr id="{{ $course->course_id }}">
                                         <td>{{ ++$key }}</td>
                                         <td>
-                                            <input id = 'course_id' value="{{ $course->id }}" data-intake = '{{ $intake->id }}' data-code = '{{ $course->course_code }}' type="checkbox">
-
+                                            <input name="course[]" value="{{ $course->course_id }}" type="checkbox">
                                             <label>{{ $course->course_name }}</label>
                                         </td>
                                         <td>
                                             @foreach($modes as $key => $mode)
                                                 <p class="">
                                                     {{ ++$key }}
-                                                    <input id = 'attendance_id{{ $course->id }}' type="checkbox" value="{{ $mode->id }}" data-code = "{{ $mode->attendance_code }}">
-                                                    <label>{{ $mode->attendance_name }}</label>
+                                                    <input name="modes[{{ $course->course_id }}][]" type="checkbox" value="{{ $mode->id }}">
+                                                    <label> {{ $mode->attendance_name }} </label>
                                                 </p>
                                             @endforeach
                                         </td>
-
                                         <td>
                                             @foreach($campuses as $key => $campus)
                                                 <p>
                                                     {{ ++$key }}
-                                                    <input id = 'campus_id{{ $course->id }}' type="checkbox" value="{{ $campus->id }}">
+                                                    <input name="campuses[{{ $course->course_id }}][]" type="checkbox" value="{{ $campus->campus_id }}">
                                                     <label>{{ $campus->name }}</label>
                                                 </p>
                                             @endforeach
                                         </td>
-
                                     </tr>
                                 @endforeach
                                 </tbody>
-
                             </table>
-
                             <div class="d-flex justify-content-center">
-                                <button class="btn btn-sm btn-alt-success mb-4" data-toggle="click-ripple" id = 'save-course' type = 'button' onlick = "You are about to add courses to {{ Carbon\carbon::parse($intake->intake_from)->format('M')}} - {{ Carbon\carbon::parse($intake->intake_to)->format('M Y') }} intake. Are you sure you want to proceed?">Save courses</button>
+                                <button class="btn btn-sm btn-alt-success mb-4" onclick="preparePayload()">Save courses</button>
                             </div>
-
+                            <input type="hidden" id="payloadInput" name="payload" value="">
+                            <input type="hidden" id="intake" name="intake" value="{{ $intake->intake_id }}">
                         </form>
 
-                    </div>
-                    <div class="block-content block-content-full bg-body-light text-center">
+                        <script>
+                            function preparePayload() {
+                                var payload = [];
+
+                                $('table tbody tr').each(function() {
+                                    var row = $(this);
+                                    var courseId = row.find('input[name="course[]"]').val();
+                                    var selectedModes = row.find('input[name="modes[' + courseId + '][]"]:checked').map(function() {
+                                        return $(this).val();
+                                    }).get();
+                                    var selectedCampuses = row.find('input[name="campuses[' + courseId + '][]"]:checked').map(function() {
+                                        return $(this).val();
+                                    }).get();
+
+                                    var rowObject = {
+                                        course: courseId,
+                                        modes: selectedModes,
+                                        campus: selectedCampuses
+                                    };
+
+                                    payload.push(rowObject);
+                                });
+
+                                $('#payloadInput').val(JSON.stringify(payload));
+                            }
+                        </script>
 
                     </div>
                 </div>
@@ -103,6 +121,38 @@
         </div>
     </div>
 <!-- END Page Content -->
-
 @endsection
 
+{{--<script>--}}
+{{--    var payload = [];--}}
+
+{{--    // Iterate through each row of the table--}}
+{{--    $('table tr').each(function() {--}}
+{{--        var row = $(this);--}}
+{{--        var courseName = row.find('td input[name="course"]').next().text().trim(); // Get the course name--}}
+
+{{--        // Find the selected campuses for the current row--}}
+{{--        var selectedCampuses = row.find('td input[name="campus"]:checked').map(function() {--}}
+{{--            return $(this).next().text().trim();--}}
+{{--        }).get();--}}
+
+{{--        // Find the selected modes of study for the current row--}}
+{{--        var selectedModes = row.find('td input[name="mode"]:checked').map(function() {--}}
+{{--            return $(this).next().text().trim();--}}
+{{--        }).get();--}}
+
+{{--        // Construct the object for the current row--}}
+{{--        var rowObject = {--}}
+{{--            course: courseName,--}}
+{{--            modes: selectedModes,--}}
+{{--            campus: selectedCampuses--}}
+{{--        };--}}
+
+{{--        // Push the row object to the payload array--}}
+{{--        payload.push(rowObject);--}}
+{{--    });--}}
+
+{{--    // Assign the payload to a hidden input field in your form--}}
+{{--    $('#payloadInput').val(JSON.stringify(payload));--}}
+
+{{--</script>--}}

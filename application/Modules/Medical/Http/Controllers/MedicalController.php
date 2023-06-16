@@ -7,9 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Crypt;
 use Modules\Application\Entities\AdmissionApproval;
+use Modules\COD\Entities\AdmissionsView;
 
 class MedicalController extends Controller
 {
+//    public function __construct(){
+//        auth()->setDefaultDriver('user');
+//        $this->middleware(['web','auth', 'medical']);
+//    }
     /**
      * Display a listing of the resource.
      * @return Renderable
@@ -20,19 +25,18 @@ class MedicalController extends Controller
     }
 
     public function admissions(){
-        $adm = AdmissionApproval::where('finance_status', 1)
+        $adm = AdmissionsView::where('cod_status', 1)
             ->where('registrar_status', NULL)
+            ->latest()
             ->get();
 
         return view('medical::admissions.index')->with('admission', $adm);
     }
 
     public function acceptAdmission($id){
-
-        $hashedId =  Crypt::decrypt($id);
-
-            $admission = AdmissionApproval::find($hashedId);
+            $admission = AdmissionApproval::where('application_id', $id)->first();
             $admission->medical_status = 1;
+            $admission->medical_comments = 'Medical report validated';
             $admission->save();
 
         return redirect()->route('medical.admissions')->with('success', 'New student successfully verified');
@@ -40,18 +44,14 @@ class MedicalController extends Controller
 
     public function rejectAdmission(Request $request, $id){
 
-        $hashedId =  Crypt::decrypt($id);
-
-        AdmissionApproval::where('id', $hashedId)->update(['medical_status' => 2, 'medical_comments' => $request->comment]);
+        AdmissionApproval::where('application_id', $id)->update(['medical_status' => 2, 'medical_comments' => $request->comment]);
 
         return redirect()->route('medical.admissions')->with('error', 'Admission request rejected');
     }
 
     public function submitAdmission($id){
 
-        $hashedId =  Crypt::decrypt($id);
-
-        $admission = AdmissionApproval::find($hashedId);
+        $admission = AdmissionApproval::where('application_id', $id)->first();
         $admission->registrar_status = 0;
         $admission->save();
 
@@ -61,18 +61,14 @@ class MedicalController extends Controller
 
     public function reviewAdmission($id){
 
-        $hashedId = Crypt::decrypt($id);
-
-        $admission = AdmissionApproval::find($hashedId);
+        $admission = AdmissionsView::where('application_id', $id)->first();
 
         return view('medical::admissions.viewAdmission')->with('admission', $admission);
     }
 
     public function withholdAdmission(Request $request, $id){
 
-        $hashedId =  Crypt::decrypt($id);
-
-        AdmissionApproval::where('id', $hashedId)->update(['medical_status' => 3, 'medical_comments' => $request->comment]);
+        AdmissionApproval::where('application_id', $id)->update(['medical_status' => 3, 'medical_comments' => $request->comment]);
 
         return redirect()->route('medical.admissions')->with('error', 'Admission request rejected');
     }

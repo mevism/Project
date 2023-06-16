@@ -2,6 +2,29 @@
 
 namespace Modules\Registrar\Http\Controllers;
 
+use App\Service\CustomIds;
+use Illuminate\Support\Facades\DB;
+use Modules\Application\Entities\ApplicantAddress;
+use Modules\Application\Entities\ApplicantContact;
+use Modules\Application\Entities\ApplicantInfo;
+use Modules\Application\Entities\ApplicantLogin;
+use Modules\Application\Entities\ApplicationApproval;
+use Modules\Application\Entities\ApplicationSubject;
+use Modules\COD\Entities\AdmissionsView;
+use Modules\COD\Entities\ApplicationsView;
+use Modules\COD\Entities\CourseCluster;
+use Modules\Registrar\Entities\ACADEMICDEPARTMENTS;
+use Modules\Registrar\Entities\Campus;
+use Modules\Registrar\Entities\ClusterGroup;
+use Modules\Registrar\Entities\ClusterSubject;
+use Modules\Registrar\Entities\Division;
+use Modules\Registrar\Entities\Group;
+use Modules\Registrar\Entities\SchoolDepartment;
+use Modules\Student\Entities\CourseClusterGroups;
+use Modules\Student\Entities\StudentAddress;
+use Modules\Student\Entities\StudentContact;
+use Modules\Student\Entities\StudentDisability;
+use Modules\Student\Entities\StudentInfo;
 use QrCode;
 use Carbon\Carbon;
 use App\Models\User;
@@ -74,6 +97,10 @@ use Modules\Registrar\emails\CourseTransferRejectedMails;
 
 class CoursesController extends Controller
 {
+//    public function __construct(){
+//        auth()->setDefaultDriver('user');
+//        $this->middleware(['web','auth', 'admin']);
+//    }
 
     public function workload()
     {
@@ -185,7 +212,7 @@ class CoursesController extends Controller
                 $updateWorkload->status  =  0;
                 $updateWorkload->save();
             }
-       
+
         return redirect()->back()->with('success', 'Workload Approved Successfully');
     }
 
@@ -193,7 +220,7 @@ class CoursesController extends Controller
     {
 
         $hashedId = Crypt::decrypt($id);
-      
+
             $updateApproval = ApproveWorkload::where('id', $hashedId)
                 ->where('dean_status', '!=', null)
                 ->first();
@@ -201,7 +228,7 @@ class CoursesController extends Controller
             $updateApproval->registrar_status = 2;
             $updateApproval->registrar_remarks = $request->remarks;
             $updateApproval->status = 2;
-            $updateApproval->save();       
+            $updateApproval->save();
 
         return redirect()->back()->with('success', 'Workload Declined');
     }
@@ -688,26 +715,6 @@ class CoursesController extends Controller
 
         return redirect()->back()->with('success', 'Course Transfer Letters Generated');
     }
-    public function coursePreview($id)
-    {
-        return $courseName = Courses::find($id);
-        $data = CourseHistory::where('course_id', $id)->latest()->get();
-        return view('registrar::course.preview')->with(['data' => $data, 'courseName' => $courseName]);
-    }
-
-    public function departmentPreview($id)
-    {
-        $departmentName = Department::find($id);
-        $data = DepartmentHistory::where('department_id', $id)->latest()->get();
-        return view('registrar::department.preview')->with(['data' => $data, 'departmentName' => $departmentName]);
-    }
-
-    public function schoolPreview($id)
-    {
-        $schoolName = School::find($id);
-        $data = SchoolHistory::where('school_id', $id)->latest()->get();
-        return view('registrar::school.preview')->with(['data' => $data, 'schoolName' => $schoolName]);
-    }
 
     public function transfer($year)
     {
@@ -957,8 +964,8 @@ class CoursesController extends Controller
         return redirect()->route('courses.showEvent')->with('success', 'Event created successfuly.');
     }
 
-    public function editEvent($id)
-    {
+    public function editEvent($id){
+
         $hashedId = Crypt::decrypt($id);
         $data = Event::find($hashedId);
         return view('registrar::events.editEvent')->with(['data' => $data]);
@@ -1168,14 +1175,6 @@ class CoursesController extends Controller
         return response()->download($pdfPath)->deleteFileAfterSend(true);
     }
 
-    public function syllabus($id)
-    {
-        $hashedId  =  Crypt::decrypt($id);
-        $course   =   Courses::find($hashedId);
-        $unit   =  UnitProgramms::where('course_code', $course->course_code)->get();
-        return view('registrar::course.syllabus')->with(['units' => $unit, 'course' => $course]);
-    }
-
     public function createUnits(Request $request, $id)
     {
         $hashedId  =  Crypt::decrypt($id);
@@ -1228,145 +1227,175 @@ class CoursesController extends Controller
         return back()->with('success', 'Data Imported Successfully');
     }
 
-    public function acceptApplication($id)
-    {
-        $app                     =         Application::find($id);
-        $app->registrar_status   =         1;
+    public function acceptApplication($id) {
+        $app = ApplicationApproval::where('application_id', $id)->first();
+        $app->registrar_status   =  1;
         $app->save();
 
-        $logs                    =         new     RegistrarLog;
-        $logs->application_id            =         $app->id;
-        $logs->user              =         Auth::guard('user')->user()->name;
-        $logs->user_role         =         Auth::guard('user')->user()->role_id;
-        $logs->activity          =         'Application accepted';
-        $logs->save();
+//        $logs = new     RegistrarLog;
+//        $logs->application_id = $app->id;
+//        $logs->user = Auth::guard('user')->user()->name;
+//        $logs->user_role = Auth::guard('user')->user()->role_id;
+//        $logs->activity = 'Application accepted';
+//        $logs->save();
         return redirect()->route('courses.applications')->with('success', '1 applicant approved');
     }
 
     public function rejectApplication(Request $request, $id)
     {
-        $app                       =        Application::find($id);
-        $app->registrar_status     =        2;
-        $app->registrar_comments   =        $request->comment;
+        $app = ApplicationApproval::where('application_id', $id)->first();
+        $app->registrar_status = 2;
+        $app->registrar_comments = $request->comment;
         $app->save();
-        $logs                      =       new RegistrarLog;
-        $logs->application_id              =       $app->id;
-        $logs->user                =       Auth::guard('user')->user()->name;
-        $logs->user_role           =       Auth::guard('user')->user()->role_id;
-        $logs->activity            =       'Application rejected';
-        $logs->comments            =       $request->comment;
-        $logs->save();
+
+//        $logs                      =       new RegistrarLog;
+//        $logs->application_id              =       $app->id;
+//        $logs->user                =       Auth::guard('user')->user()->name;
+//        $logs->user_role           =       Auth::guard('user')->user()->role_id;
+//        $logs->activity            =       'Application rejected';
+//        $logs->comments            =       $request->comment;
+//        $logs->save();
+
         return redirect()->route('courses.applications')->with('success', 'Application declined');
     }
 
-    public function preview($id)
-    {
+    public function preview($id){
         $app                       =        Application::find($id);
         $school                    =        Education::where('applicant_id', $app->applicant->id)->first();
         return view('registrar::offer.preview')->with(['app' => $app, 'school' => $school]);
     }
 
-    public function viewApplication($id)
-    {
-
-        $app                       =        Application::find($id);
-        $school                    =        Education::where('applicant_id', $app->applicant->id)->get();
+    public function viewApplication($id) {
+        $app = ApplicationsView::where('application_id', $id)->first();
+        $school = Education::where('applicant_id', $app->applicant_id)->get();
 
         return view('registrar::offer.viewApplication')->with(['app' => $app, 'school' => $school]);
     }
 
-    public function accepted()
-    {
+    public function accepted(){
+        $kuccps = KuccpsApplicant::where('status', 0)->get();
 
-        $kuccps         =          KuccpsApplicant::where('status', 0)->get();
         foreach ($kuccps as $applicant) {
-            // return $applicant->kuccpsApplication->course_code;
 
-            $course        =          Courses::where('course_code', $applicant->kuccpsApplication->course_code)->first();
-            // return $course;
-            $regNumber     = Application::where('course_id', $course->id)
+            $campus = Campus::where('name', 'MAIN CAMPUS')->first();
+            $course = Courses::where('course_code', $applicant->kuccpsApplication->course_code)->first();
+            $regNumber = Application::where('course_id', $course->course_id)
                 ->where('intake_id', $applicant->kuccpsApplication->intake_id)
                 ->where('student_type', 2)
                 ->count();
-            $app                   =        new Applicant;
 
-            $app->index_number     =         $applicant->index_number;
-            $app->password         =         Hash::make($applicant->index_number);
-            $app->username         =         $applicant->index_number;
-            $app->email            =         $applicant->email;
-            $app->alt_email        =         $applicant->alt_email;
-            $app->sname            =         $applicant->sname;
-            $app->fname            =         $applicant->fname;
-            $app->mname            =         $applicant->mname;
-            $app->gender           =         $applicant->gender;
-            $app->phone_verification =       1;
-            $app->email_verified_at =        date('d-m-Y');
-            $app->mobile            =        $applicant->mobile;
-            $app->alt_mobile        =        $applicant->alt_mobile;
-            $app->town              =        $applicant->town;
-            $app->address           =        $applicant->BOX;
-            $app->postal_code       =        $applicant->postal;
-            $app->student_type      =         2;
-            $app->save();
+            $studentNumber = $applicant->kuccpsApplication->course_code."/".str_pad($regNumber + 1,3,"0", STR_PAD_LEFT)."J/".Carbon::parse($applicant->kuccpsApplication->kuccpsIntake->intake_from)->format('Y');
 
-            $app_course                 =            new Application;
-            $app_course->applicant_id        =            $app->id;
-            $app_course->intake_id      =            $applicant->kuccpsApplication->intake_id;
-            $app_course->department_id  =            $course->department_id;
-            $app_course->school_id      =            $course->getCourseDept->school_id;
-            $app_course->course_id      =            $course->id;
-            $app_course->finance_status =            1;
-            $app_course->cod_status     =            1;
-            $app_course->dean_status    =            1;
-            $app_course->registrar_status =          3;
-            $app_course->status         =            1;
-            $app_course->student_type   =            2;
-            $app_course->ref_number     =            'APP/' . date('Y') . "/" . str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT);
-            $app_course->reg_number     =            $applicant->kuccpsApplication->course_code . "/" . str_pad($regNumber + 1, 3, "0", STR_PAD_LEFT) . "J" . "/" . Carbon::parse($applicant->kuccpsApplication->kuccpsIntake->intake_from)->format('Y');
-            $app_course->adm_letter     =            'APP' . "_" . date('Y') . "_" . str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT) . '.pdf';
-            $app_course->save();
+            ApplicantInfo::create([
+                'applicant_id' => $applicant->applicant_id,
+                'fname' => $applicant->fname,
+                'mname' => $applicant->mname,
+                'sname' => $applicant->sname,
+                'gender' => $applicant->gender,
+                'index_number' => $applicant->index_number
+            ]);
+
+            ApplicantLogin::create([
+                'applicant_id' => $applicant->applicant_id,
+                'username' => $applicant->index_number,
+                'password' => Hash::make($applicant->index_number),
+                'phone_verification' => 1,
+                'student_type' => 2,
+                'email_verified_at' => Carbon::parse()->format('Y-m-d')
+                ]);
+
+            ApplicantContact::create([
+                'applicant_id' => $applicant->applicant_id,
+                'email' => $applicant->email,
+                'alt_email' => $applicant->alt_email,
+                'mobile' => $applicant->mobile,
+                'alt_mobile' => $applicant->alt_mobile,
+            ]);
+
+            ApplicantAddress::create([
+                'applicant_id' => $applicant->applicant_id,
+                'town' => $applicant->town,
+                'address' => $applicant->BOX,
+                'postal_code' => $applicant->postal
+            ]);
+
+            $app = new CustomIds();
+            $application_id = $app->generateId();
+            $application_No = 'APP'.time();
+
+            Application::create([
+                'application_id' => $application_id,
+                'applicant_id' => $applicant->applicant_id,
+                'ref_number' => $application_No,
+                'intake_id' => $applicant->kuccpsApplication->intake_id,
+                'student_type' => 2,
+                'campus_id' => $campus->campus_id,
+                'school_id' => $course->getCourseDept->schools->first()->school_id,
+                'department_id' => $course->department_id,
+                'course_id' => $course->course_id,
+                'declaration' => 1,
+            ]);
+
+            ApplicationApproval::create([
+                'application_id' => $application_id,
+                'applicant_id' => $applicant->applicant_id,
+                'finance_status' => 1,
+                'invoice_number' => 'KUCCPS',
+                'cod_status' => '1',
+                'cod_comments' => 'KUCCPS approved',
+                'dean_status' => 1,
+                'dean_comments' => 'KUCCPS approved',
+                'registrar_status' => 3,
+                'registrar_comments' => 'KUCCPS approved',
+                'reg_number' => $studentNumber,
+                'admission_letter' => $application_No.".docx"
+            ]);
+
+            ApplicationSubject::create([
+                'application_id' => $application_id, 'subject_1' => 'KUCCPS', 'subject_2' => 'KUCCPS', 'subject_3' => 'KUCCPS', 'subject_4'=> 'KUCCPS'
+            ]);
 
             $domPdfPath     =    base_path('vendor/dompdf/dompdf');
             \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
             \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
 
-            $my_template            =          new TemplateProcessor(storage_path('adm_template.docx'));
-
-            $my_template->setValue('name', strtoupper($applicant->sname . " " . $applicant->mname . " " . $applicant->fname));
+            $my_template = new TemplateProcessor(storage_path('adm_template.docx'));
+            $my_template->setValue('name', strtoupper($applicant->sname." ".$applicant->mname." ".$applicant->fname));
             $my_template->setValue('box', strtoupper($applicant->BOX));
             $my_template->setValue('address', strtoupper($applicant->address));
             $my_template->setValue('postal_code', strtoupper($applicant->postal_code));
             $my_template->setValue('town', strtoupper($applicant->town));
-            $my_template->setValue('course', $applicant->kuccpsApplication->course_name);
-            $my_template->setValue('department', $course->getCourseDept->name);
-            $my_template->setValue('duration', $course->courseRequirements->course_duration);
+            $my_template->setValue('course', strtoupper($applicant->kuccpsApplication->course_name));
+            $my_template->setValue('department', strtoupper($course->getCourseDept->name));
+            $my_template->setValue('department', strtoupper($course->getCourseDept->name));
+            $my_template->setValue('campus', strtoupper($campus->name));
+            $my_template->setValue('duration', strtoupper($course->courseRequirements->course_duration));
             $my_template->setValue('from', Carbon::parse($applicant->kuccpsApplication->kuccpsIntake->intake_from)->format('d-m-Y'));
             $my_template->setValue('to', Carbon::parse($applicant->kuccpsApplication->kuccpsIntake->intake_to)->format('d-m-Y'));
-            $my_template->setValue('reg_number', $applicant->kuccpsApplication->course_code . "/" . str_pad(1 + $regNumber, 3, "0", STR_PAD_LEFT) . "J" . "/" . Carbon::parse($applicant->kuccpsApplication->kuccpsIntake->intake_from)->format('Y'));
-            $my_template->setValue('ref_number', 'APP/' . date('Y') . "/" . str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT));
+            $my_template->setValue('reg_number', strtoupper($studentNumber));
+            $my_template->setValue('ref_number', $application_No);
             $my_template->setValue('date',  date('d-M-Y'));
-
-            $docPath         =         storage_path('APP' . "_" . date('Y') . "_" . str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT) . ".docx");
-
+            $docPath = 'Admission Letters/'.$application_No.".docx";
             $my_template->saveAs($docPath);
 
-            $contents         =         \PhpOffice\PhpWord\IOFactory::load($docPath);
-
-            $pdfPath          =          storage_path('APP' . "_" . date('Y') . "_" . str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT) . ".pdf");
+            $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
+            $pdfPath = 'Admission Letters/'.$application_No.".pdf";
 
             if (file_exists($pdfPath)) {
                 unlink($pdfPath);
             }
 
-            $converter     =     new OfficeConverter(storage_path('APP' . "_" . date('Y') . "_" . str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT) . ".docx"), storage_path());
-            $converter->convertTo('APP' . "_" . date('Y') . "_" . str_pad(0000000 + $applicant->id, 6, "0", STR_PAD_LEFT) . '.pdf');
-            if (file_exists($docPath)) {
-                unlink($docPath);
-            }
-            Application::where('applicant_id', $applicant->id)->update(['status' => 0]);
-            KuccpsApplicant::where('id', $applicant->id)->update(['status' => 1]);
-            if ($applicant->alt_email != null) {
-                Mail::to($applicant->alt_email)->send(new KuccpsMails($applicant));
+//            $converter = new OfficeConverter('Admission Letters/'. ".docx", 'Admission Letters/');
+//            $converter->convertTo($application_No.".pdf");
+
+//            if (file_exists($docPath)) {
+//                unlink($docPath);
+//            }
+
+            Application::where('applicant_id', $applicant->applicant_id)->update(['status' => 0]);
+            KuccpsApplicant::where('applicant_id', $applicant->applicant_id)->update(['status' => 1]);
+            if ($applicant->email != null) {
+                Mail::to($applicant->email)->send(new KuccpsMails($applicant));
             }
         }
         return redirect()->back()->with('success', 'Admission letters generated and emails send');
@@ -1384,7 +1413,7 @@ class CoursesController extends Controller
 
     public function importUnitProgramms()
     {
-        $up        =         UnitProgramms::all();
+        $up = UnitProgramms::all();
         return view('registrar::offer.unitprog')->with('up', $up);
     }
 
@@ -1402,10 +1431,10 @@ class CoursesController extends Controller
 
     public function importCourses(Request $request)
     {
-        $vz        =          $request->validate([
-            'excel_file'   =>    'required|mimes:xlsx'
+        $request->validate([
+            'excel_file' => 'required|mimes:xlsx'
         ]);
-        $excel_file         =         $request->excel_file;
+        $excel_file = $request->excel_file;
         Excel::import(new CourseImport(), $excel_file);
         return back()->with('success', 'Data Imported Successfully');
     }
@@ -1417,66 +1446,57 @@ class CoursesController extends Controller
         return view('registrar::offer.kuccps')->with(['intakes' => $intakes, 'new' => $newstudents]);
     }
 
-    public function importUnitProg(Request $request)
-    {
-        $vz        =         $request->validate([
-            'excel_file'   =>    'required|mimes:xlsx'
+    public function importUnitProg(Request $request) {
+        $request->validate([
+            'excel_file' => 'required|mimes:xlsx'
         ]);
-        $excel_file         =         $request->excel_file;
+
+        $excel_file = $request->excel_file;
         Excel::import(new UnitProgrammsImport(), $excel_file);
         return back()->with('success', 'Data Imported Successfully');
     }
 
     public function importUnits(Request $request)
     {
-        $vz            =        $request->validate([
-            'excel_file'   =>    'required|mimes:xlsx'
+        $request->validate([
+            'excel_file' => 'required|mimes:xlsx'
         ]);
         $excel_file         =         $request->excel_file;
         Excel::import(new UnitImport(), $excel_file);
         return back()->with('success', 'Data Imported Successfully');
     }
 
-    public function importkuccps(Request $request)
-    {
-        $vz         =          $request->validate([
-
+    public function importkuccps(Request $request){
+        $request->validate([
             'excel_file'   =>    'required|mimes:xlsx'
         ]);
-        $excel_file          =           $request->excel_file;
-        $intake_id           =           $request->intake;
+        $excel_file = $request->excel_file;
+        $intake_id  = $request->intake;
         Excel::import(new KuccpsImport($intake_id), $excel_file);
+
         return back()->with('success', 'Data Imported Successfully');
     }
 
-    public function applications()
-    {
-        $accepted              =          Application::where('registrar_status', '>=', 0)
+    public function applications() {
+        $accepted = ApplicationsView::where('registrar_status', '>=', 0)
             ->where('registrar_status', '!=', 3)
             ->where('registrar_status', '!=', 4)
+            ->latest()
             ->get();
         return view('registrar::offer.applications')->with('accepted', $accepted);
     }
 
-    public function showKuccps()
-    {
-        $kuccps           =        KuccpsApplicant::orderBy('id', 'desc')->get();
+    public function showKuccps() {
+        $kuccps = KuccpsApplicant::latest()->get();
         return view('registrar::offer.showKuccps')->with(['kuccps' => $kuccps]);
     }
 
-    public function offer()
-    {
-        $active         =         Intake::where('status', 1)->get();
-        if (count($active) == 0) {
-            $courses       =        $active;
-            return view('registrar::offer.coursesOffer', compact('courses'));
-        } else {
-            foreach ($active as $intake) {
+    public function offer() {
+        $intake = Intake::where('status', 1)->first();
+        $courses = DB::table('COURESONOFFERVIEW')->where('intake_id', $intake->intake_id)
+            ->latest()->get();
 
-                $courses[]        =        AvailableCourse::where('intake_id', $intake->id)->get();
-            }
-            return view('registrar::offer.coursesOffer', compact('courses', 'active'));
-        }
+            return view('registrar::offer.coursesOffer')->with(['courses' => $courses]);
     }
 
     public function profile()
@@ -1487,155 +1507,167 @@ class CoursesController extends Controller
     public function acceptedMail(Request $request)
     {
         $request->validate([
-            'submit'       =>      'required'
+            'submit' => 'required'
         ]);
         foreach ($request->submit as $id) {
-
-            $app       =      Application::find($id);
+            $app = ApplicationsView::where('application_id', $id)->first();
 
             if ($app->registrar_status == 1 && $app->cod_status == 1) {
 
-                $regNo         =        Application::where('course_id', $app->course_id)
+               $regNo = ApplicationsView::where('course_id', $app->course_id)
                     ->where('intake_id', $app->intake_id)
                     ->where('student_type', 1)
                     ->where('registrar_status', 3)
                     ->count();
+               $studentNumber = $app->DepartmentCourse->course_code."/".str_pad(1+$regNo,4,"0",STR_PAD_LEFT)."/".Carbon::parse($app->ApplicationIntake->intake_from)->format('Y');
 
                 $domPdfPath        =         base_path('vendor/dompdf/dompdf');
                 \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
                 \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
 
-                $my_template         =        new TemplateProcessor(storage_path('adm_template.docx'));
-
-                $my_template->setValue('name', strtoupper($app->applicant->sname . " " . $app->applicant->mname . " " . $app->applicant->fname));
-                $my_template->setValue('box', strtoupper($app->applicant->address));
-                $my_template->setValue('postal_code', strtoupper($app->applicant->postal_code));
-                $my_template->setValue('town', strtoupper($app->applicant->town));
-                $my_template->setValue('course', $app->courses->course_name);
-                $my_template->setValue('department', $app->courses->getCourseDept->name);
-                $my_template->setValue('duration', $app->courses->courseRequirements->course_duration);
-                $my_template->setValue('from', Carbon::parse($app->app_intake->intake_from)->format('d - m - Y'));
-                $my_template->setValue('to', Carbon::parse($app->app_intake->intake_from)->addDays(4)->format('d - m - Y'));
-                $my_template->setValue('campus', $app->courses->courseXAvailable->courseXCampus->name);
-                $my_template->setValue('reg_number', $app->courses->course_code . "/" . str_pad(1 + $regNo, 4, "0", STR_PAD_LEFT) . "/" . Carbon::parse($app->app_intake->intake_from)->format('Y'));
-                $my_template->setValue('ref_number', 'APP/' . date('Y') . "/" . str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT));
+                $my_template = new TemplateProcessor(storage_path('adm_template.docx'));
+                $my_template->setValue('name', strtoupper($app->sname . " " . $app->mname . " " . $app->fname));
+                $my_template->setValue('box', strtoupper($app->address));
+                $my_template->setValue('postal_code', strtoupper($app->postal_code));
+                $my_template->setValue('town', strtoupper($app->town));
+                $my_template->setValue('course', $app->DepartmentCourse->course_name);
+                $my_template->setValue('department', $app->DepartmentCourse->getCourseDept->name);
+                $my_template->setValue('duration', $app->DepartmentCourse->courseRequirements->course_duration);
+                $my_template->setValue('from', Carbon::parse($app->ApplicationIntake->intake_from)->format('d-m-Y'));
+                $my_template->setValue('to', Carbon::parse($app->ApplicationIntake->intake_from)->addDays(4)->format('d-m- Y'));
+                $my_template->setValue('campus', $app->ApplcationCampus->name);
+                $my_template->setValue('reg_number', $studentNumber);
+                $my_template->setValue('ref_number', $app->ref_number);
                 $my_template->setValue('date',  date('d-M-Y'));
-
-                $docPath       =        storage_path('APP' . "_" . date('Y') . "_" . str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT) . ".docx");
-
+                $docPath = 'Admission Letters/'.$app->ref_number.".docx";
                 $my_template->saveAs($docPath);
 
-                $contents       =        \PhpOffice\PhpWord\IOFactory::load($docPath);
+                $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
 
-                $pdfPath        =        storage_path('APP' . "_" . date('Y') . "_" . str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT) . ".pdf");
+                $pdfPath =  'Admission Letters/'. $app->ref_number.".pdf";
 
                 if (file_exists($pdfPath)) {
                     unlink($pdfPath);
                 }
 
-                $converter      =        new OfficeConverter(storage_path('APP' . "_" . date('Y') . "_" . str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT) . ".docx"), storage_path());
-                $converter->convertTo('APP' . "_" . date('Y') . "_" . str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT) . '.pdf');
+//                $converter = new OfficeConverter('Admission Letters/'.$app->ref_number.".docx",'Admission Letters/');
+//                $converter->convertTo('Admission Letters/'.$app->ref_number.".pdf");
 
-                if (file_exists($docPath)) {
-                    unlink($docPath);
-                }
+//                if (file_exists($docPath)) {
+//                    unlink($docPath);
+//                }
 
-                $update          =       Application::find($id);
-                $update->registrar_status       =    3;
-                $update->status                 =    0;
-                $update->ref_number             =    'APP/' . date('Y') . "/" . str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT);
-                $update->reg_number             =    $app->courses->course_code . "/" . str_pad(1 + $regNo, 4, "0", STR_PAD_LEFT) . "/" . Carbon::parse($app->app_intake->intake_from)->format('Y');
-                $update->adm_letter             =    'APP' . "_" . date('Y') . "_" . str_pad(0000000 + $app->id, 6, "0", STR_PAD_LEFT) . ".pdf";
+                $update = ApplicationApproval::where('application_id', $id)->first();
+                $update->registrar_status = 3;
+                $update->registrar_comments = 'Admission letter generated';
+                $update->reg_number = $studentNumber;
+                $update->admission_letter = $app->ref_number.".docx";
                 $update->save();
 
-                $comms = new Notification;
-                $comms->application_id = $id;
-                $comms->role_id = Auth::guard('user')->user()->role_id;
-                $comms->subject = 'Application Approval Process';
-                $comms->comment = 'Congratulations! Your application was successful. Got to My Courses section to download your admission letter.';
-                $comms->status = 1;
-                $comms->save();
-                Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails($app->applicant));
-            }
-            if ($app->finance_status == 3 && $app->registrar_status == 1) {
+                $status = Application::where('application_id', $id)->first();
+                $status->status = 0;
+                $status->save();
 
-                $update          =         Application::find($id);
-                $update->finance_status         =       0;
-                $update->registrar_status       =       NULL;
-                $update->save();
+//                $comms = new Notification;
+//                $comms->application_id = $id;
+//                $comms->role_id = Auth::guard('user')->user()->role_id;
+//                $comms->subject = 'Application Approval Process';
+//                $comms->comment = 'Congratulations! Your application was successful. Got to My Courses section to download your admission letter.';
+//                $comms->status = 1;
+//                $comms->save();
+
+                Mail::to($app->email)->send(new \App\Mail\RegistrarEmails($app));
             }
+//            if ($app->finance_status == 3 && $app->registrar_status == 1) {
+//
+//                $update          =         Application::find($id);
+//                $update->finance_status         =       0;
+//                $update->registrar_status       =       NULL;
+//                $update->save();
+//            }
             if ($app->cod_status == 1 && $app->registrar_status == 2) {
 
-                Application::where('id', $id)->update(['cod_status' => 3, 'dean_status' => 3, 'registrar_status' => 4]);
+                ApplicationApproval::where('application_id', $id)->update(['dean_status' => 3, 'registrar_status' => 4]);
+            }
+            if ($app->cod_status == 2 && $app->registrar_status == 2) {
+
+                ApplicationApproval::where('application_id', $id)->update(['dean_status' => 3, 'registrar_status' => 4]);
             }
             if ($app->cod_status == 2 && $app->registrar_status == 1) {
-
-                Application::where('id', $id)->update(['cod_status' => 3, 'dean_status' => 3, 'registrar_status' => 4]);
-            }
-            if ($app->cod_status == 2 && $app->registrar_status == 1) {
-
-                $update         =         Application::find($id);
-                $update->registrar_status         =        3;
+                $update = ApplicationApproval::where('application_id', $id)->first();
+                $update->registrar_status = 3;
                 $update->save();
 
-                $comms = new Notification;
-                $comms->application_id = $id;
-                $comms->role_id = Auth::guard('user')->user()->role_id;
-                $comms->subject = 'Application Approval Process';
-                $comms->comment = 'Oops! Your application was not successful. You can go to Courses on offer section and apply for another course that you meet the minimum course requirements.';
-                $comms->status = 1;
-                $comms->save();
+//                $comms = new Notification;
+//                $comms->application_id = $id;
+//                $comms->role_id = Auth::guard('user')->user()->role_id;
+//                $comms->subject = 'Application Approval Process';
+//                $comms->comment = 'Oops! Your application was not successful. You can go to Courses on offer section and apply for another course that you meet the minimum course requirements.';
+//                $comms->status = 1;
+//                $comms->save();
+                Mail::to($app->email)->send(new \App\Mail\RegistrarEmails1($app));
 
-                Mail::to($app->applicant->email)->send(new \App\Mail\RegistrarEmails1($app->applicant));
-
-                $update = Application::find($id);
+                $update = ApplicationApproval::where('application_id', $id)->first();
                 $update->registrar_status = 3;
                 $update->save();
             }
+
         }
-        return redirect()->back()->with('success', 'Report Generated');
+
+        return redirect()->back()->with('success', 'Admission letters generated and communication send');
     }
 
-    public function addYear()
-    {
+    public function addYear() {
         return view('registrar::academicYear.addAcademicYear');
     }
 
-    public function academicYear()
-    {
-        $years          =          AcademicYear::latest()->get();
+    public function academicYear() {
+        $years = AcademicYear::latest()->get();
         return view('registrar::academicYear.showAcademicYear')->with('years', $years);
     }
 
-    public function storeYear(Request $request)
-    {
-        $vz = $request->validate([
+    public function storeYear(Request $request) {
+        $request->validate([
             'year_start'             =>      'required',
             'year_end'               =>      'required'
-
         ]);
-        $year                         =         new AcademicYear();
-        $year->year_start             =         $request->input('year_start');
-        $year->year_end               =         $request->input('year_end');
-        $year->status                 =         0;
+        $yearId = new CustomIds();
+
+        $year = new AcademicYear();
+        $year->year_id = $yearId->generateId();
+        $year->year_start = $request->year_start;
+        $year->year_end = $request->year_end;
+        $year->status = 0;
         $year->save();
 
-        return redirect()->route('courses.academicYear')->with('success', 'Academic Year Created successfuly');
+        return redirect()->route('courses.academicYear')->with('success', 'Academic year created successfully');
     }
 
-    public function destroyYear($id)
-    {
-        $data           =          AcademicYear::find($id);
-        $data->delete();
-        return redirect()->route('courses.academicYear');
+    public function editAcademicYear($id){
+
+        $academicYear = AcademicYear::where('year_id', $id)->first();
+
+        return view('registrar::academicYear.editAcademicYear')->with(['academicYear' => $academicYear]);
     }
 
-    public function showSemester($id)
-    {
+    public function updateAcademicYear(Request $request, $id){
 
-        $hashedId  =  Crypt::decrypt($id);
-        $year      = AcademicYear::find($hashedId);
-        $intakes     =   Intake::where('academic_year_id', $hashedId)->latest()->get();
+        $request->validate([
+            'year_start'             =>      'required',
+            'year_end'               =>      'required'
+        ]);
+
+        $academicYear = AcademicYear::where('year_id', $id)->first();
+        $academicYear->year_start = $request->year_start;
+        $academicYear->year_end = $request->year_end;
+        $academicYear->save();
+
+        return redirect()->route('courses.academicYear')->with('success', 'Academic year updated successfully');
+    }
+
+    public function showSemester($id) {
+        $year = AcademicYear::where('year_id', $id)->first();
+        $intakes = Intake::where('academic_year_id', $id)->latest()->get();
         return view('registrar::academicYear.showSemester')->with(['intakes' => $intakes, 'year' => $year]);
     }
 
@@ -1643,108 +1675,106 @@ class CoursesController extends Controller
      * Show the form for a new Intake Information.
      *
      */
-    public function addIntake($id)
-    {
-        $hashedId  =  Crypt::decrypt($id);
-        $years         =         AcademicYear::find($hashedId);
-        $data          =         Intake::all();
-        $courses       =         Courses::all();
-
+    public function addIntake($id) {
+        $years = AcademicYear::where('year_id', $id)->first();
+        $data = Intake::all();
+        $courses = Courses::all();
 
         return view('registrar::intake.addIntake')->with(['data' => $data, 'years' => $years, 'courses' => $courses]);
     }
 
-    public function editstatusIntake($id)
-    {
-
-        $hashedId = Crypt::decrypt($id);
-        $data        =      Intake::find($hashedId);
+    public function editstatusIntake($id) {
+        $data = Intake::where('intake_id', $id)->first();
         return view('registrar::intake.editstatusIntake')->with(['data' => $data]);
     }
 
-    public function statusIntake(Request $request, $id)
-    {
+    public function statusIntake(Request $request, $id) {
         $request->validate(['status' => 'required']);
 
-        $hashedId  =  Crypt::decrypt($id);
         if ($request->status == 1) {
             Intake::where('status', 1)->update(['status' => 2]);
             AvailableCourse::where('status', 1)->update(['status' => 0]);
 
-            $data               =       Intake::find($hashedId);
-            $data->status       =       $request->input('status');
+            $data = Intake::where('intake_id', $id)->first();
+            $data->status = $request->input('status');
             $data->save();
 
-            AvailableCourse::where('intake_id', $hashedId)->update(['status' => 1]);
+            AvailableCourse::where('intake_id', $id)->update(['status' => 1]);
         } else {
 
-            $data             =       Intake::find($hashedId);
+            $data             =       Intake::where('intake_id', $id)->first();
             $data->status     =       $request->input('status');
             $data->save();
 
-            AvailableCourse::where('intake_id', $hashedId)->update(['status' => 0]);
+            AvailableCourse::where('intake_id', $id)->update(['status' => 0]);
         }
 
-        return redirect()->route('courses.showSemester', ['id' => Crypt::encrypt($data->academic_year_id)])->with('status', 'Data Updated Successfully');
+        return redirect()->route('courses.showSemester', $data->academic_year_id)->with('status', 'Semester status updated successfully');
     }
 
-    public function storeIntake(Request $request, $id)
-    {
-        $vz = $request->validate([
+    public function storeIntake(Request $request, $id){
+        $request->validate([
             'year'                  =>       'required',
-            'intake_name_from'      =>       'required',
-            'intake_name_to'        =>       'required'
-
+            'intake_name_from'      =>       'required|before:intake_name_to',
+            'intake_name_to'        =>       'required|after:intake_name_from'
         ]);
 
+        $academicYear = AcademicYear::where('year_id', $request->year)->first();
 
-        $intake                     =         new Intake;
-        $intake->academic_year_id   =         $request->input('year');
-        $intake->intake_from        =         $request->input('intake_name_from');
-        $intake->intake_to          =         $request->input('intake_name_to');
-        $intake->status             =         0;
-        $intake->save();
+        if (Carbon::parse($academicYear->year_start)->format('Y-m-d') <= Carbon::parse($request->intake_name_from)->format('Y-m-d') && Carbon::parse($academicYear->year_end)->format('Y-m-d') >= Carbon::parse($request->intake_name_to)->format('Y-m-d') && Carbon::parse($academicYear->year_end)->format('Y-m-d') > Carbon::parse($request->intake_name_from)->format('Y-m-d')){
 
-        return redirect()->route('courses.showSemester', ['id' => Crypt::encrypt($id)])->with('success', 'Intake Created successfuly');
+            $intakeId = new CustomIds();
+
+            $intake = new Intake;
+            $intake->intake_id = $intakeId->generateId();
+            $intake->academic_year_id = $request->year;
+            $intake->intake_from = $request->intake_name_from;
+            $intake->intake_to = $request->intake_name_to;
+            $intake->status = 0;
+            $intake->save();
+
+            return redirect()->route('courses.showSemester', $id)->with('success', 'Intake created successfully');
+
+        }else{
+            return redirect()->back()->with('error', 'Confirm dates to be within the academic year dates');
+        }
     }
 
-    public function showIntake()
-    {
-        $data       =      Intake::latest()->paginate(5);
+
+
+    public function showIntake() {
+        $data = Intake::latest()->get();
         return view('registrar::intake.showIntake')->with('data', $data);
     }
 
-    public function editIntake($id)
-    {
-        $courses        =         Courses::all();
-        $data           =         Intake::find($id);
-        $course[]      =         AvailableCourse::find($id);
-        return view('registrar::intake.editIntake')->with(['data' => $data, 'courses' => $courses, 'course' => $course]);
+    public function editIntake($id) {
+        $intake = Intake::where('intake_id', $id)->first();
+        return view('registrar::intake.editIntake')->with(['intake' => $intake]);
     }
 
 
-    public function updateIntake(Request $request, $id)
-    {
-        $data                   =      Intake::find($id);
-        $data->intake_from      =      $request->input('intake_name_from');
-        $data->intake_to        =      $request->input('intake_name_to');
-        $data->save();
-        foreach ($request->input('course') as $course_id) {
-            $intakes               =        AvailableCourse::find($course_id)->id;
-            $intakes->course_id    =        $course_id;
-            $intakes->intake_id    =        $data->id;
-            $intakes->save();
+    public function updateIntake(Request $request, $id){
+        $request->validate([
+            'intake_name_from'      =>       'required|before:intake_name_to',
+            'intake_name_to'        =>       'required|after:intake_name_from'
+        ]);
+
+        $academicYear = Intake::where('intake_id', $id)->first()->academicYear;
+
+        if (Carbon::parse($academicYear->year_start)->format('Y-m-d') <= Carbon::parse($request->intake_name_from)->format('Y-m-d') && Carbon::parse($academicYear->year_end)->format('Y-m-d') >= Carbon::parse($request->intake_name_to)->format('Y-m-d') && Carbon::parse($academicYear->year_end)->format('Y-m-d') > Carbon::parse($request->intake_name_from)->format('Y-m-d')){
+
+            $intake = Intake::where('intake_id', $id)->first();
+            $intake->intake_from = $request->intake_name_from;
+            $intake->intake_to = $request->intake_name_to;
+            $intake->save();
+
+            return redirect()->route('courses.showSemester', $academicYear->year_id)->with('success', 'Intake updated successfully');
+
+        }else{
+
+            return redirect()->back()->with('error', 'Confirm dates to be within the academic year dates');
         }
-        $data->intake_to           =        $request->input('intake_name_to');
-        $data->update();
-        return redirect()->route('courses.showIntake')->with('status', 'Data Updated Successfully');
-    }
 
-    public function destroyIntake($id)
-    {
-        $data         =       Intake::find($id);
-        $data->delete();
-        return redirect()->back()->with('success', 'record deleted successfully');
     }
 
     /**
@@ -1759,29 +1789,25 @@ class CoursesController extends Controller
     public function showAttendance()
     {
         $data = Attendance::latest()->get();
-
         return view('registrar::attendance.showAttendance')->with('data', $data);
     }
 
-    public function editAttendance($id)
-    {
-        $hashedId  =  Crypt::decrypt($id);
-        $data         =        Attendance::find($hashedId);
+    public function editAttendance($id) {
+        $hashedId = Crypt::decrypt($id);
+        $data = Attendance::find($hashedId);
         return view('registrar::attendance.editAttendance')->with('data', $data);
     }
-    public function updateAttendance(Request $request, $id)
-    {
+    public function updateAttendance(Request $request, $id) {
 
-        $data                       =         Attendance::find($id);
-        $data->attendance_code      =         $request->input('code');
-        $data->attendance_name      =         $request->input('name');
+        $data = Attendance::find($id);
+        $data->attendance_code = $request->input('code');
+        $data->attendance_name = $request->input('name');
         $data->update();
 
         return redirect()->route('courses.showAttendance')->with('status', 'Data Updated Successfully');
     }
 
-    public function storeAttendance(Request $request)
-    {
+    public function storeAttendance(Request $request) {
         $request->validate([
             'name'      =>     'required',
             'code'      =>     'required'
@@ -1804,114 +1830,114 @@ class CoursesController extends Controller
      *
      * Information about School
      */
-    public function  addschool()
-    {
-
+    public function  addschool() {
         return view('registrar::school.addSchool');
     }
 
-    public function  showSchool()
-    {
-        $data      =     School::latest()->get();
+    public function  showSchool() {
+
+        $data = School::latest()->get();
         return view('registrar::school.showSchool')->with('data', $data);
     }
 
-    public function editSchool($id)
-    {
-        $hashedId  =  Crypt::decrypt($id);
-        $data      =     School::find($hashedId);
+    public function editSchool($id){
+
+        $data = School::where('school_id', $id)->first();
         return view('registrar::school.editSchool')->with('data', $data);
     }
 
-    public function updateSchool(Request $request, $id)
-    {
-        $data                  =         School::find($id);
+    public function updateSchool(Request $request, $id){
+        $request->validate([
+            'initials'         =>       'required|unique:schools',
+            'name'             =>       'required|unique:schools'
+        ]);
+
+        $data = School::where('school_id', $id)->first();
+        $data->initials        =         $request->initials;
+        $data->name            =         $request->name;
+        $data->save();
 
         $oldSchool = new SchoolHistory;
-        $oldSchool->school_id = $data->id;
+        $oldSchool->school_id = $data->school_id;
         $oldSchool->initials = $data->initials;
         $oldSchool->name = $data->name;
         $oldSchool->created_at = $data->created_at;
         $oldSchool->updated_at = $data->updated_at;
         $oldSchool->save();
 
-        $newSchool = School::find($id);
-
-        $newSchool->initials        =         $request->input('initials');
-        $newSchool->name            =         $request->input('name');
-        $newSchool->update();
-
         return redirect()->route('courses.showSchool')->with('status', 'Data Updated Successfully');
     }
 
-    public function storeSchool(Request $request)
-    {
-        $vz                    =        $request->validate([
-            // 'initials'         =>       'required|unique:schools',
+    public function storeSchool(Request $request){
+            $request->validate([
+            'initials'         =>       'required|unique:schools',
             'name'             =>       'required|unique:schools'
-        ]);
-        $schools               =        new School;
-        $schools->initials     =         $request->input('initials');
-        $schools->name         =        $request->input('name');
-        $schools->save();
+            ]);
+
+            $id = new CustomIds();
+
+            $schools = new School;
+            $schools->school_id = $id->generateId();
+            $schools->initials = $request->input('initials');
+            $schools->name = $request->input('name');
+            $schools->save();
+
         return redirect()->route('courses.showSchool')->with('success', 'School Created');
     }
 
-    public function destroySchool($id)
-    {
-        $data         =        School::find($id);
-        $data->delete();
-        return redirect()->route('courses.showSchool');
+    public function schoolPreview($id){
+        $schoolName = School::where('school_id', $id)->first();
+        $data = SchoolHistory::where('school_id', $id)->latest()->get();
+        return view('registrar::school.preview')->with(['data' => $data, 'schoolName' => $schoolName]);
     }
-
     /**
      *
      * Information about departments
      */
-    public function addDepartment()
-    {
-        $schools       =       School::all();
+    public function addDepartment() {
+        $schools = School::all();
         return view('registrar::department.addDepartment')->with('schools', $schools);
     }
 
-    public function showDepartment()
-    {
-
-        $data      =       Department::where('division_id', 1)->latest()->get();
+    public function showDepartment() {
+        $data = ACADEMICDEPARTMENTS::latest()->get();
         return view('registrar::department.showDepartment')->with('data', $data);
     }
 
-    public function storeDepartment(Request $request)
-    {
-        $vz                       =        $request->validate([
-            'dept_code'           =>       'required|unique:departments',
-            'name'                =>       'required|unique:departments'
-
+    public function storeDepartment(Request $request){
+        $request->validate([
+            'dept_code' => 'required|unique:departments',
+            'name' => 'required|unique:departments'
         ]);
-        $departments                =        new Department;
-        $departments->school_id     =        $request->input('school');
-        $departments->dept_code     =        $request->input('dept_code');
-        $departments->name          =        $request->input('name');
+
+        $id = new CustomIds();
+        $division = Division::where('name', 'Academic Division')->first();
+
+        $departments = new Department;
+        $departments->department_id = $id->generateId();
+        $departments->division_id = $division->division_id;
+        $departments->dept_code = $request->input('dept_code');
+        $departments->name = $request->input('name');
         $departments->save();
+
+        $school = new SchoolDepartment;
+        $school->school_id = $request->school;
+        $school->department_id = $departments->department_id;
+        $school->save();
 
         return redirect()->route('courses.showDepartment')->with('success', 'Department Created');
     }
 
-    public function editDepartment($id)
-    {
-        $hashedId  =  Crypt::decrypt($id);
-        $data            =        Department::find($hashedId);
-        $schools         =        School::all();
+    public function editDepartment($id){
+        $data = ACADEMICDEPARTMENTS::where('department_id', $id)->first();
+        $schools = School::all();
         return view('registrar::department.editDepartment')->with(['data' => $data, 'schools' => $schools]);
     }
 
-    public function updateDepartment(Request $request, $id)
-    {
-
-        $data                 =         Department::find($id);
-
+    public function updateDepartment(Request $request, $id) {
+        $data = ACADEMICDEPARTMENTS::where('department_id', $id)->first();
         $oldDepartment  =  new DepartmentHistory;
-        $oldDepartment->department_id = $data->id;
+        $oldDepartment->department_id = $data->department_id;
         $oldDepartment->school_id  = $data->school_id;
         $oldDepartment->name  = $data->name;
         $oldDepartment->dept_code  =  $data->dept_code;
@@ -1919,37 +1945,35 @@ class CoursesController extends Controller
         $oldDepartment->updated_at = $data->updated_at;
         $oldDepartment->save();
 
-        $newDepartment   = Department::find($id);
-        $newDepartment->school_id      =         $request->input('school');
-        $newDepartment->dept_code      =         $request->input('dept_code');
-        $newDepartment->name           =         $request->input('name');
-        $newDepartment->update();
+        $newDepartment = Department::where('department_id', $data->department_id)->first();
+        $newDepartment->dept_code = $request->dept_code;
+        $newDepartment->name = $request->name;
+        $newDepartment->save();
+
+        SchoolDepartment::where('department_id', $data->department_id)->update(['school_id' => $request->school]);
+
         return redirect()->route('courses.showDepartment')->with('status', 'Data Updated Successfully');
     }
 
-    public function destroyDepartment($id)
-    {
-        $data        =      Department::find($id);
-        $data->delete();
-        return redirect()->route('courses.showDepartment');
+    public function departmentPreview($id){
+        $departmentName = Department::where('department_id', $id)->first();
+        $data = DepartmentHistory::where('department_id', $id)->latest()->get();
+        return view('registrar::department.preview')->with(['data' => $data, 'departmentName' => $departmentName]);
     }
-
     /**
      *
      * Information about Course
      */
-    public function addCourse()
-    {
-        $schools             =        School::all();
-        $departments         =        Department::where('division_id', 1)->latest()->get();
-        $group               =        \Modules\Registrar\Entities\Group::all();
-        return view('registrar::course.addCourse')->with(['schools' => $schools, 'departments' => $departments,  'groups' => $group]);
+    public function addCourse(){
+        $departments = ACADEMICDEPARTMENTS::latest()->get();
+        $group = Group::all();
+        $clusters = CourseClusterGroups::all();
+        $levels = Level::all();
+        return view('registrar::course.addCourse')->with(['departments' => $departments,  'groups' => $group, 'clusters' => $clusters, 'levels' => $levels]);
     }
 
-    public function storeCourse(Request $request)
-    {
-
-        $vz = $request->validate([
+    public function storeCourse(Request $request){
+        $request->validate([
             'department'                =>       'required',
             'course_name'               =>       'required',
             'course_code'               =>       'required',
@@ -1961,6 +1985,12 @@ class CoursesController extends Controller
             'subject3'                  =>       'required',
             'subject'                   =>       'required'
         ]);
+
+        if ($request->level == 3){
+            $request->validate([
+                'cluster_group' => 'required|string'
+            ]);
+        }
 
         $subject          =          $request->subject;
         $subject1         =          $request->subject1;
@@ -1971,226 +2001,235 @@ class CoursesController extends Controller
         $data2            =          implode(",", $subject2);
         $data3            =          implode(",", $subject3);
 
-        $courses                      =          new Courses();
-        $courses->department_id       =          $request->input('department');
-        $courses->course_name         =          $request->input('course_name');
-        $courses->course_code         =          $request->input('course_code');
-        $courses->level               =          $request->input('level');
+        $courseId = new CustomIds();
+        $courses = new Courses();
+        $courses->course_id = $courseId->generateId();
+        $courses->department_id = $request->department;
+        $courses->course_name = $request->course_name;
+        $courses->course_code = $request->course_code;
+        $courses->level = $request->level;
         $courses->save();
 
-        $requirement                      =         new CourseRequirement;
-        $requirement->course_id           =         $courses->id;
-        $requirement->course_duration     =         $request->input('course_duration');
-        if ($request->level  == 1) {
-            $requirement->fee  = '500';
-        } elseif ($request->level  == 2) {
-            $requirement->fee  = '500';
-        } elseif ($request->level  == 3) {
-            $requirement->fee  = '1000';
-        } else {
-            $requirement->fee  = '1500';
-        }
-        $requirement->course_requirements =           $request->input('course_requirements');
-        $requirement->subject1            =           str_replace(',', '/', $data) . " " . $request->grade1;
-        $requirement->subject2            =           str_replace(',', '/', $data1) . " " . $request->grade2;
-        $requirement->subject3            =           str_replace(',', '/', $data2) . " " . $request->grade2;
-        $requirement->subject4            =           str_replace(',', '/', $data3) . " " . $request->grade3;
+        $requirement  =  new CourseRequirement;
+        $requirement->course_id  = $courses->course_id;
+        $requirement->course_duration = $request->course_duration;
+                if ($request->level  == 1) {
+                    $requirement->application_fee  = '500';
+                } elseif ($request->level  == 2) {
+                    $requirement->application_fee  = '500';
+                } elseif ($request->level  == 3) {
+                    $requirement->application_fee  = '1000';
+                } else {
+                    $requirement->application_fee  = '1500';
+                }
+        $requirement->course_requirements = $request->input('course_requirements');
+        $requirement->subject1 = str_replace(',', '/', $data) . " " . $request->grade1;
+        $requirement->subject2 = str_replace(',', '/', $data1) . " " . $request->grade2;
+        $requirement->subject3 = str_replace(',', '/', $data2) . " " . $request->grade2;
+        $requirement->subject4 = str_replace(',', '/', $data3) . " " . $request->grade3;
         $requirement->save();
+
+        if ($request->level == 3){
+            $cluster = new CourseCluster;
+            $cluster->course_id = $courses->course_id;
+            $cluster->cluster = $request->cluster_group;
+            $cluster->save();
+        }
 
         return redirect()->route('courses.showCourse')->with('success', 'Course Created');
     }
 
-    public function showCourse()
-    {
-        $data        =          Courses::orderBy('id', 'desc')->get();
+    public function showCourse() {
+        $data = Courses::orderBy('id', 'desc')->get();
         return view('registrar::course.showCourse')->with('data', $data);
     }
 
-    public function editCourse($id)
-    {
-
-
-        $hashedId  =  Crypt::decrypt($id);
-
-        $schools              =          School::all();
-        $departments          =          Department::all();
-        $data                 =          Courses::find($hashedId);
-        $group                =          \Modules\Registrar\Entities\Group::all();
-        return view('registrar::course.editCourse')->with(['groups' => $group, 'data' => $data, 'schools' => $schools, 'departments' => $departments]);
+    public function editCourse($id) {
+        $departments = Department::latest()->get();
+        $data = Courses::where('course_id', $id)->first();
+        $group = Group::all();
+        $levels = Level::all();
+        $clusters = CourseClusterGroups::all();
+        return view('registrar::course.editCourse')->with(['groups' => $group, 'data' => $data, 'departments' => $departments, 'levels' => $levels, 'clusters' => $clusters]);
     }
 
-    public function updateCourse(Request $request, $id)
-    {
-
-        $vz = $request->validate([
-            'department'                =>       'required',
-            'course_name'               =>       'required',
-            'course_code'               =>       'required',
-            'level'                     =>       'required',
-            'course_duration'           =>       'required',
-            'course_requirements'       =>       'required',
-            'subject1'                  =>       'required',
-            'subject2'                  =>       'required',
-            'subject3'                  =>       'required',
-            'subject'                   =>       'required'
+    public function updateCourse(Request $request, $id) {
+        $request->validate([
+            'department' => 'required',
+            'course_name' =>       'required',
+            'course_code' =>       'required',
+            'level' => 'required',
+            'course_duration' => 'required',
+            'course_requirements' => 'required',
+            'subject1' => 'required',
+            'subject2' => 'required',
+            'subject3' => 'required',
+            'subject'  => 'required'
         ]);
 
-        $subject          =          $request->subject;
-        $subject1         =          $request->subject1;
-        $subject2         =          $request->subject2;
-        $subject3         =          $request->subject3;
-        $record             =          implode(",", $subject);
-        $record1            =          implode(",", $subject1);
-        $record2            =          implode(",", $subject2);
-        $record3            =          implode(",", $subject3);
+        if ($request->level == 3){
+            $request->validate(['cluster_group' => 'required|string']);
+        }
 
-        $data                      =           Courses::find($id);
+        $subject =  $request->subject;
+        $subject1 = $request->subject1;
+        $subject2 = $request->subject2;
+        $subject3 = $request->subject3;
+        $record = implode(",", $subject);
+        $record1 = implode(",", $subject1);
+        $record2 = implode(",", $subject2);
+        $record3 = implode(",", $subject3);
 
-        if ($request->department == $data->department_id) {
+        $data = Courses::where('course_id' ,$id)->first();
 
-            $oldCourse                      =      new  CourseHistory;
-            $oldCourse->course_id           =           $data->id;
-            $oldCourse->course_name         =           $data->course_name;
-            $oldCourse->department_id       =           $data->department_id;
-            $oldCourse->level               =           $data->level;
-            $oldCourse->course_code         =           $data->course_code;
+            $oldCourse = new  CourseHistory;
+            $oldCourse->course_id = $data->course_id;
+            $oldCourse->course_name = $data->course_name;
+            $oldCourse->department_id = $data->department_id;
+            $oldCourse->level = $data->level;
+            $oldCourse->course_code = $data->course_code;
             $oldCourse->save();
-        } else {
 
-            return "null";
-        }
-        $newCourse                      =           Courses::find($id);
-        $newCourse->course_name         =           $request->input('course_name');
-        $newCourse->department_id       =           $request->input('department');
-        $newCourse->level               =           $request->input('level');
-        $newCourse->course_code         =           $request->input('course_code');
-        $newCourse->save();
+            $newCourse = Courses::where('course_id', $id)->first();
+            $newCourse->course_name = $request->course_name;
+            $newCourse->department_id = $request->department;
+            $newCourse->level = $request->level;
+            $newCourse->course_code = $request->course_code;
+            $newCourse->save();
 
-        $req              =             CourseRequirement::where('course_id', $id)->first();
-        $req->course_duration           =             $request->input('course_duration');
-        $req->course_requirements       =             $request->input('course_requirements');
-        if ($request->level  == 1) {
-            $req->fee  = '500';
-        } elseif ($request->level  == 2) {
-            $req->fee  = '500';
-        } elseif ($request->level  == 3) {
-            $req->fee  = '1000';
-        } else {
-            $req->fee  = '1500';
-        }
+            $req = CourseRequirement::where('course_id', $id)->first();
+            $req->course_duration = $request->course_duration;
+            $req->course_requirements = $request->course_requirements;
+                if ($request->level  == 1) {
+                    $req->application_fee  = '500';
+                } elseif ($request->level  == 2) {
+                    $req->application_fee  = '500';
+                } elseif ($request->level  == 3) {
+                    $req->application_fee  = '1000';
+                } else {
+                    $req->application_fee  = '1500';
+                }
+            $req->subject1 = str_replace(',', '/', $record) . " " . $request->grade1;
+            $req->subject2 = str_replace(',', '/', $record1) . " " . $request->grade2;
+            $req->subject3 = str_replace(',', '/', $record2) . " " . $request->grade3;
+            $req->subject4 = str_replace(',', '/', $record3) . " " . $request->grade4;
+            $req->save();
 
-        $req->subject1            =           str_replace(',', '/', $record) . " " . $request->grade1;
-        $req->subject2            =           str_replace(',', '/', $record1) . " " . $request->grade2;
-        $req->subject3            =           str_replace(',', '/', $record2) . " " . $request->grade3;
-        $req->subject4            =           str_replace(',', '/', $record3) . " " . $request->grade4;
-        $req->save();
-        return redirect()->route('courses.showCourse')->with('status', 'Data Updated Successfully');
+            return redirect()->route('courses.showCourse')->with('status', 'Data Updated Successfully');
     }
 
-    public function destroyCourse($id)
-    {
-
-        CourseRequirement::where('course_id', $id)->delete();
-        Courses::find($id)->delete();
-
-        return redirect()->route('courses.showCourse');
+    public function coursePreview($id){
+        $courseName = Courses::where('course_id', $id)->first();
+        $data = CourseHistory::where('course_id', $id)->latest()->get();
+        return view('registrar::course.preview')->with(['data' => $data, 'courseName' => $courseName]);
     }
-    public function archived()
+
+    public function syllabus($id)
     {
-        $archived             =          Application::where('registrar_status', 3)->get();
+        $hashedId  =  Crypt::decrypt($id);
+        $course   =   Courses::find($hashedId);
+        $unit   =  UnitProgramms::where('course_code', $course->course_code)->get();
+        return view('registrar::course.syllabus')->with(['units' => $unit, 'course' => $course]);
+    }
+
+    public function archived() {
+        $archived = ApplicationsView::where('registrar_status', 3)->latest()->get();
         return view('registrar::offer.archived')->with('archived', $archived);
     }
 
     public function destroyCoursesAvailable(Request $request, $id)
     {
-        $course          =          AvailableCourse::find($id)->delete();
+        $course = AvailableCourse::find($id)->delete();
         return redirect()->route('courses.offer');
     }
 
-    public function admissions()
-    {
-        $admission     =    AdmissionApproval::where('medical_status', 1)
-            ->where('status', NULL)
+    public function admissions(){
+        $admission = AdmissionsView::where('medical_status', 1)
+//            ->where('status', NULL)
             ->get();
 
         return view('registrar::admissions.index')->with('admission', $admission);
     }
 
-    public function admissionsJab()
-    {
+    public function admitStudent($id){
+        $admission = AdmissionsView::where('application_id', $id)->first();
+//        return $admission->reg_number;
+        $studentID = new CustomIds();
 
-        $admission      =      AdmissionApproval::where('medical_status', 1)
-            ->where('student_type', 2)
-            ->where('status', NULL)
-            ->get();
-        return view('registrar::admissions.kuccps')->with('admission', $admission);
-    }
-
-    public function admitStudent($id)
-    {
-        $app          =           AdmissionApproval::find($id);
-        $student               =             new Student;
-
-        $student->reg_number   =             $app->appApprovals->reg_number;
-        $student->ref_number   =             $app->appApprovals->ref_number;
-        $student->sname        =             $app->appApprovals->applicant->sname;
-        $student->fname        =             $app->appApprovals->applicant->fname;
-        $student->mname        =             $app->appApprovals->applicant->mname;
-        $student->email        =             $app->appApprovals->applicant->email;
-        $student->student_email =            strtolower(str_replace('/', '', $app->appApprovals->reg_number) . '@students.tum.ac.ke');
-        $student->mobile       =             $app->appApprovals->applicant->mobile;
-        $student->alt_mobile   =             $app->appApprovals->applicant->alt_mobile;
-        $student->title        =             $app->appApprovals->applicant->title;
-        $student->marital_status =           $app->appApprovals->applicant->marital_status;
-        $student->gender       =             $app->appApprovals->applicant->gender;
-        $student->dob          =             $app->appApprovals->applicant->DOB;
-        $student->id_number    =             $app->appApprovals->applicant->id_number;
-        $student->citizen      =             $app->appApprovals->applicant->nationality;
-        $student->county       =             $app->appApprovals->applicant->county;
-        $student->sub_county   =             $app->appApprovals->applicant->sub_county;
-        $student->town         =             $app->appApprovals->applicant->town;
-        $student->address      =             $app->appApprovals->applicant->address;
-        $student->postal_code  =             $app->appApprovals->applicant->postal_code;
-        $student->disabled     =             $app->appApprovals->applicant->disabled;
-        $student->disability   =             $app->appApprovals->applicant->disability;
+        $student = new StudentInfo;
+        $student->student_id = $studentID->generateId();
+        $student->sname = $admission->sname;
+        $student->fname = $admission->fname;
+        $student->mname = $admission->mname;
+        $student->title = $admission->title;
+        $student->marital_status = $admission->marital_status;
+        $student->gender = $admission->gender;
+        $student->dob = $admission->dob;
+        $student->id_number = $admission->id_number;
+        $student->disabled = $admission->disabled;
         $student->save();
 
-
-        $studCourse                =             new StudentCourse;
-        $studCourse->student_id    =             $student->id;
-        $studCourse->student_type  =             $app->appApprovals->applicant->student_type;
-        $studCourse->department_id =             $app->appApprovals->courses->department_id;
-        $studCourse->course_id     =             $app->appApprovals->course_id;
-        $studCourse->intake_id     =             $app->appApprovals->intake_id;
-        $studCourse->academic_year_id =          $app->appApprovals->app_intake->academicYear->id;
-        if ($app->appApprovals->applicant->student_type == 1) {
-            $studCourse->class_code    =             strtoupper($app->appApprovals->courses->course_code . '/' . Carbon::parse($app->appApprovals->app_intake->intake_from)->format('MY') . '/S-FT');
-            $studCourse->class         =             strtoupper($app->appApprovals->courses->course_code . '/' . Carbon::parse($app->appApprovals->app_intake->intake_from)->format('MY') . '/S-FT');
-        } else {
-            $studCourse->class_code    =             strtoupper($app->appApprovals->courses->course_code . '/' . Carbon::parse($app->appApprovals->app_intake->intake_from)->format('MY') . '/J-FT');
-            $studCourse->class         =             strtoupper($app->appApprovals->courses->course_code . '/' . Carbon::parse($app->appApprovals->app_intake->intake_from)->format('MY') . '/J-FT');
+        if ($admission->disabled == "YES"){
+            $studentdisability = new StudentDisability;
+            $studentdisability->student_id = $student->student_id;
+            $studentdisability->disability = $admission->disability;
+            $studentdisability->save();
         }
-        $studCourse->course_duration =           $app->appApprovals->courses->courseRequirements->course_duration;
-        $studCourse->save();
 
-        $studLogin                 =             new StudentLogin;
-        $studLogin->username       =             $app->appApprovals->reg_number;
-        $studLogin->password       =             Hash::make($app->appApprovals->applicant->id_number);
-        $studLogin->student_id     =             $student->id;
+        $studentcontact = new StudentContact;
+        $studentcontact->student_id = $student->student_id;
+        $studentcontact->email = $admission->email;
+        $studentcontact->student_email = strtolower(str_replace('/','',$admission->reg_number).'@students.tum.ac.ke');
+        $studentcontact->mobile = $admission->mobile;
+        $studentcontact->alt_mobile = $admission->alt_mobile;
+        $studentcontact->alt_email = $admission->alt_email;
+        $studentcontact->save();
+
+        $studentAddress = new StudentAddress;
+        $studentAddress->student_id = $student->student_id;
+        $studentAddress->citizen = $admission->nationality;
+        $studentAddress->county = $admission->county;
+        $studentAddress->sub_county = $admission->sub_county;
+        $studentAddress->town = $admission->town;
+        $studentAddress->address = $admission->address;
+        $studentAddress->postal_code = $admission->postal_code;
+        $studentAddress->save();
+
+        $studLogin = new StudentLogin;
+        $studLogin->username = $admission->reg_number;
+        $studLogin->password = Hash::make($admission->id_number);
+        $studLogin->student_id = $student->student_id;
         $studLogin->save();
 
-        $admin                     =             AdmissionApproval::find($id);
-        $admin->registrar_status   =             1;
-        $admin->accommodation_status =           0;
-        $admin->save();
+        $studCourse = new StudentCourse;
+        $studCourse->student_id = $student->student_id;
+        $studCourse->student_number = $admission->reg_number;
+        $studCourse->reference_number =$admission->ref_number;
+        $studCourse->student_type = $admission->student_type;
+        $studCourse->department_id = $admission->department_id;
+        $studCourse->course_id = $admission->course_id;
+        $studCourse->intake_id = $admission->intake_id;
+        if ($admission->student_type == 1) {
+            $studCourse->current_class = strtoupper($admission->admissionCourse->course_code . '/' . Carbon::parse($admission->admissionIntake->intake_from)->format('MY') . '/S-FT');
+            $studCourse->entry_class = strtoupper($admission->admissionCourse->course_code . '/' . Carbon::parse($admission->admissionIntake->intake_from)->format('MY') . '/S-FT');
+        } else {
+            $studCourse->current_class = strtoupper($admission->admissionCourse->course_code . '/' . Carbon::parse($admission->admissionIntake->intake_from)->format('MY').'/J-FT');
+            $studCourse->entry_class = strtoupper($admission->admissionCourse->course_code . '/' . Carbon::parse($admission->admissionIntake->intake_from)->format('MY').'/J-FT');
+        }
+        $studCourse->save();
 
-        $comms = new Notification;
-        $comms->application_id = $app->appApprovals->id;
-        $comms->role_id = Auth::guard('user')->user()->role_id;
-        $comms->subject = 'Application Admission Process';
-        $comms->comment = 'Congratulations! Your admission was successful. You are now a bona-fied student at TUM. You can now log in as a student using your registration number as user ID and ID/PASSPORT/BIRTH certificate number.';
-        $comms->status = 1;
-        $comms->save();
+        $approval = AdmissionApproval::where('application_id', $id)->first();
+        $approval->registrar_status   =             1;
+        $approval->accommodation_status =           0;
+        $approval->save();
+
+//        $comms = new Notification;
+//        $comms->application_id = $admission->id;
+//        $comms->role_id = Auth::guard('user')->user()->role_id;
+//        $comms->subject = 'Application Admission Process';
+//        $comms->comment = 'Congratulations! Your admission was successful. You are now a bona-fied student at TUM. You can now log in as a student using your registration number as user ID and ID/PASSPORT/BIRTH certificate number.';
+//        $comms->status = 1;
+//        $comms->save();
 
         return redirect()->back()->with('success', 'New student admission completed successfully');
     }
@@ -2213,7 +2252,6 @@ class CoursesController extends Controller
     {
 
         $request->validate([
-
             'image'             =>          'required'
         ]);
         $studID                =           AdmissionApproval::find($id);
@@ -2234,10 +2272,8 @@ class CoursesController extends Controller
 
         return redirect()->route('courses.admissions')->with('success', 'ID photo uploaded successfully');
     }
-    public function fetchSubjects(Request $request)
-    {
-
-        $data         =           ClusterSubjects::where('group_id', $request->id)->get();
+    public function fetchSubjects(Request $request) {
+        $data = ClusterSubject::where('group_id', $request->id)->get();
         return response()->json($data);
     }
 }

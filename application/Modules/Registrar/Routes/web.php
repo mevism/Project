@@ -1,5 +1,6 @@
 <?php
 
+use Modules\Registrar\Entities\School;
 use Modules\Registrar\Http\Controllers\CoursesController;
 
 /*
@@ -13,10 +14,8 @@ use Modules\Registrar\Http\Controllers\CoursesController;
 |
 */
 
-Route::prefix('courses')->middleware(['admin'])->group(function() {
-    
+Route::prefix('courses')->group(function() {
 
-    
     Route::get('/show-semester-fee', 'CoursesController@showSemFee')->name('courses.showSemFee');
     Route::get('/semFee', 'CoursesController@semFee')->name('courses.semFee');
     Route::post('/store-semester-fee', 'CoursesController@storeSemFee')->name('courses.storeSemFee');
@@ -47,7 +46,7 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
 
     Route::get('/import-unit','CoursesController@importUnit')->name('courses.importUnit');
     Route::post('/import-unit','CoursesController@importUnits')->name('courses.importUnits');
-    
+
     Route::get('/import-export-courses','CoursesController@importExportCourses')->name('courses.importExportCourses');
     Route::post('/import-courses','CoursesController@importCourses')->name('courses.importCourses');
 
@@ -65,50 +64,49 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
 
     //routes on intakes
     Route::get('/', 'CoursesController@index')->name('courses.index');
-    Route::get('approve-index', 'CoursesController@approveIndex')->name('courses.approveIndex');
-    Route::get('/add-intake/{id}', 'CoursesController@addIntake')->name('courses.addIntake');
-    Route::post('/store-intake/{id}', 'CoursesController@storeIntake')->name('courses.storeIntake');
-    Route::get('/show-intake', 'CoursesController@showIntake')->name('courses.showIntake');
-    Route::get('/edit-intake/{id}', 'CoursesController@editIntake')->name('courses.editIntake');
-    Route::put('/update-intake/{id}', 'CoursesController@updateIntake')->name('courses.updateIntake');
-    Route::get('/destroy-intake/{id}', 'CoursesController@destroyIntake')->name('courses.destroyIntake');
-    Route::get('/view-intake/{id}', 'CoursesController@viewIntake')->name('courses.viewIntake');
-    Route::get('/view-course/{id}', 'CoursesController@viewCourse')->name('courses.viewCourse');
-    Route::put('/status-intake/{id}', 'CoursesController@statusIntake')->name('courses.statusIntake');
-    Route::get('/edit-status-intake/{id}', 'CoursesController@editstatusIntake')->name('courses.editstatusIntake');
+    Route::get('approve-index', [CoursesController::class, 'approveIndex'])->name('courses.approveIndex');
+    Route::get('/add-intake/{id}', [CoursesController::class, 'addIntake'])->name('courses.addIntake');
+    Route::post('/store-intake/{id}', [CoursesController::class, 'storeIntake'])->name('courses.storeIntake');
+    Route::get('/show-intake', [CoursesController::class,'showIntake'])->name('courses.showIntake');
+    Route::get('/edit-intake/{id}', [CoursesController::class, 'editIntake'])->name('courses.editIntake');
+    Route::post('/update-intake/{id}', [CoursesController::class, 'updateIntake'])->name('courses.updateIntake');
+    Route::get('/destroy-intake/{id}', [CoursesController::class, 'destroyIntake'])->name('courses.destroyIntake');
+    Route::get('/view-intake/{id}', [CoursesController::class, 'viewIntake'])->name('courses.viewIntake');
+    Route::get('/view-course/{id}', [CoursesController::class, 'viewCourse'])->name('courses.viewCourse');
+    Route::post('/status-intake/{id}', [CoursesController::class,'statusIntake'])->name('courses.statusIntake');
+    Route::get('/edit-status-intake/{id}', [CoursesController::class, 'editstatusIntake'])->name('courses.editstatusIntake');
 
 
-    Route::get('/add-year', 'CoursesController@addYear')->name('courses.addYear');
-    Route::get('/academic-year', 'CoursesController@academicYear')->name('courses.academicYear');
-    Route::post('/store-year', 'CoursesController@storeYear')->name('courses.storeYear');
-    Route::get('/destroy-year/{id}', 'CoursesController@destroyYear')->name('courses.destroyYear');
-    Route::get('/show-semester/{id}', 'CoursesController@showSemester')->name('courses.showSemester');
-
+    Route::get('/add-year', [CoursesController::class, 'addYear'])->name('courses.addYear');
+    Route::get('/academic-year', [CoursesController::class, 'academicYear'])->name('courses.academicYear');
+    Route::post('/store-year', [CoursesController::class, 'storeYear'])->name('courses.storeYear');
+    Route::get('/destroy-year/{id}', [CoursesController::class, 'destroyYear'])->name('courses.destroyYear');
+    Route::get('/show-semester/{id}', [CoursesController::class, 'showSemester'])->name('courses.showSemester');
+    Route::get('/edit-academic-year/{id}', [CoursesController::class, 'editAcademicYear'])->name('courses.editAcademicYear');
+    Route::post('/update-academic-year/{id}', [CoursesController::class, 'updateAcademicYear'])->name('courses.updateAcademicYear');
 
     //routes on school
-    Route::get('/add-school', 'CoursesController@addSchool')->name('courses.addSchool');
-    Route::post('/store-school', 'CoursesController@storeSchool')->name('courses.storeSchool');
-    Route::get('/show-school', 'CoursesController@showSchool')->name('courses.showSchool');
-    Route::get('/edit-school/{id}', 'CoursesController@editSchool')->name('courses.editSchool');
-    Route::put('/update-school/{id}', 'CoursesController@updateSchool')->name('courses.updateSchool');
-    Route::get('/destroy-school/{id}', 'CoursesController@destroySchool')->name('courses.destroySchool');
+    Route::get('/add-school', [CoursesController::class,'addSchool'])->name('courses.addSchool');
+    Route::post('/store-school', [CoursesController::class,'storeSchool'])->name('courses.storeSchool');
+    Route::get('/show-school', [CoursesController::class,'showSchool'])->name('courses.showSchool');
+    Route::get('/edit-school/{id}', [CoursesController::class, 'editSchool'])->name('courses.editSchool');
+    Route::put('/update-school/{id}', [CoursesController::class,'updateSchool'])->name('courses.updateSchool');
+    Route::get('/destroy-school/{id}', [CoursesController::class,'destroySchool'])->name('courses.destroySchool');
 
     //routes on departments
-    Route::get('/add-department', 'CoursesController@addDepartment')->name('courses.addDepartment');
-    Route::post('/store-department', 'CoursesController@storeDepartment')->name('courses.storeDepartment');
-    Route::get('/show-department', 'CoursesController@showDepartment')->name('courses.showDepartment');
-    Route::get('/edit-department/{id}', 'CoursesController@editDepartment')->name('courses.editDepartment');
-    Route::put('/update-department/{id}', 'CoursesController@updateDepartment')->name('courses.updateDepartment');
-    Route::get('/destroy-department/{id}', 'CoursesController@destroyDepartment')->name('courses.destroyDepartment');
+    Route::get('/add-department', [CoursesController::class,'addDepartment'])->name('courses.addDepartment');
+    Route::post('/store-department', [CoursesController::class,'storeDepartment'])->name('courses.storeDepartment');
+    Route::get('/show-department', [CoursesController::class,'showDepartment'])->name('courses.showDepartment');
+    Route::get('/edit-department/{id}', [CoursesController::class,'editDepartment'])->name('courses.editDepartment');
+    Route::put('/update-department/{id}', [CoursesController::class,'updateDepartment'])->name('courses.updateDepartment');
 
     //routes on courses
-    Route::get('/add-course', 'CoursesController@addCourse')->name('courses.addCourse');
-    Route::post('/store-course', 'CoursesController@storeCourse')->name('courses.storeCourse');
-    Route::get('/show-course', 'CoursesController@showCourse')->name('courses.showCourse');
-    Route::get('/edit-course/{id}', 'CoursesController@editCourse')->name('courses.editCourse');
-    Route::get('/syllabus/{id}', 'CoursesController@syllabus')->name('courses.syllabus');
-    Route::put('/update-course/{id}', 'CoursesController@updateCourse')->name('courses.updateCourse');
-    Route::get('/destroy-course/{id}', 'CoursesController@destroyCourse')->name('courses.destroyCourse');
+    Route::get('/add-course', [CoursesController::class,'addCourse'])->name('courses.addCourse');
+    Route::post('/store-course', [CoursesController::class,'storeCourse'])->name('courses.storeCourse');
+    Route::get('/show-course', [CoursesController::class,'showCourse'])->name('courses.showCourse');
+    Route::get('/edit-course/{id}', [CoursesController::class,'editCourse'])->name('courses.editCourse');
+    Route::get('/syllabus/{id}', [CoursesController::class,'syllabus'])->name('courses.syllabus');
+    Route::put('/update-course/{id}', [CoursesController::class,'updateCourse'])->name('courses.updateCourse');
 
     //routes on attendance/ mode of study
     Route::get('/add-attendance', 'CoursesController@addAttendance')->name('courses.addAttendance');
@@ -164,7 +162,7 @@ Route::prefix('courses')->middleware(['admin'])->group(function() {
     Route::get('/school-preview/{id}', [CoursesController::class, 'schoolPreview'])->name('courses.schoolPreview');
     Route::get('/department-preview/{id}', [CoursesController::class, 'departmentPreview'])->name('courses.departmentPreview');
     Route::get('/course-preview/{id}', [CoursesController::class, 'coursePreview'])->name('courses.coursePreview');
-   
+
 
     Route::post('/accepted-transfers', 'CoursesController@acceptedTransfers')->name('courses.acceptedTransfers');
     Route::get('/transfer-requests', [CoursesController::class, 'yearly'])->name('courses.yearly');

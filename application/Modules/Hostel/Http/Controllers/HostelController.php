@@ -9,6 +9,11 @@ use Modules\Registrar\Entities\Student;
 
 class HostelController extends Controller
 {
+//    public function __construct(){
+//        auth()->setDefaultDriver('user');
+//        $this->middleware(['web','auth', 'hostels']);
+//    }
+
     public function allocations(){
 
         $student = Student::all();

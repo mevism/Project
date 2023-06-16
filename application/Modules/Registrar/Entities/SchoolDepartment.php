@@ -9,8 +9,8 @@ class SchoolDepartment extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
-    
+    protected $fillable = ['school_id'];
+
     protected static function newFactory()
     {
         return \Modules\Registrar\Database\factories\SchoolDepartmentFactory::new();

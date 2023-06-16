@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('education', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('applicant_id');
+            $table->string('applicant_id');
             $table->string('institution');
             $table->string('qualification');
             $table->string('level');

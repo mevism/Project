@@ -24,6 +24,10 @@ use Hash;
 
 class LecturerController extends Controller
 {
+//    public function __construct(){
+//        auth()->setDefaultDriver('user');
+//        $this->middleware(['web','auth']);
+//    }
     /**
      * Display a listing of the resource.
      * @return Renderable

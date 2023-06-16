@@ -36,41 +36,42 @@
     </div>
     <div class="block block-rounded">
         <div class="block-content block-content-full">
-            <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
-                        @if(count($courses)>0)
-                            <thead>
-                            <tr>
-                                <th>Department</th>
-                                <th>Course</th>
-                                <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($courses as $course)
-                                <tr>
-                                    <td>{{ $course->courses->getCourseDept->name }}</td>
-                                    <td>{{ $course->courses->course_name }}</td>
-                                    <td nowrap="">
-                                        @if($course->registrar_status == 3 && $course->cod_status == 1)
-                                        <a class="btn btn-sm btn-alt-success" target="_top" href="{{ route('application.download', ['id' => Crypt::encrypt($course->id)]) }}"><i class="fa fa-file-pdf"></i> download</a>
-                                        <a class="btn btn-sm btn-alt-info" data-toggle="click-ripple" href="{{ route('application.uploadDocuments', ['id' => Crypt::encrypt($course->id)]) }}"><i class="fa fa-file-upload"></i> upload docs</a>
-                                        @elseif($course->registrar_status == NULL && $course->finance_status == NULL)
-                                        <a class="btn btn-sm btn-alt-info" href="{{ route('application.edit', ['id' => Crypt::encrypt($course->id)]) }}">
-                                            <i class="fa fa-pen-to-square"></i> update</a>
-                                        @elseif($course->registrar_status == 1 && $course->cod_status == 2)
-                                            <a class="btn btn-sm btn-alt-danger" href="#">
-                                                <i class="fa fa-ban"></i> rejected</a>
-                                        @else
-                                            <a class="btn btn-sm btn-alt-secondary disabled" href="{{ route('application.progress', ['id' => Crypt::encrypt($course->id)]) }}"> <i class="fa fa-spinner"></i> in progress</a>
+            <div class="col-12 table-responsive">
+                <table id="example" class="table table-sm table-striped table-bordered fs-sm">
+                    <thead>
+                    <th>#</th>
+                    <th>Department</th>
+                    <th>Course</th>
+                    <th>Action</th>
+                    </thead>
+                    <tbody>
+                    @foreach($courses as $course)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $course->courses->getCourseDept->name }}</td>
+                            <td>{{ $course->courses->course_name }}</td>
+                            <td nowrap="">
+                                @if($course->applicationApproval == null)
+                                    <a class="btn btn-sm btn-alt-info" href="{{ route('application.edit', $course->application_id) }}">
+                                        <i class="fa fa-pen-to-square"></i> update</a>
+                                @elseif($course->applicationApproval != null)
+                                    @if($course->applicationApproval->finance_status != null && $course->applicationApproval->cod_status == null)
+                                        <a class="btn btn-sm btn-alt-info" href="{{ route('application.edit', $course->application_id) }}"> <i class="fa fa-pen-to-square"></i> update</a>
+                                    @elseif($course->applicationApproval->cod_status == 1 && $course->applicationApproval->registrar_status == 3)
+                                        <a class="btn btn-sm btn-alt-success" target="_top" href="{{ route('application.download', $course->application_id) }}"><i class="fa fa-file-pdf"></i> download</a>
+                                        <a class="btn btn-sm btn-alt-info" data-toggle="click-ripple" href="{{ route('application.uploadDocuments', $course->application_id) }}"><i class="fa fa-file-upload"></i> upload docs</a>
+                                    @elseif($course->applicationApproval->cod_status == 2 && $course->applicationApproval->registrar_status == 3)
+                                        <a class="btn btn-sm btn-alt-danger" href="#"> <i class="fa fa-ban"></i> rejected</a>
+                                    @elseif($course->applicationApproval->cod_status == null || $course->applicationApproval->cod_status != null)
+                                        <a class="btn btn-sm btn-alt-secondary disabled" href="#"> <i class="fa fa-spinner"></i> in progress </a>
                                     @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        @else
-                            <small class="text-center text-muted"> You have not submitted any applications</small>
-                        @endif
-                    </table>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 @endsection
@@ -78,7 +79,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[2, 'asc']],
+            order: [[0, 'asc']],
             rowGroup: {
                 dataSrc: 2
             }

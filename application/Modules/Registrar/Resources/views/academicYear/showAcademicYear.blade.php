@@ -52,7 +52,7 @@
       <div class="block-content block-content-full">
         <div class="row">
           <div class="col-12">
-        <table id="example" class="table table-bordered table-striped table-vcenter js-dataTable-responsive fs-sm">
+        <table id="example" class="table table-sm table-bordered table-striped fs-sm">
           <span class="d-flex justify-content-end">
             <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addYear') }}">Create</a>
         </span><br>
@@ -60,20 +60,27 @@
             <tr>
               <th></th>
               <th>Academic Year </th>
-              <th>Action</th>
+              <th>Academic Year Dates </th>
+              <th>View Semesters</th>
+                <th>Action</th>
             </tr>
           </thead>
           <tbody>
             @foreach ($years as $key => $year)
             <tr>
               <td>{{ ++$key }}</td>
-              <td style="text-transform: uppercase" >{{ Carbon\carbon::parse($year->year_start)->format('Y')}}/{{ Carbon\carbon::parse($year->year_end)->format('Y')}}</td>
-              <td nowrap="">
-                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.showSemester',['id'=> Crypt::encrypt($year->id)]) }}">view semester</a>
-
-                {{-- <a class="btn btn-sm btn-alt-info" href="{{ route('courses.showSemester',['id'=> Crypt::encrypt($year->id)]) }}">view semester</a> --}}
-                <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this year ?')" href="{{ route('courses.destroyYear', $year->id) }}">delete</a>
+              <td style="text-transform: uppercase" >
+                  {{ Carbon\carbon::parse($year->year_start)->format('Y')}}/{{ Carbon\carbon::parse($year->year_end)->format('Y')}}
               </td>
+                <td>
+                   <b>From :</b> {{ Carbon\carbon::parse($year->year_start)->format('d/M/Y')}} <b>To :</b> {{ Carbon\carbon::parse($year->year_end)->format('d/M/Y')}}
+                </td>
+              <td nowrap="">
+                <a class="link-primary" href="{{ route('courses.showSemester', $year->year_id) }}">View Semesters</a>
+              </td>
+                <td>
+                    <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editAcademicYear', $year->year_id) }}"> edit <i class="fa fa-pencil"></i> </a>
+                </td>
             </tr>
             @endforeach
           </tbody>

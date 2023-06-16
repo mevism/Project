@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('available_courses', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('intake_id');
-            $table->bigInteger('course_id');
-            $table->bigInteger('campus_id');
+            $table->string('available_id');
+            $table->string('intake_id');
+            $table->string('course_id');
+            $table->string('campus_id');
             $table->tinyInteger('status')->default(0);
             $table->timestamps();
             $table->softDeletes();

@@ -25,9 +25,17 @@ use Modules\Application\Http\Controllers\ApplicationController;
         Route::get('/verifyphone', 'ApplicationController@phoneverify')->name('application.phone');
         Route::any('/generateCode', [ApplicationController::class, 'getNewCode'])->name('application.getNewCode');
 
+        /**
+         * new routes
+         */
+
+        Route::post('/update-personal-information', [ApplicationController::class, 'updatePersonalInfo'])->name('applicant.personalInfo');
+        Route::post('/update-contact-information', [ApplicationController::class, 'updateContactInfo'])->name('applicant.contactInfo');
+        Route::post('/update-address-information', [ApplicationController::class, 'updateAddressInfo'])->name('applicant.addressInfo');
 
 
-        Route::get('/logout', 'ApplicationController@logout')->name('application.logout');
+
+        Route::get('/logout', [ApplicationController::class, 'signOut'])->name('application.logout');
         Route::get('/details', 'ApplicationController@details')->name('application.details');
 
         Route::group(['middleware' => ['auth', 'is_verified']], function (){

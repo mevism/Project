@@ -13,14 +13,14 @@ class DepartmentHistory extends Model
 
     public function schoolsDeptHist(){
 
-        return $this->belongsTo(School::class, 'school_id');
+        return $this->belongsTo(School::class, 'school_id', 'school_id');
     }
 
     public function historydepartments(){
 
-        return $this->hasMany(Department::class, 'department_id');
+        return $this->hasMany(Department::class, 'department_id', 'department_id');
     }
-    
+
     protected static function newFactory()
     {
         return \Modules\Registrar\Database\factories\DepartmentHistoryFactory::new();

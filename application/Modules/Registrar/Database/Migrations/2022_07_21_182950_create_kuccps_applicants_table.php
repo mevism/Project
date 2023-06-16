@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('kuccps_applicants', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('applicant_id');
             $table->string('index_number');
             $table->string('sname');
             $table->string('fname');
@@ -27,8 +28,8 @@ return new class extends Migration
             $table->string('BOX')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('town')->nullable();
-            $table->integer('status')->default(0);
             $table->string('school');
+            $table->integer('status')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

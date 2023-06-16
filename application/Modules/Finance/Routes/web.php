@@ -13,7 +13,9 @@ use Modules\Finance\Http\Controllers\FinanceController;
 |
 */
 
-Route::prefix('applications')->group(function() {
+Route::prefix('applications')
+//    ->middleware(['user', 'auth', 'finance'])
+    ->group(function() {
 //    Route::get('/', 'FinanceController@index');
     Route::group(['middleware' => 'finance'], function (){
         Route::get('/finance', [FinanceController::class, 'index'])->name('finance.dashboard');

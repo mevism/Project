@@ -44,20 +44,7 @@ class Applicant extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function routeNotificationForAfricasTalking($notification)
-    {
-        return $this->mobile;
-    }
 
-    public function VerifyEmail(){
-
-        return $this->hasOne(VerifyEmail::class);
-    }
-
-    public function VerifyUser(){
-
-        return $this->hasOne(VerifyUser::class);
-    }
 
     public function application(){
 

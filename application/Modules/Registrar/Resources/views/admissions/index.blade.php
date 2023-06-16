@@ -32,29 +32,28 @@
             <div class="row">
                 <div class="col-lg-12">
                     <table id="example" class="table table-responsive table-md table-striped table-bordered table-vcenter fs-sm">
-                        @if(count($admission)>0)
                             <thead>
-                            <th></th>
+                            <th>#</th>
                             <th>Applicant Name</th>
                             <th>Department</th>
                             <th>Course Name</th>
                             <th>Stud. Type</th>
                             <th>Status</th>
-                            <th style="white-space: nowrap !important;">Stud. ID</th>
+{{--                            <th style="white-space: nowrap !important;">Stud. ID</th>--}}
                             <th style="white-space: nowrap !important;">Action</th>
                             </thead>
                             <tbody>
                             @foreach($admission as $app)
-                       
+
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td nowrap=""> {{ $app->appApprovals->applicant->sname }} {{ $app->appApprovals->applicant->fname }} {{ $app->appApprovals->applicant->mname }} </td>
-                                    <td> {{ $app->appApprovals->courses->getCourseDept->name }}</td>
-                                    <td> {{ $app->appApprovals->courses->course_name }}</td>
+                                    <td nowrap=""> {{ $app->sname }} {{ $app->fname }} {{ $app->mname }} </td>
+                                    <td> {{ $app->admissionCourse->getCourseDept->name }}</td>
+                                    <td> {{ $app->admissionCourse->course_name }}</td>
                                     <td>
-                                        @if($app->appApprovals->applicant->student_type == 1)
+                                        @if($app->student_type == 1)
                                             S-FT
-                                        @elseif($app->appApprovals->applicant->student_type == 2)
+                                        @elseif($app->student_type == 2)
                                             J-FT
                                         @else
                                             S-PT
@@ -71,27 +70,14 @@
                                     </td>
                                     <td nowrap="">
                                         @if($app->registrar_status == 0)
-                                            <span class="badge bg-primary"> <i class="fa fa-spinner"></i> waiting...</span>
-                                            @elseif($app->registrar_status == 1)
-                                                @if($app->id_status == NULL)
-                                            <a class="btn btn-sm btn-alt-success" data-toggle="click-ripple" href="{{ route('courses.studentID', $app->id) }}"> Take Image</a>
-                                                @else
-                                                    <a class="badge bg-success"><i class="fa fa-check"></i> uploaded</a>
-                                                @endif
-                                        @else
-                                            <span class="badge btn-danger"><i class="fa fa-ban"></i> rejected</span>
-                                        @endif
-                                    </td>
-                                    <td nowrap="">
-                                        @if($app->registrar_status == 0)
-                                            <a class="btn btn-sm btn-alt-success" data-toggle="click-ripple" onclick="return confirm('Are you sure you want to erroll this student?')" href="{{ route('courses.admitStudent', $app->id) }}"> Enroll </a>
-                                            <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->id }}"> Reject </a>
-                                            <div class="modal fade" id="modal-block-popin-{{ $app->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin{{ $app->id }}" aria-hidden="true">
+                                            <a class="btn btn-sm btn-alt-success" data-toggle="click-ripple" onclick="return confirm('Are you sure you want to erroll this student?')" href="{{ route('courses.admitStudent', ['id' => $app->application_id]) }}"> Enroll </a>
+                                            <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->application_id }}"> Reject </a>
+                                            <div class="modal fade" id="modal-block-popin-{{ $app->application_id }}" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin{{ $app->application_id }}" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-popin" role="document">
                                                     <div class="modal-content">
                                                         <div class="block block-rounded block-transparent mb-0">
                                                             <div class="block-header block-header-default">
-                                                                <h3 class="block-title">Reason(s) for rejecting {{ $app->appApprovals->applicant->sname }}'s admission </h3>
+                                                                <h3 class="block-title">Reason(s) for rejecting {{ $app->sname }}'s admission </h3>
                                                                 <div class="block-options">
                                                                     <button type="button" class="btn-block-option" data-bs-dismiss="modal" aria-label="Close">
                                                                         <i class="fa fa-fw fa-times"></i>
@@ -99,11 +85,11 @@
                                                                 </div>
                                                             </div>
                                                             <div class="block-content fs-sm">
-                                                                <form action="{{ route('courses.rejectAdmissions', $app->id) }}" method="post">
+                                                                <form action="{{ route('courses.rejectAdmissions', ['id' => $app->application_id]) }}" method="post">
                                                                     @csrf
                                                                     <div class="row col-md-12 mb-3">
                                                                         <textarea class="form-control" placeholder="Write down the reasons for declining this application" name="comment" required></textarea>
-                                                                        <input type="hidden" name="{{ $app->id }}">
+                                                                        <input type="hidden" name="{{ $app->application_id }}">
                                                                     </div>
                                                                     <div class="d-flex justify-content-center mb-2">
                                                                         <button type="submit" class="btn btn-alt-danger btn-sm">Reject</button>
@@ -119,19 +105,14 @@
                                                 </div>
                                             </div>
                                         @elseif($app->registrar_status == 1)
-                                            <a class="btn btn-sm btn-alt-info disabled" href="{{ route('cod.reviewAdmission', $app->id) }}"> Edit </a>
+                                            <a class="btn btn-sm btn-alt-info disabled" href="{{ route('cod.reviewAdmission', $app->application_id) }}"> Edit </a>
                                         @else
-                                            <a class="btn btn-sm btn-alt-info disabled" href="{{ route('cod.reviewAdmission', $app->id) }}"> Edit </a>
+                                            <a class="btn btn-sm btn-alt-info disabled" href="{{ route('cod.reviewAdmission', $app->application_id) }}"> Edit </a>
                                         @endif
                                     </td>
                                 </tr>
                             @endforeach
                             </tbody>
-                        @else
-                            <tr>
-                                <span class="text-muted text-center fs-sm">There are no new applications submitted</span>
-                            </tr>
-                        @endif
                     </table>
                 </div>
             </div>
@@ -154,7 +135,6 @@
             }
         } );
     } );
-
 </script>
 
 

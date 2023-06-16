@@ -16,7 +16,7 @@
   $(document).ready(function() {
       $('#example').DataTable( {
           responsive: true,
-          order: [[2, 'asc']],
+          order: [[1, 'asc']],
           rowGroup: {
               dataSrc: 2
           }
@@ -55,7 +55,6 @@
 
             <table id="example" class="table table-bordered table-striped js-dataTable-responsive fs-sm">
                     <thead>
-                    <tr>
                         <th>✔</th>
                          <th></th>
                         <th>Applicant Name</th>
@@ -65,22 +64,21 @@
                         <th>Department</th>
                         <th>Registrar</th>
                         <th>Action</th>
-                    </tr>
                     </thead>
                     <tbody>
                     @foreach($accepted as $item)
                             <tr>
                                 <td>
                                     @if($item->registrar_status > 0 )
-                                    <input class="accepted" type="checkbox" name="submit[]" value="{{ $item->id }}">
+                                    <input class="accepted" type="checkbox" name="submit[]" value="{{ $item->application_id }}">
                                         @else
 
                                     @endif
                                 </td>
                                 <td>{{ $loop->iteration }}</td>
-                                <td> {{ $item->applicant->sname }} {{ $item->applicant->fname }} {{ $item->applicant->mname }}</td>
-                                <td> {{ $item->courses->getCourseDept->name }}</td>
-                                <td> {{ $item->courses->course_name }}</td>
+                                <td> {{ $item->sname }} {{ $item->fname }} {{ $item->mname }}</td>
+                                <td> {{ $item->DepartmentCourse->getCourseDept->name }}</td>
+                                <td> {{ $item->DepartmentCourse->course_name }}</td>
                                 <td> @if ($item->finance_status ==1)
                                     <a  class="badge badge bg-success" >Accepted</a>
                                     @elseif($item->finance_status ==2)
@@ -112,10 +110,10 @@
                                 <td nowrap>
                                     @if($item->registrar_status == 0)
 
-                                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.viewApplication', $item->id) }}">view</a>
+                                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.viewApplication', $item->application_id) }}">view</a>
                                     @else
-                                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.preview', $item->id) }}">view</a>
-                                    <a class="btn btn-sm btn-alt-info" href="{{ route('courses.viewApplication', $item->id) }}">edit</a>
+                                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.preview', $item->application_id) }}">view</a>
+                                    <a class="btn btn-sm btn-alt-info" href="{{ route('courses.viewApplication', $item->application_id) }}">edit</a>
 
                                     @endif
                                 </td>

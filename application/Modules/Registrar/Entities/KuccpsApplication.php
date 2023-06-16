@@ -11,12 +11,7 @@ class KuccpsApplication extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'applicant_id',
-        'intake_id',
-        'course_code',
-        'course_name'
-    ];
+    protected $fillable = [ 'applicant_id', 'intake_id', 'course_code', 'course_name'];
 
     public function kuccpsApplicant(){
 
@@ -25,7 +20,7 @@ class KuccpsApplication extends Model
 
     public function kuccpsIntake(){
 
-        return $this->belongsTo(Intake::class,'intake_id' );
+        return $this->belongsTo(Intake::class,'intake_id', 'intake_id' );
     }
 
     public function approveKuccps(){

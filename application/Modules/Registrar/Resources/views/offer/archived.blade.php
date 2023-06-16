@@ -35,45 +35,43 @@
         </div>
     </div>
 
+    <div class="block block-rounded">
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-lg-12">
                     {{-- <table id="example" class="display"> --}}
-        <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
+        <table id="example" class="table table-bordered table-striped js-dataTable-responsive fs-sm">
             @csrf
             @method('delete')
-            @if(count($archived) >0 )
                 <thead>
+                    <th>#</th>
                     <th>Ref. number</th>
                     <th>Applicant Name</th>
-                    {{-- <th>Department</th> --}}
-                    {{-- <th>Course</th> --}}
+                    <th>Department</th>
+                    <th>Course</th>
                     <th>Status</th>
-
                 </thead>
                 <tbody>
                 @foreach($archived as $item)
                         <tr>
+                            <td> {{ $loop->iteration }} </td>
                             <td> {{ $item->ref_number }}</td>
-                            <td> {{ $item->applicant->sname }} {{ $item->applicant->fname }} {{ $item->applicant->mname }}</td>
-                            {{-- <td> {{ $item->courses->department_id }}</td> --}}
-                            {{-- <td> {{ $item->courses->course_name }}</td> --}}
-                            <td> @if ($item->registrar_status == 4 || 3)<a  class="badge badge-sm bg-info" >Completed</a>
+                            <td> {{ $item->sname }} {{ $item->fname }} {{ $item->mname }}</td>
+                             <td> {{ $item->DepartmentCourse->getCourseDept->dept_code }}</td>
+                             <td> {{ $item->DepartmentCourse->course_name }}</td>
+                            <td> @if ($item->cod_status == 1)
+                                    <a  class="badge badge-sm bg-success" >Successful</a>
+                                @else
+                                    <a  class="badge badge-sm bg-warning" >Unsuccessful</a>
                                 @endif
                             </td>
 
                           </tr>
-
                 @endforeach
                 </tbody>
-            @else
-            <tr>
-                <small class="text-center text-muted">There are no archived appications</small>
-            </tr>
-            @endif
-    </table>
+        </table>
+                </div>
             </div>
-
         </div>
     </div>
 
@@ -83,7 +81,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[2, 'asc']],
+            order: [[0, 'asc']],
             rowGroup: {
                 dataSrc: 2
             }

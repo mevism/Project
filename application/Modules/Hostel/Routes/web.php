@@ -14,12 +14,11 @@
 
 use Modules\Hostel\Http\Controllers\HostelController;
 
-Route::prefix('hostel')->group(function() {
+Route::prefix('hostel')
+//    ->middleware(['user', 'auth', 'hostels'])
+    ->group(function() {
 //    Route::get('/', 'HostelController@index');
-
-    Route::group(['middleware' => 'hostels'], function (){
         Route::get('/', [HostelController::class, 'index'])->name('hostel.dashboard');
-          Route::get('/allocations', [HostelController::class, 'allocations'])->name('hostel.allocations');
+        Route::get('/allocations', [HostelController::class, 'allocations'])->name('hostel.allocations');
 
-    });
 });

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->bigInteger('student_id');
             $table->bigInteger('leave_id');
             $table->string('academic_year');
-            $table->varchar('academic_semester');
+            $table->string('academic_semester');
             $table->tinyInteger('status')->nullable();
             $table->timestamps();
             $table->softDeletes();

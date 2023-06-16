@@ -25,48 +25,43 @@
 </div>
     <div class="content">
         <div  class="block block-rounded">
-            <div class="block-header block-header-default">
-            </div>
             <div class="block-content block-content-full">
                 <form method="POST" action="{{ route('courses.storeCourse') }}">
                     @csrf
               <div class="row">
                 <div class="col-lg-5 space-y-0">
-
                     <div class="form-floating col-12 col-xl-12 mb-4">
-                      <select name="department" id="department" value="{{ old('department') }}" class="form-control form-control-sm text-uppercase">
+                      <select name="department" id="department" value="{{ old('department') }}" class="form-control form-control-sm text-uppercase fs-sm">
                         <option selected disabled> Select Department</option>
                         @foreach ($departments as $department)
-                        <option value="{{ $department->id }}">{{ $department->name }}</option>
+                        <option value="{{ $department->department_id }}">{{ $department->name }}</option>
                       @endforeach
-                      <label class="form-label">DEPARTMENT</label>
                       </select>
+                        <label class="form-label">DEPARTMENT OFFERING</label>
                     </div>
                     <div class="form-floating  col-12 col-xl-12 mb-4">
-                    <select name="level" id="level"value="{{ old('level') }}" class="form-control form-control-sm text-uppercase form-select">
+                    <select name="level" id="level" value="{{ old('level') }}" class="form-control form-control-sm text-uppercase form-select fs-sm">
                       <option disabled selected>Level of Study</option>
-                      <option value="1">Certificate</option>
-                      <option value="2">Diploma</option>
-                      <option value="3">Undergraduate</option>
-                      <option value="4">Postgraduate</option>
-                      <option value="5">Non Standard</option>
-                      <label class="form-label">LEVEL</label>
+                      @foreach($levels as $level)
+                          <option value="{{ $level->id }}">{{ $level->name }}</option>
+                        @endforeach
                     </select>
+                        <label class="form-label">COURSE LEVEL</label>
                     </div>
                     <div class="form-floating  col-12 col-xl-12 mb-4">
-                      <input type = "text" class = "form-control form-control-sm text-uppercase" id = "course_name"value="{{ old('course_name') }}" name="course_name" placeholder="Course Name">
+                      <input type = "text" class = "form-control form-control-sm text-uppercase fs-sm" id = "course_name"value="{{ old('course_name') }}" name="course_name" placeholder="Course Name">
                       <label class="form-label">COURSE NAME</label>
                     </div>
                     <div class="form-floating  col-12 col-xl-12 mb-4">
-                        <input type = "text" class = "form-control form-control-sm text-uppercase" id = "course_code" value="{{ old('course_code') }}"name="course_code" placeholder="Course Code">
+                        <input type = "text" class = "form-control form-control-sm text-uppercase fs-sm" id = "course_code" value="{{ old('course_code') }}"name="course_code" placeholder="Course Code">
                         <label class="form-label">COURSE CODE</label>
                       </div>
                       <div class="form-floating  col-12 col-xl-12 mb-4">
-                        <input type = "text" class = "form-control form-control-sm text-uppercase" id = "course_duration" value="{{ old('course_duration') }}"name="course_duration" placeholder="Course Duration">
+                        <input type = "text" class = "form-control form-control-sm text-uppercase fs-sm" id = "course_duration" value="{{ old('course_duration') }}"name="course_duration" placeholder="Course Duration">
                         <label class="form-label">COURSE DURATION</label>
                       </div>
                       <div class="form-floating col-12 col-xl-12 mb-4">
-                        <textarea class = "form-control form-control-sm text-uppercase" id="course_requirements" name="course_requirements" placeholder="Course Requirements">{{ old('course_requirements') }}</textarea>
+                        <textarea class = "form-control form-control-sm text-uppercase fs-sm" id="course_requirements" name="course_requirements" placeholder="Course Requirements">{{ old('course_requirements') }}</textarea>
                         <label class="form-label">COURSE REQUIREMENTS</label>
                       </div>
                      </div>
@@ -76,7 +71,7 @@
                         <select class="form-control form-control-sm text-uppercase category m-1 fs-sm" name="school" id="category">
                                 <option disabled selected> -- select group -- </option>
                                 @foreach ($groups as $group)
-                                    <option value="{{ $group->id }}"> {{ $group->name }}</option>
+                                    <option value="{{ $group->group_id }}"> {{ $group->name }}</option>
                                 @endforeach
                             </select>
                             <select class="form-control form-control-sm text-uppercase subcategory m-1 fs-sm" multiple="multiple" name="subject[]" id="subcategory">
@@ -101,7 +96,7 @@
                         <select class="form-control form-control-sm text-uppercase category1 m-1 fs-sm" name="school" id="category1">
                                 <option disabled selected> -- select group -- </option>
                                 @foreach ($groups as $group)
-                                    <option value="{{ $group->id }}"> {{ $group->name }}</option>
+                                    <option value="{{ $group->group_id }}"> {{ $group->name }}</option>
                                 @endforeach
                             </select>
                             <select class="form-control form-control-sm text-uppercase subcategory1 m-1 fs-sm" multiple="multiple" name="subject1[]" id="subcategory1">
@@ -126,7 +121,7 @@
                         <select class="form-control form-control-sm text-uppercase category2 m-1 fs-sm" name="school" id="category2">
                                 <option disabled selected> -- select group -- </option>
                                     @foreach ($groups as $group)
-                                        <option value="{{ $group->id }}"> {{ $group->name }}</option>
+                                        <option value="{{ $group->group_id }}"> {{ $group->name }}</option>
                                     @endforeach
                             </select>
                             <select class="form-control form-control-sm text-uppercase subcategory2 m-1 fs-sm" multiple="multiple" name="subject2[]" id="subcategory2">
@@ -151,7 +146,7 @@
                         <select class="form-control form-control-sm text-uppercase category3 m-1 fs-sm" name="school" id="category3">
                                 <option disabled selected> -- select group -- </option>
                                     @foreach ($groups as $group)
-                                        <option value="{{ $group->id }}"> {{ $group->name }}</option>
+                                        <option value="{{ $group->group_id }}"> {{ $group->name }}</option>
                                     @endforeach
                             </select>
                             <select class="form-control form-control-sm text-uppercase subcategory3 m-1 fs-sm" multiple="multiple" name="subject3[]" id="subcategory3">
@@ -171,6 +166,17 @@
                                 <option value="D"> D </option>
                                 <option value="D-"> D- </option>
                             </select>
+                    </div>
+
+                    <div class="form-floating">
+                        <select class="form-control form-control-sm text-uppercase category3 m-1 fs-sm" name="cluster_group" id="cluster">
+                            <option class="text-center" disabled selected> -- select course cluster group -- </option>
+                            @foreach($clusters as $cluster)
+                                <option value="{{ $cluster->group }}">{{ $cluster->group }}</option>
+                            @endforeach
+                        </select>
+                        <label>CLUSTER GROUPS </label>
+                        <small class="text-danger">All undergrad courses must have a cluster group</small>
                     </div>
 
                 </div>
@@ -313,6 +319,24 @@
                     });
                 });
             });
+
+            $(document).ready(function() {
+                var $cluster = $("#cluster");
+                var $level = $("#level");
+
+                $cluster.prop("disabled", true);
+
+                $level.on("change", function() {
+
+                    if ($level.val() === '3') {
+
+                        $cluster.prop("disabled", false);
+                    } else {
+                        $cluster.prop("disabled", true);
+                    }
+                });
+            });
+
 
         </script>
 @endsection

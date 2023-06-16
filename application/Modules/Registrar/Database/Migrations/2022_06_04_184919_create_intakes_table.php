@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('intakes', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('academic_year_id');
+            $table->string('intake_id');
+            $table->string('academic_year_id');
             $table->string('intake_from')->unique();
             $table->string('intake_to')->unique();
             $table->integer('status');

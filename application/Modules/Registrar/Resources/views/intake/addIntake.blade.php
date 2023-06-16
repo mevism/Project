@@ -25,17 +25,17 @@
             <div class="block-content block-content-full">
               <div class="row">
                 <div class="col-lg-12 space-y-0">
-                   <form action="{{ route('courses.storeIntake', $years->id) }}" method="POST">
+                   <form action="{{ route('courses.storeIntake', $years->year_id) }}" method="POST">
                     @csrf
                     <div class="row d-flex justify-content-center">
-                      <input type="hidden" name="year" value="{{ $years->id }}">
+                      <input type="hidden" name="year" value="{{ $years->year_id }}">
                       <div class="form-floating col-12 col-xl-12 mb-2" >
-                          <input type="date" class="form-control form-control-alt" id="intake_name_from" name="intake_name_from" placeholder="Intake From">
+                          <input type="date" class="form-control" id="intake_name_from" name="intake_name_from" placeholder="Intake From">
                           <label class="form-label">SEMESTER START</label>
                         </div>
 
                         <div class="form-floating col-10 col-xl-12 mb-2">
-                          <input type="date" class="form-control form-control-alt" id="intake_name_to" name="intake_name_to" placeholder="Intake To">
+                          <input type="date" class="form-control" id="intake_name_to" name="intake_name_to" placeholder="Intake To">
                           <label class="form-label">SEMESTER END</label>
                         </div>
                     </div>

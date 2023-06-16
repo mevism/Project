@@ -9,7 +9,7 @@
         "barryvdh/laravel-dompdf": "^2.0",
         "davcpas1234/laravelpdfviewer": "^1.0",
         "fruitcake/laravel-cors": "^2.0.5",
-        "guzzlehttp/guzzle": "^7.2",
+        "guzzlehttp/guzzle": "^7.5",
         "intervention/image": "^2.7",
         "laravel-notification-channels/africastalking": "^3.2",
         "laravel/framework": "^9.0",

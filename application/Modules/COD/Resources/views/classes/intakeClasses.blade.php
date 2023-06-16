@@ -29,9 +29,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <div class="flex-grow-1">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         {{ strtoupper(\Carbon\Carbon::parse($intake->intake_from)->format('MY') ) }} CLASSES
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -62,26 +62,22 @@
                         <th>Action</th>
                         </thead>
                         <tbody>
-                            @php $i = 0; @endphp
-
-                        @foreach ($classes as $key => $intakes)
-                            @foreach($intakes as $class)
-                                @php ++$i @endphp
+                        @foreach ($classes as $class)
                                 <tr>
-                                  <td> {{ $i }} </td>
-                                  <td> {{ $class->name }} </td>
-                                  <td> {{ $class->classCourse->course_code }} </td>
-                                  <td> {{ $class->attendance_code }} </td>
+                                  <td> {{ $loop->iteration }} </td>
+                                  <td nowrap=""> {{ $class->name }} </td>
+                                  <td> {{ $class->course_name }} </td>
+                                  <td> {{ $class->attendance_id }} </td>
                                     <td>
-                                        <a class="btn btn-sm btn-outline-info" href="{{ route('cod.classPattern', ['id' => Crypt::encrypt($class->id)]) }}">View Pattern</a>
+                                        <a class="link-info" href="{{ route('cod.classPattern', $class->class_id) }}">
+                                            Create/view pattern </a>
                                     </td>
                                     <td nowrap="">
-                                        <a class="btn btn-sm btn-alt-info disabled" href="{{ route('courses.editClasses', ['id' => Crypt::encrypt($class->id)]) }}">edit</a>
-                                        <a class="btn btn-sm btn-alt-danger disabled" onclick="return confirm('Are you sure you want to delete this course ?')" href="{{ route('courses.destroyClasses', ['id' => Crypt::encrypt($class->id)]) }}">delete</a>
-                                        <a class="btn btn-sm btn-alt-secondary" href="{{ route('department.classList', ['id' => Crypt::encrypt($class->id)]) }}">View</a>
+                                        <a class="btn btn-sm btn-alt-info disabled" href="{{ route('courses.editClasses', $class->class_id) }}"> edit</a>
+                                        <a class="btn btn-sm btn-alt-danger disabled" onclick="return confirm('Are you sure you want to delete this course ?')" href="{{ route('courses.destroyClasses', $class->class_id) }}"> delete</a>
+                                        <a class="btn btn-sm btn-alt-secondary" href="{{ route('department.classList', $class->class_id) }}">View</a>
                                     </td>
                                 </tr>
-                            @endforeach
                         @endforeach
 
                         </tbody>

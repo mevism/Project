@@ -31,15 +31,15 @@
                     <div class="col-lg-5 mb-1 fs-sm">
                         <div class="row p-1">
                         <div class="col-md-4 fw-bolder text-start">Applicant Name </div>
-                        <div class="col-md-8"> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }}</div>
+                        <div class="col-md-8"> {{ $app->sname }} {{ $app->fname }} {{ $app->mname }}</div>
                         </div>
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Department</div>
-                            <div class="col-md-8"> {{ $app->courses->getCourseDept->name }} </div>
+                            <div class="col-md-8"> {{ $app->DepartmentCourse->getCourseDept->name }} </div>
                         </div>
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Course Name</div>
-                            <div class="col-md-8"> {{ $app->courses->course_name }} </div>
+                            <div class="col-md-8"> {{ $app->DepartmentCourse->course_name }} </div>
                         </div>
                         <div class="row p-1">
                             @foreach($school as $key => $institute)
@@ -54,19 +54,19 @@
                                     <th>Applicant Score</th>
                                     <tbody>
                                     <tr>
-                                        <td>{{ $app->courses->courseRequirements->subject1 }}</td>
+                                        <td>{{ $app->DepartmentCourse->courseRequirements->subject1 }}</td>
                                         <td>{{ $app->subject_1 }}</td>
                                     </tr>
                                     <tr>
-                                        <td>{{ $app->courses->courseRequirements->subject2 }}</td>
+                                        <td>{{ $app->DepartmentCourse->courseRequirements->subject2 }}</td>
                                         <td>{{ $app->subject_2 }}</td>
                                     </tr>
                                     <tr>
-                                        <td>{{ $app->courses->courseRequirements->subject3 }}</td>
+                                        <td>{{ $app->DepartmentCourse->courseRequirements->subject3 }}</td>
                                         <td>{{ $app->subject_3 }}</td>
                                     </tr>
                                     <tr>
-                                        <td>{{ $app->courses->courseRequirements->subject4 }}</td>
+                                        <td>{{ $app->DepartmentCourse->courseRequirements->subject4 }}</td>
                                         <td>{{ $app->subject_4 }}</td>
                                     </tr>
                                     </tbody>
@@ -113,14 +113,14 @@
         <div class="d-flex justify-content-center py-1">
 
             @if($app->registrar_status == 0)
-                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('courses.acceptApplication', $app->id) }}">Agree</a>
+                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('courses.acceptApplication', $app->application_id) }}">Agree</a>
                 <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Disagree</a>
                 <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('courses.applications') }}">Close</a>
             @elseif($app->registrar_status == 1)
                     <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Disagree</a>
                     <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('courses.applications') }}">Close</a>
             @else
-                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('courses.acceptApplication', $app->id) }}">Agree</a>
+                <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('courses.acceptApplication', $app->application_id) }}">Agree</a>
                 <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('courses.applications') }}">Close</a>
             @endif
         </div>
@@ -140,11 +140,11 @@
                         </div>
                     </div>
                     <div class="block-content fs-sm">
-                        <form action="{{ route('courses.rejectApplication', $app->id) }}" method="post">
+                        <form action="{{ route('courses.rejectApplication', $app->application_id) }}" method="post">
                             @csrf
                             <div class="row col-md-12 mb-3">
                             <textarea class="form-control" placeholder="Write down the reasons for declining this application" name="comment" required></textarea>
-                            <input type="hidden" name="{{ $app->id }}">
+                            <input type="hidden" name="{{ $app->application_id }}">
                             </div>
                             <div class="d-flex justify-content-center mb-2">
                             <button type="submit" class="btn btn-alt-danger btn-sm">Disagree</button>

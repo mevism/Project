@@ -15,14 +15,15 @@ return new class extends Migration
     {
         Schema::create('user_employments', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id');
-            $table->integer('user_role');
-            $table->integer('campus_id');
-            $table->integer('division_id');
-            $table->integer('department_id');
-            $table->integer('station_id');
+            $table->string('user_id');
+            $table->string('role_id');
+            $table->string('campus_id');
+            $table->string('division_id');
+            $table->string('department_id');
+            $table->string('station_id');
             $table->string('employment_terms');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

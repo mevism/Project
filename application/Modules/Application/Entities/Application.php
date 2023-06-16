@@ -17,7 +17,7 @@ class Application extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['subject_1', 'subject_2', 'subject_3', 'campus'];
+    protected $fillable = ['application_id', 'applicant_id', 'ref_number', 'intake_id', 'student_type', 'campus_id', 'school_id', 'department_id', 'course_id', 'declaration', 'status'];
 
 //    relationship between an applicant and a course
 
@@ -27,11 +27,18 @@ class Application extends Model
 
     }
 
+    public function applicationSubject(){
+        return $this->hasOne(ApplicationSubject::class, 'application_id', 'application_id');
+    }
+    public function applicationApproval(){
+        return $this->hasOne(ApplicationApproval::class, 'application_id', 'application_id');
+    }
+
 //    relationship between an application and course
 
     public function courses(){
 
-        return $this->belongsTo(Courses::class, 'course_id');
+        return $this->belongsTo(Courses::class, 'course_id', 'course_id');
 
     }
 
@@ -51,7 +58,7 @@ class Application extends Model
     }
 
     public function admissionDoc(){
-        return $this->hasOne(AdmissionDocument::class);
+        return $this->hasOne(AdmissionDocument::class, 'application_id', 'application_id');
     }
 
     public function myNotification(){

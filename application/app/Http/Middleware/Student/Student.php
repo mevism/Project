@@ -17,9 +17,7 @@ class Student
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!auth()->guard('student')->check() || !Auth::guard('student')){
-
-            dd('error');
+        if (!Auth::guard('student')->check()){
 
             abort(403);
         }

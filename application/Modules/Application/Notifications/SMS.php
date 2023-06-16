@@ -18,6 +18,7 @@ class SMS extends Notification
      *
      * @return void
      */
+
     public function __construct($verification_code)
     {
         $this->verification_code = $verification_code;
@@ -28,10 +29,8 @@ class SMS extends Notification
         return [AfricasTalkingChannel::class];
     }
 
-
     public function toAfricasTalking($notifiable)
     {
-
         return (new AfricasTalkingMessage())
             ->content('Welcome to TUM online course application platform. Your verification code '. $this->verification_code. '. Please do not share this code with anyone.');
 

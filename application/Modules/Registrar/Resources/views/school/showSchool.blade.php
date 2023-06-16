@@ -68,11 +68,11 @@
                             <td style="text-transform: uppercase"> {{ $school->initials }}</td>
                             <td style="text-transform: uppercase"> {{ $school->name }}</td>
                             <td>
-                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.schoolPreview', $school->id)}}"> View </a>
+                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.schoolPreview', $school->school_id)}}"> View </a>
 
                             </td>
                             <td>
-                                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editSchool', ['id'=> Crypt::encrypt($school->id)]) }}">edit</a>
+                                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editSchool', $school->school_id) }}"> edit <i class="fa fa-pencil"></i> </a>
 {{--                             <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this school ?')" href="{{ route('courses.destroySchool', $school->id) }}">delete</a> </td>--}}
                         </tr>
                         @endforeach

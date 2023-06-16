@@ -16,6 +16,7 @@ return [
     'defaults' => [
 //        'guard' => 'user',
         'guard' => 'web',
+//        'guard' => 'web',
         'passwords' => 'users',
     ],
 
@@ -39,7 +40,7 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'applicants',
+            'provider' => 'applicant_logins',
         ],
 
         'user' => [
@@ -71,9 +72,9 @@ return [
     */
 
     'providers' => [
-        'applicants' => [
+        'applicant_logins' => [
             'driver' => 'eloquent',
-            'model' => \Modules\Application\Entities\Applicant::class,
+            'model' => \Modules\Application\Entities\ApplicantLogin::class,
         ],
 
         'users' => [
@@ -83,7 +84,7 @@ return [
 
         'student_logins' => [
             'driver' => 'eloquent',
-            'model' => \Modules\Registrar\Entities\StudentLogin::class,
+            'model' => \Modules\Student\Entities\StudentLogin::class,
         ],
 
 //         'users' => [
@@ -108,8 +109,8 @@ return [
     */
 
     'passwords' => [
-        'applicants' => [
-            'provider' => 'applicants',
+        'applicant_logins' => [
+            'provider' => 'applicant_logins',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,

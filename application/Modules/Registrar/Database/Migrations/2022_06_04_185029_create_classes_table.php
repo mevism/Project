@@ -15,12 +15,11 @@ return new class extends Migration
     {
         Schema::create('classes', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('class_id')->unique();
             $table->string('name')->unique();
             $table->string('attendance_id');
             $table->string('course_id');
-            $table->string('intake_from');
-            $table->string('attendance_code');
-            $table->string('points');
+            $table->string('intake_id');
             $table->timestamps();
             $table->softDeletes();
         });

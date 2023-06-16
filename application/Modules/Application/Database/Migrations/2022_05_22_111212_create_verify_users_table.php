@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('verify_users', function (Blueprint $table) {
             $table->id();
-            $table->integer('applicant_id');
+            $table->string('applicant_id');
             $table->string('verification_code');
             $table->timestamps();
         });

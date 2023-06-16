@@ -52,8 +52,8 @@
 
       <div class="block-content block-content-full">
         <div class="row">
-          <div class="col-12">
-        <table id="example" class="table table-bordered table-striped table-vcenter js-dataTable-responsive fs-sm">
+          <div class="col-12 table-responsive">
+        <table id="example" class="table table-bordered table-striped table-sm fs-sm">
           <span class="d-flex justify-content-end">
             <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addCourse') }}">Create</a>
         </span><br>
@@ -73,10 +73,10 @@
               <td style="text-transform: uppercase" >{{ $courses->getCourseDept->name }}</td>
               <td style="text-transform: uppercase" >{{ $courses->course_name }}</td>
               <td>
-                <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.coursePreview', $courses->id)}}"> View </a>
+                <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.coursePreview', $courses->course_id)}}"> View </a>
               </td>
               <td nowrap="">
-                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editCourse', ['id'=> Crypt::encrypt($courses->id)]) }}">edit</a>
+                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editCourse', $courses->course_id ) }}">edit</a>
 {{--                <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this course ?')" href="{{ route('courses.destroyCourse', $courses->id) }}">delete</a>--}}
                 <a class="btn btn-sm btn-alt-primary" href="{{ route('courses.syllabus',['id'=> Crypt::encrypt($courses->id)]) }}">syllabus</a>
               </td>

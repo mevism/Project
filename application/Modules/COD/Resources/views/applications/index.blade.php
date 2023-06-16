@@ -31,11 +31,12 @@
     <div class="block block-rounded">
         <div class="block-content block-content-full">
             <div class="row">
-                <div class="col-lg-12">
-                    <table id="example" class="table table-responsive table-md table-striped table-bordered table-vcenter fs-sm">
+                <div class="col-lg-12 table-responsive">
+                    <table id="example" class="table table-striped table-bordered table-sm fs-sm">
                             <thead>
                                 <th></th>
                             <th>Applicant Name</th>
+                            <th>Gender</th>
                             <th>Department</th>
                             <th>Course Name</th>
                             <th>Status</th>
@@ -45,9 +46,10 @@
                             @foreach($apps as $app)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td> {{ $app->applicant->sname }} {{ $app->applicant->fname }} {{ $app->applicant->mname }} </td>
-                                <td> {{ $app->courses->getCourseDept->name }}</td>
-                                <td> {{ $app->courses->course_name }}</td>
+                                <td> {{ $app->sname }} {{ $app->fname }} {{ $app->mname }} </td>
+                                <td> {{ $app->gender }} </td>
+                                <td> {{ $app->DepartmentCourse->getCourseDept->dept_code }} </td>
+                                <td> {{ $app->DepartmentCourse->course_name }}</td>
                                 <td>
                                         @if($app->cod_status == 0)
                                             <span class="badge bg-primary">Awaiting</span>
@@ -64,10 +66,10 @@
                                 </td>
                                 <td nowrap="">
                                     @if($app->cod_status == 0)
-                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('cod.viewApplication', ['id' => Crypt::encrypt($app->id)]) }}"> View </a>
+                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('cod.viewApplication', $app->application_id) }}"> View </a>
                                         @else
-                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('cod.previewApplication', ['id' => Crypt::encrypt($app->id)]) }}"> View </a>
-                                <a class="btn btn-sm btn-alt-info" href="{{ route('cod.viewApplication', ['id' => Crypt::encrypt($app->id)]) }}"> Edit </a>
+                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('cod.previewApplication', $app->application_id) }}"> View </a>
+                                <a class="btn btn-sm btn-alt-info" href="{{ route('cod.viewApplication', $app->application_id) }}"> Edit </a>
                                 </td>
                                 @endif
                             </tr>

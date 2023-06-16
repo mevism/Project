@@ -13,11 +13,11 @@ class UserEmployment extends Model
 
     public function userplacement(){
 
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 
     public function userDepartment(){
-        return $this->belongsTo(Department::class, 'department_id');
+        return $this->belongsTo(Department::class, 'department_id', 'department_id');
     }
 
     public function userRole(){

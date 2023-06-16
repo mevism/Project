@@ -19,6 +19,10 @@ use Modules\Workload\Entities\Workload;
 
 class ExaminationController extends Controller
 {
+//    public function __construct(){
+//        auth()->setDefaultDriver('user');
+//        $this->middleware(['web','auth', 'is_cod', 'dean', 'admin']);
+//    }
     /**
      * Display a listing of the resource.
      * @return Renderable

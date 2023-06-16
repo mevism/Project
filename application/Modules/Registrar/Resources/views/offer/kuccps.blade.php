@@ -11,7 +11,7 @@
                        IMPORT KUCCPS STUDENTS
                     </h5>
                 </div>
-             
+
             </div>
         </div>
     </div>
@@ -35,7 +35,7 @@
                         <select name="intake" id="intake" value="" class="form-control form-control-alt text-uppercase">
                           <option selected disabled> Select Intake</option>
                           @foreach ($intakes as $intake)
-                            <option value="{{ $intake->id }}">{{ Carbon\carbon::parse($intake->intake_from)->format('M')}} - {{ Carbon\carbon::parse($intake->intake_to)->format('M Y') }}</option>
+                            <option value="{{ $intake->intake_id }}">{{ Carbon\carbon::parse($intake->intake_from)->format('M')}} - {{ Carbon\carbon::parse($intake->intake_to)->format('M Y') }}</option>
                           @endforeach
                         </select>
                       </div>
@@ -48,7 +48,7 @@
                     <div class="col-12 col-xl-12">
                          <button type="submit" class="btn btn-alt-success mb-3">Import </button>
                     </div>
-                  
+
 
                 </form>
                     @else

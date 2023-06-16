@@ -49,11 +49,9 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/spatie/ignition" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/spatie/laravel-ignition" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/vlucas/phpdotenv" />
-      <excludeFolder url="file://$MODULE_DIR$/application/vendor/dasprid/enum" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/dflydev/dot-access-data" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/egulias/email-validator" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/laminas/laminas-escaper" />
-      <excludeFolder url="file://$MODULE_DIR$/application/vendor/laravel/framework" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/laravel/sanctum" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/laravel/serializable-closure" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/laravel/tinker" />
@@ -73,12 +71,10 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/deprecation-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/error-handler" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/event-dispatcher" />
-      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/event-dispatcher-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/finder" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/http-foundation" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/http-kernel" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/mailer" />
-      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/mime" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/polyfill-ctype" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/polyfill-intl-grapheme" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/polyfill-intl-idn" />
@@ -89,7 +85,6 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/polyfill-uuid" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/process" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/routing" />
-      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/service-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/string" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/translation" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/translation-contracts" />
@@ -132,7 +127,6 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/webmozart/assert" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/guzzlehttp/guzzle" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/guzzlehttp/promises" />
-      <excludeFolder url="file://$MODULE_DIR$/application/vendor/guzzlehttp/psr7" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/nunomaduro/collision" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/nunomaduro/termwind" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/sabberworm/php-css-parser" />
@@ -147,8 +141,23 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/simplesoftwareio/simple-qrcode" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/laravelcollective/html" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/laravel-notification-channels/africastalking" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/service-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/mime" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/event-dispatcher-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/dasprid/enum" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/laravel/framework" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/guzzlehttp/psr7" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="dataTables.responsive" level="application" />
+    <orderEntry type="library" name="dataTables.rowGroup" level="application" />
+    <orderEntry type="library" name="jquery-3.5.1" level="application" />
+    <orderEntry type="library" name="jquery.dataTables" level="application" />
+    <orderEntry type="library" name="dataTables.bootstrap5" level="application" />
+    <orderEntry type="library" name="rowGroup.dataTables" level="application" />
+    <orderEntry type="library" name="twitter-bootstrap" level="application" />
+    <orderEntry type="library" name="responsive.dataTables" level="application" />
+    <orderEntry type="library" name="jquery-3.6.0" level="application" />
   </component>
 </module>

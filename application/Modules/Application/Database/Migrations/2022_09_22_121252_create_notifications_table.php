@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('application_id');
+            $table->string('application_id');
             $table->integer('role_id');
             $table->string('subject');
             $table->text('comment');

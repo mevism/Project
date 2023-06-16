@@ -16,7 +16,7 @@
 
 use Modules\Workload\Http\Controllers\WorkloadController;
 
-Route::prefix('workload')->group(function() {
+Route::prefix('workload')->middleware(['is_cod'])->group(function() {
 
     Route::get('/department-workload', [WorkloadController::class, 'workloads'])->name('department.workload');
     Route::get('/yearly-workload/{id}', [WorkloadController::class, 'yearlyWorkloads'])->name('department.yearlyWorkloads');
