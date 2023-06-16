@@ -1352,26 +1352,66 @@ class CODController extends Controller
             ->groupBy('class_code');
 
 
+        $RegResults  =   ExamMarks::where('department_id', $dept->id)
+            ->where('academic_semester', $hashedSem)
+            ->where('academic_year', $hashedYear)
+            ->latest()
+            ->get()
+            ->groupBy('reg_number');
+
+
         $domPdfPath = base_path('vendor/dompdf/dompdf');
         \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
         \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
 
-        $center = ['bold' => true, 'size' => 9, 'name' => 'Book Antiqua'];
+        $center = ['bold' => true];
+
         $table = new Table(array('unit' => TblWidth::TWIP));
         $headers = ['bold' => true, 'space' => ['before' => 2000, 'after' => 2000, 'rule' => 'exact']];
 
         foreach ($classesResults as $class => $classesResult) {
 
-            $table->addRow();
-            $table->addCell(5900, ['borderSize' => -1, 'gridSpan' => 4])->addText($dept->name, $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
-            $table->addCell(5900, ['borderSize' => -1, 'gridSpan' => 4])->addText($class, $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
+            $RegResults  =   ExamMarks::where('department_id', $dept->id)
+                ->where('academic_semester', $hashedSem)
+                ->where('academic_year', $hashedYear)
+                ->where('class_code', $class)
+                ->latest()
+                ->get()
+                ->groupBy('reg_number');
 
-            foreach ($classesResult as $student) {
+            // $regs = [];
+            // foreach ($RegResults as $regNumber => $examMarks) {
+            //     $regs[$regNumber] = $examMarks;
+            // }
+            $studentDetails  = [];
+            $students = Student::all();
+            foreach ($students as $stud) {
+                if (isset($stud->reg_number[$stud->reg_number])) {
 
-                $table->addRow();
-                $table->addCell(5900, ['borderSize' => 1, 'gridSpan' => 4])->addText($student->reg_number, $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
-                $table->addCell(5900, ['borderSize' => 1, 'gridSpan' => 4])->addText($student->reg_number, $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
+                    $studentDetails  =  $stud;
+                }
             }
+
+
+            $table->addRow();
+            $table->addCell(6000, ['gridSpan' => 2,])->addText($dept->name . ' ' . '(' . $class . ')', $headers, ['spaceAfter' => 150, 'spaceBefore' => 150]);
+
+            $table->addRow();
+            $table->addCell(500, ['borderSize' => 1])->addText('S/N');
+            $table->addCell(2750, ['borderSize' => 1])->addText('REG NO', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+            $table->addCell(2750, ['borderSize' => 1])->addText('NAMES', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+
+            foreach ($classesResult as $key =>  $student) {
+                $table->addRow();
+                $table->addCell(500, ['borderSize' => 1])->addText(++$key);
+                $table->addCell(2750, ['borderSize' => 1, 'gridSpan' => 4])->addText($student->reg_number, $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
+                
+                    
+                // $table->addCell(2750, ['borderSize' => 1, 'gridSpan' => 4])->addText(, $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
+            
+            }
+
+            
         }
 
         $results = new TemplateProcessor(storage_path('results_template.docx'));
@@ -1449,6 +1489,4 @@ class CODController extends Controller
 
         return redirect()->back()->with('success', 'Examination Results Submitted Successfully');
     }
-
-    
 }

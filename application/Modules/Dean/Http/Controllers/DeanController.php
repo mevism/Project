@@ -84,14 +84,63 @@ class DeanController extends Controller
                 ->groupBy('department_id');
         }
 
-        return view('dean::exams.index')->with(['departs' => $departs,'departments' => $departments, 'sem' => $hashedSem, 'year' => $hashedYear]);
+        return view('dean::exams.index')->with(['departments' => $departments, 'sem' => $hashedSem, 'year' => $hashedYear]);
     }
 
-    public function downloadExamResults($sem, $year)
+    public function viewClasses( $id, $sem, $year)
     {
+        $hashedId = Crypt::decrypt($id);
+
         $hashedSem = Crypt::decrypt($sem);
-         $hashedYear = Crypt::decrypt($year);
+
+        $hashedYear = Crypt::decrypt($year);
+
+        $exams = ExamMarks::where('workflow_id', $hashedId)
+            ->where('academic_year', $hashedYear)
+            ->where('academic_semester', $hashedSem)
+            ->latest()
+            ->get()
+            ->groupBy('class_code');
+
+
+        return  view('dean::exams.viewClasses')->with(['exams'  =>  $exams, 'id'  =>  $hashedId, 'sem'  =>  $hashedSem, 'year'  =>  $hashedYear]);
     }
+
+    public function viewStudents($id, $sem, $year, $class)
+    {
+        $hashedId = Crypt::decrypt($id);
+
+        $hashedClass = Crypt::decrypt($class);
+
+        $hashedSem = Crypt::decrypt($sem);
+
+        $hashedYear = Crypt::decrypt($year);
+
+
+        $exams = ExamMarks::where('class_code', $hashedClass)
+            ->where('workflow_id', $hashedId)
+            ->where('academic_year', $hashedYear)
+            ->where('academic_semester', $hashedSem)
+            ->latest()
+            ->get()
+            ->groupBy('reg_number');
+
+        $regs = [];
+        foreach ($exams as $regNumber => $examMarks) {
+            $regs[$regNumber] = $examMarks;
+        }
+        $studentDetails  = [];
+        $students = Student::all();
+        foreach ($students as $student) {
+            if (isset($regs[$student->reg_number])) {
+
+                $studentDetails[]  =  $student;
+            }
+        }
+
+        return view('dean::exams.viewStudents')->with(['studentDetails'  =>  $studentDetails, 'regs'  =>  $regs]);
+    }
+
     public function approveExamMarks($id){
 
       $hashedId = Crypt::decrypt($id);
