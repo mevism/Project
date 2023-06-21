@@ -14,7 +14,6 @@ return new class extends Migration
     public function up()
     {
         Schema::create('schools', function (Blueprint $table) {
-            //$table->string('id')->default('SCH'.rand(0,100));
             $table->bigIncrements('id');
             $table->string('school_id');
             $table->string('initials')->unique();

@@ -189,6 +189,14 @@ Route::prefix('courses')->group(function() {
     Route::get('/print-workload/{id}', [CoursesController::class, 'printWorkload'])->name('courses.printWorkload');
     Route::get('/revert-workload/{id}', [CoursesController::class, 'revertWorkload'])->name('courses.revertWorkload');
 
+
+    Route::get('/exam-marks-yearly', [CoursesController::class, 'yearlyExamMarks'])->name('courses.yearlyExamMarks');
+    Route::get('/school-exam-marks/{sem}/{year}', [CoursesController::class, 'schoolExamMarks'])->name('courses.schoolExamMarks');
+    Route::get('/semester-exam-marks/{year}', [CoursesController::class, 'semesterExamMarks'])->name('courses.semesterExamMarks');
+    Route::get('/approve-exam-marks/{id}/{year}/{sem}', [CoursesController::class, 'approveExamMarks'])->name('courses.approveExamMarks');
+    Route::post('/decline-exam-marks/{id}/{year}/{sem}', [CoursesController::class, 'declineExamMarks'])->name('courses.declineExamMarks');
+    Route::get('/download-exam-marks/{id}/{year}/{sem}', [CoursesController::class, 'downloadExamMarks'])->name('courses.downloadExamMarks');
+
 });
 
 

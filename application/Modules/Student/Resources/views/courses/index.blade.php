@@ -17,7 +17,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[2, 'asc']],
+            order: [[0, 'asc']],
             rowGroup: {
                 dataSrc: 2
             }
@@ -57,10 +57,8 @@
                     <thead>
                     <th>#</th>
                     <th> Course Name </th>
-{{--                    <th> Department </th>--}}
-                    <th nowrap=""> Course Duration </th>
-                    <th nowrap=""> Entry Year </th>
-                    <th nowrap=""> Exit Year </th>
+                    <th> Department </th>
+                    <th nowrap=""> Intake </th>
                     <th nowrap=""> Stage </th>
                     <th> Status </th>
                     </thead>
@@ -68,20 +66,18 @@
                     @foreach($course as $key => $course)
                         <tr>
                             <td>{{ ++$key }} </td>
-                            <td> {{ $course->studentCourse->course_name }}</td>
-{{--                            <td> {{ $course->studentCourse->getCourseDept->name }}</td>--}}
-                            <td> {{ $course->studentCourse->courseRequirements->course_duration }}</td>
-                            <td> {{ Carbon\Carbon::parse($course->courseEntry->year_start)->format('Y') }}</td>
-                            <td> {{ Carbon\Carbon::parse($course->courseEntry->year_start)->addYears( explode(' ', $course->studentCourse->courseRequirements->course_duration)[0] )->format('Y') }}</td>
+                            <td> {{ $course->course_name }}</td>
+                            <td> {{ $course->name }}</td>
+                            <td> {{ strtoupper(Carbon\Carbon::parse($course->intake_from)->format('MY')) }}</td>
                             <td>
-                                @if($reg == null)
+                             @if($reg == null)
                                     Not registered
                                 @else
                                     {{ 'Y'.$reg->year_study.'S'.$reg->semester_study }}
                                 @endif
                             </td>
                             <td>
-                                @if($course->student->status == 1)
+                                @if($course->status == 1)
                                     <span class="text-success"> Active </span>
                                 @else
                                 <span class="text-danger">Inactive</span>

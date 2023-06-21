@@ -34,6 +34,7 @@ use Modules\Examination\Entities\ExamMarks;
 use Modules\Student\Entities\Readmission;
 use Modules\Student\Entities\ReadmissionApproval;
 use Modules\Student\Entities\StudentCourse;
+use Modules\Student\Entities\STUDENTCOURSEVIEW;
 use Modules\Student\Entities\StudentDeposit;
 use Modules\Student\Entities\TransferInvoice;
 use NcJoes\OfficeConverter\OfficeConverter;
@@ -53,23 +54,21 @@ class StudentController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function index()
-    {
-        $courses = StudentCourse::where('student_id', Auth::guard('student')->user()->student_id)->get();
-
+    public function index() {
+        $courses = STUDENTCOURSEVIEW::where('student_id', auth()->guard('student')->user()->student_id)->get();
         return view('student::student.index')->with(['courses' => $courses]);
     }
 
     public function myCourse(){
 
-        $course = StudentCourse::where('student_id', Auth::guard('student')->user()->student_id)->get();
+        $courses = STUDENTCOURSEVIEW::where('student_id', auth()->guard('student')->user()->student_id)->get();
 
         $reg = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
             ->where('registration', 1)
             ->where('activation', 1)
             ->latest()->first();
 
-        return view('student::courses.index')->with(['course' => $course, 'reg' => $reg]);
+        return view('student::courses.index')->with(['course' => $courses, 'reg' => $reg]);
     }
 
     public function myProfile(){
@@ -335,12 +334,15 @@ class StudentController extends Controller
     }
 
     public function requestLeave(){
+        $student = DB::table('studentview')->where('student_id', \auth()->guard('student')->user()->student_id)
+            ->first();
+        $stage = Nominalroll::where('reg_number', $student->student_number)->latest()->first();
+        $current_date = Carbon::now()->format('Y-m-d');
+        $dates = Intake::where('intake_from', '<=', $current_date)->where('intake_to', '>=', $current_date)->first();
 
-       $stage = Nominalroll::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)->latest()->first();
-
-       $current_date = Carbon::now()->format('Y-m-d');
-
-       $dates = Intake::where('intake_from', '<=', $current_date)->where('intake_to', '>=', $current_date)->first();
+        if ($dates == null){
+            return redirect()->back()->with('info', 'Oops! There are no semesters on schedule. Please try again later');
+        }
 
        $academicYear =  Carbon::parse($dates->academicYear->year_start)->format('Y').'/'.Carbon::parse($dates->academicYear->year_end)->format('Y');
        $semester = Carbon::parse($dates->intake_from)->format('M').'/'.Carbon::parse($dates->intake_to)->format('M');
@@ -383,7 +385,7 @@ class StudentController extends Controller
                 }
             }
 
-        return view('student::academic.requestleave')->with(['data' => $data, 'stage' => $stage, 'event' => $event, 'dates' => $current_date]);
+        return view('student::academic.requestleave')->with(['student' => $student, 'data' => $data, 'stage' => $stage, 'event' => $event, 'dates' => $current_date]);
 
     }
 
@@ -671,6 +673,9 @@ class StudentController extends Controller
 
     public function requestSemesterRegistration(){
 
+        $student = DB::table('studentview')->where('student_id', \auth()->guard('student')->user()->student_id)
+            ->first();
+
         $reg = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
             ->where('registration', 1)
             ->where('activation', 1)
@@ -716,6 +721,7 @@ class StudentController extends Controller
 
                 return view('student::semester.requestRegistration')
                     ->with([
+                        'student' => $student,
                         'units' => $units,
                         'next' => $next,
                         'reg' => $reg,
@@ -744,6 +750,7 @@ class StudentController extends Controller
 
         return view('student::semester.requestRegistration')
             ->with([
+                'student' => $student,
                 'units' => $units,
                 'next' => $next,
                 'reg' => $reg,

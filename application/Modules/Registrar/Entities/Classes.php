@@ -16,14 +16,11 @@ class Classes extends Model
 
     protected $fillable = [];
 
-//    protected $primaryKey = 'class_code';
-//    protected $primaryKey = 'name';
-
     protected $dates = ['deleted_at'];
 
     public function classCourse(){
 
-        return $this->belongsTo(Courses::class, 'course_id', 'id');
+        return $this->belongsTo(Courses::class, 'course_id', 'course_id');
     }
 
     public function progress(){

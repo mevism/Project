@@ -71,7 +71,7 @@ $(document).ready( function (){
 
         if(stage == 1.1) {
 
-            var studentNumber = '{{ Auth::guard('student')->user()->loggedStudent->reg_number }}'.match(/\//);
+            var studentNumber = '{{ $student->student_number }}'.match(/\//);
             var studNumber = studentNumber.input;
 
             $.ajax({
@@ -108,7 +108,7 @@ $(document).ready( function (){
 
             console.log('hello')
 
-            var studentNumber = '{{ Auth::guard('student')->user()->loggedStudent->reg_number }}'.match(/\//);
+            var studentNumber = '{{ $student->student_number }}'.match(/\//);
             var studNumber = studentNumber.input;
 
             var semesters = ['SEP/DEC', 'JAN/APR', 'MAY/AUG'];
@@ -197,36 +197,36 @@ $(document).ready( function (){
                                 <legend class="float-none w-auto"><h6 class="fw-bold text-center"> CURRENT STUDENT COURSE DETAILS</h6></legend>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">STUDENT NAME : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->sname }} {{ Auth::guard('student')->user()->loggedStudent->fname }} {{ Auth::guard('student')->user()->loggedStudent->mname }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->sname }} {{ $student->fname }} {{ $student->mname }} </span>
                             </div>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">PHONE NUMBER : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->mobile }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->mobile }} </span>
                             </div>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">EMAIL ADDRESS : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->email }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->email }} </span>
                             </div>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">PHYSICAL ADDRESS : </span>
-                                <span class="h6 fs-sm fw-normal"> P.O BOX {{ Auth::guard('student')->user()->loggedStudent->address }}-{{ Auth::guard('student')->user()->loggedStudent->postal_code }} {{ Auth::guard('student')->user()->loggedStudent->town }}</span>
+                                <span class="h6 fs-sm fw-normal"> P.O BOX {{ $student->address }}-{{ $student->postal_code }} {{ $student->town }}</span>
                             </div>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">REG. NUMBER : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->reg_number }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->reg_number }} </span>
                             </div>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">COURSE ADMITTED : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->courseStudent-> studentCourse->course_name }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->course_name }} </span>
                             </div>
 
                             <div class="mb-4">
                                     <span class="h5 fs-sm">COURSE ADMITTED : </span>
-                                    <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->courseStudent->class_code }} </span>
+                                    <span class="h6 fs-sm fw-normal"> {{ $student->current_class }} </span>
                             </div>
 
                             <div class="mb-4">
-                                @if(Auth::guard('student')->user()->loggedStudent->nominalRoll == null)
+                                @if($student->nominalRoll == null)
                                     <span class="text-warning h6">
                                         Not registered
                                     </span>
@@ -245,7 +245,7 @@ $(document).ready( function (){
                                 <legend class="float-none w-auto">
                                     <h5 class="fw-bold text-center"> LEAVE/DEFERMENT DETAILS</h5>
                                 </legend>
-                                @if(Auth::guard('student')->user()->loggedStudent->nominalRoll == null)
+                                @if($student->nominalRoll == null)
                                     <span class="text-warning h6">
                                         You cannot apply for leave unless you are registered
                                     </span>
@@ -326,7 +326,7 @@ $(document).ready( function (){
                                             </div>
                                         </div>
 
-                                        <input type="hidden" name="current_class" value="{{ Auth::guard('student')->user()->loggedStudent->courseStudent->class_code }} ">
+                                        <input type="hidden" name="current_class" value="{{ $student->courseStudent->class_code }} ">
 
                                         <div class="form-floating mb-2">
                                             <textarea class="form-control" style="height: 100px;" name="reason" placeholder="reasons">{{ old('reason') }}</textarea>
