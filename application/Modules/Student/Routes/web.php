@@ -52,8 +52,11 @@ Route::prefix('student')->group(function() {
 
 
     Route::get('/discontinuation-status', [StudentController::class , 'discontinuationStatus'])->name('student.discontinuationstatus');
-    Route::get('/check-exam-results', [StudentController::class, 'examResults'])->name('student.examresults');
+    Route::get('/check-exam-results', [StudentController::class, 'examResults'])->name('student.examRrsults');
     Route::get('/apply-for-retakes', [StudentController::class, 'applyRetake'])->name('student.retakes');
+    Route::get('/examresults', [StudentController::class, 'viewExamResults'])->name('student.examresults');
+    Route::get('/viewexammarks', [StudentController::class, 'viewExamMarks'])->name('student.viewexammarks');
+   
 
 
     Route::get('/generate-fees-statement', [StudentController::class, 'feesStatement'])->name('student.feesstatement');
