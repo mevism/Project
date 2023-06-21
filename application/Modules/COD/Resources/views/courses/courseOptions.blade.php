@@ -32,12 +32,15 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-lg-12">
-                    <table id="example" class="table table-responsive table-md table-striped table-bordered fs-sm">
+                    <div class="d-flex justify-content-end ">
+                        <a class="btn btn-sm btn-alt-primary m-2" href="{{ route('department.addCourseOption', $course->course_id) }}"> <i class="fa fa-plus"></i> add option </a>
+                    </div>
+                    <table id="example" class="table table-responsive table-sm table-striped table-bordered fs-sm">
                         <thead>
                         <th>#</th>
                         <th>Course Code</th>
                         <th>Course Name</th>
-                        {{--                            <th> Amend </th>--}}
+                         <th> Action </th>
                         </thead>
                         <tbody>
                         @foreach($courses as $course)
@@ -45,9 +48,10 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td> {{ $course->course_code }} </td>
                                 <td> {{ $course->course_name }}</td>
-                                {{--                                    <td>--}}
-                                {{--                                        <a class="btn btn-sm btn-alt-info" href="#" data-toggle="click-ripple" title="Propose some changes"> Amend </a>--}}
-                                {{--                                    </td>--}}
+                                <td>
+                                    <a class="btn btn-sm btn-alt-primary" href="#"> Amend </a>
+{{--                                    <a class="btn btn-sm btn-alt-info" href="#"> Amend </a>--}}
+                                </td>
                             </tr>
                         @endforeach
                         </tbody>
