@@ -13,6 +13,9 @@ use Modules\Lecturer\Entities\LecturerQualification;
 use Modules\Lecturer\Entities\QualificationRemarks;
 use Modules\Lecturer\Entities\TeachingArea;
 use Modules\Lecturer\Entities\TeachingAreaRemarks;
+use Modules\Student\Entities\StudentCourse;
+use Modules\Student\Entities\STUDENTCOURSEVIEW;
+use Modules\Student\Entities\StudentView;
 use Response;
 use Validator;
 use Carbon\Carbon;
@@ -50,7 +53,6 @@ use Modules\Finance\Entities\StudentInvoice;
 use Modules\Registrar\Entities\FeeStructure;
 use Modules\Student\Entities\CourseTransfer;
 use Modules\Application\Entities\Application;
-use Modules\Registrar\Entities\StudentCourse;
 use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Application\Entities\Notification;
 use Modules\Examination\Entities\ExamWorkflow;
@@ -412,8 +414,7 @@ class CODController extends Controller
             return view('cod::classes.intakeClasses')->with(['intake' => $intakes, 'classes' => $classes]);
     }
 
-    public function viewSemesterUnits($id)
-    {
+    public function viewSemesterUnits($id) {
 
         $hashedId = Crypt::decrypt($id);
 
@@ -438,8 +439,7 @@ class CODController extends Controller
         return view('cod::classes.semesterUnits')->with(['pattern' => $pattern, 'units' => $units, 'semesterUnits' => $semesterUnits]);
     }
 
-    public function addSemesterUnit($id, $unit)
-    {
+    public function addSemesterUnit($id, $unit){
         $hashedId = Crypt::decrypt($id);
 
         $hashedUnit = Crypt::decrypt($unit);
@@ -479,14 +479,12 @@ class CODController extends Controller
         return redirect()->back()->with('success', 'Unit dropped successfully');
     }
 
-    public function classList($id)
-    {
+    public function classList($id){
+        $class = Classes::where('class_id', $id)->first();
 
-        $hashedId = Crypt::decrypt($id);
-
-        $class = Classes::find($hashedId);
-
-        $classList = StudentCourse::where('class_code', $class->name)->get();
+        $classList = StudentView::where('current_class', $class->name)
+            ->orderBy('student_number', 'asc')
+            ->get();
 
         return view('cod::classes.classList')->with(['classList' => $classList, 'class' => $class]);
     }
@@ -506,7 +504,6 @@ class CODController extends Controller
             ->first();
 
         if ($fees == null) {
-
             return redirect()->back()->with('error', 'Oops! Course fee structure not found. Please contact the registrar');
         } else {
 
@@ -553,9 +550,7 @@ class CODController extends Controller
 
     public function classPattern($id){
 
-        $hashedId = Crypt::decrypt($id);
-
-        $class = Classes::find($hashedId);
+        $class = Classes::where('class_id', $id)->first();
 
         $seasons = Pattern::all();
 

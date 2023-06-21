@@ -55,22 +55,23 @@
                             <th>#</th>
                             <th>Reg. Number</th>
                             <th>Student Name</th>
+                            <th>Gender</th>
                             <th style="white-space: nowrap !important;">Action</th>
                             </thead>
                             <tbody>
                             @foreach($classList as $key => $student)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td> {{ $student->student->reg_number }} </td>
-                                     <td> {{ $student->student->sname }} {{ $student->student->mname }} {{ $student->student->fname }} </td> 
+                                    <td> {{ $student->student_number }} </td>
+                                     <td> {{ $student->sname }} {{ $student->mname }} {{ $student->fname }} </td>
+                                     <td> {{ $student->gender }} </td>
                                     <td nowrap="">
-                                        @if(count($student->student->signNominal) > 0)
+                                        @if(count($student->studentRegistration) > 0)
                                             <a class="btn btn-sm btn-alt-info disabled">More</a>
                                         @else
-                                            <a class="btn btn-sm btn-alt-success" onclick="return confirm('Are you sure you want to admit this student?')" data-toggle="click-ripple" href="{{ route('department.admitStudent', ['id' => Crypt::encrypt($student->student_id)]) }}">Admit</a>
-{{----}}
+                                            <a class="btn btn-sm btn-alt-success" onclick="return confirm('Are you sure you want to admit this student?')" data-toggle="click-ripple" href="{{ route('department.admitStudent', $student->student_id) }}">Admit</a>
                                         @endif
-                                    </td> 
+                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>

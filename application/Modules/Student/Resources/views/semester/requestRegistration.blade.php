@@ -59,27 +59,31 @@
                         <legend  class="float-none w-auto"> <h6> CURRENT DETAILS </h6></legend>
                     <div class="mb-4">
                         <span class="h5 fs-sm mb-3">STUDENT NAME : </span>
-                        <span class="h6 fs-sm fw-normal mb-3"> {{ Auth::guard('student')->user()->loggedStudent->sname }} {{ Auth::guard('student')->user()->loggedStudent->fname }} {{ Auth::guard('student')->user()->loggedStudent->mname }} </span>
+                        <span class="h6 fs-sm fw-normal mb-3"> {{ $student->sname }} {{ $student->fname }} {{ $student->mname }} </span>
                     </div>
                     <div class="mb-4">
                         <span class="h5 fs-sm mb-3">PHONE NUMBER : </span>
-                        <span class="h6 fs-sm fw-normal mb-3"> {{ Auth::guard('student')->user()->loggedStudent->mobile }} </span>
+                        <span class="h6 fs-sm fw-normal mb-3"> {{ $student->mobile }} </span>
                     </div>
+                        <div class="mb-4">
+                            <span class="h5 fs-sm mb-3">STUDENT EMAIL ADDRESS : </span>
+                            <span class="h6 fs-sm fw-normal mb-3"> {{ $student->student_email }} </span>
+                        </div>
                     <div class="mb-4">
-                        <span class="h5 fs-sm mb-3">EMAIL ADDRESS : </span>
-                        <span class="h6 fs-sm fw-normal mb-3"> {{ Auth::guard('student')->user()->loggedStudent->email }} </span>
+                        <span class="h5 fs-sm mb-3">PERSONAL EMAIL ADDRESS : </span>
+                        <span class="h6 fs-sm fw-normal mb-3"> {{ $student->email }} </span>
                     </div>
                     <div class="mb-4">
                         <span class="h5 fs-sm mb-3">PHYSICAL ADDRESS : </span>
-                        <span class="h6 fs-sm fw-normal mb-3"> P.O BOX {{ Auth::guard('student')->user()->loggedStudent->address }}-{{ Auth::guard('student')->user()->loggedStudent->postal_code }} {{ Auth::guard('student')->user()->loggedStudent->town }}</span>
+                        <span class="h6 fs-sm fw-normal mb-3"> P.O BOX {{ $student->address }}-{{ $student->postal_code }} {{ $student->town }}</span>
                     </div>
                     <div class="mb-4">
                         <span class="h5 fs-sm mb-3">REG. NUMBER : </span>
-                        <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->reg_number }} </span>
+                        <span class="h6 fs-sm fw-normal"> {{ $student->student_number }} </span>
                     </div>
                     <div class="mb-4">
                         <span class="h5 fs-sm mb-3">COURSE ADMITTED : </span>
-                        <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->courseStudent-> studentCourse->course_name }} </span>
+                        <span class="h6 fs-sm fw-normal"> {{ $student->course_name }} </span>
                     </div>
 
                     <div class="mb-4">
