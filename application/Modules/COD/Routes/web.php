@@ -102,4 +102,7 @@ Route::middleware(['is_cod'])->prefix('department')->group( function() {
     Route::get('/view-students-results/{class}/{sem}/{year}', [CODController::class, 'viewStudentResults'])->name('department.viewStudentResults');
     Route::get('/submit-exam-results/{sem}/{year}', [CODController::class, 'submitExamResults'])->name('department.submitExamResults');
 
+    Route::get('/course-options/{id}', [CODController::class, 'courseOptions'])->name('department.courseOptions');
+    Route::get('/add-course-options/{id}', [CODController::class, 'addCourseOption'])->name('department.addCourseOption');
+
 });

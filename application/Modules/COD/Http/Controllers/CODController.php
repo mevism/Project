@@ -9,6 +9,7 @@ use Modules\Application\Entities\ApplicationApproval;
 use Modules\COD\Entities\AdmissionsView;
 use Modules\COD\Entities\ApplicationsView;
 use Modules\COD\Entities\CourseOnOfferView;
+use Modules\COD\Entities\CourseOptions;
 use Modules\Lecturer\Entities\LecturerQualification;
 use Modules\Lecturer\Entities\QualificationRemarks;
 use Modules\Lecturer\Entities\TeachingArea;
@@ -295,10 +296,23 @@ class CODController extends Controller
         return redirect()->back()->with('success', 'Admission sent to medical desk for verification');
     }
 
-
     public function courses(){
          $courses = Courses::where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->department_id)->get();
         return view('cod::courses.index')->with('courses', $courses);
+    }
+
+    public function addCourseOption($id){
+        $course = Courses::where('course_id', $id)->first();
+        return view('cod::courses.addCourseOption')->with('course', $course);
+    }
+
+    public function courseOptions($id){
+
+        $course = Courses::where('course_id', $id)->first();
+
+        $courses = CourseOptions::where('course_id', $id)->latest()->get();
+
+        return view('cod::courses.courseOptions')->with(['courses' => $courses, 'course' => $course]);
     }
 
     public function intakes(){
