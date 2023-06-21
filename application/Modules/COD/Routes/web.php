@@ -104,5 +104,8 @@ Route::middleware(['is_cod'])->prefix('department')->group( function() {
 
     Route::get('/course-options/{id}', [CODController::class, 'courseOptions'])->name('department.courseOptions');
     Route::get('/add-course-options/{id}', [CODController::class, 'addCourseOption'])->name('department.addCourseOption');
+    Route::get('/edit-course-options/{id}', [CODController::class, 'editCourseOption'])->name('department.editCourseOption');
+    Route::post('/store-course-options', [CODController::class, 'storeCourseOption'])->name('department.storeCourseOption');
+    Route::post('/update-course-options/{id}', [CODController::class, 'updateCourseOption'])->name('department.updateCourseOption');
 
 });

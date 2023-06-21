@@ -38,18 +38,22 @@
                     <table id="example" class="table table-responsive table-sm table-striped table-bordered fs-sm">
                         <thead>
                         <th>#</th>
-                        <th>Course Code</th>
                         <th>Course Name</th>
+                        <th>Course Option Name</th>
+                        <th>Course Option code</th>
+{{--                        <th>Status</th>--}}
                          <th> Action </th>
                         </thead>
                         <tbody>
                         @foreach($courses as $course)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td> {{ $course->course_code }} </td>
-                                <td> {{ $course->course_name }}</td>
+                                <td> {{ $course->CourseOption->course_name }} </td>
+                                <td> {{ $course->option_name }}</td>
+                                <td> {{ $course->option_code }}</td>
+{{--                                <td> @if($course->deleted_at == null) Active @else Disabled @endif</td>--}}
                                 <td>
-                                    <a class="btn btn-sm btn-alt-primary" href="#"> Amend </a>
+                                    <a class="btn btn-sm btn-alt-primary" href="{{ route('department.editCourseOption', $course->option_id) }}"> Edit </a>
 {{--                                    <a class="btn btn-sm btn-alt-info" href="#"> Amend </a>--}}
                                 </td>
                             </tr>

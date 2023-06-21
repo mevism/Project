@@ -306,6 +306,42 @@ class CODController extends Controller
         return view('cod::courses.addCourseOption')->with('course', $course);
     }
 
+    public function storeCourseOption(Request $request){
+        $request->validate([
+            'name' => 'required|string'
+        ]);
+
+        $optionId = new CustomIds;
+        $courseOption = new CourseOptions;
+        $courseOption->option_id = $optionId->generateId();
+        $courseOption->course_id = $request->course_id;
+        $courseOption->option_name = trim(strtoupper($request->name));
+        $courseOption->option_code = trim(strtoupper($request->option_code));
+        $courseOption->save();
+
+        return redirect()->route('department.courseOptions', $request->course_id)->with('success', 'Course option created successfully');
+    }
+
+    public  function editCourseOption($id){
+        $option = CourseOptions::where('option_id', $id)->first();
+        $course = Courses::where('course_id', $option->course_id)->first();
+
+        return view('cod::courses.editCourseOption')->with(['course' => $course, 'option' => $option]);
+    }
+
+    public function updateCourseOption(Request $request, $id){
+        $request->validate([
+            'name' => 'required'
+        ]);
+
+        $courseOption = CourseOptions::where('option_id', $id)->first();
+        $courseOption->option_name = trim(strtoupper($request->name));
+        $courseOption->option_code = trim(strtoupper($request->option_code));
+        $courseOption->save();
+
+        return redirect()->route('department.courseOptions', $courseOption->course_id)->with('success', 'Course option updated successfully');
+    }
+
     public function courseOptions($id){
 
         $course = Courses::where('course_id', $id)->first();

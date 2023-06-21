@@ -14,7 +14,7 @@
                             <a class="link-fx" href="javascript:void(0)">Course Options</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            Add Option
+                            Update Option
                         </li>
                     </ol>
                 </nav>
@@ -25,28 +25,27 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-lg-12">
-                        <form method="post" action="{{ route('department.storeCourseOption') }}">
-                            @csrf
-                            <div class="d-flex justify-content-center">
+                    <form method="post" action="{{ route('department.updateCourseOption', $option->option_id) }}">
+                        @csrf
+                        <div class="d-flex justify-content-center">
                             <div class="col-md-7 mt-4">
                                 <h6 class="fw-bold mb-6">
                                     {{ $course->course_name }}
                                 </h6>
                                 <div class="mb-4 form-floating">
-                                    <input type="text" name="name" class="form-control" placeholder="option name">
+                                    <input type="text" name="name" class="form-control" value="{{ $option->option_name }}" placeholder="option name">
                                     <label>OPTION NAME</label>
                                 </div>
                                 <div class="mb-4 form-floating">
-                                    <input type="text" name="option_code" class="form-control" placeholder="option code">
+                                    <input type="text" name="option_code" class="form-control" value="{{ $option->option_code }}" placeholder="option code">
                                     <label>OPTION CODE (optional) </label>
                                 </div>
-                                <input type="hidden" value="{{ $course->course_id }}" name="course_id">
                                 <div class="mb-4 d-flex justify-content-center">
                                     <button class="btn btn-md btn-alt-success">Save Course Option</button>
                                 </div>
                             </div>
-                            </div>
-                        </form>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
