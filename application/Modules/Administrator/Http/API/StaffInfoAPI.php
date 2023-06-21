@@ -12,7 +12,7 @@ class StaffInfoAPI
     public function __construct(){
 
         $this->client = new Client([
-            'base_uri' => 'http://developer.tum.ac.ke/v1/staff/',
+            'base_uri' => 'http://developer.tum.ac.ke/v1/staff/profile/',
             'auth' => [env('STAFF_API_USERNAME'), env('STAFF_API_PASSWORD')],
         ]);
 
@@ -21,7 +21,7 @@ class StaffInfoAPI
     public function fetchStaff($staffNumber, $userId)
     {
         try {
-            $uri = "profile/{$staffNumber}/{$userId}";
+            $uri = "{$staffNumber}/{$userId}";
 
             $response = $this->client->request('GET', $uri);
 
