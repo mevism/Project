@@ -30,6 +30,7 @@ use Modules\Student\Entities\AcademicLeaveApproval;
 use Modules\Student\Entities\CourseTransfer;
 use Modules\Student\Entities\DeferredClass;
 use Modules\Student\Entities\ExamResults;
+use Modules\Examination\Entities\ExamMarks;
 use Modules\Student\Entities\Readmission;
 use Modules\Student\Entities\ReadmissionApproval;
 use Modules\Student\Entities\StudentCourse;
@@ -138,8 +139,6 @@ class StudentController extends Controller
             }
 
         }
-
-
         return view('student::courses.transfers')->with(['transfers' => $transfers]);
     }
 
@@ -966,6 +965,36 @@ class StudentController extends Controller
 
          return response()->download($docPath)->deleteFileAfterSend(true);
     }
+
+    public function viewExamResults(){
+
+
+       // $results = ExamResults::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+
+        $exam_marks = ExamMarks::where('reg_number',Auth::guard('student')->user()->loggedStudent->reg_number)
+          ->orderBy('academic_semester','asc')
+          ->groupBy('academic_semester')
+          ->get(); 
+          
+
+        
+        return view('student::examination.examresults',['exam_marks' => $exam_marks]);
+    }
+
+    public function viewExamMarks(){
+
+    
+        $exam_marks = ExamMarks::where('reg_number',Auth::guard('student')->user()->loggedStudent->reg_number)
+        ->orderBy('unit_code','asc')
+       //->groupBy('academic_semester')
+        ->get(); 
+
+        return view('student::examination.viewexammarks',['exam_marks' => $exam_marks]);
+        //return ExamMarks::find(1)->unit;
+    }
+
+
+
 
     /**
      * Show the form for creating a new resource.
