@@ -2,6 +2,7 @@
 
 namespace Modules\Student\Http\Controllers;
 
+use App\Service\CustomIds;
 use BaconQrCode\Encoder\QrCode;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
@@ -13,8 +14,11 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Modules\COD\Entities\ClassPattern;
+use Modules\COD\Entities\CourseSyllabus;
 use Modules\COD\Entities\Nominalroll;
 use Modules\COD\Entities\SemesterUnit;
+use Modules\Examination\Entities\Exam;
+use Modules\Examination\Entities\ExamMarks;
 use Modules\Finance\Entities\StudentInvoice;
 use Modules\Registrar\Entities\CalenderOfEvents;
 use Modules\Registrar\Entities\Classes;
@@ -22,7 +26,7 @@ use Modules\Registrar\Entities\ClusterWeights;
 use Modules\Registrar\Entities\CourseLevelMode;
 use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Department;
-use Modules\Registrar\Entities\FeeStructure;
+use Modules\Registrar\Entities\Division;
 use Modules\Registrar\Entities\Intake;
 use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Student\Entities\AcademicLeave;
@@ -36,7 +40,6 @@ use Modules\Student\Entities\ReadmissionApproval;
 use Modules\Student\Entities\StudentCourse;
 use Modules\Student\Entities\STUDENTCOURSEVIEW;
 use Modules\Student\Entities\StudentDeposit;
-use Modules\Student\Entities\TransferInvoice;
 use NcJoes\OfficeConverter\OfficeConverter;
 use PhpOffice\PhpWord\Element\Table;
 use PhpOffice\PhpWord\SimpleType\TblWidth;
@@ -46,11 +49,7 @@ use SimpleSoftwareIO\QrCode\Facade;
 
 class StudentController extends Controller
 {
-    public function __construct(){
-//        auth()->setDefaultDriver('student');
-//        $this->middleware(['web','auth', 'is_student']);
-    }
-    /**
+     /**
      * Display a listing of the resource.
      * @return Renderable
      */
@@ -62,8 +61,7 @@ class StudentController extends Controller
     public function myCourse(){
 
         $courses = STUDENTCOURSEVIEW::where('student_id', auth()->guard('student')->user()->student_id)->get();
-
-        $reg = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
+        $reg = Nominalroll::where('student_id', auth()->guard('student')->user()->loggedStudent->student_id)
             ->where('registration', 1)
             ->where('activation', 1)
             ->latest()->first();
@@ -79,161 +77,156 @@ class StudentController extends Controller
     }
 
     public function courseTransfers(){
-
-        $student = Auth::guard('student')->user()->loggedStudent;
-
-        $transfers = CourseTransfer::where('student_id', Auth::guard('student')->user()->student_id)->latest()->get();
-
+        $student = auth()->guard('student')->user()->loggedStudent;
+        $transfers = CourseTransfer::where('student_id', $student->student_id)->latest()->get();
         $current = Carbon::now()->format('Y-m-d');
-
         $sem_date = Intake::where('intake_from', '<=', $current )
         ->where('intake_to', '>=', $current)
         ->first();
 
-        $academicYear =  Carbon::parse($sem_date->academicYear->year_start)->format('Y').'/'.Carbon::parse($sem_date->academicYear->year_end)->format('Y');
-        $semester = Carbon::parse($sem_date->intake_from)->format('M').'/'.Carbon::parse($sem_date->intake_to)->format('M');
+        if ($sem_date != null){
+            $academicYear =  Carbon::parse($sem_date->academicYear->year_start)->format('Y').'/'.Carbon::parse($sem_date->academicYear->year_end)->format('Y');
+            $semester = Carbon::parse($sem_date->intake_from)->format('M').'/'.Carbon::parse($sem_date->intake_to)->format('M');
 
-        $event = CalenderOfEvents::where('academic_year_id', $academicYear)
-            ->where('intake_id', strtoupper($semester))
-            ->where('event_id', 5)
-            ->first();
+            $event = CalenderOfEvents::where('academic_year_id', $academicYear)
+                ->where('intake_id', strtoupper($semester))
+                ->where('event_id', 5)
+                ->first();
 
-        if ($event != null){
+            if ($event != null){
 
-            if ($event->start_date <= $current && $current <= $event->end_date){
+                if ($event->start_date <= $current && $current <= $event->end_date){
 
-                $invoices = StudentInvoice::where('student_id', $student->id)
-                    ->where('reg_number', $student->reg_number)
-                    ->latest()
-                    ->get();
-                $deposits = StudentDeposit::where('reg_number', $student->reg_number)
-                    ->latest()
-                    ->get();
+                    $invoices = StudentInvoice::where('student_id', $student->id)
+                        ->where('reg_number', $student->reg_number)
+                        ->latest()
+                        ->get();
+                    $deposits = StudentDeposit::where('reg_number', $student->reg_number)
+                        ->latest()
+                        ->get();
 
-                $invoice = 0;
-                $deposit = 0;
+                    $invoice = 0;
+                    $deposit = 0;
 
-                foreach ($invoices as $record){
+                    foreach ($invoices as $record){
 
-                    $invoice += $record->amount;
-                }
+                        $invoice += $record->amount;
+                    }
 
-                foreach ($deposits as $record){
+                    foreach ($deposits as $record){
 
-                    $deposit += $record->deposit;
-                }
+                        $deposit += $record->deposit;
+                    }
 
-                if ($deposit >= $invoice){
+                    if ($deposit >= $invoice){
 
-                    foreach ($transfers as $transfer){
+                        foreach ($transfers as $transfer){
 
-                        if (!$transfer->status){
+                            if (!$transfer->status){
 
-                            $transfer->status = 1;
-                            $transfer->save();
+                                $transfer->status = 1;
+                                $transfer->save();
+                            }
                         }
                     }
+
                 }
 
             }
-
         }
+      
         return view('student::courses.transfers')->with(['transfers' => $transfers]);
     }
 
     public function requestTransfer(){
+        $division = Division::where('name', 'ACADEMIC DIVISION')->first()->division_id;
+        $departments = Department::where('division_id', $division)->latest()->get();
+        $stage = Nominalroll::where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
+            ->latest()
+            ->first();
+        $registration = \auth()->guard('student')->user()->StudentsNominalRoll;
+//        $current = Carbon::now()->format('Y-m-d');
+        $current = '2023-09-23';
+        $event = [];
+        $academicYear = 'null';
 
-        $departments = Department::latest()->get();
-        $stage = Nominalroll::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)->latest()->first();
-        $current = Carbon::now()->format('Y-m-d');
-
-        $sem_date = Intake::where('intake_from', '<=', $current, )
+       $sem_date = Intake::where('intake_from', '<=', $current, )
             ->where('intake_to', '>=', $current)
             ->first();
+        if ($sem_date != null){
+            $academicYear =  Carbon::parse($sem_date->academicYear->year_start)->format('Y').'/'.Carbon::parse($sem_date->academicYear->year_end)->format('Y');
+            $semester = Carbon::parse($sem_date->intake_from)->format('M').'/'.Carbon::parse($sem_date->intake_to)->format('M');
 
-        $academicYear =  Carbon::parse($sem_date->academicYear->year_start)->format('Y').'/'.Carbon::parse($sem_date->academicYear->year_end)->format('Y');
-        $semester = Carbon::parse($sem_date->intake_from)->format('M').'/'.Carbon::parse($sem_date->intake_to)->format('M');
+          $event = CalenderOfEvents::where('academic_year_id', $academicYear)
+                ->where('intake_id', strtoupper($semester))
+                ->where('event_id', 5)
+                ->first();
+        }
 
-        $event = CalenderOfEvents::where('academic_year_id', $academicYear)
-            ->where('intake_id', strtoupper($semester))
-            ->where('event_id', 5)
-            ->first();
-
-        return view('student::courses.coursetransfer')->with(['departments' => $departments, 'stage' => $stage, 'event' => $event, 'academic_year' => $academicYear]);
+        return view('student::courses.coursetransfer')->with(['departments' => $departments, 'stage' => $stage, 'event' => $event, 'academic_year' => $academicYear, 'intake' => $sem_date->intake_id, 'registration' => $registration]);
 
     }
 
     public function getDeptCourses(Request $request){
-
         $data = Courses::where('department_id', $request->id)
-            ->where('level', Auth::guard('student')->user()->loggedStudent->courseStudent->studentCourse->level)
-            ->latest()->get();
-
+            ->where('level', auth()->guard('student')->user()->enrolledCourse->StudentsCourse->level)
+            ->latest()
+            ->get();
         return response()->json($data);
     }
 
     public function getCourseClasses(Request $request){
-
-        $student = Auth::guard('student')->user()->loggedStudent;
-
-        // return $student;
-        $group = Courses::where('id', $request->id)->first();
-        // return $group;
+        $student = auth()->guard('student')->user()->loggedStudent;
+        $group = Courses::where('course_id', $request->id)->first();
         if ($group->level == 2){
-
             $classes = Classes::where('course_id', $request->id)
                 ->where('attendance_id', 'J-FT')
-                ->select('id','name', 'points')
+                ->select('class_id','name', 'points')
                 ->latest()
                 ->first();
-
-            $cluster = [$classes->id, $classes->name, $group->courseRequirements->subject1, $group->courseRequirements->subject2, $group->courseRequirements->subject3, $group->courseRequirements->subject4, $group->courseRequirements->course_requirements, $group->level];
+           $cluster = [$classes->class_id, $classes->name, $group->courseRequirements->subject1, $group->courseRequirements->subject2, $group->courseRequirements->subject3, $group->courseRequirements->subject4, $group->courseRequirements->course_requirements, $group->level];
 
             return response()->json($cluster);
+        }else{
+            $points = ClusterWeights::where('student_name', $student->sname.' '.$student->fname.' '.$student->mname)
+                ->select($group->CourseClusters->cluster)
+                ->first();
+            $classes = Classes::where('course_id', $request->id)
+                ->where('attendance_id', 'J-FT')
+                ->select('class_id','name', 'points')
+                ->latest()
+                ->first();
+            $cluster = [$classes->class_id, $classes->name, $points[$group->CourseClusters->cluster], $classes->points];
         }
-        $points = ClusterWeights::where('student_name', $student->sname.' '.$student->fname.' '.$student->mname)
-            ->select($group->cluster_group)
-            ->first();
-
-        $classes = Classes::where('course_id', $request->id)
-            ->where('attendance_id', 'J-FT')
-            ->select('id','name', 'points')
-            ->latest()
-            ->first();
-//             return $classes;
-
-       return $cluster = [$classes->id, $classes->name, $points[$group->cluster_group], $classes->points];
-
 
         return response()->json($cluster);
     }
 
     public function submitRequest(Request $request){
-
-
         $request->validate([
             'dept' => 'required',
             'course' => 'required',
             'class' => 'required',
         ]);
 
-        if (Auth::guard('student')->user()->loggedStudent->courseStudent->course_id == $request->course){
+        if (auth()->guard('student')->user()->enrolledCourse->course_id == $request->course){
 
             return redirect()->back()->with('error', 'You are already admitted to this course');
 
         }else{
-            if (CourseTransfer::where('course_id', $request->course)->where('student_id', Auth::guard('student')->user()->student_id)->first()){
+            if (CourseTransfer::where('course_id', $request->course)->where('student_id', auth()->guard('student')->user()->student_id)->first()){
 
-                return redirect()->route('student.coursetransfers')->with('warning', 'You have already created course transfer request for this course');
+                return redirect()->route('student.coursetransfers')->with('warning', 'You have already requested course transfer for this course');
 
             }else{
-
+                $transferID = new CustomIds();
                 $transfer = new CourseTransfer;
-                $transfer->student_id = Auth::guard('student')->user()->student_id;
+                $transfer->course_transfer_id = $transferID->generateId();
+                $transfer->student_id = auth()->guard('student')->user()->student_id;
                 $transfer->department_id = $request->dept;
                 $transfer->course_id = $request->course;
                 $transfer->class_id = $request->class;
-                $transfer->academic_year = $request->academic_year;
+                $transfer->intake_id = $request->intake;
                 if ($request->mingrade == null){
                     $transfer->class_points = $request->points;
                     $transfer->student_points = $request->mypoints;
@@ -243,11 +236,13 @@ class StudentController extends Controller
                 }
                 $transfer->save();
 
+                $invoiceID = new CustomIds();
                 $invoice = new StudentInvoice;
-                $invoice->student_id = Auth::guard('student')->user()->student_id;
-                $invoice->reg_number = Auth::guard('student')->user()->loggedStudent->reg_number;
+                $invoice->invoice_id = $invoiceID->generateId();
+                $invoice->student_id = auth()->guard('student')->user()->student_id;
+                $invoice->reg_number = auth()->guard('student')->user()->enrolledCourse->student_number;
                 $invoice->invoice_number = 'INV'.time();
-                $invoice->description = 'New Student Course Transfers';
+                $invoice->description = 'New Student Inter/Intra Faculty Course Transfer Fee';
                 $invoice->amount = 500;
                 $invoice->stage = 1;
                 $invoice->save();
@@ -526,9 +521,10 @@ class StudentController extends Controller
     }
 
     public function unitRegistration(){
+        $studentCourses = StudentCourse::where('student_id',  auth()->guard('student')->user()->student_id)->first();
 
-        $student_activation = StudentInvoice::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
-            ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+        $student_activation = StudentInvoice::where('student_id', auth()->guard('student')->user()->student_id)
+            ->where('reg_number', $studentCourses->student_number)
             ->latest()->first();
 
         if ($student_activation == null){
@@ -546,22 +542,22 @@ class StudentController extends Controller
             ]);
         }else{
 
-        $semester = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
-            ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+        $semester = Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)
+            ->where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
             ->latest()
             ->first();
 
-        $previousStage = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
-            ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+        $previousStage = Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)
+            ->where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
             ->where('activation', 1)
             ->latest()
             ->first();
 
-       $invoices = StudentInvoice::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
-            ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+        $invoices = StudentInvoice::where('student_id', auth()->guard('student')->user()->student_id)
+            ->where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
             ->where('stage', '<', $student_activation->stage)->get();
 
-       $results = ExamResults::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+        $results = ExamResults::where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
            ->where('stage', $previousStage->year_study)
            ->latest()
            ->first();
@@ -573,7 +569,7 @@ class StudentController extends Controller
                 $invoice += $payment->amount;
             }
 
-            $paid = StudentDeposit::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+            $paid = StudentDeposit::where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
                 ->get();
 
             $payed = 0;
@@ -588,8 +584,8 @@ class StudentController extends Controller
             if ($semester->semester_study == 1 && $results != null){
                 if ($balance >= $student_activation->amount*0.5 && $results->status == 1){
 
-                    $sign = Nominalroll::where('student_id', Auth::guard('student')->user()->student_id)
-                        ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+                    $sign = Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)
+                        ->where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
                         ->latest()
                         ->first();
                     if (!$sign->activation){
@@ -603,8 +599,8 @@ class StudentController extends Controller
             if ($semester->semester_study == 2){
                 if ($balance >= $student_activation->amount*0.5){
 
-                    $sign = Nominalroll::where('student_id', Auth::guard('student')->user()->student_id)
-                        ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+                    $sign = Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)
+                        ->where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
                         ->latest()
                         ->first();
                     if (!$sign->activation){
@@ -617,8 +613,8 @@ class StudentController extends Controller
 
             if ($semester->pattern_id == 3){
 
-                $sign = Nominalroll::where('student_id', Auth::guard('student')->user()->student_id)
-                    ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+                $sign = Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)
+                    ->where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
                     ->latest()
                     ->first();
 
@@ -629,8 +625,8 @@ class StudentController extends Controller
                 }
             }
 
-            $inv = StudentInvoice::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)->get();
-            $dep = StudentDeposit::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)->get();
+            $inv = StudentInvoice::where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)->get();
+            $dep = StudentDeposit::where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)->get();
 
             $invo = 0;
             $depo = 0;
@@ -648,8 +644,8 @@ class StudentController extends Controller
             $bal = $depo - $invo;
 
             if (in_array($semester->pattern_id, [4, 5], true) && $bal >= 0){
-                $sign = Nominalroll::where('student_id', Auth::guard('student')->user()->student_id)
-                    ->where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+                $sign = Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)
+                    ->where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
                     ->latest()
                     ->first();
 
@@ -661,7 +657,7 @@ class StudentController extends Controller
             }
 
 
-            $reg = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)->latest()->get();
+            $reg = Nominalroll::where('student_id', \auth()->guard('student')->user()->student_id)->latest()->get();
 
             return view('student::semester.index')->with([
                 'reg' => $reg,
@@ -675,15 +671,20 @@ class StudentController extends Controller
 
         $student = DB::table('studentview')->where('student_id', \auth()->guard('student')->user()->student_id)
             ->first();
+        $list = [];
 
-        $reg = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
+        $reg = Nominalroll::where('student_id', \auth()->guard('student')->user()->loggedStudent->student_id)
             ->where('registration', 1)
             ->where('activation', 1)
             ->latest()->first();
+        $current = $reg->year_study.'.'.$reg->semester_study;
+        $class_code = StudentCourse::where('student_id', auth()->guard('student')->user()->student_id)->first();
+        $classes = ClassPattern::where('class_code', $class_code->current_class)->get();
+        $course = $class_code->StudentsCourse;
 
         if ($reg == null){
 
-            $units = [];
+            $options = [];
 
             $next = [];
 
@@ -693,14 +694,7 @@ class StudentController extends Controller
 
         }else{
 
-            $current = $reg->year_study.'.'.$reg->semester_study;
-
-            $class_code = Auth::guard('student')->user()->loggedStudent->courseStudent->class_code;
-
-            $classes = ClassPattern::where('class_code', $class_code)->get();
-
             foreach ($classes as $class){
-
                 $list[] = $class->semester;
             }
 
@@ -710,62 +704,74 @@ class StudentController extends Controller
 
             if ($next_id == null){
 
-                $reg = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
+                $reg = Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)
                     ->where('registration', 1)
                     ->where('activation', 1)
                     ->latest()->first();
 
-                $units = [];
+                $options = [];
 
                 $next = [];
 
                 return view('student::semester.requestRegistration')
                     ->with([
                         'student' => $student,
-                        'units' => $units,
+                        'options' => $options,
                         'next' => $next,
                         'reg' => $reg,
                         'list' => $list,
+                        'course' => $course
                     ]);
 
             }else{
 
                 $new = explode('.', $next_id);
 
-                $units = SemesterUnit::where('class_code', $class_code)
+                $class = Classes::where('name', $class_code->current_class)->first();
+
+                $options = CourseSyllabus::where('course_code', $course->course_code)
+                    ->where('version', $class->syllabus_name)
                     ->where('stage', $new[0])
                     ->where('semester', $new[1])
-                    ->get();
+                    ->orderBy('unit_code', 'asc')
+                    ->get()
+                    ->groupBy('option');
 
-                $next = ClassPattern::where('semester', $next_id)->where('class_code', $class_code)->first();
+                $next = ClassPattern::where('semester', $next_id)->where('class_code', $class_code->current_class)->first();
+
+                $dates = CalenderOfEvents::where('academic_year_id', $next->academic_year)
+                    ->where('intake_id', $next->period)
+                    ->where('event_id', 1)
+                    ->latest()
+                    ->first();
+
+                return view('student::semester.requestRegistration')
+                    ->with([
+                        'student' => $student,
+                        'options' => $options,
+                        'next' => $next,
+                        'reg' => $reg,
+                        'list' => $list,
+                        'dates' => $dates,
+                        'course' => $course
+                    ]);
             }
 
-            $dates = CalenderOfEvents::where('academic_year_id', $next->academic_year)
-                ->where('intake_id', $next->period)
-                ->where('event_id', 1)
-                ->latest()
-                ->first();
-
         }
-
-        return view('student::semester.requestRegistration')
-            ->with([
-                'student' => $student,
-                'units' => $units,
-                'next' => $next,
-                'reg' => $reg,
-                'list' => $list,
-                'dates' => $dates
-            ]);
     }
 
     public function registerSemester(Request $request){
+        $units = $request->unit_code;
 
-        $student = StudentCourse::where('student_id', Auth::guard('student')->user()->student_id)->first();
+        if ($request->optionId == null){
+            return redirect()->back()->with('error', 'Ensure you have selected an option to proceed');
+        }
+
+        $student = StudentCourse::where('student_id', auth()->guard('student')->user()->student_id)->first();
 
         $fees = CourseLevelMode::where('attendance_id', $student->student_type)
                             ->where('course_id', $student->course_id)
-                            ->where('level_id', $student->studentCourse->level)
+                            ->where('level_id', $student->StudentsCourse->level)
                             ->first();
         $proformaInvoice = 0;
 
@@ -774,7 +780,7 @@ class StudentController extends Controller
             $proformaInvoice += $item->semesterII;
         }
 
-        if (Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
+        if (Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)
                     ->where('academic_year', $request->academicyear)
                     ->where('year_study', $request->yearstudy)
                     ->where('semester_study', $request->semesterstudy)->exists()){
@@ -782,14 +788,15 @@ class StudentController extends Controller
             return redirect()->back()->with('info', 'You have already registered for '.$request->semester.' stage.');
 
         }else {
+
             $invoiceNo = 'INV' . time();
-
             $description = 'Registration Invoice for Stage ' . $request->semester . ' Academic Year ' . $request->academicyear;
-
+            $nominalID = new CustomIds();
             $nominal = new Nominalroll;
-            $nominal->student_id = Auth::guard('student')->user()->loggedStudent->id;
-            $nominal->reg_number = Auth::guard('student')->user()->loggedStudent->reg_number;
-            $nominal->class_code = Auth::guard('student')->user()->loggedStudent->courseStudent->class_code;
+            $nominal->nominal_id = $nominalID->generateId();
+            $nominal->student_id = auth()->guard('student')->user()->student_id;
+            $nominal->reg_number = auth()->guard('student')->user()->enrolledCourse->student_number;
+            $nominal->class_code = auth()->guard('student')->user()->enrolledCourse->current_class;
             $nominal->year_study = $request->yearstudy;
             $nominal->semester_study = $request->semesterstudy;
             $nominal->academic_semester = $request->period;
@@ -800,34 +807,45 @@ class StudentController extends Controller
 
             if (!in_array($request->semester, ['1.3', '2.3', '3.3', '4.3', '5.3', '6.3'], true)) {
 
+                $invoiceID = new CustomIds();
                 $invoice = new StudentInvoice;
-                $invoice->student_id = Auth::guard('student')->user()->loggedStudent->id;
-                $invoice->reg_number = Auth::guard('student')->user()->loggedStudent->reg_number;
+                $invoice->invoice_id = $invoiceID->generateId();
+                $invoice->student_id = auth()->guard('student')->user()->student_id;
+                $invoice->reg_number = auth()->guard('student')->user()->enrolledCourse->student_number;
                 $invoice->invoice_number = $invoiceNo;
                 $invoice->stage = $request->semester;
                 $invoice->amount = $proformaInvoice;
                 $invoice->description = $description;
                 $invoice->save();
+
+                foreach ($units as $unit){
+                    $wID = new CustomIds();
+                    $examinableUnit = new ExamMarks;
+                    $examinableUnit->workflow_id = $wID->generateId();
+                    $examinableUnit->student_number = \auth()->guard('student')->user()->enrolledCourse->student_number;
+                    $examinableUnit->class_code = \auth()->guard('student')->user()->enrolledCourse->current_class;
+                    $examinableUnit->unit_code = $unit;
+                    $examinableUnit->academic_year = $request->academicyear;
+                    $examinableUnit->academic_semester = $request->period;
+                    $examinableUnit->stage = $request->yearstudy;
+                    $examinableUnit->semester = $request->semesterstudy;
+                    $examinableUnit->save();
+                }
+
             }
+
         }
-
-
         return redirect()->route('student.unitregistration')->with('success', 'You success registered for '.$request->semester);
 
     }
 
     public function viewSemesterUnits($id){
 
-        $hashedId = Crypt::decrypt($id);
-
-        $season = Nominalroll::find($hashedId);
-
-        $class_code = Auth::guard('student')->user()->loggedStudent->courseStudent->class_code;
-
-
-        $units = SemesterUnit::where('class_code', $class_code)
+        $season = Nominalroll::where('nominal_id', $id)->first();
+        $units = ExamMarks::where('student_number', \auth()->guard('student')->user()->enrolledCourse->student_number)
             ->where('stage', $season->year_study)
             ->where('semester', $season->semester_study)
+            ->orderBy('unit_code', 'asc')
             ->get();
 
         return view('student::semester.semesterUnits')->with(['units' => $units]);
@@ -835,7 +853,7 @@ class StudentController extends Controller
 
     public function feesStatement(){
 
-        $statements = StudentInvoice::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+        $statements = StudentInvoice::where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
             ->orderBy('created_at', 'asc')
             ->get();
 

@@ -2,11 +2,13 @@
 
 namespace Modules\Student\Entities;
 
+use App\Http\Middleware\Student\Student;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Modules\COD\Entities\Nominalroll;
 
 class StudentLogin extends Authenticatable
 {
@@ -36,6 +38,18 @@ class StudentLogin extends Authenticatable
 
     public function enrolledCourse(){
         return $this->belongsTo(StudentCourse::class, 'student_id', 'student_id');
+    }
+
+    public function StudentAddresses(){
+        return $this->belongsTo(StudentAddress::class, 'student_id', 'student_id');
+    }
+
+    public function StudentsContact(){
+        return $this->belongsTo(StudentContact::class, 'student_id', 'student_id');
+    }
+
+    public function StudentsNominalRoll(){
+        return $this->hasMany(Nominalroll::class, 'student_id', 'student_id');
     }
 
     protected static function newFactory()

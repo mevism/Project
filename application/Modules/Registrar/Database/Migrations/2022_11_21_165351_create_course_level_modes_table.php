@@ -15,10 +15,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('course_level_modes', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('course_id');
-            $table->integer('level_id');
-            $table->integer('attendance_id');
+            $table->string('course_level_mode_id');
+            $table->string('course_id');
+            $table->string('level_id');
+            $table->string('attendance_id');
             $table->timestamps();
         });
     }

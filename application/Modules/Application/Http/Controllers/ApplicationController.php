@@ -165,7 +165,7 @@ class ApplicationController extends Controller
 
        if (isset($unverified)){
 
-                   return$applicant = $unverified->emailVerify;
+                   $applicant = $unverified->emailVerify;
 
                     if (!$applicant->email_verified_at){
                         $applicant->email_verified_at = Carbon::now();
@@ -963,9 +963,7 @@ class ApplicationController extends Controller
 
             $id = $request->passPortId;
 
-            $hashedId = Crypt::decrypt($id);
-
-            $name = Application::find($hashedId);
+            $name = Application::where('application_id', $id)->first();
 
             $academicCerts = new AdmissionDocument;
             $academicCerts->application_id = $request->passPortId;

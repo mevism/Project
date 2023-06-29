@@ -8,40 +8,39 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Department;
-use Modules\Registrar\Entities\Student;
-
+use Modules\Student\Entities\StudentLogin;
 class CourseTransfer extends Model
 {
-    use HasFactory, softDeletes;
+    use HasFactory, SoftDeletes;
 
-    protected $dates = ['delete_at'];
+    protected $table = 'course_transfers';
+//    protected $dates = ['delete_at'];
 
     protected $fillable = ['status'];
 
     public function courseTransfer(){
-        return $this->belongsTo(Courses::class, 'course_id');
+        return $this->belongsTo(Courses::class, 'course_id', 'course_id');
     }
 
     public function deptTransfer(){
-        return $this->belongsTo(Department::class, 'department_id');
+        return $this->belongsTo(Department::class, 'department_id', 'department_id');
     }
 
     public function classTransfer(){
-        return $this->belongsTo(Classes::class, 'class_id');
+        return $this->belongsTo(Classes::class, 'class_id', 'class_id');
     }
 
     public function studentTransfer(){
-        return $this->belongsTo(Student::class, 'student_id')->withTrashed();
+        return $this->belongsTo(StudentLogin::class, 'student_id', 'student_id')->withTrashed();
     }
     public function approveTransfer(){
 
         return $this->hasOne(CourseTransferApproval::class, 'id');
-        
+
     }
 
     public function approvedTransfer(){
-
-        return $this->hasOne(CourseTransferApproval::class, 'course_transfer_id');
+        return $this->hasOne(CourseTransferApproval::class, 'course_transfer_id', 'course_transfer_id');
     }
 
     protected static function newFactory()

@@ -49,8 +49,8 @@
     <div class="block block-rounded">
         <div class="block-content block-content-full">
             <div class="row">
-                <div class="col-lg-12">
-                    <table id="example" class="table table-responsive table-sm table-striped table-bordered table-vcenter fs-sm">
+                <div class="table-responsive col-lg-12">
+                    <table id="example" class="table table-sm table-striped table-borderless fs-sm">
                             <thead>
                             <th>#</th>
                             <th>Reg. Number</th>

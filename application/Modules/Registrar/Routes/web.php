@@ -19,7 +19,7 @@ Route::prefix('courses')->group(function() {
     Route::get('/show-semester-fee', 'CoursesController@showSemFee')->name('courses.showSemFee');
     Route::get('/semFee', 'CoursesController@semFee')->name('courses.semFee');
     Route::post('/store-semester-fee', 'CoursesController@storeSemFee')->name('courses.storeSemFee');
-    Route::get('/view-semester--fee/{id}', 'CoursesController@viewSemFee')->name('courses.viewSemFee');
+    Route::get('/view-semester-fee/{id}', 'CoursesController@viewSemFee')->name('courses.viewSemFee');
     Route::get('/print-fee/{id}', 'CoursesController@printFee')->name('courses.printFee');
 
     //routes on fee

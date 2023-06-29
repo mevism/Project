@@ -14,9 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('semester_fees', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('course_level_mode_id');
-            $table->integer('voteheads_id');
+            $table->string('course_level_mode_id');
+            $table->string('votehead_id');
             $table->string('semesterI');
             $table->string('semesterII')->nullable();
             $table->timestamps();

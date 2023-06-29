@@ -11,16 +11,16 @@ class SemesterFee extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['voteheads_id','semesterI', 'semesterII', 'attendance_id', 'course_level_mode_id'];
+    protected $fillable = ['votehead_id','semesterI', 'semesterII', 'attendance_id', 'course_level_mode_id', 'semester_fee_id'];
 
     public function semVotehead(){
 
-        return $this->belongsTo(VoteHead::class, 'voteheads_id');
+        return $this->belongsTo(VoteHead::class, 'votehead_id', 'votehead_id');
     }
 
     public function proformaInvoice(){
 
-        return $this->belongsTo(CourseLevelMode::class);
+        return $this->belongsTo(CourseLevelMode::class, 'course_level_mode_id', 'course_level_mode_id');
     }
 
     protected static function newFactory()

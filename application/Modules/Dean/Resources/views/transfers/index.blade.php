@@ -25,9 +25,9 @@
     <div class="content content-full">
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
             <div class="flex-grow-0">
-                <h5 class="h5 fw-bold mb-0" >
-                    {{ $year }} COURSE TRANSFER
-                </h5>
+                <h6 class="h6 fw-bold mb-0" >
+                    {{ strtoupper(\Carbon\Carbon::parse(\Modules\Registrar\Entities\Intake::where('intake_id', $intake)->first()->intake_from)->format('MY')) }} COURSE TRANSFER
+                </h6>
             </div>
             <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-alt">
@@ -48,14 +48,13 @@
         <div class="row">
             <div class="col-12">
                 <div class="d-flex justify-content-end m-2">
-                    <a class="btn  btn-alt-primary btn-sm" href="{{ route('dean.requestedTransfers', ['year' => Crypt::encrypt($year)]) }}">Generate report</a>
+                    <a class="btn  btn-alt-primary btn-sm" href="{{ route('dean.requestedTransfers', $intake) }}">Generate report</a>
                 </div>
-                <table id="example" class="table table-bordered table-striped fs-sm">
-                    {{-- @if(count($transfer)>0) --}}
+                <table id="example" class="table table-bordered table-striped table-sm fs-sm">
                         <thead>
                             <th>#</th>
-                            <th>Reg. Number</th>
-                            <th>Student</th>
+                            <th>Student Number</th>
+                            <th>Student Name</th>
                             <th>Course</th>
                             <th>Department</th>
                             <th>COD Remarks</th>
@@ -67,37 +66,40 @@
                             @foreach($items as $item )
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td> {{ $item->transferApproval->studentTransfer->reg_number }} </td>
+                            <td> {{ $item->student_number }} </td>
                             <td>
-                                {{ $item->transferApproval->studentTransfer->sname.' '.$item->transferApproval->studentTransfer->fname.' '.$item->transferApproval->studentTransfer->mname }}
+                                {{ $item->sname.' '.$item->fname.' '.$item->mname }}
                             </td>
-                            <td> {{ $item->transferApproval->courseTransfer->course_code }}</td>
-                            <td> {{ $item->transferApproval->deptTransfer->dept_code }}</td>
+                            <td> {{ $item->course_code }} </td>
+                            <td> {{ $item->dept_code }} </td>
                              <td> {{ $item->cod_remarks }}</td>
                             <td>
                                 @if($item->dean_remarks == null)
                                     <span class="badge bg-primary">Waiting approval</span>
                                     {{ $item->dean_remarks }}
                                 @else
-                                    <p class="text-success">{{ $item->dean_remarks }}</p>
+                                    @if($item->dean_status == 1)
+                                        <p class="text-success">{{ $item->dean_remarks }}</p>
+                                    @else
+                                        <p class="text-danger">{{ $item->dean_remarks }}</p>
+                                    @endif
                                 @endif
                             </td>
-                    
+
                             <td nowrap="">
-                                <a class="btn btn-sm btn-outline-secondary" href="{{ route('dean.viewTransfer', [ 'id' => Crypt::encrypt($item->id)]) }}"> View </a>
+                                <a class="btn btn-sm btn-outline-secondary" href="{{ route('dean.viewTransfer', $item->course_transfer_id) }}"> View </a>
                                 @if($item->dean_status != null)
-                                <i class="fa fa-check text-primary"></i>
+                                    @if($item->dean_status == 1)
+                                        <i class="fa fa-check text-success"></i>
+                                    @else
+                                        <i class="fa fa-times text-danger"></i>
+                                    @endif
                                 @endif
                             </td>
                         </tr>
                         @endforeach
                         @endforeach
                         </tbody>
-                    {{-- @else/ --}}
-                        {{-- <tr>
-                            <span class="text-muted text-center fs-sm">There are no new transfers submitted</span>
-                        </tr>
-                    @endif --}}
                 </table>
             </div>
         </div>

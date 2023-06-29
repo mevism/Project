@@ -14,6 +14,9 @@ class ApplicationApproval extends Model
     public function approveApplication(){
         return $this->belongsTo(Application::class, 'application_id', 'application_id');
     }
+    public function ApplicationsDocments(){
+        return $this->hasOne(AdmissionDocument::class, 'application_id', 'application_id');
+    }
 
     protected static function newFactory()
     {

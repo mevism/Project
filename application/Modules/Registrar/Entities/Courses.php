@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\COD\Entities\CourseCluster;
+use Modules\COD\Entities\CourseOptions;
 use Modules\Student\Entities\CourseTransfer;
 
 class Courses extends Model
@@ -46,7 +47,6 @@ class Courses extends Model
 
         return $this->hasOne(CourseRequirement::class, 'course_id', 'course_id');
     }
-
 
     public function getCourseDept(){
 
@@ -92,5 +92,13 @@ class Courses extends Model
 
     public function courseRequirement(){
         return $this->hasOne(CourseRequirement::class, 'course_id', 'course_id');
+    }
+
+    public function CourseOptions(){
+        return $this->hasMany(CourseOptions::class, 'course_id', 'course_id');
+    }
+
+    public function CourseClusters(){
+        return $this->hasOne(CourseCluster::class, 'course_id', 'course_id');
     }
 }

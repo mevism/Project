@@ -3,6 +3,7 @@
 namespace Modules\Registrar\Http\Controllers;
 
 use App\Service\CustomIds;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Modules\Application\Entities\ApplicantAddress;
 use Modules\Application\Entities\ApplicantContact;
@@ -13,6 +14,7 @@ use Modules\Application\Entities\ApplicationSubject;
 use Modules\COD\Entities\AdmissionsView;
 use Modules\COD\Entities\ApplicationsView;
 use Modules\COD\Entities\CourseCluster;
+use Modules\COD\Entities\Unit;
 use Modules\Registrar\Entities\ACADEMICDEPARTMENTS;
 use Modules\Registrar\Entities\Campus;
 use Modules\Registrar\Entities\ClusterGroup;
@@ -27,6 +29,7 @@ use Modules\Student\Entities\StudentCourse;
 use Modules\Student\Entities\StudentDisability;
 use Modules\Student\Entities\StudentInfo;
 use Modules\Student\Entities\StudentLogin;
+use Modules\Student\Entities\StudentView;
 use QrCode;
 use Carbon\Carbon;
 use App\Models\User;
@@ -40,7 +43,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
-use Modules\Registrar\Entities\Unit;
 use PhpOffice\PhpWord\Element\Table;
 use App\Imports\ClusterWeightsImport;
 use Illuminate\Support\Facades\Crypt;
@@ -708,44 +710,32 @@ class CoursesController extends Controller
         return redirect()->back()->with('success', 'Email sent successfuly.');
     }
 
-    public function acceptedTransfers(Request $request)
-    {
+    public function acceptedTransfers(Request $request){
         $request->validate(['submit' => 'required']);
-
         foreach ($request->submit as $id) {
+            $approval = DB::table('coursetransfersview')->where('course_transfer_id', $id)->first();
+            if ($approval->dean_status == 1) {
 
-            $approvedID = CourseTransferApproval::find($id);
-
-            $approval = CourseTransfer::find($approvedID->course_transfer_id);
-            if ($approvedID->dean_status == 1) {
-
-                $date = Carbon::now()->format('Y-m-d');
-
-                $intakes  =  Intake::where('intake_from', '<', $date)
-                    ->where('intake_to', '>', $date)
-                    ->latest()
-                    ->first();
-
+                $intake = Intake::where('intake_id', $approval->intake_id)->first();
                 $registered = StudentCourse::withTrashed()
-                    ->where('intake_id', $intakes->id)
+                    ->where('intake_id', $approval->intake_id)
                     ->where('course_id', $approval->course_id)
                     ->count();
 
-                $course = Courses::find($approval->course_id);
+                $course = Courses::where('course_id', $approval->course_id)->first();
 
-                $regNumber = $course->course_code . '/' . str_pad($registered + 1, 3, "0", STR_PAD_LEFT) . "J/" . Carbon::parse($intakes->academicYear->year_start)->format('Y');
+                $regNumber = $course->course_code . '/' . str_pad($registered + 1, 3, "0", STR_PAD_LEFT) . "J/" . Carbon::parse($intake->academicYear->year_start)->format('Y');
 
-                $refNumber = 'XFER/' . date('Y') . "/" . str_pad(0000000 + $approval->id, 6, "0", STR_PAD_LEFT);
+                $refNumber = 'TRANSFER/'.time();
+                $student = StudentView::where('student_id', $approval->student_id)->first();
 
-                $student = $approval->studentTransfer;
-
-                $domPdfPath        =         base_path('vendor/dompdf/dompdf');
+                $domPdfPath = base_path('vendor/dompdf/dompdf');
                 \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
                 \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
 
                 $my_template         =        new TemplateProcessor(storage_path('adm_template.docx'));
 
-                $my_template->setValue('name', strtoupper($student->sname . ' ' . $student->fname . ' ' . $student->mname));
+                $my_template->setValue('name', strtoupper($approval->sname.' '.$approval->fname.' '.$approval->mname));
                 $my_template->setValue('reg_number', strtoupper($regNumber));
                 $my_template->setValue('date',  date('d-M-Y'));
                 $my_template->setValue('ref_number', $refNumber);
@@ -756,16 +746,16 @@ class CoursesController extends Controller
                 $my_template->setValue('duration', strtoupper($course->courseRequirements->course_duration));
                 $my_template->setValue('department', strtoupper($course->getCourseDept->name));
                 $my_template->setValue('campus', 'MAIN');
-                $my_template->setValue('from', Carbon::parse($intakes->intake_from)->format('D, d-m-Y'));
-                $my_template->setValue('to', Carbon::parse($intakes->intake_from)->addDays(4)->format('D, d-m-Y'));
+                $my_template->setValue('from', Carbon::parse($intake->intake_from)->format('D, d-m-Y'));
+                $my_template->setValue('to', Carbon::parse($intake->intake_from)->addDays(4)->format('D, d-m-Y'));
 
-                $docPath         =         storage_path(str_replace('/', '_', $refNumber) . ".docx");
+                $docPath = storage_path(str_replace('/', '_', $refNumber) . ".docx");
 
                 $my_template->saveAs($docPath);
 
-                $contents         =         \PhpOffice\PhpWord\IOFactory::load(storage_path(str_replace('/', '_', $refNumber) . ".docx"));
+                $contents = \PhpOffice\PhpWord\IOFactory::load(storage_path(str_replace('/', '_', $refNumber) . ".docx"));
 
-                $pdfPath          =          storage_path(str_replace('/', '_', $refNumber) . ".pdf");
+                $pdfPath = storage_path(str_replace('/', '_', $refNumber) . ".pdf");
 
                 if (file_exists($pdfPath)) {
                     unlink($pdfPath);
@@ -778,7 +768,7 @@ class CoursesController extends Controller
                 //                        unlink($docPath);
                 //                    }
 
-                $record = Student::withTrashed()->find($approval->student_id)->delete();
+                Student::withTrashed()->find($approval->student_id)->delete();
 
                 $oldRecord = Student::withTrashed()->find($approval->student_id);
 
@@ -904,46 +894,26 @@ class CoursesController extends Controller
         return redirect()->back()->with('success', 'Course Transfer Letters Generated');
     }
 
-    public function transfer($year)
-    {
-        $hashedYear = Crypt::decrypt($year);
-        $schools   =   School::all();
-
-        $transfers  =  CourseTransfer::where('academic_year', $hashedYear)->get();
-        foreach ($transfers as $record) {
-
-            $transfer[] = CourseTransferApproval::where('course_transfer_id', $record->id)
-                ->where('dean_status', '!=', null)
-                ->latest()
-                ->get();
-            // ->groupBy($record->department_id);
-        }
-        // return $transfer;
-
-        return view('registrar::transfers.index')->with(['transfer' => $transfer, 'schools' => $schools, 'year' => $hashedYear, 'year' => $hashedYear]);
+    public function transfer($id){
+        $transfers  =  DB::table('coursetransfersview')->where('intake_id', $id)
+            ->get();
+        return view('registrar::transfers.index')->with(['transfer' => $transfers, 'intake' => $id]);
     }
 
-    public function yearly()
-    {
-        $schools   =   School::all();
-        foreach ($schools as $school) {
-            $data = CourseTransfer::all()->groupBy('academic_year');
-        }
-
-        return  view('registrar::transfers.yearlyTransfers')->with(['data' => $data, 'schools' => $schools]);
+    public function yearly(){
+       $data = CourseTransfer::withTrashed()->get()->groupBy('intake_id');
+        return  view('registrar::transfers.yearlyTransfers')->with(['data' => $data]);
     }
 
-    public function requestedTransfers($year)
-    {
-        $hashedYear = Crypt::decrypt($year);
-        $user = Auth::guard('user')->user();
-        $by = $user->name;
+    public function requestedTransfers($id) {
+        $user = auth()->guard('user')->user();
+        $by = $user->staffInfos->title." ".$user->staffInfos->last_name." ".$user->staffInfos->first_name." ".$user->staffInfos->miidle_name;
         $role = $user->roles->first()->name;
         $school  =  "UNIVERSITY INTER/INTRA FACULTY COURSE TRANSFERS";
         $dept = 'ACADEMIC AFFAIRS';
 
-        $transfers = CourseTransfer::where('academic_year', $hashedYear)
-            ->latest()
+        $transfers = DB::table('coursetransfersview')->where('intake_id', $id)
+            ->where('dean_status', '>=', 1)
             ->get()
             ->groupBy('course_id');
 
@@ -953,20 +923,17 @@ class CoursesController extends Controller
         \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
 
         $center = ['bold' => true];
-
         $table = new Table(array('unit' => TblWidth::TWIP));
 
         foreach ($transfers as $course => $transfer) {
-
             foreach ($courses as $listed) {
-                if ($listed->id == $course) {
+                if ($listed->course_id == $course) {
                     $courseName =  $listed->course_name;
                     $courseCode = $listed->course_code;
                 }
             }
 
             $headers = ['bold' => true, 'space' => ['before' => 2000, 'after' => 2000, 'rule' => 'exact']];
-
             $table->addRow(600);
             $table->addCell(5000, ['gridSpan' => 9,])->addText($courseName . ' ' . '(' . $courseCode . ')', $headers, ['spaceAfter' => 300, 'spaceBefore' => 300]);
             $table->addRow();
@@ -981,19 +948,22 @@ class CoursesController extends Controller
             $table->addCell(1750, ['borderSize' => 1])->addText('Deans Committee Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
 
             foreach ($transfer as $key => $list) {
-                $name = $list->studentTransfer->reg_number . "<w:br/>\n" . $list->studentTransfer->sname . ' ' . $list->studentTransfer->fname . ' ' . $list->studentTransfer->mname;
-                if ($list->approvedTransfer == null) {
+                $name = $list->student_number. "<w:br/>\n" . $list->sname . ' ' . $list->fname . ' ' . $list->mname;
+                $student_id = DB::table('coursetransfersview')->where('student_id', $list->student_id)
+                    ->first()->student_id;
+                $student = StudentView::where('student_id', $student_id)->first();
+                if ($list->cod_status == null) {
                     $remarks = 'Missed Deadline';
                     $deanRemark = 'Declined';
                 } else {
-                    $remarks = $list->approvedTransfer->cod_remarks;
-                    $deanRemark = $list->approvedTransfer->dean_remarks;
+                    $remarks = $list->cod_remarks;
+                    $deanRemark = $list->dean_remarks;
                 }
                 $table->addRow();
                 $table->addCell(200, ['borderSize' => 1])->addText(++$key);
                 $table->addCell(2800, ['borderSize' => 1])->addText($name);
-                $table->addCell(1900, ['borderSize' => 1])->addText($list->studentTransfer->courseStudent->studentCourse->course_code);
-                $table->addCell(1900, ['borderSize' => 1])->addText($list->courseTransfer->course_code);
+                $table->addCell(1900, ['borderSize' => 1])->addText($student->course_code);
+                $table->addCell(1900, ['borderSize' => 1])->addText($list->course_code);
                 $table->addCell(1750, ['borderSize' => 1])->addText($list->class_points);
                 $table->addCell(1000, ['borderSize' => 1])->addText($list->student_points);
                 $table->addCell(2600, ['borderSize' => 1])->addText($remarks);
@@ -1006,7 +976,7 @@ class CoursesController extends Controller
         $total = 0;
         foreach ($transfers as $group => $transfer) {
             foreach ($courses as $listed) {
-                if ($listed->id == $group) {
+                if ($listed->course_id == $group) {
                     $courseName =  $listed->course_name;
                     $courseCode = $listed->course_code;
                 }
@@ -1037,16 +1007,17 @@ class CoursesController extends Controller
 
         $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
 
-        $pdfPath = 'Fees/' . 'Transfers' . time() . ".pdf";
+//        $pdfPath = 'Fees/' . 'Transfers' . time() . ".pdf";
+//
+//        $converter =  new OfficeConverter($docPath, 'Fees/');
+//        $converter->convertTo('Transfers' . time() . ".pdf");
+//
+//        if (file_exists($docPath)) {
+//            unlink($docPath);
+//        }
 
-        $converter =  new OfficeConverter($docPath, 'Fees/');
-        $converter->convertTo('Transfers' . time() . ".pdf");
-
-        if (file_exists($docPath)) {
-            unlink($docPath);
-        }
-
-        return response()->download($pdfPath)->deleteFileAfterSend(true);
+        return response()->download($docPath)->deleteFileAfterSend(true);
+//        return response()->download($pdfPath)->deleteFileAfterSend(true);
     }
 
     /**
@@ -1181,35 +1152,28 @@ class CoursesController extends Controller
         return view('registrar::fee.showVoteheads', compact('show'));
     }
 
-    public function storeVoteheads(Request $request)
-    {
-        $voteheads  = new VoteHead();
+    public function storeVoteheads(Request $request){
+        $voteID = new CustomIds();
+        $voteheads  = new VoteHead;
+        $voteheads->votehead_id = $voteID->generateId();
         $voteheads->name  =  $request->input('name');
         $voteheads->save();
 
         return redirect()->route('courses.showVoteheads')->with('success', 'votehead added successfully.');
     }
 
-    public function editVotehead($id)
-    {
-        $hashedId  =  Crypt::decrypt($id);
-        $data                  =         VoteHead::find($hashedId);
+    public function editVotehead($id){
+        $data = VoteHead::where('votehead_id', $id)->first();
         return view('registrar::fee.editVotehead')->with(['data' => $data]);
     }
 
-    public function updateVotehead(Request $request, $id)
-    {
-        $data                  =         VoteHead::find($id);
-        $data->name            =         $request->input('name');
-        $data->update();
-
+    public function updateVotehead(Request $request, $id){
+        VoteHead::where('votehead_id', $id)->update(['name' => $request->name ]);
         return redirect()->route('courses.showVoteheads')->with('status', 'Data Updated Successfully');
     }
 
-    public function destroyVotehead($id)
-    {
-        $data             =            VoteHead::find($id);
-        $data->delete();
+    public function destroyVotehead($id) {
+        VoteHead::where('votehead_id', $id)->delete();
         return redirect()->route('courses.showVoteheads');
     }
     /**
@@ -1233,8 +1197,7 @@ class CoursesController extends Controller
         return view('registrar::fee.showsemFee')->with(['courses' => $courses]);
     }
 
-    public function storeSemFee(Request $request)
-    {
+    public function storeSemFee(Request $request){
         $request->validate([
 
             'course' => 'required',
@@ -1243,10 +1206,12 @@ class CoursesController extends Controller
 
         ]);
 
+        $levelsId = new CustomIds();
         $courseFee = new CourseLevelMode();
-        $courseFee->course_id = $request->input('course');
-        $courseFee->level_id = $request->input('level');
-        $courseFee->attendance_id = $request->input('attendance');
+        $courseFee->course_level_mode_id = $levelsId->generateId();
+        $courseFee->course_id = $request->course;
+        $courseFee->level_id = $request->level;
+        $courseFee->attendance_id = $request->attendance;
         $courseFee->save();
 
         $voteheads = $request->voteheads;
@@ -1254,12 +1219,14 @@ class CoursesController extends Controller
         $semester2_amount = $request->semester2;
 
         for ($i = 0; $i < count($semester1_amount); $i++) {
+            $feeId = new CustomIds();
 
             if (empty($semester1_amount[$i])) continue; // skip all the blank ones
 
             $semester = [
-                'course_level_mode_id' => $courseFee->id,
-                'voteheads_id'   =>  $voteheads[$i],
+                'semester_fee_id' => $feeId->generateId(),
+                'course_level_mode_id' => $courseFee->course_level_mode_id,
+                'votehead_id'   =>  $voteheads[$i],
                 'semesterI'    =>  $semester1_amount[$i],
                 'semesterII'    =>  $semester2_amount[$i]
             ];
@@ -1269,22 +1236,17 @@ class CoursesController extends Controller
         return redirect()->route('courses.showSemFee')->with('success', 'Fee added successfully.');
     }
 
-    public function viewSemFee($id)
-    {
-        $hashedId  =  Crypt::decrypt($id);
-        $course =  CourseLevelMode::find($hashedId);
-        $semester = SemesterFee::where('course_level_mode_id', $hashedId)
-            ->orderBy('voteheads_id', 'asc')->get();
+    public function viewSemFee($id) {
+        $course =  CourseLevelMode::where('course_level_mode_id', $id)->first();
+        $semester = SemesterFee::where('course_level_mode_id', $id)
+            ->orderBy('votehead_id', 'asc')->get();
 
-        return view('registrar::fee.viewSemFee')->with(['semesterI' => $semester, 'course' => $course, 'id' => $hashedId]);
+        return view('registrar::fee.viewSemFee')->with(['semesterI' => $semester, 'course' => $course, 'id' => $id]);
     }
 
-    public function printFee($id)
-    {
-        $hashedId  =  Crypt::decrypt($id);
-        $course =  CourseLevelMode::find($hashedId);
-
-        $semester = SemesterFee::where('course_level_mode_id', $hashedId)->orderBy('voteheads_id', 'asc')->get();
+    public function printFee($id){
+        $course =  CourseLevelMode::where('course_level_mode_id', $id)->first();
+        $semester = SemesterFee::where('course_level_mode_id', $id)->orderBy('votehead_id', 'asc')->get();
 
         $semester1 = 0;
         $semester2 = 0;
@@ -1630,6 +1592,7 @@ class CoursesController extends Controller
         $request->validate([
             'excel_file' => 'required|mimes:xlsx'
         ]);
+
         $excel_file         =         $request->excel_file;
         Excel::import(new UnitImport(), $excel_file);
         return back()->with('success', 'Data Imported Successfully');

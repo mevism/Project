@@ -67,8 +67,10 @@
                         <tr>
                             <td> {{ ++$key }} </td>
                             <td> {{ $unit->unit_code }} </td>
-                            <td> {{ $unit->unit_name }} </td>
-                            <td> {{ $unit->type }} </td>
+                            <td> {{ $unit->unit->unit_name}} </td>
+                            <td>
+                                {{ $unit->UnitSyllabus::where('course_code', auth()->guard('student')->user()->enrolledCourse->StudentsCourse->course_code)->where('unit_code', $unit->unit_code)->first()->type }}
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>

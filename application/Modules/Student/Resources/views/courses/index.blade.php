@@ -77,7 +77,7 @@
                                 @endif
                             </td>
                             <td>
-                                @if($course->status == 1)
+                                @if($course->status == 0 && $reg != null)
                                     <span class="text-success"> Active </span>
                                 @else
                                 <span class="text-danger">Inactive</span>

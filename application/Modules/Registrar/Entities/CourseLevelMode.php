@@ -16,12 +16,12 @@ class CourseLevelMode extends Model
         return $this->belongsTo(Level::class, 'level_id');
     }
     public function courseclm(){
-        return $this->belongsTo(Courses::class, 'course_id');
+        return $this->belongsTo(Courses::class, 'course_id', 'course_id');
     }
 
     public function invoiceProforma(){
 
-        return $this->hasMany(SemesterFee::class);
+        return $this->hasMany(SemesterFee::class, 'course_level_mode_id', 'course_level_mode_id');
     }
 
     protected $fillable = ['course_id','level_id','attendance_id'];

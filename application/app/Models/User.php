@@ -54,7 +54,7 @@ class User extends Authenticatable
 
     public function getDept(){
 
-        return $this->belongsTo(\Modules\Registrar\Entities\Department::class, 'department_id');
+        return $this->belongsTo(Department::class, 'department_id', 'department_id');
 
     }
 
