@@ -23,7 +23,7 @@ Route::prefix('dean')->middleware(['web'])->group(function() {
         Route::get('/acceptApplication/{id}', [DeanController::class, 'acceptApplication'])->name('dean.acceptApplication');
         Route::post('/rejectApplication/{id}', [DeanController::class, 'rejectApplication'])->name('dean.rejectApplication');
 
-        Route::get('/transfer/{year}', [DeanController::class, 'transfer'])->name('dean.transfer');
+        Route::get('/transfer/{id}', [DeanController::class, 'transfer'])->name('dean.transfer');
         Route::get('/batchTransfer', [DeanController::class, 'batchTransfer'])->name('dean.batchTransfer');
         Route::get('/viewTransfer/{id}', [DeanController::class, 'viewTransfer'])->name('dean.viewTransfer');
         Route::get('/preview/{id}', [DeanController::class, 'preview'])->name('dean.preview');

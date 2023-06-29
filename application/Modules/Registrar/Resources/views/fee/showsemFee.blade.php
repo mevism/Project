@@ -47,8 +47,8 @@
 
         <div class="block-content block-content-full">
           <div class="row">
-            <div class="col-12">
-          <table id="example" class="table table-bordered table-striped table-vcenter js-dataTable-responsive fs-sm">
+            <div class="table-responsive col-12">
+          <table id="example" class="table table-bordered table-striped table-sm fs-sm">
             <span class="d-flex justify-content-end">
                 <a class="btn btn-alt-info btn-sm" href="{{ route('courses.semFee') }}">Create</a>
             </span><br>
@@ -69,7 +69,7 @@
                 <td>{{ $item->levelclm->name }}</td>
                 <td>{{ $item->modeofstudy->attendance_code }}</td>
                 <td>
-                  <a class="btn btn-sm btn-alt-info" href="{{ route('courses.viewSemFee', ['id' =>  Crypt::encrypt($item->id)]) }}">view</a>
+                  <a class="btn btn-sm btn-alt-info" href="{{ route('courses.viewSemFee', $item->course_level_mode_id) }}">view</a>
                 </td>
               </tr>
             @endforeach

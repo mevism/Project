@@ -17,8 +17,7 @@ class CourseRequirement extends Model
     protected $dates = ['deleted_at'];
 
     public function coursesReq(){
-
-        return $this->belongsTo(Courses::class, 'id');
+        return $this->belongsTo(Courses::class, 'course_id', 'course_id');
     }
 
     protected static function newFactory()

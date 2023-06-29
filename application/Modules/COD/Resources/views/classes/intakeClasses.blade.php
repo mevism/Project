@@ -58,6 +58,7 @@
                         <th>Class Name</th>
                         <th>Course Code</th>
                         <th>Study Mode</th>
+                        <th>Class Syllabus</th>
                         <th>Class Pattern</th>
                         <th>Action</th>
                         </thead>
@@ -68,13 +69,12 @@
                                   <td nowrap=""> {{ $class->name }} </td>
                                   <td> {{ $class->course_name }} </td>
                                   <td> {{ $class->attendance_id }} </td>
+                                  <td> {{ $class->syllabus_name }} </td>
                                     <td>
                                         <a class="link-info" href="{{ route('cod.classPattern', $class->class_id) }}">
                                             Create/view pattern </a>
                                     </td>
                                     <td nowrap="">
-                                        <a class="btn btn-sm btn-alt-info disabled" href="{{ route('courses.editClasses', $class->class_id) }}"> edit</a>
-                                        <a class="btn btn-sm btn-alt-danger disabled" onclick="return confirm('Are you sure you want to delete this course ?')" href="{{ route('courses.destroyClasses', $class->class_id) }}"> delete</a>
                                         <a class="btn btn-sm btn-alt-secondary" href="{{ route('department.classList', $class->class_id) }}">View</a>
                                     </td>
                                 </tr>

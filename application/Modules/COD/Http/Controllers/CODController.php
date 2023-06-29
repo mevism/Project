@@ -10,6 +10,9 @@ use Modules\COD\Entities\AdmissionsView;
 use Modules\COD\Entities\ApplicationsView;
 use Modules\COD\Entities\CourseOnOfferView;
 use Modules\COD\Entities\CourseOptions;
+use Modules\COD\Entities\CourseSyllabus;
+use Modules\COD\Entities\SyllabusVersion;
+use Modules\COD\Entities\Unit;
 use Modules\Lecturer\Entities\LecturerQualification;
 use Modules\Lecturer\Entities\QualificationRemarks;
 use Modules\Lecturer\Entities\TeachingArea;
@@ -297,7 +300,8 @@ class CODController extends Controller
     }
 
     public function courses(){
-         $courses = Courses::where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->department_id)->get();
+         $courses = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+             ->get();
         return view('cod::courses.index')->with('courses', $courses);
     }
 
@@ -349,6 +353,119 @@ class CODController extends Controller
         $courses = CourseOptions::where('course_id', $id)->latest()->get();
 
         return view('cod::courses.courseOptions')->with(['courses' => $courses, 'course' => $course]);
+    }
+
+    public function allUnits(){
+        $units = Unit::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+            ->orWhere('type', 1)
+            ->orWhere('type', 2)
+            ->latest()
+            ->get();
+
+
+        return view('cod::syllabus.index')->with(['units' => $units]);
+    }
+
+    public function addUnit(){
+
+        return view('cod::syllabus.addUnit');
+    }
+
+    public function storeUnit(Request $request){
+        $request->validate([
+           'unit_code' => 'required|string',
+           'unit_name' => 'required|string',
+           'unit_type' => 'required|numeric',
+           'total_exam' => 'required|numeric',
+           'total_cat' => 'required|numeric',
+           'cat' => 'required|numeric',
+        ]);
+
+        $totatMark = $request->total_exam + $request->total_cat;
+        $totalCat = $request->cat + $request->assignment + $request->practical;
+        if ($totatMark != 100){
+            return redirect()->back()->with('error', 'Exam mark and CAT mark must equal to 100%');
+        }
+
+        if ($totalCat != $request->total_cat){
+            return redirect()->back()->with('error', 'CAT, Assignment and Practical marks must equal Total CAT');
+        }
+        $practical = 0;
+        $assignment = 0;
+        if ($request->assignment != null){
+            $assignment = $request->assignment;
+        }
+
+        if ($request->practical != null){
+            $practical = $request->practical;
+        }
+
+        $unitID = new CustomIds();
+
+        $unit = new Unit;
+        $unit->unit_id = $unitID->generateId();
+        $unit->unit_code = strtoupper(str_replace(' ', '', $request->unit_code));
+        $unit->unit_name = strtoupper($request->unit_name);
+        $unit->type = $request->unit_type;
+        $unit->department_id = auth()->guard('user')->user()->employmentDepartment->first()->department_id;
+        $unit->total_exam = $request->total_exam;
+        $unit->total_cat = $request->total_cat;
+        $unit->cat = $request->cat;
+        $unit->assignment = $assignment;
+        $unit->practical = $practical;
+        $unit->save();
+
+        return redirect()->route('department.allUnits')->with('success', 'Unit has been successfully created');
+
+    }
+
+    public function editUnit($id){
+        $unit = Unit::where('unit_id', $id)->first();
+        return view('cod::syllabus.editUnit')->with('unit', $unit);
+    }
+
+    public function updateUnit(Request $request, $id){
+        $request->validate([
+            'unit_code' => 'required|string',
+            'unit_name' => 'required|string',
+            'unit_type' => 'required|numeric',
+            'total_exam' => 'required|numeric',
+            'total_cat' => 'required|numeric',
+            'cat' => 'required|numeric',
+        ]);
+
+        $totatMark = $request->total_exam + $request->total_cat;
+        $totalCat = $request->cat + $request->assignment + $request->practical;
+        if ($totatMark != 100){
+            return redirect()->back()->with('error', 'Exam mark and CAT mark must equal to 100%');
+        }
+
+        if ($totalCat != $request->total_cat){
+            return redirect()->back()->with('error', 'CAT, Assignment and Practical marks must equal Total CAT');
+        }
+        $practical = 0;
+        $assignment = 0;
+        if ($request->assignment != null){
+            $assignment = $request->assignment;
+        }
+
+        if ($request->practical != null){
+            $practical = $request->practical;
+        }
+
+        Unit::where('unit_id', $id)->update([
+            'unit_code' => strtoupper(str_replace(' ', '', $request->unit_code)),
+            'unit_name' => strtoupper($request->unit_name),
+            'type' => $request->unit_type,
+            'department_id' => auth()->guard('user')->user()->employmentDepartment->first()->department_id,
+            'total_exam' => $request->total_exam,
+            'total_cat' => $request->total_cat,
+            'cat' => $request->cat,
+            'assignment' => $assignment,
+            'practical' => $practical
+        ]);
+
+        return redirect()->route('department.allUnits')->with('success', 'Unit has been successfully updated');
     }
 
     public function intakes(){
@@ -464,69 +581,109 @@ class CODController extends Controller
             return view('cod::classes.intakeClasses')->with(['intake' => $intakes, 'classes' => $classes]);
     }
 
-    public function viewSemesterUnits($id) {
-
-        $hashedId = Crypt::decrypt($id);
-
-        $pattern = ClassPattern::find($hashedId);
-
-        //        return $pattern->pattern_id;
-
-        $class = Classes::where('name', $pattern->class_code)->first();
-
-        $semesterUnits = SemesterUnit::where('class_code', $class->name)
-            ->where('stage', $pattern->stage)
-            ->where('semester', $pattern->pattern_id)
-            ->latest()
+    public function syllabi(){
+        $courses = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
             ->get();
-
-        $units = UnitProgramms::where('course_code', $class->classCourse->course_code)
-            ->orderByRaw("FIELD(stage, $pattern->stage) DESC")
-            ->orderByRaw("FIELD(semester, $pattern->pattern_id) DESC")
-            ->get();
-
-
-        return view('cod::classes.semesterUnits')->with(['pattern' => $pattern, 'units' => $units, 'semesterUnits' => $semesterUnits]);
+        return view('cod::syllabus.syllabi')->with('courses', $courses);
     }
 
-    public function addSemesterUnit($id, $unit){
-        $hashedId = Crypt::decrypt($id);
+    public function courseSyllabus($id){
+        $course = Courses::where('course_id', $id)->first();
+        $versions = SyllabusVersion::where('course_id', $id)->latest()->get();
+        return view('cod::syllabus.courseSyllabus')->with(['course' => $course, 'versions' => $versions]);
+    }
 
-        $hashedUnit = Crypt::decrypt($unit);
-
-        $pattern = ClassPattern::find($hashedId);
-
-        $semesterUnit = UnitProgramms::find($hashedUnit);
-
-        if (SemesterUnit::where('unit_code', $semesterUnit->course_unit_code)
-            ->where('class_code', $pattern->class_code)
-            ->where('semester', $pattern->pattern_id)
-            ->exists()
-        ) {
-
-            return redirect()->back()->with('info', 'Unit has already been mounted to the selected class pattern');
-        } else {
-            $addUnit = new SemesterUnit;
-            $addUnit->class_code = $pattern->class_code;
-            $addUnit->unit_code = $semesterUnit->course_unit_code;
-            $addUnit->unit_name = $semesterUnit->unit_name;
-            $addUnit->stage = $pattern->stage;
-            $addUnit->semester = $pattern->pattern_id;
-            $addUnit->type = $semesterUnit->type;
-            $addUnit->save();
+    public function addCourseSyllabusVersion($id){
+        $versionID = new CustomIds();
+        $syllabusName = 'v.'.Carbon::now()->format('Y');
+        if (SyllabusVersion::where('course_id', $id)->where('syllabus_name', $syllabusName)->exists()){
+            return redirect()->back()->with('warning', 'Syllabus version already exists');
         }
 
-        return redirect()->back()->with('success', 'Unit mounted to the selected class pattern');
+        $version = new SyllabusVersion;
+        $version->syllabus_id = $versionID->generateId();
+        $version->course_id = $id;
+        $version->syllabus_name = $syllabusName;
+        $version->save();
+
+        return redirect()->back()->with('success', 'Syllabus version created successfully');
     }
 
-    public function dropSemesterUnit($id)
-    {
+    public function viewSyllabusUnits($id){
+        $syllabus = SyllabusVersion::where('syllabus_id', $id)->first();
+        return view('cod::syllabus.syllabusUnits')->with(['syllabus' => $syllabus]);
+    }
 
-        $hashedId = Crypt::decrypt($id);
+    public function completeSyllabus($course, $version){
+       $course = Courses::where('course_id', $course)->first();
+       $versions = SyllabusVersion::where('syllabus_id', $version)->first();
+       $stages = CourseSyllabus::where('course_code', $course->course_code)
+          ->where('version', $versions->syllabus_name)
+          ->orderBy('stage', 'asc')
+          ->orderBy('semester', 'asc')
+          ->get()
+          ->groupBy(function ($item) {
+              return $item->stage . '.' . $item->semester;
+          });
 
-        SemesterUnit::find($hashedId)->delete();
+        return view('cod::syllabus.completeCourseSyllabus')->with(['stages' => $stages, 'course' => $course]);
+    }
 
-        return redirect()->back()->with('success', 'Unit dropped successfully');
+    public function searchUnit(Request $request) {
+        $query = $request->search;
+
+        $units = Unit::where(function ($queryBuilder) use ($query) {
+            $queryBuilder->where('unit_code', 'like', $query.'%')
+                        ->orWhere('unit_name', 'like', $query.'%');
+        })->get();
+
+        return response()->json($units);
+    }
+
+    public function submitSyllabusUnits(Request $request){
+        $request->validate([
+           'stage' => 'required|string',
+           'semester' => 'required|string',
+           'option' => 'required|string',
+           'units' => 'required|string',
+        ]);
+
+        foreach (json_decode($request->units) as $unit){
+            $syllabusUnit = CourseSyllabus::where('course_code', $request->course_code)
+                                            ->where('unit_code', $unit->unit_code)
+                                            ->where('version', $request->version)
+                                            ->exists();
+            $syllabiID = new CustomIds();
+            if (!$syllabusUnit){
+                $syllabus = new CourseSyllabus;
+                $syllabus->course_syllabus_id = $syllabiID->generateId();
+                $syllabus->course_code = $request->course_code;
+                $syllabus->unit_code = $unit->unit_code;
+                $syllabus->stage = $request->stage;
+                $syllabus->semester = $request->semester;
+                $syllabus->type = $unit->unit_type;
+                $syllabus->option = $request->option;
+                $syllabus->version = $request->version;
+                $syllabus->save();
+            }
+
+        }
+
+        return redirect()->back()->with('success', 'Units mounted to a semester');
+    }
+
+
+    public function viewSemesterUnits($id){
+      $pattern = ClassPattern::where('class_pattern_id', $id)->first();
+      $class = DB::table('classesview')->where('name', $pattern->class_code)->first();
+      $semesterUnits = CourseSyllabus::where('course_code', $class->course_code)
+          ->where('version', $class->syllabus_name)
+          ->where('stage', $pattern->stage)
+          ->where('semester', $pattern->pattern_id)
+          ->orderBy('unit_code', 'asc')
+          ->get();
+
+        return view('cod::classes.semesterUnits')->with(['class' => $class, 'pattern' => $pattern, 'semesterUnits' => $semesterUnits]);
     }
 
     public function classList($id){
@@ -539,42 +696,40 @@ class CODController extends Controller
         return view('cod::classes.classList')->with(['classList' => $classList, 'class' => $class]);
     }
 
-    public function admitStudent($id)
-    {
+    public function admitStudent($id){
+        $student = StudentCourse::where('student_id', $id)->first();
+        $studentClass = Classes::where('name', $student->current_class)->first();
+        $units = CourseSyllabus::where('course_code', $student->StudentsCourse->course_code)
+            ->where('version', $studentClass->syllabus_name)
+            ->where('stage', 1)
+            ->where('semester', 1)
+            ->get();
 
-        $hashedId = Crypt::decrypt($id);
-
-        $student = Student::find($hashedId);
-
-        $student_fee = $student->courseStudent;
-        // return $student_fee;
-        $fees = CourseLevelMode::where('attendance_id', $student_fee->student_type)
-            ->where('course_id', $student_fee->course_id)
-            ->where('level_id', $student_fee->studentCourse->level)
+         $fees = CourseLevelMode::where('attendance_id', $student->student_type)
+            ->where('course_id', $student->course_id)
+            ->where('level_id', $student->StudentsCourse->level)
             ->first();
 
         if ($fees == null) {
             return redirect()->back()->with('error', 'Oops! Course fee structure not found. Please contact the registrar');
         } else {
 
-
             $proformaInvoice = 0;
-
-            //return $fees;
 
             foreach ($fees->invoiceProforma as $votehead) {
 
                 $proformaInvoice += $votehead->semesterI;
             }
 
-            $academic = Carbon::parse($student->courseStudent->courseEntry->year_start)->format('Y') . '/' . Carbon::parse($student->courseStudent->courseEntry->year_end)->format('Y');
-            $period = Carbon::parse($student->courseStudent->coursesIntake->intake_from)->format('M') . '/' . Carbon::parse($student->courseStudent->coursesIntake->intake_to)->format('M');
+            $academic = Carbon::parse($student->StudentIntake->academicYear->year_start)->format('Y') . '/' . Carbon::parse($student->StudentIntake->academicYear->year_end)->format('Y');
+            $period = Carbon::parse($student->StudentIntake->intake_from)->format('M') . '/' . Carbon::parse($student->StudentIntake->intake_to)->format('M');
 
-
+            $nominalID = new CustomIds();
             $signed = new Nominalroll;
-            $signed->student_id = $student->id;
-            $signed->reg_number = $student->reg_number;
-            $signed->class_code = $student->courseStudent->class_code;
+            $signed->nominal_id = $nominalID->generateId();
+            $signed->student_id = $student->student_id;
+            $signed->reg_number = $student->student_number;
+            $signed->class_code = $student->current_class;
             $signed->year_study = 1;
             $signed->semester_study = 1;
             $signed->academic_year = $academic;
@@ -584,15 +739,30 @@ class CODController extends Controller
             $signed->activation = 1;
             $signed->save();
 
+            $studInvoice = new CustomIds();
             $invoice = new StudentInvoice;
-            $invoice->student_id = $student->id;
-            $invoice->reg_number = $student->reg_number;
+            $invoice->invoice_id = $studInvoice->generateId();
+            $invoice->student_id = $student->student_id;
+            $invoice->reg_number = $student->student_number;
             $invoice->invoice_number = 'INV' . time();
             $invoice->stage = '1.1';
             $invoice->amount = $proformaInvoice;
             $invoice->description = 'New Student Registration Invoice for 1.1 ' . 'Academic Year ' . $academic;
             $invoice->save();
 
+            foreach ($units as $unit){
+                $wID = new CustomIds();
+                $examinableUnit = new ExamMarks;
+                $examinableUnit->workflow_id = $wID->generateId();
+                $examinableUnit->student_number = $student->student_number;
+                $examinableUnit->class_code = $student->current_class;
+                $examinableUnit->unit_code = $unit->unit_code;
+                $examinableUnit->academic_year = $academic;
+                $examinableUnit->academic_semester = $period;
+                $examinableUnit->stage = 1;
+                $examinableUnit->semester = 1;
+                $examinableUnit->save();
+            }
 
             return redirect()->back()->with('success', 'Student admitted and invoiced successfully');
         }
@@ -622,7 +792,10 @@ class CODController extends Controller
 
         $semester = Pattern::find($request->semester);
 
+        $customPattern = new CustomIds();
+
         $pattern = new ClassPattern;
+        $pattern->class_pattern_id = $customPattern->generateId();
         $pattern->class_code = $request->code;
         $pattern->stage = $request->stage;
         $pattern->period = $request->period;
@@ -647,19 +820,16 @@ class CODController extends Controller
 
         $semester = Pattern::find($request->semester);
 
-        $hashedId = Crypt::decrypt($id);
-
-
-        $pattern = ClassPattern::find($hashedId);
-        $pattern->class_code = $request->code;
-        $pattern->stage = $request->stage;
-        $pattern->period = $request->period;
-        $pattern->academic_year = $request->year;
-        $pattern->start_date = $request->start_date;
-        $pattern->end_date = $request->end_date;
-        $pattern->pattern_id = $request->semester;
-        $pattern->semester = $request->stage . '.' . $semester->season_code;
-        $pattern->save();
+        ClassPattern::where('class_pattern_id', $id)->update([
+            'class_code' => $request->code,
+            'stage' => $request->stage,
+            'period' => $request->period,
+            'academic_year' => $request->year,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'pattern_id' => $request->semester,
+            'semester' => $request->stage . '.' . $semester->season_code
+        ]);
 
         return redirect()->back()->with('success', 'Class pattern record updated successfully');
     }
@@ -743,121 +913,95 @@ class CODController extends Controller
         return redirect()->route('department.examResults')->with('success', 'Exam result updated successfully');
     }
 
-    public function transferRequests()
-    {
-
-        $transfers = CourseTransfer::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->id)
+    public function transferRequests(){
+        $transfers = CourseTransfer::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
             ->latest()
+            ->withTrashed()
             ->get()
-            ->groupBy('academic_year');
+            ->groupBy('intake_id');
 
         return view('cod::transfers.index')->with(['transfers' => $transfers]);
     }
 
-    public function viewYearRequests($year)
-    {
+    public function viewYearRequests($id){
 
-        $hashedYear = Crypt::decrypt($year);
-
-        $transfers = CourseTransfer::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->id)
-            ->where('academic_year', $hashedYear)
+     $transfers = CourseTransfer::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+            ->where('intake_id', $id)
             ->latest()
+            ->withTrashed()
             ->get();
 
-        return view('cod::transfers.annualTransfers')->with(['transfers' => $transfers, 'year' => $hashedYear]);
+        return view('cod::transfers.annualTransfers')->with(['transfers' => $transfers, 'intake' => $id]);
     }
 
-    public function viewTransferRequest($id)
-    {
-
-        $hashedId = Crypt::decrypt($id);
-
-        $transfer = CourseTransfer::find($hashedId);
-
+    public function viewTransferRequest($id){
+        $transfer = CourseTransfer::where('course_transfer_id', $id)->withTrashed()->first();
         return view('cod::transfers.viewRequest')->with(['transfer' => $transfer]);
     }
 
-    public function viewUploadedDocument($id)
-    {
+    public function viewUploadedDocument($id){
+        $course = CourseTransfer::where('course_transfer_id', $id)->withTrashed()->first();
+        $document = ApplicationApproval::where('reg_number', $course->studentTransfer->enrolledCourse->student_number)->first()->ApplicationsDocments;
 
-        $hashedId = Crypt::decrypt($id);
-
-        $course = CourseTransfer::find($hashedId);
-
-        $document = Application::where('reg_number', $course->studentTransfer->reg_number)->first();
-
-        return response()->file('Admissions/Certificates/' . $document->admissionDoc->certificates);
+        return response()->file('Admissions/Certificates/' . $document->certificates);
     }
 
-    public function acceptTransferRequest($id)
-    {
+    public function acceptTransferRequest($id){
+        $intake = CourseTransfer::where('course_transfer_id', $id)->withTrashed()->first()->intake_id;
+        $class = CourseTransfer::where('course_transfer_id', $id)->withTrashed()->first()->classTransfer->name;
 
-        $hashedId = Crypt::decrypt($id);
-        $year = CourseTransfer::find($hashedId)->academic_year;
-        $class = CourseTransfer::find($hashedId)->classTransfer->name;
-
-        if (CourseTransferApproval::where('course_transfer_id', $hashedId)->exists()) {
-
-            $approval = CourseTransferApproval::where('course_transfer_id', $hashedId)->first();
-            $approval->cod_status = 1;
-            $approval->cod_remarks = 'Student to be admitted to ' . $class . ' class.';
-            $approval->save();
+        if (CourseTransferApproval::where('course_transfer_id', $id)->exists()) {
+            CourseTransferApproval::where('course_transfer_id', $id)->update([
+                'cod_status' => 1,
+                'cod_remarks' => 'Student to be admitted to ' . $class . ' class.'
+            ]);
         } else {
-
             $approval = new CourseTransferApproval;
-            $approval->course_transfer_id = $hashedId;
+            $approval->course_transfer_id = $id;
             $approval->cod_status = 1;
             $approval->cod_remarks = 'Student to be admitted to ' . $class . ' class.';
             $approval->save();
         }
 
-        return redirect()->route('department.viewYearRequests', ['year' => Crypt::encrypt($year)])->with('success', 'Course transfer request accepted');
+        return redirect()->route('department.viewYearRequests', $intake)->with('success', 'Course transfer request accepted');
     }
 
-    public function declineTransferRequest(Request $request, $id)
-    {
+    public function declineTransferRequest(Request $request, $id){
+        $intake = CourseTransfer::where('course_transfer_id', $id)->withTrashed()->first()->intake_id;
 
-        $hashedId = decrypt($id);
+        if (CourseTransferApproval::where('course_transfer_id', $id)->exists()) {
+           CourseTransferApproval::where('course_transfer_id', $id)->update([
+               'cod_status' => 2,
+               'cod_remarks' => $request->remarks
+           ]);
 
-        $year = CourseTransfer::find($hashedId)->academic_year;
-
-        if (CourseTransferApproval::where('course_transfer_id', $hashedId)->exists()) {
-
-            $approval = CourseTransferApproval::where('course_transfer_id', $hashedId)->first();
-            $approval->cod_status = 2;
-            $approval->cod_remarks = $request->remarks;
-            $approval->save();
         } else {
-
             $approval = new CourseTransferApproval;
-            $approval->course_transfer_id = $hashedId;
+            $approval->course_transfer_id = $id;
             $approval->cod_status = 2;
             $approval->cod_remarks = $request->remarks;
             $approval->save();
         }
 
-        return redirect()->route('department.viewYearRequests', ['year' => Crypt::encrypt($year)])->with('success', 'Course transfer request accepted');
+        return redirect()->route('department.viewYearRequests', $intake)->with('success', 'Course transfer request declined');
     }
 
-    public function requestedTransfers($year)
-    {
+    public function requestedTransfers($id){
 
-        $hashedYear = Crypt::decrypt($year);
+        $user = auth()->guard('user')->user();
+        $by = $user->staffInfos->title." ".$user->staffInfos->last_name." ".$user->staffInfos->first_name." ".$user->staffInfos->miidle_name;
+        $dept = DB::table('staffview')->where('user_id', $user->user_id)->first()->name;
+        $role = $user->roles->first()->name;
 
-        $user = Auth::guard('user')->user();
-
-        $by = $user->name;
-        $dept = $user->getDept->dept_code;
-        $role = $user->userRoles->name;
-
-        $transfers = CourseTransfer::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->id)
-            // ->where('status', '<', 1)
-            ->where('academic_year', $hashedYear)
+        $transfers = CourseTransfer::where('department_id', $user->employmentDepartment->first()->department_id)
+//            ->where('status', '>=', 1)
+            ->where('intake_id', $id)
             ->latest()
+            ->withTrashed()
             ->get()
             ->groupBy('course_id');
 
-        $school = Auth::guard('user')->user()->getDept->name;
+        $school = $user->employmentDepartment->first()->schools->first()->name;
 
         $courses = Courses::all();
 
@@ -870,7 +1014,7 @@ class CODController extends Controller
         $table = new Table(array('unit' => TblWidth::TWIP));
         foreach ($transfers as $course => $transfer) {
             foreach ($courses as $listed) {
-                if ($listed->id == $course) {
+                if ($listed->course_id == $course) {
                     $courseName =  $listed->course_name;
                     $courseCode = $listed->course_code;
                 }
@@ -892,8 +1036,8 @@ class CODController extends Controller
             $table->addCell(1750, ['borderSize' => 1])->addText('Deans Committee Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
 
             foreach ($transfer as $key => $list) {
-                $name = $list->studentTransfer->reg_number . "<w:br/>\n" . $list->studentTransfer->sname . ' ' . $list->studentTransfer->fname . ' ' . $list->studentTransfer->mname;
-                if ($list->approveTransfer == null) {
+                $name = $list->studentTransfer->enrolledCourse->student_number . "<w:br/>\n" . $list->studentTransfer->loggedStudent->sname . ' ' . $list->studentTransfer->loggedStudent->fname . ' ' . $list->studentTransfer->loggedStudent->mname;
+                if ($list->approvedTransfer == null) {
                     $remarks = 'Missed Deadline';
                 } else {
                     $remarks = $list->approvedTransfer->cod_remarks;
@@ -901,7 +1045,7 @@ class CODController extends Controller
                 $table->addRow();
                 $table->addCell(400, ['borderSize' => 1])->addText(++$key);
                 $table->addCell(2700, ['borderSize' => 1])->addText($name);
-                $table->addCell(1900, ['borderSize' => 1])->addText($list->studentTransfer->courseStudent->studentCourse->course_code);
+                $table->addCell(1900, ['borderSize' => 1])->addText($list->studentTransfer->enrolledCourse->StudentsCourse->course_code);
                 $table->addCell(1900, ['borderSize' => 1])->addText($list->courseTransfer->course_code);
                 $table->addCell(1750, ['borderSize' => 1])->addText($list->class_points);
                 $table->addCell(1000, ['borderSize' => 1])->addText($list->student_points);
@@ -915,7 +1059,7 @@ class CODController extends Controller
         $total = 0;
         foreach ($transfers as $group => $transfer) {
             foreach ($courses as $listed) {
-                if ($listed->id == $group) {
+                if ($listed->course_id == $group) {
                     $courseName =  $listed->course_name;
                     $courseCode = $listed->course_code;
                 }
@@ -949,15 +1093,15 @@ class CODController extends Controller
 
         $pdfPath = 'Fees/' . 'Transfers' . time() . ".pdf";
 
-        $converter =  new OfficeConverter($docPath, 'Fees/');
-        $converter->convertTo('Transfers' . time() . ".pdf");
+//        $converter =  new OfficeConverter($docPath, 'Fees/');
+//        $converter->convertTo('Transfers' . time() . ".pdf");
 
-        if (file_exists($docPath)) {
-            unlink($docPath);
-        }
+//        if (file_exists($docPath)) {
+//            unlink($docPath);
+//        }
         //
-        //        return response()->download($docPath)->deleteFileAfterSend(true);
-        return response()->download($pdfPath)->deleteFileAfterSend(true);
+                return response()->download($docPath)->deleteFileAfterSend(true);
+//        return response()->download($pdfPath)->deleteFileAfterSend(true);
     }
 
 

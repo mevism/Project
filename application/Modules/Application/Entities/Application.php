@@ -58,6 +58,7 @@ class Application extends Model
     }
 
     public function admissionDoc(){
+
         return $this->hasOne(AdmissionDocument::class, 'application_id', 'application_id');
     }
 

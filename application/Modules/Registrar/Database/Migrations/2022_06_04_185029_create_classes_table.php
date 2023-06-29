@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('attendance_id');
             $table->string('course_id');
             $table->string('intake_id');
+            $table->string('syllabus_name');
             $table->timestamps();
             $table->softDeletes();
         });

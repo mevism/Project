@@ -51,26 +51,24 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-12">
-                        <table id="example" class="table table-bordered table-striped fs-sm">
+                        <table id="example" class="table table-bordered table-striped table-sm fs-sm">
                             <thead>
                                 <th>#</th>
-                                <th>Academic Year</th>
+                                <th>INTAKE</th>
                                 <th>Total Request</th>
                                 <th>Action</th>
                             </thead>
-                            <tbody>                                
+                            <tbody>
                                 @foreach($data as $transfer)
-
-                                @foreach($transfer as $academic_year => $transfer)
-
-                                    <tr>
-                                        <td> {{ $loop->iteration }} </td>
-                                        <td> {{ $academic_year }} </td>
-                                        <td> {{ $transfer->count() }}</td>
-                                        <td>
-                                            <a class="btn btn-sm btn-outline-secondary" href="">view requests</a>
-                                        </td>
-                                    </tr>
+                                    @foreach($transfer as $intake => $transfer)
+                                        <tr>
+                                            <td> {{ $loop->iteration }} </td>
+                                            <td class="text-uppercase"> {{ Carbon\Carbon::parse(\Modules\Registrar\Entities\Intake::where('intake_id', $intake)->first()->intake_from)->format('MY') }} </td>
+                                            <td> {{ $transfer->count() }}</td>
+                                            <td>
+                                                <a class="btn btn-sm btn-outline-secondary" href="{{ route('dean.transfer', $intake) }}">view requests</a>
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 @endforeach
                             </tbody>

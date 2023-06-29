@@ -28,9 +28,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0">
-                       {{ $year }} COURSE TRANSFERS
-                    </h5>
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
+                       {{ \Carbon\Carbon::parse(\Modules\Registrar\Entities\Intake::where('intake_id', $intake)->first()->intake_from)->format('MY') }} COURSE TRANSFERS
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -47,14 +47,13 @@
     </div>
 
     <div class="block block-rounded">
-
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-12">
-                    <div class="d-flex justify-content-end m-2">
-                        <a class="btn btn btn-sm btn-alt-primary" href="{{ route('department.requestedTransfers', ['year' => Crypt::encrypt($year)]) }}">Generate report</a>
+                    <div class="d-flex justify-content-end ">
+                        <a class="btn btn btn-sm btn-alt-primary m-2" href="{{ route('department.requestedTransfers', $intake) }}">Generate report</a>
                     </div>
-                    <table id="example" class="table table-bordered table-striped fs-sm">
+                    <table id="example" class="table table-bordered table-striped table-sm fs-sm">
                         <thead>
                             <th>#</th>
                             <th>Reg. Number</th>
@@ -69,21 +68,21 @@
                             @foreach ($transfers as $key => $transfer)
                                 <tr>
                                     <td> {{ ++$key }} </td>
-                                    <td> {{ $transfer->studentTransfer->reg_number }}</td>
+                                    <td> {{ $transfer->studentTransfer->enrolledCourse->student_number }}</td>
                                     <td class="text-uppercase">
-                                    {{ $transfer->studentTransfer->sname.' '.$transfer->studentTransfer->fname.' '.$transfer->studentTransfer->mname }}
+                                    {{ $transfer->studentTransfer->loggedStudent->sname.' '.$transfer->studentTransfer->loggedStudent->fname.' '.$transfer->studentTransfer->loggedStudent->mname }}
                                     </td>
-                                    <td> {{ $transfer->studentTransfer->courseStudent->studentCourse->course_code }} </td>
+                                    <td> {{ $transfer->studentTransfer->enrolledCourse->StudentSCourse->course_code }} </td>
                                     <td> {{ $transfer->courseTransfer->course_code }} </td>
                                     <td> {{ $transfer->class_points }} </td>
                                     <td> {{ $transfer->student_points }} </td>
                                     <td nowrap="">
-                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewTransferRequest', ['id' => Crypt::encrypt($transfer->id)]) }}">View </a>
+                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewTransferRequest', $transfer->course_transfer_id) }}">View </a>
                                         @if($transfer->approvedTransfer != null)
                                             @if($transfer->approvedTransfer->cod_status == 1)
                                              <i class="fa fa-check text-success m-2"></i>
                                             @else
-                                            <i class="fa fa-times text-danger m-2"></i>   
+                                            <i class="fa fa-times text-danger m-2"></i>
                                             @endif
                                         @endif
                                     </td>

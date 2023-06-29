@@ -30,8 +30,8 @@
 
         <div class="block-content block-content-full">
           <div class="row">
-            <div class="col-12">
-          <table id="example" class="table table-bordered table-striped table-vcenter fs-sm">
+            <div class="table-responsive col-12">
+          <table id="example" class="table table-bordered table-striped table-sm fs-sm">
             <span class="d-flex justify-content-end">
                 <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addEvent') }}">Create</a>
             </span><br>
@@ -46,7 +46,7 @@
                  <td>{{ ++$key }}</td>
                  <td>{{ $item->name }}</td>
                  <td>
-                    <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editEvent', Crypt::encrypt($item->id)) }}">edit</a>
+                    <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editEvent', $item->id) }}">edit</a>
                     <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this event ?')" href="{{ route('courses.destroyEvent', $item->id) }}">delete</a>
                   </td>
              </tr>

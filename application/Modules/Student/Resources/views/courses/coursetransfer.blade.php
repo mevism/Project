@@ -35,33 +35,33 @@
                         <div class="col-lg-6">
                             <fieldset class="border p-2" style="height: 100% !important;">
                                 <legend class="float-none w-auto"><h6 class="fw-bold text-center"> CURRENT COURSE DETAILS</h6></legend>
-                            <div class="mb-2">
+                            <div class="mb-4">
                                 <span class="h5 fs-sm">STUDENT NAME : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->sname }} {{ Auth::guard('student')->user()->loggedStudent->fname }} {{ Auth::guard('student')->user()->loggedStudent->mname }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{\auth()->guard('student')->user()->loggedStudent->sname }} {{\auth()->guard('student')->user()->loggedStudent->fname }} {{\auth()->guard('student')->user()->loggedStudent->mname }} </span>
                             </div>
-                            <div class="mb-2">
+                            <div class="mb-4">
                                 <span class="h5 fs-sm">PHONE NUMBER : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->mobile }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{\auth()->guard('student')->user()->StudentsContact->mobile }} </span>
                             </div>
-                            <div class="mb-2">
+                            <div class="mb-4">
                                 <span class="h5 fs-sm">EMAIL ADDRESS : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->email }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{\auth()->guard('student')->user()->StudentsContact->email }} </span>
                             </div>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">PHYSICAL ADDRESS : </span>
-                                <span class="h6 fs-sm fw-normal"> P.O BOX {{ Auth::guard('student')->user()->loggedStudent->address }}-{{ Auth::guard('student')->user()->loggedStudent->postal_code }} {{ Auth::guard('student')->user()->loggedStudent->town }}</span>
+                                <span class="h6 fs-sm fw-normal"> P.O BOX {{\auth()->guard('student')->user()->StudentAddresses->address }}-{{\auth()->guard('student')->user()->StudentAddresses->postal_code }} {{\auth()->guard('student')->user()->StudentAddresses->town }}</span>
                             </div>
-                            <div class="mb-2">
+                            <div class="mb-4">
                                 <span class="h5 fs-sm">REG. NUMBER : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->reg_number }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{\auth()->guard('student')->user()->enrolledCourse->student_number }} </span>
                             </div>
-                            <div class="mb-2">
+                            <div class="mb-4">
                                 <span class="h5 fs-sm">COURSE ADMITTED : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->courseStudent-> studentCourse->course_name }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{\auth()->guard('student')->user()->enrolledCourse->StudentsCourse->course_name }} </span>
                             </div>
 
-                            <div class="mb-2">
-                                @if(Auth::guard('student')->user()->loggedStudent->nominalRoll == null)
+                            <div class="mb-4">
+                                @if($stage == null)
                                     Not registered
                                 @else
                                 <span class="h5 fs-sm"> YEAR OF STUDY : </span>
@@ -73,11 +73,11 @@
                             </div>
                             </fieldset>
                         </div>
-                        <div class="col-lg-6 space-y-4">
+                        <div class="col-lg-6 space-y-0">
                             <fieldset class="border p-2" style="height: 100% !important;">
                                 <legend class="float-none w-auto"><h6 class="fw-bold text-center"> NEW COURSE DETAILS</h6></legend>
                             <!-- Form Labels on top - Default Style -->
-                                @if(Auth::guard('student')->user()->loggedStudent->nominalRoll == null)
+                                @if( $stage == null)
                                     <span class="text-warning text-center">
                                         You cannot request course transfer, ask to be registered first
                                     </span>
@@ -87,7 +87,6 @@
                                         <span class="text-warning text-center">
                                         Course transfers are done only at year 1 semester 1
                                         </span>
-
                                     @else
                                         <form action="{{ route('student.submittransferrequest') }}" method="POST">
                                             @csrf
@@ -99,7 +98,7 @@
                                                         <select name="dept" class="form-control form-control-lg form-select mb-2 department">
                                                             <option selected disabled class="text-center"> -- select department -- </option>
                                                             @foreach($departments as $key => $department)
-                                                                <option value="{{ $department->id }}"> {{ $department->name }}</option>
+                                                                <option value="{{ $department->department_id }}"> {{ $department->name }}</option>
                                                             @endforeach
                                                         </select>
 
@@ -119,7 +118,7 @@
 
                                                         <label class="mb-2 label">MY POINTS</label>
                                                         <input type="text" id="mypoints" class="form-control mb-3" name="mypoints" readonly value="{{ old('points') }}">
-                                                        <input type="hidden" value="{{ $academic_year }}" name="academic_year">
+                                                        <input type="hidden" value="{{ $intake }}" name="intake">
                                                     </div>
 
                                                     <div class="mb-2" id="requirements">
@@ -130,7 +129,6 @@
                                                         <input type="text" id="subject3" readonly style="border: none transparent; outline: none !important;">
                                                         <input type="text" id="subject4" readonly style="border: none transparent; outline: none !important;">
                                                         <hr>
-
                                                     </div>
 
                                                     <div class="mb-2" id="grades">
@@ -151,7 +149,6 @@
                                                             <option value="KCSE D+">KCSE D+</option>
                                                             <option value="KCSE D">KCSE D</option>
                                                             <option value="KCSE D-">KCSE D-</option>
-
                                                         </select>
                                                     </div>
 
@@ -173,7 +170,7 @@
                                                     @if($event == NULL)
                                                         <div class="mb-4">
                                                             <div class="d-flex justify-content-center">
-                                                                <button class="btn btn-primary col-md-7 disabled" >{{ $event }}Course transfer not scheduled </button>
+                                                                <button class="btn btn-primary col-md-7 disabled" > Course transfer not scheduled </button>
                                                             </div>
                                                         </div>
                                                     @else
@@ -197,7 +194,7 @@
                                                         @elseif($now <= $event->end_date)
                                                             <div class="mb-4">
                                                                 <div class="d-flex justify-content-center">
-                                                                    <button class="btn btn-outline-success col-md-7"  onclick="return confirm('Are you sure you want to proceed? You will be invoiced for submitting this request.')"> Submit Request </button>
+                                                                    <button class="btn btn-outline-success col-md-7"  onclick="return confirm('Are you sure you want to proceed? You will be invoiced for submitting this request.')"> Submit Course Transfer Request </button>
                                                                 </div>
                                                             </div>
                                                         @endif
@@ -252,7 +249,7 @@
 
                     for (var i = 0; i < data.length; i++){
 
-                        op+='<option value="'+data[i].id+'"> '+data[i].course_name+'</<option>';                           ''
+                        op+='<option value="'+data[i].course_id+'"> '+data[i].course_name+'</<option>';                           ''
                     }
 
                     div.find('.course').html(" ");
@@ -284,7 +281,7 @@
                 // dataType: 'json',
                 success:function (data) {
 
-                    console.log(data);
+                    console.log(data)
 
                     // op1+='<option value="" selected class="text-center"> data[i].name</option>'
 
@@ -293,8 +290,6 @@
                     op1 += '<option selected value="' + data[0] + '"> ' + data[1] + '</<option>';
                     // op2+='<option selected value="'+data[2]+'"> '+data[2]+'</<option>';                           ''
                     // }
-
-                    console.log(data[7])
 
                         if (data[7] == 2) {
                             $("#points").hide();
@@ -306,10 +301,10 @@
                             a.find('.class').html(" ");
                             a.find('.class').append(op1);
                             $("#mingrade").val(data[6]);
-                            $("#subject1").val(data[3]);
-                            $("#subject2").val(data[4]);
-                            $("#subject3").val(data[5]);
-                            $("#subject4").val(data[6]);
+                            $("#subject1").val(data[2]);
+                            $("#subject2").val(data[3]);
+                            $("#subject3").val(data[4]);
+                            $("#subject4").val(data[5]);
 
                             $("#info").show();
 

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('nominalrolls', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->string('nominal_id');
             $table->string('student_id');
             $table->string('reg_number');
             $table->string('year_study');

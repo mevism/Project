@@ -66,10 +66,10 @@ Route::middleware(['is_cod'])->prefix('department')->group( function() {
         Route::get('/accept-student-transfer-request/{id}', [CODController::class, 'acceptTransferRequest'])->name('department.acceptTransferRequest');
         Route::post('/decline-student-transfer-request/{id}', [CODController::class, 'declineTransferRequest'])->name('department.declineTransferRequest');
         Route::get('/generate-list-of-all-transfer-requests/{year}', [CODController::class, 'requestedTransfers'])->name('department.requestedTransfers');
-        Route::get('/view-yearly-course-transfer-requests/{year}', [CODController::class, 'viewYearRequests'])->name('department.viewYearRequests');
+        Route::get('/view-yearly-course-transfer-requests/{id}', [CODController::class, 'viewYearRequests'])->name('department.viewYearRequests');
 
         Route::get('/view-list-of-departmental-academic-leave-transfers', [CODController::class, 'academicLeave'])->name('department.academicLeave');
-        Route::get('/view-yearly-departmental-academic-leave-transfers/{year}', [CODController::class, 'yearlyAcademicLeave'])->name('department.yearlyLeaves');
+        Route::get('/view-yearly-departmental-academic-leave-transfers/{id}', [CODController::class, 'yearlyAcademicLeave'])->name('department.yearlyLeaves');
         Route::get('/view-academic-leave-request/{id}', [CODController::class, 'viewLeaveRequest'])->name('department.viewLeaveRequest');
         Route::get('/accept-academic-leave/deferment-request/{id}', [CODController::class, 'acceptLeaveRequest'])->name('department.acceptLeaveRequest');
         Route::post('/decline-academic-leave/deferment-request/{id}', [CODController::class, 'declineLeaveRequest'])->name('department.declineLeaveRequest');
@@ -95,7 +95,6 @@ Route::middleware(['is_cod'])->prefix('department')->group( function() {
     Route::get('/department-approve-lecturer-teaching-area/{id}', [CODController::class, 'approveTeachingArea'])->name('department.approveTeachingArea');
     Route::post('/department-decline-lecturer-qualification/{id}', [CODController::class, 'declineTeachingArea'])->name('department.declineTeachingArea');
 
-
     Route::get('/yearly-results', [CODController::class, 'yearlyResults'])->name('department.yearlyResults');
     Route::get('/semester-results/{year}', [CODController::class, 'semesterResults'])->name('department.semesterResults');
     Route::get('/download-results/{sem}/{year}', [CODController::class, 'downloadResults'])->name('department.downloadResults');
@@ -107,5 +106,21 @@ Route::middleware(['is_cod'])->prefix('department')->group( function() {
     Route::get('/edit-course-options/{id}', [CODController::class, 'editCourseOption'])->name('department.editCourseOption');
     Route::post('/store-course-options', [CODController::class, 'storeCourseOption'])->name('department.storeCourseOption');
     Route::post('/update-course-options/{id}', [CODController::class, 'updateCourseOption'])->name('department.updateCourseOption');
+
+    Route::get('/units', [CODController::class, 'allUnits'])->name('department.allUnits');
+    Route::get('/add-units', [CODController::class, 'addUnit'])->name('department.addUnit');
+    Route::post('/store-units', [CODController::class, 'storeUnit'])->name('department.storeUnit');
+    Route::get('/edit-units/{id}', [CODController::class, 'editUnit'])->name('department.editUnit');
+    Route::post('/update-units/{id}', [CODController::class, 'updateUnit'])->name('department.updateUnit');
+
+    Route::get('/department-syllabi', [CODController::class, 'syllabi'])->name('department.syllabi');
+    Route::get('/course-syllabus/{id}', [CODController::class, 'courseSyllabus'])->name('department.courseSyllabus');
+    Route::get('/add-course-syllabus-version/{id}', [CODController::class, 'addCourseSyllabusVersion'])->name('department.addSyllabusVersion');
+    Route::get('/syllabus-version-units/{id}', [CODController::class, 'viewSyllabusUnits'])->name('department.viewSyllabusUnits');
+    Route::get('/fetch-syllabus-unit', [CODController::class, 'searchUnit'])->name('department.searchUnit');
+    Route::any('/submit-syllabus-units', [CODController::class, 'submitSyllabusUnits'])->name('department.submitSyllabusUnits');
+    Route::get('/complete-course-syllabus/{course}/{version}', [CODController::class, 'completeSyllabus'])->name('department.completeCourseSyllabus');
+
+
 
 });

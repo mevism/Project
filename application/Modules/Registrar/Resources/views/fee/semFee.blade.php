@@ -36,9 +36,10 @@
                                <select name="course" class="form-control  text-uppercase">
                                    <option selected disabled> -- Select Course -- </option>
                                    @foreach ($courses as $key => $course)
-                                       <option value="{{ $course->id }}">{{ $course->course_name }}</option>
+                                       <option value="{{ $course->course_id }}">{{ $course->course_name }}</option>
                                    @endforeach
                                </select>
+                               <label>Course Name</label>
                            </div>
 
                            <div class="form-floating mb-2">
@@ -49,6 +50,7 @@
                                    @endforeach
                                    {{-- <label class="form-label">LEVEL</label> --}}
                                </select>
+                               <label>Course Level</label>
                            </div>
 
                            <div class="form-floating col">
@@ -58,6 +60,7 @@
                                        <option value="{{ $mode->id }}">{{ $mode->attendance_code }}</option>
                                    @endforeach
                                </select>
+                               <label>Course Mode of Study</label>
                            </div>
 
                            <label class="fw-bold mb-2 mt-4">FEE DESCRIPTION</label>
@@ -66,7 +69,7 @@
 
                            @foreach($votes as $vote)
                            <div class="mb-4">
-                               <input name="voteheads[]" type="hidden" value="{{ $vote->id }} ">
+                               <input name="voteheads[]" type="hidden" value="{{ $vote->votehead_id }} ">
                                <label for=""> {{ $vote->name }}</label>
                            </div>
                            <div class="mb-4">

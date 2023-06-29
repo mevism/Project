@@ -39,7 +39,7 @@
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="{{ route('student') }}">Dashboard</a>
+                            <a class="link-fx" href="{{ route('student') }}"> Semester </a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
                             Registration Details
@@ -53,7 +53,7 @@
     <div class="block block-rounded">
         <div class="block-content block-content-full">
             <div class="table-responsive">
-                <div class="d-flex justify-content-end mb-4">
+                <div class="d-flex justify-content-end m-2">
                     <a class="btn btn-sm btn-alt-primary m-2" href="{{ route('student.requestRegistration') }}">Create request</a>
                 </div>
                 <table id="example" class="table table-responsive-sm table-striped table-borderless fs-sm">
@@ -86,7 +86,7 @@
                                     @endif
                                 </td>
                                 <td nowrap="">
-                                    <a class="btn btn-sm btn-outline-info" href="{{ route('student.viewSemesterUnits', ['id' => Crypt::encrypt($register->id)]) }}">View units</a>
+                                    <a class="btn btn-sm btn-outline-info" href="{{ route('student.viewSemesterUnits', $register->nominal_id) }}">View units</a>
                                 </td>
                             </tr>
                         @endforeach

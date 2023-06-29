@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('student_invoices', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('student_id');
+            $table->string('invoice_id');
+            $table->string('student_id');
             $table->string('reg_number');
             $table->string('invoice_number');
             $table->string('stage');

@@ -10,7 +10,7 @@ class StudentAddress extends Model
     use HasFactory;
 
     protected $fillable = [];
-    
+
     protected static function newFactory()
     {
         return \Modules\Student\Database\factories\StudentAddressFactory::new();

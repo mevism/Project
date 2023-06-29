@@ -109,17 +109,17 @@
                                             <td>{{ $pattern->stage }}</td>
                                             <td>{{ $pattern->pattern->season }}</td>
                                             <td>
-                                                <a class="btn btn-sm btn-outline-primary" href="{{ route('department.viewSemesterUnits', ['id' => Crypt::encrypt($pattern->id)]) }}">view units</a>
+                                                <a class="btn btn-sm btn-outline-primary" href="{{ route('department.viewSemesterUnits', $pattern->class_pattern_id) }}">view units</a>
                                             </td>
                                             <td>{{ $pattern->start_date }}</td>
                                             <td>{{ $pattern->end_date }}</td>
                                             <td nowrap="">
-                                                <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $pattern->id }}">
+                                                <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $pattern->class_pattern_id }}">
                                                     Edit
                                                 </button>
-                                                <a class="btn btn-sm btn-outline-danger" href="{{ route('cod.deleteClassPattern', ['id' => Crypt::encrypt($pattern->id)]) }}">delete</a>
+                                                <a class="btn btn-sm btn-outline-danger" href="{{ route('cod.deleteClassPattern', $pattern->class_pattern_id) }}">delete</a>
 
-                                                <div class="modal fade" id="staticBackdrop-{{ $pattern->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                <div class="modal fade" id="staticBackdrop-{{ $pattern->class_pattern_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                     <div class="modal-dialog modal-xl modal-dialog-centered">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -133,7 +133,7 @@
                                                                     $stage = explode(' ', $class->classCourse->courseRequirements->course_duration)[0];
                                                                 @endphp
 
-                                                                <form method="POST" action="{{ route('cod.updateClassPattern', ['id' => Crypt::encrypt($pattern->id)]) }}">
+                                                                <form method="POST" action="{{ route('cod.updateClassPattern', $pattern->class_pattern_id) }}">
                                                                     @csrf
 
                                                                     <div class="row row-cols-sm-4 g-2">

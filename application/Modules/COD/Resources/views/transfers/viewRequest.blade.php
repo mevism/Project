@@ -28,9 +28,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         VIEW REQUEST
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -56,34 +56,34 @@
                             <fieldset class="border p-2" style="height: 100% !important;">
                                 <legend class="float-none w-auto"><h6 class="fw-bold text-center"> STUDENT'S CURRENT COURSE</h6></legend>
                                 <div class="row mb-3">
-                                    <div class="col-md-3 fw-bold">Reg. Number </div>
+                                    <div class="col-md-3 fw-bold">Student Number </div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $transfer->studentTransfer->reg_number }}
+                                        {{ $transfer->studentTransfer->enrolledCourse->student_number }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Student Name</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $transfer->studentTransfer->sname.' '.$transfer->studentTransfer->fname.' '.$transfer->studentTransfer->mname }}
+                                        {{ $transfer->studentTransfer->loggedStudent->sname.' '.$transfer->studentTransfer->loggedStudent->fname.' '.$transfer->studentTransfer->loggedStudent->mname }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Current Class</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $transfer->studentTransfer->courseStudent->class_code }}
+                                        {{ $transfer->studentTransfer->enrolledCourse->entry_class }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Current Course</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $transfer->studentTransfer->courseStudent->studentCourse->course_name }}
+                                        {{ $transfer->studentTransfer->enrolledCourse->StudentSCourse->course_name }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Current Department</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $transfer->studentTransfer->courseStudent->studentCourse->getCourseDept->name }}
+                                        {{ $transfer->studentTransfer->enrolledCourse->StudentsDepartment->name }}
                                     </div>
                                 </div>
 
@@ -91,7 +91,7 @@
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">KCSE Results</div>
                                     <div class="col-md-9 fs-sm">
-                                        <a class="btn btn-sm btn-outline-primary col-md-6" target="_blank" href="{{ route('department.viewUploadedDocument', ['id' => Crypt::encrypt($transfer->id)]) }}">View Document</a>
+                                        <a class="btn btn-sm btn-outline-primary col-md-6" target="_blank" href="{{ route('department.viewUploadedDocument', $transfer->course_transfer_id) }}">View Document</a>
                                     </div>
                                 </div>
                                 @endif
@@ -140,9 +140,9 @@
                                         <div class="col-md-4 fw-bold">Recommendation</div>
                                         <div class="col-md-8 fs-sm">
                                             @if($transfer->student_points >= $transfer->class_points)
-                                                <span class="badge bg-success"> Meets all minimum requirements </span>
+                                                <span class="badge bg-success"> Meets minimum cluster points requirements </span>
                                             @else
-                                                <span class="badge bg-danger"> Does not meet all minimum requirements </span>
+                                                <span class="badge bg-danger"> Doesn't meet minimum cluster points requirements </span>
 
                                             @endif
                                         </div>
@@ -168,13 +168,13 @@
                     </div>
                     <div class="d-flex justify-content-center m-2">
                         @if($transfer->approvedTransfer == null)
-                            <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('department.acceptTransferRequest', ['id' => Crypt::encrypt($transfer->id)]) }}"> Accept Transfer </a>
+                            <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('department.acceptTransferRequest', $transfer->course_transfer_id) }}"> Accept Transfer </a>
                             <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Transfer</a>
                         @else
-                            @if($transfer->approvedTransfer->cod_status == 1)
+                            @if($transfer->approvedTransfer->cod_status == 1 && $transfer->approvedTransfer->dean_status == null)
                                 <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Transfer</a>
-                            @else
-                                <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('department.acceptTransferRequest', ['id' => Crypt::encrypt($transfer->id)]) }}"> Accept Transfer </a>
+                            @elseif($transfer->approvedTransfer->cod_status == 2 && $transfer->approvedTransfer->dean_status == null)
+                                <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('department.acceptTransferRequest', $transfer->course_transfer_id) }}"> Accept Transfer </a>
                             @endif
                         @endif
                 </div>
@@ -191,12 +191,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                        <form method="POST" action="{{ route('department.declineTransferRequest', ['id' => Crypt::encrypt($transfer->id)]) }}">
+                        <form method="POST" action="{{ route('department.declineTransferRequest', $transfer->course_transfer_id) }}">
                             @csrf
                             <div class="d-flex justify-content-center mb-4">
                             <div class="col-md-11">
                                 <textarea name="remarks" placeholder="Remarks" rows="6" class="form-control"></textarea>
-                                <input type="hidden" value="{{ $transfer->id }}" name="transfer_id">
+                                <input type="hidden" value="{{ $transfer->course_transfer_id}}" name="transfer_id">
                             </div>
                             </div>
                             <div class="d-flex justify-content-center">

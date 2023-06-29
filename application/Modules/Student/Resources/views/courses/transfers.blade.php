@@ -53,8 +53,8 @@
     <div class="block block-rounded">
         <div class="block-content block-content-full">
             <div class="table-responsive">
-                <div class="d-flex justify-content-end mb-4">
-                    <a class="btn btn-sm btn-alt-primary" href="{{ route('student.requesttransfer') }}">Create request</a>
+                <div class="d-flex justify-content-end mb-0">
+                    <a class="btn btn-sm btn-alt-primary m-2" href="{{ route('student.requesttransfer') }}">Create request</a>
                 </div>
                 <table id="example"  class="table table-sm table-striped table-bordered fs-sm">
                     <thead>

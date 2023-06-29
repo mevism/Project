@@ -1,4 +1,5 @@
 @extends('student::layouts.backend')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
@@ -6,7 +7,7 @@
 <link rel="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css">
 <link rel="https://cdn.datatables.net/rowgroup/1.2.0/css/rowGroup.dataTables.min.css">
 
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+{{--<script src="https://code.jquery.com/jquery-3.5.1.js"></script>--}}
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 
 <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
@@ -132,11 +133,45 @@
                                 </fieldset>
 
                                 @else
+                                <form method="POST" action="{{ route('student.registerSemester') }}">
                                 <fieldset class="border p-2 mb-0">
                                     <legend  class="float-none w-auto"> <h6>  SEMESTER UNITS </h6></legend>
-                                    @foreach($units as $key => $one)
-                                        <p> {{ ++$key }}. {{ $one->unit_code }} - {{ $one->unit_name }}</p>
+                                    @foreach($options as $option => $units)
+                                        @if($course->course_id == $option)
+                                            <h6 class="mb-4">{{ $course->course_name }}</h6>
+                                            @foreach($units as $unit)
+                                              <p>
+                                                <input type="checkbox" name="unit_code[]" checked value="{{ $unit->unit_code }}" onclick="return false;">
+                                                  <input type="hidden" name="optionId" value="{{ $option }}">
+                                                  {{ $loop->iteration }}. {{ $unit->unit_code }} - {{ $unit->SyllabusUnit->unit_name }}
+                                              </p>
+                                            @endforeach
+                                        @else
+                                            <h6 class="mb-2 mt-4">
+                                                <label>
+                                                    <input type="radio" name="optionId" value="{{ $option }}" class="option-radio">
+                                                    {{ \Modules\COD\Entities\CourseOptions::where('option_id', $option)->first()->option_name }}
+                                                </label>
+                                            </h6>
+                                            <div class="units-container">
+                                                @foreach($units as $unit)
+                                                        <div class="row mb-2">
+                                                            <div class="col-md-3">
+                                                                <input type="checkbox" @if($unit->type == 'core') checked onclick="return false;" @endif name="unit_code[]" value="{{ $unit->unit_code }}" class="unit-checkbox" data-option="{{ $option }}">
+                                                                {{ $loop->iteration }}. {{ $unit->unit_code }}
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                {{ $unit->SyllabusUnit->unit_name }}
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                {{ $unit->type }}
+                                                            </div>
+                                                        </div>
+                                                @endforeach
+                                            </div>
+                                        @endif
                                     @endforeach
+                                    <small class="text-danger">Number of units selected must match department requirements</small>
                                 </fieldset>
                                 @endif
                         </fieldset>
@@ -181,7 +216,6 @@
             </div>
 
             @if($next != NULL)
-                <form method="POST" action="{{ route('student.registerSemester') }}">
                     @csrf
                     <input type="hidden" name="semester" value="{{ $next->semester }}">
                     <input type="hidden" name="yearstudy" value="{{ $next->stage}}">
@@ -236,3 +270,33 @@
         </div>
     </div>
 @endsection
+<script>
+    $(document).ready(function() {
+        $('.unit-checkbox').on('change', function() {
+            var selectedOption = $(this).data('option');
+            $('.option-radio').prop('checked', false); // Uncheck all option radios
+            $('input[name="optionId"][value="' + selectedOption + '"]').prop('checked', true); // Check the selected option radio
+
+            // Disable all unit checkboxes
+            $('.unit-checkbox').prop('disabled', true);
+
+            // Enable unit checkboxes for the selected option
+            $('.unit-checkbox[data-option="' + selectedOption + '"]').prop('disabled', false);
+        });
+
+        $('.option-radio').on('change', function() {
+            var selectedOption = $(this).val();
+
+            // Disable all unit checkboxes
+            $('.unit-checkbox').prop('disabled', true);
+
+            // Enable unit checkboxes for the selected option
+            $('.unit-checkbox[data-option="' + selectedOption + '"]').prop('disabled', false);
+        });
+    });
+
+</script>
+
+
+
+
