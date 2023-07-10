@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('qualification_remarks', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('qualification_id');
+            $table->string('qualification_id');
             $table->longText('remarks');
             $table->timestamps();
             $table->softDeletes();
