@@ -200,6 +200,7 @@
                         </a>
                     </li>
                 </ul>
+{{--                @dd($user->enrolledCourse)--}}
               @if($user->enrolledCourse->student_type == 2)
                     <ul class="nav-main-submenu">
                         <li class="nav-main-item">

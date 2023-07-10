@@ -9,9 +9,13 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Modules\Application\Entities\ApplicationApproval;
+use Modules\COD\Entities\AcademicLeavesView;
 use Modules\COD\Entities\ApplicationsView;
+use Modules\COD\Entities\ReadmissionsView;
 use Modules\Dean\Entities\DeanLog;
 use Modules\Registrar\Entities\ACADEMICDEPARTMENTS;
+use Modules\Student\Entities\CourseTransfersView;
+use Modules\Student\Entities\StudentCourse;
 use Modules\Student\Entities\StudentView;
 use PhpOffice\PhpWord\Element\Table;
 use Illuminate\Support\Facades\Crypt;
@@ -472,267 +476,125 @@ class DeanController extends Controller{
     }
 
 
-    public function readmissions()
-    {
-
-        $readmissions = Readmission::latest()->get()->groupBy('academic_year');
-
+    public function readmissions(){
+        $readmissions = Readmission::latest()->get()->groupBy('intake_id');
         return view('dean::readmissions.yearlyReadmissions')->with(['readmissions' => $readmissions]);
     }
 
-    public function yearlyReadmissions($year)
-    {
-
-        $hashedYear = Crypt::decrypt($year);
-
-        $admissions = Readmission::where('academic_year', $hashedYear)->latest()->get()->groupBy('academic_semester');
-
-        return view('dean::readmissions.yearly')->with(['admissions' => $admissions, 'year' => $hashedYear]);
-    }
-
-    public function intakeReadmissions($intake, $year)
-    {
-
-        $hashedIntake = Crypt::decrypt($intake);
-        $hashedYear = Crypt::decrypt($year);
-
-        $school_id = auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->id;
-
-        $departments   =   Department::where('division_id', 1)->get();
+    public function intakeReadmissions($id){
+        $user = auth()->guard('user')->user();
+        $school_id = $user->employmentDepartment->first()->schools->first()->school_id;
+        $departments = ACADEMICDEPARTMENTS::where('school_id', $school_id)->get();
         foreach ($departments as $department) {
-            if ($department->schools->first()->id == $school_id) {
-
-                $deptAdmission[] = $department->id;
-            }
+            $readmissions[] = ReadmissionsView::where('intake_id', $id)
+                ->where('department_id', $department->department_id)
+                ->where('cod_status', '>', 0)
+                ->latest()
+                ->get();
         }
-
-        $readmissions = Readmission::where('academic_year', $hashedYear)->where('academic_semester', $hashedIntake)->get();
-
-        $allReadmissions = [];
-
-        foreach ($readmissions as $readmission) {
-            if (in_array($readmission->leaves->studentLeave->courseStudent->department_id, $deptAdmission, false)) {
-                $allReadmissions[] = $readmission;
-            }
-        }
-
-        return view('dean::readmissions.intakeReadmissions')->with(['readmissions' => $allReadmissions, 'year' => $hashedYear]);
+        return view('dean::readmissions.intakeReadmissions')->with(['readmissions' => $readmissions, 'intake' => $id]);
     }
 
-    public function selectedReadmission($id)
-    {
-
-        $hashedId = Crypt::decrypt($id);
-
-        $leave = Readmission::find($hashedId);
-
-        $stage = Nominalroll::where('student_id', $leave->leaves->studentLeave->id)
-            ->latest()
-            ->first();
-        $studentStage = $stage->year_study . '.' . $stage->semester_study;
-
-        $patterns = ClassPattern::where('academic_year', '>', $stage->academic_year)
-            ->where('period', $stage->academic_semester)
-            ->where('semester', $studentStage)
+    public function selectedReadmission($id){
+        $leave = ReadmissionsView::where('readmision_id', $id)->first();
+        $patterns = ClassPattern::where('semester', $leave->StudentsReadmission->stage)
             ->get()
             ->groupBy('class_code');
+        $studentCourse = StudentCourse::where('student_id', $leave->student_id)->first();
+
+        if ($studentCourse->student_type == 1){
+            $mode = 'S-FT';
+        }elseif ($studentCourse->student_type == 2){
+            $mode = 'J-FT';
+        }elseif ($studentCourse->student_type == 3){
+            $mode = 'S-PT';
+        }elseif ($studentCourse->student_type == 4){
+            $mode = 'S-EV';
+        }
 
         if (count($patterns) == 0) {
-
             $classes = [];
         } else {
-
             foreach ($patterns as $class_code => $pattern) {
 
                 $classes[] = Classes::where('name', $class_code)
-                    ->where('course_id', $leave->leaves->studentLeave->courseStudent->course_id)
-                    ->where('attendance_code', $leave->leaves->studentLeave->courseStudent->typeStudent->attendance_code)
-                    ->where('name', '!=', $leave->leaves->studentLeave->courseStudent->class_code)
+                    ->where('course_id', $studentCourse->course_id)
+                    ->where('attendance_id', $mode)
+                    ->where('name', '!=',$studentCourse->current_class)
                     ->get()
                     ->groupBy('name');
             }
         }
 
-        return view('dean::readmissions.selectedReadmission')->with(['classes' => $classes, 'leave' => $leave, 'stage' => $stage]);
+        return view('dean::readmissions.selectedReadmission')->with(['classes' => $classes, 'leave' => $leave]);
     }
-    public function acceptReadmission(Request $request, $id)
-    {
-
+    public function acceptReadmission(Request $request, $id){
         $request->validate([
             'class' => 'required'
         ]);
+        $intake = Readmission::where('readmision_id', $id)->first()->intake_id;
+        ReadmissionApproval::where('readmission_id', $id)->update([
+                'dean_status' => 1,
+                'dean_remarks' => 'Readmission request accepted'
+            ]);
 
-        $hashedId = Crypt::decrypt($id);
-
-        $route = Readmission::find($hashedId);
-
-        if (ReadmissionApproval::where('readmission_id', $hashedId)->exists()) {
-
-            $placement = new ReadmissionClass;
-            $placement->readmission_id = $hashedId;
-            $placement->class_code = $request->class;
-            $placement->save();
-
-
-            $readmission = ReadmissionApproval::where('readmission_id', $hashedId)->first();
-            $readmission->dean_status = 1;
-            $readmission->dean_remarks = 'Admit student to ' . $request->class . ' class.';
-            $readmission->save();
-        } else {
-
-            $placement = new ReadmissionClass;
-            $placement->readmission_id = $hashedId;
-            $placement->class_code = $request->class;
-            $placement->save();
-
-            $readmission = new ReadmissionApproval;
-            $readmission->readmission_id = $hashedId;
-            $readmission->dean_status = 1;
-            $readmission->dean_remarks = 'Admit student to ' . $request->class . ' class.';
-            $readmission->save();
-        }
-
-        return redirect()->route('dean.intakeReadmissions', ['intake' => Crypt::encrypt($route->academic_semester), 'year' => Crypt::encrypt($route->academic_year)])->with('success', 'Readmission request accepted');
+        return redirect()->route('dean.intakeReadmissions', $intake)->with('success', 'Readmission request accepted');
     }
 
-    public function declineReadmission(Request $request, $id)
-    {
+    public function declineReadmission(Request $request, $id){
 
         $request->validate([
             'remarks' => 'required'
         ]);
-
-        $hashedId = Crypt::decrypt($id);
-
-        $route = Readmission::find($hashedId);
-
-        if (ReadmissionApproval::where('readmission_id', $hashedId)->exists()) {
-
-            ReadmissionClass::where('readmission_id', $hashedId)->delete();
-
-            $readmission = ReadmissionApproval::where('readmission_id', $hashedId)->first();
-            $readmission->dean_status = 2;
-            $readmission->dean_remarks = $request->remarks;
-            $readmission->save();
-        } else {
-
-            $readmission = new ReadmissionApproval;
-            $readmission->readmission_id = $hashedId;
-            $readmission->dean_status = 2;
-            $readmission->dean_remarks = $request->remarks;
-            $readmission->save();
-        }
-
-        return redirect()->route('dean.intakeReadmissions', ['intake' => Crypt::encrypt($route->academic_semester), 'year' => Crypt::encrypt($route->academic_year)])->with('success', 'Readmission request declined');
+        $intake = Readmission::where('readmision_id', $id)->first()->intake_id;
+        ReadmissionApproval::where('readmission_id', $id)->update([
+            'dean_status' => 2,
+            'dean_remarks' => $request->remarks,
+        ]);
+        return redirect()->route('dean.intakeReadmissions', $intake)->with('success', 'Readmission request accepted');
     }
 
-    public function academicLeave()
-    {
-
-        $requests = AcademicLeave::latest()->get()->groupBy('academic_year');
-
+    public function academicLeave(){
+        $requests = AcademicLeave::latest()->get()->groupBy('intake_id');
         return view('dean::defferment.index')->with(['leaves' => $requests]);
     }
 
-    public function yearlyAcademicLeave($year)
-    {
-
-        $hashedYear = Crypt::decrypt($year);
-
-        $school_id = auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->id;
-
-        $departments   =   Department::where('division_id', 1)->get();
+    public function yearlyAcademicLeave($id){
+        $user = auth()->guard('user')->user();
+        $school_id = $user->employmentDepartment->first()->schools->first()->school_id;
+        $departments = ACADEMICDEPARTMENTS::where('school_id', $school_id)->get();
         foreach ($departments as $department) {
-            if ($department->schools->first()->id == $school_id) {
-
-                $deptLeaves[] = $department->id;
-            }
+            $leaves[] = AcademicLeavesView::where('intake_id', $id)
+                ->where('department_id', $department->department_id)
+                ->where('cod_status', '>', 0)
+                ->latest()
+                ->get();
         }
-
-        $leaves = AcademicLeave::where('academic_year', $hashedYear)->latest()->get();
-
-        $allLeaves = [];
-
-        //        foreach ($departments as $department){
-        //            $deptIds[] = $department->id;
-        //        }
-
-        foreach ($leaves as $leave) {
-
-            // return $leave->studentLeave->courseStudent->department_id;
-            if (in_array($leave->studentLeave->courseStudent->department_id, $deptLeaves, false)) {
-                $allLeaves[] = $leave;
-            }
-        }
-
-
-        return view('dean::defferment.annualLeaves')->with(['leaves' => $allLeaves, 'year' => $hashedYear]);
+        return view('dean::defferment.annualLeaves')->with(['leaves' => $leaves, 'intake' => $id]);
     }
 
-    public function viewLeaveRequest($id)
-    {
-
-        $hashedId = Crypt::decrypt($id);
-
-        $leave = AcademicLeave::find($hashedId);
-
-        $student = Student::find($leave->student_id);
-
-        $currentStage = Nominalroll::where('student_id', $leave->student_id)
-            ->latest()
-            ->first();
-
-        return view('dean::defferment.viewRequests')->with(['leave' => $leave, 'current' => $currentStage, 'student' => $student]);
+    public function viewLeaveRequest($id){
+        $leave = AcademicLeavesView::where('leave_id', $id)->first();
+        $student = StudentView::where('student_id', $leave->student_id)->first();
+        return view('dean::defferment.viewRequests')->with(['leave' => $leave, 'student' => $student]);
     }
 
-    public function acceptLeaveRequest($id)
-    {
-
-        $hashedId = Crypt::decrypt($id);
-
-        $leave = AcademicLeave::find($hashedId);
-
-        if (AcademicLeaveApproval::where('academic_leave_id', $hashedId)->exists()) {
-
-            $updateApproval = AcademicLeaveApproval::where('academic_leave_id', $hashedId)->first();
-            $updateApproval->dean_status = 1;
-            $updateApproval->dean_remarks = 'Request Accepted';
-            $updateApproval->save();
-        } else {
-
-            $newApproval = new AcademicLeaveApproval;
-            $newApproval->academic_leave_id = $hashedId;
-            $newApproval->dean_status = 1;
-            $newApproval->dean_remarks = 'Request Accepted';
-            $newApproval->save();
-        }
-
-        return redirect()->route('dean.yearlyLeaves', ['year' => Crypt::encrypt($leave->academic_year)])->with('success', 'Deferment/Academic leave approved');
+    public function acceptLeaveRequest($id){
+        $leave = AcademicLeavesView::where('leave_id', $id)->first();
+            AcademicLeaveApproval::where('leave_id', $id)->update([
+                'dean_status' => 1,
+                'dean_remarks' => 'Request Accepted'
+            ]);
+        return redirect()->route('dean.yearlyLeaves', $leave->intake_id)->with('success', 'Deferment/Academic leave approved');
     }
 
-    public function declineLeaveRequest(Request $request, $id)
-    {
-
-        $hashedId = Crypt::decrypt($id);
-
-        $leave = AcademicLeave::find($hashedId);
-
-        if (AcademicLeaveApproval::where('academic_leave_id', $hashedId)->exists()) {
-
-            $updateApproval = AcademicLeaveApproval::where('academic_leave_id', $hashedId)->first();
-            $updateApproval->dean_status = 2;
-            $updateApproval->dean_remarks = $request->remarks;
-            $updateApproval->save();
-        } else {
-
-            $newApproval = new AcademicLeaveApproval;
-            $newApproval->academic_leave_id = $hashedId;
-            $newApproval->dean_status = 2;
-            $newApproval->dean_remarks = $request->remarks;
-            $newApproval->save();
-        }
-
-        return redirect()->route('dean.yearlyLeaves', ['year' => Crypt::encrypt($leave->academic_year)])->with('success', 'Deferment/Academic leave declined.');
+    public function declineLeaveRequest(Request $request, $id){
+        $leave = AcademicLeavesView::where('leave_id', $id)->first();
+        AcademicLeaveApproval::where('leave_id', $id)->update([
+            'dean_status' => 2,
+            'dean_remarks' => $request->remarks
+        ]);
+        return redirect()->route('dean.yearlyLeaves', $leave->intake_id)->with('success', 'Deferment/Academic leave declined.');
     }
 
     public function requestedTransfers($id) {
@@ -743,7 +605,7 @@ class DeanController extends Controller{
         $role = $user->roles->first()->name;
        $departments = ACADEMICDEPARTMENTS::where('school_id', $school->school_id)->get();
         foreach ($departments as $department) {
-           $transfers[] = DB::table('coursetransfersview')->where('department_id', $department->department_id)
+           $transfers[] = CourseTransfersView::where('department_id', $department->department_id)
                 ->where('intake_id', $id)
                 ->get()
                 ->groupBy('course_id');
@@ -785,7 +647,7 @@ class DeanController extends Controller{
 
                 foreach ($transfer as $key => $list) {
                     $name = $list->student_number . "<w:br/>\n" . $list->sname . ' ' . $list->fname . ' ' . $list->mname;
-                    $student_id = DB::table('coursetransfersview')->where('student_id', $list->student_id)
+                    $student_id = CourseTransfersView::where('student_id', $list->student_id)
                         ->first()->student_id;
                     $student = StudentView::where('student_id', $student_id)->first();
                     if ($list->cod_status == null) {
@@ -863,8 +725,7 @@ class DeanController extends Controller{
     }
 
 
-    public function yearly() {
-
+    public function yearly(){
         $user = auth()->guard('user')->user();
         $school_id = $user->employmentDepartment->first()->schools->first()->school_id;
         $departments = ACADEMICDEPARTMENTS::where('school_id', $school_id)->get();
@@ -872,17 +733,14 @@ class DeanController extends Controller{
         foreach ($departments as $deptmentTransfer) {
             $data[] = CourseTransfer::where('department_id', $deptmentTransfer->department_id)
                 ->latest()
-                ->withTrashed()
                 ->get()
                 ->groupBy('intake_id');
         }
-
         return  view('dean::transfers.yearly')->with(['data' => $data, 'departments' => $departments]);
     }
 
-
     public function declineTransferRequest(Request $request, $id){
-        $intake = DB::table('coursetransfersview')->where('course_transfer_id', $id)->first()->intake_id;
+        $intake = CourseTransfersView::where('course_transfer_id', $id)->first()->intake_id;
         CourseTransferApproval::where('course_transfer_id', $id)->update([
             'dean_status' => 2,
             'dean_remarks' => $request->remarks,
@@ -891,18 +749,16 @@ class DeanController extends Controller{
     }
 
     public function acceptTransferRequest($id){
-
-        $intake = DB::table('coursetransfersview')->where('course_transfer_id', $id)->first()->intake_id;
+        $intake = CourseTransfersView::where('course_transfer_id', $id)->first()->intake_id;
         CourseTransferApproval::where('course_transfer_id', $id)->update([
             'dean_status' => 1,
             'dean_remarks' => 'Admit Student'
         ]);
-
         return redirect()->route('dean.transfer', $intake)->with('success', 'Course transfer request accepted');
     }
 
     public function viewUploadedDocument($id){
-        $course = CourseTransfer::where('course_transfer_id', $id)->withTrashed()->first();
+        $course = CourseTransfer::where('course_transfer_id', $id)->first();
         $document = ApplicationApproval::where('reg_number', $course->studentTransfer->enrolledCourse->student_number)->first()->ApplicationsDocments;
         return response()->file('Admissions/Certificates/' . $document->certificates);
     }
@@ -913,18 +769,17 @@ class DeanController extends Controller{
         $departments = ACADEMICDEPARTMENTS::where('school_id', $school_id)->get();
 
         foreach ($departments as $deptmentTransfer) {
-            $data[] = DB::table('coursetransfersview')->where('department_id', $deptmentTransfer->department_id)
-                ->where('cod_status', '>=', 1)
+            $data[] = CourseTransfersView::where('department_id', $deptmentTransfer->department_id)
+                ->where('cod_status', '!=', null)
 //                ->latest()
                 ->get();
         }
-
         return view('dean::transfers.index')->with(['transfer' => $data, 'departments' => $departments, 'intake' => $id]);
     }
 
     public function viewTransfer($id) {
-        $data =  DB::table('coursetransfersview')->where('course_transfer_id', $id)->first();
-        $student_id = CourseTransfer::where('course_transfer_id', $id)->withTrashed()->first()->student_id;
+        $data =  CourseTransfersView::where('course_transfer_id', $id)->first();
+        $student_id = CourseTransfer::where('course_transfer_id', $id)->first()->student_id;
         $student = StudentView::where('student_id', $student_id)->first();
         return view('dean::transfers.viewTransfer')->with(['data' => $data, 'student' => $student]);
     }
@@ -940,24 +795,20 @@ class DeanController extends Controller{
         return view('dean::applications.index')->with('apps', $applications);
     }
 
-    public function viewApplication($id)
-    {
-
+    public function viewApplication($id){
         $app = ApplicationsView::where('application_id', $id)->first();
         $school = Education::where('applicant_id', $app->applicant_id)->get();
 
         return view('dean::applications.viewApplication')->with(['app' => $app, 'school' => $school]);
     }
 
-    public function previewApplication($id)
-    {
+    public function previewApplication($id){
         $app = ApplicationsView::where('application_id', $id)->first();
         $school = Education::where('applicant_id', $app->applicant_id)->get();
         return view('dean::applications.preview')->with(['app' => $app, 'school' => $school]);
     }
 
-    public function acceptApplication($id)
-    {
+    public function acceptApplication($id){
         $app = ApplicationApproval::where('application_id', $id)->first();
         $app->dean_status = 1;
         $app->dean_comments = 'Application Accepted';
@@ -976,8 +827,7 @@ class DeanController extends Controller{
         return redirect()->route('dean.applications')->with('success', '1 applicant approved');
     }
 
-    public function rejectApplication(Request $request, $id)
-    {
+    public function rejectApplication(Request $request, $id){
         $app = ApplicationApproval::where('application_id', $id)->first();
         $app->dean_status = 2;
         $app->dean_comments = $request->comment;
@@ -997,8 +847,7 @@ class DeanController extends Controller{
         return redirect()->route('dean.applications')->with('success', 'Application declined');
     }
 
-    public function batch()
-    {
+    public function batch(){
         $apps = ApplicationsView::where('dean_status', '>', 0)
             ->where('school_id', auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->school_id)
             ->where('registrar_status', null)
@@ -1010,8 +859,7 @@ class DeanController extends Controller{
         return view('dean::applications.batch')->with('apps', $apps);
     }
 
-    public function batchSubmit(Request $request)
-    {
+    public function batchSubmit(Request $request){
 
         foreach ($request->submit as $item) {
             $app = ApplicationApproval::where('application_id', $item)->first();
@@ -1041,74 +889,5 @@ class DeanController extends Controller{
         }
 
         return redirect()->route('dean.batch')->with('success', '1 Batch send to next level of approval');
-    }
-
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
-    public function index()
-    {
-        return view('dean::index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
-    {
-        return view('dean::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
-    {
-        return view('dean::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('dean::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

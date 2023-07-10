@@ -13,7 +13,7 @@ class DeferredClass extends Model
 
     public function classDiferred(){
 
-        return $this->belongsTo(AcademicLeave::class, 'academic_leave_id');
+        return $this->belongsTo(AcademicLeave::class, 'leave_id', 'leave_id');
     }
 
     protected static function newFactory()

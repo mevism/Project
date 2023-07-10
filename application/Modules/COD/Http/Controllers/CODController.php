@@ -6,11 +6,13 @@ use App\Models\User;
 use App\Service\CustomIds;
 use Auth;
 use Modules\Application\Entities\ApplicationApproval;
+use Modules\COD\Entities\AcademicLeavesView;
 use Modules\COD\Entities\AdmissionsView;
 use Modules\COD\Entities\ApplicationsView;
 use Modules\COD\Entities\CourseOnOfferView;
 use Modules\COD\Entities\CourseOptions;
 use Modules\COD\Entities\CourseSyllabus;
+use Modules\COD\Entities\ReadmissionsView;
 use Modules\COD\Entities\SyllabusVersion;
 use Modules\COD\Entities\Unit;
 use Modules\Lecturer\Entities\LecturerQualification;
@@ -485,7 +487,6 @@ class CODController extends Controller
 
     public function addAvailableCourses(Request $request){
 
-//        return $request->intake;
         $payload = json_decode($request->input('payload'), true);
 
         // Check if JSON decoding was successful
@@ -530,6 +531,7 @@ class CODController extends Controller
                     $course = Courses::where('course_id', $selectedCourse['course'])->first();
                     $code = Attendance::find($mode);
                     $classEx = $course->course_code.'/'.strtoupper(Carbon::parse($intakes->intake_from)->format('MY')).'/'.$code->attendance_code;
+                    $syllabus = SyllabusVersion::where('course_id', $course->course_id)->latest()->first()->syllabus_name;
 
                     $classId = new CustomIds();
 
@@ -541,6 +543,8 @@ class CODController extends Controller
                         $class->attendance_id = $code->attendance_code;
                         $class->course_id = $selectedCourse['course'];
                         $class->intake_id = $request->intake;
+                        $class->syllabus_name = $syllabus;
+                        $class->points = 0;
                         $class->save();
                     }
                 }
@@ -916,7 +920,6 @@ class CODController extends Controller
     public function transferRequests(){
         $transfers = CourseTransfer::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
             ->latest()
-            ->withTrashed()
             ->get()
             ->groupBy('intake_id');
 
@@ -928,27 +931,26 @@ class CODController extends Controller
      $transfers = CourseTransfer::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
             ->where('intake_id', $id)
             ->latest()
-            ->withTrashed()
             ->get();
 
         return view('cod::transfers.annualTransfers')->with(['transfers' => $transfers, 'intake' => $id]);
     }
 
     public function viewTransferRequest($id){
-        $transfer = CourseTransfer::where('course_transfer_id', $id)->withTrashed()->first();
+        $transfer = CourseTransfer::where('course_transfer_id', $id)->first();
         return view('cod::transfers.viewRequest')->with(['transfer' => $transfer]);
     }
 
     public function viewUploadedDocument($id){
-        $course = CourseTransfer::where('course_transfer_id', $id)->withTrashed()->first();
+        $course = CourseTransfer::where('course_transfer_id', $id)->first();
         $document = ApplicationApproval::where('reg_number', $course->studentTransfer->enrolledCourse->student_number)->first()->ApplicationsDocments;
 
         return response()->file('Admissions/Certificates/' . $document->certificates);
     }
 
     public function acceptTransferRequest($id){
-        $intake = CourseTransfer::where('course_transfer_id', $id)->withTrashed()->first()->intake_id;
-        $class = CourseTransfer::where('course_transfer_id', $id)->withTrashed()->first()->classTransfer->name;
+        $intake = CourseTransfer::where('course_transfer_id', $id)->first()->intake_id;
+        $class = CourseTransfer::where('course_transfer_id', $id)->first()->classTransfer->name;
 
         if (CourseTransferApproval::where('course_transfer_id', $id)->exists()) {
             CourseTransferApproval::where('course_transfer_id', $id)->update([
@@ -967,7 +969,7 @@ class CODController extends Controller
     }
 
     public function declineTransferRequest(Request $request, $id){
-        $intake = CourseTransfer::where('course_transfer_id', $id)->withTrashed()->first()->intake_id;
+        $intake = CourseTransfer::where('course_transfer_id', $id)->first()->intake_id;
 
         if (CourseTransferApproval::where('course_transfer_id', $id)->exists()) {
            CourseTransferApproval::where('course_transfer_id', $id)->update([
@@ -997,7 +999,7 @@ class CODController extends Controller
 //            ->where('status', '>=', 1)
             ->where('intake_id', $id)
             ->latest()
-            ->withTrashed()
+
             ->get()
             ->groupBy('course_id');
 
@@ -1105,255 +1107,134 @@ class CODController extends Controller
     }
 
 
-    public function academicLeave()
-    {
-
+    public function academicLeave(){
         $requests = AcademicLeave::latest()
             ->get()
-            ->groupBy('academic_year');
-
+            ->groupBy('intake_id');
         return view('cod::leaves.index')->with(['leaves' => $requests]);
     }
 
-    public function yearlyAcademicLeave($year)
-    {
-
-        $hashedYear = Crypt::decrypt($year);
-
-        $deptID = auth()->guard('user')->user()->employmentDepartment->first()->id;
-
-        $requests = AcademicLeave::where('academic_year', $hashedYear)
+    public function yearlyAcademicLeave($id){
+        $deptID = auth()->guard('user')->user()->employmentDepartment->first()->department_id;
+        $leaves = AcademicLeavesView::where('intake_id', $id)
+            ->where('department_id', $deptID)
             ->latest()
             ->get();
 
-        $allLeaves = [];
-
-        foreach ($requests as $leave) {
-
-            // return $leave->studentLeave->courseStudent->department_id;
-            if ($leave->studentLeave->courseStudent->department_id == $deptID) {
-                $allLeaves[] = $leave;
-            }
-        }
-
-        return view('cod::leaves.annualLeaves')->with(['leaves' => $allLeaves, 'year' => $hashedYear]);
+        return view('cod::leaves.annualLeaves')->with(['leaves' => $leaves, 'intake' => $id]);
     }
 
-    public function viewLeaveRequest($id)
-    {
-
-        $hashedId = Crypt::decrypt($id);
-
-        $leave = AcademicLeave::find($hashedId);
-
-        $student = Student::find($leave->student_id);
-
-        $currentStage = Nominalroll::where('student_id', $leave->student_id)
-            ->latest()
-            ->first();
-
-        return view('cod::leaves.viewLeaveRequest')->with(['leave' => $leave, 'current' => $currentStage, 'student' => $student]);
+    public function viewLeaveRequest($id){
+        $leave = AcademicLeavesView::where('leave_id', $id)->first();
+        $student = StudentView::where('student_id', $leave->student_id)->first();
+        return view('cod::leaves.viewLeaveRequest')->with(['leave' => $leave, 'student' => $student]);
     }
 
-    public function acceptLeaveRequest($id)
-    {
-
-        $hashedId = Crypt::decrypt($id);
-
-        $leave = AcademicLeave::find($hashedId);
-
-        if (AcademicLeaveApproval::where('academic_leave_id', $hashedId)->exists()) {
-
-            $updateApproval = AcademicLeaveApproval::where('academic_leave_id', $hashedId)->first();
-            $updateApproval->cod_status = 1;
-            $updateApproval->cod_remarks = 'Request Accepted';
-            $updateApproval->save();
-        } else {
-
-            $newApproval = new AcademicLeaveApproval;
-            $newApproval->academic_leave_id = $hashedId;
-            $newApproval->cod_status = 1;
-            $newApproval->cod_remarks = 'Request Accepted';
-            $newApproval->save();
-        }
-
-        return redirect()->route('department.yearlyLeaves', ['year' => Crypt::encrypt($leave->academic_year)])->with('success', 'Deferment/Academic leave approved');
+    public function acceptLeaveRequest($id){
+        $updateApproval = AcademicLeavesView::where('leave_id', $id)->first();
+        AcademicLeaveApproval::where('leave_id', $id)->update([
+            'cod_status' => 1,
+            'cod_remarks' => 'Request accepted'
+            ]);
+        return redirect()->route('department.yearlyLeaves', $updateApproval->intake_id)->with('success', 'Deferment/Academic leave approved');
     }
 
-    public function declineLeaveRequest(Request $request, $id)
-    {
-
-        $hashedId = Crypt::decrypt($id);
-
-        $leave = AcademicLeave::find($hashedId);
-
-        if (AcademicLeaveApproval::where('academic_leave_id', $hashedId)->exists()) {
-
-            $updateApproval = AcademicLeaveApproval::where('academic_leave_id', $hashedId)->first();
-            $updateApproval->cod_status = 2;
-            $updateApproval->cod_remarks = $request->remarks;
-            $updateApproval->save();
-        } else {
-
-            $newApproval = new AcademicLeaveApproval;
-            $newApproval->academic_leave_id = $hashedId;
-            $newApproval->cod_status = 2;
-            $newApproval->cod_remarks = $request->remarks;
-            $newApproval->save();
-        }
-
-        return redirect()->route('department.yearlyLeaves', ['year' => Crypt::encrypt($leave->academic_year)])->with('success', 'Deferment/Academic leave declined.');
+    public function declineLeaveRequest(Request $request, $id){
+            $updateApproval = AcademicLeavesView::where('leave_id', $id)->first();
+            AcademicLeaveApproval::where('leave_id', $id)->update([
+                'cod_status' => 2,
+                'cod_remarks' => $request->remarks
+            ]);
+        return redirect()->route('department.yearlyLeaves', $updateApproval->intake_id)->with('success', 'Deferment/Academic leave approved');
     }
 
-    public function readmissions()
-    {
-
-        $readmissions = Readmission::latest()->get()->groupBy('academic_year');
-
+    public function readmissions(){
+        $readmissions = Readmission::latest()->get()->groupBy('intake_id');
         return view('cod::readmissions.index')->with(['readmissions' => $readmissions]);
     }
 
-    public function yearlyReadmissions($year)
-    {
-
-        $hashedYear = Crypt::decrypt($year);
-
-        $admissions = Readmission::where('academic_year', $hashedYear)->latest()->get()->groupBy('academic_semester');
-
-        return view('cod::readmissions.yearlyReadmissions')->with(['admissions' => $admissions, 'year' => $hashedYear]);
+    public function yearlyReadmissions($id){
+        $admissions = ReadmissionsView::where('intake_id', $id)
+            ->where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+            ->latest()->get();
+        return view('cod::readmissions.intakeReadmissions')->with(['admissions' => $admissions]);
     }
 
-    public function intakeReadmissions($intake, $year)
-    {
-
-        $hashedIntake = Crypt::decrypt($intake);
-        $hashedYear = Crypt::decrypt($year);
-
-        $readmissions = Readmission::where('academic_year', $hashedYear)
-            ->where('academic_semester', $hashedIntake)
-            ->get();
-
-        $leaves = [];
-
-        foreach ($readmissions as $readmission) {
-
-            if ($readmission->leaves->studentLeave->courseStudent->department_id == auth()->guard('user')->user()->employmentDepartment->first()->id) {
-
-                $leaves[] = $readmission;
-            }
-        }
-
-        return view('cod::readmissions.intakeReadmissions')->with(['admissions' => $leaves]);
-    }
-
-    public function selectedReadmission($id)
-    {
-
-        $hashedId = Crypt::decrypt($id);
-        // $classes = [];
-
-        $leave = Readmission::find($hashedId);
-
-        $stage = Nominalroll::where('student_id', $leave->leaves->studentLeave->id)
-            // ->where('activation', 0)
-            ->latest()
-            ->first();
-        $studentStage = $stage->year_study . '.' . $stage->semester_study;
-
-        $patterns = ClassPattern::where('academic_year', '>', $stage->academic_year)
-            ->where('period', $stage->academic_semester)
-            ->where('semester', $studentStage)
+    public function selectedReadmission($id){
+      $readmision = ReadmissionsView::where('readmision_id', $id)->first();
+      $patterns = ClassPattern::where('semester', $readmision->StudentsReadmission->stage)
             ->get()
             ->groupBy('class_code');
+      $studentCourse = StudentCourse::where('student_id', $readmision->student_id)->first();
+
+      if ($studentCourse->student_type == 1){
+          $mode = 'S-FT';
+      }elseif ($studentCourse->student_type == 2){
+          $mode = 'J-FT';
+      }elseif ($studentCourse->student_type == 3){
+          $mode = 'S-PT';
+      }elseif ($studentCourse->student_type == 4){
+          $mode = 'S-EV';
+      }
 
         if (count($patterns) == 0) {
-
             $classes = [];
         } else {
-
             foreach ($patterns as $class_code => $pattern) {
 
                 $classes[] = Classes::where('name', $class_code)
-                    ->where('course_id', $leave->leaves->studentLeave->courseStudent->course_id)
-                    ->where('attendance_code', $leave->leaves->studentLeave->courseStudent->typeStudent->attendance_code)
-                    ->where('name', '!=', $leave->leaves->studentLeave->courseStudent->class_code)
+                    ->where('course_id', $studentCourse->course_id)
+                    ->where('attendance_id', $mode)
+                    ->where('name', '!=',$studentCourse->current_class)
                     ->get()
                     ->groupBy('name');
             }
         }
 
-        return view('cod::readmissions.viewSelectedReadmission')->with(['classes' => $classes, 'leave' => $leave, 'stage' => $stage]);
+        return view('cod::readmissions.viewSelectedReadmission')->with(['readmision' => $readmision, 'classes' => $classes]);
     }
 
-    public function acceptReadmission(Request $request, $id)
-    {
-
+    public function acceptReadmission(Request $request, $id){
         $request->validate([
             'class' => 'required'
         ]);
+       $pattern = ClassPattern::where('class_code', $request->class)->where('semester', $request->stage)->first();
+        $intake = Readmission::where('readmision_id', $id)->first()->intake_id;
+        ReadmissionApproval::where('readmission_id', $id)->update([
+            'cod_status' => 1,
+            'cod_remarks' => 'Admit student to ' . $request->class . ' class.',
+        ]);
 
-        $hashedId = Crypt::decrypt($id);
-
-        $route = Readmission::find($hashedId);
-
-        if (ReadmissionApproval::where('readmission_id', $hashedId)->exists()) {
-
+        if (ReadmissionClass::where('readmission_id', $id)->exists()){
+            ReadmissionClass::where('readmission_id', $id)->update([
+                'readimission_class' => $request->class
+            ]);
+        }else{
+            $readID = new CustomIds();
             $placement = new ReadmissionClass;
-            $placement->readmission_id = $hashedId;
-            $placement->class_code = $request->class;
+            $placement->readmission_class_id = $readID->generateId();
+            $placement->readmission_id = $id;
+            $placement->readmission_class = $request->class;
+            $placement->readmission_year = $pattern->academic_year;
+            $placement->readmission_semester = $pattern->period;
+            $placement->stage = $request->stage;
             $placement->save();
-
-
-            $readmission = ReadmissionApproval::where('readmission_id', $hashedId)->first();
-            $readmission->cod_status = 1;
-            $readmission->cod_remarks = 'Admit student to ' . $request->class . ' class.';
-            $readmission->save();
-        } else {
-
-            $placement = new ReadmissionClass;
-            $placement->readmission_id = $hashedId;
-            $placement->class_code = $request->class;
-            $placement->save();
-
-            $readmission = new ReadmissionApproval;
-            $readmission->readmission_id = $hashedId;
-            $readmission->cod_status = 1;
-            $readmission->cod_remarks = 'Admit student to ' . $request->class . ' class.';
-            $readmission->save();
         }
 
-        return redirect()->route('department.intakeReadmissions', ['intake' => Crypt::encrypt($route->academic_semester), 'year' => Crypt::encrypt($route->academic_year)])->with('success', 'Readmission request accepted');
+        return redirect()->route('department.yearlyReadmissions', $intake)->with('success', 'Readmission request accepted');
     }
 
-    public function declineReadmission(Request $request, $id)
-    {
-
+    public function declineReadmission(Request $request, $id){
         $request->validate([
             'remarks' => 'required'
         ]);
-
-        $hashedId = Crypt::decrypt($id);
-
-        $route = Readmission::find($hashedId);
-
-        if (ReadmissionApproval::where('readmission_id', $hashedId)->exists()) {
-
-            ReadmissionClass::where('readmission_id', $hashedId)->delete();
-
-            $readmission = ReadmissionApproval::where('readmission_id', $hashedId)->first();
-            $readmission->cod_status = 2;
-            $readmission->cod_remarks = $request->remarks;
-            $readmission->save();
-        } else {
-
-            $readmission = new ReadmissionApproval;
-            $readmission->readmission_id = $hashedId;
-            $readmission->cod_status = 2;
-            $readmission->cod_remarks = $request->remarks;
-            $readmission->save();
-        }
-
-        return redirect()->route('department.intakeReadmissions', ['intake' => Crypt::encrypt($route->academic_semester), 'year' => Crypt::encrypt($route->academic_year)])->with('success', 'Readmission request declined');
+        $intake = Readmission::where('readmision_id', $id)->first()->intake_id;
+        ReadmissionApproval::where('readmission_id', $id)->update([
+            'cod_status' => 2,
+            'cod_remarks' => $request->remarks,
+        ]);
+        ReadmissionClass::where('readmission_id', $id)->delete();
+        return redirect()->route('department.yearlyReadmissions', $intake)->with('success', 'Readmission request accepted');
     }
 
     public function departmentLectures()

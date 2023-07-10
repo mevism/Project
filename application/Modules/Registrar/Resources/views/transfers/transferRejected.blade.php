@@ -28,11 +28,11 @@
             .bgcolor3{
                 background-color: #dddddd;
             }
-          
+
         </style>
     </head>
     <body  class="bgcolor" style="margin: 0; padding: 0;" yahoo="fix">
-       
+
         <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%; max-width: 600px;  " class="content">
             <tr>
                 <td style="padding: 15px 10px 15px 10px;">
@@ -52,9 +52,9 @@
             </tr>
             <tr>
                 <td align="auto" class="bgcolor2" style="padding: 40px 20px 40px 20px; color: #555555; font-family: Arial, sans-serif; font-size: 20px; line-height: 30px; border-bottom: 1px solid #f6f6f6;">
-                    <h5>Dear {{ $oldStud->studentTransfer->sname. ' '. $oldStud->studentTransfer->fname .' '. $oldStud->studentTransfer->mname }}, </h5>
+                    <h5>Dear {{ $oldStudent->sname. ' '. $oldStudent->fname .' '. $oldStudent->mname }}, </h5>
                      <p>
-                       Your course transfer to <b>{{ $oldStud->courseTransfer->course_name }}</b> was not successful. You are advised to continue with your current course <b>{{ $oldStud->studentTransfer->courseStudent->studentCourse->course_name }}</b>.
+                       Your course transfer was not successful. You are advised to continue with your current course <b>{{ $oldStudent->course_name }}</b>.
                      </p>
                     <div>
                         <p>
@@ -66,12 +66,12 @@
                                Admissions Department <br><br>
 
                              Technical University of Mombasa
-                            
+
                         </p>
                      </div>
                 </td>
             </tr>
-            
+
             <tr>
                 <td align="center" class="bgcolor3" style="padding: 15px 10px 15px 10px; color: #555555; font-family: Arial, sans-serif; font-size: 12px; line-height: 18px;">
                     <b>Technical University of Mombasa.</b><br/>Tom Mboya street, Tudor &bull; Mombasa &bull; Kenya

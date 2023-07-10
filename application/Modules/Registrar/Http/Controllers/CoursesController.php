@@ -3,6 +3,7 @@
 namespace Modules\Registrar\Http\Controllers;
 
 use App\Service\CustomIds;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Modules\Application\Entities\ApplicantAddress;
@@ -11,18 +12,25 @@ use Modules\Application\Entities\ApplicantInfo;
 use Modules\Application\Entities\ApplicantLogin;
 use Modules\Application\Entities\ApplicationApproval;
 use Modules\Application\Entities\ApplicationSubject;
+use Modules\COD\Entities\AcademicLeavesView;
 use Modules\COD\Entities\AdmissionsView;
 use Modules\COD\Entities\ApplicationsView;
 use Modules\COD\Entities\CourseCluster;
+use Modules\COD\Entities\Nominalroll;
+use Modules\COD\Entities\ReadmissionsView;
 use Modules\COD\Entities\Unit;
 use Modules\Registrar\Entities\ACADEMICDEPARTMENTS;
 use Modules\Registrar\Entities\Campus;
+use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\ClusterGroup;
 use Modules\Registrar\Entities\ClusterSubject;
 use Modules\Registrar\Entities\Division;
 use Modules\Registrar\Entities\Group;
 use Modules\Registrar\Entities\SchoolDepartment;
 use Modules\Student\Entities\CourseClusterGroups;
+use Modules\Student\Entities\CourseSoftDelete;
+use Modules\Student\Entities\CourseTransfersView;
+use Modules\Student\Entities\OldStudentCourse;
 use Modules\Student\Entities\StudentAddress;
 use Modules\Student\Entities\StudentContact;
 use Modules\Student\Entities\StudentCourse;
@@ -257,13 +265,7 @@ class CoursesController extends Controller
             ->get()
             ->groupBy('reg_number');
 
-
-
-
-
-
-
-        // $table->addRow();
+            // $table->addRow();
         // $table->addCell(5900, ['borderSize' => 1, 'gridSpan' => 4])->addText('SEMESTER UNITS AND MARKS', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
         // // $table->addCell(800, ['borderSize' => 1])->addText();
 
@@ -596,82 +598,54 @@ class CoursesController extends Controller
         return response()->download($pdfPath)->deleteFileAfterSend(true);
     }
 
-    public function readmissions()
-    {
-        $schools   =   School::all();
-        foreach ($schools as $school) {
-            $data = Readmission::all()->groupBy('academic_year');
-        }
-
-        return  view('registrar::readmissions.index')->with(['data' => $data, 'schools' => $schools]);
+    public function readmissions(){
+        $data = ReadmissionsView::all()->groupBy('intake_id');
+        return  view('registrar::readmissions.index')->with(['data' => $data]);
     }
 
-    public function yearlyReadmissions($year)
-    {
-        $hashedYear = Crypt::decrypt($year);
-        $schools   =   School::all();
-        $readmissions  =  Readmission::where('academic_year', $hashedYear)->get();
-
-        return view('registrar::readmissions.yearlyReadmissions')->with(['readmissions' => $readmissions, 'schools' => $schools, 'year' => $hashedYear]);
+    public function yearlyReadmissions($id){
+        $readmissions = ReadmissionsView::where('intake_id', $id)->where('dean_status', '>', 0)->get();
+        return view('registrar::readmissions.yearlyReadmissions')->with(['readmissions' => $readmissions, 'intake' => $id]);
     }
 
-    public function acceptedReadmissions(Request $request)
-    {
+    public function acceptedReadmissions(Request $request){
         $request->validate(['submit' => 'required']);
-
         foreach ($request->submit as $id) {
-
-            $approval = Readmission::find($id);
-
-            if ($approval->readmissionApproval->dean_status == 1) {
-
-                Mail::to($approval->studentReadmission->student_email)->send(new AcceptedReadmissionsMail($approval));
-
-                StudentCourse::where('student_id', $approval->studentReadmission->id)->update(['class_code' => $approval->readmissionsReadmitClass->class_code, 'class' => $approval->readmissionsReadmitClass->class_code]);
-
-                $approved = ReadmissionApproval::where('readmission_id', $id)->first();
-                $approved->registrar_status  =  1;
-                $approved->save();
-
-                $student = Student::find($approval->student_id);
-                $student->status = 1;
-                $student->save();
-
-                $approval->status = 1;
-                $approval->save();
+            $approval = ReadmissionsView::where('readmision_id', $id)->first();
+            if ($approval->cod_status == 1) {
+                StudentCourse::where('student_id', $approval->student_id)->update([
+                    'current_class' => $approval->ReadmissionClass->readmission_class,
+                    'status' => 1,
+                    ]);
+                ReadmissionApproval::where('readmission_id', $id)->update([
+                    'registrar_status'  =>  1
+                ]);
+                Readmission::where('readmision_id', $id)->update([
+                    'status' => 1
+                ]);
+                Mail::to($approval->student_email)->send(new AcceptedReadmissionsMail($approval));
             } else {
-
-                Mail::to($approval->studentLeave->student_email)->send(new RejectedReadmissionsMail($approval));
-
-                $rejected = ReadmissionApproval::find($id);
-                $rejected->registrar_status  =  1;
-                $rejected->save();
-
-                $approval->status = 2;
-                $approval->save();
+                ReadmissionApproval::where('readmission_id', $id)->update([
+                    'registrar_status'  =>  1,
+                ]);
+                Readmission::where('readmision_id', $id)->update([
+                   'status' => 2
+                ]);
+                Mail::to($approval->student_email)->send(new RejectedReadmissionsMail($approval));
             }
         }
 
-        return redirect()->back()->with('success', 'Email sent successfuly.');
+        return redirect()->back()->with('success', 'Readmission requests processed successfully.');
     }
 
-    public function leaves()
-    {
-        $schools   =   School::all();
-        foreach ($schools as $school) {
-            $data = AcademicLeave::all()->groupBy('academic_year');
-        }
-
-        return  view('registrar::leaves.yearlyLeaves')->with(['data' => $data, 'schools' => $schools]);
+    public function leaves(){
+        $leaves = AcademicLeave::all()->groupBy('intake_id');
+        return  view('registrar::leaves.yearlyLeaves')->with(['leaves' => $leaves]);
     }
 
-    public function academicLeave($year)
-    {
-        $hashedYear = Crypt::decrypt($year);
-        $schools   =   School::all();
-        $leaves  =  AcademicLeave::where('academic_year', $hashedYear)->get();
-
-        return view('registrar::leaves.index')->with(['leaves' => $leaves, 'schools' => $schools, 'year' => $hashedYear]);
+    public function academicLeave($id){
+        $leaves  =  AcademicLeavesView::where('intake_id', $id)->where('dean_status', '>', 0)->get();
+        return view('registrar::leaves.index')->with(['leaves' => $leaves]);
     }
 
     public function acceptedAcademicLeaves(Request $request)
@@ -679,32 +653,24 @@ class CoursesController extends Controller
         $request->validate(['submit' => 'required']);
 
         foreach ($request->submit as $id) {
+            $approval = AcademicLeavesView::where('leave_id', $id)->first();
+            if ($approval->dean_status == 1) {
+                AcademicLeaveApproval::where('leave_id', $id)->update([
+                    'registrar_status'  =>  1,
+                    'status'  =>  1
+                ]);
 
-            $approval = AcademicLeave::find($id);
-
-            if ($approval->approveLeave->dean_status == 1) {
-
-                Mail::to($approval->studentLeave->student_email)->send(new AcademicLeaveMail($approval));
-
-                $approved = AcademicLeaveApproval::where('academic_leave_id', $id)->first();
-                $approved->registrar_status  =  1;
-                $approved->status  =  1;
-                $approved->save();
-
-                $student = Student::find($approval->student_id);
-                $student->status = 3;
-                $student->save();
+                StudentCourse::where('student_id', $approval->student_id)->update([
+                    'status' => 3
+                ]);
+                Mail::to($approval->student_email)->send(new AcademicLeaveMail($approval));
             } else {
-
-                Mail::to($approval->studentLeave->student_email)->send(new RejectedAcademicMail($approval));
-
-                $rejected = AcademicLeaveApproval::find($id);
-                $rejected->registrar_status  =  1;
-                $rejected->status  =  2;
-                $rejected->save();
+                AcademicLeaveApproval::where('leave_id', $id)->update([
+                    'registrar_status'  =>  1,
+                    'status'  =>  2,
+                ]);
+                Mail::to($approval->student_email)->send(new RejectedAcademicMail($approval));
             }
-
-            return $newStudentCourse          =       new StudentCourse;
         }
 
         return redirect()->back()->with('success', 'Email sent successfuly.');
@@ -713,21 +679,20 @@ class CoursesController extends Controller
     public function acceptedTransfers(Request $request){
         $request->validate(['submit' => 'required']);
         foreach ($request->submit as $id) {
-            $approval = DB::table('coursetransfersview')->where('course_transfer_id', $id)->first();
+          $approval = CourseTransfersView::where('course_transfer_id', $id)->first();
             if ($approval->dean_status == 1) {
-
                 $intake = Intake::where('intake_id', $approval->intake_id)->first();
-                $registered = StudentCourse::withTrashed()
-                    ->where('intake_id', $approval->intake_id)
+                $registered = StudentCourse::where('intake_id', $approval->intake_id)
                     ->where('course_id', $approval->course_id)
                     ->count();
-
                 $course = Courses::where('course_id', $approval->course_id)->first();
 
                 $regNumber = $course->course_code . '/' . str_pad($registered + 1, 3, "0", STR_PAD_LEFT) . "J/" . Carbon::parse($intake->academicYear->year_start)->format('Y');
 
-                $refNumber = 'TRANSFER/'.time();
+                $refNumber = 'TRANSFER'.time();
                 $student = StudentView::where('student_id', $approval->student_id)->first();
+
+                StudentInfo::where('student_id', $student->student_id)->first()->id_number;
 
                 $domPdfPath = base_path('vendor/dompdf/dompdf');
                 \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
@@ -735,7 +700,7 @@ class CoursesController extends Controller
 
                 $my_template         =        new TemplateProcessor(storage_path('adm_template.docx'));
 
-                $my_template->setValue('name', strtoupper($approval->sname.' '.$approval->fname.' '.$approval->mname));
+                $my_template->setValue('name', strtoupper($student->sname.' '.$student->fname.' '.$student->mname));
                 $my_template->setValue('reg_number', strtoupper($regNumber));
                 $my_template->setValue('date',  date('d-M-Y'));
                 $my_template->setValue('ref_number', $refNumber);
@@ -749,16 +714,17 @@ class CoursesController extends Controller
                 $my_template->setValue('from', Carbon::parse($intake->intake_from)->format('D, d-m-Y'));
                 $my_template->setValue('to', Carbon::parse($intake->intake_from)->addDays(4)->format('D, d-m-Y'));
 
-                $docPath = storage_path(str_replace('/', '_', $refNumber) . ".docx");
+                $docPath = 'Admission Letters/'. $refNumber. ".docx";
 
                 $my_template->saveAs($docPath);
 
-                $contents = \PhpOffice\PhpWord\IOFactory::load(storage_path(str_replace('/', '_', $refNumber) . ".docx"));
+                $contents = \PhpOffice\PhpWord\IOFactory::load('Admission Letters/'. $refNumber. ".docx");
 
-                $pdfPath = storage_path(str_replace('/', '_', $refNumber) . ".pdf");
+                $pdfPath = 'Admission Letters/'. $refNumber.".pdf";
 
                 if (file_exists($pdfPath)) {
                     unlink($pdfPath);
+
                 }
 
                 //                    $converter     =     new OfficeConverter($docPath, storage_path());
@@ -768,126 +734,155 @@ class CoursesController extends Controller
                 //                        unlink($docPath);
                 //                    }
 
-                Student::withTrashed()->find($approval->student_id)->delete();
+                $currentCourse = StudentCourse::where('student_id', $student->student_id)->first();
 
-                $oldRecord = Student::withTrashed()->find($approval->student_id);
+                $oldStudentCourse = new OldStudentCourse;
+                $oldStudentCourse->student_id  = $currentCourse->student_id;
+                $oldStudentCourse->student_number  = $currentCourse->student_number;
+                $oldStudentCourse->reference_number  = $currentCourse->reference_number;
+                $oldStudentCourse->student_type  = $currentCourse->student_type;
+                $oldStudentCourse->course_id  = $currentCourse->course_id;
+                $oldStudentCourse->department_id  = $currentCourse->department_id;
+                $oldStudentCourse->intake_id  = $currentCourse->intake_id;
+                $oldStudentCourse->current_class  = $currentCourse->current_class;
+                $oldStudentCourse->entry_class  = $currentCourse->entry_class;
+                $oldStudentCourse->status  = 10;
+                $oldStudentCourse->save();
 
-                StudentCourse::where('student_id', $approval->student_id)->delete();
-                StudentLogin::where('student_id', $approval->student_id)->delete();
+                $invoices  =  StudentInvoice::where('reg_number', $currentCourse->student_number)->get();
 
-                // return $s = StudentInvoice::where($record->reg_number)->get();
+                $deposits  =  StudentDeposit::where('reg_number', $currentCourse->student_number)->get();
 
-                $invoices  =  StudentInvoice::where('reg_number', 'BSIT/002J/2023')->get();
-                $deposits  =  StudentDeposit::where('reg_number', $oldRecord->reg_number)->get();
+                DB::beginTransaction();
 
-                $record = Student::withTrashed()->find($approval->student_id)->delete();
+                try {
+                    foreach ($invoices as $invoice){
+                        $invoiceId = new CustomIds();
+                        $newDeposit  =  new StudentDeposit;
+                        $newDeposit->invoice_id = $invoiceId->generateId();
+                        $newDeposit->reg_number  =  $invoice->reg_number;
+                        $newDeposit->deposit = $invoice->amount;
+                        $newDeposit->description = $invoice->description;
+                        $newDeposit->invoice_number = $invoice->invoice_number;
+                        $newDeposit->save();
+                    }
 
-                $oldRecord = Student::withTrashed()->find($approval->student_id);
+                    foreach ($deposits as $deposit){
+                        $newInvoice  =  new StudentInvoice;
+                        $newInvoice->student_id  =  $student->student_id;
+                        $newInvoice->reg_number  =  $deposit->reg_number;
+                        $newInvoice->invoice_number = $deposit->invoice_number;
+                        $newInvoice->stage = '1.1';
+                        $newInvoice->amount = $deposit->deposit;
+                        $newInvoice->description = $deposit->description;
+                        $newInvoice->save();
+                    }
 
-                StudentCourse::where('student_id', $approval->student_id)->delete();
-                StudentLogin::where('student_id', $approval->student_id)->delete();
+                    foreach ($deposits as $invoice){
+                        $newDeposit = new StudentDeposit;
+                        $newDeposit->reg_number = $regNumber;
+                        $newDeposit->deposit = $invoice->deposit;
+                        $newDeposit->description = $invoice->description;
+                        $newDeposit->invoice_number = $invoice->invoice_number;
+                        $newDeposit->save();
+                    }
 
-                $invoices  =  StudentInvoice::where('reg_number', $oldRecord->reg_number)->get();
-                $deposits  =  StudentDeposit::where('reg_number', $oldRecord->reg_number)->get();
+                    foreach ($invoices as $deposit){
+                        $newInvoice  =  new StudentInvoice;
+                        $newInvoice->student_id  =  $deposit->student_id;
+                        $newInvoice->reg_number  =  $regNumber;
+                        $newInvoice->invoice_number = $deposit->invoice_number;
+                        $newInvoice->stage = '1.1';
+                        $newInvoice->amount = $deposit->amount;
+                        $newInvoice->description = $deposit->description;
+                        $newInvoice->save();
+                    }
+                    DB::commit();
 
-                $oldstudent = Student::withTrashed()->find($id);
+                } catch (ModelNotFoundException $e) {
+                    // Model not found, handle the exception (e.g., log or display a message)
+                    // ...
 
-                $newStudent               =             new Student;
+                    // Roll back the transaction
+                    DB::rollBack();
+                } catch (\Exception $e) {
+                    // An error occurred, handle the exception (e.g., log or display a message)
+                    // ...
 
-                $newStudent->reg_number   =             $regNumber;
-                $newStudent->ref_number   =             $refNumber;
-                $newStudent->sname        =             $student->sname;
-                $newStudent->fname        =             $student->fname;
-                $newStudent->mname        =             $student->mname;
-                $newStudent->email        =             $student->email;
-                $newStudent->student_email =            strtolower(str_replace('/', '', $regNumber) . '@students.tum.ac.ke');
-                $newStudent->mobile       =             $student->mobile;
-                $newStudent->alt_mobile   =             $student->alt_mobile;
-                $newStudent->title        =             $student->title;
-                $newStudent->marital_status =           $student->marital_status;
-                $newStudent->gender       =             $student->gender;
-                $newStudent->dob          =             $student->dob;
-                $newStudent->id_number    =             $student->id_number;
-                $newStudent->citizen      =             $student->citizen;
-                $newStudent->county       =             $student->county;
-                $newStudent->sub_county   =             $student->sub_county;
-                $newStudent->town         =             $student->town;
-                $newStudent->address      =             $student->address;
-                $newStudent->postal_code  =             $student->postal_code;
-                $newStudent->disabled     =             $student->disabled;
-                $newStudent->disability   =             $student->disability;
-                $newStudent->save();
+                    // Roll back the transaction
+                    DB::rollBack();
+                }
 
-                $newStudCourse                =             new StudentCourse;
-                $newStudCourse->student_id    =             $newStudent->id;
-                $newStudCourse->student_type  =             2;
-                $newStudCourse->department_id =             $approval->department_id;
-                $newStudCourse->course_id     =             $approval->course_id;
-                $newStudCourse->intake_id     =             $intakes->id;
-                $newStudCourse->academic_year_id =          $intakes->academic_year_id;
-                $newStudCourse->class_code    =             strtoupper($approval->classTransfer->name);
-                $newStudCourse->class         =             strtoupper($approval->classTransfer->name);
-                $newStudCourse->course_duration =           $course->courseRequirements->course_duration;
+                $class = Classes::where('class_id', $approval->class_id)->first();
+                $newStudCourse = new StudentCourse;
+                $newStudCourse->student_id = $student->student_id;
+                $newStudCourse->student_number = $regNumber;
+                $newStudCourse->reference_number = $refNumber;
+                $newStudCourse->student_type = 2;
+                $newStudCourse->department_id = $approval->department_id;
+                $newStudCourse->course_id = $approval->course_id;
+                $newStudCourse->intake_id = $intake->intake_id;
+                $newStudCourse->current_class = strtoupper($class->name);
+                $newStudCourse->entry_class = strtoupper($class->name);
+                $newStudCourse->status = 1;
                 $newStudCourse->save();
 
-                $newStudLogin    =  new StudentLogin;
-                $newStudLogin->student_id       =   $newStudent->id;
-                $newStudLogin->username         =   $newStudent->reg_number;
-                $newStudLogin->password         =   Hash::make($newStudent->id_number);
+                $newStudLogin = new StudentLogin;
+                $newStudLogin->student_id = $student->student_id;
+                $newStudLogin->username = $regNumber;
+                $newStudLogin->password = Hash::make(StudentInfo::where('student_id', $student->student_id)->first()->id_number);
                 $newStudLogin->save();
 
-                $oldStudentInvoice  =  StudentInvoice::find($id);
+                Mail::to($student->email)->send(new CourseTransferMails($student, $approval, $regNumber));
 
-                foreach ($invoices as $invoice) {
+                $studentNumber = $student->student_number;
+                StudentLogin::where('username', $studentNumber)->delete();
+                StudentCourse::where('student_number', $studentNumber)->delete();
 
-                    $newInvoice  =  new StudentInvoice;
-                    $newInvoice->student_id  =  $newStudent->id;
-                    $newInvoice->reg_number  =  $newStudent->reg_number;
-                    $newInvoice->invoice_number = $oldStudentInvoice->invoice_number;
-                    $newInvoice->stage = $oldStudentInvoice->stage;
-                    $newInvoice->amount = $oldStudentInvoice->amount;
-                    $newInvoice->description = $oldStudentInvoice->description;
-                    $newInvoice->save();
+                $nominalId = new CustomIds();
+                $registration = [
+                    'nominal_id' => $nominalId->generateId(),
+                    'student_id' => $student->student_id,
+                    'reg_number' => $regNumber,
+                    'year_study' => 1,
+                    'semester_study' => 1,
+                    'academic_year' =>  Carbon::parse($intake->academicYear->year_start)->format('Y').'/'.Carbon::parse($intake->academicYear->year_end)->format('Y'),
+                    'academic_semester' => strtoupper(Carbon::parse($intake->intake_from)->format('MY')),
+                    'pattern_id' => 1,
+                    'class_code' => $newStudCourse->current_class,
+                    'registration' => 1,
+                    'activation' => 1
+                ];
+                Nominalroll::create($registration);
+                CourseTransferApproval::where('course_transfer_id', $approval->course_transfer_id)
+                    ->update([
+                        'registrar_status'  =>  1,
+                        'status' => 1
+                    ]);
 
-                    StudentInvoice::find($invoice->id)->delete();
-                }
+                CourseTransfer::where('course_transfer_id', $approval->course_transfer_id)
+                    ->update([
+                        'status' => 1
+                    ]);
 
-                $oldStudentDeposit  =  StudentDeposit::find($id);
-                foreach ($deposits as $deposit) {
-
-                    $newDeposit  =  new StudentDeposit;
-                    $newDeposit->reg_number  =  $newStudent->reg_number;
-                    $newDeposit->deposit = $oldStudentDeposit->deposit;
-                    $newDeposit->description = $oldStudentDeposit->description;
-                    $newDeposit->invoice_number = $oldStudentDeposit->invoice_number;
-                    $newDeposit->save();
-
-                    StudentDeposit::find($deposit->id)->delete();
-                }
-
-                Mail::to($newStudent->email)->send(new CourseTransferMails($newStudent));
-
-                $approved = CourseTransferApproval::find($id);
-                $approved->registrar_status  =  1;
-                $approved->status  =  1;
-                $approved->save();
-
-                $approval->status = 2;
-                $approval->save();
             } else {
 
-                $rejectedMail = CourseTransferApproval::find($id);
-                $oldStud =  $rejectedMail->transferApproval;
+                $transfer = CourseTransfersView::where('course_transfer_id', $id)->first();
 
-                Mail::to($oldStud->studentTransfer->email)->send(new CourseTransferRejectedMails($oldStud));
+                $oldStudent = StudentView::where('student_id', $transfer->student_id)->first();
 
-                $rejectedMail->registrar_status  =  1;
-                $rejectedMail->status  =  2;
-                $rejectedMail->save();
+                Mail::to($oldStudent->email)->send(new CourseTransferRejectedMails($oldStudent));
 
-                $transferStatus =  CourseTransfer::find($rejectedMail->course_transfer_id);
-                $transferStatus->status = 3;
-                $transferStatus->save();
+                CourseTransferApproval::where('course_transfer_id', $approval->course_transfer_id)
+                    ->update([
+                        'registrar_status'  =>  1,
+                        'status' => 1
+                    ]);
+
+                CourseTransfer::where('course_transfer_id', $approval->course_transfer_id)
+                    ->update([
+                        'status' => 3
+                    ]);
             }
         }
 
@@ -895,13 +890,14 @@ class CoursesController extends Controller
     }
 
     public function transfer($id){
-        $transfers  =  DB::table('coursetransfersview')->where('intake_id', $id)
+        $transfers  =  CourseTransfersView::where('intake_id', $id)
+            ->where('dean_status', '!=', null)
             ->get();
         return view('registrar::transfers.index')->with(['transfer' => $transfers, 'intake' => $id]);
     }
 
     public function yearly(){
-       $data = CourseTransfer::withTrashed()->get()->groupBy('intake_id');
+       $data = CourseTransfer::get()->groupBy('intake_id');
         return  view('registrar::transfers.yearlyTransfers')->with(['data' => $data]);
     }
 
@@ -2342,6 +2338,7 @@ class CoursesController extends Controller
         $studCourse->department_id = $admission->department_id;
         $studCourse->course_id = $admission->course_id;
         $studCourse->intake_id = $admission->intake_id;
+        $studCourse->status = 1;
         if ($admission->student_type == 1) {
             $studCourse->current_class = strtoupper($admission->admissionCourse->course_code . '/' . Carbon::parse($admission->admissionIntake->intake_from)->format('MY') . '/S-FT');
             $studCourse->entry_class = strtoupper($admission->admissionCourse->course_code . '/' . Carbon::parse($admission->admissionIntake->intake_from)->format('MY') . '/S-FT');

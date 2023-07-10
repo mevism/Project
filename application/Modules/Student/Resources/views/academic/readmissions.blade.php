@@ -17,7 +17,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[2, 'asc']],
+            order: [[0, 'asc']],
             rowGroup: {
                 dataSrc: 2
             }
@@ -32,9 +32,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         READMISSION
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -53,10 +53,10 @@
     <div class="block block-rounded">
         <div class="block-content block-content-full">
             <div class="table-responsive">
-                <div class="d-flex justify-content-end mb-4">
+                <div class="d-flex justify-content-end mb-0 mt-0">
                     <a class="btn btn-sm btn-alt-primary m-2" href="{{ route('student.readmisionrequest') }}">Create request</a>
                 </div>
-                <table id="example"  class="table table-sm table-striped table-bordered fs-sm">
+                <table id="example"  class="table table-sm table-striped table-borderless fs-sm">
                     <thead>
                     <th>#</th>
                     <th nowrap=""> Leave Type </th>
@@ -82,11 +82,11 @@
                                     DISCONTINUATION
                                 @endif
                             </td>
-                            <td>{{ $readmit->leaves->deferredClass->deferred_class }}</td>
+                            <td>{{ $readmit->leaves->deferredClass->differed_class }}</td>
                             <td>{{ $readmit->leaves->deferredClass->stage }}</td>
                             <td>
-                                <span class="fw-semibold"> Academic Year : </span> {{ $readmit->leaves->deferredClass->academic_year }} <br>
-                                <span class="fw-semibold"> Academic Sem. : </span> {{ $readmit->leaves->deferredClass->semester_study }}
+                                <span class="fw-semibold"> Academic Year : </span> {{ $readmit->leaves->deferredClass->differed_year }} <br>
+                                <span class="fw-semibold"> Academic Sem. : </span> {{ $readmit->leaves->deferredClass->differed_semester }}
                             </td>
                             <td>
                                 <span class="fw-semibold"> Academic Year : </span> {{ $readmit->academic_year }} <br>

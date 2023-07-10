@@ -11,10 +11,7 @@ use Modules\Registrar\Entities\Department;
 use Modules\Student\Entities\StudentLogin;
 class CourseTransfer extends Model
 {
-    use HasFactory, SoftDeletes;
-
-    protected $table = 'course_transfers';
-//    protected $dates = ['delete_at'];
+    use HasFactory;
 
     protected $fillable = ['status'];
 
@@ -31,7 +28,7 @@ class CourseTransfer extends Model
     }
 
     public function studentTransfer(){
-        return $this->belongsTo(StudentLogin::class, 'student_id', 'student_id')->withTrashed();
+        return $this->belongsTo(StudentLogin::class, 'student_id', 'student_id');
     }
     public function approveTransfer(){
 

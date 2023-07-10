@@ -55,50 +55,47 @@
                 <table id="example"  class="table table-sm table-striped table-bordered fs-sm">
                     <thead>
                     <th>#</th>
-                    <th>Reg. NUMBER</th>
+                    <th>Student NUMBER</th>
                     <th>NAME</th>
                     <th>LEAVE TYPE</th>
                     <th>CURRENT STAGE</th>
-                    <th>PERIOD</th>
+                    <th>CURRENT Class</th>
+                    <th>Leave Duration</th>
                     <th>Action</th>
                     </thead>
                     <tbody>
                     @foreach($admissions as $admission)
                             <tr>
                                 <td> {{ $loop->iteration }} </td>
-                                <td> {{ $admission->leaves->studentLeave->reg_number }} </td>
-                                <td> {{ $admission->leaves->studentLeave->sname.' '.$admission->leaves->studentLeave->fname.' '.$admission->leaves->studentLeave->mname }} </td>
-                                <td> @if($admission->leaves->type == 1)
+                                <td> {{ $admission->student_number }} </td>
+                                <td> {{ $admission->sname.' '.$admission->fname.' '.$admission->mname }} </td>
+                                <td>
+                                    @if($admission->StudentsReadmission->type == 1)
                                         ACADEMIC LEAVE
-                                    @elseif($admission->leaves->type == 2)
+                                    @elseif($admission->StudentsReadmission->type == 2)
                                         DEFERMENT
-                                    @elseif($admission->leaves->type == 3)
+                                    @elseif($admission->StudentsReadmission->type == 3)
                                         SUSPENSION
                                     @else
                                         DISCONTINUATION
-                                    @endif </td>
-                                <td>
-                                    Year : {{ $admission->leaves->year_study }} Semester : {{ $admission->leaves->semester_study }}
+                                    @endif
                                 </td>
                                 <td>
-                                    From : {{ $admission->leaves->from }} <br>
-                                    To : {{ $admission->leaves->to }} <br>
+                                    Year : {{ $admission->StudentsReadmission->year_study }} Semester : {{ $admission->StudentsReadmission->semester_study }}
+                                </td>
+                                <td> {{ $admission->StudentsReadmission->current_class }} </td>
+                                <td>
+                                    <b>From :</b> {{ $admission->StudentsReadmission->from }} <br>
+                                    <b>To :</b> {{ $admission->StudentsReadmission->to }} <br>
                                 </td>
                                 <td>
-                                    <?php
-
-                                    $user = auth()->guard('user')->user();
-
-                                    ?>
-                                    @if($user->can('approve-application'))
-                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('department.selectedReadmission', ['id' => Crypt::encrypt($admission->id)]) }}"> View </a>
-                                        @endif
-                                    @if($admission->readmissionApproval != null)
-                                        @if($admission->readmissionApproval->cod_status == 1)
-                                            <i class="fa fa-check text-success"></i>
-                                        @else
-                                            <i class="fa fa-times text-danger"></i>
-                                        @endif
+                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('department.selectedReadmission', $admission->readmision_id) }}"> View </a>
+                                    @if($admission->cod_status == 1)
+                                        <i class="fa fa-check text-success"></i>
+                                    @elseif($admission->cod_status == 2)
+                                        <i class="fa fa-times text-danger"></i>
+                                    @else
+                                        <i class="fa fa-spinner text-info"></i>
                                     @endif
                                 </td>
                             </tr>

@@ -28,11 +28,11 @@
             .bgcolor3{
                 background-color: #dddddd;
             }
-          
+
         </style>
     </head>
     <body  class="bgcolor" style="margin: 0; padding: 0;" yahoo="fix">
-       
+
         <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%; max-width: 600px;  " class="content">
             <tr>
                 <td style="padding: 15px 10px 15px 10px;">
@@ -52,10 +52,10 @@
             </tr>
             <tr>
                 <td align="auto" class="bgcolor2" style="padding: 40px 20px 40px 20px; color: #555555; font-family: Arial, sans-serif; font-size: 20px; line-height: 30px; border-bottom: 1px solid #f6f6f6;">
-                    <h5>Dear {{ $approval->studentLeave->sname.' '.$approval->studentLeave->fname.' '.$approval->studentLeave->mname }} , </h5>
+                    <h5>Dear {{ $approval->sname.' '.$approval->fname.' '.$approval->mname }} , </h5>
                      <p>
                        Your academic leave/deferment has been accepted, it starts from
-                        <b>{{$approval->from}}</b> to <b>{{$approval->to }}</b>. You will join <b>{{ $approval->deferredClass->deferred_class }}</b> at this academic year <b>{{ $approval->deferredClass->academic_year}}</b> and this acedimic semester <b>{{ $approval->deferredClass->semester_study }}</b> at stage <b>{{ $approval->deferredClass->stage }}</b>.
+                        <b>{{$approval->from}}</b> to <b>{{$approval->to }}</b>. You are expected to join <b>{{ $approval->differed_class }}</b> class at <b>{{ $approval->stage }}</b> during <b>{{ $approval->differed_academic}}</b> academic year, <b>{{ $approval->differed_semester }}</b> academic semester.
                      </p>
                     <div>
                         <p>
@@ -67,12 +67,12 @@
                                Admissions Department <br><br>
 
                              Technical University of Mombasa
-                            
+
                         </p>
                      </div>
                 </td>
             </tr>
-            
+
             <tr>
                 <td align="center" class="bgcolor3" style="padding: 15px 10px 15px 10px; color: #555555; font-family: Arial, sans-serif; font-size: 12px; line-height: 18px;">
                     <b>Technical University of Mombasa.</b><br/>Tom Mboya street, Tudor &bull; Mombasa &bull; Kenya

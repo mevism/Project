@@ -1,19 +1,13 @@
 @extends('student::layouts.backend')
-<script src="https://code.jquery.com/jquery-3.6.2.js" integrity="sha256-pkn2CUZmheSeyssYw3vMp1+xyub4m+e+QK4sQskvuo4=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.2.js"></script>
 
 @if($stage != null)
-
-
 <script>
 
 $(document).ready( function (){
-
     var type = $('#type').val();
-
     if(type == 1){
-
         $(document).on('change', '#newclass', function () {
-
             var class_code = $('#newclass').val();
             var stage = $('#stage').val();
 
@@ -88,11 +82,7 @@ $(document).ready( function (){
                     var newyear = data.academic_year.split("/")
                     var yearstart = parseInt(newyear[newyear.length, 0]) + 1
                     var yearend = parseInt(newyear[newyear.length, 1]) + 1
-                    var enddates = data.academic_semester.split("/")
-                    var dated = enddates[enddates.length, 0]
-
-
-                    console.log(yearend);
+                    var dated = data.academic_semester.slice(0, -4)
 
                     $('#mynewclass').val(newcls)
                     $('#newClass').val(newcls)
@@ -166,9 +156,9 @@ $(document).ready( function (){
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         ACADEMIC LEAVES
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -213,7 +203,7 @@ $(document).ready( function (){
                             </div>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">REG. NUMBER : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ $student->reg_number }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->student_number }} </span>
                             </div>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">COURSE ADMITTED : </span>
@@ -226,7 +216,7 @@ $(document).ready( function (){
                             </div>
 
                             <div class="mb-4">
-                                @if($student->nominalRoll == null)
+                                @if($stage == null)
                                     <span class="text-warning h6">
                                         Not registered
                                     </span>
@@ -245,7 +235,7 @@ $(document).ready( function (){
                                 <legend class="float-none w-auto">
                                     <h5 class="fw-bold text-center"> LEAVE/DEFERMENT DETAILS</h5>
                                 </legend>
-                                @if($student->nominalRoll == null)
+                                @if($stage == null)
                                     <span class="text-warning h6">
                                         You cannot apply for leave unless you are registered
                                     </span>
@@ -284,6 +274,7 @@ $(document).ready( function (){
                                             <label>UPCOMING CLASSES </label>
                                             @endif
                                         </div>
+                                        <input type="hidden" name="intake" value="{{ $intake->intake_id }}">
                                         <div class="form-floating mb-2">
                                             <input type="text" name="start_date" value="{{ \Carbon\Carbon::now()->format('Y-M-d') }}" class="form-control" readonly>
                                             <label>LEAVE START DATE</label>
@@ -326,7 +317,7 @@ $(document).ready( function (){
                                             </div>
                                         </div>
 
-                                        <input type="hidden" name="current_class" value="{{ $student->courseStudent->class_code }} ">
+                                        <input type="hidden" name="current_class" value="{{ $student->current_class }} ">
 
                                         <div class="form-floating mb-2">
                                             <textarea class="form-control" style="height: 100px;" name="reason" placeholder="reasons">{{ old('reason') }}</textarea>

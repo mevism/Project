@@ -6,9 +6,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         COURSE Readmission
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -39,36 +39,40 @@
                                 </legend>
                             <div class="mb-2">
                                 <span class="h5 fs-sm">STUDENT NAME : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->sname }} {{ Auth::guard('student')->user()->loggedStudent->fname }} {{ Auth::guard('student')->user()->loggedStudent->mname }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->sname }} {{ $student->fname }} {{ $student->mname }} </span>
                             </div>
                             <div class="mb-2">
                                 <span class="h5 fs-sm">PHONE NUMBER : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->mobile }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->mobile }} </span>
                             </div>
                             <div class="mb-2">
                                 <span class="h5 fs-sm">EMAIL ADDRESS : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->email }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->email }} </span>
                             </div>
+                                <div class="mb-2">
+                                    <span class="h5 fs-sm">STUDENT EMAIL : </span>
+                                    <span class="h6 fs-sm fw-normal"> {{ $student->student_email }} </span>
+                                </div>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">PHYSICAL ADDRESS : </span>
-                                <span class="h6 fs-sm fw-normal"> P.O BOX {{ Auth::guard('student')->user()->loggedStudent->address }}-{{ Auth::guard('student')->user()->loggedStudent->postal_code }} {{ Auth::guard('student')->user()->loggedStudent->town }}</span>
+                                <span class="h6 fs-sm fw-normal"> P.O BOX {{ $student->address }}-{{ $student->postal_code }} {{ $student->town }}</span>
                             </div>
                             <div class="mb-2">
-                                <span class="h5 fs-sm">REG. NUMBER : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->reg_number }} </span>
+                                <span class="h5 fs-sm">STUDENT NUMBER : </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->student_number }} </span>
                             </div>
                             <div class="mb-2">
                                 <span class="h5 fs-sm">COURSE ADMITTED : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->courseStudent-> studentCourse->course_name }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->course_name }} </span>
                             </div>
 
                                 <div class="mb-2">
                                     <span class="h5 fs-sm">CURRENT CLASS : </span>
-                                    <span class="h6 fs-sm fw-normal"> {{ Auth::guard('student')->user()->loggedStudent->courseStudent->class_code }} </span>
+                                    <span class="h6 fs-sm fw-normal"> {{ $student->current_class }} </span>
                                 </div>
 
                             <div class="mb-2">
-                                @if(Auth::guard('student')->user()->loggedStudent->nominalRoll == null)
+                                @if($student->studentRegistration == null)
                                     <span class="text-warning">Not registered</span>
                                 @else
                                 <span class="h5 fs-sm"> YEAR OF STUDY : </span>
@@ -85,7 +89,7 @@
                                 <legend class="float-none w-auto">
                             <h6 class="fw-bold text-center"> RE-ADMISSION DETAILS</h6>
                                 </legend>
-                                @if(Auth::guard('student')->user()->loggedStudent->nominalRoll == null)
+                                @if($student->studentRegistration == null)
                                     <span class="text-warning">
                                         You can not request for readmission unless you are registered
                                     </span>
@@ -131,7 +135,7 @@
                                                 <h1 class="h6 fs-sm">READMISSION CLASS</h1>
                                             </div>
                                             <div class="col-md-8 fs-sm">
-                                                {{ $admission->deferredClass->deferred_class }}
+                                                {{ $admission->differed_class }}
                                             </div>
                                         </div>
 
@@ -140,9 +144,9 @@
                                                 <h1 class="h6 fs-sm">JOINING AT </h1>
                                             </div>
                                             <div class="col-md-8 fs-sm">
-                                                <p>ACADEMIC YEAR : {{ $admission->deferredClass->academic_year }}</p>
-                                                <p>YEAR OF STUDY : {{ $admission->deferredClass->stage }}</p>
-                                                <p>ACADEMIC SEM. : {{ $admission->deferredClass->semester_study }}</p>
+                                                <p><b>ACADEMIC YEAR :</b> {{ $admission->differed_year }}</p>
+                                                <p><b>STAGE :</b> {{ $admission->stage }}</p>
+                                                <p><b>ACADEMIC SEMESTER :</b> {{ $admission->differed_semester }}</p>
                                             </div>
                                         </div>
 
@@ -158,17 +162,16 @@
                             @if($dates == null)
                                 <a class="btn btn-outline-info col-md-7" disabled="">Readmissions not scheduled</a>
                             @else
-                                @if(in_array(Auth::guard('student')->user()->loggedStudent->status, ['1', '2'], true))
+                                @if(in_array($student->status, ['1', '2'], true))
                                     <a class="btn btn-outline-warning col-md-7"> You are not eligible to apply for admission </a>
                                 @else
                                     @if($dates->start_date > \Carbon\Carbon::today())
-
                                         <a class="btn btn-outline-info col-md-7" disabled="">Readmission's schedule to open on {{ \Carbon\Carbon::parse($dates->start_date)->format('D, d-M-Y') }}</a>
 
                                     @elseif($dates->end_date < Carbon\Carbon::today())
                                         <a class="btn btn-outline-danger col-md-7" disabled="">Readmission's schedule closed on {{ \Carbon\Carbon::parse($dates->end_date)->format('D, d-M-Y') }}</a>
                                     @else
-                                        <a class="btn btn-outline-success col-md-7" href="{{ route('student.storereadmissionrequest', ['id' => Crypt::encrypt($admission->id)]) }}">Request readmission </a>
+                                        <a class="btn btn-outline-success col-md-7" href="{{ route('student.storereadmissionrequest', $admission->leave_id) }}">Request readmission </a>
                                     @endif
 
                                 @endif

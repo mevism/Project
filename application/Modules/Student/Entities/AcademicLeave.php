@@ -14,16 +14,16 @@ class AcademicLeave extends Model
 
     public function studentLeave(){
 
-        return $this->belongsTo(Student::class, 'student_id')->withTrashed();
+        return $this->belongsTo(StudentLogin::class, 'student_id', 'student_id');
     }
 
     public function approveLeave(){
 
-        return $this->hasOne(AcademicLeaveApproval::class, 'academic_leave_id');
+        return $this->hasOne(AcademicLeaveApproval::class, 'leave_id', 'leave_id');
     }
 
     public function deferredClass(){
-        return $this->hasOne(DeferredClass::class, 'id');
+        return $this->hasOne(DeferredClass::class, 'leave_id', 'leave_id');
     }
 
     public function readmissions(){

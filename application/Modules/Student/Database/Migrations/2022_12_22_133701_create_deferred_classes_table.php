@@ -14,11 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('deferred_classes', function (Blueprint $table) {
-            $table->id();
-            $table->string('academic_leave_id');
-            $table->string('deferred_class');
-            $table->string('academic_year');
-            $table->string('semester_study');
+            $table->string('differed_class_id');
+            $table->string('leave_id');
+            $table->string('differed_class');
+            $table->string('differed_year');
+            $table->string('differed_semester');
             $table->string('stage');
             $table->timestamps();
         });

@@ -84,7 +84,7 @@
                                     <td> {{ $unit->DepartmentUnit->name }} </td>
                                     <td nowrap=""> {{ $unit->total_exam }} - {{ $unit->total_cat }} </td>
                                     <td nowrap=""> CAT: {{ $unit->cat }} - ASSIG.: {{ $unit->assignment }} - PRAC.: {{ $unit->practical }} </td>
-                                    <td>
+                                    <td nowrap="">
                                         <a class="btn btn-sm btn-secondary" href="{{ route('department.editUnit', $unit->unit_id) }}"> <i class="fa fa-pencil"></i> edit</a>
                                     </td>
                                 </tr>

@@ -14,9 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('readmission_classes', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('readmission_id');
-            $table->string('class_code');
+            $table->string('readmission_class_id ');
+            $table->string('readmission_id');
+            $table->string('readmission_year');
+            $table->string('readmission_semester');
+            $table->string('stage');
             $table->timestamps();
             $table->softDeletes();
         });

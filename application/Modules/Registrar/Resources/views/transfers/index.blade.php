@@ -73,8 +73,8 @@
                                                     @endif
                                                 </td>
                                                 <td> {{ ++$key }} </td>
-                                                <td> {{  $item->student_number }} </td>
-                                                <td> {{  $item->sname.' '.$item->fname.' '.$item->mname }} </td>
+                                                <td> {{  $item->StudentsTransferCourse->student_number }} </td>
+                                                <td> {{  $item->StudentsTransferInfo->sname.' '.$item->StudentsTransferInfo->fname.' '.$item->StudentsTransferInfo->mname }} </td>
                                                 <td> {{  $item->dept_code }} </td>
                                                 <td> {{  $item->course_name }} </td>
                                                 <td> {{  $item->cod_remarks }} </td>

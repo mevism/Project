@@ -17,7 +17,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[2, 'asc']],
+            order: [[0, 'asc']],
             rowGroup: {
                 dataSrc: 2
             }
@@ -32,9 +32,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         ACADEMIC LEAVE
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -53,10 +53,10 @@
     <div class="block block-rounded">
         <div class="block-content block-content-full">
             <div class="table-responsive">
-                <div class="d-flex justify-content-end mb-4">
+                <div class="d-flex justify-content-end mb-0 mt-0">
                     <a class="btn btn-sm btn-alt-primary m-2" href="{{ route('student.academicleaverequest') }}">Create request</a>
                 </div>
-                <table id="example"  class="table table-sm table-striped table-bordered fs-sm">
+                <table id="example"  class="table table-sm table-striped table-borderless fs-sm">
                     <thead>
                         <th>#</th>
                         <th nowrap=""> CURRENT CLASS </th>
@@ -71,7 +71,7 @@
                     @foreach($leaves as $key => $leave)
                         <tr>
                             <td>{{ ++$key }} </td>
-                            <td> {{ $leave->studentLeave->courseStudent->class_code }} </td>
+                            <td> {{ $leave->studentLeave->enrolledCourse->current_class }} </td>
                             <td> Y{{ $leave->year_study }} S{{ $leave->semester_study}} </td>
                             <td> {{ $leave->academic_year }} </td>
                             <td nowrap="">
@@ -84,8 +84,8 @@
                             <td nowrap=""> From : {{ $leave->from }} <br> To : {{ $leave->to }}</td>
                             <td> {{ $leave->reason }} </td>
                             <td nowrap="">
-                                @if($leave->approveLeave == NULL)
-                                    <a class="btn btn-sm btn-alt-danger" href="{{ route('student.deleteleaverequest', ['id' => Crypt::encrypt($leave->id)]) }}"> Withdraw </a>
+                                @if($leave->approveLeave->cod_status < 1)
+                                    <a class="btn btn-sm btn-alt-danger" href="{{ route('student.deleteleaverequest', $leave->leave_id) }}"> Withdraw </a>
                                 @else
                                     @if($leave->approveLeave->status == 1)
                                         <span class="text-success fw-bold"> Successful </span>

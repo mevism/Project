@@ -31,9 +31,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         ACADEMIC/DEFERMENT LEAVE REQUESTS
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -55,16 +55,16 @@
                 <table id="example"  class="table table-sm table-striped table-bordered fs-sm">
                     <thead>
                         <th>#</th>
-                        <th>Academic Year</th>
+                        <th>Semester</th>
                         <th>Action</th>
                     </thead>
                     <tbody>
-                        @foreach($leaves as $academicYear => $leave)
+                        @foreach($leaves as $intake => $leave)
                             <tr>
                                 <td> {{ $loop->iteration }} </td>
-                                <td> {{ $academicYear }} </td>
+                                <td> {{ strtoupper(Carbon\Carbon::parse(\Modules\Registrar\Entities\Intake::where('intake_id', $intake)->first()->intake_from)->format('MY'))}} </td>
                                 <td>
-                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('dean.yearlyLeaves', ['year' => Crypt::encrypt($academicYear)]) }}"> View </a>
+                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('dean.yearlyLeaves', $intake) }}"> View </a>
                                 </td>
                             </tr>
 

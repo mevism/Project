@@ -65,10 +65,10 @@
           <ul class="nav-main">
             <li class="nav-main-item">
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
-                <i class="nav-main-link-icon si si-cursor"></i>
+                <i class="nav-main-link-icon si si-home"></i>
                 <span class="nav-main-link-name">
                     @if(auth()->guard('user')->user()->hasRole('Director/Dean'))
-                        Director/Dean
+                        Director/Dean [ {{ auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->initials }} ]
                     @endif
                 </span>
 
@@ -226,7 +226,7 @@
                     @endif </p>
                 <p class="mb-0 text-muted fs-sm fw-medium">
                     @if(auth()->guard('user')->user()->hasRole('Director/Dean'))
-                        Director/Dean
+                        Director/Dean [ {{ auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->initials }} ]
                     @endif
               </div>
               {{-- <div class="p-2">

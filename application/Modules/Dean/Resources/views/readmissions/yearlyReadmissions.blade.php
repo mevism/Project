@@ -28,9 +28,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         READMISSIONS
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -54,19 +54,19 @@
                     <table id="example"  class="table table-sm table-striped table-bordered fs-sm">
                         <thead>
                         <th>#</th>
-                        <th>Academic Year</th>
+                        <th>Semester</th>
                         <th>Action</th>
                         </thead>
                         <tbody>
-                        @foreach($readmissions as $academicYear => $readmission)
+                        @foreach($readmissions as $intake => $readmission)
                             <tr>
                                 <td> {{ $loop->iteration }} </td>
-                                <td> {{ $academicYear }} </td>
+                                <td> {{ strtoupper(\Carbon\Carbon::parse(\Modules\Registrar\Entities\Intake::where('intake_id', $intake)->first()->intake_from)->format('MY')) }} </td>
                                 <td>
-                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('dean.yearlyReadmissions', ['year' => Crypt::encrypt($academicYear)]) }}"> View </a>
+                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('dean.intakeReadmissions', $intake) }}"> View </a>
                                 </td>
                             </tr>
-    
+
                         @endforeach
                         </tbody>
                     </table>

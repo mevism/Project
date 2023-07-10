@@ -52,42 +52,271 @@
 
     <div class="block block-rounded">
         <div class="block-content block-content-full">
-            <div class="table-responsive">
-                <table id="example"  class="table table-sm table-striped table-bordered fs-sm">
-                    <thead>
-                    <th>#</th>
-                    <th> Course Name </th>
-                    <th> Department </th>
-                    <th nowrap=""> Intake </th>
-                    <th nowrap=""> Stage </th>
-                    <th> Status </th>
-                    </thead>
-                    <tbody>
-                    @foreach($course as $key => $course)
-                        <tr>
-                            <td>{{ ++$key }} </td>
-                            <td> {{ $course->course_name }}</td>
-                            <td> {{ $course->name }}</td>
-                            <td> {{ strtoupper(Carbon\Carbon::parse($course->intake_from)->format('MY')) }}</td>
-                            <td>
-                             @if($reg == null)
-                                    Not registered
-                                @else
-                                    {{ 'Y'.$reg->year_study.'S'.$reg->semester_study }}
-                                @endif
-                            </td>
-                            <td>
-                                @if($course->status == 0 && $reg != null)
-                                    <span class="text-success"> Active </span>
-                                @else
-                                <span class="text-danger">Inactive</span>
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
+                <div class="row">
+                    @if(count($others) > 0)
+                        <div class="col-md-7 table-responsive">
+                            <h6 style="margin-left: 5% !important;">Currently Enrolled Course</h6>
+                            <div class="block-content fs-sm">
+                                <!-- Introduction -->
+                                <table class="table table-borderless">
+                                    <tbody>
+                                    <tr class="table-active fs-sm">
+                                        <th style="width: 50px;"></th>
+                                        <th>{{ $course->course_name }}</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-success text-center">
+                                            <i class="fa fa-fw fa-clock text-success"></i>
+                                        </td>
+                                        <td>
+                                            <span><b>Course Duration:</b> {{ $course->course_duration }} </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-success text-center">
+                                            <i class="fa fa-fw fa-user-graduate text-success"></i>
+                                        </td>
+                                        <td>
+                                            <span><b>Entry Grade:</b> {{ $course->course_requirements }} </span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <!-- END Introduction -->
+
+                                <!-- Basics -->
+                                <table class="table table-borderless table-vcenter">
+                                    <tbody>
+                                    <tr class="table-active">
+                                        <th style="width: 50px;"></th>
+                                        <th>Course Details</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-info text-center">
+                                            <i class="fa fa-fw fa-building text-success"></i>
+                                        </td>
+                                        <td>
+                                            <span> <b>Department: </b> {{ $course->name }}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-info text-center">
+                                            <i class="fa fa-fw fa-clock-rotate-left text-success"></i>
+                                        </td>
+                                        <td>
+                                            <span> <b>Intake: </b> {{ strtoupper(Carbon\Carbon::parse($course->intake_from)->format('MY')) }} </span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <!-- END Basics -->
+
+                                <!-- Advanced -->
+                                <table class="table table-borderless table-vcenter">
+                                    <tbody>
+                                    <tr class="table-active">
+                                        <th style="width: 50px;"></th>
+                                        <th>Registration Status</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-primary text-center">
+                                            <i class="fa fa-fw fa-step-forward text-success"></i>
+                                        </td>
+                                        <td>
+                                    <span> <b> Stage: </b>
+                                            @if($reg != null)
+                                            {{ 'Y'.$reg->year_study.'S'.$reg->semester_study }}
+                                        @else
+                                            <span class="text-info">Awaiting Registration</span>
+                                        @endif
+                                    </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table-primary text-center">
+                                            <i class="fa fa-fw fa-exclamation-triangle text-success"></i>
+                                        </td>
+                                        <td>
+                                    <span>
+                                        <b>Status</b>
+                                        @if($reg != null)
+                                            <span class="text-success">Registered</span>
+                                        @else
+                                            <span class="text-danger">Not Registered</span>
+                                        @endif
+                                    </span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <!-- END Advanced -->
+                            </div>
+                        </div>
+                        <div class="col-md-5 table-responsive">
+                            <h6 style="margin-left: 5% !important;">Previously Enrolled Course</h6>
+                            @foreach($others as $other)
+                                <div class="block-content fs-sm">
+                                    <!-- Introduction -->
+                                    <table class="table table-borderless">
+                                        <tbody>
+                                        <tr class="table-active fs-sm">
+                                            <th style="width: 50px;"> {{ $loop->iteration }} </th>
+                                            <th> {{ $other->OldCourse->course_name }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-success text-center">
+                                                <i class="fa fa-fw fa-clock text-success"></i>
+                                            </td>
+                                            <td>
+                                                <span><b>Course Duration:</b> {{ $other->OldCourse->courseRequirement->course_duration }} </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-success text-center">
+                                                <i class="fa fa-fw fa-user-graduate text-success"></i>
+                                            </td>
+                                            <td>
+                                                <span><b>Entry Grade:</b> {{ $other->OldCourse->courseRequirement->course_requirements }} </span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <!-- END Introduction -->
+
+                                    <!-- Basics -->
+                                    <table class="table table-borderless table-vcenter">
+                                        <tbody>
+                                        <tr class="table-active">
+                                            <th style="width: 50px;"></th>
+                                            <th>Course Details</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-info text-center">
+                                                <i class="fa fa-fw fa-building text-success"></i>
+                                            </td>
+                                            <td>
+                                                <span> <b>Department: </b> {{ $other->OldCourse->getCourseDept->name }} </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-info text-center">
+                                                <i class="fa fa-fw fa-clock-rotate-left text-success"></i>
+                                            </td>
+                                            <td>
+                                                <span> <b>Intake: </b> {{ strtoupper(Carbon\Carbon::parse(\Modules\Registrar\Entities\Intake::where('intake_id', $other->intake_id)->first()->intake_from)->format('MY')) }} </span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <hr>
+                                    <!-- END Basics -->
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="d-flex justify-content-center">
+                            <div class="col-md-8 table-responsive">
+                                <h6 style="margin-left: 5% !important;">Currently Enrolled Course</h6>
+                                <div class="block-content fs-sm">
+                                    <!-- Introduction -->
+                                    <table class="table table-borderless">
+                                        <tbody>
+                                        <tr class="table-active fs-sm">
+                                            <th style="width: 50px;"></th>
+                                            <th>{{ $course->course_name }}</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-success text-center">
+                                                <i class="fa fa-fw fa-clock text-success"></i>
+                                            </td>
+                                            <td>
+                                                <span><b>Course Duration:</b> {{ $course->course_duration }} </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-success text-center">
+                                                <i class="fa fa-fw fa-user-graduate text-success"></i>
+                                            </td>
+                                            <td>
+                                                <span><b>Entry Grade:</b> {{ $course->course_requirements }} </span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <!-- END Introduction -->
+
+                                    <!-- Basics -->
+                                    <table class="table table-borderless table-vcenter">
+                                        <tbody>
+                                        <tr class="table-active">
+                                            <th style="width: 50px;"></th>
+                                            <th>Course Details</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-info text-center">
+                                                <i class="fa fa-fw fa-building text-success"></i>
+                                            </td>
+                                            <td>
+                                                <span> <b>Department: </b> {{ $course->name }}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-info text-center">
+                                                <i class="fa fa-fw fa-clock-rotate-left text-success"></i>
+                                            </td>
+                                            <td>
+                                                <span> <b>Intake: </b> {{ strtoupper(Carbon\Carbon::parse($course->intake_from)->format('MY')) }} </span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <!-- END Basics -->
+
+                                    <!-- Advanced -->
+                                    <table class="table table-borderless table-vcenter">
+                                        <tbody>
+                                        <tr class="table-active">
+                                            <th style="width: 50px;"></th>
+                                            <th>Registration Status</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-primary text-center">
+                                                <i class="fa fa-fw fa-step-forward text-success"></i>
+                                            </td>
+                                            <td>
+                                    <span> <b> Stage: </b>
+                                            @if($reg != null)
+                                            {{ 'Y'.$reg->year_study.'S'.$reg->semester_study }}
+                                        @else
+                                            <span class="text-info">Awaiting Registration</span>
+                                        @endif
+                                    </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-primary text-center">
+                                                <i class="fa fa-fw fa-exclamation-triangle text-success"></i>
+                                            </td>
+                                            <td>
+                                    <span>
+                                        <b>Status</b>
+                                        @if($reg != null)
+                                            <span class="text-success">Registered</span>
+                                        @else
+                                            <span class="text-danger">Not Registered</span>
+                                        @endif
+                                    </span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <!-- END Advanced -->
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                </div>
         </div>
     </div>
 
