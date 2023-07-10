@@ -11,16 +11,20 @@ class CourseTransferMails extends Mailable
 {
 
     use Queueable, SerializesModels;
-    public $newStudent;
+    public $student;
+    public $approval;
+    public $regNumber;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($newStudent)
+    public function __construct($student, $approval, $regNumber)
     {
-         $this->newStudent =  $newStudent;
+         $this->student =  $student;
+         $this->approval =  $approval;
+         $this->regNumber =  $regNumber;
     }
 
     /**

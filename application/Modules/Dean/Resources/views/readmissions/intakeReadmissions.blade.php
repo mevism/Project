@@ -59,43 +59,46 @@
                     <th>NAME</th>
                     <th>LEAVE TYPE</th>
                     <th>CURRENT STAGE</th>
-                    <th>PERIOD</th>
+                    <th>Current Class</th>
+                    <th>Leave Duration</th>
                     <th>Action</th>
                     </thead>
                     <tbody>
-                    @foreach($readmissions as $readmission)
+                    @foreach($readmissions as $allreadmissions)
+                        @foreach($allreadmissions as $readmission)
                             <tr>
                                 <td> {{ $loop->iteration }} </td>
-                                <td> {{ $readmission->leaves->studentLeave->reg_number }} </td>
-                                <td> {{ $readmission->leaves->studentLeave->sname.' '.$readmission->leaves->studentLeave->fname.' '.$readmission->leaves->studentLeave->mname }} </td>
-                                <td> @if($readmission->leaves->type == 1)
+                                <td> {{ $readmission->student_number }} </td>
+                                <td> {{ $readmission->sname.' '.$readmission->fname.' '.$readmission->mname }} </td>
+                                <td> @if($readmission->StudentsReadmission->type == 1)
                                         ACADEMIC LEAVE
-                                    @elseif($readmission->leaves->type == 2)
+                                    @elseif($readmission->StudentsReadmission->type == 2)
                                         DEFERMENT
-                                    @elseif($readmission->leaves->type == 3)
+                                    @elseif($readmission->StudentsReadmission->type == 3)
                                         SUSPENSION
                                     @else
                                         DISCONTINUATION
                                     @endif </td>
                                 <td>
-                                    Year : {{ $readmission->leaves->year_study }} Semester : {{ $readmission->leaves->semester_study }}
+                                    Year : {{ $readmission->StudentsReadmission->year_study }} Semester : {{ $readmission->StudentsReadmission->semester_study }}
+                                </td>
+                                <td> {{ $readmission->StudentsReadmission->current_class }} </td>
+                                <td>
+                                   <b> From :</b> {{ $readmission->StudentsReadmission->from }} <br>
+                                    <b>To :</b> {{ $readmission->StudentsReadmission->to }} <br>
                                 </td>
                                 <td>
-                                    From : {{ $readmission->leaves->from }} <br>
-                                    To : {{ $readmission->leaves->to }} <br>
-                                </td>
-                                <td>
-                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('dean.selectedReadmission', ['id' => Crypt::encrypt($readmission->id)]) }}"> View </a>
-
-                                    @if($readmission->readmissionApproval != null)
-                                        @if($readmission->readmissionApproval->dean_status == 1)
+                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('dean.selectedReadmission', $readmission->readmision_id) }}"> View </a>
+                                    @if($readmission->dean_status == 1)
                                             <i class="fa fa-check text-success"></i>
-                                        @else
+                                    @elseif($readmission->dean_status == 2)
                                             <i class="fa fa-times text-danger"></i>
-                                        @endif
+                                    @else
+                                        <i class="fa fa-spinner text-info"></i>
                                     @endif
                                 </td>
                             </tr>
+                        @endforeach
                     @endforeach
                     </tbody>
                 </table>

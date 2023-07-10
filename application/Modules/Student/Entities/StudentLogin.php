@@ -12,10 +12,9 @@ use Modules\COD\Entities\Nominalroll;
 
 class StudentLogin extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $table = 'student_logins';
-
     protected $fillable = [];
 
     protected $hidden = [

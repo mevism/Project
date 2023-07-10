@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Modules\COD\Entities\AcademicLeavesView;
 use Modules\COD\Entities\ClassPattern;
 use Modules\COD\Entities\CourseSyllabus;
 use Modules\COD\Entities\Nominalroll;
@@ -34,12 +35,13 @@ use Modules\Student\Entities\AcademicLeaveApproval;
 use Modules\Student\Entities\CourseTransfer;
 use Modules\Student\Entities\DeferredClass;
 use Modules\Student\Entities\ExamResults;
-use Modules\Examination\Entities\ExamMarks;
+use Modules\Student\Entities\OldStudentCourse;
 use Modules\Student\Entities\Readmission;
 use Modules\Student\Entities\ReadmissionApproval;
 use Modules\Student\Entities\StudentCourse;
 use Modules\Student\Entities\STUDENTCOURSEVIEW;
 use Modules\Student\Entities\StudentDeposit;
+use Modules\Student\Entities\StudentView;
 use NcJoes\OfficeConverter\OfficeConverter;
 use PhpOffice\PhpWord\Element\Table;
 use PhpOffice\PhpWord\SimpleType\TblWidth;
@@ -59,14 +61,15 @@ class StudentController extends Controller
     }
 
     public function myCourse(){
-
-        $courses = STUDENTCOURSEVIEW::where('student_id', auth()->guard('student')->user()->student_id)->get();
+        $course = STUDENTCOURSEVIEW::where('student_id', auth()->guard('student')->user()->student_id)->first();
         $reg = Nominalroll::where('student_id', auth()->guard('student')->user()->loggedStudent->student_id)
+            ->where('class_code', $course->current_class)
             ->where('registration', 1)
             ->where('activation', 1)
             ->latest()->first();
+        $others = OldStudentCourse::where('student_id', auth()->guard('student')->user()->student_id)->get();
 
-        return view('student::courses.index')->with(['course' => $courses, 'reg' => $reg]);
+        return view('student::courses.index')->with(['course' => $course, 'reg' => $reg, 'others' => $others]);
     }
 
     public function myProfile(){
@@ -77,8 +80,8 @@ class StudentController extends Controller
     }
 
     public function courseTransfers(){
-        $student = auth()->guard('student')->user()->loggedStudent;
-        $transfers = CourseTransfer::where('student_id', $student->student_id)->latest()->get();
+       $student = auth()->guard('student')->user()->loggedStudent;
+       $transfers = CourseTransfer::where('student_id', auth()->guard('student')->user()->student_id)->latest()->get();
         $current = Carbon::now()->format('Y-m-d');
         $sem_date = Intake::where('intake_from', '<=', $current )
         ->where('intake_to', '>=', $current)
@@ -134,7 +137,7 @@ class StudentController extends Controller
 
             }
         }
-      
+
         return view('student::courses.transfers')->with(['transfers' => $transfers]);
     }
 
@@ -145,8 +148,8 @@ class StudentController extends Controller
             ->latest()
             ->first();
         $registration = \auth()->guard('student')->user()->StudentsNominalRoll;
-//        $current = Carbon::now()->format('Y-m-d');
-        $current = '2023-09-23';
+        $current = Carbon::now()->format('Y-m-d');
+//        $current = '2023-09-23';
         $event = [];
         $academicYear = 'null';
 
@@ -265,8 +268,7 @@ class StudentController extends Controller
 
     }
 
-    public function updateRequest(Request $request, $id)
-    {
+    public function updateRequest(Request $request, $id){
 
         $request->validate([
             'dept' => 'required',
@@ -329,64 +331,68 @@ class StudentController extends Controller
     }
 
     public function requestLeave(){
-        $student = DB::table('studentview')->where('student_id', \auth()->guard('student')->user()->student_id)
+        $student = StudentView::where('student_id', \auth()->guard('student')->user()->student_id)
             ->first();
-        $stage = Nominalroll::where('reg_number', $student->student_number)->latest()->first();
+       $stage = Nominalroll::where('reg_number', $student->student_number)->latest()->first();
         $current_date = Carbon::now()->format('Y-m-d');
-        $dates = Intake::where('intake_from', '<=', $current_date)->where('intake_to', '>=', $current_date)->first();
-
-        if ($dates == null){
-            return redirect()->back()->with('info', 'Oops! There are no semesters on schedule. Please try again later');
-        }
-
-       $academicYear =  Carbon::parse($dates->academicYear->year_start)->format('Y').'/'.Carbon::parse($dates->academicYear->year_end)->format('Y');
+       $dates = Intake::where('intake_from', '<=', $current_date)->where('intake_to', '>=', $current_date)->first();
+        $list = [];
+        $data = [];
+        $academicYear =  Carbon::parse($dates->academicYear->year_start)->format('Y').'/'.Carbon::parse($dates->academicYear->year_end)->format('Y');
        $semester = Carbon::parse($dates->intake_from)->format('M').'/'.Carbon::parse($dates->intake_to)->format('M');
 
        $event = CalenderOfEvents::where('academic_year_id', $academicYear)
             ->where('intake_id', strtoupper($semester))
             ->where('event_id', 4)
             ->first();
+       if($stage == null){
+            $currentStage = [];
+       }else{
+            $currentStage = $stage->year_study.'.'.$stage->semester_study;
+            $pattern = ClassPattern::where('class_code', $stage->class_code)->get();
 
-            $data = [];
+            foreach ($pattern as $classPattern){
+                $list[] = $classPattern->semester;
+            }
 
-            if($stage == null){
+            $id_collection = collect($list);
+            $this_key = $id_collection->search($currentStage);
+            $next_id = $id_collection->get($this_key);
 
-                $currentStage = [];
-            }else{
-                $currentStage = $stage->year_study.'.'.$stage->semester_study;
-
-                $classes = ClassPattern::where('class_code', $stage->class_code)->get();
-
-                foreach ($classes as $class){
-
-                    $list[] = $class->semester;
+            if ( (float)$currentStage > (float)'1.2'){
+                    $currently = $stage->year_study.'.'.$stage->semester_study;
+                    $classPattern =  ClassPattern::where('semester', '<',  $currently)
+                                        ->get()
+                                        ->groupBy('class_code');
                 }
 
-                $id_collection = collect($list);
-                $this_key = $id_collection->search($currentStage);
-                $next_id = $id_collection->get($this_key + 1);
+                if (\auth()->guard('student')->user()->enrolledCourse->student_type == 2){
+                    $mode = 'J-FT';
+                }elseif (\auth()->guard('student')->user()->enrolledCourse->student_type == 1){
+                    $mode = 'S-FT';
+                }elseif (\auth()->guard('student')->user()->enrolledCourse->student_type == 3){
+                    $mode = 'S-PT';
+                }else{
+                    $mode = 'S-EV';
+                }
 
-
-
-                if ( (float)$currentStage > (float)'1.3'){
-
-                   $currently = $stage->year_study.'.'.$stage->semester_study;
-                    $classPattern =  ClassPattern::where('academic_year', $stage->academic_year)
-                                ->where('period', $stage->academic_semester)
-                                ->where('semester', '<',  $currently)
-                                ->get()
-                                ->groupBy('class_code');
-
+                foreach ($classPattern as $class => $pattern){
+                    $classes[] = Classes::where('course_id', \auth()->guard('student')->user()->enrolledCourse->course_id)
+                        ->where('name', $class)
+                        ->where('name', '!=', \auth()->guard('student')->user()->enrolledCourse->current_class)
+                        ->where('attendance_id', $mode)
+                        ->latest()
+                        ->get()
+                        ->groupBy('name');
                 }
             }
 
-        return view('student::academic.requestleave')->with(['student' => $student, 'data' => $data, 'stage' => $stage, 'event' => $event, 'dates' => $current_date]);
+        return view('student::academic.requestleave')->with(['student' => $student, 'data' => $data, 'stage' => $stage, 'event' => $event, 'dates' => $current_date, 'list' => $list, 'classes' => $classes, 'intake' => $dates]);
 
     }
 
 
     public function leaveClasses(Request $request){
-
         $data = ClassPattern::where('class_code', $request->class)
                             ->where('semester', $request->stage)
                             ->first();
@@ -395,25 +401,19 @@ class StudentController extends Controller
     }
 
     public function defermentRequest(Request $request){
-
         $deferment = Nominalroll::where('reg_number', $request->studNumber)
             ->first();
-
         return response()->json($deferment);
-
     }
 
     public function submitLeaveRequest(Request $request){
-
-
         $request->validate([
             'type' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
             'reason' => 'required|string'
         ]);
-
-        $currentStage = Nominalroll::where('student_id', Auth::guard('student')->user()->student_id)
+        $currentStage = Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)
                                     ->latest()
                                     ->first();
         if (AcademicLeave::where('student_id', $currentStage->student_id)->where('type', $request->type)->where('year_study', $currentStage->year_study)->where('semester_study', $currentStage->semester_study)->exists()){
@@ -421,59 +421,65 @@ class StudentController extends Controller
             return redirect()->back()->with('info', 'You have already requested leave for this stage');
         }else {
 
+            $leaveId = new CustomIds();
             $leave = new AcademicLeave;
-            $leave->student_id = Auth::guard('student')->user()->student_id;
+            $leave->student_id = auth()->guard('student')->user()->student_id;
+            $leave->leave_id = $leaveId->generateId();
             $leave->type = $request->type;
             $leave->current_class = $currentStage->class_code;
             $leave->year_study = $currentStage->year_study;
             $leave->semester_study = $currentStage->semester_study;
             $leave->academic_year = $currentStage->academic_year;
+            $leave->intake_id = $request->intake;
             $leave->from = $request->start_date;
             $leave->to = $request->end_date;
             $leave->reason = $request->reason;
             $leave->save();
 
+            $differedId = new CustomIds();
             $deferredClass = new DeferredClass;
-            $deferredClass->academic_leave_id = $leave->id;
-            $deferredClass->deferred_class = $request->newClass;
-            $deferredClass->academic_year = $request->newAcademic;
-            $deferredClass->semester_study = $request->newSemester;
+            $deferredClass->differed_class_id = $differedId->generateId();
+            $deferredClass->leave_id = $leave->leave_id;
+            $deferredClass->differed_class = $request->newClass;
+            $deferredClass->differed_year = $request->newAcademic;
+            $deferredClass->differed_semester = $request->newSemester;
             $deferredClass->stage = $request->newStage;
             $deferredClass->save();
+
+            $approvalId = new CustomIds();
+            $approvals = new AcademicLeaveApproval;
+            $approvals->leave_approval_id = $approvalId->generateId();
+            $approvals->leave_id = $leave->leave_id;
+            $approvals->save();
 
             return redirect()->route('student.requestacademicleave')->with('success', 'Leave request created successfully');
         }
     }
 
     public function deleteLeaveRequest($id){
-
-        $hashedId = Crypt::decrypt($id);
-
-        AcademicLeave::find($hashedId)->delete();
-        DeferredClass::where('academic_leave_id', $hashedId)->delete();
-
+        AcademicLeave::where('leave_id', $id)->delete();
+        DeferredClass::where('leave_id', $id)->delete();
         return redirect()->back()->with('success', 'Leave request deleted successfully');
     }
 
     public function requestReadmission(){
-
-        $readmit = Readmission::where('student_id', Auth::guard('student')->user()->student_id)->get();
-
+        $readmit = Readmission::where('student_id', auth()->guard('student')->user()->student_id)->get();
         return view('student::academic.readmissions')->with(['readmits' => $readmit]);
-
     }
 
     public function readmissionRequests(){
-
+      $student = StudentView::where('student_id', \auth()->guard('student')->user()->student_id)->first();
       $currentStage = Nominalroll::where('student_id', Auth::guard('student')->user()->student_id)
                                     ->latest()
                                     ->first();
 
-       $readmit = AcademicLeave::where('student_id', Auth::guard('student')->user()->student_id)
-                                   ->latest()
-                                   ->first();
+       $readmit = AcademicLeavesView::where('student_id', auth()->guard('student')->user()->student_id)
+                        ->where('status', 1)
+                        ->latest()
+                        ->first();
 
-       $today = Carbon::now();
+//       $today = Carbon::now();
+       $today = '2023-09-23';
 
       $intake = Intake::where('intake_from', '<=', $today)->where('intake_to', '>=', $today)->latest()->first();
       $semester = Carbon::parse($intake->intake_from)->format('M').'/'.Carbon::parse($intake->intake_to)->format('M');
@@ -481,42 +487,45 @@ class StudentController extends Controller
 
       $dates = CalenderOfEvents::where('academic_year_id', $academic_year)->where('intake_id', strtoupper($semester))->where('event_id', 3)->first();
 
-        return view('student::academic.readmissionrequests')->with(['admission' => $readmit, 'current' => $currentStage, 'dates' => $dates]);
+        return view('student::academic.readmissionrequests')->with(['admission' => $readmit, 'current' => $currentStage, 'dates' => $dates, 'student' => $student]);
 
     }
 
     public function storeReadmissionRequest($id){
-
-        $hashedId = Crypt::decrypt($id);
-
-        $today = Carbon::now()->format('Y-m-d');
-
+//        $today = Carbon::now()->format('Y-m-d');
+        $today = '2023-09-23';
         $intake = Intake::where('intake_from', '<=', $today)
                             ->where('intake_to', '>=', $today)
                             ->latest()
                             ->first();
         $season = Carbon::parse($intake->intake_from)->format('M').'/'.Carbon::parse($intake->intake_to)->format('M');
 
-       $academicYear = Carbon::parse($intake->academicYear->year_start)->format('Y').'/'.Carbon::parse($intake->academicYear->year_end)->format('Y');
+        $academicYear = Carbon::parse($intake->academicYear->year_start)->format('Y').'/'.Carbon::parse($intake->academicYear->year_end)->format('Y');
 
-       if (Readmission::where('student_id', Auth::guard('student')->user()->id)
-                        ->where('leave_id', $hashedId)
+       if (Readmission::where('student_id', auth()->guard('student')->user()->student_id)
+                        ->where('leave_id', $id)
                         ->where('status', 0)->exists()){
-
-           return redirect()->back()->with('info', 'You have already requested to be admitted');
-
+           return redirect()->back()->with('info', 'You have already requested for readmission');
        }else{
 
+           $readmissionID = new CustomIds();
            $readmission = new Readmission;
-           $readmission->student_id = Auth::guard('student')->user()->id;
-           $readmission->leave_id = $hashedId;
+           $readmission->student_id = auth()->guard('student')->user()->student_id;
+           $readmission->readmision_id = $readmissionID->generateId();
+           $readmission->leave_id = $id;
            $readmission->academic_year = $academicYear;
            $readmission->academic_semester = strtoupper($season);
+           $readmission->intake_id = $intake->intake_id;
            $readmission->status = 0;
            $readmission->save();
 
-           return redirect()->route('student.requestreadmission')->with('success', 'Readmission request created successfully');
+           $approvalID = new CustomIds();
+           $approval = new ReadmissionApproval;
+           $approval->approval_id = $approvalID->generateId();
+           $approval->readmission_id = $readmission->readmision_id;
+           $approval->save();
 
+           return redirect()->route('student.requestreadmission')->with('success', 'Readmission request created successfully');
        }
     }
 
@@ -999,85 +1008,22 @@ class StudentController extends Controller
         $exam_marks = ExamMarks::where('reg_number',Auth::guard('student')->user()->loggedStudent->reg_number)
           ->orderBy('academic_semester','asc')
           ->groupBy('academic_semester')
-          ->get(); 
-          
+          ->get();
 
-        
+
+
         return view('student::examination.examresults',['exam_marks' => $exam_marks]);
     }
 
     public function viewExamMarks(){
 
-    
+
         $exam_marks = ExamMarks::where('reg_number',Auth::guard('student')->user()->loggedStudent->reg_number)
         ->orderBy('unit_code','asc')
        //->groupBy('academic_semester')
-        ->get(); 
+        ->get();
 
         return view('student::examination.viewexammarks',['exam_marks' => $exam_marks]);
         //return ExamMarks::find(1)->unit;
-    }
-
-
-
-
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
-    {
-        return view('student::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
-    {
-        return view('student::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('student::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

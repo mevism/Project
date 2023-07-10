@@ -55,16 +55,16 @@
                 <table id="example"  class="table table-sm table-striped table-bordered fs-sm">
                     <thead>
                         <th>#</th>
-                        <th>Academic Year</th>
+                        <th>SEMESTER</th>
                         <th>Action</th>
                     </thead>
                     <tbody>
-                        @foreach($leaves as $academicYear => $leave)
+                        @foreach($leaves as $intake => $leave)
                             <tr>
                                 <td> {{ $loop->iteration }} </td>
-                                <td> {{ $academicYear }} </td>
+                                <td> {{ strtoupper(Carbon\Carbon::parse(\Modules\Registrar\Entities\Intake::where('intake_id', $intake)->first()->intake_from)->format('MY')) }} </td>
                                 <td>
-                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('department.yearlyLeaves', ['year' => Crypt::encrypt($academicYear)]) }}"> View </a>
+                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('department.yearlyLeaves', $intake) }}">View</a>
                                 </td>
                             </tr>
 

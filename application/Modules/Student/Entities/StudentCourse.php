@@ -11,9 +11,10 @@ use Modules\Registrar\Entities\Intake;
 
 class StudentCourse extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
-    protected $dates = 'deleted_id';
+//    protected $dates = 'deleted_at';
+        protected $table = 'student_courses';
 
     protected $fillable = [];
 

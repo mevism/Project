@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('readmission_approvals', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('readmission_id');
+            $table->string('approval_id ');
+            $table->string('readmission_id');
             $table->integer('cod_status');
             $table->string('cod_remarks');
             $table->integer('dean_status')->nullable();

@@ -73,14 +73,14 @@
           <ul class="nav-main">
             <li class="nav-main-item">
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
-                <i class="nav-main-link-icon si si-cursor"></i>
+                <i class="nav-main-link-icon si si-home"></i>
                 <span class="nav-main-link-name">
                     @php
                         $user = auth()->guard('user')->user()->staffInfos
                     @endphp
 
                     @if(auth()->guard('user')->user()->hasRole('Chairperson of Department'))
-                        Chairperson of Department
+                        COD [ {{ auth()->guard('user')->user()->employmentDepartment->first()->dept_code }} ]
                     @endif
 {{--                    @if(auth()->guard('user')->user()->role_id == 2)--}}
 
@@ -330,7 +330,7 @@
                 <p class="mb-0 text-muted fs-sm fw-medium">
                     @if(Auth::guard('user')->check())
                         @if(auth()->guard('user')->user()->hasRole('Chairperson of Department'))
-                            Chairperson of Department
+                            COD ( {{ auth()->guard('user')->user()->employmentDepartment->first()->dept_code }} )
                         @endif
                     @endif</p>
               </div>

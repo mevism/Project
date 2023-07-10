@@ -35,7 +35,7 @@
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="javascript:void(0)">Schools</a>
+                            <a class="link-fx" href="javascript:void(0)">Leaves</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
                             All deferment/academic leaves
@@ -51,22 +51,19 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-12">
-                        <table id="example" class="table table-bordered table-striped fs-sm">
+                        <table id="example" class="table table-bordered table-striped table-borderless table-sm fs-sm">
                             <thead>
                                 <th>#</th>
-                                <th>Academic Year</th>
+                                <th>Semester</th>
                                 <th>Action</th>
                             </thead>
                             <tbody>
-                                
-                                @foreach($data as $academic_year => $leave)
-                                
-
+                                @foreach($leaves as $intake => $leave)
                                     <tr>
                                         <td> {{ $loop->iteration }} </td>
-                                        <td> {{ $academic_year }} </td>
+                                        <td> {{ strtoupper(\Carbon\Carbon::parse(\Modules\Registrar\Entities\Intake::where('intake_id', $intake)->first()->intake_from)->format('MY')) }} </td>
                                         <td>
-                                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.academicLeave', ['year' => Crypt::encrypt($academic_year)]) }}">view</a>
+                                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.academicLeave', $intake) }}">view</a>
                                         </td>
                                     </tr>
                                 @endforeach

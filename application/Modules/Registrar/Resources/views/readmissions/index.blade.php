@@ -28,9 +28,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         READMISSION REQUESTS
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -51,22 +51,19 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-12">
-                        <table id="example" class="table table-bordered table-striped fs-sm">
+                        <table id="example" class="table table-bordered table-striped table-borderless table-sm fs-sm">
                             <thead>
                                 <th>#</th>
-                                <th>Academic Year</th>
+                                <th>Semester</th>
                                 <th>Action</th>
                             </thead>
                             <tbody>
-                                
-                                @foreach($data as $academic_year => $leave)
-                                
-
+                            @foreach($data as $intake => $leave)
                                     <tr>
                                         <td> {{ $loop->iteration }} </td>
-                                        <td> {{ $academic_year }} </td>
+                                        <td> {{ strtoupper(Carbon\Carbon::parse(\Modules\Registrar\Entities\Intake::where('intake_id', $intake)->first()->intake_from)->format('MY')) }} </td>
                                         <td>
-                                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.yearlyReadmissions', ['year' => Crypt::encrypt($academic_year)]) }}">view</a>
+                                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.yearlyReadmissions', $intake) }}">view</a>
                                         </td>
                                     </tr>
                                 @endforeach

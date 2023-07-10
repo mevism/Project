@@ -66,9 +66,9 @@
                             @foreach($items as $item )
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td> {{ $item->student_number }} </td>
+                            <td> {{ $item->StudentsTransferCourse->student_number }} </td>
                             <td>
-                                {{ $item->sname.' '.$item->fname.' '.$item->mname }}
+                                {{ $item->StudentsTransferInfo->sname.' '.$item->StudentsTransferInfo->fname.' '.$item->StudentsTransferInfo->mname }}
                             </td>
                             <td> {{ $item->course_code }} </td>
                             <td> {{ $item->dept_code }} </td>

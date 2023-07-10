@@ -28,9 +28,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         VIEW REQUEST
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -58,39 +58,39 @@
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Reg. Number </div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $leave->studentLeave->reg_number }}
+                                        {{ $leave->student_number }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Student Name</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $leave->studentLeave->sname.' '.$leave->studentLeave->fname.' '.$leave->studentLeave->mname }}
+                                        {{ $leave->sname.' '.$leave->fname.' '.$leave->mname }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Current Class</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $leave->studentLeave->courseStudent->class_code }}
+                                        {{ $leave->current_class }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Current Course</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $leave->studentLeave->courseStudent->studentCourse->course_name }}
+                                        {{ $student->course_name }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Current Department</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $leave->studentLeave->courseStudent->studentCourse->getCourseDept->name }}
+                                        {{ $student->name }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Current Stage</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ 'Year'.' '.$current->year_study.' Semester'.$current->semester_study.' '.'('.$current->patternRoll->season.')' }}
+                                        {{ 'Year'.' '.$leave->year_study.' Semester '.$leave->semester_study }}
                                     </div>
                                 </div>
                             </fieldset>
@@ -121,21 +121,21 @@
                                 <div class="row mb-3">
                                     <div class="col-md-4 fw-bold">New Class</div>
                                     <div class="col-md-8 fs-sm">
-                                        {{ $leave->deferredClass->deferred_class }}
+                                        {{ $leave->differed_class }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-4 fw-bold">New Stage</div>
                                     <div class="col-md-8 fs-sm">
-                                        {{ $leave->deferredClass->stage }}
+                                        {{ $leave->stage }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-4 fw-bold">Readmission Period</div>
                                     <div class="col-md-8 fs-sm">
-                                        Academic Year {{ $leave->deferredClass->academic_year }} Semester {{ $leave->deferredClass->semester_study }}
+                                        <b>Academic Year :</b> {{ $leave->differed_year }} <br> <b>Academic Semester :</b> {{ $leave->differed_semester }}
                                     </div>
                                 </div>
 
@@ -156,17 +156,14 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-center m-2">
-
-{{--                        @if($leave->approveLeave )--}}
-
-                            @if($leave->approveLeave->dean_status== null)
-                            <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('dean.acceptLeaveRequest', ['id' => Crypt::encrypt($leave->id)]) }}"> Accept Transfer </a>
+                            @if($leave->registrar_status == 0)
+                            <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('dean.acceptLeaveRequest', $leave->leave_id) }}"> Accept Transfer </a>
                             <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Transfer</a>
                             @else
-                                @if($leave->approveLeave->dean_status == 1)
+                                @if($leave->dean_status == 1)
                                     <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Transfer</a>
                                 @else
-                                    <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('dean.acceptLeaveRequest', ['id' => Crypt::encrypt($leave->id)]) }}"> Accept Transfer </a>
+                                    <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('dean.acceptLeaveRequest', $leave->leave_id) }}"> Accept Transfer </a>
                                 @endif
                             @endif
                     </div>
@@ -183,12 +180,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="{{ route('dean.declineLeaveRequest', ['id' => Crypt::encrypt($leave->id)]) }}">
+                    <form method="POST" action="{{ route('dean.declineLeaveRequest', $leave->leave_id) }}">
                         @csrf
                         <div class="d-flex justify-content-center mb-4">
                             <div class="col-md-11">
                                 <textarea name="remarks" placeholder="Remarks" rows="6" class="form-control"></textarea>
-                                <input type="hidden" value="{{ $leave->id }}" name="transfer_id">
+                                <input type="hidden" value="{{ $leave->leave_id }}" name="transfer_id">
                             </div>
                         </div>
                         <div class="d-flex justify-content-center">

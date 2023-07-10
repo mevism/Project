@@ -25,17 +25,17 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0" >
+                    <h6 class="h6 fw-bold mb-0" >
                      ACADEMIC/DEFERMENT LEAVE REQUESTS
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="javascript:void(0)">Schools</a>
+                            <a class="link-fx" href="javascript:void(0)">Leaves</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            ACADEMIC/DEFERMENT
+                            Academic/Differements
                         </li>
                     </ol>
                 </nav>
@@ -68,27 +68,23 @@
                                             <tr>
                                                 <td>
                                                     @if($item->registrar_status == NULL )
-                                                    <input class="leaves" type="checkbox" name="submit[]" value="{{ $item->id }}">
+                                                    <input class="leaves" type="checkbox" name="submit[]" value="{{ $item->leave_id }}">
                                                         @else
                                                         ✔
                                                     @endif
                                                 </td>
                                                 <td> {{ ++$key }} </td>
-                                                <td>{{ $item->studentLeave->reg_number }}</td>
-                                                <td>{{ $item->studentLeave->sname.' '. $item->studentLeave->fname.' '. $item->studentLeave->mname }} </td>
-                                                <td>{{ $item->studentLeave->courseStudent->deptStudCourse->dept_code }}</td>
+                                                <td>{{ $item->student_number }}</td>
+                                                <td>{{ $item->sname.' '. $item->fname.' '. $item->mname }} </td>
+                                                <td> {{ $item->StudentsDepartment->name }} </td>
                                                 <td>
-                                                    @if($item->approveLeave != null)
-                                                    {{ $item->approveLeave->cod_remarks }}
-                                                    @endif
+                                                    {{ $item->cod_remarks }}
                                                 </td>
                                                 <td>
-                                                    @if($item->approveLeave != null)
-                                                        @if($item->approveLeave->dean_status == 1)
-                                                            <span class="badge bg-success">Accepted</span>
-                                                        @else
-                                                            <span class="badge bg-danger">Rejected</span>
-                                                        @endif
+                                                    @if($item->dean_status == 1)
+                                                        <span class="badge bg-success">Accepted</span>
+                                                    @else
+                                                         <span class="badge bg-danger">Rejected</span>
                                                     @endif
                                                 </td>
                                             </tr>

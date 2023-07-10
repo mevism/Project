@@ -25,9 +25,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0" >
+                    <h6 class="h6 fw-bold mb-0" >
                     READMISSION REQUESTS
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -47,59 +47,52 @@
             <div class="row">
                 <div class="col-12">
                     <div class="d-flex justify-content-end m-2">
-                        <a class="btn  btn-alt-primary btn-sm" href="">Generate report</a>
+{{--                        <a class="btn  btn-alt-primary btn-sm" href="">Generate report</a>--}}
                     </div>
                     <form action="{{ route('courses.acceptedReadmissions') }}" method="post">
                         @csrf
-                        <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
-                            {{-- @if(count($leaves)>0) --}}
+                        <table id="example" class="table table-md table-striped table-borderless table-sm fs-sm">
                                 <thead>
                                     <th>✔</th>
                                     <th>#</th>
-                                    <th nowrap=""> Student Number</th>
-                                    <th nowrap="">Student name</th>
-                                    <th nowrap="">Department</th>
+                                    <th> Student Number</th>
+                                    <th>Student name</th>
+                                    <th>Department</th>
+                                    <th>Current Class</th>
+                                    <th>New Class</th>
                                     <th>COD Remarks</th>
                                     <th>DEAN STATUS</th>
                                 </thead>
                                 <tbody>
                                 @foreach($readmissions as $key => $item)
-
                                             <tr>
                                                 <td>
                                                     @if($item->registrar_status == NULL )
-                                                    <input class="readmissions" type="checkbox" name="submit[]" value="{{ $item->id }}">
+                                                    <input class="readmissions" type="checkbox" name="submit[]" value="{{ $item->readmision_id }}">
                                                         @else
                                                         ✔
                                                     @endif
                                                 </td>
                                                 <td> {{ ++$key }} </td>
-                                                 <td>{{ $item->studentReadmission->reg_number }}</td>
-                                                <td>{{ $item->studentReadmission->sname.' '. $item->studentReadmission->fname.' '. $item->studentReadmission->mname }} </td>
-                                                <td>{{ $item->studentReadmission->courseStudent->deptStudCourse->dept_code }}</td>
+                                                 <td>{{ $item->student_number }}</td>
+                                                <td>{{ $item->sname.' '. $item->fname.' '. $item->mname }} </td>
+                                                <td>{{ $item->ReadmissionCourse->name }}</td>
+                                                <td nowrap="">{{ $item->ReadmissionCourse->current_class }}</td>
+                                                <td nowrap="">{{ $item->ReadmissionClass->readmission_class }}</td>
                                                <td>
-                                                    @if($item->readmissionApproval != null)
-                                                    {{ $item->readmissionApproval->cod_remarks }}
-                                                    @endif
+                                                 {{ $item->cod_remarks }}
                                                 </td>
                                                 <td>
-                                                    @if($item->readmissionApproval != null)
-                                                        @if($item->readmissionApproval->dean_status == 1)
-                                                            <span class="badge bg-success">Accepted</span>
-                                                        @else
-                                                            <span class="badge bg-danger">Rejected</span>
-                                                        @endif
+                                                    @if($item->dean_status == 1)
+                                                        <span class="badge bg-success">Accepted</span>
+                                                    @else
+                                                        <span class="badge bg-danger">Rejected</span>
                                                     @endif
                                                 </td>
                                             </tr>
 
                                 @endforeach
                                 </tbody>
-                            {{-- @else
-                                <tr>
-                                    <span class="text-muted text-center fs-sm">There are no new leaves submitted</span>
-                                </tr>
-                            @endif --}}
                         </table>
                         @if(count($readmissions) > 0)
                         <div>

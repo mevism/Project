@@ -38,14 +38,14 @@ Route::prefix('dean')->middleware(['web'])->group(function() {
         Route::get('/generate-transfer-requests-report/{year}', [DeanController::class, 'requestedTransfers'])->name('dean.requestedTransfers');
 
         Route::get('/view-list-of-academic-leaves', [DeanController::class, 'academicLeave'])->name('dean.academicLeave');
-        Route::get('/view-yearly-academic-leave/{year}', [DeanController::class, 'yearlyAcademicLeave'])->name('dean.yearlyLeaves');
+        Route::get('/view-yearly-academic-leave/{id}', [DeanController::class, 'yearlyAcademicLeave'])->name('dean.yearlyLeaves');
         Route::get('/view-academic-leave-request/{id}', [DeanController::class, 'viewLeaveRequest'])->name('dean.viewLeaveRequest');
         Route::get('/accept-academic-leave/deferment-request/{id}', [DeanController::class, 'acceptLeaveRequest'])->name('dean.acceptLeaveRequest');
         Route::post('/decline-academic-leave/deferment-request/{id}', [DeanController::class, 'declineLeaveRequest'])->name('dean.declineLeaveRequest');
 
         Route::get('/view-yearly-readmissions', [DeanController::class, 'readmissions'])->name('dean.readmissions');
-        Route::get('/view-yearly-readmissions/{year}', [DeanController::class, 'yearlyReadmissions'])->name('dean.yearlyReadmissions');
-        Route::get('/get-intake-readmission-requests/{intake}/{year}', [DeanController::class, 'intakeReadmissions'])->name('dean.intakeReadmissions');
+        Route::get('/view-yearly-readmissions/{id}', [DeanController::class, 'yearlyReadmissions'])->name('dean.yearlyReadmissions');
+        Route::get('/get-intake-readmission-requests/{id}', [DeanController::class, 'intakeReadmissions'])->name('dean.intakeReadmissions');
         Route::get('/view-selected-readmission-request/{id}', [DeanController::class, 'selectedReadmission'])->name('dean.selectedReadmission');
         Route::post('/accept-selected-readmission-request/{id}', [DeanController::class, 'acceptReadmission'])->name('dean.acceptReadmission');
         Route::post('/decline-selected-readmission-request/{id}', [DeanController::class, 'declineReadmission'])->name('dean.declineReadmission');

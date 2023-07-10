@@ -49,7 +49,7 @@
                                             <option value="2">Faculty Unit</option>
                                             <option value="3">Department Unit</option>
                                         </select>
-                                        <label>UNIT CODE <sup class="text-danger">*</sup> </label>
+                                        <label>UNIT TYPE <sup class="text-danger">*</sup> </label>
                                     </div>
                                     <div class="mb-2 form-floating">
                                         <input type="number" class="form-control" name="total_exam" value="{{ old('total_exam') }}" placeholder="unit code">

@@ -47,7 +47,6 @@
     </div>
 
     <div class="block block-rounded">
-
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-12">

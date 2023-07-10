@@ -20,7 +20,7 @@ class Readmission extends Model
 
     public function leaves(){
 
-        return $this->belongsTo(AcademicLeave::class, 'leave_id');
+        return $this->belongsTo(AcademicLeave::class, 'leave_id', 'leave_id');
     }
 
     public function studentReadmission(){

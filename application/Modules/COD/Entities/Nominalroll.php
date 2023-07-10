@@ -2,6 +2,7 @@
 
 namespace Modules\COD\Entities;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,19 +13,7 @@ class Nominalroll extends Model
 {
     use HasFactory, softDeletes;
 
-    protected $fillable = [];
-
-    public function signedNominalroll(){
-
-        return $this->belongsTo(Student::class);
-
-    }
-
-    public function studentRoll(){
-
-        return $this->belongsTo(Student::class);
-
-    }
+    protected $fillable = ['nominal_id', 'student_id', 'reg_number', 'year_study', 'semester_study', 'academic_year','academic_semester', 'pattern_id', 'class_code', 'registration', 'activation'];
 
     public function yearStudy(){
 

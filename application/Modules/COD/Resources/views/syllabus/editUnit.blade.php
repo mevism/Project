@@ -49,7 +49,7 @@
                                             <option @if($unit->type == 2) selected @endif value="2">Faculty Unit</option>
                                             <option @if($unit->type == 3) selected @endif value="3">Department Unit</option>
                                         </select>
-                                        <label>UNIT CODE <sup class="text-danger">*</sup> </label>
+                                        <label>UNIT TYPE <sup class="text-danger">*</sup> </label>
                                     </div>
                                     <div class="mb-2 form-floating">
                                         <input type="number" class="form-control" name="total_exam" value="{{ $unit->total_exam }}" placeholder="unit code">
