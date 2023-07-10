@@ -63,9 +63,13 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'user_employments', 'user_id', 'role_id', 'user_id', 'id');
     }
 
+    public function employments(){
+        return $this->belongsTo(UserEmployment::class, 'user_id', 'user_id');
+    }
+    
     public function placedUser(){
 
-       return $this->hasMany(UserEmployment::class);
+       return $this->hasMany(User::class, 'user_id','user_id');
     }
 
     public function getSch(){
@@ -88,25 +92,25 @@ class User extends Authenticatable
 
     public function workloadAllocation(){
 
-        return $this->hasMany(Workload::class, 'user_id', 'id');
+        return $this->hasMany(Workload::class, 'user_id', 'user_id');
     }
 
     public function teachingAreaUser(){
 
-        return $this->hasMany(TeachingArea::class, 'user_id','id');
+        return $this->hasMany(TeachingArea::class, 'user_id','user_id');
     }
 
     public function lecturerQualfs(){
 
-        return $this->hasMany(LecturerQualification::class, 'user_id', 'id');
+        return $this->hasMany(LecturerQualification::class, 'user_id', 'user_id');
     }
 
     public function lecturerQualification(){
-        return $this->hasMany(LecturerQualification::class, 'user_id', 'id');
+        return $this->hasMany(LecturerQualification::class, 'user_id', 'user_id');
     }
 
     public function staffInfos(){
-        return $this->belongsTo(StaffInfo::class, 'user_id', 'user_id');
+        return $this->belongsTo(StaffInfo::class, 'user_id', 'user_id',);
     }
 
 }

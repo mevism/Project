@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('lecturer_qualifications', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id');
+            $table->string('user_id');
             $table->string('institution');
             $table->string('qualification');
             $table->integer('level');
-            $table->integer('qualification_status');
+            $table->integer('status');
             $table->timestamps();
             $table->softDeletes();
         });

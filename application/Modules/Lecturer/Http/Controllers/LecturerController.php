@@ -18,7 +18,9 @@ use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\StudentCourse;
 use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Workload\Entities\Workload;
+use \App\Models\StaffInfo;
 use \App\Models\User;
+use \App\Service\CustomIds;
 use Hash;
 
 
@@ -47,10 +49,7 @@ class LecturerController extends Controller
 
     public function qualifications(){
 
-        $qualification = LecturerQualification::where('user_id', auth()->guard('user')->user()->id)->latest()->get();
-
-
-
+        $qualification = LecturerQualification::where('user_id', auth()->guard('user')->user()->staffInfos->id)->latest()->get();
 
         return view('lecturer::profile.qualifications')->with ('qualifications', $qualification);
 
@@ -70,8 +69,11 @@ class LecturerController extends Controller
 
        ]);
 
+       $qualID = new CustomIds(); 
+
        $qualification = new LecturerQualification;
-       $qualification->user_id = auth()->guard('user')->user()->id;
+       $qualification->qualification_id = $qualID->generateId();
+       $qualification->user_id = auth()->guard('user')->user()->staffInfos->user_id;
        $qualification->level = $request->level;
        $qualification->qualification = $request->qualification;
        $qualification->institution = $request ->institution;
@@ -100,7 +102,7 @@ class LecturerController extends Controller
         ]);
 
         $qualification = LecturerQualification::find($id);
-        $qualification->user_id = auth()->guard('user')->user()->id;
+        $qualification->user_id = auth()->guard('user')->user()->staffInfos->id;
        $qualification->level = $request->level;
        $qualification->qualification = $request->qualification;
        $qualification->institution = $request ->institution;
@@ -127,32 +129,30 @@ class LecturerController extends Controller
 
     public function teachingAreas(){
 
-        $myUnits = TeachingArea::where('user_id', auth()->guard('user')->user()->id)->latest()->get();
+        $myUnits = TeachingArea::where('user_id', auth()->guard('user')->user()->staffInfos->id)->latest()->get();
 
         return view('lecturer::profile.teachingArea')->with(['units' => $myUnits]);
     }
 
     public function addTeachingAreas(){
+       
 
         $userQualifications = [];
 
-        $qualifications = Auth()->guard('user')->user()->lecturerQualification;
+       $qualifications = Auth()->guard('user')->user()->lecturerQualification;
         foreach($qualifications as $qualification){
             $userQualifications[] =$qualification->level;
         }
 
-        if ($userQualifications == null){
-            $highestQualification = 0;
-        }else{
-            $highestQualification = max($userQualifications);
-        }
+        $highestQualification = ($userQualifications == null) ? 0 : max($userQualifications);
 
         $userSchool = auth()->guard('user')->user()->employmentDepartment->first()->schools->first();
 
+        $Allcourses = [];
         foreach ($userSchool->departments as $department){
-            $Allcourses[] = Courses::where('department_id', $department->id)->latest()->get();
+            $courses = Courses::where('department_id', $department->id)->latest()->get();
         }
-
+        $units = [];
         foreach ($Allcourses as $courses){
             foreach ($courses as $course){
                 $units[] = UnitProgramms::where('course_code', $course->course_code)->latest()->get();
@@ -206,7 +206,7 @@ class LecturerController extends Controller
 
     public function examination(){
 
-        $workloads = Workload::where('user_id', auth()->guard('user')->user()->id)->where('status', 1)->latest()->get();
+        $workloads = Workload::where('user_id', auth()->guard('user')->user()->id)->latest()->get();
 
         $setting = ExamWeights::latest()->get();
 
@@ -444,13 +444,13 @@ class LecturerController extends Controller
         return redirect()->back()->with('success', 'Deleted successfully');
     }
 
-
-
+    
        public function myProfile(){
 
-            $qualifications = LecturerQualification::where ('user_id', auth()->guard('user')->user()->id)->where('status' ,1)->latest()->get();
-
-             return view('lecturer::profile.myprofile')->with('qualifications',$qualifications);
+            $qualifications = LecturerQualification::where ('user_id', auth()->guard('user')->user()->staffInfos->id)->where('status' ,1)->latest()->get();
+            
+            return view('lecturer::profile.myprofile')->with('qualifications',$qualifications);
+            
        }
        public function editMyprofile(){
 
@@ -461,6 +461,7 @@ class LecturerController extends Controller
 
     public function updateMyprofile(Request $request, $id){
 
+
         $request->validate([
             'title' => 'required',
             'lname' => 'required',
@@ -468,10 +469,8 @@ class LecturerController extends Controller
             'username' => 'required',
             'profile_image'=>'image|nullable|max:1999'
         ]);
-        //Handle file Upload
-
-
-        $users = User::find($id);
+      
+        $users = StaffInfo::where('user_id', $id)->first();
         $users->title = $request->title;
         $users->last_name = $request->lname;
         $users->first_name = $request ->fname;
@@ -487,11 +486,10 @@ class LecturerController extends Controller
         }
         $users->office_email = $request ->office_email;
         $users->personal_email = $request->personal_email;
-        $users->username = $request->username;
         $users->gender = $request ->gender;
         $users->save();
 
-        return redirect()->route('lecturer.myProfile')->with('success', 'Updated successfully');
+      return redirect()->route('lecturer.myProfile')->with('success', 'Updated successfully');
 
     }
 

@@ -16,3 +16,4 @@ class StaffInfo extends Model
         return \Modules\User\Database\factories\StaffInfoFactory::new();
     }
 }
+

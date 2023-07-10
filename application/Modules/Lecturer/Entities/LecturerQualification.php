@@ -12,7 +12,7 @@ class LecturerQualification extends Model
     protected $fillable = [];
 
     public function getQualificationRemark(){
-        return $this->hasMany(QualificationRemarks::class, 'qualification_id', 'id');
+        return $this->hasMany(QualificationRemarks::class, 'qualification_id', 'user_id');
      }
     
     protected static function newFactory()
@@ -20,3 +20,5 @@ class LecturerQualification extends Model
         return \Modules\Lecturer\Database\factories\LecturerQualificationFactory::new();
     }
 }
+
+

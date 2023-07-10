@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('teaching_areas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id');
+            $table->string('user_id');
             $table->string('unit_code');
             $table->string('level');
             $table->integer('status');

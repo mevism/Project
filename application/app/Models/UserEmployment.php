@@ -24,4 +24,10 @@ class UserEmployment extends Model
 
         return $this->belongsTo(Role::class, 'role_id');
     }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_id');
+    }
+
 }

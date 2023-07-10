@@ -1,15 +1,15 @@
-@extends('lecturer::layouts.backend')
-@section('content')
 
-    <div class="bg-image" style="background-image: url( {{ url('media/photos/photo12@2x.jpg')}} );">
+<?php $__env->startSection('content'); ?>
+
+    <div class="bg-image" style="background-image: url( <?php echo e(url('media/photos/photo12@2x.jpg')); ?> );">
       <div class="bg-black-50">
         <div class="content content-full text-center">
           <div class="my-3">
-            <img class="img-avatar img-avatar-thumb" src="{{ url('media/profile', auth()->guard('user')->user()->profile_image)}}" alt="">
+            <img class="img-avatar img-avatar-thumb" src="<?php echo e(url('media/profile', auth()->guard('user')->user()->profile_image)); ?>" alt="">
           </div>
-          <h1 class="h2 text-white mb-0">{{ auth()->guard('user')->user()->staffInfos->title }} {{ auth()->guard('user')->user()->staffInfos->last_name }} {{ auth()->guard('user')->user()->staffInfos->first_name }} {{ auth()->guard('user')->user()->staffInfos->middle_name }}</h1>
+          <h1 class="h2 text-white mb-0"><?php echo e(auth()->guard('user')->user()->staffInfos->title); ?> <?php echo e(auth()->guard('user')->user()->staffInfos->last_name); ?> <?php echo e(auth()->guard('user')->user()->staffInfos->first_name); ?> <?php echo e(auth()->guard('user')->user()->staffInfos->middle_name); ?></h1>
           <span class="text-white-75">Lecturer</span><br>
-          <a class="btn btn-sm btn-alt-secondary mt-3" href="{{route('lecturer.editMyprofile')}}">
+          <a class="btn btn-sm btn-alt-secondary mt-3" href="<?php echo e(route('lecturer.editMyprofile')); ?>">
             <i class=" text-danger"></i> Edit Profile
           </a>
         </div>
@@ -35,21 +35,22 @@
                 <div class="block-content">
                     <div class="row m-2 fs-sm" >
                         <div class="col-md-4">Name:</div>
-                        <div class="col-md-8">{{ auth()->guard('user')->user()->staffInfos->title }} {{ auth()->guard('user')->user()->staffInfos->last_name }} {{ auth()->guard('user')->user()->staffInfos->first_name }} {{ auth()->guard('user')->user()->staffInfos->middle_name }}
+                        <div class="col-md-8"><?php echo e(auth()->guard('user')->user()->staffInfos->title); ?> <?php echo e(auth()->guard('user')->user()->staffInfos->last_name); ?> <?php echo e(auth()->guard('user')->user()->staffInfos->first_name); ?> <?php echo e(auth()->guard('user')->user()->staffInfos->middle_name); ?>
+
                         </div>
                     </div>
                     <div class="row m-2 fs-sm" >
                         <div class="col-md-4">Staff No:</div>
-                        <div class="col-md-8">{{ auth()->guard('user')->user()->staffInfos->staff_number }}</div>
+                        <div class="col-md-8"><?php echo e(auth()->guard('user')->user()->staffInfos->staff_number); ?></div>
                     </div>
                     <div class="row m-2 fs-sm" >
                         <div class="col-md-4">Gender:</div>
                         <div class="col-md-8">
-                            @if (auth()->guard('user')->user()->staffInfos->gender=='F')
+                            <?php if(auth()->guard('user')->user()->staffInfos->gender=='F'): ?>
                                 Female
-                             @else
+                             <?php else: ?>
                                 Male
-                             @endif
+                             <?php endif; ?>
                         </div>
                     </div>
               </div>
@@ -68,15 +69,15 @@
                 <div class="block-content block-content-full">
                     <div class="row m-2 fs-sm" >
                         <div class="col-md-4">Phone Number:</div>
-                        <div class="col-md-8">{{ auth()->guard('user')->user()->staffInfos->phone_number }}</div>
+                        <div class="col-md-8"><?php echo e(auth()->guard('user')->user()->staffInfos->phone_number); ?></div>
                     </div>
                     <div class="row m-2 fs-sm" >
                         <div class="col-md-4">Office Email:</div>
-                        <div class="col-md-8">{{ auth()->guard('user')->user()->staffInfos->office_email }}</div>
+                        <div class="col-md-8"><?php echo e(auth()->guard('user')->user()->staffInfos->office_email); ?></div>
                     </div>
                     <div class="row m-2 fs-sm" >
                         <div class="col-md-4">Personal Email:</div>
-                        <div class="col-md-8">{{ auth()->guard('user')->user()->staffInfos->personal_email }}</div>
+                        <div class="col-md-8"><?php echo e(auth()->guard('user')->user()->staffInfos->personal_email); ?></div>
                     </div>
                 </div>
               </div>
@@ -91,34 +92,37 @@
                 </div>
                 <div class="block-content">
                
-                    @foreach(auth()->guard('user')->user()->employmentDepartment as $employment )
+                    <?php $__currentLoopData = auth()->guard('user')->user()->employmentDepartment; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $employment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="row m-2 fs-sm" >
                         <div class="col-md-3">Department:</div>
                         <div class="col-md-9">
-                            {{ $employment->name }}
+                            <?php echo e($employment->name); ?>
+
                     </div>
                     </div>
                     <div class="row m-2 fs-sm" >
                         <div class="col-md-3">Station:</div>
                         <div class="col-md-9">
-                            {{ $employment->name}}
+                            <?php echo e($employment->name); ?>
+
                         </div>
                     </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                    @foreach(auth()->guard('user')->user()->roles as  $employment) 
+                    <?php $__currentLoopData = auth()->guard('user')->user()->roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $employment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> 
                     <div class="row m-2 fs-sm" >
                         <div class="col-md-3">Role:</div>
                         <div class="col-md-9">
-                             {{ $employment->name }}
+                             <?php echo e($employment->name); ?>
+
                         </div>
                     </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     
                     <div class="row m-2 fs-sm" >
                         <div class="col-md-3">Contract:</div>
                         <div class="col-md-9">
-                          {{ auth()->guard('user')->user()->employments->employment_terms}} 
+                          <?php echo e(auth()->guard('user')->user()->employments->employment_terms); ?> 
                         </div>
                     </div>
                     <hr>
@@ -142,7 +146,7 @@
               </div>
             </div>
             <div class="block-content">
-                @foreach($qualifications as $key =>$qualification)
+                <?php $__currentLoopData = $qualifications; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key =>$qualification): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
               <div class="d-flex align-items-center push">
                     <div class="flex-shrink-0 me-3">
                     <a class="item item-rounded fs-lg" href="javascript:void(0)">
@@ -151,23 +155,23 @@
                     </div>
                 <div class="flex-grow-1">
                   <div class="fw-semibold">
-                    @if($qualification->level==1) 
+                    <?php if($qualification->level==1): ?> 
                     CERTIFICATE
-                    @elseif($qualification->level==2)
+                    <?php elseif($qualification->level==2): ?>
                         DIPLOMA
-                    @elseif($qualification->level==3)
+                    <?php elseif($qualification->level==3): ?>
                         BACHELORS
-                    @elseif($qualification->level==4)
+                    <?php elseif($qualification->level==4): ?>
                         MASTERS 
-                    @elseif($qualification->level==5)
+                    <?php elseif($qualification->level==5): ?>
                         PHD 
-                    @endif
+                    <?php endif; ?>
                    
               </div>
-                  <div class="fs-sm">{{ $qualification ->qualification}}</div>
+                  <div class="fs-sm"><?php echo e($qualification ->qualification); ?></div>
                 </div>
               </div>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
               </div>
             </div>
           </div>
@@ -177,4 +181,6 @@
     
     <!-- END Page Content -->
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('lecturer::layouts.backend', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\project1\application\Modules/Lecturer\Resources/views/profile/myprofile.blade.php ENDPATH**/ ?>
