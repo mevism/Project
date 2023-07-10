@@ -1000,63 +1000,30 @@ class StudentController extends Controller
          return response()->download($docPath)->deleteFileAfterSend(true);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
-    {
-        return view('student::create');
+    public function viewExamResults(){
+
+
+       // $results = ExamResults::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+
+        $exam_marks = ExamMarks::where('reg_number',Auth::guard('student')->user()->loggedStudent->reg_number)
+          ->orderBy('academic_semester','asc')
+          ->groupBy('academic_semester')
+          ->get();
+
+
+
+        return view('student::examination.examresults',['exam_marks' => $exam_marks]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    public function viewExamMarks(){
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
-    {
-        return view('student::show');
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('student::edit');
-    }
+        $exam_marks = ExamMarks::where('reg_number',Auth::guard('student')->user()->loggedStudent->reg_number)
+        ->orderBy('unit_code','asc')
+       //->groupBy('academic_semester')
+        ->get();
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
+        return view('student::examination.viewexammarks',['exam_marks' => $exam_marks]);
+        //return ExamMarks::find(1)->unit;
     }
 }
