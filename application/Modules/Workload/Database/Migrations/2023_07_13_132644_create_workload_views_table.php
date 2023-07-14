@@ -13,13 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('teaching_areas', function (Blueprint $table) {
-            $table->string('teaching_area_id');
-            $table->string('user_id');
-            $table->string('unit_code');
-            $table->integer('status');
+        Schema::create('workload_views', function (Blueprint $table) {
+            $table->id();
+
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('teaching_areas');
+        Schema::dropIfExists('workload_views');
     }
 };

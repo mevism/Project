@@ -5,6 +5,7 @@ namespace Modules\Lecturer\Entities;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\COD\Entities\Unit;
 use Modules\Registrar\Entities\UnitProgramms;
 
 class TeachingArea extends Model
@@ -14,10 +15,8 @@ class TeachingArea extends Model
     protected $fillable = [];
 
     public function teachingArea(){
-
-        return $this->belongsTo(UnitProgramms::class, 'unit_code', 'course_unit_code');
+        return $this->belongsTo(Unit::class, 'unit_code', 'unit_code');
     }
-
     public function userTeachingArea(){
 
          return $this->belongsTo(User::class, 'user_id');

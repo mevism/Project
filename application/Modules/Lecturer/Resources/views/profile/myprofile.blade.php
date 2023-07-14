@@ -90,7 +90,7 @@
                   <h3 class="block-title">Department Details</h3>
                 </div>
                 <div class="block-content">
-               
+
                     @foreach(auth()->guard('user')->user()->employmentDepartment as $employment )
                     <div class="row m-2 fs-sm" >
                         <div class="col-md-3">Department:</div>
@@ -106,7 +106,7 @@
                     </div>
                     @endforeach
 
-                    @foreach(auth()->guard('user')->user()->roles as  $employment) 
+                    @foreach(auth()->guard('user')->user()->roles as  $employment)
                     <div class="row m-2 fs-sm" >
                         <div class="col-md-3">Role:</div>
                         <div class="col-md-9">
@@ -114,11 +114,11 @@
                         </div>
                     </div>
                     @endforeach
-                    
+
                     <div class="row m-2 fs-sm" >
                         <div class="col-md-3">Contract:</div>
                         <div class="col-md-9">
-                          {{ auth()->guard('user')->user()->employments->employment_terms}} 
+                          {{ auth()->guard('user')->user()->employments->first()->employment_terms}}
                         </div>
                     </div>
                     <hr>
@@ -151,18 +151,18 @@
                     </div>
                 <div class="flex-grow-1">
                   <div class="fw-semibold">
-                    @if($qualification->level==1) 
+                    @if($qualification->level==1)
                     CERTIFICATE
                     @elseif($qualification->level==2)
                         DIPLOMA
                     @elseif($qualification->level==3)
                         BACHELORS
                     @elseif($qualification->level==4)
-                        MASTERS 
+                        MASTERS
                     @elseif($qualification->level==5)
-                        PHD 
+                        PHD
                     @endif
-                   
+
               </div>
                   <div class="fs-sm">{{ $qualification ->qualification}}</div>
                 </div>
@@ -173,8 +173,8 @@
           </div>
           <!-- END Products -->
         </div>
-      
-    
+
+
     <!-- END Page Content -->
 
 @endsection

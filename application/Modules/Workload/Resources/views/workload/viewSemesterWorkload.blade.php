@@ -73,21 +73,21 @@
                                 <td> {{ $loop->iteration }} </td>
                                 <td>
                                     @foreach($lecturers as $lecturer)
-                                        @if($lecturer->id == $lec)
-                                            {{ $lecturer->staff_number }}
+                                        @if($lecturer->user_id == $lec)
+                                            {{ $lecturer->StaffInfos->staff_number }}
                                         @endif
                                     @endforeach
                                 </td>
                                 <td>
                                     @foreach($lecturers as $lecturer)
-                                        @if($lecturer->id == $lec)
-                                           {{ $lecturer->title }}. {{ $lecturer->last_name }} {{ $lecturer->first_name }} {{ $lecturer->middle_name }}
+                                        @if($lecturer->user_id == $lec)
+                                           {{ $lecturer->StaffInfos->title }}. {{ $lecturer->StaffInfos->last_name }} {{ $lecturer->StaffInfos->first_name }} {{ $lecturer->StaffInfos->middle_name }}
                                         @endif
                                     @endforeach
                                 </td>
                                 <td>
                                     @foreach($lecturers as $lecturer)
-                                        @if($lecturer->id == $lec)
+                                        @if($lecturer->user_id == $lec)
                                             @foreach( $lecturer->lecturerQualfs()->where('status', 1)->get() as $qualification)
                                                 <p>{{ $qualification->qualification }}</p>
                                             @endforeach
@@ -96,7 +96,7 @@
                                 </td>
                                 <td>
                                     @foreach($lecturers as $lecturer)
-                                        @if($lecturer->id == $lec)
+                                        @if($lecturer->user_id == $lec)
                                             @foreach($lecturer->roles as $role)
                                                 <p>{{ $role->name }}</p>
                                             @endforeach
@@ -112,10 +112,10 @@
                                 <td>
                                     @php  $userLoad = $workload->count();  @endphp
                                     @foreach ($lecturers as $lecturer)
-                                        @if ($lecturer->id === $lec)
+                                        @if ($lecturer->user_id === $lec)
                                             @php $staff = $lecturer; @endphp
-                                               
-                                            @if ($staff->placedUser->first()->employment_terms == 'FT' && $staff->hasRole(['Chairperson of Department', 'Exam Coordinator', 'Director/Dean']) )
+
+                                            @if ($staff->employments->first()->employment_terms == 'FT' && $staff->hasRole(['Chairperson of Department', 'Exam Coordinator', 'Director/Dean']) )
                                             @for ($i = 0; $i < $userLoad; ++$i)
                                                 @if ($i < 2)
                                                     @php $load = 'FT'; @endphp
@@ -125,9 +125,9 @@
                                                     <p>{{ $load }}</p>
                                                 @endif
                                             @endfor
-                                        @elseif ($staff->placedUser->first()->employment_terms == 'FT')
+                                        @elseif ($staff->employments->first()->employment_terms == 'FT')
                                             @for ($i = 0; $i < $userLoad; ++$i)
-                                                @if ($i < 4)
+                                                @if ($i < 3)
                                                     @php $load = 'FT'; @endphp
                                                     <p>{{ $load }}</p>
                                                 @else
@@ -143,7 +143,7 @@
                                                 @endif
                                             @endfor
                                         @endif
-                                        @endif                                            
+                                        @endif
                                     @endforeach
                                 </td>
                                 <td>

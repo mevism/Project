@@ -5,6 +5,7 @@ namespace Modules\COD\Http\Controllers;
 use App\Models\User;
 use App\Service\CustomIds;
 use Auth;
+use Modules\Administrator\Entities\Staff;
 use Modules\Application\Entities\ApplicationApproval;
 use Modules\COD\Entities\AcademicLeavesView;
 use Modules\COD\Entities\AdmissionsView;
@@ -1237,110 +1238,58 @@ class CODController extends Controller
         return redirect()->route('department.yearlyReadmissions', $intake)->with('success', 'Readmission request accepted');
     }
 
-    public function departmentLectures()
-    {
-
-        $dept = auth()->guard('user')->user()->employmentDepartment->first()->id;
-
-        $users = User::all();
-
-        foreach ($users as $user) {
-
-            if ($user->employmentDepartment->first()->id == $dept) {
-
-                $lectures[] = $user;
-            }
-        }
-
+    public function departmentLectures(){
+        $lectures = Staff::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+                        ->get();
         return view('cod::lecturers.index')->with(['lecturers' => $lectures]);
     }
 
     public function lecturesQualification()
     {
-        $dept = auth()->guard('user')->user()->employmentDepartment->first()->id;
-
-        $users = User::all();
-
-        foreach ($users as $user) {
-            // return $user->employmentDepartment->first();
-            if ($user->employmentDepartment->first()->id == $dept) {
-
-                $lectures[] = $user;
-            }
-        }
-
+        $lectures = Staff::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+            ->whereIn('role_id', [10, 2, 4])
+            ->get();
         return view('cod::lecturers.departmentalLecturers')->with(['lecturers' => $lectures]);
     }
 
-    public function viewLecturerQualification($id)
-    {
-        $hashedId = Crypt::decrypt($id);
-
-        $user = User::find($hashedId);
-
+    public function viewLecturerQualification($id){
+        $user = Staff::where('user_id', $id)->first();
         return view('cod::lecturers.lecturerQualification')->with(['user' => $user]);
     }
 
-    public function approveQualification($id)
-    {
-        $hashedId = Crypt::decrypt($id);
-
-        $qualification = LecturerQualification::findorFail($hashedId);
-        $qualification->status = 1;
-        $qualification->save();
-
+    public function approveQualification($id){
+        LecturerQualification::where('qualification_id', $id)->update(['status' => 1]);
         return redirect()->back()->with('success', 'Lecturer qualification verified successfully');
     }
 
-    public function rejectQualification(Request $request, $id)
-    {
-        $hashedId = Crypt::decrypt($id);
-
-        $qualification = LecturerQualification::findorFail($hashedId);
-        $qualification->status = 2;
-        $qualification->save();
-
+    public function rejectQualification(Request $request, $id){
+        $request->validate([
+            'reason' => 'required'
+        ]);
+        LecturerQualification::where('qualification_id', $id)->update(['status' => 2]);
         $remark = new QualificationRemarks;
-        $remark->qualification_id = $hashedId;
+        $remark->qualification_id = $id;
         $remark->remarks = $request->reason;
         $remark->save();
-
         return redirect()->back()->with('success', 'Lecturer qualification declined successfully');
     }
 
-    public function viewLecturerTeachingArea($id)
-    {
-        $hashedId = Crypt::decrypt($id);
-
-        $user = User::find($hashedId);
-
+    public function viewLecturerTeachingArea($id){
+        $user = User::where('user_id', $id)->first();
         return view('cod::lecturers.teachingAreas')->with(['user' => $user]);
     }
 
-    public function approveTeachingArea($id)
-    {
-        $hashedId = Crypt::decrypt($id);
-
-        $qualification = TeachingArea::findorFail($hashedId);
-        $qualification->status = 1;
-        $qualification->save();
-
+    public function approveTeachingArea($id){
+        TeachingArea::where('teaching_area_id', $id)->update(['status' => 1]);
         return redirect()->back()->with('success', 'Lecturer qualification verified successfully');
     }
 
-    public function declineTeachingArea(Request $request, $id)
-    {
-        $hashedId = Crypt::decrypt($id);
-
-        $qualification = TeachingArea::findorFail($hashedId);
-        $qualification->status = 2;
-        $qualification->save();
-
+    public function declineTeachingArea(Request $request, $id){
+        TeachingArea::where('teaching_area_id', $id)->update(['status' => 2]);
         $remark = new TeachingAreaRemarks;
-        $remark->teaching_id = $hashedId;
+        $remark->teaching_area_id = $id;
         $remark->remarks = $request->reason;
         $remark->save();
-
         return redirect()->back()->with('success', 'Lecturer qualification declined successfully');
     }
 

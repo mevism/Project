@@ -5,9 +5,9 @@
     <div class="content content-full">
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
             <div class="flex-grow-0">
-                <h5 class="h5 fw-bold mb-0">
+                <h6 class="h6 fw-bold mb-0">
                    Edit My Qualifications
-                </h5>
+                </h6>
             </div>
             <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-alt">
@@ -26,7 +26,7 @@
     <div class="block-content block-content-full">
         <div class="d-flex justify-content-center">
             <div class="col-md-6 space-y-0">
-            <form method="POST" action="{{ route('lecturer.updateQualifications', $qualification->id) }}">
+            <form method="POST" action="{{ route('lecturer.updateQualifications', $qualification->qualification_id) }}">
                 @csrf
                 <div class="row row-cols-sm-1 g-2">
                     <div class="form-floating mb-2">
@@ -45,7 +45,7 @@
                       <input type="text" name="institution" class="form-control " value="{{ $qualification->institution}}" placeholder="Institution Name">
                       <label>Institution Name </label>
                     </div>
-                   
+
                     <div class="form-floating mb-2">
                         <input type="text" name="qualification" class="form-control " value="{{ $qualification->qualification}}"placeholder="qualification Name">
                         <label>Qualification </label>

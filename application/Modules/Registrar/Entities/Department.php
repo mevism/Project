@@ -29,7 +29,6 @@ class Department extends Model
     }
 
     public function schools(){
-
         return $this->belongsToMany(School::class, 'school_departments', 'department_id', 'school_id', 'department_id', 'school_id');
     }
 

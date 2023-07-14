@@ -14,11 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('approve_workloads', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('cod_status')->nullable();
+            $table->string('workload_approval_id');
             $table->integer('dean_status')->nullable();
             $table->string('dean_remarks')->nullable();
-            $table->integer('registar_status')->nullable();
+            $table->integer('registrar_status')->nullable();
             $table->string('registrar_remarks')->nullable();
             $table->integer('status')->default(0);
             $table->timestamps();

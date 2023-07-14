@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\COD\Entities\ClassPattern;
 use Modules\COD\Entities\Progression;
 use Modules\Student\Entities\CourseTransfer;
+use Modules\Student\Entities\StudentCourse;
 use Modules\Workload\Entities\Workload;
 
 class Classes extends Model
@@ -37,8 +38,7 @@ class Classes extends Model
     }
 
     public function studentClass(){
-
-        return $this->hasMany(StudentCourse::class, 'class_code', 'name');
+        return $this->hasMany(StudentCourse::class, 'current_class', 'name');
     }
 
     protected static function newFactory()

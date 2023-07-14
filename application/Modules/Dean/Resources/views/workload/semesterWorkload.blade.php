@@ -39,7 +39,7 @@
                             <a class="link-fx" href="javascript:void(0)">department</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            workload 
+                            workload
                         </li>
                     </ol>
                 </nav>
@@ -53,9 +53,9 @@
             <div class="row">
                 <div class="col-12">
                     <table id="example" class="table table-bordered table-responsive-sm table-striped table-vcenter js-dataTable-responsive fs-sm">
-                     
+
                         <thead>
-                        <th>#</th>                        
+                        <th>#</th>
                         {{-- <th>Academic Year </th> --}}
                         <th>department </th>
                         <th>Academic semester</th>
@@ -66,7 +66,7 @@
                                 <tr>
                                     <td> {{ $loop->iteration }}</td>
 
-                                    <td>                                           
+                                    <td>
                                         @foreach($departs as $deptCode)
                                             @if($dept == $deptCode->id )
                                              {{ $deptCode->dept_code }}
@@ -75,50 +75,47 @@
                                     </td>
 
                                     <td nowrap="">
-                                        
+
                                         @foreach ($intakes as $academic  => $intake)
-                                        
+
                                             <div class="row mb-1">
                                                 <div class="col col-md-8">
                                                     {{ $academic }}
                                                 </div>
-                                                
-                                                
-                                                    <a class="btn btn-sm btn-outline-secondary" 
-                                                    href="{{ route('dean.viewWorkload', ['id' => Crypt::encrypt($academic), 'year' => Crypt::encrypt($year), 'dept' => Crypt::encrypt($dept)]) }}
-                                                    "
-                                                    >view</a>   
-                                                    
-                                                    
+                                                <a class="btn btn-sm btn-outline-secondary"
+                                                    href="{{ route('dean.viewWorkload', ['id' => Crypt::encrypt($academic), 'year' => Crypt::encrypt($year), 'dept' => Crypt::encrypt($dept)]) }}"
+                                                    >view</a>
+
+
                                                         <a class="btn btn-sm btn-outline-success" onclick="return confirm('Are you sure you want to approve this workload there is no reverting ?')"
                                                         href="{{ route('dean.approveWorkload', ['id' => Crypt::encrypt($academic), 'year' => Crypt::encrypt($year)]) }}"
-                                                        >Approve 
+                                                        >Approve
                                                         @if($intake != null)
                                                             @if($intake->first()->dean_status == 1)
                                                                 <span class="m-2 text-success">
                                                                     <i class="fa fa-check"></i>
                                                                 </span>
-                                                          
+
                                                             @endif
                                                         @endif
                                                     </a>
-                                                       
+
                                                     </div>
-                                                    
+
                                                         <a class="btn btn-sm btn-outline-danger" onclick="return confirm('You are about to  decline this workload there is no reverting?')"data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ preg_replace('~/~', '', $academic) }}
                                                         ">Decline
                                                         @if($intake != null)
                                                             @if($intake->first()->dean_status == 2)
                                                             <span class="m-2 text-danger">
-                                                                <i class="fa fa-times"></i> 
+                                                                <i class="fa fa-times"></i>
                                                             </span>
-                                                           
-                                                                
+
+
                                                             @endif
                                                         @endif
                                                     </a>
 
-                                                        
+
                                                     </div>
 
                                                     <div class="modal fade" id="staticBackdrop-{{ preg_replace('~/~', '', $academic) }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -145,8 +142,8 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>                                               
-                                                
+                                                </div>
+
                                             </div>
                                         @endforeach
                                     </td>
@@ -158,5 +155,5 @@
                 </div>
             </div>
         </div>
-    </div>   
+    </div>
 @endsection

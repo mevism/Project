@@ -29,9 +29,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-1">
-                    <h5 class="h6 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         SEMESTER WORKLOADS
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -52,103 +52,124 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-12">
-                    <div class="table-responsive">
-                            <table id="example" class="table table-bordered table-responsive-sm table-striped table-vcenter js-dataTable-responsive fs-sm">
+                    <div class="">
+                            <table id="example" class="table table-borderless table-sm table-striped fs-sm">
                         <thead>
                         <th>#</th>
                         <th>Class code </th>
-                        <th>UNIT NAME </th>
-                        <th>UNIT CODE</th>
+                        <th>UNIT code </th>
+                        <th>UNIT name</th>
                         <th>Stage</th>
                         <th>Unit Lecturer(s)</th>
-                        <th>No:</th>
-                        </thead>  
+                        </thead>
                         {{-- @if ($staff->placedUser->first()->employment_terms == 'FT' && $staff->hasRole('Dean/Director') || $staff->hasRole('Chairperson of Department') || $staff->hasRole('Exam Coordinator')) --}}
                         <tbody>
                         @foreach ($units as $key => $unit)
                             <tr>
                                 <td> {{ ++$key }} </td>
-                                <td> {{ $unit->class_code }} </td>
-                                <td> {{ $unit->unit_code}} </td>
-                                <td> {{ $unit->unit_name }} </td>
+                                <td> {{ $class->class_code }} </td>
+                                <td> {{ $unit->unit_code }} </td>
+                                <td> {{ $unit->SyllabusUnit->unit_name }} </td>
                                 <td> {{ $unit->stage.'.'.$unit->semester }} </td>
                                 <td nowrap="">
-                                    {{-- {{ $unit}} --}}
-                                    @if($unit->allocateUnit == null)
-                                        @php $loaded = $unit->unitTeacher()->where('status', 1)->get(); @endphp
-                                        @if(count($loaded) < 1)
-                                              No Unit Lecturer
-                                        @else
-                                            @foreach($unit->unitTeacher()->where('status', 1)->get() as $key => $lecturer)
-                                                <div class="row mb-1">
-                                                    <div class="col col-md-8">
-                                                        {{ ++$key }}. {{ $lecturer->userTeachingArea->title}} {{ $lecturer->userTeachingArea->last_name}} {{ $lecturer->userTeachingArea->first_name}} {{ $lecturer->userTeachingArea->middle_name}} 
-                                                        ({{ $lecturer->userTeachingArea->placedUser->first()->employment_terms }})
-                                                     
+                                    @php $unitLec = $unit->SyllabusUnit->UnitsLectures()->where('status', 1)->get(); @endphp
+                                    @if(count($unitLec) < 1)
+                                        No Unit Lecturer
+                                    @else
+                                        @if($workloads->where('unit_id', $unit->SyllabusUnit->unit_id)->where('class_code', $class->class_code)->first())
+                                            @foreach($lecturers as $lecturer)
+                                                @if($workloads->where('unit_id', $unit->SyllabusUnit->unit_id)->where('class_code', $class->class_code)->first()->user_id == $lecturer->user_id)
+                                                    <div class="row mb-1">
+                                                        <div class="col col-md-6">
+                                                            {{ $lecturer->staffInfos->title }} {{ $lecturer->staffInfos->last_name}} {{ $lecturer->staffInfos->first_name}} {{ $lecturer->staffInfos->middle_name}} ({{ $lecturer->employments->first()->employment_terms }})
+                                                        </div>
+                                                        <div class="col col-md-3">
+
+                                                            @php $loadcount = $workloads->where('user_id', $lecturer->user_id)->where('academic_year', $class->academic_year)->where('period', $class->academic_semester)->count();
+                                                            @endphp
+                                                            @php
+                                                            if($lecturer->employments->first()->employment_terms == 'FT'){
+                                                                $maxLoad  =  '7';
+                                                            }else{
+                                                                $maxLoad  =  '4';
+                                                            }
+                                                            @endphp
+                                                            <?php $percent = ($loadcount/$maxLoad)*100 ?>
+                                                            {{ $loadcount }}/ {{ $maxLoad }} -
+                                                                @if(number_format($percent, 1) <= 50)
+                                                                    <span class="fw-bold text-success">
+                                                                        {{ number_format($percent, 1) }}%
+                                                                    </span>
+                                                            @elseif(number_format($percent, 1) <= 75)
+                                                                    <span class="fw-bold text-warning">
+                                                                        {{ number_format($percent, 1) }}%
+                                                                    </span>
+                                                            @else
+                                                                <span class="fw-bold text-danger">
+                                                                        {{ number_format($percent, 1) }}%
+                                                                    </span>
+                                                            @endif
+                                                        </div>
+                                                        <div class="col col-md-3">
+{{--                                                            {{ $workload }}--}}
+                                                            @if( $workloads->where('unit_id', $unit->SyllabusUnit->unit_id)->where('class_code', $class->class_code)->first()->workload_approval_id == null)
+                                                                <a class="btn btn-sm btn-outline-danger ml-2" onclick="return confirm('Are you sure you want to remove allocation')" href="{{ route('department.deleteWorkload', $workloads->where('unit_id', $unit->SyllabusUnit->unit_id)->where('class_code', $class->class_code)->first()->workload_id) }}">Revoke </a>
+                                                            @else
+                                                                <span class="text-success">Submitted</span>
+                                                            @endif
+                                                        </div>
                                                     </div>
-                                                    <div class="col col-md-4">
-                                                        <a class="btn btn-sm btn-outline-success ml-2" href="{{ route('department.allocateUnit', ['staff_id' =>  Crypt::encrypt($lecturer->userTeachingArea->id), 'unit_id' => Crypt::encrypt($unit->id)]) }}">Allocate </a>
+                                                @endif
+                                            @endforeach
+                                        @else
+                                            @foreach($unit->SyllabusUnit->UnitsLectures()->where('status', 1)->get() as $key => $lecturer)
+                                                <div class="row mb-0 mt-0 p-0">
+                                                    <div class="col col-md-6">
+                                                        {{ ++$key }}.
+                                                        {{ $lecturer->staffInfos->title }}
+                                                        {{ $lecturer->staffInfos->last_name}} {{ $lecturer->staffInfos->first_name}} {{ $lecturer->staffInfos->middle_name}}
+                                                        ({{ $lecturer->employments->first()->employment_terms }})
+
+                                                    </div>
+                                                    <div class="col col-md-3 mt-0 mb-0">
+                                                        @php $loadcount = $workloads->where('user_id', $lecturer->user_id)->where('academic_year', $class->academic_year)->where('period', $class->academic_semester)->count();
+                                                        @endphp
+                                                        @php
+                                                            if($lecturer->employments->first()->employment_terms == 'FT'){
+                                                                 $maxLoad  =  '7';
+                                                            }else{
+                                                                 $maxLoad  =  '4';
+                                                            }
+                                                        @endphp
+                                                        <?php $percent = ($loadcount/$maxLoad)*100 ?>
+                                                        {{ $loadcount }}/ {{ $maxLoad }} -
+                                                        @if(number_format($percent, 1) <= 50)
+                                                            <span class="fw-bold text-success">
+                                                                        {{ number_format($percent, 1) }}%
+                                                                    </span>
+                                                        @elseif(number_format($percent, 1) <= 75)
+                                                            <span class="fw-bold text-warning">
+                                                                        {{ number_format($percent, 1) }}%
+                                                                    </span>
+                                                        @else
+                                                            <span class="fw-bold text-danger">
+                                                                        {{ number_format($percent, 1) }}%
+                                                                    </span>
+                                                        @endif
+                                                    </div>
+                                                    <div class="col col-md-3 mt-0 mb-0">
+                                                        <form method="post" action="{{ route('department.allocateUnit') }}">
+                                                            @csrf
+                                                            <input type="hidden" name="staffId" value="{{ $lecturer->user_id }}">
+                                                            <input type="hidden" name="unitId" value="{{ $unit->SyllabusUnit->unit_id }}">
+                                                            <input type="hidden" name="patternId" value="{{ $class->class_pattern_id }}">
+                                                            <button type="submit" class="btn btn-sm btn-outline-success ml-2"> Allocate </button>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             @endforeach
                                         @endif
-                                    @else
-                                        <div class="row mb-1">
-                                            <div class="col col-md-8">
-                                                 {{ $unit->allocateUnit->userAllocation->last_name }} {{ $unit->allocateUnit->userAllocation->first_name }} {{ $unit->allocateUnit->userAllocation->middle_name }}
-                                                ( {{ $unit->allocateUnit->userAllocation->placedUser->first()->employment_terms }} ) 
-                                            </div>
-                                            <div class="col col-md-4">
-                                                @if($unit->allocateUnit->workload_approval_id === 0 || $unit->allocateUnit->status == 2)
-                                                <a class="btn btn-sm btn-outline-danger ml-2" href="{{ route('department.deleteWorkload', ['id' => Crypt::encrypt($unit->allocateUnit->unit_id)]) }}">Revoke </a>
-                                                @endif
-                                            </div>
-                                        </div>
                                     @endif
-                                </td>
-                                <td>
-                                       {{-- {{ $unit}} --}}
-                                       @if($unit->allocateUnit == null)
-                                       @php $loaded = $unit->unitTeacher()->where('status', 1)->get(); @endphp
-                                       @if(count($loaded) < 1)
-                                             Not Allocated
-                                       @else
-                                           @foreach($unit->unitTeacher()->where('status', 1)->get() as $key => $lecturer)
-                                               <div class="row mb-1">
-                                                   <div class="col col-md-8">
-                                                      @php $loadcount  =  $workload->where('user_id', $lecturer->user_id)->count(); @endphp
-                                                      @php 
-                                                        if($lecturer->userTeachingArea->placedUser->first()->employment_terms == 'FT'){
-                                                            $maxLoad  =  '7';
-                                                        }else{
-                                                            $maxLoad  =  '4';
-                                                        }
-                                                      @endphp
-
-                                                      {{ $loadcount }}/ {{ $maxLoad }}
-                                                   </div>
-                                                   
-                                               </div>
-                                           @endforeach
-                                       @endif
-                                   @else
-                                       <div class="row mb-1">
-                                           <div class="col col-md-8">
-                                            @php $loadcount  =  $workload->where('user_id', $unit->allocateUnit->user_id)->count(); @endphp
-                                            @php 
-                                              if($unit->allocateUnit->userAllocation->placedUser->first()->employment_terms == 'FT'){
-                                                  $maxLoad  =  '7';
-                                              }else{
-                                                  $maxLoad  =  '4';
-                                              }
-                                            @endphp
-
-                                            {{ $loadcount }}/ {{ $maxLoad }}
-                                               {{-- {{ $unit->allocateUnit->userAllocation->placedUser->first()->employment_terms }} --}}
-                                           </div>
-                                           
-                                       </div>
-                                   @endif
                                 </td>
                             </tr>
                         @endforeach

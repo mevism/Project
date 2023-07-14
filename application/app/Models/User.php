@@ -57,16 +57,15 @@ class User extends Authenticatable
         return $this->belongsTo(Department::class, 'department_id', 'department_id');
 
     }
-
     public function roles(): BelongsToMany {
 
         return $this->belongsToMany(Role::class, 'user_employments', 'user_id', 'role_id', 'user_id', 'id');
     }
 
     public function employments(){
-        return $this->belongsTo(UserEmployment::class, 'user_id', 'user_id');
+        return $this->hasMany(UserEmployment::class, 'user_id', 'user_id');
     }
-    
+
     public function placedUser(){
 
        return $this->hasMany(User::class, 'user_id','user_id');
@@ -95,9 +94,8 @@ class User extends Authenticatable
         return $this->hasMany(Workload::class, 'user_id', 'user_id');
     }
 
-    public function teachingAreaUser(){
-
-        return $this->hasMany(TeachingArea::class, 'user_id','user_id');
+    public function LecturersArea(){
+        return $this->hasMany(TeachingArea::class, 'user_id', 'user_id');
     }
 
     public function lecturerQualfs(){

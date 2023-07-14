@@ -14,13 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('workloads', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('department_id');
+            $table->string('workload_id');
+            $table->string('department_id');
             $table->string('academic_year');
             $table->string('academic_semester');
-            $table->integer('user_id');
+            $table->string('user_id');
             $table->string('unit_id');
             $table->string('class_code');
+            $table->string('workload_approval_id')->nullable();
+            $table->integer('status')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

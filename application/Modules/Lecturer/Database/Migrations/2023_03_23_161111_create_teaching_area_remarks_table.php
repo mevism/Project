@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('teaching_area_remarks', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('teaching_id');
+            $table->integer('teaching_area_id');
             $table->longText('remarks');
             $table->timestamps();
             $table->softDeletes();

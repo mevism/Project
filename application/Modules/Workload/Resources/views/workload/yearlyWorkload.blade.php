@@ -29,9 +29,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-1">
-                    <h5 class="h6 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         PREPARE SEMESTER WORKLOADS
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -52,7 +52,7 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-12">
-                    <table id="example" class="table table-bordered table-responsive-sm table-striped table-vcenter js-dataTable-responsive fs-sm">
+                    <table id="example" class="table table-borderless table-responsive table-sm table-striped fs-sm">
                         <thead>
                         <th>#</th>
                         <th>Academic Year </th>
@@ -71,7 +71,7 @@
                                     {{ \Carbon\Carbon::parse($semester->intake_from)->format('M').'/'.\Carbon\Carbon::parse($semester->intake_to)->format('M') }}
                                 </td>
                                 <td>
-                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.semesterWorkloads', ['id' => Crypt::encrypt($semester->id)]) }}">View</a>
+                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.semesterWorkloads', $semester->intake_id) }}">View</a>
                                 </td>
                             </tr>
                         @endforeach

@@ -17,10 +17,6 @@ class UnitProgramms extends Model
         return $this->belongsTo(Courses::class, 'course_code', 'course_code');
     }
 
-    public function lecturerAreas(){
-
-        return $this->hasOne(TeachingArea::class, 'unit_code', 'course_unit_code');
-    }
 
     protected static function newFactory()
     {
