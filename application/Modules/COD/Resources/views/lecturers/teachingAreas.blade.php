@@ -29,9 +29,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-1">
-                    <h5 class="h6 fw-bold mb-0">
-                        {{ $user->title }} {{ $user->last_name.' '.$user->first_name }} TEACHING AREAS
-                    </h5>
+                    <h6 class="h6 fw-bold mb-0">
+                        {{ $user->StaffInfos->title }} {{ $user->StaffInfos->last_name.' '.$user->StaffInfos->first_name }} TEACHING AREAS
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -52,32 +52,18 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-12 table-responsive table-primary">
-                    <table id="example" class="table table-bordered table-responsive-sm table-striped table-vcenter js-dataTable-responsive fs-sm">
+                    <table id="example" class="table table-borderless table-responsive table-sm table-striped fs-sm">
                         <thead>
                         <th>#</th>
-                        <th> LEVEL OF STUDY </th>
                         <th> UNIT CODE </th>
                         <th> UNIT NAME </th>
                         <th> status </th>
                         <th>Action</th>
                         </thead>
                         <tbody>
-                        @foreach($user->teachingAreaUser()->latest()->get() as $key => $area)
+                        @foreach($user->LecturersArea()->latest()->get() as $key => $area)
                             <tr>
                                 <td> {{ ++$key }} </td>
-                                <td>
-                                    @if($area->level == 1)
-                                        CERTIFICATE
-                                    @elseif($area->level == 2)
-                                        DIPLOMA
-                                    @elseif($area->level == 3)
-                                        BACHELORS
-                                    @elseif($area->level == 4)
-                                        MASTERS
-                                    @else
-                                        PHD
-                                    @endif
-                                </td>
                                 <td> {{ $area->unit_code }} </td>
                                 <td> {{ $area->teachingArea->unit_name }} </td>
 
@@ -93,18 +79,18 @@
                                 </td>
                                 <td>
                                     @if($area->status == 0)
-                                        <a class="btn btn-sm btn-alt-success" href="{{ route('department.approveTeachingArea', ['id' => Crypt::encrypt($area->id)]) }}">Approve</a>
-                                        <a class="btn btn-sm btn-alt-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $area->id }}" >Decline</a>
+                                        <a class="btn btn-sm btn-alt-success" onclick="return confirm('Are you sure you want to approve this teaching area?')" href="{{ route('department.approveTeachingArea',$area->teaching_area_id) }}">Approve</a>
+                                        <a class="btn btn-sm btn-alt-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $area->teaching_area_id }}" >Decline</a>
                                     @elseif($area->status == 1)
-                                        <a class="btn btn-sm btn-alt-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $area->id }}" >Decline</a>
+                                        <a class="btn btn-sm btn-alt-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $area->teaching_area_id }}" >Revoke</a>
                                     @else
-                                        <a class="btn btn-sm btn-alt-success" href="{{ route('department.approveTeachingArea', ['id' => Crypt::encrypt($area->id)]) }}">Approve</a>
+                                        <a class="btn btn-sm btn-alt-success" onclick="return confirm('Are you sure you want to approve this teaching area?')"href="{{ route('department.approveTeachingArea', $area->teaching_area_id) }}">Approve</a>
                                     @endif
 
                                 </td>
 
                                 <!-- Modal -->
-                                <div class="modal fade" id="staticBackdrop-{{ $area->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal fade" id="staticBackdrop-{{ $area->teaching_area_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -114,7 +100,7 @@
                                             <div class="modal-body">
                                                 <div class="d-flex justify-content-center">
                                                     <div class="col-md-12">
-                                                        <form method="post" action="{{ route('department.declineTeachingArea', ['id' => Crypt::encrypt($area->id)]) }}">
+                                                        <form method="post" action="{{ route('department.declineTeachingArea', $area->teaching_area_id) }}">
                                                             @csrf
                                                             <div class="mb-4 form-floating">
                                                                 <textarea name="reason" class="form-control" placeholder="hello" rows="5" style="min-height: 150px !important;"></textarea>

@@ -51,6 +51,7 @@ Route::prefix('dean')->middleware(['web'])->group(function() {
         Route::post('/decline-selected-readmission-request/{id}', [DeanController::class, 'declineReadmission'])->name('dean.declineReadmission');
 
         Route::get('/yearly-workload', [DeanController::class, 'yearlyWorkload'])->name('dean.workload');
+        Route::get('/semester-workloads/{id}', [DeanController::class, 'semesterWorkload'])->name('dean.SemesterWorkload');
         Route::get('/print-workload/{id}', [DeanController::class, 'printWorkload'])->name('dean.printWorkload');
         Route::get('/view-workload/{id}', [DeanController::class, 'viewWorkload'])->name('dean.viewWorkload');
         Route::get('/approve-workload/{id}', [DeanController::class, 'approveWorkload'])->name('dean.approveWorkload');

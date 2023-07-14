@@ -5,6 +5,7 @@ namespace Modules\Workload\Entities;
 use App\Models\User;
 use Modules\COD\Entities\SemesterUnit;
 use Illuminate\Database\Eloquent\Model;
+use Modules\COD\Entities\Unit;
 use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\Department;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,9 +17,8 @@ class Workload extends Model
 
     protected $fillable = [];
 
-    public function allocatedUnit(){
-
-        return $this->belongsTo(SemesterUnit::class, 'id', 'unit_id');
+    public function WorkloadsUnit(){
+        return $this->belongsTo(Unit::class, 'unit_id', 'unit_id');
     }
 
     public function userAllocation(){
@@ -27,13 +27,11 @@ class Workload extends Model
     }
 
     public function workloadUnit(){
-
-        return $this->belongsTo(SemesterUnit::class, 'unit_id', 'id');
+        return $this->belongsTo(Unit::class, 'unit_id', 'unit_id');
     }
 
     public function workloadApproval(){
-
-        return $this->hasOne(ApproveWorkload::class, 'workload_approval_id');
+        return $this->hasOne(ApproveWorkload::class, 'workload_approval_id', 'workload_approval_id');
     }
 
     public function workloadDept(){
@@ -47,7 +45,6 @@ class Workload extends Model
     }
 
     public function classWorkload(){
-
         return $this->belongsTo(Classes::class, 'class_code', 'name');
     }
 

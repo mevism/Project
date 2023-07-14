@@ -28,7 +28,7 @@
                             <a class="link-fx" href="javascript:void(0)">Profile</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            My Teaching Area
+                            My Teaching Areas
                         </li>
                     </ol>
                 </nav>
@@ -41,15 +41,14 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="d-flex justify-content-end m-2">
-                        <a class="btn btn-sm btn-alt-primary" data-toggle="click-ripple" href="{{ route('lecturer.addTeachingAreas') }}">Add Teaching Areas </a>
+                        <a class="btn btn-sm btn-alt-primary" data-toggle="click-ripple" href="{{ route('lecturer.addTeachingAreas') }}"> <i class="fa fa-plus-circle"></i> add area</a>
                     </div>
 
-                    <table id="example" class="table table-responsive-sm table-bordered table-striped js-dataTable-responsive fs-sm">
+                    <table id="example" class="table table-sm table-borderless table-striped table-responsive fs-sm">
                         <thead>
                         <th></th>
                         <th>Unit Code</th>
                         <th>Unit Name</th>
-                        <th>Level</th>
                         <th>Status</th>
                         <th>Remove</th>
 
@@ -58,44 +57,32 @@
                         @foreach($units as $key => $unit)
                             <tr>
                                 <td>{{ ++$key }}</td>
-                                <td>{{ $unit->unit_code}}</td>
-                                <td>{{ $unit->teachingArea->unit_name}}</td>
-                                <td>
-                                    @if($unit->level == 1)
-                                        CERTIFICATE
-                                    @elseif($unit->level == 2)
-                                        DIPLOMA
-                                    @elseif($unit->level == 3)
-                                        BACHELORS
-                                    @else
-                                        POST GRADUATE
-                                    @endif
-                                </td>
-                                <td>
+                                <td>{{ $unit->unit_code }}</td>
+                                <td>{{ $unit->teachingArea->unit_name }}</td>
+                                <td nowrap="">
                                     @if($unit->status==0)
                                     <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>
                                     @elseif($unit->status==1)
                                     <span class="badge bg-success"> <i class="fa fa-check"></i> Approved</span>
                                     @elseif($unit->status==2)
                                     <span class="badge bg-danger"> <i class="fa fa-ban"></i> Declined</span>
-                                    <span> 
-                                        <a class="link m-3" data-bs-toggle="modal" data-bs-target="#exampleModal-{{$unit->id}}"> Why? </a>
+                                    <span>
+                                        <a class="link m-3" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ $unit->teaching_area_id }}"> Why? </a>
                                         </span>
-                                  
-                                    @endif 
+                                    @endif
                                 </td>
                                 <td>
                                     @if($unit->status==0)
-                                    <a class="btn btn-sm btn-alt-danger" href="{{route('lecturer.deleteTeachingArea',['id' => Crypt::encrypt($unit->id)] )}}">Drop</a>
+                                    <a class="btn btn-sm btn-alt-danger" href="{{ route('lecturer.deleteTeachingArea', $unit->teaching_area_id) }}">Drop</a>
                                     @elseif($unit->status==1)
                                     <a class="btn btn-sm btn-alt-success" disabled>Verified</a>
                                     @elseif($unit->status==2)
-                                    <a class="btn btn-sm btn-alt-danger" href="{{route('lecturer.deleteTeachingArea',['id' => Crypt::encrypt($unit->id)] )}}">Drop</a>
-                                    @endif 
-                                    
+                                    <a class="btn btn-sm btn-alt-danger" href="{{ route('lecturer.deleteTeachingArea', $unit->teaching_area_id) }}">Drop</a>
+                                    @endif
+
                                 </td>
                                 <!-- Modal -->
-                                <div class="modal fade" id="exampleModal-{{$unit->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="exampleModal-{{ $unit->teaching_area_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -106,7 +93,7 @@
                                             @foreach($unit->getTeachingAreaRemarks as $remark )
                                             <p>{{\Carbon\Carbon::parse($remark->created_at)->format('d-M-y')}} - {{$remark->remarks}}</p>
                                             @endforeach
-                                        
+
                                         </div>
                                     </div>
                                     </div>

@@ -29,9 +29,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-1">
-                    <h5 class="h6 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         VIEW WORKLOADS
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -52,21 +52,21 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-12">
-                    <table id="example" class="table table-bordered table-responsive-sm table-striped table-vcenter js-dataTable-responsive fs-sm">
+                    <table id="example" class="table table-borderless table-sm table-striped fs-sm">
                         <thead>
                         <th>#</th>
                         <th>Academic Year </th>
                         <th>Action</th>
                         </thead>
                         <tbody>
-                        @foreach ($workloads as $yearly => $workload)
+                        @foreach ($workloads as $workload)
                             <tr>
                                 <td> {{ $loop->iteration }} </td>
                                 <td>
-                                    {{ $yearly }}
+                                    {{ Carbon\Carbon::parse($workload->year_start)->format('Y').'/'.Carbon\Carbon::parse($workload->year_end)->format('Y') }}
                                 </td>
                                 <td>
-                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewYearWorkload', ['year' => Crypt::encrypt($yearly)]) }}">View</a>
+                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewYearWorkload', $workload->year_id) }}"> View </a>
                                 </td>
                             </tr>
                         @endforeach

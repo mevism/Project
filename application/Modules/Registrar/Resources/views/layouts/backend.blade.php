@@ -299,7 +299,7 @@
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('courses.workload') }}">
                         <i class="nav-main-link-icon si si-user"></i>
-                        <span class="nav-main-link-name"> view Workload </span>
+                        <span class="nav-main-link-name"> View Workload </span>
                     </a>
                 </li>
             </ul>

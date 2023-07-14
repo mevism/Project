@@ -15,10 +15,9 @@ class ApproveWorkload extends Model
 
         return $this->belongsTo(Workload::class,   'id');
     }
-    
-    public function workloadProcessed(){
 
-        return $this->hasMany(Workload::class, 'workload_approval_id');
+    public function WorkloadsApproval(){
+        return $this->hasMany(Workload::class, 'workload_approval_id', 'workload_approval_id');
     }
     protected static function newFactory()
     {

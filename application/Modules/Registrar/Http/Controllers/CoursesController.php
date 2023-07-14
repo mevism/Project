@@ -38,6 +38,7 @@ use Modules\Student\Entities\StudentDisability;
 use Modules\Student\Entities\StudentInfo;
 use Modules\Student\Entities\StudentLogin;
 use Modules\Student\Entities\StudentView;
+use Modules\Workload\Entities\WorkloadView;
 use QrCode;
 use Carbon\Carbon;
 use App\Models\User;
@@ -326,72 +327,34 @@ class CoursesController extends Controller
     }
 
     /* Workload */
-    public function workload()
-    {
-
-        $schools   =   School::all();
-        foreach ($schools as $school) {
-            $data = ApproveWorkload::all()->groupBy('academic_year');
-        }
-
-        return view('registrar::workload.index')->with(['data' => $data, 'schools' => $schools]);
+    public function workload(){
+        $years = AcademicYear::orderBy('year_start', 'desc')->get();
+        return view('registrar::workload.index')->with(['years' => $years]);
     }
 
-    public function schoolWorkload($year)
-    {
-
-        $hashedYear  =  Crypt::decrypt($year);
-
-        $schools =  School::all();
-
-        return view('registrar::workload.schoolWorkload')->with(['year' => $hashedYear])->with(['schools'  =>  $schools]);
+    public function schoolWorkload($id){
+        $year = AcademicYear::where('year_id', $id)->first();
+        $academicYear = Carbon::parse($year->year_start)->format('Y').'/'.Carbon::parse($year->year_end)->format('Y');
+        $workloads = WorkloadView::where('academic_year', $academicYear)
+                            ->where('dean_status', 1)
+                            ->get()
+                            ->groupBy(['school_id', 'academic_semester']);
+        return view('registrar::workload.schoolWorkload')->with(['year' => $year, 'workloads'=> $workloads]);
     }
 
-    public function revertWorkload($id)
-    {
-
-        $hashedId = Crypt::decrypt($id);
-
-        $workloads = Workload::where('workload_approval_id', $hashedId)->get();
-
-        foreach ($workloads  as  $workload) {
-
-            $updateLoad  =  Workload::find($workload->id);
-            $updateLoad->status  =  2;
-            $updateLoad->save();
-        }
-
-        return redirect()->back()->with('success', 'Workload Reverted to Dean Successfully.');
-    }
-
-    public function departmentalWorkload($id, $year)
-    {
-
-        $hashedYear  =  Crypt::decrypt($year);
-
-        $hashedId = Crypt::decrypt($id);
-
-        $departs   =   Department::where('division_id', 1)->get();
-
-        foreach ($departs as $department) {
-            if ($department->schools->first()->id == $hashedId) {
-
-                $deptWorkloads[] = $department->id;
+    public function departmentalWorkload(Request $request){
+        $users = User::all();
+        foreach ($users as $user) {
+            if ($user->hasRole('Lecturer')) {
+                $lectures[] = $user;
             }
         }
-
-        $departments = [];
-
-        foreach ($deptWorkloads as $wrkload) {
-
-            $departments[] = ApproveWorkload::where('department_id', $wrkload)
-                ->where('academic_year', $hashedYear)
-                ->where('dean_status', '!=', null)
-                ->latest()
-                ->get();
-        }
-
-        return view('registrar::workload.departmentalWorkload')->with(['departs' => $departs, 'year'  =>  $hashedYear, 'departments' => $departments]);
+      $workloads = WorkloadView::where('school_id', $request->school)
+                                ->where('academic_year', $request->year)
+                                ->where('academic_semester', $request->semester)
+                                ->get()
+                                ->groupBy(['department_id', 'user_id']);
+        return view('registrar::workload.departmentalWorkload')->with(['workloads' => $workloads, 'users' => $users]);
     }
 
     public function viewWorkload($id)
@@ -411,45 +374,59 @@ class CoursesController extends Controller
         return view('registrar::workload.viewWorkload')->with(['workloads' => $workloads, 'lecturers' => $lectures,  'id' => $hashedId]);
     }
 
-
-    public function approveWorkload(Request $request, $id)
-    {
-
-        $hashedId = Crypt::decrypt($id);
-
-        $workloadId  = Workload::where('workload_approval_id', $hashedId)->get();
-
-        $updateApproval = ApproveWorkload::where('id', $hashedId)
-            ->where('dean_status', '!=', null)
-            ->first();
-        $updateApproval->registrar_status = 1;
-        $updateApproval->registrar_remarks = 'Workload Approved';
-        $updateApproval->status = 1;
-        $updateApproval->save();
-
-        foreach ($workloadId  as  $workload) {
-
-            $updateWorkload  =   Workload::find($workload->id);
-            $updateWorkload->status  =  0;
-            $updateWorkload->save();
-        }
-
+    public function approveWorkload(Request $request){
+        $workloadID = WorkloadView::where('school_id', $request->school)
+                    ->where('academic_year', $request->year)
+                    ->where('academic_semester', $request->semester)
+                    ->first()
+                    ->workload_approval_id;
+        ApproveWorkload::where('workload_approval_id', $workloadID)->update([
+                'registrar_status' => 1,
+                'registrar_remarks' => 'Workload Approved',
+                'status' => 0
+        ]);
         return redirect()->back()->with('success', 'Workload Approved Successfully');
     }
 
-    public function declineWorkload(Request $request, $id)
-    {
-        $hashedId = Crypt::decrypt($id);
-
-        $updateApproval = ApproveWorkload::where('id', $hashedId)
-            ->where('dean_status', '!=', null)
-            ->first();
-        $updateApproval->registrar_status = 2;
-        $updateApproval->registrar_remarks = $request->remarks;
-        $updateApproval->status = 2;
-        $updateApproval->save();
+    public function declineWorkload(Request $request){
+        $workloadID = WorkloadView::where('school_id', $request->school)
+                    ->where('academic_year', $request->year)
+                    ->where('academic_semester', $request->semester)
+                    ->first()
+                    ->workload_approval_id;
+        ApproveWorkload::where('workload_approval_id', $workloadID)->update([
+            'registrar_status' => 2,
+            'registrar_remarks' => $request->remarks,
+            'status' => 0
+        ]);
 
         return redirect()->back()->with('success', 'Workload Declined');
+    }
+
+    public function submitWorkload(Request $request){
+        $workloadID = WorkloadView::where('school_id', $request->school)
+            ->where('academic_year', $request->year)
+            ->where('academic_semester', $request->semester)
+            ->first()
+            ->workload_approval_id;
+
+        ApproveWorkload::where('workload_approval_id', $workloadID)->update([
+            'status' => 1
+        ]);
+        return redirect()->back()->with('success', 'Workload approved for publishing Successfully');
+    }
+
+    public function revertWorkload(Request $request){
+        $workloadID = WorkloadView::where('school_id', $request->school)
+                    ->where('academic_year', $request->year)
+                    ->where('academic_semester', $request->semester)
+                    ->first()
+                    ->workload_approval_id;
+        $workloads = ApproveWorkload::where('workload_approval_id', $workloadID)->get();
+        foreach ($workloads  as  $workload) {
+            ApproveWorkload::where('workload_approval_id', $workload->workload_approval_id)->update(['status' => 2]);
+        }
+        return redirect()->back()->with('success', 'Workload Reverted to Dean Successfully.');
     }
 
     public function printWorkload($id)

@@ -17,9 +17,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         My Qualifications
-                    </h5>
+                    </h6>
                 </div>
 
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -43,8 +43,8 @@
                             <div class="d-flex justify-content-end m-2">
                                 <a class="btn btn-sm btn-alt-primary" data-toggle="click-ripple" href="{{ route('lecturer.addqualifications') }}">Add Qualifications </a>
                             </div>
-        
-            <table id="example" class="table table-sm table-bordered table-striped js-dataTable-responsive fs-sm">
+
+            <table id="example" class="table table-sm table-borderless table-striped table-responsive fs-sm">
                 @csrf
                 @method('delete')
 
@@ -62,48 +62,43 @@
                             <tr>
                                 <td>{{ ++$key }}</td>
                                 <td>
-                                    @if($qualification->level==1) 
+                                    @if($qualification->level==1)
                                         CERTIFICATE
                                     @elseif($qualification->level==2)
                                          DIPLOMA
                                     @elseif($qualification->level==3)
                                         BACHELORS
                                     @elseif($qualification->level==4)
-                                        MASTERS 
+                                        MASTERS
                                     @elseif($qualification->level==5)
-                                        PHD 
+                                        PHD
                                     @endif
                                 </td>
                                 <td>{{ $qualification->institution}}</td>
                                 <td>{{ $qualification->qualification}}</td>
                                 <td nowrap>
-                                    @if($qualification->qualification_status == 0)
+                                    @if($qualification->status == 0)
                                     <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending</span>
-                                    @elseif($qualification->qualification_status==1)
+                                    @elseif($qualification->status==1)
                                     <span class="badge bg-success"> <i class="fa fa-check"></i> Approved</span>
-                                    @elseif($qualification->qualification_status==2)
-                                    <span class="badge bg-danger" > <i class="fa fa-ban" ></i> Declined </span> 
-                                    <span> 
-                                    <a class="link m-3" data-bs-toggle="modal" data-bs-target="#exampleModal-{{$qualification->id}}"> Why? </a>
+                                    @elseif($qualification->status==2)
+                                    <span class="badge bg-danger" > <i class="fa fa-ban" ></i> Declined </span>
+                                    <span>
+                                    <a class="link m-3" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ $qualification->qualification_id }}"> Why? </a>
                                     </span>
-                                    @endif 
+                                    @endif
                                 </td>
-                                <td>
-                                    @if($qualification->qualification_status==0)
-                                    <a class="btn btn-sm btn-alt-danger" href="{{ route('lecturer.deleteQualification', ['id' => Crypt::encrypt($qualification->id)] ) }}">Drop</a>
-                                    @elseif($qualification->qualification_status==1)
+                                <td nowrap="">
+                                    @if($qualification->status==0)
+                                    <a class="btn btn-sm btn-alt-danger" href="{{ route('lecturer.deleteQualification',  $qualification->qualification_id) }}">Drop</a>
+                                    @elseif($qualification->status==1)
                                     <a class="btn btn-sm btn-alt-success" disabled>Verified</a>
-                                    @elseif($qualification->qualification_status==2)
-                                    <a class="btn btn-sm btn-alt-info" href="{{ route('lecturer.editQualifications', ['id' => Crypt::encrypt($qualification->id)]) }}">Edit</a>
-                                    <a class="btn btn-sm btn-alt-danger" href="{{ route('lecturer.deleteQualification', ['id' => Crypt::encrypt($qualification->id)] ) }}">Drop</a>
-                                    @endif 
+                                    @elseif($qualification->status==2)
+                                    <a class="btn btn-sm btn-alt-info" href="{{ route('lecturer.editQualifications', $qualification->qualification_id) }}">Edit</a>
+                                    <a class="btn btn-sm btn-alt-danger" href="{{ route('lecturer.deleteQualification',$qualification->qualification_id) }}">Drop</a>
+                                    @endif
                                 </td>
-
-{{-- modal --}}
-
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="exampleModal-{{$qualification->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="exampleModal-{{$qualification->qualification_id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -114,7 +109,7 @@
                                             @foreach($qualification->getQualificationRemark as $remark )
                                             <p>{{\Carbon\Carbon::parse($remark->created_at)->format('d-M-y')}} - {{$remark->remarks}}</p>
                                             @endforeach
-                                        
+
                                         </div>
                                     </div>
                                     </div>

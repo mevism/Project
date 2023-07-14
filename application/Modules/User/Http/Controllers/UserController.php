@@ -2,33 +2,29 @@
 
 namespace Modules\User\Http\Controllers;
 
+use App\Http\Apis\AppApis;
 use App\Models\User;
 use App\Models\UserEmployment;
 use App\Service\CustomIds;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
 use Modules\Administrator\Entities\Staff;
-use Modules\Administrator\Http\API\StaffInfoAPI;
 use Modules\Registrar\Entities\Campus;
 use Modules\Registrar\Entities\Department;
 use Modules\Registrar\Entities\Division;
 use Modules\User\Entities\StaffInfo;
 use Spatie\Permission\Models\Role;
-use GuzzleHttp;
+
+//use App\Http\Apis\AppApis;
 
 class UserController extends Controller
 {
     protected $staffInfoAPI;
 
-    public function __construct(StaffInfoAPI $staffInfoAPI){
-
+    public function __construct(AppApis $staffInfoAPI){
         $this->staffInfoAPI = $staffInfoAPI;
-
     }
     /**
      * Display a listing of the resource.
@@ -156,65 +152,5 @@ class UserController extends Controller
 
         return redirect()->route('admin.users')->with('success', 'User role added successfully');
 
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
-    {
-        return view('user::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
-    {
-        return view('user::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('user::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

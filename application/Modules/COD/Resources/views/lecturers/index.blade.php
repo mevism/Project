@@ -51,13 +51,14 @@
 
         <div class="block-content block-content-full">
             <div class="row">
-                <div class="col-12 table-responsive table-primary">
-                    <table id="example" class="table table-bordered table-responsive-sm table-striped table-vcenter js-dataTable-responsive fs-sm">
+                <div class="col-12">
+                    <table id="example" class="table table-bordered table-sm table-striped fs-sm">
                         <thead>
                         <th>#</th>
                         <th>Staff number </th>
                         <th>Staff name </th>
                         <th>Gender </th>
+                        <th>Terms</th>
                         <th>Roles</th>
                         <th>Phone Number</th>
                         <th>Email Address </th>
@@ -70,9 +71,10 @@
                                 <td> {{ $lecturer->staff_number }} </td>
                                 <td> {{ $lecturer->title }} {{ $lecturer->last_name }} {{ $lecturer->first_name }} {{ $lecturer->middle_name }}</td>
                                 <td> {{ $lecturer->gender }} </td>
+                                <td> {{ $lecturer->employment_terms }} </td>
                                 <td>
-                                    @foreach($lecturer->roles as $role)
-                                        <p>{{ $role->name }}</p>
+                                    @foreach($lecturer->Users->roles as $role)
+                                        {{ $role->name }}<br>
                                     @endforeach
                                 </td>
                                 <td> {{ $lecturer->phone_number }} </td>

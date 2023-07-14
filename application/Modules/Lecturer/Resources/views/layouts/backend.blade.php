@@ -14,7 +14,7 @@
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    
+
 
   <!-- Icons -->
   <link rel="shortcut icon" href="{{ asset('media/favicons/favicon.png') }}">
@@ -184,11 +184,11 @@
               <img class="rounded-circle" src="{{ asset('media/avatars/male.png') }}" alt="Header Avatar" style="width: 21px;">
               <span class="d-none d-sm-inline-block ms-2">
                   @php
-                      $user = Auth::guard('user')->user();
+                      $user = auth()->guard('user')->user();
                   @endphp
 
-                  @if(Auth::guard('user')->check())
-                      {{ $user->title }} {{ $user->last_name }}
+                  @if(auth()->guard('user')->check())
+                      {{ $user->staffInfos->title }} {{ $user->staffInfos->last_name }}
                   @endif
               </span>
               <i class="fa fa-fw fa-angle-down d-none d-sm-inline-block ms-1 mt-1"></i>
@@ -199,11 +199,11 @@
                 <p class="mt-2 mb-0 fw-medium">
 
                   @if(Auth::guard('user')->check())
-                      {{ $user->title }} {{ $user->last_name }} {{ $user->first_name }} {{ $user->middle_name }}
+                      {{ $user->staffInfos->title }} {{ $user->staffInfos->last_name }} {{ $user->staffInfos->first_name }} {{ $user->staffInfos->middle_name }}
                   @endif
                 <p class="mb-0 text-muted fs-sm fw-medium">
                     @if(auth()->guard('user')->user()->hasRole('Lecturer'))
-                        Lecturer
+                        Lecturer [ {{ $user->employmentDepartment->first()->dept_code }} ]
                     @endif
                 </p>
               </div>

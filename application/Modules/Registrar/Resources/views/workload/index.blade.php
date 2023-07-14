@@ -51,19 +51,19 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-12">
-                        <table id="example" class="table table-bordered table-striped fs-sm">
+                        <table id="example" class="table table-bordered table-striped table-sm fs-sm">
                             <thead>
                                 <th>#</th>
                                 <th>Academic Year</th>
                                 <th>Action</th>
                             </thead>
-                            <tbody>                                
-                                @foreach($data as $academic_year => $transfer)
+                            <tbody>
+                                @foreach($years as $year)
                                     <tr>
                                         <td> {{ $loop->iteration }} </td>
-                                        <td> {{ $academic_year }} </td>
+                                        <td> {{ Carbon\Carbon::parse($year->year_start)->format('Y').'/'.\Carbon\Carbon::parse($year->year_end)->format('Y') }} </td>
                                         <td>
-                                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.schoolWorkload', ['year'=> Crypt::encrypt($academic_year)]) }}">view </a>
+                                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.schoolWorkload', $year->year_id) }}">view </a>
                                         </td>
                                     </tr>
                                 @endforeach

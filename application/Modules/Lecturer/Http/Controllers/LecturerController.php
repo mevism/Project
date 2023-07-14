@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Validation\Rule;
 use Modules\COD\Entities\SemesterUnit;
+use Modules\COD\Entities\Unit;
 use Modules\Examination\Entities\ExamMarks;
 use Modules\Lecturer\Entities\ExamWeights;
 use Modules\Lecturer\Entities\LecturerQualification;
@@ -34,43 +35,38 @@ class LecturerController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function index()
-    {
+    public function index(){
         return view('lecturer::index');
     }
 
     public function viewworkload(){
 
-        $workloads = Workload::where('user_id', auth()->guard('user')->user()->id)->where('status')->latest()->get();
+        $workloads = Workload::where('user_id', auth()->guard('user')->user()->user_id)
+            ->where('status', 1)
+            ->latest()
+            ->get();
 
         return view('lecturer::workload.viewworkload')->with(['workloads' => $workloads]);
 
     }
 
     public function qualifications(){
-
-        $qualification = LecturerQualification::where('user_id', auth()->guard('user')->user()->staffInfos->id)->latest()->get();
-
+        $qualification = LecturerQualification::where('user_id', auth()->guard('user')->user()->staffInfos->user_id)
+            ->latest()
+            ->get();
         return view('lecturer::profile.qualifications')->with ('qualifications', $qualification);
-
     }
 
     public function addqualifications(){
-
         return view('lecturer::profile.addqualifications');
-
     }
     public function storeQualifications(REQUEST $request){
-
        $request->validate([
             'level' => 'required',
             'qualification' =>'required',
             'institution' => 'required'
-
        ]);
-
-       $qualID = new CustomIds(); 
-
+       $qualID = new CustomIds();
        $qualification = new LecturerQualification;
        $qualification->qualification_id = $qualID->generateId();
        $qualification->user_id = auth()->guard('user')->user()->staffInfos->user_id;
@@ -78,108 +74,69 @@ class LecturerController extends Controller
        $qualification->qualification = $request->qualification;
        $qualification->institution = $request ->institution;
        $qualification->save();
-
         return redirect()->route('lecturer.qualifications')->with('Success', '1 qualification added successfully');
-
     }
 
     public function editQualifications($id){
-
-        $hashedId = Crypt::decrypt($id);
-
-        $qualification = LecturerQualification::find($hashedId);
-
+        $qualification = LecturerQualification::where('qualification_id', $id)->first();
         return view('lecturer::profile.editqualifications')->with(['qualification' => $qualification]);
-
     }
 
     public function updateQualifications(Request $request, $id){
-
         $request->validate([
             'level' => 'required',
             'qualification' =>'required',
             'institution' => 'required'
         ]);
-
-        $qualification = LecturerQualification::find($id);
-        $qualification->user_id = auth()->guard('user')->user()->staffInfos->id;
-       $qualification->level = $request->level;
-       $qualification->qualification = $request->qualification;
-       $qualification->institution = $request ->institution;
-       $qualification->save();
-
+        LecturerQualification::where('qualification_id', $id)->update([
+            'level' => $request->level,
+            'qualification' => $request->qualification,
+            'institution' => $request ->institution,
+            'status' => 0
+        ]);
         return redirect()->route('lecturer.qualifications')->with('success', 'Updated successfully');
-
     }
 
     public function deleteQualification($id){
-        $hashedId = Crypt::decrypt($id);
-
-        $qualification = LecturerQualification::find($hashedId);
-        $qualification->delete();
-
+        LecturerQualification::where('qualification_id', $id)->delete();
+        QualificationRemarks::where('qualification_id', $id)->delete();
         return redirect()->route('lecturer.qualifications')->with('success', 'Deleted successfully');
     }
 
-    public function qualificationRemark (){
-
-
-    }
-
-
     public function teachingAreas(){
-
-        $myUnits = TeachingArea::where('user_id', auth()->guard('user')->user()->staffInfos->id)->latest()->get();
-
+        $myUnits = TeachingArea::where('user_id', auth()->guard('user')->user()->user_id)
+            ->latest()
+            ->get();
         return view('lecturer::profile.teachingArea')->with(['units' => $myUnits]);
     }
 
     public function addTeachingAreas(){
-       
-
-        $userQualifications = [];
-
-       $qualifications = Auth()->guard('user')->user()->lecturerQualification;
+       $userQualifications = [];
+       $qualifications = auth()->guard('user')->user()->lecturerQualification->where('status', 1);
         foreach($qualifications as $qualification){
             $userQualifications[] =$qualification->level;
         }
-
-        $highestQualification = ($userQualifications == null) ? 0 : max($userQualifications);
-
-        $userSchool = auth()->guard('user')->user()->employmentDepartment->first()->schools->first();
-
-        $Allcourses = [];
-        foreach ($userSchool->departments as $department){
-            $courses = Courses::where('department_id', $department->id)->latest()->get();
-        }
-        $units = [];
-        foreach ($Allcourses as $courses){
-            foreach ($courses as $course){
-                $units[] = UnitProgramms::where('course_code', $course->course_code)->latest()->get();
-            }
-        }
-
-        return view('lecturer::profile.addTeachingAreas')->with(['units' => $units, 'highest' => $highestQualification]);
+       $highestQualification = ($userQualifications == null) ? 0 : max($userQualifications);
+       $units = Unit::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+            ->latest()
+            ->get();
+        $myAreas = auth()->guard('user')->user()->LecturersArea->pluck('unit_code')->toArray();
+        return view('lecturer::profile.addTeachingAreas')->with(['units' => $units, 'highest' => $highestQualification, 'myAreas' => $myAreas]);
     }
 
     public function storeTeachingAreas(Request $request){
-
         $request->validate([
            'units' => 'required'
         ]);
-
         foreach ($request->units as $id){
-
-            $unit = UnitProgramms::find($id);
-
+            $unitID = new CustomIds();
+            $unit = Unit::where('unit_id', $id)->first();
             $teachingArea =  new TeachingArea;
-            $teachingArea->user_id = auth()->guard('user')->user()->id;
-            $teachingArea->unit_code = $unit->course_unit_code;
-            $teachingArea->level = $unit->courseLevel->level;
+            $teachingArea->teaching_area_id = $unitID->generateId();
+            $teachingArea->user_id = auth()->guard('user')->user()->user_id;
+            $teachingArea->unit_code = $unit->unit_code;
             $teachingArea->save();
-
         }
-
         return redirect()->route('lecturer.teachingAreas')->with('success', 'Teaching areas added successfully');
     }
 
@@ -444,13 +401,13 @@ class LecturerController extends Controller
         return redirect()->back()->with('success', 'Deleted successfully');
     }
 
-    
+
        public function myProfile(){
 
             $qualifications = LecturerQualification::where ('user_id', auth()->guard('user')->user()->staffInfos->id)->where('status' ,1)->latest()->get();
-            
+
             return view('lecturer::profile.myprofile')->with('qualifications',$qualifications);
-            
+
        }
        public function editMyprofile(){
 
@@ -469,7 +426,7 @@ class LecturerController extends Controller
             'username' => 'required',
             'profile_image'=>'image|nullable|max:1999'
         ]);
-      
+
         $users = StaffInfo::where('user_id', $id)->first();
         $users->title = $request->title;
         $users->last_name = $request->lname;

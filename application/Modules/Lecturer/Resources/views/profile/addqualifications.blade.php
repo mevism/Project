@@ -31,15 +31,15 @@
                 @csrf
                 <div class="row row-cols-sm-1 g-2">
                     <div class="form-floating mb-2">
-                        <select name="level" class="form-control form-select">
-                              <option value="" selected disabled>-- select level --</option>
+                        <select name="level" class="form-control">
+                              <option value="" selected disabled class="text-center">-- select level --</option>
                               <option value="5">PHD</option>
                               <option value="4">Masters</option>
                               <option value="3">Bachelors</option>
                               <option value="2">Diploma</option>
                               <option value="1">Certificate</option>
 
-                            
+
                         </select>
                         <label for="">Education Level</label>
                     </div>
@@ -47,7 +47,7 @@
                       <input type="text" name="institution" class="form-control " placeholder="Institution Name">
                       <label>Institution Name </label>
                     </div>
-                   
+
                     <div class="form-floating mb-2">
                         <input type="text" name="qualification" class="form-control " placeholder="qualification Name">
                         <label>Qualification </label>

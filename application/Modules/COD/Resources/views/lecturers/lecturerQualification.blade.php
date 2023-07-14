@@ -29,9 +29,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-1">
-                    <h5 class="h6 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         {{ $user->title }} {{ $user->last_name.' '.$user->first_name }} QUALIFICATIONS
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -52,7 +52,7 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-12 table-responsive table-primary">
-                    <table id="example" class="table table-bordered table-responsive-sm table-striped table-vcenter js-dataTable-responsive fs-sm">
+                    <table id="example" class="table table-borderless table-sm table-striped table-responsive fs-sm">
                         <thead>
                         <th>#</th>
                         <th> LEVEL OF STUDY </th>
@@ -62,37 +62,51 @@
                         <th>Action</th>
                         </thead>
                         <tbody>
-                        @foreach($user->lecturerQualification as $key => $qualification)
+                        @foreach($user->Users->lecturerQualification as $key => $qualification)
                             <tr>
                                 <td> {{ ++$key }} </td>
-                                <td> {{ $qualification->level }} </td>
+                                <td>
+                                    @if($qualification->level == 1)
+                                        CERTIFICATE
+                                    @elseif($qualification->level == 2)
+                                        DIPLOMA
+                                    @elseif($qualification->level == 3)
+                                        UNDERGRADUATE
+                                    @elseif($qualification->level == 4)
+                                        MASTERS
+                                    @elseif($qualification->level == 5)
+                                        PHD
+                                    @else
+                                        NON STANDARD
+                                    @endif
+                                </td>
                                 <td> {{ $qualification->institution }} </td>
                                 <td> {{ $qualification->qualification }} </td>
 
                                 <td>
-                                    @if($qualification->qualification_status == 0)
+                                    @if($qualification->status == 0)
                                         <span class="badge bg-primary"> <i class="fa fa-spinner"></i> pending </span>
-                                    @elseif($qualification->qualification_status == 1)
+                                    @elseif($qualification->status == 1)
                                         <span class="badge bg-success"> <i class="fa fa-check"></i> approved </span>
                                     @else
                                         <span class="badge bg-warning"> <i class="fa fa-ban"></i> declined </span>
                                     @endif
 
                                 </td>
-                                <td>
-                                    @if($qualification->qualification_status == 0)
-                                        <a class="btn btn-sm btn-alt-success" href="{{ route('department.approveQualification', ['id' => Crypt::encrypt($qualification->id)]) }}">Approve</a>
-                                        <a class="btn btn-sm btn-alt-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $qualification->id }}" >Decline</a>
-                                    @elseif($qualification->qualification_status == 1)
-                                        <a class="btn btn-sm btn-alt-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $qualification->id }}" >Decline</a>
+                                <td nowrap="">
+                                    @if($qualification->status == 0)
+                                        <a class="btn btn-sm btn-alt-success" onclick="return confirm('Are you sure you want approve this qualification?')" href="{{ route('department.approveQualification', $qualification->qualification_id) }}">Approve</a>
+                                        <a class="btn btn-sm btn-alt-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $qualification->qualification_id }}" >Decline</a>
+                                    @elseif($qualification->status == 1)
+                                        <a class="btn btn-sm btn-alt-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $qualification->qualification_id }}" >Revoke</a>
                                     @else
-                                        <a class="btn btn-sm btn-alt-success" href="{{ route('department.approveQualification', ['id' => Crypt::encrypt($qualification->id)]) }}">Approve</a>
+                                        <a class="btn btn-sm btn-alt-success" onclick="return confirm('Are you sure you want approve this qualification?')" href="{{ route('department.approveQualification', $qualification->qualification_id) }}">Approve</a>
                                     @endif
 
                                 </td>
 
                                 <!-- Modal -->
-                                <div class="modal fade" id="staticBackdrop-{{ $qualification->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal fade" id="staticBackdrop-{{ $qualification->qualification_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -102,7 +116,7 @@
                                             <div class="modal-body">
                                                 <div class="d-flex justify-content-center">
                                                     <div class="col-md-12">
-                                                        <form method="post" action="{{ route('department.rejectQualification', ['id' => Crypt::encrypt($qualification->id)]) }}">
+                                                        <form method="post" action="{{ route('department.rejectQualification', $qualification->qualification_id) }}">
                                                             @csrf
                                                             <div class="mb-4 form-floating">
                                                                 <textarea name="reason" class="form-control" placeholder="hello" rows="5" style="min-height: 150px !important;"></textarea>
