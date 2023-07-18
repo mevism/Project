@@ -45,11 +45,7 @@
                     <div class="row m-2 fs-sm" >
                         <div class="col-md-4">Gender:</div>
                         <div class="col-md-8">
-                            @if (auth()->guard('user')->user()->staffInfos->gender=='F')
-                                Female
-                             @else
-                                Male
-                             @endif
+                            {{ auth()->guard('user')->user()->staffInfos->gender }}
                         </div>
                     </div>
               </div>

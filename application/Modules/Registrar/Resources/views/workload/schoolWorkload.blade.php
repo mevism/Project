@@ -67,12 +67,14 @@
                                             <td> {{ \Modules\Registrar\Entities\School::where('school_id', $school)->first()->name }} </td>
                                             <td> {{ $semester }} </td>
                                             <td>
-                                                @if($workload->first()->WorkApprovalView->registrar_status == 0 && $workload->first()->WorkApprovalView->status == null || $workload->first()->WorkApprovalView->registrar_status == 1 && $workload->first()->WorkApprovalView->status == null || $workload->first()->WorkApprovalView->registrar_status == 2 && $workload->first()->WorkApprovalView->status == null)
+                                                @if($workload->first()->WorkApprovalView->registrar_status == 0 && $workload->first()->WorkApprovalView->status == 0 || $workload->first()->WorkApprovalView->registrar_status == 1 && $workload->first()->WorkApprovalView->status == 0 || $workload->first()->WorkApprovalView->registrar_status == 2 && $workload->first()->WorkApprovalView->status == 0)
                                                     <span class="text-info">Pending</span>
                                                 @elseif($workload->first()->WorkApprovalView->registrar_status == 2 && $workload->first()->WorkApprovalView->status == 2)
                                                     <span class="text-warning">Reverted for corrections</span>
-                                                @elseif($workload->first()->WorkApprovalView->registrar_status == 1 && $workload->first()->WorkApprovalView->status == 1)
+                                                @elseif($workload->first()->WorkApprovalView->registrar_status == 1 && $workload->first()->WorkApprovalView->status == 1 && $workload->first()->WorkloadApprovalView->status == 0)
                                                     <span class="text-primary">Workload Approved </span>
+                                                @elseif($workload->first()->WorkApprovalView->registrar_status == 1 && $workload->first()->WorkApprovalView->status == 1 && $workload->first()->WorkloadApprovalView->status == 1)
+                                                    <span class="text-success">Workload Approved and Published </span>
                                                 @endif
                                             </td>
                                             <td>

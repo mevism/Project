@@ -830,7 +830,7 @@ class StudentController extends Controller
                 foreach ($units as $unit){
                     $wID = new CustomIds();
                     $examinableUnit = new ExamMarks;
-                    $examinableUnit->workflow_id = $wID->generateId();
+                    $examinableUnit->exam_id = $wID->generateId();
                     $examinableUnit->student_number = \auth()->guard('student')->user()->enrolledCourse->student_number;
                     $examinableUnit->class_code = \auth()->guard('student')->user()->enrolledCourse->current_class;
                     $examinableUnit->unit_code = $unit;
@@ -838,6 +838,7 @@ class StudentController extends Controller
                     $examinableUnit->academic_semester = $request->period;
                     $examinableUnit->stage = $request->yearstudy;
                     $examinableUnit->semester = $request->semesterstudy;
+                    $examinableUnit->attempt = $request->yearstudy.'.'.$request->semesterstudy;
                     $examinableUnit->save();
                 }
 

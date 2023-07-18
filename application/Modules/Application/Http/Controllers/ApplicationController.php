@@ -73,7 +73,7 @@ class ApplicationController extends Controller
 
     public function signup(Request $request){
 
-        $validated = $request->validate([
+        $request->validate([
             'email' => 'required|email|unique:applicant_contacts',
             'mobile' => 'required|unique:applicant_contacts',
             'password' => 'required|confirmed',
@@ -165,7 +165,7 @@ class ApplicationController extends Controller
 
        if (isset($unverified)){
 
-                   $applicant = $unverified->emailVerify;
+                  $applicant = $unverified->emailVerify;
 
                     if (!$applicant->email_verified_at){
                         $applicant->email_verified_at = Carbon::now();

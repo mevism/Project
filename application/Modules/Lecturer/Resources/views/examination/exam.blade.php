@@ -1,24 +1,29 @@
 @extends('lecturer::layouts.backend')
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
+<script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
+
 <style>
     .cellText {
         font-weight: bold;
-        font-family: Calibri;
+        font-family: Calibri, serif;
         background-color: #f2f4fb;
     }
     .make-me-red{
         color: red !important;
     }
+     .toast-container {
+         bottom: 5vh;
+     }
 </style>
 @section('content')
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         STUDENT MARKS
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -39,16 +44,50 @@
                 <div class="alert alert-info p-0">
                     <p class="text-center fs-9 mt-2 mb-1"> <sup class="text-danger">*</sup> Cells in red means that the value entered is either less than 0 or greater than the examined CAT/Assignment/Practical/Exam weights and can also mean you keyed in a letter instead of a digit. Please confirm your entries before submissions.</p>
                 </div>
-{{--                <small class="text-danger text-center"> Where cells are in red </small> check if you used <span class="fw-semibold">O</span> instead of <span class="fw-semibold">0</span> or the value is less than 0 or more than the set value for CAT/ASSIGNMENT/PRACTICAL/EXAM--}}
                 <div class="col-lg-12">
                     <div id="example" style="width: 100% !important; overflow: hidden !important;"></div>
                     <div class="d-flex justify-content-center mt-4">
-                        <button id="save" class="btn btn-col-md-7 btn-outline-secondary">Submit Student Marks</button>
+                        @if($marks->where('status', 1)->first())
+                            <span class="text-success fw-bold"> Exam Marks Received </span>
+                        @else
+                            <button id="save" class="btn btn-col-md-7 btn-outline-secondary">Submit Student Marks</button>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+{{--    <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button>--}}
+
+    <div class="toast-container position-fixed bottom-90 end-0 p-3">
+        <div id="liveToast" class="toast bg-danger text-white" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="fa fa-exclamation-triangle text-danger"></i>  <span>&nbsp;</span>
+{{--                <img src="..." class="rounded me-2" alt="...">--}}
+                <strong class="me-auto">Error</strong>
+                <small>{{ Carbon\Carbon::now()->diffForHumans() }}</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Hello, world! This is a toast message.
+            </div>
+        </div>
+    </div>
+<script>
+    function showError(){
+        const toastTrigger = document.getElementById('liveToastBtn')
+        const toastLiveExample = document.getElementById('liveToast')
+
+        if (toastTrigger) {
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+            toastTrigger.addEventListener('click', () => {
+                toastBootstrap.show()
+            })
+        }
+    }
+</script>
+
 
 @endsection
 <script type="module">
@@ -61,11 +100,8 @@
         const unit = JSON.parse('<?php echo json_encode($unit) ?>');
 
         if (weights === null) {
-
             weight = {cat: unit.cat, assignment: unit.assignment, practical: unit.practical, exam: unit.total_exam};
-
         } else {
-
             weight = {
                 cat: weights.cat,
                 assignment: weights.assignment,
@@ -78,12 +114,42 @@
         let table = [];
 
         for (let i = 0; i < data.length; i++) {
-            const tableData = [data[i].reg_number, data[i].sname + ' ' + data[i].fname + ' ' + data[i].mname, '0', '0', '0', null, '0', '0', '0', null, '1st ATTEMPT']
+            var grade = null;
+            var examType = null;
+                if(data[i].total_mark > 70 ){
+                    grade = 'A';
+                }else if(data[i].total_mark >= 60){
+                    grade = 'B';
+                }else if(data[i].total_mark >= 50){
+                    grade = 'C';
+                }else if(data[i].total_mark >= 40){
+                    grade = 'D';
+                }else if(data[i].total_mark >= 1) {
+                    grade = 'E';
+                }else{
+                    grade = 'ABSENT';
+                }
+
+            var columnFormat = data[i].attempt;
+            var firstNumber = parseInt(columnFormat.split(".")[0]);
+            var secondNumber = parseInt(columnFormat.split(".")[1]);
+            var thirdNumber = parseInt(columnFormat.split(".")[2]);
+
+            if (firstNumber >= 1 && firstNumber <= 7 && (secondNumber === 1 || secondNumber === 2) && isNaN(thirdNumber)) {
+                examType = 'ORDINARY EXAM';
+            } else if (thirdNumber !== null && thirdNumber === 1) {
+                examType = 'SPECIAL EXAM';
+            } else if (thirdNumber !== null && thirdNumber === 2) {
+                examType = 'SUPPLEMENTARY EXAM';
+            } else if (thirdNumber !== null && thirdNumber === 3) {
+                examType = 'RETAKE EXAM';
+            }
+
+
+            const tableData = [data[i].student_number, data[i].sname + ' ' + data[i].fname + ' ' + data[i].mname, data[i].cat, data[i].assignment, data[i].practical, data[i].exam, data[i].total_cat, data[i].total_exam, data[i].total_mark, grade, examType]
 
             table.push(tableData)
         }
-            console.log(table)
-
             const container = document.querySelector('#example');
             const save = document.querySelector('#save');
 
@@ -99,6 +165,9 @@
                     if (value === "" || value === null){
                         td.innerHTML = "-";
                     }
+                    if (value === 'ABSENT'){
+                        td.innerHTML = 'ABSENT';
+                    }
                 }
 
                 if(col === 6 || col === 7 || col === 8 ){
@@ -110,6 +179,9 @@
                         td.style.background = '#EEE';
                         td.innerHTML = Math.round(td.innerHTML)
                     }
+                    if (value === 'ABSENT'){
+                        td.innerHTML = 'ABSENT';
+                    }
                 }
 
                 if (col === 9 || col === 10){
@@ -119,13 +191,13 @@
 
             let assignment =  unit.assignment;
             let assignmentColumn = false;
-            if(assignment == null){
+            if(assignment == 0){
                 assignmentColumn = 3;
             }
 
             let practical =  unit.practical;
             let practicalColumn = false;
-            if(practical == null){
+            if(practical == 0){
                 practicalColumn = 4;
             }
 
@@ -148,6 +220,7 @@
                                 callback(true);
                             } else {
                                 callback(false);
+                                showNotification('Oops! Entered marks out of your set range ', 'error');
                             }
                         }
                     },
@@ -157,6 +230,7 @@
                                 callback(true);
                             } else {
                                 callback(false);
+                                showNotification('Oops! Entered marks out of your set range ', 'error');
                             }
                         }
                     },
@@ -166,6 +240,7 @@
                                 callback(true);
                             } else {
                                 callback(false);
+                                showNotification('Oops! Entered marks out of your set range ', 'error');
                             }
                         }
                     },
@@ -175,6 +250,7 @@
                                 callback(true);
                             } else {
                                 callback(false);
+                                showNotification('Oops! Entered marks out of your set range ', 'error');
                             }
                         }
                     },
@@ -290,21 +366,33 @@
 
                          location.reload();
                          toastr.success("Student marks saved successfully");
-
                      }
 
                  });
-
-
-                 {{--fetch('{{ route('lecturer.storeMarks') }}', {--}}
-                 {{--    method: 'POST',--}}
-                 {{--    mode: 'no-cors',--}}
-                 {{--    headers: {--}}
-                 {{--        'Content-Type': 'application/json'--}}
-                 {{--    },--}}
-                 {{--    body: JSON.stringify({ data: hot.getData() })--}}
-                 {{--})--}}
              });
     });
+
+    function showNotification(message, errorMessage = '') {
+        const toastTrigger = document.getElementById('liveToastBtn');
+        const toastLiveExample = document.getElementById('liveToast');
+        const toastBootstrap = new bootstrap.Toast(toastLiveExample);
+
+        toastBootstrap.hide(); // Hide any existing toast before showing a new one
+
+        toastLiveExample.querySelector('.toast-body').textContent = message;
+        toastLiveExample.classList.remove('bg-success');
+        toastLiveExample.classList.add('bg-danger');
+
+        if (errorMessage) {
+            const errorElement = document.createElement('div');
+            errorElement.classList.add('text-danger');
+            errorElement.textContent = errorMessage;
+            toastLiveExample.querySelector('.toast-body').appendChild(errorElement);
+        }
+
+        toastBootstrap.show();
+    }
+
+
 
 </script>

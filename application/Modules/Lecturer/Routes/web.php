@@ -31,8 +31,8 @@ Route::prefix('lecturer')
     Route::get('/lecture-view-semester-workload/{year}/{semester}', [LecturerController::class, 'semesterWorkload'])->name('lecturer.semesterWorkload');
     Route::get('/view-examination', [LecturerController::class, 'examination']) ->name ('lecturer.examination');
     Route::get('/view-yearly-exams/{id}', [LecturerController::class, 'yearlyExams'])->name('lecturer.yearlyExams');
-    Route::get('/view-semester-exams/{year}/{semester}', [LecturerController::class, 'semesterExamination'])->name('lecturer.semesterExamination');
-    Route::any('/get-students-per-unit/{id}/{unit_id}', [LecturerController::class, 'getClassStudents'])->name('lecturer.studentList');
+    Route::post('/view-semester-exams', [LecturerController::class, 'semesterExamination'])->name('lecturer.semesterExamination');
+    Route::post('/get-students-per-unit', [LecturerController::class, 'getClassStudents'])->name('lecturer.studentList');
     Route::get('/get-student-exam-marks', [LecturerController::class, 'getStudentExam'])->name('lecturer.getStudentExams');
     Route::any('/lecturer-save-student-marks', [LecturerController::class, 'storeMarks'])->name('lecturer.storeMarks');
     Route::any('/lecturer-update-student-marks', [LecturerController::class, 'updateMarks'])->name('lecturer.updateMarks');

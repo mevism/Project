@@ -68,7 +68,7 @@
                 <i class="nav-main-link-icon si si-cursor"></i>
                 <span class="nav-main-link-name">
                     @if(auth()->guard('user')->user()->hasRole('Exam Coordinator'))
-                        Exam Coordinator
+                        Ex. Coordinator [ {{ auth()->guard('user')->user()->employmentDepartment->first()->dept_code }} ]
                     @endif
                 </span>
 
@@ -129,8 +129,9 @@
             <button type="button" class="btn btn-sm btn-alt-dark d-flex align-items-center" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <img class="rounded-circle" src="{{ asset('media/avatars/male.png') }}" alt="Header Avatar" style="width: 21px;">
               <span class="d-none d-sm-inline-block ms-2">
-                  @if(Auth::guard('user')->check())
-                      {{ Auth::guard('user')->user()->last_name.' '.Auth::guard('user')->user()->first_name.' '.Auth::guard('user')->user()->middle_name }}
+                  @php $user = auth()->guard('user')->user() @endphp
+                  @if(auth()->guard('user')->check())
+                      {{ $user->StaffInfos->title.' '.$user->StaffInfos->last_name.' '.$user->StaffInfos->first_name }}
                   @endif
               </span>
               <i class="fa fa-fw fa-angle-down d-none d-sm-inline-block ms-1 mt-1"></i>
@@ -140,13 +141,14 @@
                 <img class="img-avatar img-avatar48 img-avatar-thumb" src="{{ asset('media/avatars/male.png') }}" alt="">
                 <p class="mt-2 mb-0 fw-medium">
            {{-- {{ Auth::guard('user')->user()->name }}--}}
-                    @if(Auth::guard('user')->check())
-                        {{ Auth::guard('user')->user()->last_name.' '.Auth::guard('user')->user()->first_name.' '.Auth::guard('user')->user()->middle_name }}
+                    @if(auth()->guard('user')->check())
+                        {{ $user->StaffInfos->title.' '.$user->StaffInfos->last_name.' '.$user->StaffInfos->first_name.' '.$user->middle_name }}
                     @endif </p>
+                  <hr>
                 <p class="mb-0 text-muted fs-sm fw-medium">
                     @if(Auth::guard('user')->check())
                         @if(auth()->guard('user')->user()->hasRole('Exam Coordinator'))
-                            Exam Coordinator
+                            Exam Coordinator [ {{ auth()->guard('user')->user()->employmentDepartment->first()->dept_code }} ]
                         @endif
                     @endif</p>
               </div>
@@ -157,7 +159,7 @@
               </div> --}}
               <div role="separator" class="dropdown-divider m-0"></div>
               <div class="p-2">
-                <a class="dropdown-item d-flex align-items-center justify-content-between" href="{{ route('application.logout') }}">
+                <a class="dropdown-item d-flex align-items-center justify-content-between" href="{{ route('logout') }}">
                   <span class="fs-sm fw-medium">Log Out</span>
                 </a>
               </div>

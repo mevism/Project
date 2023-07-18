@@ -2,209 +2,175 @@
 
 namespace Modules\Examination\Http\Controllers;
 
+use App\Service\CustomIds;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Modules\COD\Entities\CourseSyllabus;
 use Modules\COD\Entities\SemesterUnit;
+use Modules\COD\Entities\Unit;
 use Modules\Examination\Entities\Exam;
 use Modules\Examination\Entities\ExamMarks;
+use Modules\Examination\Entities\ExamWorkflow;
+use Modules\Examination\Entities\ModeratedResults;
 use Modules\Lecturer\Entities\ExamWeights;
+use Modules\Registrar\Entities\ACADEMICDEPARTMENTS;
+use Modules\Registrar\Entities\Classes;
+use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Student;
-use Modules\Registrar\Entities\StudentCourse;
 use Modules\Student\Entities\ExamResults;
+use Modules\Student\Entities\StudentCourse;
 use Modules\Workload\Entities\Workload;
 
 class ExaminationController extends Controller
 {
-//    public function __construct(){
-//        auth()->setDefaultDriver('user');
-//        $this->middleware(['web','auth', 'is_cod', 'dean', 'admin']);
-//    }
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
     public function index()
     {
         return view('examination::index');
     }
 
     public function registration(){
-
-       $grouped = ExamMarks::latest()->get()->groupBy(['academic_semester']);
-
-       foreach ($grouped as $group){
-           $data [] = $group->groupBy('academic_year');
-       }
-
-        return view('examination::semester.registration')->with(['data' => $data]);
+        $deptID = auth()->guard('user')->user()->employmentDepartment->first()->department_id;
+        $courseIDs = Courses::where('department_id', $deptID)->pluck('course_id');
+        $classNames = Classes::whereIn('course_id', $courseIDs)->pluck('name');
+        $exams = ExamMarks::whereIn('class_code', $classNames)->get()->groupBy('academic_year');
+        return view('examination::semester.registration')->with(['exams' => $exams]);
     }
 
-    public function semesterExams($year, $semester){
-
-        $exams = ExamMarks::where('academic_year', Crypt::decrypt($year))->where('academic_semester', Crypt::decrypt($semester))->get()->groupBy('class_code');
-
-        return view('examination::exams.semesterExams')->with(['exams' => $exams]);
-
+    public function yearExams(Request $request){
+        $deptID = auth()->guard('user')->user()->employmentDepartment->first()->department_id;
+        $courseIDs = Courses::where('department_id', $deptID)->pluck('course_id');
+        $classNames = Classes::whereIn('course_id', $courseIDs)->pluck('name');
+        $exams = ExamMarks::whereIn('class_code', $classNames)->where('academic_year', $request->year)->get()->groupBy('academic_semester');
+         return view('examination::exams.yearlyExams')->with(['exams' => $exams, 'year' => $request->year]);
     }
 
-    public function previewExam($class, $code){
+    public function semesterExams(Request $request){
+        $deptID = auth()->guard('user')->user()->employmentDepartment->first()->department_id;
+        $courseIDs = Courses::where('department_id', $deptID)->pluck('course_id');
+        $classNames = Classes::whereIn('course_id', $courseIDs)->pluck('name');
+        $exams = ExamMarks::whereIn('class_code', $classNames)->where('academic_year', $request->year)->where('academic_semester', $request->semester)->get()->groupBy('class_code');
+        return view('examination::exams.semesterExams')->with(['exams' => $exams, 'year' => $request->year, 'semester' => $request->semester]);
+    }
 
-        $exams = ExamMarks::where('unit_code', Crypt::decrypt($code))->where('class_code', Crypt::decrypt($class))->get();
-
+    public function previewExam(Request $request){
+        $exams = ExamMarks::where('unit_code', $request->unit)->where('class_code', $request->class)->get();
         return view('examination::exams.previewExam')->with(['exams' => $exams]);
     }
 
-    public function receiveExam($class, $code){
-
-        $exams = ExamMarks::where('unit_code', Crypt::decrypt($code))->where('class_code', Crypt::decrypt($class))->get();
-
+    public function receiveExam(Request $request){
+        $exams = ExamMarks::where('unit_code', $request->unit)->where('class_code', $request->class)->get();
+        $examID = new CustomIds();
+        $approvalID = $examID->generateId();
         foreach ($exams as $exam){
-            $received = ExamMarks::find($exam->id);
-            $received->status = 1;
-            $received->save();
+            $moderated = new ModeratedResults;
+            $moderated->moderated_exam_id = $approvalID;
+            $moderated->class_code = $exam->class_code;
+            $moderated->unit_code = $exam->unit_code;
+            $moderated->student_number = $exam->student_number;
+            $moderated->academic_year = $exam->academic_year;
+            $moderated->academic_semester = $exam->academic_semester;
+            $moderated->stage = $exam->stage;
+            $moderated->semester = $exam->semester;
+            $moderated->total_cat = $exam->total_cat;
+            $moderated->total_exam = $exam->total_exam;
+            $moderated->attempt = '1.1';
+            $moderated->save();
+        }
+        foreach ($exams as $exam){
+            ExamMarks::where('unit_code', $request->unit)->where('class_code', $request->class)->where('student_number', $exam->student_number)->update([
+                'status' => 1,
+            ]);
         }
 
-        return redirect()->back()->with('success', 'Exam received successfully');
-
+        $deptID = auth()->guard('user')->user()->employmentDepartment->first()->department_id;
+        $courseIDs = Courses::where('department_id', $deptID)->pluck('course_id');
+        $classNames = Classes::whereIn('course_id', $courseIDs)->pluck('name');
+        $examMarks = ExamMarks::whereIn('class_code', $classNames)->where('academic_year', $exams->first()->academic_year)->where('academic_semester', $exams->first()->academic_semester)->get()->groupBy('class_code');
+        return view('examination::exams.semesterExams')->with(['exams' => $examMarks, 'year' => $exams->first()->academic_year, 'semester' => $exams->first()->academic_semester]);
     }
 
-    public function processExam($class, $code){
+    public function processExam(Request $request){
+        $classview = DB::table('classesview')->where('name', $request->class)->first()->course_code;
+        $unit = Unit::where('unit_code', $request->unit)->first();
+        $examMarks = ModeratedResults::where('class_code', $request->class)->where('unit_code', $request->unit)->get();
+        $weights = Unit::where('unit_code', $request->unit)->first();
+        $syllabus = CourseSyllabus::where('course_code', $classview)->where('unit_code', $request->unit)->first();
+        $students = new Collection;
+        $classList = StudentCourse::where('current_class', $request->class)
+            ->orderBy('student_number', 'asc')
+            ->get();
 
-        $students = [];
+        foreach ($classList as $student) {
+            $mark = ModeratedResults::where('class_code', $request->class)
+                ->where('unit_code', $request->unit)
+                ->where('student_number', $student->student_number)
+                ->first();
 
-        $weights = ExamWeights::where('class_code', Crypt::decrypt($class))->where('unit_code', Crypt::decrypt($code))->first();
-        $exams = ExamMarks::where('class_code', Crypt::decrypt($class))->where('unit_code', Crypt::decrypt($code))->first();
-        $unit = SemesterUnit::where('unit_code', Crypt::decrypt($code))->where('class_code',Crypt::decrypt($class))->first();
-        $workload = Workload::where('unit_id', $unit->id)->first();
-
-            $students = new Collection;
-
-            $classList = StudentCourse::where('class_code', Crypt::decrypt($class))->orderBy('student_id', 'asc')->get();
-
-            foreach ($classList as $student) {
-
-                $mark = ExamMarks::where('class_code', Crypt::decrypt($class))->where('unit_code', Crypt::decrypt($code))->where('reg_number', $student->student->reg_number)->first();
-
-                $studentList = $student->student;
-
-                $students[] = collect($mark)->merge($studentList);
-
-                }
-
-        return view('examination::exams.processExam')->with(['class' => $class, 'students' => $students, 'unit' => $unit, 'weights' => $weights, 'workload' => $workload, 'exams' => $exams]);
-
+            if ($mark) {
+                $studentList = $student->StudentCourseInfo;
+                $mergedData = collect($mark)->merge($studentList)->put('student_number', $student->student_number)->put('attempt', $syllabus->stage.'.'.$syllabus->semester);
+                $students->push($mergedData);
+            }
+        }
+        return view('examination::exams.processExam')->with(['class' => $request->class, 'students' => $students, 'unit' => $unit, 'weights' => $weights, 'semester' => $request->semester, 'exams' => $examMarks]);
     }
 
     public function processMarks(Request $request){
-
         $marks = $request->data;
         $semester = $request->unit;
-        $workload = $request->workload;
-
         foreach ($marks as $mark){
-//            return $mark;
-                $exams = ExamMarks::where('class_code', $semester['class_code'])->where('unit_code', $semester['unit_code'])->where('reg_number', $mark[0])->first();
-                $exams->class_code = $semester['class_code'];
-                $exams->unit_code = $semester['unit_code'];
-                $exams->reg_number = $mark[0];
-                $exams->academic_year = $workload['academic_year'];
-                $exams->academic_semester = $workload['academic_semester'];
-                $exams->stage = $semester['stage'];
-                $exams->semester = $semester['semester'];
-                $exams->cat = $mark[2];
-                $exams->assignment = $mark[3];
-                $exams->practical = $mark[4];
-                if ($mark[5] == null){ $exams->exam = 'ABSENT'; }else{ $exams->exam = round(intval($mark[5]),0); }
-                $exams->total_cat = $mark[6];
-                if ($mark[7] == 'NaN' || $mark[7] == 'ABSENT'){ $exams->total_exam = 'ABSENT'; }else{ $exams->total_exam = round($mark[7],0); }
-                if ($mark[7] == 'NaN' || $mark[7] == 'ABSENT'){ $exams->total_mark = 'ABSENT'; }else{ $exams->total_mark = round($mark[8],0); }
-                $exams->attempt = '$mark[10]';
-                $exams->save();
+            ModeratedResults::where('student_number', $mark[0])->where('unit_code', $semester['unit_code'])->update([
+                'total_cat' => $mark[2] ?? 0,
+                'total_exam' => $mark[3] === null || $mark[3] === 'ABSENT' ? 'ABSENT' : round($mark[3], 0),
+            ]);
+        }
+    }
 
-//                return $mark;
+    public function submitMarks(Request $request){
+        $deptID = auth()->guard('user')->user()->employmentDepartment->first()->department_id;
+        $exam = ExamMarks::where('unit_code', $request->unit)->where('class_code', $request->class)->first();
 
+        if (ExamWorkflow::where('academic_year', $exam->academic_year)->where('academic_semester', $exam->academic_semester)->where('department_id', $deptID)->exists()){
+            $deptApprovalId = ExamWorkflow::where('academic_year', $exam->academic_year)->where('academic_semester', $exam->academic_semester)->where('department_id', $deptID)->first();
+            $results = ModeratedResults::where('class_code', $request->class)->where('unit_code', $request->unit)->get();
+            foreach ($results as $result){
+                ModeratedResults::where('class_code', $request->class)->where('unit_code', $request->unit)->where('student_number', $result->student_number)->update([
+                    'exam_approval_id' => $deptApprovalId->exam_approval_id
+                ]);
             }
+            $exams =  ExamMarks::where('class_code', $request->class)->where('unit_code', $request->unit)->get();
+            foreach ($exams as $moderatedExam){
+                ExamMarks::where('class_code', $request->class)->where('unit_code', $request->unit)->where('student_number', $moderatedExam->student_number)->update([
+                    'exam_approval_id' => $deptApprovalId->exam_approval_id
+                ]);
+            }
+        }else{
+            $approveID = new CustomIds();
+            $examApproval =  new ExamWorkflow;
+            $examApproval->exam_approval_id = $approveID->generateId();
+            $examApproval->department_id = $deptID;
+            $examApproval->academic_year = $exam->academic_year;
+            $examApproval->academic_semester = $exam->academic_semester;
+            $examApproval->cod_status = 0;
+            $examApproval->save();
 
-    }
+            $exams =  ExamMarks::where('class_code', $request->class)->where('unit_code', $request->unit)->get();
+            foreach ($exams as $moderatedExam){
+                ExamMarks::where('class_code', $request->class)->where('unit_code', $request->unit)->where('student_number', $moderatedExam->student_number)->update([
+                    'exam_approval_id' => $examApproval->exam_approval_id
+                ]);
+            }
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
-    {
-        return view('examination::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
-    {
-        return view('examination::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('examination::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
+        $courseIDs = Courses::where('department_id', $deptID)->pluck('course_id');
+        $classNames = Classes::whereIn('course_id', $courseIDs)->pluck('name');
+        $examMarks = ExamMarks::whereIn('class_code', $classNames)->where('academic_year', $exam->academic_year)->where('academic_semester', $exam->academic_semester)->get()->groupBy('class_code');
+        return view('examination::exams.semesterExams')->with(['exams' => $examMarks, 'year' => $exam->academic_year, 'semester' => $exam->academic_semester]);
     }
 }
+

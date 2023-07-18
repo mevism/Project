@@ -10,6 +10,7 @@ use Modules\Registrar\Entities\Department;
 use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Examination\Entities\ExamWorkflow;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Student\Entities\StudentCourse;
 
 class ExamMarks extends Model
 {
@@ -28,7 +29,7 @@ class ExamMarks extends Model
 
     public function studentMark(){
 
-        return $this->belongsTo(Student::class, 'reg_number', 'reg_number');
+        return $this->belongsTo(StudentCourse::class, 'student_number', 'student_number');
     }
 
     public function examProcessed(){

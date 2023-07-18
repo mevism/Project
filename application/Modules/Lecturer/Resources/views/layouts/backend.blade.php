@@ -198,9 +198,10 @@
                 <img class="img-avatar img-avatar48 img-avatar-thumb" src="{{ asset('media/avatars/male.png') }}" alt="">
                 <p class="mt-2 mb-0 fw-medium">
 
-                  @if(Auth::guard('user')->check())
+                  @if(auth()->guard('user')->check())
                       {{ $user->staffInfos->title }} {{ $user->staffInfos->last_name }} {{ $user->staffInfos->first_name }} {{ $user->staffInfos->middle_name }}
                   @endif
+                  <hr>
                 <p class="mb-0 text-muted fs-sm fw-medium">
                     @if(auth()->guard('user')->user()->hasRole('Lecturer'))
                         Lecturer [ {{ $user->employmentDepartment->first()->dept_code }} ]
