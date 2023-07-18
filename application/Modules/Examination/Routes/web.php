@@ -17,10 +17,12 @@ Route::prefix('examination')->group(function() {
 
     Route::get('/', 'ExaminationController@index')->name('examination');
     Route::get('/exams', [ExaminationController::class, 'registration'])->name('examination.registration');
-    Route::get('/semester-exam/{year}/{semester}', [ExaminationController::class, 'semesterExams'])->name('examination.semesterExams');
-    Route::get('/preview-exam-marks/{class}/{code}', [ExaminationController::class, 'previewExam'])->name('examination.previewExam');
-    Route::get('/receive-exam/{class}/{code}', [ExaminationController::class, 'receiveExam'])->name('examination.receiveExam');
-    Route::get('/process-exam/{class}/{code}', [ExaminationController::class, 'processExam'])->name('examination.processExam');
+    Route::post('/year-exam', [ExaminationController::class, 'yearExams'])->name('examination.yearExams');
+    Route::any('/semester-exam', [ExaminationController::class, 'semesterExams'])->name('examination.semesterExams');
+    Route::post('/preview-exam-marks', [ExaminationController::class, 'previewExam'])->name('examination.previewExam');
+    Route::post('/receive-exam', [ExaminationController::class, 'receiveExam'])->name('examination.receiveExam');
+    Route::post('/process-exam', [ExaminationController::class, 'processExam'])->name('examination.processExam');
     Route::any('/save-processed-exam-marks/', [ExaminationController::class, 'processMarks'])->name('examination.updateMarks');
+    Route::post('/submit-exam-marks/', [ExaminationController::class, 'submitMarks'])->name('examination.submitMarks');
 
 });

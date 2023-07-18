@@ -60,37 +60,35 @@
                             $i = 0;
                         @endphp
 
-                        @foreach($workloads as $workload)
+                        @foreach($classes as $class)
                             <tr>
                                 <td>  {{ ++$i }} </td>
-                                <td> {{ $workload->class_code }} </td>
-                                <td> {{ $workload->workloadUnit->unit_code }} </td>
-                                <td> {{ $workload->workloadUnit->unit_name }}</td>
+                                <td> {{ $class->class_code }} </td>
+                                <td> {{ $class->workloadUnit->unit_code }} </td>
+                                <td> {{ $class->workloadUnit->unit_name }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $workload->id }}">
+                                    <button type="button" class="btn btn-sm btn-alt-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $class->workload_id }}">
                                         Enter Marks
                                     </button>
                                     @foreach($settings as $setting)
-
                                         @php
                                             $userSetting = [];
                                         @endphp
 
-                                        @if($setting->unit_code == $workload->workloadUnit->unit_code)
+                                        @if($setting->unit_code == $class->workloadUnit->unit_code)
                                             @php
                                                 $userSetting = $setting;
                                             @endphp
-
-                                            <div class="modal fade" id="staticBackdrop-{{ $workload->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal fade" id="staticBackdrop-{{ $class->workload_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-md modal-dialog-centered">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title fs-10" id="staticBackdropLabel">{{ $workload->workloadUnit->unit_code.' - '. $workload->workloadUnit->unit_name  }}</h5>
+                                                            <h5 class="modal-title fs-10" id="staticBackdropLabel">{{ $class->workloadUnit->unit_code.' - '. $class->workloadUnit->unit_name  }}</h5>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
 
-                                                            <form method="post" action="{{ route('lecturer.studentList', ['id' => Crypt::encrypt($workload->id), 'unit_id' => Crypt::encrypt($workload->workloadUnit->id) ]) }}">
+                                                            <form method="post" action="{{ route('lecturer.studentList') }}">
                                                                 @csrf
                                                                 <div class="row">
                                                                     <div class="col-md-5 fw-semibold mb-4"> Unit Settings </div>
@@ -102,7 +100,7 @@
                                                                                 Exam Marks
                                                                             </div>
                                                                             <div class="col-md-2">
-                                                                                : {{ $workload->workloadUnit->total_exam }}
+                                                                                : {{ $class->workloadUnit->total_exam }}
                                                                             </div>
                                                                             <div class="col-md-5">
                                                                                 <input type="number" class="form-control-sm form-control" @if($userSetting != null) value="{{ $userSetting->exam }}" @endif name="exam">
@@ -113,35 +111,42 @@
                                                                                 CAT1/CAT Marks
                                                                             </div>
                                                                             <div class="col-md-2">
-                                                                                : {{ $workload->workloadUnit->cat }}
+                                                                                : {{ $class->workloadUnit->cat }}
                                                                             </div>
                                                                             <div class="col-md-5">
                                                                                 <input type="number" class="form-control-sm form-control" @if($userSetting != null) value="{{ $userSetting->cat }}" @endif name="cat">
                                                                             </div>
                                                                         </div>
-
+                                                                        @if($setting->assignment != 0)
                                                                         <div class="row mb-4">
                                                                             <div class="col-md-5">
                                                                                 CAT2/Assignment Marks
                                                                             </div>
                                                                             <div class="col-md-2">
-                                                                                : {{ $workload->workloadUnit->assignment }}
+                                                                                : {{ $class->workloadUnit->assignment }}
                                                                             </div>
                                                                             <div class="col-md-5">
                                                                                 <input type="number" class="form-control-sm form-control" @if($userSetting != null) value="{{ $userSetting->assignment }}" @endif name="assignment">
                                                                             </div>
                                                                         </div>
+                                                                        @endif
+                                                                        @if($setting->practical != 0)
                                                                         <div class="row mb-4">
                                                                             <div class="col-md-5">
                                                                                 <p>CAT3/Practicals Marks</p>
                                                                             </div>
                                                                             <div class="col-md-2">
-                                                                                : {{ $workload->workloadUnit->practical }}
+                                                                                : {{ $class->workloadUnit->practical }}
                                                                             </div>
                                                                             <div class="col-md-5">
                                                                                 <input type="number" class="form-control-sm form-control" @if($userSetting != null) value="{{ $userSetting->practical }}" @endif name="practical">
                                                                             </div>
                                                                         </div>
+                                                                        @endif
+                                                                        <input type="hidden" name="class" value="{{ $class->class_code }}">
+                                                                        <input type="hidden" name="unit" value="{{ $class->workloadUnit->unit_code }}">
+                                                                        <input type="hidden" name="semester" value="{{ $semester }}">
+                                                                        <input type="hidden" name="year" value="{{ $year }}">
 
                                                                     </div>
                                                                 </div>
@@ -160,16 +165,16 @@
 
                                 @endforeach
 
-                                    <div class="modal fade" id="staticBackdrop-{{ $workload->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal fade" id="staticBackdrop-{{ $class->workload_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-md modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title fs-10" id="staticBackdropLabel">{{ $workload->workloadUnit->unit_code.' - '. $workload->workloadUnit->unit_name  }} </h5>
+                                                    <h5 class="modal-title fs-10" id="staticBackdropLabel">{{ $class->workloadUnit->unit_code.' - '. $class->workloadUnit->unit_name  }} </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
 
-                                                    <form method="post" action="{{ route('lecturer.studentList', ['id' => Crypt::encrypt($workload->id), 'unit_id' => Crypt::encrypt($workload->workloadUnit->id) ]) }}">
+                                                    <form method="post" action="{{ route('lecturer.studentList') }}">
                                                         @csrf
                                                         <div class="row">
                                                             <div class="col-md-5 fw-semibold mb-4"> Unit Settings </div>
@@ -181,7 +186,7 @@
                                                                         Exam Marks
                                                                     </div>
                                                                     <div class="col-md-2">
-                                                                        : {{ $workload->workloadUnit->total_exam }}
+                                                                        : {{ $class->workloadUnit->total_exam }}
                                                                     </div>
                                                                     <div class="col-md-5">
                                                                         <input type="number" class="form-control-sm form-control" value="{{ old('exam') }}" name="exam">
@@ -192,38 +197,44 @@
                                                                         CAT1/CAT Marks
                                                                     </div>
                                                                     <div class="col-md-2">
-                                                                        : {{ $workload->workloadUnit->cat }}
+                                                                        : {{ $class->workloadUnit->cat }}
                                                                     </div>
                                                                     <div class="col-md-5">
                                                                         <input type="number" class="form-control-sm form-control" value="{{ old('cat') }}" name="cat">
                                                                     </div>
                                                                 </div>
-                                                                @if($workload->workloadUnit->assignment != null)
+                                                                @if($class->workloadUnit->assignment != 0)
                                                                 <div class="row mb-4">
                                                                     <div class="col-md-5">
                                                                         CAT2/Assignment Mark
                                                                     </div>
                                                                     <div class="col-md-2">
-                                                                        : {{ $workload->workloadUnit->assignment }}
+                                                                        : {{ $class->workloadUnit->assignment }}
                                                                     </div>
                                                                     <div class="col-md-5">
                                                                         <input type="number" class="form-control-sm form-control" value="{{ old('assignment') }}" name="assignment">
                                                                     </div>
                                                                 </div>
                                                                 @endif
+                                                                @if($class->workloadUnit->practical != 0)
                                                                 <div class="row mb-4">
                                                                     <div class="col-md-5">
                                                                         <p>CAT3/Practicals Marks</p>
                                                                     </div>
                                                                     <div class="col-md-2">
-                                                                        : {{ $workload->workloadUnit->practical }}
+                                                                        : {{ $class->workloadUnit->practical }}
                                                                     </div>
                                                                     <div class="col-md-5">
                                                                         <input type="number" class="form-control-sm form-control" value="{{ old('practical') }}" name="practical">
                                                                     </div>
                                                                 </div>
+                                                                @endif
                                                             </div>
                                                         </div>
+                                                        <input type="hidden" name="class" value="{{ $class->class_code }}">
+                                                        <input type="hidden" name="unit" value="{{ $class->workloadUnit->unit_code }}">
+                                                        <input type="hidden" name="semester" value="{{ $semester }}">
+                                                        <input type="hidden" name="year" value="{{ $year }}">
                                                         <div class="d-flex justify-content-center">
                                                             <button type="submit" class="btn btn-sm btn-alt-success">Save settings & proceed</button>
                                                         </div>
@@ -232,7 +243,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                {{--                                    <a class="btn btn-sm btn-alt-secondary" href="{{ route('lecturer.studentList', ['id' => Crypt::encrypt($workload->id), 'unit_id' => Crypt::encrypt($workload->workloadUnit->id) ]) }}"> Enter Marks </a> </td>--}}
+{{--                                      <a class="btn btn-sm btn-alt-secondary" href="{{ route('lecturer.studentList', ['id' => Crypt::encrypt($class->id), 'unit_id' => Crypt::encrypt($class->workloadUnit->id) ]) }}"> Enter Marks </a>--}}
+                                </td>
                             </tr>
                         @endforeach
 

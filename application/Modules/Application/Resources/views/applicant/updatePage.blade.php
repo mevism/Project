@@ -35,13 +35,13 @@
                                             $user = auth()->guard('web')->user();
                                         @endphp
 
-                                        <button class="nav-link @if($user->infoApplicant == null || $user->infoApplicant->title == null) active @endif" id="btabs-animated-slideup-home-tab" data-bs-toggle="tab" data-bs-target="#btabs-animated-slideup-home" role="tab" aria-controls="btabs-animated-slideup-home" aria-selected="true">Personal Information @if($user->infoApplicant != null && $user->infoApplicant->title != null) <i class="fa fa-check text-success"></i> @endif </button>
+                                        <button class="nav-link @if($user->student_type == 1 && $user->infoApplicant == null || $user->student_type == 2 && $user->infoApplicant->title == null) active @endif" id="btabs-animated-slideup-home-tab" data-bs-toggle="tab" data-bs-target="#btabs-animated-slideup-home" role="tab" aria-controls="btabs-animated-slideup-home" aria-selected="true">Personal Information @if($user->infoApplicant != null && $user->infoApplicant->title != null) <i class="fa fa-check text-success"></i> @endif </button>
                                     </li>
                                     <li class="nav-item">
-                                        <button class="nav-link @if($user->infoApplicant != null && $user->infoApplicant->title != null && $user->contactApplicant->alt_email == null || $user->contactApplicant->alt_mobile == null) active @endif" id="btabs-animated-slideup-profile-tab" data-bs-toggle="tab" data-bs-target="#btabs-animated-slideup-profile" role="tab" aria-controls="btabs-animated-slideup-profile" aria-selected="false">Contact Information @if($user->infoApplicant != null && $user->contactApplicant->alt_email != null && $user->contactApplicant->alt_mobile != null) <i class="fa fa-check text-success"></i> @endif </button>
+                                        <button class="nav-link @if($user->student_type == 1 && $user->infoApplicant != null && $user->contactApplicant->alt_email == null || $user->student_type == 2 && $user->infoApplicant->title != null && $user->contactApplicant->alt_email == null) active @endif" id="btabs-animated-slideup-profile-tab" data-bs-toggle="tab" data-bs-target="#btabs-animated-slideup-profile" role="tab" aria-controls="btabs-animated-slideup-profile" aria-selected="false">Contact Information @if($user->infoApplicant != null && $user->contactApplicant->alt_email != null && $user->contactApplicant->alt_mobile != null) <i class="fa fa-check text-success"></i> @endif </button>
                                     </li>
                                     <li class="nav-item">
-                                        <button class="nav-link @if($user->contactApplicant->alt_email != null && $user->contactApplicant->alt_mobile != null && $user->infoApplicant->title != null && $user->addressApplicant->nationality == null) active @endif" id="btabs-animated-slideup-address-tab" data-bs-toggle="tab" data-bs-target="#btabs-animated-slideup-address" role="tab" aria-controls="btabs-animated-slideup-address" aria-selected="false">Address Information @if($user->addressApplicant != null && $user->addressApplicant->nationality != null && $user->infoApplicant->title != null) <i class="fa fa-check text-success"></i> @endif </button>
+                                        <button class="nav-link @if($user->student_type == 1 && $user->infoApplicant != null && $user->contactApplicant->alt_email != null && $user->addressApplicant == null || $user->student_type == 2 && $user->infoApplicant->title != null && $user->contactApplicant->alt_email != null && $user->contactApplicant->alt_mobile != null && $user->addressApplicant->nationality == null) active @endif" id="btabs-animated-slideup-address-tab" data-bs-toggle="tab" data-bs-target="#btabs-animated-slideup-address" role="tab" aria-controls="btabs-animated-slideup-address" aria-selected="false">Address Information @if($user->addressApplicant != null && $user->addressApplicant->nationality != null && $user->infoApplicant->title != null) <i class="fa fa-check text-success"></i> @endif </button>
                                     </li>
                                     <li class="nav-item ms-auto">
                                         <span class="text-warning mt-4 fs-sm">
@@ -51,7 +51,7 @@
                                     </li>
                                 </ul>
                                 <div class="block-content tab-content overflow-hidden">
-                                    <div class="tab-pane fade fade-up show @if($user->infoApplicant == null || $user->infoApplicant->title == null) active @endif" id="btabs-animated-slideup-home" role="tabpanel" aria-labelledby="btabs-animated-slideup-home-tab">
+                                    <div class="tab-pane fade fade-up show @if($user->infoApplicant == null || $user->student_type == 2 && $user->infoApplicant->title == null) active @endif" id="btabs-animated-slideup-home" role="tabpanel" aria-labelledby="btabs-animated-slideup-home-tab">
                                         <form class="" method="POST" action="{{ route('applicant.personalInfo') }}">
                                             @csrf
                                             <div class="row row-cols-sm-2 g-2">
@@ -151,7 +151,7 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <div class="tab-pane fade fade-up show @if($user->infoApplicant != null && $user->infoApplicant->title != null && $user->contactApplicant->alt_email == null || $user->contactApplicant->alt_mobile == null) active @endif" id="btabs-animated-slideup-profile" role="tabpanel" aria-labelledby="btabs-animated-slideup-profile-tab">
+                                    <div class="tab-pane fade fade-up show @if($user->student_type == 1 && $user->infoApplicant != null && $user->contactApplicant->alt_email == null || $user->student_type == 2 && $user->infoApplicant->title != null && $user->contactApplicant->alt_email == null) active @endif" id="btabs-animated-slideup-profile" role="tabpanel" aria-labelledby="btabs-animated-slideup-profile-tab">
                                         <form class="" method="POST" action="{{ route('applicant.contactInfo') }}">
                                             @csrf
                                             <div class="row row-cols-sm-2 g-2">
@@ -177,7 +177,7 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <div class="tab-pane fade fade-up show @if($user->contactApplicant->alt_email != null && $user->contactApplicant->alt_mobile != null && $user->infoApplicant->title != null && $user->addressApplicant->nationality == null) active @endif" id="btabs-animated-slideup-address" role="tabpanel" aria-labelledby="btabs-animated-slideup-address-tab">
+                                    <div class="tab-pane fade fade-up show @if($user->student_type == 1 && $user->infoApplicant != null && $user->contactApplicant->alt_email != null && $user->addressApplicant == null || $user->student_type == 2 && $user->infoApplicant->title != null && $user->contactApplicant->alt_email != null && $user->contactApplicant->alt_mobile != null && $user->addressApplicant->nationality == null) active @endif" id="btabs-animated-slideup-address" role="tabpanel" aria-labelledby="btabs-animated-slideup-address-tab">
                                         <form class="" method="POST" action="{{ route('applicant.addressInfo') }}">
                                             @csrf
                                             <div class="row row-cols-sm-2 g-2">

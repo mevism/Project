@@ -758,7 +758,7 @@ class CODController extends Controller
             foreach ($units as $unit){
                 $wID = new CustomIds();
                 $examinableUnit = new ExamMarks;
-                $examinableUnit->workflow_id = $wID->generateId();
+                $examinableUnit->exam_id = $wID->generateId();
                 $examinableUnit->student_number = $student->student_number;
                 $examinableUnit->class_code = $student->current_class;
                 $examinableUnit->unit_code = $unit->unit_code;
@@ -766,6 +766,7 @@ class CODController extends Controller
                 $examinableUnit->academic_semester = $period;
                 $examinableUnit->stage = 1;
                 $examinableUnit->semester = 1;
+                $examinableUnit->attempt = '1.1';
                 $examinableUnit->save();
             }
 

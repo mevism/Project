@@ -28,9 +28,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         Exams
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -51,10 +51,9 @@
         <div class="block-content block-content-full">
             <div class="row">
              <div class="col-12">
-                <table id="example" class="table table-bordered table-striped table-vcenter js-dataTable-responsive fs-sm">
+                <table id="example" class="table table-borderless table-striped table-sm fs-sm">
                     <thead>
                         <th> # </th>
-                        <th> Academic Semester </th>
                         <th> Academic Year </th>
                         <th> Action </th>
                     </thead>
@@ -62,19 +61,19 @@
                         @php
                          $i = 0;
                         @endphp
-                        @foreach ($data as $items)
-                           @foreach($items as $year => $item)
+                        @foreach ($exams as $academicYear => $deptExams)
                                <tr>
                                    <td> {{ ++$i }} </td>
-                                   <td> {{ $item->first()->academic_semester }} </td>
-                                   <td> {{ $year }} </td>
+                                   <td> {{ $academicYear }} </td>
                                    <td>
-                                        <a class="btn btn-sm btn-outline-dark" href="{{ route('examination.semesterExams', ['year' => Crypt::encrypt($year), 'semester' => Crypt::encrypt($item->first()->academic_semester)]) }}"> Open </a>
+                                       <form class="p-0 m-0" method="post" action="{{ route('examination.yearExams') }}">
+                                           @csrf
+                                           <input type="hidden" name="year" value="{{ $academicYear }}">
+                                           <button type="submit" class="btn btn-sm btn-outline-dark" > View </button>
+                                       </form>
                                    </td>
                                </tr>
-                            @endforeach
                         @endforeach
-
                     </tbody>
                 </table>
             </div>
@@ -83,43 +82,5 @@
           <!-- Dynamic Table Responsive -->
         </div>
         <!-- END Page Content -->
-
-<script>
-    $(".input").on('input', function(){
-
-        var x = document.getElementById('cat').value;
-        x = parseFloat(x);
-
-        var y = document.getElementById('exam').value;
-        y = parseFloat(y);
-
-        var w = document.getElementById('total').value;
-        if(x>30 || y>70 || w>100){
-            alert('please enter correct values');
-        }
-
-        if(Number.isNaN(x))
-        x = 0;
-        else if(Number.isNaN(y))
-        y = 0;
-
-        w = x + y;
-        document.getElementById('total').value = w;
-
-       if(w >= 70){
-        document.getElementById('grade').value = "A";
-       }
-       else if(w >= 60){
-       document.getElementById('grade').value = "B";
-       }else if(w >= 50){
-       document.getElementById('grade').value = "C";
-       }else if(w >= 40){
-       document.getElementById('grade').value = "D";
-       }else if(w < 40){
-       document.getElementById('grade').value = "E";
-       }
-    });
-</script>
-
 @endsection
 

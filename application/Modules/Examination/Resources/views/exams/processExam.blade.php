@@ -1,14 +1,24 @@
 @extends('examination::layouts.backend')
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
+
 <style>
     .cellText {
         font-weight: bold;
-        font-family: Calibri;
+        font-family: Calibri, serif;
         background-color: #f2f4fb;
     }
     .make-me-red{
         color: red !important;
+    }
+    .toast-container {
+        bottom: 5vh;
+    }
+    .handsontable .htDimmed .htHighlight {
+        background-color: transparent !important;
+        box-shadow: none !important;
+        outline: none !important;
     }
 </style>
 @section('content')
@@ -16,9 +26,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         STUDENT MARKS
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -50,6 +60,37 @@
         </div>
     </div>
 
+    {{--    <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button>--}}
+
+    <div class="toast-container position-fixed bottom-90 end-0 p-3">
+        <div id="liveToast" class="toast bg-danger text-white" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="fa fa-exclamation-triangle text-danger"></i>  <span>&nbsp;</span>
+                {{--                <img src="..." class="rounded me-2" alt="...">--}}
+                <strong class="me-auto">Error</strong>
+                <small>{{ Carbon\Carbon::now()->diffForHumans() }}</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Hello, world! This is a toast message.
+            </div>
+        </div>
+    </div>
+    <script>
+        function showError(){
+            const toastTrigger = document.getElementById('liveToastBtn')
+            const toastLiveExample = document.getElementById('liveToast')
+
+            if (toastTrigger) {
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+                toastTrigger.addEventListener('click', () => {
+                    toastBootstrap.show()
+                })
+            }
+        }
+    </script>
+
+
 @endsection
 <script type="module">
 
@@ -60,60 +101,54 @@
         const weights = JSON.parse('<?php echo json_encode($weights) ?>');
         const unit = JSON.parse('<?php echo json_encode($unit) ?>');
 
-        if (weights === null) {
-
-            weight = {cat: unit.cat, assignment: unit.assignment, practical: unit.practical, exam: unit.total_exam};
-
-        } else {
-
-            weight = {
-                cat: weights.cat,
-                assignment: weights.assignment,
-                practical: weights.practical,
-                exam: weights.exam
-            };
-
-        }
+        weight = {cat: weights.total_cat, exam: weights.total_exam};
 
         let table = [];
 
         for (let i = 0; i < data.length; i++) {
-
-            var newExam = null;
             var grade = null;
-            var newTotalExam = null;
-            var newTotalMark = null;
+            var examType = null;
+            var total_mark = parseInt(data[i].total_cat) + parseInt(data[i].total_exam)
 
-            if(data[i].exam === 'ABSENT'){
-                newExam = null;
-                newTotalExam = null;
-                newTotalMark = null;
-            }else {
-
-                newExam = data[i].exam;
-                newTotalExam = data[i].total_exam;
-                newTotalMark = data[i].total_mark;
+            if(isNaN(total_mark)){
+                total_mark = 'ABSENT';
             }
 
-            if(data[i].total_mark > 70 ){
+            if(total_mark > 70 ){
                 grade = 'A';
-            }else if(data[i].total_mark >= 60){
+            }else if(total_mark >= 60){
                 grade = 'B';
-            }else if(data[i].total_mark >= 50){
+            }else if(total_mark >= 50){
                 grade = 'C';
-            }else if(data[i].total_mark >= 40){
+            }else if(total_mark >= 40){
                 grade = 'D';
-            }else if(data[i].total_mark >= 1) {
+            }else if(total_mark >= 1) {
                 grade = 'E';
-            }else{
+            }else if (isNaN(total_mark)){
+                grade = 'ABSENT';
+            }else {
                 grade = 'ABSENT';
             }
 
-            const tableData = [data[i].reg_number, data[i]['sname']+' '+data[i]['fname']+' '+data[i]['mname'], data[i].cat, data[i].assignment, data[i].practical, newExam, data[i].total_cat, newTotalExam, newTotalMark, grade, '1st ATTEMPT']
+            var columnFormat = data[i].attempt;
+            var firstNumber = parseInt(columnFormat.split(".")[0]);
+            var secondNumber = parseInt(columnFormat.split(".")[1]);
+            var thirdNumber = parseInt(columnFormat.split(".")[2]);
+
+            if (firstNumber >= 1 && firstNumber <= 7 && (secondNumber === 1 || secondNumber === 2) && isNaN(thirdNumber)) {
+                examType = 'ORDINARY EXAM';
+            } else if (thirdNumber !== null && thirdNumber === 1) {
+                examType = 'SPECIAL EXAM';
+            } else if (thirdNumber !== null && thirdNumber === 2) {
+                examType = 'SUPPLEMENTARY EXAM';
+            } else if (thirdNumber !== null && thirdNumber === 3) {
+                examType = 'RETAKE EXAM';
+            }
+
+            const tableData = [data[i].student_number, data[i].sname + ' ' + data[i].fname + ' ' + data[i].mname, data[i].total_cat, data[i].total_exam, total_mark, grade, examType]
 
             table.push(tableData)
         }
-
         console.log(table)
 
         const container = document.querySelector('#example');
@@ -122,44 +157,23 @@
         function negativeValueRenderer(instance, td, row, col, prop, value, cellProperties, ) {
 
             Handsontable.renderers.TextRenderer.apply(this, arguments);
+            // Handsontable.TextCell.renderer.apply(this, arguments);
 
-            if (col === 2 || col === 3 || col === 4 ){
+            if (col === 2 || col === 3 || col === 4 || col === 5){
+                if (value === '0' ){
+                    td.innerHTML = 0;
+                }
                 if (value === "" || value === null){
                     td.innerHTML = "-";
                 }
-            }
-
-            if (col === 5){
-                if (value === null){
+                if (value === 'ABSENT'){
                     td.innerHTML = 'ABSENT';
-                    td.style.background = '#EEE'
                 }
             }
 
-            if (col === 6){
-                td.innerHTML = Math.round(td.innerHTML)
+            if(col === 4 || col === 5 || col === 6){
+                td.style.background = '#EEE';
             }
-
-            if(col === 7 || col === 8 ){
-                if (value === null){
-                    td.innerHTML = 'ABSENT';
-                }else {
-                    td.innerHTML = Math.round(td.innerHTML)
-                }
-            }
-
-        }
-
-        let assignment =  unit.assignment;
-        let assignmentColumn = false;
-        if(assignment == null){
-            assignmentColumn = 3;
-        }
-
-        let practical =  unit.practical;
-        let practicalColumn = false;
-        if(practical == null){
-            practicalColumn = 4;
         }
 
         Handsontable.renderers.registerRenderer(negativeValueRenderer );
@@ -170,70 +184,38 @@
             width: '100%',
             height: 'auto',
             stretchH: 'all',
-            colWidths: [120, 250, 60, 60, 60, 60, 60, 60, 80, 60, 150],
+            colWidths: [120, 300, 80, 90, 80, 60, 140],
             className: 'htCenter',
             columns: [
-                {readOnly: true, editor:false, className: 'htLeft htMiddle cellText'},
-                {readOnly: true, editor:false, className: 'htLeft htMiddle cellText'},
+                {readOnly: true, className: 'htLeft htMiddle cellText htReadOnly'},
+                {readOnly: true, className: 'htLeft htMiddle cellText htReadOnly'},
                 {type: 'numeric',
                     validator: function(value, callback) {
                         if (value <= weight.cat && value >= 0) {
                             callback(true);
                         } else {
-                            // document.getElementById('save').disabled = true;
-                            // toastr.error("The cat mark is outside your set mark range");
                             callback(false);
+                            showNotification('Oops! Entered marks out of your set range ', 'error');
                         }
-                    }
-                },
-                {type: 'numeric',
-                    validator: function(value, callback) {
-                        if (value <= weight.assignment && value >= 0) {
-                            callback(true);
-                        } else {
-                            document.getElementById('save').disabled = true;
-                            toastr.error("The assignment mark is outside your set mark range");
-                            callback(false);
-                        }
-                    }
-                },
-                {type: 'numeric',
-                    validator: function(value, callback) {
-                        if (value <= weight.practical && value >= 0) {
-                            callback(true);
-                        } else {
-                            document.getElementById('save').disabled = true;
-                            toastr.error("The practical mark is outside your set mark range");
-                            callback(false);
-                        }
-                    }
+                    },
                 },
                 {type: 'numeric',
                     validator: function(value, callback) {
                         if (value <= weight.exam && value >= 0) {
                             callback(true);
                         } else {
-                            document.getElementById('save').disabled = true;
-                            toastr.error("The exam mark is outside your set mark range");
                             callback(false);
+                            showNotification('Oops! Entered marks out of your set range ', 'error');
                         }
                     }
                 },
-                {readOnly: true },
-                {readOnly: true },
-                {readOnly: true },
+                {readOnly: true, },
                 {readOnly: true},
                 {readOnly: true, className: 'htCenter htMiddle cellText'}
             ],
-
-            hiddenColumns: {
-
-                columns: [ assignmentColumn, practicalColumn ]
-            },
-
             rowHeights: 30,
             rowHeaders: true,
-            colHeaders: ['STUDENT NUMBER', 'STUDENT NAME', 'CAT 1', 'CAT 2', 'CAT 3', 'EXAM', 'T. CAT', 'T. EXAM', 'T. MARKS', 'GRADE', 'ATTEMPT'],
+            colHeaders: ['STUDENT NUMBER', 'STUDENT NAME', 'TOTAL CAT', 'TOTAL EXAM', 'TOTAL MARKS', 'GRADE', 'ATTEMPT'],
             licenseKey: 'non-commercial-and-evaluation', // for non-commercial use only
 
             cells(row, col,  prop, value) {
@@ -250,31 +232,7 @@
                 if(changes !== null){
 
                     if (source !== 'sum') {
-                        var a, b, c, d, sum, i, value, grade, total;
-
-
-                        var cats = (unit.cat / weight.cat);
-                        var assignments = (unit.assignment / weight.assignment);
-                        var practicals = (unit.practical / weight.practical);
-                        var exam = (unit.total_exam / weight.exam);
-
-
-                        if (assignments === null || assignments === "" || !assignments) {
-                            assignments = 0;
-                            b = 0;
-                        }
-
-                        if (practicals === null || practicals === "" || !practicals) {
-                            practicals = 0;
-                            c = 0;
-                        }
-
-                        if (exam === null || exam === "" || !exam) {
-                            practicals = 0;
-                            c = 0;
-                        }
-
-
+                        var a, b, sum, i, value, grade, total;
                         for (var i = 0; i < changes.length; i++) {
                             // console.log(changes.length)
                             var change = changes[i];
@@ -282,59 +240,49 @@
 
                             a = parseInt(this.getDataAtCell(line, 2));
                             b = parseInt(this.getDataAtCell(line, 3));
-                            c = parseInt(this.getDataAtCell(line, 4));
-                            d = parseInt(this.getDataAtCell(line, 5));
 
-                            if( !a ){ a = 0; } if( !b ){ b = 0; } if( !c ){ c = 0; } if( !d ){ d = 0; }
-                            if (a <= weight.cat && a >= 0){
-                                document.getElementById('save').disabled = false;
-                            }else {
-                                document.getElementById('save').disabled = true;
-                                toastr.error("The cat mark is outside your set mark range");
-                            }
-                            value = a * cats + b * assignments + c * practicals;
+                            if( !a ){ a = 0; } if( !b ){ b = 0; }
 
-                            if (!d ){ total = null } else {total = d * exam + value;}
+                            value = a;
+                            total = b + value;
 
-                            if (!d){
-                                grade = "-";
-                            }else {
-
-                                if (Math.round(total) >= 70) {
-                                    grade = 'A';
-                                } else if (Math.round(total) >= 60) {
-                                    grade = 'B';
-                                } else if (Math.round(total) >= 50) {
-                                    grade = 'C';
-                                } else if (Math.round(total) >= 40) {
-                                    grade = 'D';
-                                } else {
-                                    grade = 'E';
-                                }
+                            if (total >= 70) {
+                                grade = 'A';
+                            } else if (total >= 60) {
+                                grade = 'B';
+                            } else if (total >= 50) {
+                                grade = 'C';
+                            } else if (total >= 40) {
+                                grade = 'D';
+                            } else if (total >= 1) {
+                                grade = 'E';
+                            } else {
+                                grade = 'ABSENT';
                             }
 
                             // We want to programmatically update the table.
                             // Let's update it, and associate the source 'sum' to the event.
-                            this.setDataAtCell(change[0], 6, value, 'sum');
-                            this.setDataAtCell(change[0], 7, d * exam, 'sum');
-                            this.setDataAtCell(change[0], 8, total, 'sum');
-                            this.setDataAtCell(change[0], 9, grade, 'sum');
-
+                            this.setDataAtCell(change[0], 4, total, 'sum');
+                            this.setDataAtCell(change[0], 5, grade, 'sum');
                         }
 
                     }
                 }
-            }
+            },
+            beforeRenderer: function (td, row, col, prop, value, cellProperties) {
+                if (cellProperties.readOnly) {
+                    td.classList.add('no-highlight'); // Add a custom CSS class
+                }
+            },
         });
 
         save.addEventListener('click', () => {
 
             var marks = hot.getData();
             var classUnit = JSON.parse('<?php echo json_encode($unit) ?>');
-            var workload = JSON.parse('<?php echo json_encode($workload) ?>');
+            var workload = JSON.parse('<?php echo json_encode($semester) ?>');
 
             $.ajax({
-
                 type: 'get',
                 url: '{{ route('examination.updateMarks') }}',
                 data: { data:marks, unit:classUnit, workload:workload},
@@ -344,12 +292,31 @@
                 success: function (data){
 
                     location.reload();
-                    toastr.success("Student marks updated successfully");
-
+                    toastr.success("Student marks saved successfully");
                 }
 
             });
         });
     });
 
+    function showNotification(message, errorMessage = '') {
+        const toastTrigger = document.getElementById('liveToastBtn');
+        const toastLiveExample = document.getElementById('liveToast');
+        const toastBootstrap = new bootstrap.Toast(toastLiveExample);
+
+        toastBootstrap.hide(); // Hide any existing toast before showing a new one
+
+        toastLiveExample.querySelector('.toast-body').textContent = message;
+        toastLiveExample.classList.remove('bg-success');
+        toastLiveExample.classList.add('bg-danger');
+
+        if (errorMessage) {
+            const errorElement = document.createElement('div');
+            errorElement.classList.add('text-danger');
+            errorElement.textContent = errorMessage;
+            toastLiveExample.querySelector('.toast-body').appendChild(errorElement);
+        }
+
+        toastBootstrap.show();
+    }
 </script>

@@ -210,7 +210,9 @@ class DeanController extends Controller{
     }
 
     public function yearlyWorkload(){
-        $workloads =  ApproveWorkload::latest()->get();
+        $departments = ACADEMICDEPARTMENTS::where('school_id', auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->school_id)->pluck('department_id');
+       $workloadIds =  Workload::whereIn('department_id', $departments)->pluck('workload_approval_id');
+       $workloads = ApproveWorkload::whereIn('workload_approval_id', $workloadIds)->latest()->get();
         return view('dean::workload.index')->with(['workloads' => $workloads]);
     }
 

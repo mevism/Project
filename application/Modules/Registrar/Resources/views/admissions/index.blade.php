@@ -10,9 +10,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         Admissions
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -31,7 +31,7 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-lg-12">
-                    <table id="example" class="table table-responsive table-md table-striped table-bordered table-vcenter fs-sm">
+                    <table id="example" class="table table-responsive table-sm table-striped table-borderless fs-sm">
                             <thead>
                             <th>#</th>
                             <th>Applicant Name</th>
@@ -43,10 +43,10 @@
                             <th style="white-space: nowrap !important;">Action</th>
                             </thead>
                             <tbody>
+                            @php $i = 0; @endphp
                             @foreach($admission as $app)
-
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ ++$i }}</td>
                                     <td nowrap=""> {{ $app->sname }} {{ $app->fname }} {{ $app->mname }} </td>
                                     <td> {{ $app->admissionCourse->getCourseDept->name }}</td>
                                     <td> {{ $app->admissionCourse->course_name }}</td>
@@ -129,7 +129,7 @@
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
-            order: [[6, 'desc']],
+            order: [[0, 'asc']],
             rowGroup: {
                 dataSrc: 2
             }

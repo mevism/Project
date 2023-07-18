@@ -129,14 +129,14 @@ class WorkloadController extends Controller
     }
 
     public function viewWorkload(){
-        $workloads = AcademicYear::orderBy('year_start', 'desc')->get();
+       $workloads = AcademicYear::orderBy('year_start', 'desc')->get();
         return view('workload::workload.viewWorkload')->with(['workloads' => $workloads]);
     }
 
     public function viewYearWorkload($id){
         $year =  AcademicYear::where('year_id', $id)->first();
         $academic_year = Carbon::parse($year->year_start)->format('Y').'/'.Carbon::parse($year->year_end)->format('Y');
-        $workloads = Workload::where('academic_year', $academic_year)->latest()->get()->groupBy('academic_semester');
+        $workloads = Workload::where('academic_year', $academic_year)->where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->latest()->get()->groupBy('academic_semester');
         return view('workload::workload.viewYearWorkload')->with(['workloads' => $workloads, 'year' => $academic_year]);
     }
 

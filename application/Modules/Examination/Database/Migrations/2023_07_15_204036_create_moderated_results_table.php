@@ -13,9 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('exam_marks', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('workflow_id')->nullable();
+        Schema::create('moderated_results', function (Blueprint $table) {
+            $table->string('exam_approval_id');
             $table->string('class_code');
             $table->string('unit_code');
             $table->string('student_number');
@@ -23,17 +22,11 @@ return new class extends Migration
             $table->string('academic_semester');
             $table->integer('stage');
             $table->integer('semester');
-            $table->string('cat')->nullable();
-            $table->string('assignment')->nullable();
-            $table->string('practical')->nullable();
-            $table->string('exam')->nullable();
             $table->string('total_cat')->nullable();
             $table->string('total_exam')->nullable();
-            $table->string('total_mark')->nullable();
             $table->string('attempt');
             $table->integer('status')->default(0);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -44,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('exam_marks');
+        Schema::dropIfExists('moderated_results');
     }
 };

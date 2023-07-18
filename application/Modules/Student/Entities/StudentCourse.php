@@ -30,6 +30,10 @@ class StudentCourse extends Model
         return $this->belongsTo(Department::class, 'department_id', 'department_id');
     }
 
+    public function StudentCourseInfo(){
+        return $this->belongsTo(StudentInfo::class, 'student_id', 'student_id');
+    }
+
     protected static function newFactory()
     {
         return \Modules\Student\Database\factories\StudentCourseFactory::new();

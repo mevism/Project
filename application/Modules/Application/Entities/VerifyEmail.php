@@ -14,8 +14,7 @@ class VerifyEmail extends Model
     protected $fillable = ['applicant_id', 'verification_code'];
 
     public function emailVerify(){
-
-        return $this->hasOne(ApplicantInfo::class, 'applicant_id', 'applicant_id');
+        return $this->belongsTo(ApplicantLogin::class, 'applicant_id', 'applicant_id');
     }
 
     protected static function newFactory()

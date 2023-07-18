@@ -28,9 +28,9 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0">
-                        Exams
-                    </h5>
+                    <h6 class="h6 fw-bold mb-0">
+                       {{ $year }} EXAMS
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
@@ -38,7 +38,7 @@
                             <a class="link-fx" href="javascript:void(0)">Exams</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            Semester Exams
+                            All Exams
                         </li>
                     </ol>
                 </nav>
@@ -51,27 +51,28 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-12">
-                    <table id="example" class="table table-borderless table-striped fs-sm">
+                    <table id="example" class="table table-borderless table-striped table-sm fs-sm">
                         <thead>
                         <th> # </th>
-                        <th> student NUMBER </th>
-                        <th> STUDENT NAME </th>
-                        <th> CAT </th>
-                        <th> EXAM </th>
-                        <th> Total Mark</th>
+                        <th> Academic Year </th>
+                        <th> Action </th>
                         </thead>
                         <tbody>
                         @php
                             $i = 0;
                         @endphp
-                        @foreach ($exams as $key => $exam)
+                        @foreach ($exams as $academicSemester => $deptExams)
                             <tr>
-                                <td> {{ ++$key }} </td>
-                                <td> {{ $exam->student_number }} </td>
-                                <td> {{ $exam->studentMark->StudentCourseInfo->sname.' '.$exam->studentMark->StudentCourseInfo->fname.' '.$exam->studentMark->StudentCourseInfo->mname }} </td>
-                                <td> {{ $exam->total_cat }} </td>
-                                <td> {{ $exam->total_exam }} </td>
-                                <td> {{ $exam->total_mark }} </td>
+                                <td> {{ ++$i }} </td>
+                                <td> {{ strtoupper($academicSemester) }} </td>
+                                <td>
+                                    <form class="p-0 m-0" method="post" action="{{ route('examination.semesterExams') }}">
+                                        @csrf
+                                        <input type="hidden" name="semester" value="{{ $academicSemester }}">
+                                        <input type="hidden" name="year" value="{{ $year }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-dark" > View </button>
+                                    </form>
+                                </td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -83,5 +84,4 @@
     </div>
     <!-- END Page Content -->
 @endsection
-
 
