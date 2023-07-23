@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('user_id')->primary();
             $table->string('username')->unique();
             $table->string('password');
-            $table->string('remember_token');
+            $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
         });

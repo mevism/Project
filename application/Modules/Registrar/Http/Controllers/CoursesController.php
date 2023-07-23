@@ -2026,7 +2026,7 @@ class CoursesController extends Controller
 
     public function showDepartment()
     {
-        $data = academicdepartments::latest()->get();
+         $data = academicdepartments::latest()->get();
         return view('registrar::department.showDepartment')->with('data', $data);
     }
 
@@ -2038,7 +2038,7 @@ class CoursesController extends Controller
         ]);
 
         $id = new CustomIds();
-        $division = Division::where('name', 'Academic Division')->first();
+        $division = Division::where('name', 'ACADEMIC DIVISION')->first();
 
         $departments = new Department;
         $departments->department_id = $id->generateId();

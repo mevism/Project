@@ -6,6 +6,7 @@ use App\Service\CustomIds;
 use Illuminate\Support\Collection;
 use Modules\Application\Entities\Education;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Modules\Application\Entities\KuccpsEducation;
 use Modules\Registrar\Entities\KuccpsApplicant;
 use Modules\Registrar\Entities\KuccpsApplication;
 
@@ -74,7 +75,7 @@ class KuccpsImport implements ToCollection
                 'course_name' => preg_replace('/&/', 'AND', $row[12])
             ]);
 
-            Education::create([
+            KuccpsEducation::create([
                 'applicant_id' => $applcant_id,
                 'institution' => preg_replace('/&/', 'AND', $row[13]),
                 'level' => 'SECONDARY',

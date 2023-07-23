@@ -10,7 +10,8 @@ class KuccpsApplicant extends Model
     use HasFactory;
 
     protected $fillable = [ 'applicant_id', 'index_number', 'sname', 'fname', 'mname', 'gender', 'mobile', 'alt_mobile', 'email', 'alt_email', 'BOX', 'postal_code', 'town', 'school' ];
-
+    protected $primaryKey = 'applicant_id';
+    protected $keyType = 'string';
 
     public function kuccpsApplication(){
 

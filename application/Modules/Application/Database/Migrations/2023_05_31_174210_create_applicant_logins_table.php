@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('student_type')->nullable();
             $table->date('email_verified_at')->nullable();
             $table->tinyInteger('phone_verification')->nullable();
-            $table->string('remember_token')->nullable();
+            $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
         });
