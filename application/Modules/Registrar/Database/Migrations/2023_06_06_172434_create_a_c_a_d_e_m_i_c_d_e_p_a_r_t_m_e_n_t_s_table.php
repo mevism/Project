@@ -16,10 +16,10 @@ return new class extends Migration
     {
         DB::statement(
             "CREATE VIEW academicdepartments AS
-                SELECT
-                departments.*, school_departments.school_id
-                FROM school_departments
-                JOIN departments ON departments.department_id = school_departments.department_id;"
+            SELECT 
+            departments.department_id,  departments.division_id, school_departments.school_id, departments.dept_code, departments.name, departments.created_at 
+            FROM departments
+            JOIN schools ON school_departments.school_id  =  departments.department_id"
         );
     }
 

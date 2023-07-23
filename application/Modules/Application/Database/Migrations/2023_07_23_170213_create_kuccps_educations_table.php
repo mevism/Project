@@ -13,13 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('kuccps_applications', function (Blueprint $table) {
-            $table->string('applicant_id')->primary();
+        Schema::create('kuccps_educations', function (Blueprint $table) {
+            $table->string('applicant_id');
             $table->foreign('applicant_id')->references('applicant_id')->on('kuccps_applicants')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('intake_id');
-            $table->foreign('intake_id')->references('intake_id')->on('intakes')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('course_code');
-            $table->string('course_name');
+            $table->string('institution');
+            $table->string('qualification');
+            $table->string('level');
+            $table->string('start_date');
+            $table->string('exit_date');
+            $table->string('certificate')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kuccps_applications');
+        Schema::dropIfExists('kuccps_educations');
     }
 };

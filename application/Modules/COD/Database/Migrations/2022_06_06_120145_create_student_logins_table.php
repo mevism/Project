@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('student_logins', function (Blueprint $table) {
             $table->string('student_id')->primary();
             $table->string('username');
-            $table->string('remember_token')->nullable();
+            $table->rememberToken();
             $table->string('password');
             $table->timestamps();
             $table->softDeletes();

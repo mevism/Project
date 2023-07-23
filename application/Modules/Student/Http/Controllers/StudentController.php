@@ -566,7 +566,7 @@ class StudentController extends Controller
             ->where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
             ->where('stage', '<', $student_activation->stage)->get();
 
-        $results = ExamResults::where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
+        $results = ModeratedResults::where('student_number', auth()->guard('student')->user()->enrolledCourse->student_number)
            ->where('stage', $previousStage->year_study)
            ->latest()
            ->first();

@@ -13,6 +13,7 @@ use Modules\Registrar\Entities\Campus;
 use Modules\Registrar\Entities\ClusterSubject;
 use Modules\Registrar\Entities\ClusterSubjects;
 use Modules\Registrar\Entities\Group;
+use Modules\Registrar\Entities\VoteHead;
 
 class UserSeeder extends Seeder
 {
@@ -78,7 +79,7 @@ class UserSeeder extends Seeder
         //     ClusterSubject::create(['group_id' => $group->group_id, 'subject' => $subject['subject']]);
         // }
 
-        // DB::table('vote_heads')->insert([
+        // $voteheads  =  [
         //     ['name' => 'CAUTION MONEY'],
         //     ['name' =>  'STUDENT UNION'],
         //     ['name'=>'MEDICAL LEVY'],
@@ -93,7 +94,12 @@ class UserSeeder extends Seeder
         //     ['name' => 'STUDENT BENEVOLENT'],
         //     ['name' => 'KUCCPS PLACEMENT FEE'],
         //     ['name' => 'CUE LEVY']
-        // ]);
+        // ];
+
+        // foreach ($voteheads as $votehead){
+        //     $voteheadId = new CustomIds();
+        //     VoteHead::create(['votehead_id' => $voteheadId->generateId(), 'name' => $votehead['name']]);
+        // }
 
         //   DB::table('levels')->insert([
         //       ['name' => 'CERTIFICATE'],
@@ -118,8 +124,8 @@ class UserSeeder extends Seeder
 
         // ]);
         // DB::table('divisions')->insert([
-        //     ['division_id'=>'368HZXbsoMi','name' => 'Academic Division'],
-        //     ['division_id'=>'NjvCrvr9X0W','name' => 'Administrative Division'],
+        //     ['division_id'=>'368HZXbsoMi','name' => 'ACADEMIC DIVISION'],
+        //     ['division_id'=>'NjvCrvr9X0W','name' => 'ADMINISTRATIVE DIVISION'],
         
         // ]);
         // DB::table('campuses')->insert([
@@ -131,16 +137,16 @@ class UserSeeder extends Seeder
         //     ['department_id' => '368HZXbsoM2','division_id' =>  'NjvCrvr9X0W', 'dept_code'=> 'RAA' , 'name'  => 'REGISTRARAA'],
         // ]);
 
-        DB::table('users')->insert([
-            ['user_id' => '368HZXbso22','username' => 'mevis', 'password'  =>  Hash::make('1234')]
-        ]);
+        // DB::table('users')->insert([
+        //     ['user_id' => '368HZXbso22','username' => 'mevis', 'password'  =>  Hash::make('1234')]
+        // ]);
 
         // DB::table('roles')->insert([
-        //     ['id' => 2,'name' => 'REGISTRAR','guard_name' => 'user']
+        //     ['id' => 1,'name' => 'REGISTRAR','guard_name' => 'user']
         // ]);
 
         DB::table('user_employments')->insert([
-            ['user_id' => '368HZXbso22','department_id' => '368HZXbsoM2','division_id' =>  'NjvCrvr9X0W', 'campus_id' => '668HZXbsoM2','role_id' => 2,'station_id' => '368HZXbsoM2','employment_terms' => 'FT'],
+            ['user_id' => '368HZXbso22','department_id' => '368HZXbsoM2','division_id' =>  'NjvCrvr9X0W', 'campus_id' => '668HZXbsoM2','role_id' => 1,'station_id' => '368HZXbsoM2','employment_terms' => 'FT'],
         ]);
 
          DB::table('staff_infos')->insert([

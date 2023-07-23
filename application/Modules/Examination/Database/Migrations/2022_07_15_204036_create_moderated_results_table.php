@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('semester');
             $table->string('total_cat')->nullable();
             $table->string('total_exam')->nullable();
+            // $table->string('totals');
             $table->string('attempt');
             $table->integer('status')->default(0);
             $table->timestamps();
