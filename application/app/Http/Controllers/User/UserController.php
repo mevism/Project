@@ -13,7 +13,6 @@ use Modules\Application\Entities\VerifyUser;
 use Modules\Application\Entities\Application;
 use Modules\COD\Entities\ApplicationsView;
 use Modules\Registrar\Entities\AvailableCourse;
-
 class UserController extends Controller
 {
 //    public function __construct(){
@@ -34,38 +33,23 @@ class UserController extends Controller
         return redirect()->route('root')->with('success', 'You are now logged out');
 
     }
-    public function login(Request $request)
-    {
+    public function login(Request $request){
         $logins = $request->only('username', 'password');
-
-        if (Auth::guard('user')->attempt($logins)) {
-
-            $name = Auth::guard('user')->user()->name;
-
-            if (Auth::guard('user')->user()) {
-                return redirect()->intended('/dashboard')->with('success', 'Welcome' . " " . $name . " " . 'to' . " " . config('app.name') . ".");
+        if (\auth()->guard('user')->attempt($logins)) {
+            if (auth()->guard('user')->user()) {
+                return redirect()->intended('/dashboard');
             }
-        }
-        if (Auth::guard('web')->attempt($logins, true)) {
-
-            return redirect()->route('application.applicant')->with('success', 'Welcome' . " " . Auth::user()->email . " " . Auth::user()->role_id . "  " . 'to' . " " . config('app.name') . ".");
-
-        }
-
-        if (Auth::guard('student')->attempt($logins, true)) {
-            if (Auth::guard('student')) {
-
+        }elseif (\auth()->guard('web')->attempt($logins, true)) {
+            return redirect()->route('application.applicant');
+        }elseif (\auth()->guard('student')->attempt($logins, true)) {
+            if (\auth()->guard('student')) {
                 return redirect()->route('student')->with('success', 'You have logged in');
-
             }
-
         } else {
             return redirect('/')->with('error', 'Your details did not match to any record in the database');
         }
-
     }
     public function dashboard(){
-
         if (auth()->guard('user')->check()){
             // return auth()->guard('user')->user();
             if (\auth()->guard('user')->user()->roles->first()->id == 0){
@@ -96,10 +80,7 @@ class UserController extends Controller
                 return view('cod::COD.index')->with(['apps'=>$apps_cod, 'admissions'=>$admissions, 'classes' => $classes]);
 
             }elseif (\auth()->guard('user')->user()->roles->first()->id == 3){
-
-                // return auth()->guard('user')->user()->roles;
-                $apps_finance = Application::where('finance_status', '!=', 3)
-                    ->count();
+                $apps_finance = Application::all()->count();
 
                 return view('applications::finance.index')->with('apps', $apps_finance);
 

@@ -19,7 +19,7 @@ class Student
     {
         if (!Auth::guard('student')->check()){
 
-            abort(403);
+            return redirect()->route('root')->with('warning', 'Oops! Seems you are logged out');
         }
         return $next($request);
     }

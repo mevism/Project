@@ -16,6 +16,7 @@ use Modules\COD\Entities\CourseSyllabus;
 use Modules\COD\Entities\ReadmissionsView;
 use Modules\COD\Entities\SyllabusVersion;
 use Modules\COD\Entities\Unit;
+use Modules\Examination\Entities\ModeratedResults;
 use Modules\Lecturer\Entities\LecturerQualification;
 use Modules\Lecturer\Entities\QualificationRemarks;
 use Modules\Lecturer\Entities\TeachingArea;
@@ -1301,26 +1302,59 @@ class CODController extends Controller
     /*
     * Examination part
     */
-    public function yearlyResults()
-    {
-        $academicYears = ExamMarks::latest()->get()->groupBy('academic_year');
-
-        return view('cod::results.index')->with(['academicYears' => $academicYears]);
+    public function yearlyResults() {
+        $deptID = auth()->guard('user')->user()->employmentDepartment->first()->department_id;
+        $academicYears = ExamWorkflow::where('department_id', $deptID)->get()->groupBy('academic_year');
+        return view('cod::exams.index')->with(['academicYears' => $academicYears]);
+    }
+    public function semesterResults($id){
+        $deptID = auth()->guard('user')->user()->employmentDepartment->first()->department_id;
+        $semesters = ExamWorkflow::where('department_id', $deptID)->where('academic_year', base64_decode($id))->latest()->get()->groupBy('academic_semester');
+        return view('cod::exams.semesterResults')->with(['semesters' => $semesters, 'year' => base64_decode($id)]);
     }
 
-    public function semesterResults($year)
-    {
-        $hashedYear = Crypt::decrypt($year);
+    public function viewStudentResults($id){
+       $results =  ModeratedResults::where('exam_approval_id', $id)
+            ->orderBy('class_code', 'asc')
+            ->get()
+            ->groupBy(['class_code', 'unit_code', 'student_number']);
+        return view('cod::exams.viewExamResults')->with(['results' => $results]);
+    }
+    public function declineResults(Request $request, $id){
+        $request->validate([
+            'remarks' => 'required|string'
+        ]);
 
-        $semesters = ExamMarks::where('academic_year', $hashedYear)->latest()->get()->groupBy('academic_semester');
-
-        $dept =  auth()->guard('user')->user()->employmentDepartment->first();
-
-        $exams = ExamWorkflow::where('department_id', $dept->id)
-            ->where('academic_year', $hashedYear)
-            ->latest()->get();
-
-        return view('cod::results.semesterResults')->with(['semesters' => $semesters, 'year' => $hashedYear, 'exams' => $exams]);
+        ExamWorkflow::where('exam_approval_id', $id)->update([
+            'cod_status' => 2,
+            'cod_remarks' => $request->remarks
+        ]);
+        return redirect()->back()->with('success', 'Exam rejected Successfully');
+    }
+    public function approveExamResults($id){
+        ExamWorkflow::where('exam_approval_id', $id)->update([
+            'cod_status' => 1,
+            'cod_remarks' => 'Exam results accepted',
+            'dean_status' => NULL
+        ]);
+        return redirect()->back()->with('success', 'Exam Accepted Successfully');
+    }
+    public function revertExamResults($id){
+        $deptResults = ExamWorkflow::where('exam_approval_id', $id)->first();
+        ExamWorkflow::where('exam_approval_id', $id)->update(['cod_status' => 2]);
+        $examResults = ExamMarks::where('exam_approval_id', $id)->where('academic_year', $deptResults->academic_year)->where('academic_semester', $deptResults->academic_semester)->get();
+        foreach ($examResults as $result){
+            ExamMarks::where('exam_approval_id', $id)->where('academic_year', $deptResults->academic_year)->where('academic_semester', $deptResults->academic_semester)->where('student_number', $result->student_number)->update([
+                'exam_approval_id' => NULL
+            ]);
+        }
+        return redirect()->back()->with('success', 'Exam results reversed successfully');
+    }
+    public function submitExamResults($id){
+           ExamWorkflow::where('exam_approval_id', $id)->update([
+            'dean_status' => 0,
+           ]);
+        return redirect()->back()->with('success', 'Examination Results Submitted For Dean Approval');
     }
 
     public function downloadResults($sem, $year)
@@ -1433,59 +1467,8 @@ class CODController extends Controller
         return response()->download($docPath)->deleteFileAfterSend(true);
     }
 
-    public function submitExamResults($sem, $year)
-    {
-
-        $hashedSem = Crypt::decrypt($sem);
-
-        $hashedYear = Crypt::decrypt($year);
-
-        $deptId = auth()->guard('user')->user()->employmentDepartment->first()->id;
-
-        $results   =   ExamMarks::where('academic_year', $hashedYear)
-            ->where('academic_semester', $hashedSem)
-            ->where('department_id', $deptId)
-            ->get();
-
-        if (ExamWorkflow::where('academic_year', $hashedYear)->where('academic_semester', $hashedSem)->where('department_id', $deptId)->exists()) {
-
-            $approveResults   =   ExamWorkflow::where('academic_year', $hashedYear)->where('academic_semester', $hashedSem)->where('department_id', $deptId)->first();
-            $approveResults->academic_year  =  $hashedYear;
-            $approveResults->academic_semester  =  $hashedSem;
-            $approveResults->department_id  = $deptId;
-            $approveResults->cod_status  =  1;
-            $approveResults->dean_status  = 0;
-            $approveResults->registrar_status  = null;
-            $approveResults->status  = 0;
-            $approveResults->save();
-
-            foreach ($results as $result) {
-
-                $newId   =   ExamMarks::find($result->id);
-                $newId->workflow_id  =   $approveResults->id;
-                $newId->status = 0;
-                $newId->save();
-            }
-        } else {
-
-            $newResults   =  new  ExamWorkflow();
-            $newResults->academic_year  =  $hashedYear;
-            $newResults->academic_semester  =  $hashedSem;
-            $newResults->department_id  = $deptId;
-            $newResults->cod_status  =  1;
-            $newResults->dean_status  = 0;
-            $newResults->registrar_status  = null;
-            $newResults->status  = 0;
-            $newResults->save();
-
-            foreach ($results as $result) {
-
-                $newId   =   ExamMarks::find($result->id);
-                $newId->workflow_id  =   $newResults->id;
-                $newId->save();
-            }
-        }
-
-        return redirect()->back()->with('success', 'Examination Results Submitted Successfully');
+    public function supSpecials(){
+        $sups = [];
+        return view('cod::supSpecial.index')->with(['sups' => $sups]);
     }
 }

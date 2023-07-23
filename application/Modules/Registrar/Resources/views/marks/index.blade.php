@@ -28,17 +28,17 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0">
-                      YEARLY  EXAM MARKS
-                    </h5>
+                    <h6 class="h6 fw-bold mb-0">
+                      EXAMINATION
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="javascript:void(0)">Schools</a>
+                            <a class="link-fx" href="javascript:void(0)">UNIVERSITY</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            exam marks
+                            UNIVERSITY EXAMINATION
                         </li>
                     </ol>
                 </nav>
@@ -51,21 +51,20 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-12">
-                        <table id="example" class="table table-bordered table-striped fs-sm">
+                        <table id="example" class="table table-borderless table-sm table-striped fs-sm">
                             <thead>
                                 <th>#</th>
                                 <th>Academic Year</th>
                                 <th>Action</th>
                             </thead>
-                            <tbody>                                
+                            <tbody>
                                 @foreach($academicYears as $year => $academicYear)
                                     <tr>
                                         <td> {{ $loop->iteration }} </td>
                                         <td> {{ $year }} </td>
                                         <td>
-                                                                                  
-                                              <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.semesterExamMarks', ['year'=> Crypt::encrypt($year)]) }}">view </a>                                                                             
-                                          
+                                              <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.semesterExamMarks', base64_encode(substr($year, 0, 11))) }}"> View </a>
+
                                         </td>
                                     </tr>
                                 @endforeach

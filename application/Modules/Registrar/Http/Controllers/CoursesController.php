@@ -20,6 +20,8 @@ use Modules\COD\Entities\Nominalroll;
 use Modules\COD\Entities\ReadmissionsView;
 use Modules\COD\Entities\Unit;
 use Modules\Registrar\Entities\academicdepartments;
+use Modules\Examination\Entities\ModeratedResults;
+use Modules\Examination\Entities\SchoolExamWorkflow;
 use Modules\Registrar\Entities\Campus;
 use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\ClusterGroup;
@@ -116,93 +118,63 @@ class CoursesController extends Controller
     /*
      * exam marks
     */
-    public function  yearlyExamMarks()
-    {
+    public function  yearlyExamMarks(){
         $academicYears = ExamWorkflow::latest()->get()->groupBy('academic_year');
         return view('registrar::marks.index')->with(['academicYears' => $academicYears]);
     }
 
-    public function semesterExamMarks($year)
-    {
-        $hashedYear = Crypt::decrypt($year);
-
-        $semesters = ExamMarks::where('academic_year', $hashedYear)->latest()->get()->groupBy('academic_semester');
-
-        return view('registrar::marks.semesterExamMarks')->with(['semesters' => $semesters, 'year' => $hashedYear]);
+    public function semesterExamMarks($id){
+        $semesters = ExamWorkflow::where('academic_year', base64_decode($id))->latest()->get()->groupBy('academic_semester');
+        return view('registrar::marks.semesterExamMarks')->with(['semesters' => $semesters, 'year' => base64_decode($id)]);
     }
 
-
-    public function schoolExamMarks($sem, $year)
-    {
-        $hashedSem = Crypt::decrypt($sem);
-
-        $hashedYear = Crypt::decrypt($year);
-
-        $schools =  School::all();
-
-        //  $marks = ExamWorkflow::where('academic_year', $hashedYear)
-        //             ->where('academic_semester', $hashedSem)
-        //             ->first();
-
-
-
-        return view('registrar::marks.schoolExamMarks')->with(['schools'  =>  $schools, 'year'  =>  $hashedYear, 'sem'  =>  $hashedSem /* , 'marks'  =>  $marks */]);
+    public function schoolExamMarks($id){
+        list($year, $semester) = explode(':', base64_decode($id));
+        $schools =  SchoolExamWorkflow::where('academic_year', $year)->where('academic_semester', $semester)->get()->groupBy('school_id');
+        return view('registrar::marks.schoolExamMarks')->with(['schools'  =>  $schools, 'year'  =>  $year, 'semester'  =>  $semester ]);
     }
 
-    public function approveExamMarks($id, $year, $sem)
-    {
-        $hashedId = Crypt::decrypt($id);
-        $hashedYear = Crypt::decrypt($year);
-        $hashedSem = Crypt::decrypt($sem);
+    public function viewExamMarks($id){
+       $approval = SchoolExamWorkflow::where('exam_approval_id', $id)->first();
+       $deptIDs = SchoolDepartment::where('school_id', $approval->school_id)->pluck('department_id');
+       $departments = ExamWorkflow::whereIn('department_id', $deptIDs)->where('academic_year', $approval->academic_year)->where('academic_semester', $approval->academic_semester)->get();
+       return view('registrar::marks.departmentalExamMarks')->with(['departments' => $departments, 'period' => $approval]);
+    }
 
-        $school = School::find($hashedId);
-
-        $depts = $school->departments;
-
-        foreach ($depts as $dept) {
-
-            if (ExamWorkflow::where('academic_year', $hashedYear)->where('academic_semester', $hashedSem)->where('department_id', $dept->id)->exists()) {
-                $result = ExamWorkflow::where('academic_year', $hashedYear)
-                    ->where('academic_semester', $hashedSem)
-                    ->where('department_id', $dept->id)
-                    ->first();
-
-                $result->registrar_status = '1';
-                $result->registrar_remarks = 'Workload Approved';
-                $result->status =  '1';
-                $result->save();
-            }
+    public function approveExamMarks($id){
+        $approval = DB::table('schoolexamworkflow')->where('exam_approval_id', $id)->first();
+        $deptIDs = SchoolDepartment::where('school_id', $approval->school_id)->pluck('department_id');
+        foreach ($deptIDs as $ids){
+            ExamWorkflow::where('department_id', $ids)->update(['registrar_status' => 1, 'registrar_remarks' => 'Exam Marks Approved']);
         }
-
         return redirect()->back()->with('success', 'Exam Marks Approved Successfully');
     }
 
-    public function declineExamMarks(Request $request, $id, $year, $sem)
-    {
-        $hashedId = Crypt::decrypt($id);
-        $hashedYear = Crypt::decrypt($year);
-        $hashedSem = Crypt::decrypt($sem);
-
-        $school = School::find($hashedId);
-
-        $depts = $school->departments;
-
-        foreach ($depts as $dept) {
-
-            if (ExamWorkflow::where('academic_year', $hashedYear)->where('academic_semester', $hashedSem)->where('department_id', $dept->id)->exists()) {
-                $result = ExamWorkflow::where('academic_year', $hashedYear)
-                    ->where('academic_semester', $hashedSem)
-                    ->where('department_id', $dept->id)
-                    ->first();
-                $result->registrar_status = '2';
-                $result->registrar_remarks = $request->remarks;
-                $result->status = '2';
-                $result->save();
-            }
+    public function declineExamMarks(Request $request, $id){
+        $approval = SchoolExamWorkflow::where('exam_approval_id', $id)->first();
+        $deptIDs = SchoolDepartment::where('school_id', $approval->school_id)->pluck('department_id');
+        foreach ($deptIDs as $ids) {
+            ExamWorkflow::where('department_id', $ids)->update(['registrar_status' => 2, 'registrar_remarks' => $request->remarks]);
         }
-
-
         return redirect()->back()->with('success', 'Exam Marks Declined');
+    }
+
+    public function revertExamMarks($id){
+        $approval = SchoolExamWorkflow::where('exam_approval_id', $id)->first();
+        $deptIDs = SchoolDepartment::where('school_id', $approval->school_id)->pluck('department_id');
+        foreach ($deptIDs as $ids) {
+            ExamWorkflow::where('exam_approval_id', $ids)->update(['dean_status' => 3]);
+        }
+        return redirect()->back()->with('success', 'Exam results reversed to Dean for correction');
+    }
+
+    public function submitExamMarks($id){
+        $approval = SchoolExamWorkflow::where('exam_approval_id', $id)->first();
+        $deptIDs = SchoolDepartment::where('school_id', $approval->school_id)->pluck('department_id');
+        foreach ($deptIDs as $ids) {
+            ExamWorkflow::where('department_id', $ids)->update(['status' => 1]);
+        }
+        return redirect()->back()->with('success', 'Exam results submitted to Dean for publishing');
     }
 
     public function downloadExamMarks($id, $year, $sem)

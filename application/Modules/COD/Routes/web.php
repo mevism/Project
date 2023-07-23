@@ -14,7 +14,7 @@
 use App\Http\Middleware\COD\COD;
 use Modules\COD\Http\Controllers\CODController;
 
-Route::middleware(['is_cod'])->prefix('department')->group( function() {
+Route::prefix('department')->middleware(['web', 'auth:user', 'is_cod'])->group( function() {
 
         Route::get('/cod', [CODController::class, 'index'])->name('cod.dashboard');
         Route::get('/applications', [CODController::class, 'applications'])->name('cod.applications');
@@ -94,10 +94,13 @@ Route::middleware(['is_cod'])->prefix('department')->group( function() {
     Route::post('/department-decline-lecturer-qualification/{id}', [CODController::class, 'declineTeachingArea'])->name('department.declineTeachingArea');
 
     Route::get('/yearly-results', [CODController::class, 'yearlyResults'])->name('department.yearlyResults');
-    Route::get('/semester-results/{year}', [CODController::class, 'semesterResults'])->name('department.semesterResults');
+    Route::get('/semester-results/{id}', [CODController::class, 'semesterResults'])->name('department.semesterResults');
     Route::get('/download-results/{sem}/{year}', [CODController::class, 'downloadResults'])->name('department.downloadResults');
-    Route::get('/view-students-results/{class}/{sem}/{year}', [CODController::class, 'viewStudentResults'])->name('department.viewStudentResults');
-    Route::get('/submit-exam-results/{sem}/{year}', [CODController::class, 'submitExamResults'])->name('department.submitExamResults');
+    Route::get('/view-exam-results/{id}', [CODController::class, 'viewStudentResults'])->name('department.viewStudentResults');
+    Route::post('/decline-exam-results/{id}', [CODController::class, 'declineResults'])->name('department.declineResults');
+    Route::get('/approve-exam-results/{id}', [CODController::class, 'approveExamResults'])->name('department.approveExamResults');
+    Route::get('/revert-exam-results/{id}', [CODController::class, 'revertExamResults'])->name('department.revertExamResults');
+    Route::get('/submit-exam-results/{id}', [CODController::class, 'submitExamResults'])->name('department.submitExamResults');
 
     Route::get('/course-options/{id}', [CODController::class, 'courseOptions'])->name('department.courseOptions');
     Route::get('/add-course-options/{id}', [CODController::class, 'addCourseOption'])->name('department.addCourseOption');
@@ -118,7 +121,5 @@ Route::middleware(['is_cod'])->prefix('department')->group( function() {
     Route::get('/fetch-syllabus-unit', [CODController::class, 'searchUnit'])->name('department.searchUnit');
     Route::any('/submit-syllabus-units', [CODController::class, 'submitSyllabusUnits'])->name('department.submitSyllabusUnits');
     Route::get('/complete-course-syllabus/{course}/{version}', [CODController::class, 'completeSyllabus'])->name('department.completeCourseSyllabus');
-
-
-
+    Route::get('/supplementary-specials', [CODController::class, 'supSpecials'])->name('department.supSpecials');
 });

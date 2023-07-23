@@ -35,14 +35,8 @@ class ExamMarks extends Model
         return $this->belongsTo(StudentCourse::class, 'student_number', 'student_number');
     }
 
-    public function examProcessed(){
-
-        return $this->hasMany(ExamWorkflow::class, 'workflow_id');
-    }
-
-     public function marksApproval(){
-
-        return $this->hasOne(ExamWorkflow::class, 'workflow_id');
+     public function ExamMarksApproval(){
+        return $this->belongsTo(ExamWorkflow::class, 'exam_approval_id', 'exam_approval_id');
     }
 
 

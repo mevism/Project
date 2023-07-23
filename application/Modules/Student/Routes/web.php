@@ -13,11 +13,12 @@
 
 use Modules\Student\Http\Controllers\StudentController;
 
-Route::prefix('student')->middleware('is_student')->group(function() {
+Route::prefix('student')->middleware(['web', 'auth:student', 'is_student'])->group(function() {
 
     Route::get('/', [StudentController::class, 'index'])->name('student');
     Route::get('/my-course', [StudentController::class, 'myCourse'])->name('student.mycourses');
     Route::get('/course-transfers', [StudentController::class, 'courseTransfers'])->name('student.coursetransfers');
+    Route::get('/my-academic-calendar', [StudentController::class, 'myCalender'])->name('student.myCalendar');
     Route::get('/request-transfer', [StudentController::class, 'requestTransfer'])->name('student.requesttransfer');
     Route::get('/get-department-courses', [StudentController::class, 'getDeptCourses'])->name('student.getdeptcourse');
     Route::get('/get-courses-classes', [StudentController::class, 'getCourseClasses'])->name('student.getcourseclasses');
@@ -32,7 +33,6 @@ Route::prefix('student')->middleware('is_student')->group(function() {
     Route::post('/submit-semester-registration', [StudentController::class, 'registerSemester'])->name('student.registerSemester');
     Route::get('/view-units-in-selected-semester/{id}', [StudentController::class, 'viewSemesterUnits'])->name('student.viewSemesterUnits');
 
-
     Route::get('/request-academic-leave', [StudentController::class, 'academicLeave'])->name('student.requestacademicleave');
     Route::get('/request-deffer-or-academic-leave', [StudentController::class, 'requestLeave'])->name('student.academicleaverequest');
     Route::post('/submit-academic-leave-request', [StudentController::class, 'submitLeaveRequest'])->name('student.submitacademicleaverequest');
@@ -43,25 +43,18 @@ Route::prefix('student')->middleware('is_student')->group(function() {
     Route::get('/get-list-of-available-class', [StudentController::class, 'leaveClasses'])->name('student.getLeaveClasses');
     Route::get('/generate-deferment-details-for-new-student', [StudentController::class, 'defermentRequest'])->name('student.defermentRequest');
 
-
-
     Route::get('/request-readmission', [StudentController::class, 'requestReadmission'])->name('student.requestreadmission');
     Route::get('/request-course-readmission', [StudentController::class, 'readmissionRequests'])->name('student.readmisionrequest');
     Route::get('/store-readmission-request/{id}', [StudentController::class, 'storeReadmissionRequest'])->name('student.storereadmissionrequest');
-
-
 
     Route::get('/discontinuation-status', [StudentController::class , 'discontinuationStatus'])->name('student.discontinuationstatus');
     Route::get('/check-exam-results', [StudentController::class, 'examResults'])->name('student.examRrsults');
     Route::get('/apply-for-retakes', [StudentController::class, 'applyRetake'])->name('student.retakes');
     Route::get('/examresults', [StudentController::class, 'viewExamResults'])->name('student.examresults');
-    Route::get('/viewexammarks', [StudentController::class, 'viewExamMarks'])->name('student.viewexammarks');
-   
-
+    Route::get('/viewexammarks/{id}', [StudentController::class, 'viewExamMarks'])->name('student.viewexammarks');
 
     Route::get('/generate-fees-statement', [StudentController::class, 'feesStatement'])->name('student.feesstatement');
     Route::get('/get-my-fee-statement', [StudentController::class, 'printStatement'])->name('student.printStatement');
-
 
     Route::get('/my-profile', [StudentController::class, 'myProfile'])->name('student.myprofile');
 
