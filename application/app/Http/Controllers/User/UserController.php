@@ -50,9 +50,8 @@ class UserController extends Controller
         }
     }
     public function dashboard(){
-//        return \auth()->guard('user')->user();
-
         if (auth()->guard('user')->check()){
+            // return auth()->guard('user')->user();
             if (\auth()->guard('user')->user()->roles->first()->id == 0){
                 $courses = AvailableCourse::count();
                 $applications = Application::count();
@@ -73,7 +72,7 @@ class UserController extends Controller
                $apps_cod = ApplicationsView::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
                    ->where('cod_status', null )
                    ->count();
-               $classes = DB::table('CLASSESVIEW')
+               $classes = DB::table('classesview')
                    ->where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
                    ->count();
                 $admissions = 0;
@@ -81,7 +80,6 @@ class UserController extends Controller
                 return view('cod::COD.index')->with(['apps'=>$apps_cod, 'admissions'=>$admissions, 'classes' => $classes]);
 
             }elseif (\auth()->guard('user')->user()->roles->first()->id == 3){
-
                 $apps_finance = Application::all()->count();
 
                 return view('applications::finance.index')->with('apps', $apps_finance);

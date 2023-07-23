@@ -14,11 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('class_patterns', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->string('class_pattern_id')->primary();
             $table->string('class_code');
             $table->string('academic_year');
             $table->integer('stage');
-            $table->string('pattern_id');
+            $table->unsignedBigInteger('pattern_id');
+            $table->foreign('pattern_id')->references('id')->on('patterns')->onDelete('cascade')->onUpdate('cascade');
             $table->string('period');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();

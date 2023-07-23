@@ -14,7 +14,7 @@ class ApplicationsView extends Model
 
     protected $fillable = [];
 
-    protected $table = 'APPLICATIONSVIEW';
+    protected $table = 'applicationsview';
 
     public function DepartmentCourse(){
 

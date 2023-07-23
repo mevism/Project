@@ -18,6 +18,9 @@ class ExamMarks extends Model
 
     protected $fillable = [];
 
+    protected $primaryKey = 'exam_id';
+    protected $keyType = 'string';
+
     public function unit(){
 
         return $this->belongsTo(Unit::class, 'unit_code', 'unit_code');

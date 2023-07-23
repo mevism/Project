@@ -14,8 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('exam_marks', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('workflow_id')->nullable();
+            $table->string('exam_id')->primary();
             $table->string('class_code');
             $table->string('unit_code');
             $table->string('student_number');
@@ -31,6 +30,7 @@ return new class extends Migration
             $table->string('total_exam')->nullable();
             $table->string('total_mark')->nullable();
             $table->string('attempt');
+            $table->string('exam_approval_id');
             $table->integer('status')->default(0);
             $table->timestamps();
             $table->softDeletes();

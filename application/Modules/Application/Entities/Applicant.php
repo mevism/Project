@@ -15,7 +15,8 @@ class Applicant extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected  $table = 'applicants';
-
+    protected $primaryKey = 'applicant_id';
+    protected $keyType = 'string';
     /**
      * The attributes that are mass assignable.
      *

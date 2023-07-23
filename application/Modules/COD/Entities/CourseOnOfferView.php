@@ -11,7 +11,7 @@ class CourseOnOfferView extends Model
 {
     use HasFactory;
 
-    protected $table = 'COURESONOFFERVIEW';
+    protected $table = 'coursesonofferview';
     protected $fillable = [];
 
     public function OnofferDepartment(){

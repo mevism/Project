@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('application_subjects', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('application_id');
+            $table->foreign('application_id')->references('application_id')->on('applications')->onUpdate('cascade')->onDelete('cascade');
             $table->string('subject_1')->nullable();
             $table->string('subject_2')->nullable();
             $table->string('subject_3')->nullable();

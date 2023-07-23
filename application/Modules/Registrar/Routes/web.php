@@ -105,7 +105,7 @@ Route::prefix('courses')->group(function() {
     Route::post('/store-course', [CoursesController::class,'storeCourse'])->name('courses.storeCourse');
     Route::get('/show-course', [CoursesController::class,'showCourse'])->name('courses.showCourse');
     Route::get('/edit-course/{id}', [CoursesController::class,'editCourse'])->name('courses.editCourse');
-    Route::get('/syllabus/{id}', [CoursesController::class,'syllabus'])->name('courses.syllabus');
+    Route::get('/syllabus/{course_id}', [CoursesController::class,'syllabus'])->name('courses.syllabus');
     Route::put('/update-course/{id}', [CoursesController::class,'updateCourse'])->name('courses.updateCourse');
 
     //routes on attendance/ mode of study

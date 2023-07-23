@@ -14,9 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('student_addresses', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('student_id');
-            $table->string('citizen');
+            $table->string('student_id')->primary();
+            $table->foreign('student_id')->references('student_id')->on('student_logins')->onDelete('cascade')->onUpdate('cascade');            $table->string('citizen');
             $table->string('county');
             $table->string('sub_county');
             $table->string('town');

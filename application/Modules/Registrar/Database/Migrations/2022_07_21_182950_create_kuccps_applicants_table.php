@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('kuccps_applicants', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('applicant_id');
+            $table->foreign('applicant_id')->references('applicant_id')->on('applicant_contacts')->onUpdate('cascade')->onDelete('cascade');
             $table->string('index_number');
             $table->string('sname');
             $table->string('fname');

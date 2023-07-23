@@ -478,6 +478,7 @@ class CODController extends Controller
     }
 
     public function intakeCourses($id){
+        // return $id;
             $modes = Attendance::all();
             $campuses = Campus::all();
             $intake = Intake::where('intake_id', $id)->first();
@@ -519,8 +520,9 @@ class CODController extends Controller
             }else{
                 foreach ($selectedCourse['campus'] as $campus) {
                     $availableId = new CustomIds();
+                    $generatedID  =  $availableId->generateId();
                     $availableCourse = new AvailableCourse;
-                    $availableCourse->available_id = $availableId->generateId();
+                    $availableCourse->available_id = $generatedID;
                     $availableCourse->intake_id = $request->intake;
                     $availableCourse->course_id = $selectedCourse['course'];
                     $availableCourse->campus_id = $campus;
@@ -536,10 +538,11 @@ class CODController extends Controller
                     $syllabus = SyllabusVersion::where('course_id', $course->course_id)->latest()->first()->syllabus_name;
 
                     $classId = new CustomIds();
+                    // $generatedClassID  =  $classId->generateId();
 
                     $deptClass = Classes::where('name', $classEx)->exists();
                     if ($deptClass == null){
-                        $class = new Classes;
+                        $class = new Classes;                        
                         $class->class_id = $classId->generateId();
                         $class->name = $classEx;
                         $class->attendance_id = $code->attendance_code;
@@ -568,7 +571,7 @@ class CODController extends Controller
 
     public function deptClasses(){
         $intakes = Intake::all();
-        $classes = DB::table('classesVIEW')
+        $classes = DB::table('classesview')
                 ->where('department_id',  auth()->guard('user')->user()->employmentDepartment->first()->department_id)
                 ->latest()->get()->groupBy('intake_id');
             return view('cod::classes.index')->with(['intakes' => $intakes, 'classes' => $classes]);
@@ -579,7 +582,7 @@ class CODController extends Controller
     {
 
         $intakes = Intake::where('intake_id', $intake)->first();
-        $classes = DB::table('classesVIEW')
+          $classes = DB::table('classesview')
             ->where('department_id',  auth()->guard('user')->user()->employmentDepartment->first()->department_id)
             ->where('intake_id', $intake)
             ->latest()->get();
@@ -693,6 +696,7 @@ class CODController extends Controller
     }
 
     public function classList($id){
+         
         $class = Classes::where('class_id', $id)->first();
 
         $classList = StudentView::where('current_class', $class->name)
@@ -800,9 +804,9 @@ class CODController extends Controller
         $semester = Pattern::find($request->semester);
 
         $customPattern = new CustomIds();
-
+        $generatedPatternID   =  $customPattern->generateId();
         $pattern = new ClassPattern;
-        $pattern->class_pattern_id = $customPattern->generateId();
+        $pattern->class_pattern_id = $generatedPatternID;
         $pattern->class_code = $request->code;
         $pattern->stage = $request->stage;
         $pattern->period = $request->period;

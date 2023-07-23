@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('finance_logs', function (Blueprint $table) {
             $table->id();
-            $table->integer('application_id');
+            $table->string('application_id');
+            $table->foreign('application_id')->references('application_id')->on('applications')->onDelete('cascade')->onUpdate('cascade');
             $table->string('user');
             $table->string('user_role');
             $table->string('activity');

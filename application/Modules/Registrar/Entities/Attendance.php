@@ -10,6 +10,8 @@ class Attendance extends Model
     use HasFactory;
 
     protected $fillable = [];
+    protected $primaryKey = 'id';
+    protected $keyType = 'string';
 
     public function semestermodeofstudy(){
         return $this->hasMany(SemesterFee::class, 'id');

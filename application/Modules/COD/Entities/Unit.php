@@ -14,7 +14,7 @@ class Unit extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['unit_id', 'unit_code', 'unit_name', 'type', 'department_id', 'total_exam', 'total_cat', 'cat', 'assignment', 'practical'];
+    protected $fillable = ['unit_id','department_id', 'unit_code', 'unit_name', 'type', 'total_exam', 'total_cat', 'cat', 'assignment', 'practical'];
 
     public function DepartmentUnit(){
         return $this->belongsTo(Department::class, 'department_id', 'department_id');

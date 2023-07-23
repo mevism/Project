@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('cluster_subjects', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('group_id');
+            $table->string('group_id');
+            $table->foreign('group_id')->references('group_id')->on('groups')->onUpdate('cascade')->onDelete('cascade');
             $table->string('subject');
             $table->timestamps();
             $table->softDeletes();

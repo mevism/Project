@@ -14,8 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('qualification_remarks', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('qualification_id');
+            $table->string('qualification_id')->primary();
             $table->longText('remarks');
             $table->timestamps();
             $table->softDeletes();

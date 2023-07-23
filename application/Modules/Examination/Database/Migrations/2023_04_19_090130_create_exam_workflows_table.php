@@ -18,8 +18,11 @@ return new class extends Migration
             $table->string('academic_year');
             $table->string('academic_semester');
             $table->integer('cod_status')->nullable();
+            $table->string('cod_remarks');
             $table->integer('dean_status')->nullable();
+            $table->string('dean_remarks');
             $table->integer('registrar_status')->nullable();
+            $table->string('registrar_remarks');
             $table->integer('status')->nullable();
             $table->timestamps();
             $table->softDeletes();

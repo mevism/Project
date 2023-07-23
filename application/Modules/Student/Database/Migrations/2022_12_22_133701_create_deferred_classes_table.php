@@ -14,8 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('deferred_classes', function (Blueprint $table) {
-            $table->string('differed_class_id');
+            $table->string('differed_class_id')->primary();
             $table->string('leave_id');
+            $table->foreign('leave_id')->references('leave_id')->on('academic_leaves')->onDelete('cascade')->onUpdate('cascade');
             $table->string('differed_class');
             $table->string('differed_year');
             $table->string('differed_semester');

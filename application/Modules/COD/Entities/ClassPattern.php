@@ -11,18 +11,22 @@ class ClassPattern extends Model
     use HasFactory;
 
     protected $fillable = [];
-//    protected $primaryKey = 'class_code';
-//    protected $primaryKey = 'name';
+    //    protected $primaryKey = 'class_code';
+    //    protected $primaryKey = 'name';
+    protected $primaryKey = 'class_pattern_id';
+    protected $keyType = 'string';
 
     public $incrementing = false;
 
 
-    public function pattern(){
+    public function pattern()
+    {
 
         return $this->belongsTo(Pattern::class);
     }
 
-    public function classSchedule(){
+    public function classSchedule()
+    {
 
         return $this->belongsTo(Classes::class, 'class_code', 'name');
     }

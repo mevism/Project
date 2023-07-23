@@ -11,6 +11,8 @@ class UserEmployment extends Model
 {
     use HasFactory;
 
+    protected $primaryKey  =  'id';
+
     public function userplacement(){
 
         return $this->belongsTo(User::class, 'user_id', 'user_id');

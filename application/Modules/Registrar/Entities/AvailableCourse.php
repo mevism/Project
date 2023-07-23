@@ -12,7 +12,8 @@ class AvailableCourse extends Model
     use HasFactory;
 
     protected $fillable = [];
-
+    protected $primaryKey = 'available_id';
+    protected $keyType = 'string';
 //        availablecourse vs intake
     public function openCourse(){
 

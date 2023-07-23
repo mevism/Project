@@ -47,6 +47,9 @@
             <div class="row">
                 <div class="col-12 table-responsive">
                     <table id="example" class="table table-bordered table-striped table-vcenter js-dataTable-responsive fs-sm">
+                        <span class="d-flex justify-content-end">
+                            <a class="btn btn-alt-info btn-sm" href="{{ route('courses.showCourse') }}">Back</a>
+                        </span><br>
                         <thead>
                             <th>#</th>
                             <th>department Name</th>

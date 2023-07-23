@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6ed1005940bc9a5d858f5fc80ec58ea5",
+    "content-hash": "b08e414ab0ed066791bd301a78a10ce7",
     "packages": [
         {
             "name": "africastalking/africastalking",
@@ -7895,11 +7895,11 @@
             "type": "library",
             "autoload": {
                 "files": [
-                    "library/helpers.php",
-                    "library/Mockery.php"
+                    "src/helpers.php",
+                    "src/Mockery.php"
                 ],
                 "psr-4": {
-                    "Mockery\\": "library/Mockery"
+                    "Mockery\\": "src/Mockery"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -7947,6 +7947,7 @@
                 "security": "https://github.com/mockery/mockery/security/advisories",
                 "source": "https://github.com/mockery/mockery"
             },
+
             "time": "2023-07-19T15:51:02+00:00"
         },
         {

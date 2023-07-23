@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('applicant_addresses', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('applicant_id');
+            $table->foreign('applicant_id')->references('applicant_id')->on('applicant_contacts')->onUpdate('cascade')->onDelete('cascade');
             $table->string('nationality')->nullable();
             $table->string('county')->nullable();
             $table->string('sub_county')->nullable();

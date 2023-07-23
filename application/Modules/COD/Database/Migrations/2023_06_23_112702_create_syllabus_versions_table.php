@@ -14,8 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('syllabus_versions', function (Blueprint $table) {
-            $table->string('syllabus_id');
+            $table->string('syllabus_id')->primary();
             $table->string('course_id');
+            $table->foreign('course_id')->references('course_id')->on('courses')->onUpdate('cascade')->onDelete('cascade');
             $table->string('syllabus_name');
             $table->timestamps();
             $table->softDeletes();
