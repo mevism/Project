@@ -62,11 +62,12 @@ Route::prefix('dean')->middleware(['web'])->group(function() {
 
 
         Route::get('/yearly-exams', [DeanController::class, 'yearlyExams'])->name('dean.yearlyExams');
-        Route::get('/exams/{sem}/{year}', [DeanController::class, 'exams'])->name('dean.exams');
-        Route::get('/view-yearly-exams/{year}', [DeanController::class, 'viewYearlyExams'])->name('dean.viewYearlyExams');
+        Route::get('/exams/{id}', [DeanController::class, 'exams'])->name('dean.exams');
+        Route::get('/view-yearly-exams/{id}', [DeanController::class, 'viewYearlyExams'])->name('dean.viewYearlyExams');
         Route::get('/approve-marks/{id}', [DeanController::class, 'approveExamMarks'])->name('dean.approveExamMarks');
         Route::post('/decline-marks/{id}', [DeanController::class, 'declineExams'])->name('dean.declineExams');
         Route::get('/submit-marks/{id}', [DeanController::class, 'submitExamMarks'])->name('dean.submitExamMarks');
+        Route::get('/publish-results/{id}', [DeanController::class, 'publishResults'])->name('dean.publishResults');
         Route::get('/revert-marks/{id}', [DeanController::class, 'revertExamMarks'])->name('dean.revertExamMarks');
         Route::get('/download-exam-results/{sem}/{year}', [DeanController::class, 'downloadExamResults'])->name('dean.downloadExamResults');
 

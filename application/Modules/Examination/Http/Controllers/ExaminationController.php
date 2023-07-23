@@ -64,6 +64,7 @@ class ExaminationController extends Controller
 
     public function receiveExam(Request $request){
         $exams = ExamMarks::where('unit_code', $request->unit)->where('class_code', $request->class)->get();
+        $route = ExamMarks::where('unit_code', $request->unit)->where('class_code', $request->class)->first();
         $examID = new CustomIds();
         $approvalID = $examID->generateId();
         foreach ($exams as $exam){
@@ -86,12 +87,8 @@ class ExaminationController extends Controller
                 'status' => 1,
             ]);
         }
-
-        $deptID = auth()->guard('user')->user()->employmentDepartment->first()->department_id;
-        $courseIDs = Courses::where('department_id', $deptID)->pluck('course_id');
-        $classNames = Classes::whereIn('course_id', $courseIDs)->pluck('name');
-        $examMarks = ExamMarks::whereIn('class_code', $classNames)->where('academic_year', $exams->first()->academic_year)->where('academic_semester', $exams->first()->academic_semester)->get()->groupBy('class_code');
-        return view('examination::exams.semesterExams')->with(['exams' => $examMarks, 'year' => $exams->first()->academic_year, 'semester' => $exams->first()->academic_semester]);
+        $newRoute = route('examination.semesterExams', ['year' => $route->academic_year, 'semester' => $route->academic_semester]);
+        return redirect()->to($newRoute)->with('success', 'Exam marks received successfully');
     }
 
     public function processExam(Request $request){
@@ -137,6 +134,7 @@ class ExaminationController extends Controller
 
         if (ExamWorkflow::where('academic_year', $exam->academic_year)->where('academic_semester', $exam->academic_semester)->where('department_id', $deptID)->exists()){
             $deptApprovalId = ExamWorkflow::where('academic_year', $exam->academic_year)->where('academic_semester', $exam->academic_semester)->where('department_id', $deptID)->first();
+            ExamWorkflow::where('academic_year', $exam->academic_year)->where('academic_semester', $exam->academic_semester)->where('department_id', $deptID)->update(['cod_status' => 0, 'cod_remarks' => null]);
             $results = ModeratedResults::where('class_code', $request->class)->where('unit_code', $request->unit)->get();
             foreach ($results as $result){
                 ModeratedResults::where('class_code', $request->class)->where('unit_code', $request->unit)->where('student_number', $result->student_number)->update([
@@ -167,10 +165,8 @@ class ExaminationController extends Controller
             }
         }
 
-        $courseIDs = Courses::where('department_id', $deptID)->pluck('course_id');
-        $classNames = Classes::whereIn('course_id', $courseIDs)->pluck('name');
-        $examMarks = ExamMarks::whereIn('class_code', $classNames)->where('academic_year', $exam->academic_year)->where('academic_semester', $exam->academic_semester)->get()->groupBy('class_code');
-        return view('examination::exams.semesterExams')->with(['exams' => $examMarks, 'year' => $exam->academic_year, 'semester' => $exam->academic_semester]);
+        $newRoute = route('examination.semesterExams', ['year' => $exam->academic_year, 'semester' => $exam->academic_semester]);
+        return redirect()->to($newRoute)->with('success', 'Exam marks received successfully');
     }
 }
 

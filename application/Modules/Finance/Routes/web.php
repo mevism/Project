@@ -16,8 +16,6 @@ use Modules\Finance\Http\Controllers\FinanceController;
 Route::prefix('applications')
 //    ->middleware(['user', 'auth', 'finance'])
     ->group(function() {
-//    Route::get('/', 'FinanceController@index');
-    Route::group(['middleware' => 'finance'], function (){
         Route::get('/finance', [FinanceController::class, 'index'])->name('finance.dashboard');
         Route::get('/finance/applications', [FinanceController::class, 'applications'])->name('finance.applications');
         Route::get('/finance/viewApplication/{id}', [FinanceController::class, 'viewApplication'])->name('finance.viewApplication');
@@ -42,5 +40,4 @@ Route::prefix('applications')
         Route::get('/student-invoices', [FinanceController::class, 'allInvoices'])->name('finance.invoices');
         Route::get('/add-student-invoice', [FinanceController::class, 'addInvoice'])->name('finance.addInvoice');
         Route::post('/submit-student-invoice', [FinanceController::class, 'submitInvoice'])->name('finance.submitInvoice');
-    });
 });

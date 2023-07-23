@@ -1,12 +1,13 @@
-@extends('dean::layouts.backend')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
+@extends('cod::layouts.backend')
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
-<link rel="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css">
-<link rel="https://cdn.datatables.net/rowgroup/1.2.0/css/rowGroup.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.2.0/css/rowGroup.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
-<script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script>
+<script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script
 
 <script>
     $(document).ready(function() {
@@ -21,22 +22,21 @@
 </script>
 
 @section('content')
-
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
                     <h6 class="h6 fw-bold mb-0">
-                        {{ $approval->DepartmentExams->name }} SEMESTER EXAMINATION
+                        EXAMINATION
                     </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="javascript:void(0)">Department</a>
+                            <a class="link-fx" href="javascript:void(0)">Departmental</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            Examination
+                            Examinations
                         </li>
                     </ol>
                 </nav>
@@ -51,13 +51,10 @@
                         <tbody>
                         @foreach($results as $class => $examResults)
                             <tr style="background: lightgrey !important; ">
-                                <td colspan="{{ 5 + count($examResults) }}" class="fw-bold text-center"> {{ $approval->DepartmentExams->name }} </td>
-                            </tr>
-                            <tr style="background: lightgrey !important; ">
                                 <td colspan="{{ 5 + count($examResults) }}" class="fw-bold"> {{ $class }} </td>
                             </tr>
                             <tr>
-                                <th colspan="4" class="text-center fw-bold fs-5">STUDENT INFORMATION </th>
+                                <th colspan="4" class="text-center fw-bold fs-6">STUDENT INFORMATION </th>
                                 <th colspan="{{ 1 + count($examResults) }}" class="text-center fw-bold fs-6">SEMESTER UNITS AND MARKS </th>
                             </tr>
                             <tr>
@@ -66,7 +63,7 @@
                                 <th>STUDENT NAME</th>
                                 <th>GENDER</th>
                                 @foreach($examResults as $unitCode => $studentUnits)
-                                    <th> {{ $unitCode }} </th>
+                                <th> {{ $unitCode }} </th>
                                 @endforeach
                                 <th>REMARKS</th>
                             </tr>

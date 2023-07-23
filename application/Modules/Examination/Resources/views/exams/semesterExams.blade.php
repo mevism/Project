@@ -94,7 +94,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        @elseif($unit->first()->exam_approval_id !== null)
+                                        @elseif($unit->first()->exam_approval_id == null)
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="btn-group">
@@ -109,9 +109,23 @@
                                                             @csrf
                                                             <input type="hidden" value="{{ $class }}" name="class">
                                                             <input type="hidden" value="{{ $code }}" name="unit">
-                                                            <button type="submit" onclick="return confirm('Are you sure you want to submit this exam to COD?')" class="btn btn-sm btn-outline-success">Submit to COD {{ $unit->first()->exam_approval_id }} </button>
+                                                            <button type="submit" formmethod="post" onclick="return confirm('Are you sure you want to submit this exam to COD?')" class="btn btn-sm btn-outline-success">Submit to COD </button>
                                                         </form>
                                                     </div>
+                                                </div>
+                                            </div>
+                                        @elseif($unit->first()->exam_approval_id !== null)
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="btn-group">
+                                                        <form class="m-0 p-0" method="post" action="{{ route('examination.previewExam') }}">
+                                                            @csrf
+                                                            <input type="hidden" value="{{ $class }}" name="class">
+                                                            <input type="hidden" value="{{ $code }}" name="unit">
+                                                            <button type="submit" class="btn btn-sm btn-outline-dark">View</button>
+                                                        </form>
+                                                        <span>&nbsp;</span>
+                                                    <a class="btn btn-sm btn-primary disabled"> Awaiting processing</a> </div>
                                                 </div>
                                             </div>
                                     </td>

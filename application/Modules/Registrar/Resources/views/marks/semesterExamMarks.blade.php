@@ -29,17 +29,17 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-1">
-                    <h5 class="h6 fw-bold mb-0">
-                         SEMESTER EXAMS MARKS
-                    </h5>
+                    <h6 class="h6 fw-bold mb-0">
+                         SEMESTER EXAMINATIONS
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="javascript:void(0)">school</a>
+                            <a class="link-fx" href="javascript:void(0)">UNIVERSITY</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                             Exams marks
+                             UNIVERSITY EXAMINATION
                         </li>
                     </ol>
                 </nav>
@@ -52,7 +52,7 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-12">
-                    <table id="example" class="table table-bordered table-responsive-sm table-striped table-vcenter js-dataTable-responsive fs-sm">
+                    <table id="example" class="table table-borderless table-sm table-striped fs-sm">
                         <thead>
                         <th>#</th>
                         <th>Academic Year </th>
@@ -70,7 +70,7 @@
                                     {{ $sem }}
                                 </td>
                                 <td>
-                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.schoolExamMarks', ['sem' => Crypt::encrypt($sem) ,'year' =>Crypt::encrypt($year)]) }}">View</a>
+                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.schoolExamMarks', base64_encode($year.':'.$sem)) }}"> View </a>
                                 </td>
                             </tr>
                         @endforeach

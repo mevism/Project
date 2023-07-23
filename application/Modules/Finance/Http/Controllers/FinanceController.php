@@ -10,7 +10,7 @@ use Modules\Application\Entities\AdmissionApproval;
 use Modules\Application\Entities\Application;
 use Modules\Application\Entities\Education;
 use Modules\Finance\Entities\FinanceLog;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Modules\Registrar\Entities\Courses;
 use Modules\Application\Entities\Notification;
 use Modules\Registrar\Entities\Student;

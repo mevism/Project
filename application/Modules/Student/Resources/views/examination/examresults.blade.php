@@ -30,17 +30,17 @@
     <div class="content content-full">
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
             <div class="flex-grow-1">
-                <h5 class="h5 fw-bold mb-0">
+                <h6 class="h6 fw-bold mb-0">
                     Exam Results
-                </h5>
+                </h6>
             </div>
             <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-alt">
                     <li class="breadcrumb-item">
-                        <a class="link-fx" href="{{ route('student') }}">Dashboard</a>
+                        <a class="link-fx" href="{{ route('student') }}">STUDENT</a>
                     </li>
                     <li class="breadcrumb-item" aria-current="page">
-                        Academic Semester
+                        STUDENT EXAMINATION
                     </li>
                 </ol>
             </nav>
@@ -50,29 +50,25 @@
 
 <div class="block block-rounded">
     <div class="block-content block-content-full">
-        <div class="table-responsive">
+        <div class="col-12">
             <table id="example"  class="table table-sm table-striped table-bordered fs-sm">
                 <thead>
                 <th>#</th>
-                <th> Academic Semester </th>
                 <th> Stage </th>
-                <th> Semester </th>
                 <th> Action </th>
                 </thead>
                 <tbody>
                     @php
                         $i = 0;
                     @endphp
-                    @foreach($exam_marks as $mark)
-                    <tr>
-                        <td> {{ ++$i }} </td>
-                        <td>{{$mark->academic_semester}}</td>
-                        <td>{{$mark->stage}}</td>
-                        <td>{{$mark->semester}}</td>
-                        <td>
-                            <a class="btn btn-sm btn-alt-secondary" href="{{route('student.viewexammarks')}}"> View </a>
-                        </td>
-                    </tr>
+                    @foreach($results as $stage => $marks)
+                       <tr>
+                            <td> {{ ++$i }} </td>
+                            <td>{{ $stage }}</td>
+                            <td>
+                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('student.viewexammarks', base64_encode(substr($stage, 0, 11))) }}"> View </a>
+                            </td>
+                       </tr>
                     @endforeach
                 </tbody>
             </table>
