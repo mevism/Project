@@ -2,128 +2,76 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="08195653-74ee-4c59-8ef1-51788d10d2d9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BSCE001J2023-1689408599.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BSCE002J2023-1689408698.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BSCE003J2023-1689408816.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BSCE004J2023-1689408934.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Thumbnails/BSCE005J2023-1689409056.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/exams/yearlyExams.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/cache/data/56/33/56336218bb411e26913aaa9777c43f90c1987de9" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/01c8f4e88e483a93187c759a7de763de493d7ac1.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/03d36b370458bf262375fc1b5562ae8b5f04bf79.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/056937aa71e371c56d42d8849e8205bb657d9a27.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/exams/viewExamResults.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/supSpecial/index.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/Modules/Examination/Database/Migrations/2023_07_21_195218_create_school_exam_workflows_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/Modules/Examination/Entities/SchoolExamWorkflow.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/myCalendar.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/tEm5rOVNvMmLhg7g9koLMcnVpaop7YzxFmVjTjYA" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/0650c6d3ce1a1f024d4f68e6ab2273a4ad436417.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/0826f675164271c6db09d585d440efce70a695b3.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/0b6efba95b72d1bd73755105cfc5add7b4ae5f6d.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/0b95f6126372f643d20a7caace4f911adbab0254.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/0bad22adf17929c9d25e00051ed16d33efb6eeae.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/0cfb7e7239cbe3030b2cb9b39fccc69907e9e49b.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/0eea2d540fe1103f2ecfbd43455925c6733a230a.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/105e6516f585c655d89c28d027abd6c9c487b531.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/1061072e5df5b6c2261bfe53dc4d41ef92ff8eb7.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/12591c0edc1067060b202e52ce10ae2b42336892.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/159adeaadf104ebd8f204c1ed79f6bd255c777c6.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/17b1c1a0518d6cc854efa0e58944fd1837108ee2.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/1852d6d2fff7fca7847a6d81e2b452c419820c2f.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/187bc772fa6b338d10cdd727522eb05ed433d3bc.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/18d525abddd05e8edb65165c77837e6127147b7c.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/18d6f0eca2478c65ce8a2ed53862416f59321116.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/1b91eda14137e887b10f284eefec1ffbe40ce015.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/1d6891493c95687ce237976b1669aca95705a810.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/25c68cdd55e32b6dffd1b798bcb22ba9410fe944.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/268a077143185d37579ce83de4842cb0921fa920.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/27292ded85ae13c492b4636a8ca3ecb695c88e86.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/28f5c3a7ed228529618fe474356456c03b1b491e.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/291fb261cb9592d9d24c3e5ddf59d4ae120ce496.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/2acbb4d7ec64c4a266ac1d48d3ed07926c3226f3.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/2bb1c2e4183e951d13bcc4ae222d83edbaca072b.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/2cdf119037c5ffb873dd1717fe55c41dd98972fa.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/308ce373905897bda02dd7de481a8f0836058987.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/3bedb63d1eba357f5df9f59e7d10cc228f901bbd.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/3f390c43dc26b9b5adad5e3e4006ee90ce9c9eb4.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/4255f7ddb82d93bcdcab13079e62e89654339aa2.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/45eba842c6130906e843b5d317f08065cc42fbe9.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/47dc17367e0e598fdbd7c69765231e6b74274fd4.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/4d03fc2e61766a4f67adf7911c688a60fd6f7a8a.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/5022c5c6998b539413bc23b451566897a8f48084.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/51cab6aca7278994a615f76e9ce60639fa0957c4.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/5cdf283321f3e7766c7fd764cc11251cc8c89f4d.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/5ee964b5378a2b0b66b8ca220a1dcf36b52af33c.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/5f9c8e734e8787856c81215df829b742114a1195.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/62355128d8f633e091d63f0e4fb3e6d88fa495a0.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/64492a0cf20a52b9d39e9378f28563083c4edccd.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/69790c251a45f436ee170be025d6f18746f1ad50.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/6f81b79797e36767b817ee3f3afa85407244b1c3.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/71e6d6ef46e74d1db613fba18fc9055d663cede0.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/7641399be1f7a00f1228fb86457dfc25e17613aa.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/79bcc3e05381f0135478d621786103c42f0786b3.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/7f8e4efd44a171d354ca53096b838d98249cc612.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/80e7e407218880025b54a7fa03a8b056033c31db.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/8217a60d29f8cc06a5e602aee4a9d2e4c5c0e3a6.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/78c1050a66d15687c4bbf6cdb7bce987b280a88a.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/83b2ace1c1a9dbe83e8533d06c9a4c97b7988d26.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/84b3a8172a210dfeb79814b8f95e5ab873ef8981.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/87daa1ff2291beeaf804aa7a58b5ccef9ef756e8.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/8b16d5fad29b7dd847c7ea5444197f5c00c590af.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/8d8b15972f5cd916f39974f151f750b50f60f076.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/9550e85cb7308daac075821931a285b9850b52af.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/a63c22ef38ab03dd2b75e0a789e7b4c1d8f7d470.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/aaa0e7e12458b4321a0dbee57376b442cb00c3d2.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/ac6ca0649654a33b5278a61c102e0abe1bf0417b.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/b350446da993b938f6db198430e71a0c552c9d84.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/90b63fd237d09da5c686eaf64280b2628c5cd3bb.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/b494aa268e655e127d1d8ecb89f7485e964acd74.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/b53e55544c46dbb72ed05a879e4bf1d9f17c4bb6.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/b6be467a4b31e4dd2475f204b0f4b4a7cd4149b3.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/baf4bfc229c7e052d8956e60af4ca635439c102a.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/c0797ef360198965e8a339722bf1163f79606012.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/c13960bdba41825083123b3157e069871d49d1e0.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/c506d08c63687157a858c45223e529901d7d1eea.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/c86ab5ba561b7e3c26060e266b72cd62c8ffb65c.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/cba0f1ff4b534bd9597f00f630a892c919d32a53.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/cc5547a67d5c8780b557830557b1ce128841c6d8.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/ccf69301b5b6a2f9d38285df8ff58a4a48013943.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/d4eafea11d95cb581de036662e24eb1fff2baba6.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/d6360d1af1c93308b9f5264fab0d1bf97fad279f.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/d8c67ba07477e7f8d94d961e7ee8824d0efd9ac1.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/dae3df0c9bbbb8c37490f5c79b367bfc6ebefe72.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/e315e898cb03c3e4bb538cbea44fc84288f7da48.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/e3df0a6f5e8eb292dac1439c5c9b4160e93e97af.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/e5ef54c21f86eefad10e23f2a6196c2128864c17.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/e6a31f06e96a019a4899e4b3961c0a9f07fb5142.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/ed892f48135fbed1da7a90e597bed300a0071f5b.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/ed9733fa51c9fbd8c6747f5926ce9d13d2bd6ebc.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/f40cec2e882d343efa708e49013f386396f28209.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/f4dbdc4acc9bb58ad0f9bbf27ff632d231bebe4d.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/d7ebb35a977a4623eb21a485d639b9af5cf0d697.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/f78d60bd990aeda37920f656a31ec5de3be3e134.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/smis.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/smis.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Entities/VerifyEmail.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Entities/VerifyEmail.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/updatePage.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Resources/views/applicant/updatePage.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/.env" beforeDir="false" afterPath="$PROJECT_DIR$/application/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Http/Controllers/CODController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/exams/addExam.blade.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/exams/editExam.blade.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/exams/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/exams/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/layouts/backend.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/results/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/views/080763838633721a09729224f0d2e4195451e2f2.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Resources/views/results/semesterResults.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Resources/views/exams/semesterResults.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Routes/web.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Http/Controllers/DeanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Http/Controllers/DeanController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Database/Migrations/2023_03_17_141730_create_exam_marks_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Database/Migrations/2023_03_17_141730_create_exam_marks_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/exams/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/exams/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/exams/viewYearlyExams.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/exams/viewYearlyExams.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/exams/yearlyExams.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/exams/yearlyExams.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Resources/views/layouts/backend.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Dean/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Dean/Routes/web.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Entities/ExamMarks.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Entities/ExamMarks.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Entities/ExamWorkflow.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Entities/ExamWorkflow.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Entities/ModeratedResults.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Entities/ModeratedResults.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Http/Controllers/ExaminationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Http/Controllers/ExaminationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/exams/previewExam.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/exams/previewExam.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/exams/processExam.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/exams/processExam.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/exams/semesterExams.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/exams/semesterExams.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/semester/registration.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/semester/registration.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Examination/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Http/Controllers/LecturerController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Http/Controllers/LecturerController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/examination/editExam.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/views/22bdae5ef5f3667da5eb4b0425f64b353e39e1e2.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/examination/exam.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/examination/exam.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/examination/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/examination/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/examination/semesterExams.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/examination/semesterExams.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/profile/myprofile.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Resources/views/profile/myprofile.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Lecturer/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Medical/Resources/views/admissions/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Medical/Resources/views/admissions/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/admissions/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/admissions/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/workload/schoolWorkload.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/workload/schoolWorkload.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Entities/StudentCourse.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Entities/StudentCourse.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Http/Controllers/CoursesController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/marks/departmentalExamMarks.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/marks/departmentalExamMarks.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/marks/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/marks/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/marks/schoolExamMarks.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/marks/schoolExamMarks.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/marks/semesterExamMarks.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/marks/semesterExamMarks.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Routes/web.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Http/Controllers/StudentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Workload/Http/Controllers/WorkloadController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Workload/Http/Controllers/WorkloadController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/f9rs3aZ0VD1vjxaAjThVFLCDukcPGCNfq7safW7W" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/courses/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/examination/examresults.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/examination/examresults.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/examination/viewexammarks.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/examination/viewexammarks.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/layouts/backend.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Resources/views/student/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Resources/views/student/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/app/Http/Controllers/User/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Http/Controllers/User/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Http/Kernel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/app/Http/Middleware/Student/Student.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Http/Middleware/Student/Student.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/application/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/config/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/config/database.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/CUTV8811HPnGxxTOu4pMyROXqQXKTcuxqZ26tpAH" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/ESOEUt4fzMm1e9FuOSgmDVJC9hflWvisDkHNLlM0" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,7 +151,6 @@
       <path value="$PROJECT_DIR$/application/vendor/mockery/mockery" />
       <path value="$PROJECT_DIR$/application/vendor/monolog/monolog" />
       <path value="$PROJECT_DIR$/application/vendor/myclabs/deep-copy" />
-      <path value="$PROJECT_DIR$/application/vendor/myclabs/php-enum" />
       <path value="$PROJECT_DIR$/application/vendor/phar-io/manifest" />
       <path value="$PROJECT_DIR$/application/vendor/phar-io/version" />
       <path value="$PROJECT_DIR$/application/vendor/phpunit/php-file-iterator" />
@@ -292,6 +239,8 @@
       <path value="$PROJECT_DIR$/application/vendor/dasprid/enum" />
       <path value="$PROJECT_DIR$/application/vendor/laravel/framework" />
       <path value="$PROJECT_DIR$/application/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/polyfill-php83" />
+      <path value="$PROJECT_DIR$/application/vendor/league/flysystem-local" />
     </include_path>
   </component>
   <component name="ProjectId" id="2Mlcghr9kNM3MaOnSorYHp0CwuY" />
@@ -317,6 +266,7 @@
       <recent name="C:\xampp\htdocs\smis\application\Modules\Administrator\Resources\views" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\smis\application\Modules\COD\Resources\views\exams" />
       <recent name="C:\xampp\htdocs\smis\application\app\Http" />
     </key>
   </component>
@@ -396,7 +346,11 @@
       <workItem from="1689055924308" duration="35711000" />
       <workItem from="1689150515287" duration="10527000" />
       <workItem from="1689233355058" duration="104330000" />
-      <workItem from="1689583535930" duration="14434000" />
+      <workItem from="1689583535930" duration="36886000" />
+      <workItem from="1689750658509" duration="41061000" />
+      <workItem from="1689921244107" duration="22135000" />
+      <workItem from="1689951953541" duration="16424000" />
+      <workItem from="1690011479720" duration="11834000" />
     </task>
     <servers />
   </component>
@@ -416,5 +370,16 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/application/Modules/Student/Resources/views/student/index.blade.php</url>
+          <line>28</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

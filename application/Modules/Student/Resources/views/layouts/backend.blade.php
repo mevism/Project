@@ -20,7 +20,17 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.3.4/css/searchBuilder.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.1.2/css/dataTables.dateTime.min.css">
 
-  <link rel="shortcut icon" href="{{ asset('media/favicons/favicon.png') }}">
+    <style>
+        .tum-logo {
+            position: absolute;
+            bottom: 8% !important;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+    </style>
+
+    <link rel="shortcut icon" href="{{ asset('media/favicons/favicon.png') }}">
   <link rel="icon" sizes="192x192" type="image/png" href="{{ asset('media/favicons/favicon-192x192.png') }}">
   <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('media/favicons/apple-touch-icon-180x180.png') }}">
 
@@ -184,13 +194,13 @@
           <ul class="nav-main">
             <li class="nav-main-item">
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('student') }}">
-                <i class="nav-main-link-icon si si-cursor"></i>
+                <i class="nav-main-link-icon fas fa-user-graduate"></i>
                 <span class="nav-main-link-name">Student </span>
               </a>
             </li>
             <li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                <i class="nav-main-link-icon si si-bulb"></i>
+                <i class="nav-main-link-icon fas fa-graduation-cap"></i>
                 <span class="nav-main-link-name">Courses</span>
               </a>
                 <ul class="nav-main-submenu">
@@ -214,8 +224,8 @@
 
               <li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">
                   <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                      <i class="nav-main-link-icon si si-bulb"></i>
-                      <span class="nav-main-link-name">Academics</span>
+                      <i class="nav-main-link-icon fas fa-chart-line"></i>
+                      <span class="nav-main-link-name">Student Progression</span>
                   </a>
                   <ul class="nav-main-submenu">
                       <li class="nav-main-item">
@@ -244,7 +254,7 @@
                   <ul class="nav-main-submenu">
                       <li class="nav-main-item">
                           <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="#">
-                              <span class="nav-main-link-name">My Status</span>
+                              <span class="nav-main-link-name">Retakes</span>
 {{--                              {{ route('student.discontinuationstatus') }}--}}
                           </a>
                       </li>
@@ -253,7 +263,7 @@
 
               <li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">
                   <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                      <i class="nav-main-link-icon si si-bulb"></i>
+                      <i class="nav-main-link-icon fas fa-pen"></i>
                       <span class="nav-main-link-name">Examination</span>
                   </a>
                   <ul class="nav-main-submenu">
@@ -267,7 +277,7 @@
                   <ul class="nav-main-submenu">
                       <li class="nav-main-item">
                           <a class="nav-main-link{{ request()->is('pages/datatables') ? ' active' : '' }}" href="#">
-                              <span class="nav-main-link-name">Apply Retakes</span>
+                              <span class="nav-main-link-name">Apply Sups/Specials</span>
 {{--                              {{ route('student.retakes') }}--}}
                           </a>
                       </li>
@@ -276,7 +286,7 @@
 
               <li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">
                   <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                      <i class="nav-main-link-icon si si-bulb"></i>
+                      <i class="nav-main-link-icon fas fa-credit-card"></i>
                       <span class="nav-main-link-name">Finance</span>
                   </a>
                   <ul class="nav-main-submenu">
@@ -289,10 +299,20 @@
               </li>
 
               <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('student.myprofile') }}">
-                      <i class="nav-main-link-icon si si-cursor"></i>
+{{--                  <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('student.myprofile') }}">--}}
+                  <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="#">
+                      <i class="nav-main-link-icon fas fa-user-gear"></i>
                       <span class="nav-main-link-name">My Profile </span>
                   </a>
+              </li>
+              <li class="nav-main-item">
+                  <a class="nav-main-link" href="#">
+                      <span class="nav-main-link-name">&nbsp;</span>
+                  </a>
+                  <div class="tum-logo">
+                      <img class="mb-2" src="{{ asset('media/tum-logo/tum-logo.png') }}" alt="TUM Logo" style="height: 90px; width: 120px;"> <br>
+                      <img src="{{ asset('media/tum-logo/iso.png') }}" alt="TUM Logo" style="height: 40px; width: 150px;">
+                  </div>
               </li>
           </ul>
         </div>

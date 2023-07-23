@@ -192,11 +192,14 @@ Route::prefix('courses')->group(function() {
 
 
     Route::get('/exam-marks-yearly', [CoursesController::class, 'yearlyExamMarks'])->name('courses.yearlyExamMarks');
-    Route::get('/school-exam-marks/{sem}/{year}', [CoursesController::class, 'schoolExamMarks'])->name('courses.schoolExamMarks');
-    Route::get('/semester-exam-marks/{year}', [CoursesController::class, 'semesterExamMarks'])->name('courses.semesterExamMarks');
-    Route::get('/approve-exam-marks/{id}/{year}/{sem}', [CoursesController::class, 'approveExamMarks'])->name('courses.approveExamMarks');
-    Route::post('/decline-exam-marks/{id}/{year}/{sem}', [CoursesController::class, 'declineExamMarks'])->name('courses.declineExamMarks');
-    Route::get('/download-exam-marks/{id}/{year}/{sem}', [CoursesController::class, 'downloadExamMarks'])->name('courses.downloadExamMarks');
+    Route::get('/school-exam-marks/{id}', [CoursesController::class, 'schoolExamMarks'])->name('courses.schoolExamMarks');
+    Route::get('/semester-exam-marks/{id}', [CoursesController::class, 'semesterExamMarks'])->name('courses.semesterExamMarks');
+    Route::get('/view-semester-exam-marks/{id}', [CoursesController::class, 'viewExamMarks'])->name('courses.viewExamMarks');
+    Route::get('/approve-exam-marks/{id}', [CoursesController::class, 'approveExamMarks'])->name('courses.approveExamMarks');
+    Route::post('/decline-exam-marks/{id}', [CoursesController::class, 'declineExamMarks'])->name('courses.declineExamMarks');
+    Route::get('/download-exam-marks/{id}', [CoursesController::class, 'downloadExamMarks'])->name('courses.downloadExamMarks');
+    Route::get('/reverse-exam-marks-to-dean/{id}', [CoursesController::class, 'revertExamMarks'])->name('courses.revertExamMarks');
+    Route::get('/submit-exam-marks-to-dean/{id}', [CoursesController::class, 'submitExamMarks'])->name('courses.submitExamMarks');
 
 });
 

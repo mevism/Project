@@ -14,6 +14,7 @@ use Modules\COD\Entities\AcademicLeavesView;
 use Modules\COD\Entities\ApplicationsView;
 use Modules\COD\Entities\ReadmissionsView;
 use Modules\Dean\Entities\DeanLog;
+use Modules\Examination\Entities\ModeratedResults;
 use Modules\Registrar\Entities\ACADEMICDEPARTMENTS;
 use Modules\Registrar\Entities\Division;
 use Modules\Student\Entities\CourseTransfersView;
@@ -50,50 +51,28 @@ use Modules\Workload\Entities\ApproveWorkload;
 
 class DeanController extends Controller{
 
-    public function yearlyExams()
-    {
-        $academicYears = ExamMarks::latest()->get()->groupBy('academic_year');
-
+    public function yearlyExams(){
+        $school_id = auth()->guard('user')->user()->employmentDepartment()->first()->schools->first()->school_id;
+        $deptIDs = ACADEMICDEPARTMENTS::where('school_id', $school_id)->pluck('department_id');
+        $academicYears = ExamWorkflow::whereIn('department_id', $deptIDs)->latest()->get()->groupBy('academic_year');
         return view('dean::exams.yearlyExams')->with(['academicYears' => $academicYears]);
     }
 
-    public function viewYearlyExams($year)
-    {
-
-        $hashedYear = Crypt::decrypt($year);
-
-        $semesters = ExamMarks::where('academic_year', $hashedYear)->latest()->get()->groupBy('academic_semester');
-
-        return view('dean::exams.viewYearlyExams')->with(['semesters' => $semesters, 'year' => $hashedYear]);
+    public function viewYearlyExams($id){
+        $academic_year = base64_decode($id);
+        $school_id = auth()->guard('user')->user()->employmentDepartment()->first()->schools->first()->school_id;
+        $deptIDs = ACADEMICDEPARTMENTS::where('school_id', $school_id)->pluck('department_id');
+        $semesters = ExamWorkflow::whereIn('department_id', $deptIDs)->where('academic_year', $academic_year)->latest()->get()->groupBy(['academic_semester', 'department_id']);
+        return view('dean::exams.viewYearlyExams')->with(['semesters' => $semesters, 'year' => $academic_year]);
     }
 
-    public function exams($sem, $year)
-    {
-        $hashedSem = Crypt::decrypt($sem);
-        $hashedYear = Crypt::decrypt($year);
-        $schoolId = auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->id;
-        $departs   =   Department::where('division_id', 1)->get();
-
-        foreach ($departs as $department) {
-
-            if ($department->schools->first()->id == $schoolId) {
-
-                $deptWorkloads[] = $department->id;
-            }
-        }
-        $departments = [];
-
-        foreach ($deptWorkloads as $load) {
-
-            $departments[] = ExamWorkflow::where('department_id', $load)
-                ->where('academic_year', $hashedYear)
-                ->where('academic_semester', $hashedSem)
-                ->latest()
-                ->get()
-                ->groupBy('department_id');
-        }
-
-        return view('dean::exams.index')->with(['departments' => $departments, 'sem' => $hashedSem, 'year' => $hashedYear]);
+    public function exams($id){
+        $approval = ExamWorkflow::where('exam_approval_id', $id)->first();
+        $results =  ModeratedResults::where('exam_approval_id', $id)
+            ->orderBy('class_code', 'asc')
+            ->get()
+            ->groupBy(['class_code', 'unit_code', 'student_number']);
+        return view('dean::exams.index')->with(['results' => $results, 'approval' => $approval]);
     }
 
     public function viewClasses( $id, $sem, $year)
@@ -151,62 +130,38 @@ class DeanController extends Controller{
     }
 
     public function approveExamMarks($id){
-
-      $hashedId = Crypt::decrypt($id);
-
-      $updateApprovals = ExamWorkflow::where('id', $hashedId)->first();
-        $updateApprovals->dean_status = 1;
-        $updateApprovals->dean_remarks = 'Exam Marks Approved';
-        $updateApprovals->save();
-
-
+        ExamWorkflow::where('exam_approval_id', $id)->update([
+            'dean_status' => 1,
+            'dean_remarks' => 'Exam Marks Approved',
+        ]);
       return redirect()->back()->with('success', 'Exam Marks Approved Successfully');
     }
 
     public function submitExamMarks($id){
-
-        $hashedId = Crypt::decrypt($id);
-
-            $updateApprovals = ExamWorkflow::where('id', $hashedId)->first();
-            $updateApprovals->registrar_status = 0;
-            $updateApprovals->save();
-
-
+        ExamWorkflow::where('exam_approval_id', $id)->update([
+            'registrar_status' => 0
+            ]);
         return redirect()->back()->with('success', 'Exam Marks submitted Successfully');
       }
 
     public function declineExams(Request $request, $id){
-
-        $hashedId = Crypt::decrypt($id);
-
-        $updateApprovals = ExamWorkflow::where('id', $hashedId)->first();
-            $updateApprovals->dean_status = 2;
-            $updateApprovals->dean_remarks = $request->remarks;
-            $updateApprovals->save();
-
-
+        ExamWorkflow::where('exam_approval_id', $id)->update([
+            'dean_status' => 2,
+            'dean_remarks' => $request->remarks
+        ]);
         return redirect()->back()->with('success', 'Exam Marks Declined');
       }
 
-      public function revertExamMarks($id)
-    {
-
-        $hashedId = Crypt::decrypt($id);
-
-        $revert        =      ExamWorkflow::find($hashedId);
-        $revert->dean_status = 2;
-        $revert->save();
-
-        $examMarks = ExamMarks::where('workflow_id', $hashedId)->get();
-
-        foreach ($examMarks  as  $exam) {
-
-            $exam  =  ExamMarks::find($exam->id);
-            $exam->status  =  2;
-            $exam->save();
-        }
-
+      public function revertExamMarks($id){
+          ExamWorkflow::where('exam_approval_id', $id)->update([
+              'cod_status' => 3,
+          ]);
         return redirect()->back()->with('success', 'Exam Marks Reverted to COD Successfully.');
+    }
+
+    public function publishResults($id){
+        ModeratedResults::where('exam_approval_id', $id)->update(['status' => 1]);
+        return redirect()->back()->with('success', 'Exam Results Published Successfully.');
     }
 
     public function yearlyWorkload(){

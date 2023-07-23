@@ -58,7 +58,6 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/mockery/mockery" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/monolog/monolog" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/myclabs/deep-copy" />
-      <excludeFolder url="file://$MODULE_DIR$/application/vendor/myclabs/php-enum" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/phar-io/manifest" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/phar-io/version" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/phpunit/php-file-iterator" />
@@ -147,6 +146,8 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/dasprid/enum" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/laravel/framework" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/guzzlehttp/psr7" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/polyfill-php83" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/league/flysystem-local" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -166,5 +167,8 @@
     <orderEntry type="library" name="notify" level="application" />
     <orderEntry type="library" name="bootstrap-notify" level="application" />
     <orderEntry type="library" name="toastr" level="application" />
+    <orderEntry type="library" name="dataTables.dateTime" level="application" />
+    <orderEntry type="library" name="searchBuilder.bootstrap5" level="application" />
+    <orderEntry type="library" name="toastr.js" level="application" />
   </component>
 </module>

@@ -20,6 +20,7 @@ use Modules\COD\Entities\Nominalroll;
 use Modules\COD\Entities\SemesterUnit;
 use Modules\Examination\Entities\Exam;
 use Modules\Examination\Entities\ExamMarks;
+use Modules\Examination\Entities\ModeratedResults;
 use Modules\Finance\Entities\StudentInvoice;
 use Modules\Registrar\Entities\CalenderOfEvents;
 use Modules\Registrar\Entities\Classes;
@@ -167,7 +168,6 @@ class StudentController extends Controller
         }
 
         return view('student::courses.coursetransfer')->with(['departments' => $departments, 'stage' => $stage, 'event' => $event, 'academic_year' => $academicYear, 'intake' => $sem_date->intake_id, 'registration' => $registration]);
-
     }
 
     public function getDeptCourses(Request $request){
@@ -478,8 +478,8 @@ class StudentController extends Controller
                         ->latest()
                         ->first();
 
-//       $today = Carbon::now();
-       $today = '2023-09-23';
+       $today = Carbon::now();
+//       $today = '2023-09-23';
 
       $intake = Intake::where('intake_from', '<=', $today)->where('intake_to', '>=', $today)->latest()->first();
       $semester = Carbon::parse($intake->intake_from)->format('M').'/'.Carbon::parse($intake->intake_to)->format('M');
@@ -492,8 +492,8 @@ class StudentController extends Controller
     }
 
     public function storeReadmissionRequest($id){
-//        $today = Carbon::now()->format('Y-m-d');
-        $today = '2023-09-23';
+        $today = Carbon::now()->format('Y-m-d');
+//        $today = '2023-09-23';
         $intake = Intake::where('intake_from', '<=', $today)
                             ->where('intake_to', '>=', $today)
                             ->latest()
@@ -1002,29 +1002,27 @@ class StudentController extends Controller
     }
 
     public function viewExamResults(){
-
-
-       // $results = ExamResults::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
-
-        $exam_marks = ExamMarks::where('reg_number',Auth::guard('student')->user()->loggedStudent->reg_number)
-          ->orderBy('academic_semester','asc')
-          ->groupBy('academic_semester')
-          ->get();
-
-
-
-        return view('student::examination.examresults',['exam_marks' => $exam_marks]);
+        $examResults = ModeratedResults::where('student_number', \auth()->guard('student')->user()->enrolledCourse->student_number)
+            ->where('status', 1)
+            ->get()
+            ->groupBy('attempt');
+        return view('student::examination.examresults',['results' => $examResults]);
     }
 
-    public function viewExamMarks(){
+    public function viewExamMarks($id){
+        $stage = base64_decode($id);
+        $examResults = ModeratedResults::where('student_number', \auth()->guard('student')->user()->enrolledCourse->student_number)
+            ->where('attempt', $stage)
+            ->where('status', 1)
+            ->orderBy('unit_code', 'asc')
+            ->get();
+        return view('student::examination.viewexammarks',['results' => $examResults, 'stage' => $stage = base64_decode($id)]);
+    }
 
-
-        $exam_marks = ExamMarks::where('reg_number',Auth::guard('student')->user()->loggedStudent->reg_number)
-        ->orderBy('unit_code','asc')
-       //->groupBy('academic_semester')
-        ->get();
-
-        return view('student::examination.viewexammarks',['exam_marks' => $exam_marks]);
-        //return ExamMarks::find(1)->unit;
+    public function myCalender(){
+        $class = StudentView::where('student_number', \auth()->guard('student')->user()->enrolledCourse->student_number)
+                ->pluck('current_class');
+        $patterns = ClassPattern::where('class_code', $class)->orderBy('semester', 'asc')->get();
+        return view('student::courses.myCalendar')->with(['patterns' => $patterns]);
     }
 }

@@ -16,6 +16,7 @@ return [
     */
 
     'default' => env('DB_CONNECTION', 'mysql'),
+//    'default' => env('DB_CONNECTION', 'sqlsvr'),
 
     /*
     |--------------------------------------------------------------------------
@@ -81,7 +82,7 @@ return [
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST1', 'localhost'),
+            'host' => env('DB_HOST1', '41.89.128.66'),
             'port' => env('DB_PORT1', '1433'),
             'database' => env('DB_DATABASE1', 'forge'),
             'username' => env('DB_USERNAME1', 'forge'),
