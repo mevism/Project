@@ -29,7 +29,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
                     <h6 class="h6 fw-bold mb-0">
-                        SEMESTER SPECIAL/SUPPLEMENTARY UNITS
+                        ADD SEMESTER SPECIAL/SUPPLEMENTARY UNITS
                     </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -38,7 +38,7 @@
                             <a class="link-fx" href="javascript:void(0)">DEPARTMENT</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            SUP/SPECIALS
+                            ADD SUP/SPECIALS
                         </li>
                     </ol>
                 </nav>
@@ -50,32 +50,33 @@
 
         <div class="block-content block-content-full">
             <div class="row">
-                <div class="col-12">
-                    <div class="d-flex justify-content-end">
-                        <a class="btn btn-sm btn-alt-info m-2" href="{{ route('department.addSupSpecials') }}"><i class="fa fa-plus-circle"></i> Add series</a>
-                    </div>
-                    <table id="example" class="table table-borderless table-sm table-striped fs-sm">
-                        <thead>
-                        <th>#</th>
-                        <th>Academic Year</th>
-                        <th>Academic Semester</th>
-                        <th>Action</th>
-                        </thead>
-                        <tbody>
-                        @foreach($units as $year => $yearUnits)
-                            @foreach($yearUnits as $semester => $semesterUnits)
-                                <tr>
-                                    <td> {{ $loop->iteration }} </td>
-                                    <td> {{ $year }} </td>
-                                    <td> {{ $semester }} </td>
-                                    <td>
-                                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewSupSpecial', base64_encode(substr($year.':'.$semester, 0 , 20))) }}">View </a>
-                                    </td>
-                                </tr>
+                <div class="d-flex justify-content-center">
+                    <div class="col-8">
+                        <form method="POST" action="{{ route('department.storeSupSpecial') }}">
+                            @csrf
+                            <div class="row form-inline">
+                                <div class="mb-3 form-floating d-inline-block col-md-6">
+                                    <input type="text" name="academic" value="{{ $academic }}" class="form-control" readonly placeholder="academic year">
+                                    <label class="mx-3">ACADEMIC YEAR</label>
+                                </div>
+                                <div class="mb-3 form-floating d-inline-block col-md-6">
+                                    <input type="text" name="semester" value="{{ $semester }}" class="form-control text-uppercase" readonly placeholder="academic year">
+                                    <label class="mx-3">ACADEMIC SEMESTER</label>
+                                </div>
+                            </div>
+                            @foreach($units as $unitCode => $unit)
+                                <div class="mb-3">
+                                    {{ $loop->iteration }}
+                                    <input type="checkbox" name="units[]" value="{{ $unitCode }}" class="form-check-inline" checked placeholder="academic year">
+                                    <label>{{ $unitCode }} {{ \Modules\COD\Entities\Unit::where('unit_code', $unitCode)->first()->unit_name }}</label>
+                                </div>
                             @endforeach
-                        @endforeach
-                        </tbody>
-                    </table>
+                            <hr>
+                            <div class="d-flex justify-content-center mt-2">
+                                <button type="submit" class="btn btn-md btn-outline-success col-7"> Submit</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

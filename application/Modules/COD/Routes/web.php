@@ -122,4 +122,8 @@ Route::prefix('department')->middleware(['web', 'auth:user', 'is_cod'])->group( 
     Route::any('/submit-syllabus-units', [CODController::class, 'submitSyllabusUnits'])->name('department.submitSyllabusUnits');
     Route::get('/complete-course-syllabus/{course}/{version}', [CODController::class, 'completeSyllabus'])->name('department.completeCourseSyllabus');
     Route::get('/supplementary-specials', [CODController::class, 'supSpecials'])->name('department.supSpecials');
+    Route::get('/add-supplementary-specials', [CODController::class, 'addSupSpecials'])->name('department.addSupSpecials');
+    Route::get('/view-supplementary-specials/{id}', [CODController::class, 'viewSupSpecial'])->name('department.viewSupSpecial');
+    Route::get('/delete-supplementary-specials/{id}', [CODController::class, 'deleteSupSpecialUnit'])->name('department.deleteSupSpecialUnit');
+    Route::post('/store-supplementary-specials', [CODController::class, 'storeSupSpecials'])->name('department.storeSupSpecial');
 });

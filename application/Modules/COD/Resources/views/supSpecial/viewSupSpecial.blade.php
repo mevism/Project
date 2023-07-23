@@ -29,7 +29,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
                     <h6 class="h6 fw-bold mb-0">
-                        SEMESTER SPECIAL/SUPPLEMENTARY UNITS
+                       {{ $semester }} {{ $year }} SEMESTER SPECIAL/SUPPLEMENTARY UNITS
                     </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
@@ -51,28 +51,23 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-12">
-                    <div class="d-flex justify-content-end">
-                        <a class="btn btn-sm btn-alt-info m-2" href="{{ route('department.addSupSpecials') }}"><i class="fa fa-plus-circle"></i> Add series</a>
-                    </div>
                     <table id="example" class="table table-borderless table-sm table-striped fs-sm">
                         <thead>
                         <th>#</th>
-                        <th>Academic Year</th>
-                        <th>Academic Semester</th>
+                        <th>Unit Code</th>
+                        <th>Unit Name</th>
                         <th>Action</th>
                         </thead>
                         <tbody>
-                        @foreach($units as $year => $yearUnits)
-                            @foreach($yearUnits as $semester => $semesterUnits)
-                                <tr>
-                                    <td> {{ $loop->iteration }} </td>
-                                    <td> {{ $year }} </td>
-                                    <td> {{ $semester }} </td>
-                                    <td>
-                                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewSupSpecial', base64_encode(substr($year.':'.$semester, 0 , 20))) }}">View </a>
-                                    </td>
-                                </tr>
-                            @endforeach
+                        @foreach($units as $unit)
+                            <tr>
+                                <td> {{ $loop->iteration }} </td>
+                                <td> {{ $unit->unit_code }} </td>
+                                <td> {{ $unit->SupSpecialUnit->unit_name }} </td>
+                                <td>
+                                    <a class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to remove this unit from this schedule?')" href="{{ route('department.deleteSupSpecialUnit', $unit->sup_special_id) }}">Remove </a>
+                                </td>
+                            </tr>
                         @endforeach
                         </tbody>
                     </table>

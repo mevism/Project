@@ -14,6 +14,7 @@ use Modules\COD\Entities\CourseOnOfferView;
 use Modules\COD\Entities\CourseOptions;
 use Modules\COD\Entities\CourseSyllabus;
 use Modules\COD\Entities\ReadmissionsView;
+use Modules\COD\Entities\SupplementarySpecial;
 use Modules\COD\Entities\SyllabusVersion;
 use Modules\COD\Entities\Unit;
 use Modules\Examination\Entities\ModeratedResults;
@@ -21,6 +22,7 @@ use Modules\Lecturer\Entities\LecturerQualification;
 use Modules\Lecturer\Entities\QualificationRemarks;
 use Modules\Lecturer\Entities\TeachingArea;
 use Modules\Lecturer\Entities\TeachingAreaRemarks;
+use Modules\Registrar\Entities\AcademicYear;
 use Modules\Student\Entities\StudentCourse;
 use Modules\Student\Entities\STUDENTCOURSEVIEW;
 use Modules\Student\Entities\StudentView;
@@ -542,7 +544,7 @@ class CODController extends Controller
 
                     $deptClass = Classes::where('name', $classEx)->exists();
                     if ($deptClass == null){
-                        $class = new Classes;                        
+                        $class = new Classes;
                         $class->class_id = $classId->generateId();
                         $class->name = $classEx;
                         $class->attendance_id = $code->attendance_code;
@@ -696,7 +698,7 @@ class CODController extends Controller
     }
 
     public function classList($id){
-         
+
         $class = Classes::where('class_id', $id)->first();
 
         $classList = StudentView::where('current_class', $class->name)
@@ -1468,7 +1470,55 @@ class CODController extends Controller
     }
 
     public function supSpecials(){
-        $sups = [];
-        return view('cod::supSpecial.index')->with(['sups' => $sups]);
+        $units = SupplementarySpecial::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+            ->get()
+            ->groupBY(['academic_year', 'academic_semester']);
+        return view('cod::supSpecial.index')->with(['units' => $units]);
+    }
+
+    public function addSupSpecials(){
+//        $today = Carbon::now();
+        $today = '2023-09-22';
+        $intake = Intake::where('intake_from', '<=', $today)->where('intake_to', '>=', $today)->first();
+        $year = AcademicYear::where('year_id', $intake->academic_year_id)->first();
+        $semester = Carbon::parse($intake->intake_from)->format('M').'/'.Carbon::parse($intake->intake_to)->format('M');
+        $academic = Carbon::parse($year->year_from)->format('Y').'/'.Carbon::parse($year->year_end)->format('Y');
+        $units = ModeratedResults::where(DB::raw('total_cat + total_exam'), '<', 45)->orWhere('total_exam', 'ABSENT')->get()->groupBy('unit_code');
+        return view('cod::supSpecial.addSupSpecial')->with(['semester' => $semester, 'academic' => $academic, 'units' => $units]);
+    }
+
+    public function storeSupSpecials(Request $request){
+        $request->validate([
+            'units' => 'required|array',
+            'semester' => 'required|string',
+            'academic' => 'required|string',
+        ]);
+        $supID = new CustomIds();
+        foreach ($request->units as $unit){
+            if (!SupplementarySpecial::where('academic_year', $request->academic)->where('academic_semester', $request->semester)->where('unit_code', $unit)->exists()){
+                $supSpecial = new SupplementarySpecial;
+                $supSpecial->sup_special_id = $supID->generateId();
+                $supSpecial->academic_year = $request->academic;
+                $supSpecial->academic_semester = strtoupper($request->semester);
+                $supSpecial->department_id = auth()->guard('user')->user()->employmentDepartment->first()->department_id;
+                $supSpecial->unit_code = $unit;
+                $supSpecial->save();
+            }
+        }
+        return redirect()->route('department.supSpecials')->with('success', 'Supplementary and special units updated successfully');
+    }
+
+    public function viewSupSpecial($id){
+        list($year, $semester) = explode(':', base64_decode($id));
+        $units = SupplementarySpecial::where('academic_year', $year)->where('academic_semester', $semester)
+            ->where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+            ->orderBy('unit_code', 'asc')
+            ->get();
+        return view('cod::supSpecial.viewSupSpecial')->with(['units' => $units, 'year' => $year, 'semester' => $semester]);
+    }
+
+    public function deleteSupSpecialUnit($id){
+        SupplementarySpecial::where('sup_special_id', $id)->delete();
+        return redirect()->back()->with('success', '1 unit was removed from the schedule');
     }
 }
