@@ -14,8 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('readmission_classes', function (Blueprint $table) {
-            $table->string('readmission_class_id ');
+            $table->string('readmission_class_id')->primary();
             $table->string('readmission_id');
+            $table->foreign('readmission_id')->references('readmission_id')->on('readmissions')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('readmission_class');
             $table->string('readmission_year');
             $table->string('readmission_semester');
             $table->string('stage');

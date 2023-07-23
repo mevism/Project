@@ -16,7 +16,8 @@ class StudentLogin extends Authenticatable
 
     protected $table = 'student_logins';
     protected $fillable = [];
-
+    protected $primaryKey = 'student_id';
+    protected $keyType = 'string';
     protected $hidden = [
         'password',
         'remember_token',

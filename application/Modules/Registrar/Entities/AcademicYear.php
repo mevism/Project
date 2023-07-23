@@ -11,6 +11,9 @@ class AcademicYear extends Model
     use HasFactory;
 
     protected $fillable = [];
+    
+    protected $primaryKey = 'year_id';
+    protected $keyType = 'string';
 
     //rlship beteen an intake and academic year
     public function intake(){

@@ -13,7 +13,7 @@ class Staff extends Model
 
     protected $fillable = [];
 
-    protected $table = "STAFFVIEW";
+    protected $table = "staffview";
 
     public function staffRole(){
         return $this->belongsTo(Role::class, 'role_id', 'id');

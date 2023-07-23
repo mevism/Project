@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('academic_leave_approvals', function (Blueprint $table) {
-            $table->id();
-            $table->string('academic_leave_id');
+            $table->string('leave_approval_id')->primary();
+            $table->string('leave_id');
             $table->integer('cod_status');
             $table->mediumText('cod_remarks');
             $table->integer('dean_status')->nullable();

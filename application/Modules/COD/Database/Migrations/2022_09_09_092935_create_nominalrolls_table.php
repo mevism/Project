@@ -14,8 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('nominalrolls', function (Blueprint $table) {
-            $table->string('nominal_id');
+            $table->string('nominal_id')->primary();
             $table->string('student_id');
+            $table->foreign('student_id')->references('student_id')->on('student_contacts')->onUpdate('cascade')->onDelete('cascade');
             $table->string('reg_number');
             $table->string('year_study');
             $table->string('semester_study');

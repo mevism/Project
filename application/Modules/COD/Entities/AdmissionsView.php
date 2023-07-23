@@ -11,7 +11,7 @@ class AdmissionsView extends Model
 {
     use HasFactory;
 
-    protected $table = 'ADMISSIONSVIEW';
+    protected $table = 'admissionsview';
 
     protected $fillable = [];
 

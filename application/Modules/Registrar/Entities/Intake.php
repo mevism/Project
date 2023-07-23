@@ -12,6 +12,9 @@ class Intake extends Model
 
     protected $dates = [ 'intake_from'];
 
+    protected $primaryKey = 'intake_id';
+    protected $keyType = 'string';
+
     protected $fillable = [
         'intake_from', 'intake_to', 'status'
     ];

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('applicant_logins', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('applicant_id');
+            $table->foreign('applicant_id')->references('applicant_id')->on('applicant_contacts')->onUpdate('cascade')->onDelete('cascade');
             $table->string('username');
             $table->string('password');
             $table->tinyInteger('user_status')->default(0);

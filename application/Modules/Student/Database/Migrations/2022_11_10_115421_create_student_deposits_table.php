@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('student_deposits', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('reg_number');
+            $table->string('reg_number');     
             $table->integer('deposit');
             $table->mediumText('description');
             $table->string('invoice_number')->unique();

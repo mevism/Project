@@ -14,13 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('old_student_courses', function (Blueprint $table) {
-            $table->string('student_id');
-            $table->string('student_number');
-            $table->string('reference_number');
-            $table->string('student_type');
-            $table->string('course_id');
+            $table->string('student_id')->primary();
             $table->string('department_id');
             $table->string('intake_id');
+            $table->string('course_id');
+            $table->string('student_number');
+            $table->string('reference_number');
+            $table->string('student_type');            
             $table->string('current_class');
             $table->string('entry_class');
             $table->integer('status')->default(2);

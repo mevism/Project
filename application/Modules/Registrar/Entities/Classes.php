@@ -16,7 +16,8 @@ class Classes extends Model
     use HasFactory, softDeletes;
 
     protected $fillable = [];
-
+    protected $primaryKey = 'class_id';
+    protected $keyType = 'string';
     protected $dates = ['deleted_at'];
 
     public function classCourse(){

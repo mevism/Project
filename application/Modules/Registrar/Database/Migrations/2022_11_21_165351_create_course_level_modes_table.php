@@ -15,10 +15,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('course_level_modes', function (Blueprint $table) {
-            $table->string('course_level_mode_id');
+            $table->string('course_level_mode_id')->primary();
             $table->string('course_id');
-            $table->string('level_id');
-            $table->string('attendance_id');
+            $table->foreign('course_id')->references('course_id')->on('courses')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedBigInteger('level_id');
+            $table->foreign('level_id')->references('id')->on('levels')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedBigInteger('attendance_id');
+            $table->foreign('attendance_id')->references('id')->on('attendances')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

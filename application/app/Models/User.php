@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Modules\Lecturer\Entities\LecturerQualification;
 use Modules\Lecturer\Entities\TeachingArea;
 use Modules\Registrar\Entities\Department;
@@ -30,6 +32,9 @@ class User extends Authenticatable
     protected $fillable = [
         'app_id', 'index_number,', 'id_number', 'name', 'email', 'password',
     ];
+
+    protected $primaryKey = 'user_id';
+    protected $keyType = 'string';
 
     /**
      * The attributes that should be hidden for serialization.
@@ -59,7 +64,7 @@ class User extends Authenticatable
     }
     public function roles(): BelongsToMany {
 
-        return $this->belongsToMany(Role::class, 'user_employments', 'user_id', 'role_id', 'user_id', 'id');
+        return $this->BelongsToMany(Role::class, 'user_employments', 'user_id', 'role_id', 'user_id', 'id');
     }
 
     public function employments(){

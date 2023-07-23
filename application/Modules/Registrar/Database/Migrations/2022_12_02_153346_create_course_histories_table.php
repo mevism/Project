@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->integer('course_id');
             $table->string('department_id');
-            $table->string('course_code')->unique();
+            $table->string('course_code');
             $table->string('course_name');
             $table->string('level');
             $table->timestamps();

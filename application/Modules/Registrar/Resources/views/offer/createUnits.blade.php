@@ -7,7 +7,7 @@
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
           <div class="flex-grow-1">
             <h4 class="h3 fw-bold mb-2 block-title">
-              ADD UNIT to {{  $course->course_name }}
+              ADD UNIT to {{-- {{  $course->course_name }} --}}
                 </h4>
             </div>
             <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">

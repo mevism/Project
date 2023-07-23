@@ -14,8 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('student_invoices', function (Blueprint $table) {
-            $table->string('invoice_id');
+            $table->string('invoice_id')->primary();
             $table->string('student_id');
+            $table->foreign('student_id')->references('student_id')->on('student_contacts')->onDelete('cascade')->onUpdate('cascade');
             $table->string('reg_number');
             $table->string('invoice_number');
             $table->string('stage');

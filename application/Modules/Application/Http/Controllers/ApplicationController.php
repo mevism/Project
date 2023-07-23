@@ -48,10 +48,10 @@ use Modules\Finance\Entities\FinanceLog;
 
 class ApplicationController extends Controller
 {
-//    public function __construct(){
-//        auth()->setDefaultDriver('web');
-//        $this->middleware(['web','auth', 'is_applicant']);
-//    }
+    //    public function __construct(){
+    //        auth()->setDefaultDriver('web');
+    //        $this->middleware(['web','auth', 'is_applicant']);
+    //    }
     /**
      * Display a listing of the resource.
      * @return Renderable
@@ -66,12 +66,14 @@ class ApplicationController extends Controller
         return view('application::auth.signup');
     }
 
-    public function reloadCaptcha(){
+    public function reloadCaptcha()
+    {
 
-        return response()->json(['captcha'=> captcha_img()]);
+        return response()->json(['captcha' => captcha_img()]);
     }
 
-    public function signup(Request $request){
+    public function signup(Request $request)
+    {
 
         $request->validate([
             'email' => 'required|email|unique:applicant_contacts',
@@ -81,66 +83,68 @@ class ApplicationController extends Controller
             'captcha' => 'required|captcha',
         ]);
 
-            $id = new CustomIds();
+        $id = new CustomIds();
 
-            $applicantContact = new ApplicantContact;
-            $applicantContact->applicant_id = $id->generateId();
-            $applicantContact->mobile = str_replace(' ', '', '+254'.($request->mobile));
-            $applicantContact->email = $request->email;
-            $applicantContact->save();
+        $applicantContact = new ApplicantContact;
+        $applicantContact->applicant_id = $id->generateId();
+        $applicantContact->mobile = str_replace(' ', '', '+254' . ($request->mobile));
+        $applicantContact->email = $request->email;
+        $applicantContact->save();
 
-            $app = new ApplicantLogin;
-            $app->username = $request->email;
-            $app->applicant_id = $applicantContact->applicant_id;
-            $app->password = Hash::make($request->password);
-            $app->student_type = 1;
-            $app->save();
+        $app = new ApplicantLogin;
+        $app->username = $request->email;
+        $app->applicant_id = $applicantContact->applicant_id;
+        $app->password = Hash::make($request->password);
+        $app->student_type = 1;
+        $app->save();
 
-            VerifyEmail::create([
-                'applicant_id' => $app->applicant_id,
-                'verification_code' => Str::random(100),
-            ]);
+        VerifyEmail::create([
+            'applicant_id' => $app->applicant_id,
+            'verification_code' => Str::random(100),
+        ]);
 
-            Mail::to($applicantContact->email)->send(new VerifyEmails($app));
+        Mail::to($applicantContact->email)->send(new VerifyEmails($app));
 
-            return redirect(route('root'))->with(['info' => 'Account verification email was sent to verify your account']);
+        return redirect(route('root'))->with(['info' => 'Account verification email was sent to verify your account']);
     }
 
-    public function phoneverify(){
+    public function phoneverify()
+    {
         return view('application::auth.phoneverification');
     }
 
-    public function phonereverification(Request $request){
-            $request->validate([
-                'verification_code' => 'required',
-                'phone_number' => 'required'
-            ]);
+    public function phonereverification(Request $request)
+    {
+        $request->validate([
+            'verification_code' => 'required',
+            'phone_number' => 'required'
+        ]);
 
-                $unverified = VerifyUser::where('verification_code', $request->verification_code)->first();
+        $unverified = VerifyUser::where('verification_code', $request->verification_code)->first();
 
-                if (!$unverified){
+        if (!$unverified) {
 
-                    return redirect()->back()->with('error', 'Wrong code! Please request for a new code');
-                }
+            return redirect()->back()->with('error', 'Wrong code! Please request for a new code');
+        }
 
-                $applicant = $unverified->userVerification;
+        $applicant = $unverified->userVerification;
 
-            if (!$applicant->phone_verification){
-                $applicant->phone_verification = 1;
-                $applicant->save();
+        if (!$applicant->phone_verification) {
+            $applicant->phone_verification = 1;
+            $applicant->save();
 
-                VerifyUser::where('verification_code', $request->verification_code)->delete();
+            VerifyUser::where('verification_code', $request->verification_code)->delete();
 
-                return redirect()->route('application.applicant')->with('success', 'Phone number verified successfully');
-
-            }else{
-                abort(403);
-            }
+            return redirect()->route('application.applicant')->with('success', 'Phone number verified successfully');
+        } else {
+            abort(403);
+        }
 
         return redirect()->back()->with('error', 'Phone number failed verification');
     }
 
-    public function getNewCode(){
+    public function getNewCode()
+    {
 
         VerifyUser::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->delete();
 
@@ -153,66 +157,63 @@ class ApplicationController extends Controller
 
         $user =  auth()->guard('web')->user();
 
-//        $user->notify(new \Modules\Application\Notifications\SMS($verification_code));
+        //        $user->notify(new \Modules\Application\Notifications\SMS($verification_code));
 
         return redirect()->back()->with(['info' => 'Enter the code send to your phone', 'code' => $verification_code]);
-
     }
 
-    public function emailVerification($verification_code){
+    public function emailVerification($verification_code)
+    {
 
-       $unverified = VerifyEmail::where('verification_code', $verification_code)->first();
+        $unverified = VerifyEmail::where('verification_code', $verification_code)->first();
 
-       if (isset($unverified)){
+        if (isset($unverified)) {
 
-                  $applicant = $unverified->emailVerify;
+            $applicant = $unverified->emailVerify;
 
-                    if (!$applicant->email_verified_at){
-                        $applicant->email_verified_at = Carbon::now();
-                        $applicant->save();
+            if (!$applicant->email_verified_at) {
+                $applicant->email_verified_at = Carbon::now();
+                $applicant->save();
 
-                        VerifyEmail::where('verification_code', $verification_code)->delete();
+                VerifyEmail::where('verification_code', $verification_code)->delete();
 
-                        return redirect(route('root'))->with('success', 'Your email has been verified');
-                    }else{
+                return redirect(route('root'))->with('success', 'Your email has been verified');
+            } else {
 
-                        return redirect(route('root'))->with('warning', 'The code does not exist');
-
-                    }
-
-                }else{
-                    return redirect(route('root'))->with('info', 'Email already verified');
-                }
+                return redirect(route('root'))->with('warning', 'The code does not exist');
+            }
+        } else {
+            return redirect(route('root'))->with('info', 'Email already verified');
+        }
     }
 
-    public function checkverification(){
+    public function checkverification()
+    {
 
         return view('application::auth.landing');
     }
 
-    public function dashboard(){
+    public function dashboard()
+    {
 
         $courses = [];
         $intake = Intake::where('status', 1)->first();
 
-        if ($intake != null){
-            $courses = DB::table('COURESONOFFERVIEW')->where('intake_id', $intake->intake_id)
+        if ($intake != null) {
+            $courses = DB::table('coursesonofferview')->where('intake_id', $intake->intake_id)
                 ->latest()->get();
         }
 
         $apps  = Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->get();
 
-        if (count($apps) == 0){
+        if (count($apps) == 0) {
 
             $notification = [];
+        } else {
 
-        }else{
-
-            foreach ($apps as $id){
+            foreach ($apps as $id) {
 
                 $notification = Notification::where('application_id', $id->id)->where('status', '>', 0)->orderBy('updated_at', 'desc')->get();
-
-
             }
         }
 
@@ -224,34 +225,36 @@ class ApplicationController extends Controller
                 return redirect(route('root'))->with('warning', 'Please verify your email first');
             }
             if (\auth()->guard('web')->user()->user_status == 0) {
-               return redirect()->route('application.details')->with(['info' => 'Please update your profile']);
+                return redirect()->route('application.details')->with(['info' => 'Please update your profile']);
             } else {
-              return view('application::applicant.home')->with(['courses' => $courses,'mycourses' => $mycourses, 'notification' => $notification]);
+                return view('application::applicant.home')->with(['courses' => $courses, 'mycourses' => $mycourses, 'notification' => $notification]);
             }
             redirect()->route('application.login')->with('error', 'Please try again');
         }
-
     }
 
 
-    public function reverify(){
+    public function reverify()
+    {
         return view('application::auth.reverifyphone');
     }
 
-    public function openDetails(){
+    public function openDetails()
+    {
 
 
         return view('application::applicant.updatePage')->with('info', 'Update your profile to continue');
     }
 
-    public function updatePersonalInfo(Request $request){
+    public function updatePersonalInfo(Request $request)
+    {
 
-        if (ApplicantInfo::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->exists()){
+        if (ApplicantInfo::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->exists()) {
             $request->validate([
                 'sname' => 'required|alpha',
                 'fname' => 'required|alpha',
                 'mname' => 'string|nullable',
-                'dob'=> 'required:date_format:Y-M-D|before:2006-05-16',
+                'dob' => 'required:date_format:Y-M-D|before:2006-05-16',
                 'disabled' => 'required',
                 'disability' => 'string|nullable',
                 'title' => 'required|string',
@@ -260,13 +263,13 @@ class ApplicationController extends Controller
                 'index_number' => 'required|string',
                 'gender' => 'required|string',
             ]);
-        }else{
+        } else {
 
             $request->validate([
                 'sname' => 'required|alpha',
                 'fname' => 'required|alpha',
                 'mname' => 'string|nullable',
-                'dob'=> 'required:date_format:Y-M-D',
+                'dob' => 'required:date_format:Y-M-D',
                 'disabled' => 'required',
                 'disability' => 'string|nullable',
                 'title' => 'required|string',
@@ -278,22 +281,21 @@ class ApplicationController extends Controller
         }
 
 
-        if (ApplicantInfo::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->exists()){
-                $user = ApplicantInfo::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->first();
-                $user->sname = trim(strtoupper($request->sname));
-                $user->fname = trim(strtoupper($request->fname));
-                $user->mname = trim(strtoupper($request->mname));
-                $user->gender = trim(strtoupper($request->gender));
-                $user->index_number = trim($request->index_number);
-                $user->id_number = trim($request->id_number);
-                $user->dob = trim($request->dob);
-                $user->disabled = trim(strtoupper($request->disabled));
-                $user->disability = trim(strtoupper($request->disability));
-                $user->title = trim(strtoupper($request->title));
-                $user->marital_status = trim(strtoupper($request->status));
-                $user->save();
-
-        }else{
+        if (ApplicantInfo::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->exists()) {
+            $user = ApplicantInfo::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->first();
+            $user->sname = trim(strtoupper($request->sname));
+            $user->fname = trim(strtoupper($request->fname));
+            $user->mname = trim(strtoupper($request->mname));
+            $user->gender = trim(strtoupper($request->gender));
+            $user->index_number = trim($request->index_number);
+            $user->id_number = trim($request->id_number);
+            $user->dob = trim($request->dob);
+            $user->disabled = trim(strtoupper($request->disabled));
+            $user->disability = trim(strtoupper($request->disability));
+            $user->title = trim(strtoupper($request->title));
+            $user->marital_status = trim(strtoupper($request->status));
+            $user->save();
+        } else {
 
             $applicant = new ApplicantInfo;
             $applicant->applicant_id = \auth()->guard('web')->user()->applicant_id;
@@ -312,10 +314,10 @@ class ApplicationController extends Controller
         }
 
         return redirect()->back()->with('success', 'Personal information updated successfully');
-
     }
 
-    public function updateContactInfo(Request $request){
+    public function updateContactInfo(Request $request)
+    {
         $request->validate([
             'email' => 'required',
             'mobile' => 'required|min:10|max:13|',
@@ -323,17 +325,18 @@ class ApplicationController extends Controller
             'alt_number' => 'required|min:10|max:13|'
         ]);
 
-        $updateContact = ApplicantContact::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->first();
-        $updateContact->email = $request->email;
-        $updateContact->alt_email = $request->alt_email;
-        $updateContact->mobile = $request->mobile;
-        $updateContact->alt_mobile = $request->alt_number;
-        $updateContact->save();
+        ApplicantContact::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->update([
+            'email' => $request->email,
+            'alt_email' => $request->alt_email,
+            'mobile' => $request->mobile,
+            'alt_mobile' => $request->alt_number,
+        ]);
 
         return redirect()->back()->with('success', 'Contact information updated successfully');
     }
 
-    public function updateAddressInfo(Request $request){
+    public function updateAddressInfo(Request $request)
+    {
 
         $request->validate([
             'address' => 'required|numeric',
@@ -344,7 +347,7 @@ class ApplicationController extends Controller
             'town' => 'required|string',
         ]);
 
-        if (ApplicantAddress::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->exists()){
+        if (ApplicantAddress::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->exists()) {
 
             $applicantAddress = ApplicantAddress::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->first();
             $applicantAddress->applicant_id = \auth()->guard('web')->user()->applicant_id;
@@ -355,7 +358,7 @@ class ApplicationController extends Controller
             $applicantAddress->sub_county = trim(strtoupper($request->subcounty));
             $applicantAddress->town = trim(strtoupper($request->town));
             $applicantAddress->save();
-        }else{
+        } else {
             $applicantAddress = new ApplicantAddress;
             $applicantAddress->applicant_id = \auth()->guard('web')->user()->applicant_id;
             $applicantAddress->address = trim($request->address);
@@ -370,14 +373,16 @@ class ApplicationController extends Controller
         return redirect()->back()->with('success', 'Home address information updated successfully');
     }
 
-    public function logout(){
+    public function logout()
+    {
         Session::flush();
         Auth::guard('web')->logout();
 
-        return redirect( route('root'))->with('info', 'You have logged out');
+        return redirect(route('root'))->with('info', 'You have logged out');
     }
 
-    public function details(){
+    public function details()
+    {
 
         $userId = \auth()->guard('web')->user()->applicant_id;
         $userinfo = ApplicantInfo::where('applicant_id', $userId)->first();
@@ -388,14 +393,13 @@ class ApplicationController extends Controller
         $updatedInfo = true;
 
 
-        if ($userinfo == null || $userAddress == null || $userContact->alt_email == null || $userContact->alt_mobile == null){
+        if ($userinfo == null || $userAddress == null || $userContact->alt_email == null || $userContact->alt_mobile == null) {
             $updateUser = ApplicantLogin::where('applicant_id', $userId)->first();
             $updateUser->user_status = 0;
             $updateUser->save();
 
             return view('application::applicant.updatePage');
-
-        }else{
+        } else {
 
             $userInfoKeys = ['id', 'applicant_id', 'mname', 'disability', 'created_at', 'updated_at', 'deleted_at'];
 
@@ -436,7 +440,7 @@ class ApplicationController extends Controller
                 }
             }
 
-            if ($updatedInfo == null || $updatedAddress == null || $updatedContact == null){
+            if ($updatedInfo == null || $updatedAddress == null || $updatedContact == null) {
                 $updateUser = ApplicantLogin::where('applicant_id', $userId)->first();
                 $updateUser->user_status = 0;
                 $updateUser->save();
@@ -450,27 +454,29 @@ class ApplicationController extends Controller
 
             return redirect()->route('application.applicant')->with('success', 'Congrats! You can now use TUM Online Course Application Portal');
         }
-
     }
 
-    public function myCourses(){
+    public function myCourses()
+    {
         $mycourses = Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)
             ->latest()
             ->get();
         return view('application::applicant.mycourses')->with('courses', $mycourses);
     }
 
-    public function allCourses(){
+    public function allCourses()
+    {
         $courses = [];
         $intake = Intake::where('status', 1)->first();
-        if ($intake != null){
-            $courses = DB::table('COURESONOFFERVIEW')->where('intake_id', $intake->intake_id)
+        if ($intake != null) {
+            $courses = DB::table('coursesonofferview')->where('intake_id', $intake->intake_id)
                 ->latest()->get();
         }
-            return view('application::applicant.courses')->with(['courses' => $courses]);
+        return view('application::applicant.courses')->with(['courses' => $courses]);
     }
 
-    public function applyNow($id){
+    public function applyNow($id)
+    {
         $subject = [];
         $education = Education::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->get();
         $work = WorkExperience::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->get();
@@ -478,7 +484,7 @@ class ApplicationController extends Controller
         $mycourse = Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->where('course_id', $course->course_id)->where('intake_id', $course->intake_id)->where('campus_id', $course->campus_id)->first();
         $parent = Guardian::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->get();
         $sponsor = Sponsor::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->get();
-        if ($mycourse != null){
+        if ($mycourse != null) {
             $subject = ApplicationSubject::where('application_id', $mycourse->application_id)->first();
         }
 
@@ -486,7 +492,8 @@ class ApplicationController extends Controller
             ->with(['course' => $course, 'education' => $education, 'work' => $work, 'mycourse' => $mycourse, 'sponsor' => $sponsor, 'parent' => $parent, 'subject' => $subject]);
     }
 
-    public function applicationEdit($id){
+    public function applicationEdit($id)
+    {
 
         $course = Application::where('application_id', $id)->first();
 
@@ -497,10 +504,10 @@ class ApplicationController extends Controller
             ->first();
 
         return redirect()->route('application.apply', $id)->with(['success' => 'You can now update your application']);
-
     }
 
-    public function submitApp(Request $request){
+    public function submitApp(Request $request)
+    {
 
         $request->validate([
             'subject1' => 'required|string',
@@ -508,20 +515,20 @@ class ApplicationController extends Controller
             'subject3' => 'string|required',
             'subject4' => 'string|required',
             'campus' => 'required'
-            ]);
+        ]);
 
         $customId = new CustomIds();
-        $reference = 'APP'.time();
+        $reference = 'APP' . time();
 
-        if (Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->where('course_id', $request->course_id)->first()){
+        if (Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->where('course_id', $request->course_id)->first()) {
             $subject = Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->where('course_id', $request->course_id)->first()->application_id;
             ApplicationSubject::where('application_id', $subject)->update([
-                'subject_1' => $request->subject1." ".$request->grade1,
-                'subject_2' => $request->subject2." ".$request->grade2,
-                'subject_3' => $request->subject3." ".$request->grade3,
-                'subject_4' => $request->subject4." ".$request->grade4,
+                'subject_1' => $request->subject1 . " " . $request->grade1,
+                'subject_2' => $request->subject2 . " " . $request->grade2,
+                'subject_3' => $request->subject3 . " " . $request->grade3,
+                'subject_4' => $request->subject4 . " " . $request->grade4,
             ]);
-        }else {
+        } else {
 
             $application = new Application;
             $application->application_id = $customId->generateId();
@@ -537,15 +544,14 @@ class ApplicationController extends Controller
 
             $subject = new ApplicationSubject;
             $subject->application_id = $application->application_id;
-            $subject->subject_1 = $request->subject1." ".$request->grade1;
-            $subject->subject_2 = $request->subject2." ".$request->grade2;
-            $subject->subject_3 = $request->subject3." ".$request->grade3;
-            $subject->subject_4 = $request->subject4." ".$request->grade4;
+            $subject->subject_1 = $request->subject1 . " " . $request->grade1;
+            $subject->subject_2 = $request->subject2 . " " . $request->grade2;
+            $subject->subject_3 = $request->subject3 . " " . $request->grade3;
+            $subject->subject_4 = $request->subject4 . " " . $request->grade4;
             $subject->save();
         }
 
         return redirect()->back()->with('success', 'You course application details have been update successfully');
-
     }
 
     /**
@@ -554,57 +560,59 @@ class ApplicationController extends Controller
      * add payment function commented here
      */
 
-//    public function appPayment(Request $request){
-//            $request->validate([
-//            'receipt' => 'string|required|unique:applications',
-//            'receipt_file' => 'required|mimes:pdf|required|max:2048'
-//                ]);
-//
-//        if ($request->hasFile('receipt_file')){
-//            $file = $request->receipt_file;
-//            $fileName = 'receipt'.time().'.'.$file->getClientOriginalExtension();
-//            $request->receipt_file->move('receipts', $fileName);
-//        }
-//
-//            Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)
-//                ->where('course_id', $request->course_id)->update(['receipt' => $request->receipt, 'receipt_file' => $fileName ]);
-//
-//        return redirect()->back()->with('success', 'You course payment details have been update successfully');
-//    }
+    //    public function appPayment(Request $request){
+    //            $request->validate([
+    //            'receipt' => 'string|required|unique:applications',
+    //            'receipt_file' => 'required|mimes:pdf|required|max:2048'
+    //                ]);
+    //
+    //        if ($request->hasFile('receipt_file')){
+    //            $file = $request->receipt_file;
+    //            $fileName = 'receipt'.time().'.'.$file->getClientOriginalExtension();
+    //            $request->receipt_file->move('receipts', $fileName);
+    //        }
+    //
+    //            Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)
+    //                ->where('course_id', $request->course_id)->update(['receipt' => $request->receipt, 'receipt_file' => $fileName ]);
+    //
+    //        return redirect()->back()->with('success', 'You course payment details have been update successfully');
+    //    }
 
-    public function addParent(Request $request){
+    public function addParent(Request $request)
+    {
 
         $request->validate([
-                'parentname' => 'string|required',
-                'parentmobile' => 'string|required|regex:/(0)[0-9]{9}/|min:10|max:10',
-                'parentcounty' => 'string|required',
-                'parenttown' => 'string|required',
-                'sponsorname' => 'string|required',
-                'sponsormobile' => 'string|required|regex:/(0)[0-9]{9}/|min:10|max:10',
-                'sponsorcounty' => 'string|required',
-                'sponsortown' => 'string|required',
-            ]);
+            'parentname' => 'string|required',
+            'parentmobile' => 'string|required|regex:/(0)[0-9]{9}/|min:10|max:10',
+            'parentcounty' => 'string|required',
+            'parenttown' => 'string|required',
+            'sponsorname' => 'string|required',
+            'sponsormobile' => 'string|required|regex:/(0)[0-9]{9}/|min:10|max:10',
+            'sponsorcounty' => 'string|required',
+            'sponsortown' => 'string|required',
+        ]);
 
-                $parent = new Guardian;
-                $parent->applicant_id = \auth()->guard('web')->user()->applicant_id;
-                $parent->guardian_name = $request->parentname;
-                $parent->guardian_mobile = $request->parentmobile;
-                $parent->guardian_county = $request->parentcounty;
-                $parent->guardian_town = $request->parenttown;
-                $parent->save();
+        $parent = new Guardian;
+        $parent->applicant_id = \auth()->guard('web')->user()->applicant_id;
+        $parent->guardian_name = $request->parentname;
+        $parent->guardian_mobile = $request->parentmobile;
+        $parent->guardian_county = $request->parentcounty;
+        $parent->guardian_town = $request->parenttown;
+        $parent->save();
 
-                $sponsor = new Sponsor;
-                $sponsor->applicant_id = \auth()->guard('web')->user()->applicant_id;
-                $sponsor->sponsor_name = $request->sponsorname;
-                $sponsor->sponsor_mobile = $request->sponsormobile;
-                $sponsor->sponsor_county = $request->sponsorcounty;
-                $sponsor->sponsor_town = $request->sponsortown;
-                $sponsor->save();
+        $sponsor = new Sponsor;
+        $sponsor->applicant_id = \auth()->guard('web')->user()->applicant_id;
+        $sponsor->sponsor_name = $request->sponsorname;
+        $sponsor->sponsor_mobile = $request->sponsormobile;
+        $sponsor->sponsor_county = $request->sponsorcounty;
+        $sponsor->sponsor_town = $request->sponsortown;
+        $sponsor->save();
 
         return redirect()->back()->with('success', 'You course application details have been update successfully');
     }
 
-    public function addWork(Request $request){
+    public function addWork(Request $request)
+    {
 
         $request->validate([
             'org1' => 'string|required',
@@ -624,35 +632,37 @@ class ApplicationController extends Controller
         return redirect()->back()->with('success', 'You work experience details have been update successfully');
     }
 
-    public function secSch(Request $request){
-            $request->validate([
-                'secondaryqualification' => 'string|required',
-                'secstartdate' => 'string|required',
-                'secenddate' => 'string|required',
-                'seccert' => 'required|mimes:pdf|required|max:2048',
-            ]);
+    public function secSch(Request $request)
+    {
+        $request->validate([
+            'secondaryqualification' => 'string|required',
+            'secstartdate' => 'string|required',
+            'secenddate' => 'string|required',
+            'seccert' => 'required|mimes:pdf|required|max:2048',
+        ]);
 
-            $education = new Education;
-            $education->applicant_id = \auth()->guard('web')->user()->applicant_id;
-            $education->institution = $request->secondary;
-            $education->qualification = $request->secondaryqualification;
-            $education->start_date = $request->secstartdate;
-            $education->exit_date = $request->secenddate;
-            $education->level = $request->level;
+        $education = new Education;
+        $education->applicant_id = \auth()->guard('web')->user()->applicant_id;
+        $education->institution = $request->secondary;
+        $education->qualification = $request->secondaryqualification;
+        $education->start_date = $request->secstartdate;
+        $education->exit_date = $request->secenddate;
+        $education->level = $request->level;
 
-            if ($request->hasFile('seccert')){
-                $file = $request->seccert;
-                $fileName = 'seccert'.time().'.'.$file->getClientOriginalExtension();
-                $request->seccert->move('certs', $fileName);
-                $education->certificate = $fileName;
-            }
+        if ($request->hasFile('seccert')) {
+            $file = $request->seccert;
+            $fileName = 'seccert' . time() . '.' . $file->getClientOriginalExtension();
+            $request->seccert->move('certs', $fileName);
+            $education->certificate = $fileName;
+        }
 
-            $education->save();
+        $education->save();
 
         return redirect()->back()->with('success', 'You education history has been updated successfully');
     }
 
-    public function updateSecSch(Request $request, $id){
+    public function updateSecSch(Request $request, $id)
+    {
 
         $request->validate([
             'secondaryqualification' => 'string|required',
@@ -671,9 +681,9 @@ class ApplicationController extends Controller
         $education->exit_date = $request->secenddate;
         $education->level = $request->level;
 
-        if ($request->hasFile('seccert')){
+        if ($request->hasFile('seccert')) {
             $file = $request->seccert;
-            $fileName = 'seccert'.time().'.'.$file->getClientOriginalExtension();
+            $fileName = 'seccert' . time() . '.' . $file->getClientOriginalExtension();
             $request->seccert->move('certs', $fileName);
             $education->certificate = $fileName;
         }
@@ -683,37 +693,38 @@ class ApplicationController extends Controller
         return redirect()->back()->with('success', 'You education history has been updated successfully');
     }
 
-    public function terSch(Request $request){
-            $request->validate([
-                'tertiary' => 'string|required',
-                'teriaryqualification' => 'string|required',
-                'terstartdate' => 'string|required',
-                'level' => 'string|required',
-                'terenddate' => 'string|required',
-                'tercert' => 'required|mimes:pdf|required|max:2048',
-            ]);
+    public function terSch(Request $request)
+    {
+        $request->validate([
+            'tertiary' => 'string|required',
+            'teriaryqualification' => 'string|required',
+            'terstartdate' => 'string|required',
+            'level' => 'string|required',
+            'terenddate' => 'string|required',
+            'tercert' => 'required|mimes:pdf|required|max:2048',
+        ]);
 
-            $education = new Education;
-            $education->applicant_id = \auth()->guard('web')->user()->applicant_id;
-            $education->institution = $request->tertiary;
-            $education->qualification = $request->teriaryqualification;
-            $education->start_date = $request->terstartdate;
-            $education->exit_date = $request->terenddate;
-            $education->level = $request->level;
+        $education = new Education;
+        $education->applicant_id = \auth()->guard('web')->user()->applicant_id;
+        $education->institution = $request->tertiary;
+        $education->qualification = $request->teriaryqualification;
+        $education->start_date = $request->terstartdate;
+        $education->exit_date = $request->terenddate;
+        $education->level = $request->level;
 
-            if ($request->hasFile('tercert')){
-                $file = $request->tercert;
-                $fileName = 'tercert'.time().'.'.$file->getClientOriginalExtension();
-                $request->tercert->move('certs', $fileName);
-                $education->certificate = $fileName;
-            }
-            $education->save();
+        if ($request->hasFile('tercert')) {
+            $file = $request->tercert;
+            $fileName = 'tercert' . time() . '.' . $file->getClientOriginalExtension();
+            $request->tercert->move('certs', $fileName);
+            $education->certificate = $fileName;
+        }
+        $education->save();
 
         return redirect()->back()->with('success', 'You education history added successfully');
-
     }
 
-    public function updateTerSch(Request $request, $id){
+    public function updateTerSch(Request $request, $id)
+    {
         $request->validate([
             'tertiary' => 'string|required',
             'teriaryqualification' => 'string|required',
@@ -733,19 +744,19 @@ class ApplicationController extends Controller
         $education->exit_date = $request->terenddate;
         $education->level = $request->level;
 
-        if ($request->hasFile('tercert')){
+        if ($request->hasFile('tercert')) {
             $file = $request->tercert;
-            $fileName = 'tercert'.time().'.'.$file->getClientOriginalExtension();
+            $fileName = 'tercert' . time() . '.' . $file->getClientOriginalExtension();
             $request->tercert->move('certs', $fileName);
             $education->certificate = $fileName;
         }
         $education->save();
 
         return redirect()->back()->with('success', 'Your education history has been updated successfully');
-
     }
 
-    public function finish(Request $request){
+    public function finish(Request $request)
+    {
         $request->validate([
             'declare' => 'required'
         ]);
@@ -755,22 +766,23 @@ class ApplicationController extends Controller
         $myApplication->save();
 
         $approval = ApplicationApproval::where('application_id', $myApplication->application_id)->first();
-        if ($approval == null){
-           ApplicationApproval::create(['application_id' => $myApplication->application_id, 'applicant_id' => \auth()->guard('web')->user()->applicant_id]);
+        if ($approval == null) {
+            ApplicationApproval::create(['application_id' => $myApplication->application_id, 'applicant_id' => \auth()->guard('web')->user()->applicant_id]);
         }
 
         return redirect()->back()->with('success', 'Your application was submitted successfully');
-
     }
 
-    public function viewCourse($id){
+    public function viewCourse($id)
+    {
 
         $course = CourseOnOfferView::where('available_id', $id)->first();
 
         return view('application::applicant.viewcourse')->with('course', $course);
     }
 
-    public function applicationProgress($id){
+    public function applicationProgress($id)
+    {
 
         $hashedId = Crypt::decrypt($id);
 
@@ -784,46 +796,48 @@ class ApplicationController extends Controller
 
         return view('application::applicant.progress')->with(['logs' => $logs, 'course' => $course]);
     }
-    public function myProfile(){
+    public function myProfile()
+    {
         $apps = Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->get();
         return view('application::applicant.profilepage')->with('apps', $apps);
     }
 
-    public function downloadLetter($id){
+    public function downloadLetter($id)
+    {
 
-       $letter = ApplicationApproval::where('application_id', $id)->first();
+        $letter = ApplicationApproval::where('application_id', $id)->first();
 
-        return response()->download('Admission Letters/'.$letter->admission_letter);
+        return response()->download('AdmissionLetters/' . $letter->admission_letter);
     }
 
-    public function uploadDocuments($id){
+    public function uploadDocuments($id)
+    {
 
         $admission = Application::where('application_id', $id)->first();
 
         return view('application::applicant.admission')->with(['admission' => $admission]);
     }
 
-    public function academicDoc(Request $request){
+    public function academicDoc(Request $request)
+    {
 
         $request->validate([
             'academicDoc' => 'required|mimes:pdf',
             'academicDocId' => 'required',
         ]);
 
-        if (AdmissionDocument::where('application_id', $request->academicDocId)->exists()){
+        if (AdmissionDocument::where('application_id', $request->academicDocId)->exists()) {
 
             $name = AdmissionDocument::where('application_id', $request->academicDocId)->first()->admDocuments->reg_number;
 
-            if ($request->hasFile('academicDoc')){
+            if ($request->hasFile('academicDoc')) {
                 $file = $request->academicDoc;
-                $fileName = str_replace('/', '', $name).'-'.time().'.'.$file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name) . '-' . time() . '.' . $file->getClientOriginalExtension();
                 $request->academicDoc->move('Admissions/Certificates', $fileName);
 
-                AdmissionDocument::where('application_id', $request->academicDocId)->update(['applicant_id' => \auth()->guard('web')->user()->applicant_id,'certificates' => $fileName]);
-
+                AdmissionDocument::where('application_id', $request->academicDocId)->update(['applicant_id' => \auth()->guard('web')->user()->applicant_id, 'certificates' => $fileName]);
             }
-
-        }else{
+        } else {
 
             $id = $request->academicDocId;
 
@@ -832,9 +846,9 @@ class ApplicationController extends Controller
             $academicCerts = new AdmissionDocument;
             $academicCerts->applicant_id = \auth()->guard('web')->user()->applicant_id;
             $academicCerts->application_id = $request->academicDocId;
-            if ($request->hasFile('academicDoc')){
+            if ($request->hasFile('academicDoc')) {
                 $file = $request->academicDoc;
-                $fileName = str_replace('/', '', $name->reg_number).'-'.time().'.'.$file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name->reg_number) . '-' . time() . '.' . $file->getClientOriginalExtension();
                 $request->academicDoc->move('Admissions/Certificates', $fileName);
                 $academicCerts->certificates = $fileName;
             }
@@ -842,30 +856,28 @@ class ApplicationController extends Controller
         }
 
         return redirect()->back()->with('success', 'Academic documents uploaded successfully');
-
     }
 
-    public function bankReceipt(Request $request){
+    public function bankReceipt(Request $request)
+    {
 
         $request->validate([
             'bankReceipt' => 'required|mimes:pdf|max:40000',
             'bankReceiptId' => 'required',
         ]);
 
-        if (AdmissionDocument::where('application_id', $request->bankReceiptId)->exists()){
+        if (AdmissionDocument::where('application_id', $request->bankReceiptId)->exists()) {
 
             $name = AdmissionDocument::where('application_id', $request->bankReceiptId)->first()->admDocuments->reg_number;
 
-            if ($request->hasFile('bankReceipt')){
+            if ($request->hasFile('bankReceipt')) {
                 $file = $request->bankReceipt;
-                $fileName = str_replace('/', '', $name).'-'.time().'.'.$file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name) . '-' . time() . '.' . $file->getClientOriginalExtension();
                 $request->bankReceipt->move('Admissions/BankReceipt', $fileName);
 
                 AdmissionDocument::where('application_id', $request->bankReceiptId)->update(['applicant_id' => \auth()->guard('web')->user()->applicant_id, 'bank_receipt' => $fileName]);
-
             }
-
-        }else{
+        } else {
 
             $id = $request->bankReceiptId;
 
@@ -874,9 +886,9 @@ class ApplicationController extends Controller
             $academicCerts = new AdmissionDocument;
             $academicCerts->application_id = $request->bankReceiptId;
             $academicCerts->applicant_id = \auth()->guard('web')->user()->applicant_id;
-            if ($request->hasFile('bankReceipt')){
+            if ($request->hasFile('bankReceipt')) {
                 $file = $request->bankReceipt;
-                $fileName = str_replace('/', '', $name->reg_number).'-'.time().'.'.$file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name->reg_number) . '-' . time() . '.' . $file->getClientOriginalExtension();
                 $request->bankReceipt->move('Admissions/BankReceipt', $fileName);
                 $academicCerts->bank_receipt = $fileName;
             }
@@ -884,30 +896,28 @@ class ApplicationController extends Controller
         }
 
         return redirect()->back()->with('success', 'Bank receipt uploaded successfully');
-
     }
 
-    public function medicalForm(Request $request){
+    public function medicalForm(Request $request)
+    {
 
         $request->validate([
             'medicalForm' => 'required|mimes:pdf|max:40000',
             'medicalFormId' => 'required',
         ]);
 
-        if (AdmissionDocument::where('application_id', $request->medicalFormId)->exists()){
+        if (AdmissionDocument::where('application_id', $request->medicalFormId)->exists()) {
 
             $name = AdmissionDocument::where('application_id', $request->medicalFormId)->first()->admDocuments->reg_number;
 
-            if ($request->hasFile('medicalForm')){
+            if ($request->hasFile('medicalForm')) {
                 $file = $request->medicalForm;
-                $fileName = str_replace('/', '', $name).'-'.time().'.'.$file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name) . '-' . time() . '.' . $file->getClientOriginalExtension();
                 $request->medicalForm->move('Admissions/MedicalForms', $fileName);
 
                 AdmissionDocument::where('application_id', $request->medicalFormId)->update(['applicant_id' => \auth()->guard('web')->user()->applicant_id, 'medical_form' => $fileName]);
-
             }
-
-        }else{
+        } else {
 
             $id = $request->medicalFormId;
 
@@ -916,9 +926,9 @@ class ApplicationController extends Controller
             $academicCerts = new AdmissionDocument;
             $academicCerts->application_id = $request->medicalFormId;
             $academicCerts->applicant_id = \auth()->guard('web')->user()->applicant_id;
-            if ($request->hasFile('medicalForm')){
+            if ($request->hasFile('medicalForm')) {
                 $file = $request->medicalForm;
-                $fileName = str_replace('/', '', $name->reg_number).'-'.time().'.'.$file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name->reg_number) . '-' . time() . '.' . $file->getClientOriginalExtension();
                 $request->medicalForm->move('Admissions/MedicalForms', $fileName);
                 $academicCerts->medical_form = $fileName;
             }
@@ -926,10 +936,10 @@ class ApplicationController extends Controller
         }
 
         return redirect()->back()->with('success', 'Bank receipt uploaded successfully');
-
     }
 
-    public function passportPhoto(Request $request){
+    public function passportPhoto(Request $request)
+    {
 
         $request->validate([
             'passPort' => 'required|image|mimes:jpeg,png,jpg|max:40000',
@@ -937,29 +947,27 @@ class ApplicationController extends Controller
         ]);
 
 
-        if (AdmissionDocument::where('application_id', $request->passPortId)->exists()){
+        if (AdmissionDocument::where('application_id', $request->passPortId)->exists()) {
 
             $name = AdmissionDocument::where('application_id', $request->passPortId)->first()->admDocuments->reg_number;
 
-            if ($request->hasFile('passPort')){
+            if ($request->hasFile('passPort')) {
                 $file = $request->passPort;
-                $fileName = str_replace('/', '', $name).'-'.time().'.'.$file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name) . '-' . time() . '.' . $file->getClientOriginalExtension();
 
                 $thumbnailFolder = 'Thumbnails';
 
                 $passport = Image::make($file->path());
 
-                $passport->resize(100, 100, function ($contraint){
+                $passport->resize(100, 100, function ($contraint) {
                     $contraint->aspectRatio();
-                })->save($thumbnailFolder.'/'.$fileName);
+                })->save($thumbnailFolder . '/' . $fileName);
 
                 $file->move('Admissions/PassPorts', $fileName);
 
                 AdmissionDocument::where('application_id', $request->passPortId)->update(['applicant_id' => \auth()->guard('web')->user()->applicant_id, 'passport_photo' => $fileName]);
-
             }
-
-        }else{
+        } else {
 
             $id = $request->passPortId;
 
@@ -967,16 +975,16 @@ class ApplicationController extends Controller
 
             $academicCerts = new AdmissionDocument;
             $academicCerts->application_id = $request->passPortId;
-            if ($request->hasFile('passPort')){
+            if ($request->hasFile('passPort')) {
                 $file = $request->passPort;
-                $fileName = str_replace('/', '', $name->reg_number).'-'.time().'.'.$file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name->reg_number) . '-' . time() . '.' . $file->getClientOriginalExtension();
                 $thumbnailFolder = 'Thumbnails';
 
                 $passport = Image::make($file->path());
 
-                $passport->resize(100, 100, function ($contraint){
+                $passport->resize(100, 100, function ($contraint) {
                     $contraint->aspectRatio();
-                })->save($thumbnailFolder.'/'.$fileName);
+                })->save($thumbnailFolder . '/' . $fileName);
 
                 $file->move('Admissions/PassPorts', $fileName);
 
@@ -986,38 +994,38 @@ class ApplicationController extends Controller
         }
 
         return redirect()->back()->with('success', 'Passport Photo uploaded successfully');
-
     }
 
-    public function submitDocuments($id){
+    public function submitDocuments($id)
+    {
 
-        AdmissionApproval::create(['applicant_id' => \auth()->guard('web')->user()->applicant_id,'application_id' => $id, 'cod_status' => 0]);
+        AdmissionApproval::create(['applicant_id' => \auth()->guard('web')->user()->applicant_id, 'application_id' => $id, 'cod_status' => 0]);
         AdmissionDocument::where('application_id', $id)->update(['status' => 1]);
 
         return redirect()->back()->with('success', 'Your documents submitted for admission process');
     }
 
-    public function inbox(){
+    public function inbox()
+    {
 
         $apps  = Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->get();
 
-        if (count($apps) == 0){
+        if (count($apps) == 0) {
 
             $notification = [];
+        } else {
 
-        }else{
+            foreach ($apps as $id) {
 
-            foreach ($apps as $id){
-
-               $notification = Notification::where('application_id', $id->id)->where('status', '>', 0)->latest()->get();
-
+                $notification = Notification::where('application_id', $id->id)->where('status', '>', 0)->latest()->get();
             }
         }
 
         return view('application::applicant.inbox')->with(['notification' => $notification]);
     }
 
-    public function myAdmission(){
+    public function myAdmission()
+    {
 
         $myadmission = ApplicationsView::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->where('cod_status', 1)->where('registrar_status', 3)->get();
 
@@ -1032,5 +1040,4 @@ class ApplicationController extends Controller
     {
         return view('application::create');
     }
-
 }

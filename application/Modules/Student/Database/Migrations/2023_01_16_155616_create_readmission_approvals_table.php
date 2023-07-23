@@ -14,8 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('readmission_approvals', function (Blueprint $table) {
-            $table->string('approval_id ');
+            $table->string('approval_id')->primary();
             $table->string('readmission_id');
+            $table->foreign('readmission_id')->references('readmission_id')->on('readmissions')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('cod_status');
             $table->string('cod_remarks');
             $table->integer('dean_status')->nullable();

@@ -19,6 +19,7 @@ class UnitImport implements ToCollection
     {
 
         foreach($collection as $row) {
+
             $grading = [
                 ['total_exam' => 70, 'total_cat' => 30, 'cat' => 15, 'assignment' => 10, 'practical' => 5],
                 ['total_exam' => 70, 'total_cat' => 30, 'cat' => 20, 'assignment' => 10, 'practical' => 0],
@@ -33,16 +34,16 @@ class UnitImport implements ToCollection
                 ['total_exam' => 60, 'total_cat' => 40, 'cat' => 30, 'assignment' => 10, 'practical' => 0],
             ];
             $GradeCollection = Collection::make($grading);
-            $type = Collection::make([1, 2, 3]);
             $department = Department::where('division_id', '368HZXbsoMi')->pluck('department_id');
+            $type = Collection::make([1, 2, 3]);
             $grade = $GradeCollection->random();
             $unitID = new CustomIds();
             Unit::create([
                 'unit_id' => $unitID->generateId(),
-                'unit_code' => strtoupper(str_replace(' ', '',$row[0])),
-                'unit_name' =>  $row[1],
-                'type' => $type->random(),
                 'department_id' => $department->random(),
+                'unit_code' => strtoupper(str_replace(' ', '',$row[1])),
+                'unit_name' =>  $row[2],
+                'type' => $type->random(),                
                 'total_exam' => $grade['total_exam'],
                 'total_cat' => $grade['total_cat'],
                 'cat' => $grade['cat'],

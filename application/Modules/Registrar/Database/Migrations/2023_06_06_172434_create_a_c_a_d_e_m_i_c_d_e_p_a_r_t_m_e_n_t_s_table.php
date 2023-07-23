@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -14,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         DB::statement(
-            "CREATE VIEW ACADEMICDEPARTMENTS AS
+            "CREATE VIEW academicdepartments AS
                 SELECT
                 departments.*, school_departments.school_id
                 FROM school_departments
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ACADEMICDEPARTMENTS');
+        Schema::dropIfExists('academicdepartments');
     }
 };

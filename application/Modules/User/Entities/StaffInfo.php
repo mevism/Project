@@ -9,7 +9,9 @@ class StaffInfo extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $primaryKey  =  'id';
+
+    protected $fillable = ['user_id', 'staff_number', 'title', 'first_name', 'middle_name', 'last_name', 'gender', 'phone_number', 'office_email', 'personal_email'];
     
     protected static function newFactory()
     {

@@ -6,6 +6,7 @@ use App\Http\Apis\AppApis;
 use App\Models\User;
 use App\Models\UserEmployment;
 use App\Service\CustomIds;
+use GuzzleHttp\Promise\Create;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -85,8 +86,17 @@ class UserController extends Controller
         $data = $this->staffInfoAPI->fetchStaff($staffNumber, $userId);
 
         $userID = new CustomIds();
+        
+        $generatedId = $userID->generateId();
+
+        $user = new User;
+        $user->user_id = $generatedId;
+        $user->username = $data['dataPayload']['data']['staff_number'];
+        $user->password = Hash::make($data['dataPayload']['data']['id_number']);
+        $user->save();
+
         $staffInfo = new StaffInfo;
-        $staffInfo->user_id = $userID->generateId();
+        $staffInfo->user_id = $generatedId;
         $staffInfo->staff_number = $data['dataPayload']['data']['staff_number'];
         $staffInfo->title = 'NA';
         $staffInfo->first_name = $data['dataPayload']['data']['first_name'];
@@ -98,14 +108,21 @@ class UserController extends Controller
         $staffInfo->phone_number = $data['dataPayload']['data']['mobile_number'];
         $staffInfo->save();
 
-        $user = new User;
-        $user->user_id = $staffInfo->user_id;
-        $user->username = $data['dataPayload']['data']['staff_number'];
-        $user->password = Hash::make($data['dataPayload']['data']['id_number']);
-        $user->save();
+        // StaffInfo::create([
+        //     'user_id'  => $user->user_id,
+        //     'staff_number'  => $data['dataPayload']['data']['staff_number'],
+        //     'title'  => 'Miss',
+        //     'first_name'  => $data['dataPayload']['data']['first_name'],
+        //     'middle_name'  => $data['dataPayload']['data']['middle_name'],
+        //     'last_name'  => $data['dataPayload']['data']['last_name'],
+        //     'personal_email'  => $data['dataPayload']['data']['personal_email'],
+        //     'office_email'  => $data['dataPayload']['data']['work_email'],
+        //     'gender'  => $data['dataPayload']['data']['gender'],
+        //     'phone_number'  => $data['dataPayload']['data']['mobile_number'],
+        // ]);
 
         $userDept = new UserEmployment;
-        $userDept->user_id = $staffInfo->user_id;
+        $userDept->user_id = $generatedId;
         $userDept->role_id = $request->role;
         $userDept->campus_id = $request->campus;
         $userDept->division_id = $request->division;

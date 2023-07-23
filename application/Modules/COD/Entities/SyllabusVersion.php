@@ -11,7 +11,8 @@ class SyllabusVersion extends Model
     use HasFactory;
 
     protected $fillable = [];
-
+    protected $primaryKey = 'syllabus_id';
+    protected $keyType = 'string';
     public function CourseSyllabusVersion(){
         return $this->belongsTo(Courses::class, 'course_id', 'course_id');
     }

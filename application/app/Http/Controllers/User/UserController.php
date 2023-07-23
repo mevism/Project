@@ -43,7 +43,6 @@ class UserController extends Controller
             $name = Auth::guard('user')->user()->name;
 
             if (Auth::guard('user')->user()) {
-
                 return redirect()->intended('/dashboard')->with('success', 'Welcome' . " " . $name . " " . 'to' . " " . config('app.name') . ".");
             }
         }
@@ -67,9 +66,8 @@ class UserController extends Controller
     }
     public function dashboard(){
 
-//        return \auth()->guard('user')->user()->roles;
-
         if (auth()->guard('user')->check()){
+            // return auth()->guard('user')->user();
             if (\auth()->guard('user')->user()->roles->first()->id == 0){
                 $courses = AvailableCourse::count();
                 $applications = Application::count();
@@ -90,7 +88,7 @@ class UserController extends Controller
                $apps_cod = ApplicationsView::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
                    ->where('cod_status', null )
                    ->count();
-               $classes = DB::table('CLASSESVIEW')
+               $classes = DB::table('classesview')
                    ->where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
                    ->count();
                 $admissions = 0;
@@ -99,6 +97,7 @@ class UserController extends Controller
 
             }elseif (\auth()->guard('user')->user()->roles->first()->id == 3){
 
+                // return auth()->guard('user')->user()->roles;
                 $apps_finance = Application::where('finance_status', '!=', 3)
                     ->count();
 

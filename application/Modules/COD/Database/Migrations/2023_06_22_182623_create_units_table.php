@@ -14,11 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('units', function (Blueprint $table) {
-            $table->string('unit_id');
+            $table->string('unit_id')->primary();
+            $table->string('department_id');
+            $table->foreign('department_id')->references('department_id')->on('departments')->onUpdate('cascade')->onDelete('cascade');
             $table->string('unit_code');
             $table->string('unit_name');
             $table->string('type');
-            $table->string('department_id');
             $table->integer('total_exam');
             $table->integer('total_cat');
             $table->integer('cat');

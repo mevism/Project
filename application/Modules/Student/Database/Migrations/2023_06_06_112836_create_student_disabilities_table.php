@@ -14,10 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('student_disabilities', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('student_id');
-            $table->mediumText('disability');
-            $table->timestamps();
+            $table->string('student_id')->primary();
+            $table->foreign('student_id')->references('student_id')->on('student_logins')->onDelete('cascade')->onUpdate('cascade');            $table->timestamps();
             $table->softDeletes();
         });
     }

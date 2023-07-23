@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('course_options', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('option_id');
+            $table->string('option_id')->primary();
             $table->string('course_id');
+            $table->foreign('course_id')->references('course_id')->on('courses')->onDelete('cascade')->onUpdate('cascade');
             $table->string('option_name');
             $table->string('option_code')->nullable();
             $table->timestamps();

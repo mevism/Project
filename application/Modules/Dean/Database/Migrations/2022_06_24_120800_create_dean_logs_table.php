@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('dean_logs', function (Blueprint $table) {
             $table->id();
-            $table->integer('application_id');
+            $table->string('application_id');
+            $table->foreign('application_id')->references('application_id')->on('applications')->onUpdate('cascade')->onDelete('cascade');
             $table->string('user');
             $table->string('user_role');
             $table->string('activity');

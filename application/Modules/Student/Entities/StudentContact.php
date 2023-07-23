@@ -12,6 +12,7 @@ class StudentContact extends Model
 
     protected $fillable = [];
 //    protected $dates = 'deleted_at';
+
     public function StudentsContact(){
         return $this->belongsTo(StudentInfo::class, 'student_id', 'student_id');
     }

@@ -16,8 +16,11 @@ return new class extends Migration
         Schema::create('calender_of_events', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('academic_year_id');
+            $table->foreign('academic_year_id')->references('year_id')->on('academic_years')->onUpdate('cascade')->onDelete('cascade');
             $table->string('intake_id');
-            $table->string('event_id');
+            $table->foreign('intake_id')->references('intake_id')->on('intakes')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedBigInteger('event_id');
+            $table->foreign('event_id')->references('id')->on('events')->onUpdate('cascade')->onDelete('cascade');
             $table->string('start_date');
             $table->string('end_date');
             $table->softDeletes();

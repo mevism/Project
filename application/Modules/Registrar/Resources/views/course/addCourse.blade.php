@@ -27,6 +27,7 @@
         <div  class="block block-rounded">
             <div class="block-content block-content-full">
                 <form method="POST" action="{{ route('courses.storeCourse') }}">
+                    
                     @csrf
               <div class="row">
                 <div class="col-lg-5 space-y-0">

@@ -11,6 +11,9 @@ class ApplicationSubject extends Model
 
     protected $fillable = ['application_id', 'subject_1', 'subject_2', 'subject_3', 'subject_4'];
 
+    protected $primaryKey = 'student_id';
+    protected $keyType = 'string';
+    
     protected static function newFactory()
     {
         return \Modules\Application\Database\factories\ApplicationSubjectFactory::new();

@@ -14,9 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('groups', function (Blueprint $table) {
-            $table->id();
+            $table->string('group_id')->primary();
             $table->string('name');
-            $table->string('group_id');
             $table->timestamps();
             $table->softDeletes();
         });

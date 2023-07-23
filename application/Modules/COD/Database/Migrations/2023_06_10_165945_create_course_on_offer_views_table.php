@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -14,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         DB::statement("
-           CREATE VIEW COURESONOFFERVIEW AS
+           CREATE VIEW coursesonofferview AS
             SELECT available_courses.available_id, available_courses.intake_id, available_courses.course_id, available_courses.campus_id, courses.department_id, courses.course_code, courses.course_name, courses.level, intakes.intake_from, intakes.intake_to, departments.dept_code, school_departments.school_id, course_requirements.application_fee, course_requirements.subject1, course_requirements.subject2, course_requirements.subject3, course_requirements.subject4, course_requirements.course_duration, course_requirements.course_requirements, campuses.name, available_courses.created_at
             FROM available_courses
             JOIN courses ON courses.course_id = available_courses.course_id
@@ -33,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('course_on_offer_views');
+        Schema::dropIfExists('courseonofferview');
     }
 };

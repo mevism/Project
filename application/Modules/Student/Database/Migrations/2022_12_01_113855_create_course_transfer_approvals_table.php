@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('course_transfer_approvals', function (Blueprint $table) {
-            $table->string('course_transfer_id');
+            $table->string('course_transfer_id')->primary();
             $table->integer('cod_status');
             $table->mediumText('cod_remarks')->nullable();
             $table->integer('dean_status')->nullable();

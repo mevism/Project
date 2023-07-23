@@ -15,8 +15,10 @@ return new class extends Migration
     {
         Schema::create('admission_documents', function (Blueprint $table) {
             $table->id();
-            $table->string('applicant_id');
             $table->string('application_id');
+            $table->foreign('application_id')->references('application_id')->on('applications')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('applicant_id');
+            $table->foreign('applicant_id')->references('applicant_id')->on('applicant_contacts')->onUpdate('cascade')->onDelete('cascade');
             $table->string('certificates')->nullable();
             $table->string('bank_receipt')->nullable();
             $table->string('medical_form')->nullable();
