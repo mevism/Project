@@ -3,6 +3,7 @@
 namespace App\Http\Middleware\User;
 
 use AfricasTalking\SDK\AfricasTalking;
+use App\Http\Apis\AppApis;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,11 @@ use Modules\Application\Entities\VerifyUser;
 
 class Updatedprofile
 {
+    protected $appApi;
+
+    public function __construct(AppApis $appApi){
+        $this->appApi = $appApi;
+    }
     /**
      * Handle an incoming request.
      *
@@ -51,10 +57,9 @@ class Updatedprofile
                 'verification_code' => $verification_code,
             ]);
 
-            $user = \auth()->guard('web')->user();
-
-//            $user->notify(new \Modules\Application\Notifications\SMS($verification_code));
-
+            $phoneNumber =  auth()->guard('web')->user()->applicantContact->mobile;
+            $message = 'Welcome to TUM online course application platform. Your verification code '. $verification_code. '. Please do not share this code with anyone.';
+            $this->appApi->sendSMS($phoneNumber, $message);
             return redirect(route('application.reverify'))->with(['info' => 'Enter the code send to your phone']);
         }
 

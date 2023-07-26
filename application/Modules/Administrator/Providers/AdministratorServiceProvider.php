@@ -4,6 +4,7 @@ namespace Modules\Administrator\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
+use Modules\Administrator\Console\SemesterRegistration;
 
 class AdministratorServiceProvider extends ServiceProvider
 {
@@ -38,6 +39,7 @@ class AdministratorServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
+
     }
 
     /**
@@ -111,4 +113,8 @@ class AdministratorServiceProvider extends ServiceProvider
         }
         return $paths;
     }
+
+    protected $commands = [
+        SemesterRegistration::class
+    ];
 }

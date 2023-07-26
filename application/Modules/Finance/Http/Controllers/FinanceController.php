@@ -2,6 +2,7 @@
 
 namespace Modules\Finance\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -9,19 +10,21 @@ use Illuminate\Support\Facades\Crypt;
 use Modules\Application\Entities\AdmissionApproval;
 use Modules\Application\Entities\Application;
 use Modules\Application\Entities\Education;
+use Modules\COD\Entities\ClassPattern;
 use Modules\Finance\Entities\FinanceLog;
 use Illuminate\Support\Facades\Auth;
+use Modules\Registrar\Entities\AcademicYear;
+use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\Courses;
 use Modules\Application\Entities\Notification;
+use Modules\Registrar\Entities\Intake;
 use Modules\Registrar\Entities\Student;
+use Modules\Student\Entities\StudentCourse;
 use Modules\Student\Entities\StudentDeposit;
+use Modules\Student\Entities\StudentInfo;
 
 class FinanceController extends Controller
 {
-//    public function __construct(){
-//        auth()->setDefaultDriver('user');
-//        $this->middleware(['web','auth', 'finance']);
-//    }
     /**
      * Display a listing of the resource.
      * @return Renderable
@@ -246,27 +249,63 @@ class FinanceController extends Controller
 
     public function addInvoice(){
 
-        $students = Student::latest()->get();
+       $classes = Classes::latest()->get();
+       $students = StudentCourse::where('status', 1)->latest()->get();
 
-        return view('applications::invoices.addInvoice')->with(['students' => $students]);
+        $studentsx = $classes->merge($students);
+
+        return view('applications::invoices.addInvoice')->with(['students' => $studentsx]);
+    }
+
+    public function getInvoiceType(Request $request){
+
+        $classes = Classes::latest()->get();
+        $students = StudentCourse::where('status', 1)->latest()->get();
+//        $today = Carbon::now();
+        $invoice = '';
+        $today = '2023-09-22';
+        $intake = Intake::where('intake_from', '<=', $today)->where('intake_to', '>=', $today)->first();
+        $year = AcademicYear::where('year_id', $intake->academic_year_id)->first();
+        $semester = Carbon::parse($intake->intake_from)->format('M').'/'.Carbon::parse($intake->intake_to)->format('M');
+        $stage = Carbon::parse($year->year_start)->format('Y').'/'.Carbon::parse($year->year_end)->format('Y');
+        $studentsx = $classes->merge($students);
+        foreach ($studentsx as $student){
+            if ($student->name == $request->code || $student->student_number == $request->code){
+                if ($student->class_id !== null){
+                   $pattern = ClassPattern::where('class_code', $student->name)->where('academic_year', $stage)->where('period', $semester)->first();
+                   $class = Classes::where('name', $student->name)->first();
+                   if ($pattern !== null){
+                       $invoice = array_merge($student->toArray(), $pattern->toArray(), $class->toArray());
+                   }
+                }elseif ($student->student_id !== null){
+                    $pattern = ClassPattern::where('class_code', $student->current_class)->where('academic_year', $stage)->where('period', $semester)->first();
+                    $studentInfo = StudentInfo::where('student_id', $student->student_id)->first();
+                    if ($pattern !== null){
+                        $invoice = array_merge($student->toArray(), $pattern->toArray(), $studentInfo->toArray());
+                    }
+                }
+            }
+        }
+
+        return response()->json($invoice);
     }
 
     public function submitInvoice(Request $request){
-        $request->validate([
-            'student' => 'required',
-            'amount' => 'required',
-            'description' => 'required',
-        ]);
+//        $request->validate([
+//            'student' => 'required',
+//            'amount' => 'required',
+//            'description' => 'required',
+//        ]);
 
         $deposit = new StudentDeposit;
 
-        $deposit->reg_number = $request->student;
-        $deposit->deposit = $request->amount;
-        $deposit->description = $request->description;
+        $deposit->reg_number = '$request->student';
+        $deposit->deposit = '$request->amount';
+        $deposit->description = '$request->description';
         $deposit->invoice_number = 'INV'.time();
         $deposit->save();
 
-        return redirect()->route('finance.invoices')->with('success', 'Student invoiced successfully');
+        return redirect()->back()->with('success', 'Student invoiced successfully');
     }
 
     public function index()

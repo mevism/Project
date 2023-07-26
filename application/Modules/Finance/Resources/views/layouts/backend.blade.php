@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="{{ config('app.locale') }}">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -29,11 +28,12 @@
   @yield('css_after')
 
   <!-- Scripts -->
-  <script>
-    window.Laravel = {!! json_encode(['csrfToken' => csrf_token()]) !!};
-  </script>
+{{--  <script>--}}
+{{--    window.Laravel = {!! json_encode(['csrfToken' => csrf_token()]) !!};--}}
+{{--  </script>--}}
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{{--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>--}}
+{{--    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>--}}
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
@@ -65,15 +65,11 @@
           <ul class="nav-main">
             <li class="nav-main-item">
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
-                <i class="nav-main-link-icon si si-cursor"></i>
+                <i class="nav-main-link-icon fas fa-money-check-dollar"></i>
                 <span class="nav-main-link-name">
-                    @php
-
-                    $user = auth()->guard('user')->user();
-
-                    @endphp
-                     @if(auth()->guard('user')->user()->hasRole('Student Finance'))
-                        Student Finance
+                    @php $user = auth()->guard('user')->user(); @endphp
+                     @if($user->hasRole('Student Finance'))
+                        Finance [ {{ $user->employmentDepartment->first()->dept_code }} ]
                     @endif
                 </span>
 
@@ -89,20 +85,18 @@
 {{--            </li>--}}
             <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="{{ route('finance.applications') }}">
-                <i class="nav-main-link-icon si si-graduation"></i>
+                <i class="nav-main-link-icon fa fa-list-1-2"></i>
                 <span class="nav-main-link-name">Applications</span>
               </a>
               <ul class="nav-main-submenu">
                   <li class="nav-main-item">
                       <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('finance.applications') }}">
-                          <i class="nav-main-link-icon si si-calendar"></i>
                           <span class="nav-main-link-name">All applications</span>
                       </a>
                   </li>
 
                     <li class="nav-main-item">
                           <a class="nav-main-link{{ request()->is('school/showSchool') ? ' active' : '' }}" href="{{  route('finance.batch') }}">
-                            <i class="nav-main-link-icon si si-graduation"></i>
                               <span class="nav-main-link-name">Submit batch</span>
                           </a>
                       </li>
@@ -110,13 +104,12 @@
             </li>
               <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
                   <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="{{ route('finance.applications') }}">
-                      <i class="nav-main-link-icon si si-graduation"></i>
+                      <i class="nav-main-link-icon fa fa-list"></i>
                       <span class="nav-main-link-name">Admissions</span>
                   </a>
                   <ul class="nav-main-submenu">
                       <li class="nav-main-item">
                           <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('finance.admissions') }}">
-                              <i class="nav-main-link-icon si si-calendar"></i>
                               <span class="nav-main-link-name">View Admissions</span>
                           </a>
                       </li>
@@ -124,14 +117,20 @@
               </li>
               <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
                   <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="{{ route('finance.applications') }}">
-                      <i class="nav-main-link-icon si si-graduation"></i>
-                      <span class="nav-main-link-name">Student Invoices</span>
+                      <i class="nav-main-link-icon fa fa-coins"></i>
+                      <span class="nav-main-link-name">Student Finances</span>
                   </a>
                   <ul class="nav-main-submenu">
                       <li class="nav-main-item">
                           <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('finance.invoices') }}">
-                              <i class="nav-main-link-icon si si-calendar"></i>
-                              <span class="nav-main-link-name">All Invoices</span>
+                              <span class="nav-main-link-name">Student Invoices</span>
+                          </a>
+                      </li>
+                  </ul>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="#">
+                              <span class="nav-main-link-name">Refund Requests</span>
                           </a>
                       </li>
                   </ul>
@@ -174,8 +173,8 @@
             <button type="button" class="btn btn-sm btn-alt-dark d-flex align-items-center" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <img class="rounded-circle" src="{{ asset('media/avatars/male.png') }}" alt="Header Avatar" style="width: 21px;">
               <span class="d-none d-sm-inline-block ms-2">
-                  @if(Auth::guard('user')->check())
-                      {{ $user->title }} {{ $user->last_name }}
+                  @if(auth()->guard('user')->check())
+                      {{ $user->staffInfos->title }} {{ $user->staffInfos->last_name }}
                   @endif
               </span>
               <i class="fa fa-fw fa-angle-down d-none d-sm-inline-block ms-1 mt-1"></i>
@@ -185,12 +184,13 @@
                 <img class="img-avatar img-avatar48 img-avatar-thumb" src="{{ asset('media/avatars/male.png') }}" alt="">
                 <p class="mt-2 mb-0 fw-medium">
            {{-- {{ Auth::guard('user')->user()->name }}--}}
-                  @if(Auth::guard('user')->check())
-                      {{ $user->title }} {{ $user->last_name }} {{ $user->first_name }} {{ $user->middle_name }}
+                  @if(auth()->guard('user')->check())
+                      {{ $user->staffInfos->title }} {{ $user->staffInfos->last_name }} {{ $user->staffInfos->first_name }} {{ $user->staffInfos->middle_name }}
                   @endif
+                  <hr>
                   <p class="mb-0 text-muted fs-sm fw-medium">
                       @if(auth()->guard('user')->user()->hasRole('Student Finance'))
-                          Student Finance
+                          Finance [ {{ $user->employmentDepartment->first()->dept_code }} ]
                       @endif
                 </p>
               </div>
@@ -201,7 +201,7 @@
               </div> --}}
               <div role="separator" class="dropdown-divider m-0"></div>
               <div class="p-2">
-                <a class="dropdown-item d-flex align-items-center justify-content-between" href="{{ route('application.logout') }}">
+                <a class="dropdown-item d-flex align-items-center justify-content-between" href="{{ route('logout') }}">
                   <span class="fs-sm fw-medium">Log Out</span>
                 </a>
               </div>
@@ -341,21 +341,21 @@
 
       @section('js_after')
           <!-- jQuery (required for DataTables plugin) -->
-              <script src="{{ url('js/lib/jquery.min.js') }}"></script>
-
-              <!-- Page JS Plugins -->
-              <script src="{{ url('js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-              <script src="{{ url('js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
-              <script src="{{ url('js/plugins/datatables-buttons/dataTables.buttons.min.js') }}"></script>
-              <script src="{{ url('js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>
-              <script src="{{ url('js/plugins/datatables-buttons-jszip/jszip.min.js') }}"></script>
-              <script src="{{ url('js/plugins/datatables-buttons-pdfmake/pdfmake.min.js') }}"></script>
-              <script src="{{ url('js/plugins/datatables-buttons-pdfmake/vfs_fonts.js') }}"></script>
-              <script src="{{ url('js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>
-              <script src="{{ url('js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
-
-              <!-- Page JS Code -->
-              <script src="{{ url('js/pages/tables_datatables.js') }}"></script>
+{{--              <script src="{{ url('js/lib/jquery.min.js') }}"></script>--}}
+{{----}}
+{{--              <!-- Page JS Plugins -->--}}
+{{--              <script src="{{ url('js/plugins/datatables/jquery.dataTables.min.js') }}"></script>--}}
+{{--              <script src="{{ url('js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>--}}
+{{--              <script src="{{ url('js/plugins/datatables-buttons/dataTables.buttons.min.js') }}"></script>--}}
+{{--              <script src="{{ url('js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js') }}"></script>--}}
+{{--              <script src="{{ url('js/plugins/datatables-buttons-jszip/jszip.min.js') }}"></script>--}}
+{{--              <script src="{{ url('js/plugins/datatables-buttons-pdfmake/pdfmake.min.js') }}"></script>--}}
+{{--              <script src="{{ url('js/plugins/datatables-buttons-pdfmake/vfs_fonts.js') }}"></script>--}}
+{{--              <script src="{{ url('js/plugins/datatables-buttons/buttons.print.min.js') }}"></script>--}}
+{{--              <script src="{{ url('js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>--}}
+{{----}}
+{{--              <!-- Page JS Code -->--}}
+{{--              <script src="{{ url('js/pages/tables_datatables.js') }}"></script>--}}
           @endsection
         @include('application::messages.notification')
     </main>
@@ -380,10 +380,10 @@
 
   <!-- OneUI Core JS -->
   <script src="{{ url('js/oneui.app.js') }}"></script>
-
-  <!-- Laravel Scaffolding JS -->
+{{----}}
+{{--  <!-- Laravel Scaffolding JS -->--}}
   <!-- <script src="{{ mix('/js/laravel.app.js') }}"></script> -->
-
+{{----}}
   @yield('js_after')
 </body>
 
