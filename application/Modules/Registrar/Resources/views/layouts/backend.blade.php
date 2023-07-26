@@ -33,7 +33,7 @@
     window.Laravel = {!! json_encode(['csrfToken' => csrf_token()]) !!};
   </script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{{--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>--}}
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
@@ -549,7 +549,7 @@
     @section('js_after')
         <!-- jQuery (required for DataTables plugin) -->
             <script src="{{ url('js/lib/jquery.min.js') }}"></script>
-
+ 
             <!-- Page JS Plugins -->
             <script src="{{ url('js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
             <script src="{{ url('js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>

@@ -22,10 +22,10 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    protected $staffInfoAPI;
+    protected $appApi;
 
-    public function __construct(AppApis $staffInfoAPI){
-        $this->staffInfoAPI = $staffInfoAPI;
+    public function __construct(AppApis $appApi){
+        $this->appApi = $appApi;
     }
     /**
      * Display a listing of the resource.
@@ -42,7 +42,7 @@ class UserController extends Controller
 
         $userId = $request->userId;
         $staffNumber = $request->staffNumber;
-        $data = $this->staffInfoAPI->fetchStaff($staffNumber, $userId);
+        $data = $this->appApi->fetchStaff($staffNumber, $userId);
         $campuses = Campus::all();
         $divisions = Division::all();
         $roles = Role::all();
@@ -83,10 +83,10 @@ class UserController extends Controller
 
         $userId = $request->input('userId');
         $staffNumber = $request->input('staffNumber');
-        $data = $this->staffInfoAPI->fetchStaff($staffNumber, $userId);
+        $data = $this->appApi->fetchStaff($staffNumber, $userId);
 
         $userID = new CustomIds();
-        
+
         $generatedId = $userID->generateId();
 
         $user = new User;

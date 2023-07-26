@@ -39,5 +39,6 @@ Route::prefix('applications')
 
         Route::get('/student-invoices', [FinanceController::class, 'allInvoices'])->name('finance.invoices');
         Route::get('/add-student-invoice', [FinanceController::class, 'addInvoice'])->name('finance.addInvoice');
+        Route::get('/get-invoice-type', [FinanceController::class, 'getInvoiceType'])->name('finance.getInvoiceType');
         Route::post('/submit-student-invoice', [FinanceController::class, 'submitInvoice'])->name('finance.submitInvoice');
 });

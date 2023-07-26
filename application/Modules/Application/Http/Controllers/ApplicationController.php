@@ -3,6 +3,7 @@
 namespace Modules\Application\Http\Controllers;
 
 use AfricasTalking\SDK\AfricasTalking;
+use App\Http\Apis\AppApis;
 use App\Notifications\Sms;
 use App\Service\CustomIds;
 use Carbon\Carbon;
@@ -48,10 +49,11 @@ use Modules\Finance\Entities\FinanceLog;
 
 class ApplicationController extends Controller
 {
-    //    public function __construct(){
-    //        auth()->setDefaultDriver('web');
-    //        $this->middleware(['web','auth', 'is_applicant']);
-    //    }
+    protected $appApi;
+
+    public function __construct(AppApis $appApi){
+        $this->appApi = $appApi;
+    }
     /**
      * Display a listing of the resource.
      * @return Renderable
@@ -143,8 +145,7 @@ class ApplicationController extends Controller
         return redirect()->back()->with('error', 'Phone number failed verification');
     }
 
-    public function getNewCode()
-    {
+    public function getNewCode(){
 
         VerifyUser::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->delete();
 
@@ -154,11 +155,9 @@ class ApplicationController extends Controller
             'applicant_id' => \auth()->guard('web')->user()->applicant_id,
             'verification_code' => $verification_code,
         ]);
-
-        $user =  auth()->guard('web')->user();
-
-        //        $user->notify(new \Modules\Application\Notifications\SMS($verification_code));
-
+        $phoneNumber =  auth()->guard('web')->user()->applicantContact->mobile;
+        $message = 'Welcome to TUM online course application platform. Your verification code '. $verification_code. '. Please do not share this code with anyone.';
+        $this->appApi->sendSMS($phoneNumber, $message);
         return redirect()->back()->with(['info' => 'Enter the code send to your phone', 'code' => $verification_code]);
     }
 

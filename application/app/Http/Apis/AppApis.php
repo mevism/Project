@@ -2,8 +2,10 @@
 
 namespace App\Http\Apis;
 
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Facades\Log;
 use function env;
 
 class AppApis
@@ -11,7 +13,7 @@ class AppApis
     protected $client;
     public function __construct(){
         $this->client = new Client([
-            'base_uri' => 'http://developer.tum.ac.ke/v1/staff/profile/',
+            'base_uri' => 'http://developer.tum.ac.ke/v1/',
             'auth' => [env('STAFF_API_USERNAME'), env('STAFF_API_PASSWORD')],
         ]);
     }
@@ -19,7 +21,7 @@ class AppApis
     public function fetchStaff($staffNumber, $userId)
     {
         try {
-            $uri = "{$staffNumber}/{$userId}";
+            $uri = "staff/profile/{$staffNumber}/{$userId}";
             $response = $this->client->request('GET', $uri);
             if ($response->getStatusCode() === 200) {
                 $userData = json_decode($response->getBody(), true);
@@ -34,5 +36,22 @@ class AppApis
         return [];
     }
 
-
+    public function sendSMS($phoneNumber, $message)
+    {
+        try {
+            $uri = "sms/send";
+            $body = [
+                'mobile_number' => $phoneNumber,
+                'text_message' => $message,
+            ];
+            $response = $this->client->request('POST', $uri, ['json' => $body]);
+            $responseBody = $response->getBody()->getContents();
+            if ($response->getStatusCode() === 200) {
+                $getMessage = json_decode($responseBody, true);
+                return $getMessage;
+            }
+        } catch (GuzzleException $e) {
+            return $e->getMessage();
+        }
+    }
 }
