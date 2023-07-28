@@ -53,23 +53,24 @@
                 <div class="row">
                  <div class="table-responsive col-12">
                     <table id="example" class="table table-bordered table-striped table-sm fs-sm">
-                        <span class="d-flex justify-content-end">
+                        {{-- <span class="d-flex justify-content-end">
                             <a class="btn btn-alt-info btn-sm" href="{{ route('courses.voteheads') }}">Create</a>
-                        </span><br>
+                        </span><br> --}}
                         <thead>
                             <th>#</th>
+                            <th>Code</th>
                             <th>NAME </th>
-                            <th>ACTION</th>
                         </thead>
                         <tbody>@foreach ($show as $key => $item)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td style="text-transform: uppercase">{{ $item->name }}</td>
-                            <td nowrap>
-                                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editVotehead', $item->votehead_id) }}"> edit </a>
-                                <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this Votehead ?')"  href="{{ route('courses.destroyVotehead', $item->votehead_id) }}">delete</a>
-                              </td>
-                        </tr>
+                                {{-- @foreach($items as $item) --}}
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td style="text-transform: uppercase">{{ $item['id'] }}</td>
+                                    <td style="text-transform: uppercase">{{ $item['name'] }}</td>
+                                
+                                </tr>
+                                {{-- @endforeach --}}
+                        
                         @endforeach
 
                         </tbody>

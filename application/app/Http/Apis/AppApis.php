@@ -54,7 +54,8 @@ class AppApis
         }
     }
 
-    public function createStudent($student){
+    public function createStudent($student)
+    {
         try {
             $uri = "finance/student";
             $response = $this->client->request('POST', $uri, ['json' => $student]);
@@ -63,7 +64,42 @@ class AppApis
                 $getMessage = json_decode($responseBody, true);
                 return $getMessage;
             }
-        } catch (GuzzleException $e){
+        } catch (GuzzleException $e) {
+            return $e->getMessage();
+        }
+    }
+    public function fetchVoteheads(){
+        try{
+            $uri = "finance/voteheads";
+            $allVoteheads = collect();
+
+        $currentPage = 1;
+        do {
+            $response = $this->client->request('GET', $uri, ['query' => ['page' => $currentPage]]);
+
+            if ($response->getStatusCode() === 200) {
+                $voteheadData = json_decode($response->getBody(), true);
+                $data = $voteheadData['dataPayload']['data'];
+                $allVoteheads = $allVoteheads->merge($data);
+
+                // Check if there are more pages
+                $currentPage++;
+                $totalPages = $voteheadData['dataPayload']['totalPages'];
+            } else {
+                // Handle other status codes if needed
+                // For example, if the API returns a 404 or 500 error
+                // You may choose to return an error message or log the error
+                return response()->json(['error' => 'Failed to fetch data from API'], $response->getStatusCode());
+                // break;
+            }
+        } while ($currentPage <= $totalPages);
+
+        // Now $allVoteheads contains all the data from all pages
+        // dd($allVoteheads);
+        return $allVoteheads;
+        // You can process the $allVoteheads collection further as needed
+
+        }catch(GuzzleException $e){
             return $e->getMessage();
         }
     }

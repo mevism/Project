@@ -1,7 +1,6 @@
 <?php
 
 namespace Modules\Registrar\Http\Controllers;
-
 use App\Http\Apis\AppApis;
 use App\Service\CustomIds;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -49,6 +48,7 @@ use App\Imports\UnitImport;
 use Illuminate\Http\Request;
 use App\Imports\CourseImport;
 use App\Imports\KuccpsImport;
+use PhpParser\Node\Stmt\Return_;
 use Illuminate\Routing\Controller;
 use App\Imports\UnitProgrammsImport;
 use Illuminate\Support\Facades\Auth;
@@ -89,6 +89,7 @@ use Modules\Registrar\Entities\CourseHistory;
 use Modules\Registrar\Entities\SchoolHistory;
 use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Application\Entities\Notification;
+use Modules\Examination\Entities\ExamWorkflow;
 use Modules\Registrar\Entities\ClusterWeights;
 use Modules\Workload\Entities\ApproveWorkload;
 use Modules\Registrar\emails\AcademicLeaveMail;
@@ -102,24 +103,19 @@ use Modules\Registrar\Entities\DepartmentHistory;
 use Modules\Student\Entities\ReadmissionApproval;
 use Modules\Registrar\emails\RejectedAcademicMail;
 use Modules\Application\Entities\AdmissionApproval;
-use Modules\Examination\Entities\ExamWorkflow;
 use Modules\Student\Entities\AcademicLeaveApproval;
 use Modules\Student\Entities\CourseTransferApproval;
 use Modules\Registrar\emails\AcceptedReadmissionsMail;
 use Modules\Registrar\emails\RejectedReadmissionsMail;
 use Modules\Registrar\emails\CourseTransferRejectedMails;
-use PhpParser\Node\Stmt\Return_;
 
 class CoursesController extends Controller
 {
-    protected $appApi;
-
-    public function __construct(AppApis $appApi){
-        $this->appApi = $appApi;
+    public $appApi;
+    public function __construct(AppApis $appApi)
+    {
+        $this->appApi  =  $appApi;
     }
-    /*
-     * exam marks
-    */
     public function  yearlyExamMarks(){
         $academicYears = ExamWorkflow::latest()->get()->groupBy('academic_year');
         return view('registrar::marks.index')->with(['academicYears' => $academicYears]);
@@ -1108,9 +1104,9 @@ class CoursesController extends Controller
 
     public function showVoteheads()
     {
-        $show  = VoteHead::latest()->get();
-
-        return view('registrar::fee.showVoteheads', compact('show'));
+        // $show  = VoteHead::latest()->get();
+        $dataPayload = $this->appApi->fetchVoteheads();
+        return view('registrar::fee.showVoteheads')->with(['show' => $dataPayload]);
     }
 
     public function storeVoteheads(Request $request)
@@ -1118,7 +1114,18 @@ class CoursesController extends Controller
         $voteID = new CustomIds();
         $voteheads  = new VoteHead;
         $voteheads->votehead_id = $voteID->generateId();
+        $voteheads->vote_id  =  $request->input('vote_id');
         $voteheads->name  =  $request->input('name');
+        $voteheads->description  =  $request->input('description');
+        if($request->input('type') == 1){
+            $voteheads->type = "Fee";
+        }elseif($request->input('type') == 2){
+            $voteheads->type = "Fine";
+        }elseif($request->input('type') == 3){
+            $voteheads->type = "Accommodation";
+        }else{
+            $voteheads->type = "Graduation";
+        }
         $voteheads->save();
 
         return redirect()->route('courses.showVoteheads')->with('success', 'votehead added successfully.');
