@@ -12,7 +12,7 @@ use Modules\Dean\Http\Controllers\DeanController;
 |
 */
 
-Route::prefix('dean')->middleware(['web'])->group(function() {
+Route::prefix('dean')->middleware(['web', 'auth:user', 'is_dean'])->group(function() {
 
         Route::get('/dean', [DeanController::class, 'index'])->name('dean.dashboard');
         Route::get('/applications', [DeanController::class, 'applications'])->name('dean.applications');

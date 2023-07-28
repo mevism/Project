@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('applicant_id');
             $table->foreign('applicant_id')->references('applicant_id')->on('applicant_contacts')->onUpdate('cascade')->onDelete('cascade');
             $table->string('ref_number')->nullable();
+            $table->string('application_number')->nullable();
             $table->string('intake_id');
             $table->string('student_type');
             $table->string('campus_id')->nullable();

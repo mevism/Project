@@ -14,7 +14,9 @@ use App\Http\Middleware\SuperAdmin;
 use App\Http\Middleware\User\Twofactorverification;
 use App\Http\Middleware\User\Updatedprofile;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Modules\Examination\Http\Middleware\Examination;
 use Modules\Hostel\Http\Middleware\Accommodation;
+use Modules\Lecturer\Http\Middleware\Lecturer;
 use Modules\Medical\Http\Middleware\Medical;
 use Modules\Registrar\Http\Middleware\UseSSL;
 
@@ -47,7 +49,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
-//             \Illuminate\Session\Middleware\AuthenticateSession::class,
+             \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
@@ -88,6 +90,8 @@ class Kernel extends HttpKernel
         'is_medical' => Medical::class,
         'ssl' => UseSSL::class,
         'is_hostels' => Accommodation::class,
+        'exams' => Examination::class,
+        'lecturer' => Lecturer::class,
     ];
 
 }

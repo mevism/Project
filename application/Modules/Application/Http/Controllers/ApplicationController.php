@@ -199,7 +199,7 @@ class ApplicationController extends Controller
         $intake = Intake::where('status', 1)->first();
 
         if ($intake != null) {
-            $courses = DB::table('coursesonofferview')->where('intake_id', $intake->intake_id)
+            $courses = CourseOnOfferView::where('intake_id', $intake->intake_id)
                 ->latest()->get();
         }
 
@@ -516,8 +516,12 @@ class ApplicationController extends Controller
             'campus' => 'required'
         ]);
 
+        $apps = Application::all()->count();
+        $intakeApps = Application::where('intake_id', $request->intake)->get()->count();
         $customId = new CustomIds();
-        $reference = 'APP' . time();
+        $appId = $customId->generateId();
+        $reference = 'APP/'.str_pad($apps, 9, '0', STR_PAD_LEFT).'/'.date('Y');
+        $applicationNumber = date('y').str_pad($intakeApps, 5, '0', STR_PAD_LEFT);
 
         if (Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->where('course_id', $request->course_id)->first()) {
             $subject = Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->where('course_id', $request->course_id)->first()->application_id;
@@ -530,8 +534,9 @@ class ApplicationController extends Controller
         } else {
 
             $application = new Application;
-            $application->application_id = $customId->generateId();
+            $application->application_id = $appId;
             $application->applicant_id = \auth()->guard('web')->user()->applicant_id;
+            $application->application_number = $applicationNumber;
             $application->ref_number = $reference;
             $application->student_type = 1;
             $application->intake_id = $request->intake;
@@ -542,7 +547,7 @@ class ApplicationController extends Controller
             $application->save();
 
             $subject = new ApplicationSubject;
-            $subject->application_id = $application->application_id;
+            $subject->application_id = $appId;
             $subject->subject_1 = $request->subject1 . " " . $request->grade1;
             $subject->subject_2 = $request->subject2 . " " . $request->grade2;
             $subject->subject_3 = $request->subject3 . " " . $request->grade3;

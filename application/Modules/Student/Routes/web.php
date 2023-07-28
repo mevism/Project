@@ -14,7 +14,6 @@
 use Modules\Student\Http\Controllers\StudentController;
 
 Route::prefix('student')->middleware(['web', 'auth:student', 'is_student'])->group(function() {
-
     Route::get('/', [StudentController::class, 'index'])->name('student');
     Route::get('/my-course', [StudentController::class, 'myCourse'])->name('student.mycourses');
     Route::get('/course-transfers', [StudentController::class, 'courseTransfers'])->name('student.coursetransfers');

@@ -2,6 +2,7 @@
 
 namespace Modules\Registrar\Http\Controllers;
 
+use App\Http\Apis\AppApis;
 use App\Service\CustomIds;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
@@ -111,10 +112,11 @@ use PhpParser\Node\Stmt\Return_;
 
 class CoursesController extends Controller
 {
-    //    public function __construct(){
-    //        auth()->setDefaultDriver('user');
-    //        $this->middleware(['web','auth', 'admin']);
-    //    }
+    protected $appApi;
+
+    public function __construct(AppApis $appApi){
+        $this->appApi = $appApi;
+    }
     /*
      * exam marks
     */
@@ -1646,12 +1648,12 @@ class CoursesController extends Controller
                 $my_template->setValue('reg_number', $studentNumber);
                 $my_template->setValue('ref_number', $app->ref_number);
                 $my_template->setValue('date',  date('d-M-Y'));
-                $docPath = 'AdmissionLetters/' . $app->ref_number . ".docx";
+                $docPath = "AdmissionLetters/". str_replace('/', '', $app->ref_number) . ".docx";
                 $my_template->saveAs($docPath);
 
                 $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
 
-                $pdfPath =  'AdmissionLetters/' . $app->ref_number . ".pdf";
+                $pdfPath =  'AdmissionLetters/'.str_replace('/', '', $app->ref_number).".pdf";
 
                 if (file_exists($pdfPath)) {
                     unlink($pdfPath);
@@ -1668,7 +1670,7 @@ class CoursesController extends Controller
                 $update->registrar_status = 3;
                 $update->registrar_comments = 'Admission letter generated';
                 $update->reg_number = $studentNumber;
-                $update->admission_letter = $app->ref_number . ".docx";
+                $update->admission_letter = str_replace('/', '', $app->ref_number).".docx";
                 $update->save();
 
                 $status = Application::where('application_id', $id)->first();
@@ -2290,10 +2292,32 @@ class CoursesController extends Controller
         return view('registrar::admissions.index')->with('admission', $admission);
     }
 
-    public function admitStudent($id)
-    {
+    public function admitStudent($id){
 
-         $admission = AdmissionsView::where('application_id', $id)->first();
+        $admission = AdmissionsView::where('application_id', $id)->first();
+        $course = Courses::where('course_id', $admission->course_id)->first();
+        $intake = Intake::where('intake_id', $admission->intake_id)->first();
+        if ($admission->student_type == 1){
+            $code  = 'S-FT';
+            $group = 'SSP';
+        }elseif ($admission->student_type == 2){
+            $code  = 'J-FT';
+            $group = 'KUCCPS';
+        }else{
+            $code  = 'S-PT';
+            $group = 'SSP';
+        }
+
+        $class = $course->course_code.'/'.strtoupper(Carbon::parse($intake->intake_from)->format('MY')).'/'.$code;
+        $student = [
+            'student_number' => $admission->reg_number,
+            'full_name' => $admission->fname.' '.$admission->mname.' '.$admission->sname,
+            'class_code' => $class,
+            'group_code' => $group,
+            'course_code' => $course->course_code
+        ];
+
+        $this->appApi->createStudent($student);
         $studentID = new CustomIds();
 
         $generatedStudentID  =  $studentID->generateId();
@@ -2312,7 +2336,7 @@ class CoursesController extends Controller
         $student->title = $admission->title;
         $student->marital_status = $admission->marital_status;
         $student->gender = $admission->gender;
-        $student->dob = $admission->DOB;
+        $student->dob = $admission->dob;
         $student->id_number = $admission->id_number;
         $student->disabled = $admission->disabled;
         $student->save();
@@ -2366,13 +2390,13 @@ class CoursesController extends Controller
         $approval->accommodation_status =           0;
         $approval->save();
 
-        //        $comms = new Notification;
-        //        $comms->application_id = $admission->id;
-        //        $comms->role_id = Auth::guard('user')->user()->role_id;
-        //        $comms->subject = 'Application Admission Process';
-        //        $comms->comment = 'Congratulations! Your admission was successful. You are now a bona-fied student at TUM. You can now log in as a student using your registration number as user ID and ID/PASSPORT/BIRTH certificate number.';
-        //        $comms->status = 1;
-        //        $comms->save();
+//                $comms = new Notification;
+//                $comms->application_id = $admission->id;
+//                $comms->role_id = Auth::guard('user')->user()->role_id;
+//                $comms->subject = 'Application Admission Process';
+//                $comms->comment = 'Congratulations! Your admission was successful. You are now a bona-fied student at TUM. You can now log in as a student using your registration number as user ID and ID/PASSPORT/BIRTH certificate number.';
+//                $comms->status = 1;
+//                $comms->save();
 
         return redirect()->back()->with('success', 'New student admission completed successfully');
     }

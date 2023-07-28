@@ -17,9 +17,8 @@ class Admin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::guard('user')->check() || !Auth::guard('user')->user()->roles->first()->id == 1){
-
-            abort(403);
+        if (!auth()->guard('user')->check() || !\auth()->guard('user')->user()->roles->first()->id == 1){
+            return redirect()->back()->with('error', 'An authorized attempt blocked');
         }
         return $next($request);
     }

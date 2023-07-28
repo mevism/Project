@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\Medical\Http\Middleware;
+namespace Modules\Examination\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class Medical
+class Examination
 {
     /**
      * Handle an incoming request.
@@ -17,8 +17,8 @@ class Medical
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!\auth()->guard('user')->check() || !\auth()->guard('user')->user()->role_id === 8){
-            return redirect()->back()->with('error', 'Only medical staff members are allowed');
+        if (!auth()->guard('user')->check() || !auth()->guard('user')->user()->roles->first()->id == 6){
+            return redirect()->back()->with('error', 'An authorized access dined');
         }
         return $next($request);
     }

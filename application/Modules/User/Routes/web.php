@@ -19,9 +19,7 @@
 //use Illuminate\Routing\Route;
 use Modules\User\Http\Controllers\UserController;
 
-Route::prefix('user')
-//    ->middleware(['user', 'auth', 'admin'])
-    ->group(function() {
+Route::prefix('user')->middleware(['web', 'auth:user', 'auth'])->group(function() {
     Route::get('/system-users', [UserController::class, 'index'])->name('admin.users');
     Route::get('/fetchUser', [UserController::class,'fetchById'])->name('admin.userById');
     Route::get('/add-new-system-user', [UserController::class, 'addNewUser'])->name('admin.addNewUser');
