@@ -14,8 +14,7 @@ use Modules\Registrar\Http\Controllers\CoursesController;
 |
 */
 
-Route::prefix('courses')->group(function() {
-
+Route::prefix('registry')->middleware(['web', 'auth:user', 'registrar'])->group(function() {
     Route::get('/show-semester-fee', 'CoursesController@showSemFee')->name('courses.showSemFee');
     Route::get('/semFee', 'CoursesController@semFee')->name('courses.semFee');
     Route::post('/store-semester-fee', 'CoursesController@storeSemFee')->name('courses.storeSemFee');

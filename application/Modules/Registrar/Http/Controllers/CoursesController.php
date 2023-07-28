@@ -1,21 +1,55 @@
 <?php
 
 namespace Modules\Registrar\Http\Controllers;
-
+use App\Http\Apis\AppApis;
+use App\Service\CustomIds;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Modules\Application\Entities\ApplicantAddress;
+use Modules\Application\Entities\ApplicantContact;
+use Modules\Application\Entities\ApplicantInfo;
+use Modules\Application\Entities\ApplicantLogin;
+use Modules\Application\Entities\ApplicationApproval;
+use Modules\Application\Entities\ApplicationSubject;
+use Modules\COD\Entities\AcademicLeavesView;
+use Modules\COD\Entities\AdmissionsView;
+use Modules\COD\Entities\ApplicationsView;
+use Modules\COD\Entities\CourseCluster;
+use Modules\COD\Entities\Nominalroll;
+use Modules\COD\Entities\ReadmissionsView;
+use Modules\COD\Entities\Unit;
+use Modules\Registrar\Entities\academicdepartments;
+use Modules\Examination\Entities\ModeratedResults;
+use Modules\Examination\Entities\SchoolExamWorkflow;
+use Modules\Registrar\Entities\Campus;
+use Modules\Registrar\Entities\Classes;
+use Modules\Registrar\Entities\ClusterGroup;
+use Modules\Registrar\Entities\ClusterSubject;
+use Modules\Registrar\Entities\Division;
+use Modules\Registrar\Entities\Group;
+use Modules\Registrar\Entities\SchoolDepartment;
+use Modules\Student\Entities\CourseClusterGroups;
+use Modules\Student\Entities\CourseSoftDelete;
+use Modules\Student\Entities\CourseTransfersView;
+use Modules\Student\Entities\OldStudentCourse;
+use Modules\Student\Entities\StudentAddress;
+use Modules\Student\Entities\StudentContact;
+use Modules\Student\Entities\StudentCourse;
+use Modules\Student\Entities\StudentDisability;
+use Modules\Student\Entities\StudentInfo;
+use Modules\Student\Entities\StudentLogin;
+use Modules\Student\Entities\StudentView;
+use Modules\Workload\Entities\WorkloadView;
 use QrCode;
 use Carbon\Carbon;
 use App\Models\User;
-use App\Http\Apis\AppApis;
-use App\Service\CustomIds;
 use App\Imports\UnitImport;
 use Illuminate\Http\Request;
 use App\Imports\CourseImport;
 use App\Imports\KuccpsImport;
-use Modules\COD\Entities\Unit;
 use PhpParser\Node\Stmt\Return_;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use App\Imports\UnitProgrammsImport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -24,49 +58,31 @@ use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpWord\Element\Table;
 use App\Imports\ClusterWeightsImport;
 use Illuminate\Support\Facades\Crypt;
-use Modules\COD\Entities\Nominalroll;
 use Modules\Registrar\Entities\Event;
-use Modules\Registrar\Entities\Group;
 use Modules\Registrar\Entities\Level;
-use Modules\Registrar\Entities\Campus;
 use Modules\Registrar\Entities\Intake;
 use Modules\Registrar\Entities\School;
 use Illuminate\Support\Facades\Storage;
-use Modules\COD\Entities\CourseCluster;
-use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Student;
 use Modules\Workload\Entities\Workload;
-use Modules\COD\Entities\AdmissionsView;
-use Modules\Registrar\Entities\Division;
 use Modules\Registrar\Entities\VoteHead;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Modules\Registrar\emails\KuccpsMails;
 use Modules\Student\Entities\Readmission;
-use Modules\Student\Entities\StudentInfo;
-use Modules\Student\Entities\StudentView;
-use Modules\COD\Entities\ApplicationsView;
-use Modules\COD\Entities\ReadmissionsView;
 use Modules\Registrar\Entities\Attendance;
 use Modules\Registrar\Entities\Department;
-use Modules\Student\Entities\StudentLogin;
 use PhpOffice\PhpWord\SimpleType\TblWidth;
 use Modules\Application\Entities\Applicant;
 use Modules\Application\Entities\Education;
 use Modules\Examination\Entities\ExamMarks;
 use Modules\Registrar\Entities\SemesterFee;
 use Modules\Student\Entities\AcademicLeave;
-use Modules\Student\Entities\StudentCourse;
-use Modules\Workload\Entities\WorkloadView;
 use NcJoes\OfficeConverter\OfficeConverter;
-use Modules\COD\Entities\AcademicLeavesView;
 use Modules\Finance\Entities\StudentInvoice;
 use Modules\Registrar\Entities\AcademicYear;
-use Modules\Registrar\Entities\ClusterGroup;
 use Modules\Registrar\Entities\RegistrarLog;
 use Modules\Student\Entities\CourseTransfer;
-use Modules\Student\Entities\StudentAddress;
-use Modules\Student\Entities\StudentContact;
 use Modules\Student\Entities\StudentDeposit;
 use Modules\Application\Entities\Application;
 use Modules\Registrar\Entities\CourseHistory;
@@ -74,40 +90,23 @@ use Modules\Registrar\Entities\SchoolHistory;
 use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Application\Entities\Notification;
 use Modules\Examination\Entities\ExamWorkflow;
-use Modules\Registrar\Entities\ClusterSubject;
 use Modules\Registrar\Entities\ClusterWeights;
-use Modules\Student\Entities\CourseSoftDelete;
-use Modules\Student\Entities\OldStudentCourse;
 use Modules\Workload\Entities\ApproveWorkload;
-use Modules\Application\Entities\ApplicantInfo;
 use Modules\Registrar\emails\AcademicLeaveMail;
 use Modules\Registrar\Entities\AvailableCourse;
 use Modules\Registrar\Entities\CourseLevelMode;
 use Modules\Registrar\Entities\KuccpsApplicant;
-use Modules\Student\Entities\StudentDisability;
-use Modules\Application\Entities\ApplicantLogin;
 use Modules\Registrar\Entities\CalenderOfEvents;
-use Modules\Registrar\Entities\SchoolDepartment;
 use Modules\Registrar\emails\CourseTransferMails;
 use Modules\Registrar\Entities\CourseRequirement;
 use Modules\Registrar\Entities\DepartmentHistory;
-use Modules\Student\Entities\CourseClusterGroups;
-use Modules\Student\Entities\CourseTransfersView;
 use Modules\Student\Entities\ReadmissionApproval;
-use Modules\Application\Entities\ApplicantAddress;
-use Modules\Application\Entities\ApplicantContact;
-use Modules\Examination\Entities\ModeratedResults;
 use Modules\Registrar\emails\RejectedAcademicMail;
 use Modules\Application\Entities\AdmissionApproval;
-use Modules\Registrar\Entities\academicdepartments;
 use Modules\Student\Entities\AcademicLeaveApproval;
-use Modules\Application\Entities\ApplicationSubject;
-use Modules\Examination\Entities\SchoolExamWorkflow;
 use Modules\Student\Entities\CourseTransferApproval;
-use Modules\Application\Entities\ApplicationApproval;
 use Modules\Registrar\emails\AcceptedReadmissionsMail;
 use Modules\Registrar\emails\RejectedReadmissionsMail;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Modules\Registrar\emails\CourseTransferRejectedMails;
 
 class CoursesController extends Controller
@@ -1656,12 +1655,12 @@ class CoursesController extends Controller
                 $my_template->setValue('reg_number', $studentNumber);
                 $my_template->setValue('ref_number', $app->ref_number);
                 $my_template->setValue('date',  date('d-M-Y'));
-                $docPath = 'AdmissionLetters/' . $app->ref_number . ".docx";
+                $docPath = "AdmissionLetters/". str_replace('/', '', $app->ref_number) . ".docx";
                 $my_template->saveAs($docPath);
 
                 $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
 
-                $pdfPath =  'AdmissionLetters/' . $app->ref_number . ".pdf";
+                $pdfPath =  'AdmissionLetters/'.str_replace('/', '', $app->ref_number).".pdf";
 
                 if (file_exists($pdfPath)) {
                     unlink($pdfPath);
@@ -1678,7 +1677,7 @@ class CoursesController extends Controller
                 $update->registrar_status = 3;
                 $update->registrar_comments = 'Admission letter generated';
                 $update->reg_number = $studentNumber;
-                $update->admission_letter = $app->ref_number . ".docx";
+                $update->admission_letter = str_replace('/', '', $app->ref_number).".docx";
                 $update->save();
 
                 $status = Application::where('application_id', $id)->first();
@@ -2300,10 +2299,32 @@ class CoursesController extends Controller
         return view('registrar::admissions.index')->with('admission', $admission);
     }
 
-    public function admitStudent($id)
-    {
+    public function admitStudent($id){
 
-         $admission = AdmissionsView::where('application_id', $id)->first();
+        $admission = AdmissionsView::where('application_id', $id)->first();
+        $course = Courses::where('course_id', $admission->course_id)->first();
+        $intake = Intake::where('intake_id', $admission->intake_id)->first();
+        if ($admission->student_type == 1){
+            $code  = 'S-FT';
+            $group = 'SSP';
+        }elseif ($admission->student_type == 2){
+            $code  = 'J-FT';
+            $group = 'KUCCPS';
+        }else{
+            $code  = 'S-PT';
+            $group = 'SSP';
+        }
+
+        $class = $course->course_code.'/'.strtoupper(Carbon::parse($intake->intake_from)->format('MY')).'/'.$code;
+        $student = [
+            'student_number' => $admission->reg_number,
+            'full_name' => $admission->fname.' '.$admission->mname.' '.$admission->sname,
+            'class_code' => $class,
+            'group_code' => $group,
+            'course_code' => $course->course_code
+        ];
+
+        $this->appApi->createStudent($student);
         $studentID = new CustomIds();
 
         $generatedStudentID  =  $studentID->generateId();
@@ -2322,7 +2343,7 @@ class CoursesController extends Controller
         $student->title = $admission->title;
         $student->marital_status = $admission->marital_status;
         $student->gender = $admission->gender;
-        $student->dob = $admission->DOB;
+        $student->dob = $admission->dob;
         $student->id_number = $admission->id_number;
         $student->disabled = $admission->disabled;
         $student->save();
@@ -2376,13 +2397,13 @@ class CoursesController extends Controller
         $approval->accommodation_status =           0;
         $approval->save();
 
-        //        $comms = new Notification;
-        //        $comms->application_id = $admission->id;
-        //        $comms->role_id = Auth::guard('user')->user()->role_id;
-        //        $comms->subject = 'Application Admission Process';
-        //        $comms->comment = 'Congratulations! Your admission was successful. You are now a bona-fied student at TUM. You can now log in as a student using your registration number as user ID and ID/PASSPORT/BIRTH certificate number.';
-        //        $comms->status = 1;
-        //        $comms->save();
+//                $comms = new Notification;
+//                $comms->application_id = $admission->id;
+//                $comms->role_id = Auth::guard('user')->user()->role_id;
+//                $comms->subject = 'Application Admission Process';
+//                $comms->comment = 'Congratulations! Your admission was successful. You are now a bona-fied student at TUM. You can now log in as a student using your registration number as user ID and ID/PASSPORT/BIRTH certificate number.';
+//                $comms->status = 1;
+//                $comms->save();
 
         return redirect()->back()->with('success', 'New student admission completed successfully');
     }

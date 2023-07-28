@@ -13,9 +13,7 @@ use Modules\Lecturer\Http\Controllers\LecturerController;
 |
 */
 
-Route::prefix('lecturer')
-//    ->middleware(['user', 'auth'])
-    ->group(function() {
+Route::prefix('lecturer')->middleware(['web', 'auth:user', 'lecturer'])->group(function() {
     Route::get('/', 'LecturerController@index');
     Route::get('/view-workload', [LecturerController::class, 'viewworkload']) ->name ('lecturer.viewWorkload');
     Route::get('/qualifications', [LecturerController::class, 'qualifications']) ->name ('lecturer.qualifications');

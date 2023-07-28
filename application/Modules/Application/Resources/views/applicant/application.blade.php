@@ -717,7 +717,7 @@
                                     <p class="text-muted">To complete application you must pay and add payment details to this form</p>
                                     <p> You are required to pay <span class="fw-bold"> Ksh. {{ $course->application_fee }} </span> to complete this application.</p>
                                     @if($mycourse != null)
-                                    <p>To complete application payment use <b>{{ $mycourse->ref_number }}</b> as account number for any of the preferred payment method</p>
+                                    <p>To complete application payment use <b>{{ $mycourse->application_number }}</b> as account number for any of the preferred payment method</p>
                                     @else
                                     @endif
 
@@ -734,7 +734,7 @@
                                             <li>KCB (TUM) Fee Collection <b> Acc No. 1169329578 </b> (Mvita Branch).</li>
                                             <li>Barclays Bank <b> Acc. No. 2034098894 </b> (Nkrumah Rd Branch).</li>
                                             or
-                                            <li>Via MPesa <b>pay bill number XXXXXX </b></li>
+                                            <li>Via MPesa <b>pay bill number 4045313 </b></li>
                                         </ul>
 
                                         <span class="text-muted text-center" style="color: red !important;">Application fee is non refundable</span>

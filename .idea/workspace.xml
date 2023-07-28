@@ -2,56 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="08195653-74ee-4c59-8ef1-51788d10d2d9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/application/Modules/Administrator/Console/SemesterRegistration.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/OmiDYe2MosjM5oHz3XauAaGZyjCcPh8udu63imcp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/beUWLUXVIlFA3IcRKRSygNRjaozoqZaFVKXeEZrR" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/03d36b370458bf262375fc1b5562ae8b5f04bf79.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/0eea2d540fe1103f2ecfbd43455925c6733a230a.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/120f73fcf9dc448c7e0d7978b52c079b48ec4819.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/1d6891493c95687ce237976b1669aca95705a810.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/2cdf119037c5ffb873dd1717fe55c41dd98972fa.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/42bd0cd2e096b1dcb2f3e53e5533dc264a90caab.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/64492a0cf20a52b9d39e9378f28563083c4edccd.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/88beea5e9b1105f0c442ac44a3694aa30d8a48c2.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/9456fa8f0ef52ce87712552832e6c3b61f7aee44.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/baf4bfc229c7e052d8956e60af4ca635439c102a.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/c506d08c63687157a858c45223e529901d7d1eea.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/c86ab5ba561b7e3c26060e266b72cd62c8ffb65c.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/d5a41535bdba3e99f4e725b2fc7f539a070405d3.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/de34a38955f35f9cc89c8b089cf9a336972383ce.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/e5ef54c21f86eefad10e23f2a6196c2128864c17.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/e6a31f06e96a019a4899e4b3961c0a9f07fb5142.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/f592881f42fe96432554e373820156b8ce50f2a2.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/smis.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/smis.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/Modules/Examination/Http/Middleware/Examination.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Http/Middleware/Lecturer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/5POOP64AuonGTKARi2VSNGE0s62wN7YYwnsWyXu3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/CzOcirrO25PA7BlSzpXfvl0tjNPbWte1VBqRYtht" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/FG7iwJ03SSCzBH1pdgAH4lXu9nyxAGuwxTGbUA44" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/Nj9NxOIYuIzkNUzmixhdFIu6N3ZtX5Bbj50LLniJ" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/gp4kWvJAq0hk382mjh6PPBHLhqWwKt6A4OhsOZBR" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/.env" beforeDir="false" afterPath="$PROJECT_DIR$/application/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Administrator/Providers/AdministratorServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Administrator/Providers/AdministratorServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2022_07_12_135115_create_admission_approvals_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2022_07_12_135115_create_admission_approvals_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2022_09_16_131715_create_admission_documents_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2022_09_16_131715_create_admission_documents_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2023_06_01_153049_create_application_approvals_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2023_06_01_153049_create_application_approvals_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Database/Migrations/2022_10_28_160443_create_readmissions_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Database/Migrations/2022_10_28_160443_create_readmissions_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Database/Migrations/2023_07_08_180929_create_academic_leaves_views_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Database/Migrations/2023_07_08_180929_create_academic_leaves_views_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/invoices/addInvoice.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/invoices/addInvoice.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/invoices/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/invoices/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_11_15_083955_create_calender_of_events_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_11_15_083955_create_calender_of_events_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2023_06_06_172434_create_a_c_a_d_e_m_i_c_d_e_p_a_r_t_m_e_n_t_s_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2023_06_06_172434_create_a_c_a_d_e_m_i_c_d_e_p_a_r_t_m_e_n_t_s_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/workload/departmentalWorkload.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/workload/departmentalWorkload.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_06_114857_create_student_courses_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_06_114857_create_student_courses_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_26_155157_create_course_transfers_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_26_155157_create_course_transfers_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/User/Database/Migrations/2023_02_23_112508_create_user_employements_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/User/Database/Migrations/2023_02_23_112508_create_user_employements_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/User/Http/Controllers/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/User/Http/Controllers/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/app/Console/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Console/Kernel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/app/Http/Apis/AppApis.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Http/Apis/AppApis.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/app/Http/Middleware/User/Updatedprofile.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Http/Middleware/User/Updatedprofile.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/config/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/config/database.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/3iXI71Z2VZGPkESPhFUDz0EITl8lGU1aTlryXHVN" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/uAwfui5TFs4l64sbutlKJbpI7ZtRmoK1jCSElgyt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AdmissionLetters/APP1689947590.docx" beforeDir="false" afterPath="$PROJECT_DIR$/AdmissionLetters/APP1689947590.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Thumbnails/BTIT00012023-1689948751.png" beforeDir="false" afterPath="$PROJECT_DIR$/Thumbnails/BTIT00012023-1689948751.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +23,7 @@
     <execution />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/application" />
   </component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
@@ -224,7 +184,7 @@
     </include_path>
   </component>
   <component name="ProjectId" id="2Mlcghr9kNM3MaOnSorYHp0CwuY" />
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -334,6 +294,8 @@
       <workItem from="1690185737309" duration="8436000" />
       <workItem from="1690266954992" duration="35004000" />
       <workItem from="1690349060476" duration="2013000" />
+      <workItem from="1690357874746" duration="15040000" />
+      <workItem from="1690452673795" duration="2839000" />
     </task>
     <servers />
   </component>

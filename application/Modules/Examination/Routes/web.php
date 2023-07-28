@@ -13,8 +13,7 @@
 
 use Modules\Examination\Http\Controllers\ExaminationController;
 
-Route::prefix('examination')->group(function() {
-
+Route::prefix('examination')->middleware(['web', 'auth:user', 'exams'])->group(function() {
     Route::get('/', 'ExaminationController@index')->name('examination');
     Route::get('/exams', [ExaminationController::class, 'registration'])->name('examination.registration');
     Route::post('/year-exam', [ExaminationController::class, 'yearExams'])->name('examination.yearExams');

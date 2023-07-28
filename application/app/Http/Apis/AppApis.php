@@ -36,8 +36,7 @@ class AppApis
         return [];
     }
 
-    public function sendSMS($phoneNumber, $message)
-    {
+    public function sendSMS($phoneNumber, $message){
         try {
             $uri = "sms/send";
             $body = [
@@ -55,10 +54,24 @@ class AppApis
         }
     }
 
+    public function createStudent($student)
+    {
+        try {
+            $uri = "finance/student";
+            $response = $this->client->request('POST', $uri, ['json' => $student]);
+            $responseBody = $response->getBody()->getContents();
+            if ($response->getStatusCode() === 200) {
+                $getMessage = json_decode($responseBody, true);
+                return $getMessage;
+            }
+        } catch (GuzzleException $e) {
+            return $e->getMessage();
+        }
+    }
     public function fetchVoteheads(){
         try{
             $uri = "finance/voteheads";
-            $allVoteheads = collect(); 
+            $allVoteheads = collect();
 
         $currentPage = 1;
         do {
