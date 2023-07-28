@@ -2,53 +2,20 @@
 
 namespace Modules\Registrar\Http\Controllers;
 
-use App\Service\CustomIds;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
-use Modules\Application\Entities\ApplicantAddress;
-use Modules\Application\Entities\ApplicantContact;
-use Modules\Application\Entities\ApplicantInfo;
-use Modules\Application\Entities\ApplicantLogin;
-use Modules\Application\Entities\ApplicationApproval;
-use Modules\Application\Entities\ApplicationSubject;
-use Modules\COD\Entities\AcademicLeavesView;
-use Modules\COD\Entities\AdmissionsView;
-use Modules\COD\Entities\ApplicationsView;
-use Modules\COD\Entities\CourseCluster;
-use Modules\COD\Entities\Nominalroll;
-use Modules\COD\Entities\ReadmissionsView;
-use Modules\COD\Entities\Unit;
-use Modules\Registrar\Entities\academicdepartments;
-use Modules\Examination\Entities\ModeratedResults;
-use Modules\Examination\Entities\SchoolExamWorkflow;
-use Modules\Registrar\Entities\Campus;
-use Modules\Registrar\Entities\Classes;
-use Modules\Registrar\Entities\ClusterGroup;
-use Modules\Registrar\Entities\ClusterSubject;
-use Modules\Registrar\Entities\Division;
-use Modules\Registrar\Entities\Group;
-use Modules\Registrar\Entities\SchoolDepartment;
-use Modules\Student\Entities\CourseClusterGroups;
-use Modules\Student\Entities\CourseSoftDelete;
-use Modules\Student\Entities\CourseTransfersView;
-use Modules\Student\Entities\OldStudentCourse;
-use Modules\Student\Entities\StudentAddress;
-use Modules\Student\Entities\StudentContact;
-use Modules\Student\Entities\StudentCourse;
-use Modules\Student\Entities\StudentDisability;
-use Modules\Student\Entities\StudentInfo;
-use Modules\Student\Entities\StudentLogin;
-use Modules\Student\Entities\StudentView;
-use Modules\Workload\Entities\WorkloadView;
 use QrCode;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Http\Apis\AppApis;
+use App\Service\CustomIds;
 use App\Imports\UnitImport;
 use Illuminate\Http\Request;
 use App\Imports\CourseImport;
 use App\Imports\KuccpsImport;
+use Modules\COD\Entities\Unit;
+use PhpParser\Node\Stmt\Return_;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use App\Imports\UnitProgrammsImport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -57,67 +24,99 @@ use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpWord\Element\Table;
 use App\Imports\ClusterWeightsImport;
 use Illuminate\Support\Facades\Crypt;
+use Modules\COD\Entities\Nominalroll;
 use Modules\Registrar\Entities\Event;
+use Modules\Registrar\Entities\Group;
 use Modules\Registrar\Entities\Level;
+use Modules\Registrar\Entities\Campus;
 use Modules\Registrar\Entities\Intake;
 use Modules\Registrar\Entities\School;
 use Illuminate\Support\Facades\Storage;
+use Modules\COD\Entities\CourseCluster;
+use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Student;
 use Modules\Workload\Entities\Workload;
+use Modules\COD\Entities\AdmissionsView;
+use Modules\Registrar\Entities\Division;
 use Modules\Registrar\Entities\VoteHead;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Modules\Registrar\emails\KuccpsMails;
 use Modules\Student\Entities\Readmission;
+use Modules\Student\Entities\StudentInfo;
+use Modules\Student\Entities\StudentView;
+use Modules\COD\Entities\ApplicationsView;
+use Modules\COD\Entities\ReadmissionsView;
 use Modules\Registrar\Entities\Attendance;
 use Modules\Registrar\Entities\Department;
+use Modules\Student\Entities\StudentLogin;
 use PhpOffice\PhpWord\SimpleType\TblWidth;
 use Modules\Application\Entities\Applicant;
 use Modules\Application\Entities\Education;
 use Modules\Examination\Entities\ExamMarks;
 use Modules\Registrar\Entities\SemesterFee;
 use Modules\Student\Entities\AcademicLeave;
+use Modules\Student\Entities\StudentCourse;
+use Modules\Workload\Entities\WorkloadView;
 use NcJoes\OfficeConverter\OfficeConverter;
+use Modules\COD\Entities\AcademicLeavesView;
 use Modules\Finance\Entities\StudentInvoice;
 use Modules\Registrar\Entities\AcademicYear;
+use Modules\Registrar\Entities\ClusterGroup;
 use Modules\Registrar\Entities\RegistrarLog;
 use Modules\Student\Entities\CourseTransfer;
+use Modules\Student\Entities\StudentAddress;
+use Modules\Student\Entities\StudentContact;
 use Modules\Student\Entities\StudentDeposit;
 use Modules\Application\Entities\Application;
 use Modules\Registrar\Entities\CourseHistory;
 use Modules\Registrar\Entities\SchoolHistory;
 use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Application\Entities\Notification;
+use Modules\Examination\Entities\ExamWorkflow;
+use Modules\Registrar\Entities\ClusterSubject;
 use Modules\Registrar\Entities\ClusterWeights;
+use Modules\Student\Entities\CourseSoftDelete;
+use Modules\Student\Entities\OldStudentCourse;
 use Modules\Workload\Entities\ApproveWorkload;
+use Modules\Application\Entities\ApplicantInfo;
 use Modules\Registrar\emails\AcademicLeaveMail;
 use Modules\Registrar\Entities\AvailableCourse;
 use Modules\Registrar\Entities\CourseLevelMode;
 use Modules\Registrar\Entities\KuccpsApplicant;
+use Modules\Student\Entities\StudentDisability;
+use Modules\Application\Entities\ApplicantLogin;
 use Modules\Registrar\Entities\CalenderOfEvents;
+use Modules\Registrar\Entities\SchoolDepartment;
 use Modules\Registrar\emails\CourseTransferMails;
 use Modules\Registrar\Entities\CourseRequirement;
 use Modules\Registrar\Entities\DepartmentHistory;
+use Modules\Student\Entities\CourseClusterGroups;
+use Modules\Student\Entities\CourseTransfersView;
 use Modules\Student\Entities\ReadmissionApproval;
+use Modules\Application\Entities\ApplicantAddress;
+use Modules\Application\Entities\ApplicantContact;
+use Modules\Examination\Entities\ModeratedResults;
 use Modules\Registrar\emails\RejectedAcademicMail;
 use Modules\Application\Entities\AdmissionApproval;
-use Modules\Examination\Entities\ExamWorkflow;
+use Modules\Registrar\Entities\academicdepartments;
 use Modules\Student\Entities\AcademicLeaveApproval;
+use Modules\Application\Entities\ApplicationSubject;
+use Modules\Examination\Entities\SchoolExamWorkflow;
 use Modules\Student\Entities\CourseTransferApproval;
+use Modules\Application\Entities\ApplicationApproval;
 use Modules\Registrar\emails\AcceptedReadmissionsMail;
 use Modules\Registrar\emails\RejectedReadmissionsMail;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Modules\Registrar\emails\CourseTransferRejectedMails;
-use PhpParser\Node\Stmt\Return_;
 
 class CoursesController extends Controller
 {
-    //    public function __construct(){
-    //        auth()->setDefaultDriver('user');
-    //        $this->middleware(['web','auth', 'admin']);
-    //    }
-    /*
-     * exam marks
-    */
+    public $appApi;
+    public function __construct(AppApis $appApi)
+    {
+        $this->appApi  =  $appApi;
+    }
     public function  yearlyExamMarks(){
         $academicYears = ExamWorkflow::latest()->get()->groupBy('academic_year');
         return view('registrar::marks.index')->with(['academicYears' => $academicYears]);
@@ -1106,9 +1105,9 @@ class CoursesController extends Controller
 
     public function showVoteheads()
     {
-        $show  = VoteHead::latest()->get();
-
-        return view('registrar::fee.showVoteheads', compact('show'));
+        // $show  = VoteHead::latest()->get();
+        $dataPayload = $this->appApi->fetchVoteheads();
+        return view('registrar::fee.showVoteheads')->with(['show' => $dataPayload]);
     }
 
     public function storeVoteheads(Request $request)
@@ -1116,7 +1115,18 @@ class CoursesController extends Controller
         $voteID = new CustomIds();
         $voteheads  = new VoteHead;
         $voteheads->votehead_id = $voteID->generateId();
+        $voteheads->vote_id  =  $request->input('vote_id');
         $voteheads->name  =  $request->input('name');
+        $voteheads->description  =  $request->input('description');
+        if($request->input('type') == 1){
+            $voteheads->type = "Fee";
+        }elseif($request->input('type') == 2){
+            $voteheads->type = "Fine";
+        }elseif($request->input('type') == 3){
+            $voteheads->type = "Accommodation";
+        }else{
+            $voteheads->type = "Graduation";
+        }
         $voteheads->save();
 
         return redirect()->route('courses.showVoteheads')->with('success', 'votehead added successfully.');

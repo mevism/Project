@@ -30,10 +30,28 @@
 
                    <form class="row row-cols-lg-auto g-3 align-items-center" action="{{ route('courses.storeVoteheads') }}" method="POST">
                     @csrf
-
                     <div class="form-floating col-12 col-xl-12">
-                      <input type="text" value="{{ old('name') }}"  class="form-control form-control-alt text-uppercase" id="name" name="name" placeholder="Name ">
-                      <label class="form-label">NAME</label>
+                      <input type="text" value="{{ old('vote_id') }}"  class="form-control  text-uppercase" id="vote_id" name="vote_id" placeholder="Votehead ID ">
+                      <label class="form-label">Votehead ID</label>
+                    </div>
+                    <div class="form-floating col-12 col-xl-12">
+                      <input type="text" value="{{ old('name') }}"  class="form-control  text-uppercase" id="name" name="name" placeholder="Name ">
+                      <label class="form-label">Name</label>
+                    </div>
+                     <div class="form-floating col-12 col-xl-12">
+                      <textarea name="description" class="form-control" style="height: 50px !important;" placeholder="description"></textarea>
+                      <label>Description</label>
+                    </div>  
+                     <div class="form-floating col-12 col-xl-12">
+                      <input type="hidden" name="type">
+                      <select name="type"  class="form-control" required>
+                          <option selected disabled class="text-center">-- select type --</option>
+                          <option value="1">Fee</option>
+                          <option value="2">Fine</option>
+                          <option value="3">Accommodation</option>
+                          <option value="4">Graduation</option>
+                      </select>
+                      <label>Type</label>
                     </div>
                     <div class="col-12 text-center p-3">
                       <button type="submit" class="btn btn-alt-success" data-toggle="click-ripple">Create Votehead</button>
