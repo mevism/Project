@@ -15,7 +15,10 @@ return new class extends Migration
     {
         Schema::create('vote_heads', function (Blueprint $table) {
             $table->string('votehead_id')->primary();
-            $table->string('name')->unique();
+            $table->string('vote_id')->primary();
+            $table->string('vote_name')->primary();
+            $table->string('vote_category')->primary();
+            $table->string('vote_type')->primary();
             $table->timestamps();
             $table->softDeletes();
         });

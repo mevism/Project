@@ -11,7 +11,7 @@ class SemesterFee extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['votehead_id','semesterI', 'semesterII', 'attendance_id', 'course_level_mode_id', 'semester_fee_id'];
+    protected $fillable = ['semester_fee_id', 'course_code', 'vote_id', 'semester', 'attendance_id', 'amount', 'version'];
 
     public function semVotehead(){
 
@@ -21,6 +21,10 @@ class SemesterFee extends Model
     public function proformaInvoice(){
 
         return $this->belongsTo(CourseLevelMode::class, 'course_level_mode_id', 'course_level_mode_id');
+    }
+
+    public function CourseFee(){
+        return $this->belongsTo(Courses::class, 'course_code', 'course_code');
     }
 
     protected static function newFactory()

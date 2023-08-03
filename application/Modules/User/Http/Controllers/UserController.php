@@ -98,7 +98,7 @@ class UserController extends Controller
         $staffInfo = new StaffInfo;
         $staffInfo->user_id = $generatedId;
         $staffInfo->staff_number = $data['dataPayload']['data']['staff_number'];
-        $staffInfo->title = 'NA';
+        $staffInfo->title = $data['dataPayload']['data']['salutation'];
         $staffInfo->first_name = $data['dataPayload']['data']['first_name'];
         $staffInfo->middle_name =$data['dataPayload']['data']['middle_name'];
         $staffInfo->last_name = $data['dataPayload']['data']['last_name'];

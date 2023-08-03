@@ -13,7 +13,7 @@ use Modules\Finance\Http\Controllers\FinanceController;
 |
 */
 
-Route::prefix('applications')->middleware(['web', 'auth:user', 'finance'])
+Route::prefix('applications')->middleware(['web', 'auth:user', 'is_finance'])
     ->group(function() {
         Route::get('/finance', [FinanceController::class, 'index'])->name('finance.dashboard');
         Route::get('/finance/applications', [FinanceController::class, 'applications'])->name('finance.applications');
