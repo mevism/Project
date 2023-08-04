@@ -16,6 +16,7 @@ use Modules\COD\Entities\AcademicLeavesView;
 use Modules\COD\Entities\AdmissionsView;
 use Modules\COD\Entities\ApplicationsView;
 use Modules\COD\Entities\CourseCluster;
+use Modules\COD\Entities\CourseSyllabus;
 use Modules\COD\Entities\Nominalroll;
 use Modules\COD\Entities\ReadmissionsView;
 use Modules\COD\Entities\Unit;
@@ -632,7 +633,7 @@ class CoursesController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Email sent successfuly.');
+        return redirect()->back()->with('success', 'Email sent successfully.');
     }
 
     public function acceptedTransfers(Request $request)
@@ -1092,130 +1093,142 @@ class CoursesController extends Controller
         $data->delete();
         return redirect()->route('courses.showEvent');
     }
-    /**
-     * voteheads
-     *
-     * @return void
-     */
-    public function voteheads()
-    {
+
+    public function getVoteheads(Request $request){
+        $query = $request->input('query');
+        $dataPayload = $this->appApi->fetchVoteheads();
+        $filteredVoteheads = array_filter($dataPayload, function ($votehead) use ($query) {
+            $nameMatch = stripos($votehead['name'], $query) !== false;
+            $idMatch = stripos($votehead['id'], $query) !== false;
+            return $nameMatch || $idMatch;
+        });
+        $filteredDataPayload = [
+            'data' => array_values($filteredVoteheads), // Reset array keys for correct JSON formatting
+        ];
+        return response()->json($filteredDataPayload);
+    }
+
+    public function voteheads(){
         return view('registrar::fee.voteheads');
     }
 
-    public function showVoteheads()
-    {
-        // $show  = VoteHead::latest()->get();
-        $dataPayload = $this->appApi->fetchVoteheads();
-        return view('registrar::fee.showVoteheads')->with(['show' => $dataPayload]);
+    public function showVoteheads(){
+        $show = VoteHead::latest()->get();
+        return view('registrar::fee.showVoteheads')->with(['show' => $show]);
     }
 
-    public function storeVoteheads(Request $request)
-    {
-        $voteID = new CustomIds();
-        $voteheads  = new VoteHead;
-        $voteheads->votehead_id = $voteID->generateId();
-        $voteheads->vote_id  =  $request->input('vote_id');
-        $voteheads->name  =  $request->input('name');
-        $voteheads->description  =  $request->input('description');
-        if($request->input('type') == 1){
-            $voteheads->type = "Fee";
-        }elseif($request->input('type') == 2){
-            $voteheads->type = "Fine";
-        }elseif($request->input('type') == 3){
-            $voteheads->type = "Accommodation";
-        }else{
-            $voteheads->type = "Graduation";
-        }
-        $voteheads->save();
+    public function storeVoteheads(Request $request){
+       $votes = json_decode($request->voteheads);
 
+        foreach ($votes as $vote){
+            $voteID = new CustomIds();
+            $voteheads  = new VoteHead;
+            $voteheads->votehead_id = $voteID->generateId();
+            $voteheads->vote_id = $vote->votehead;
+            $voteheads->vote_name = $vote->voteheadName;
+            $voteheads->vote_category = $vote->voteheadCategory;
+            $voteheads->vote_type = $vote->voteheadType;
+            $voteheads->save();
+        }
         return redirect()->route('courses.showVoteheads')->with('success', 'votehead added successfully.');
     }
 
-    public function editVotehead($id)
-    {
+    public function editVotehead($id){
         $data = VoteHead::where('votehead_id', $id)->first();
         return view('registrar::fee.editVotehead')->with(['data' => $data]);
     }
 
-    public function updateVotehead(Request $request, $id)
-    {
-        VoteHead::where('votehead_id', $id)->update(['name' => $request->name]);
+    public function updateVotehead(Request $request, $id){
+        VoteHead::where('votehead_id', $id)->update([
+            'vote_name' => $request->name,
+            'vote_id' => $request->voteID,
+            'vote_category' => $request->category,
+            'vote_type' => $request->type,]);
         return redirect()->route('courses.showVoteheads')->with('status', 'Data Updated Successfully');
     }
 
-    public function destroyVotehead($id)
-    {
+    public function destroyVotehead($id){
         VoteHead::where('votehead_id', $id)->delete();
-        return redirect()->route('courses.showVoteheads');
+        return redirect()->back()->with('success', '1 record destroyed successfully');
     }
-    /**
-     * semester fees
-     *
-     * @return void
-     */
-    public function semFee()
-    {
-        $courses  =  Courses::all();
+    public function semFee($id){
+        $course = Courses::where('course_id', $id)->first();
         $modes    =  Attendance::all();
-        $levels   =  Level::all();
-        $votes    =  VoteHead::all();
+        $syllabus = CourseSyllabus::where('course_code', $course->course_code)
+            ->get()
+            ->groupBy('stage')
+            ->map(function ($group, $stage) {
+                return $group->pluck('semester')->map(function ($semester) use ($stage) {
+                    return $stage . '.' . $semester;
+                });
+            })
+            ->flatten()
+            ->unique()
+            ->values()
+            ->toArray();
+        $votes    =  VoteHead::where('vote_category', 1)->orderBy('vote_id', 'asc')->get();
 
-        return view('registrar::fee.semFee')->with(['courses' => $courses, 'modes' => $modes, 'levels' => $levels, 'votes' => $votes]);
+        return view('registrar::fee.semFee')->with(['modes' => $modes, 'votes' => $votes, 'syllabus' => $syllabus, 'course' => $course]);
     }
-    public function showSemFee()
-    {
-        $courses  = CourseLevelMode::latest()->get();
-
+    public function showSemFee(){
+        $courses  = Courses::latest()->get();
         return view('registrar::fee.showsemFee')->with(['courses' => $courses]);
     }
-
-    public function storeSemFee(Request $request)
-    {
+    public function courseFeeStures($id){
+        $course = Courses::where('course_id', $id)->first();
+        $feeStructures = SemesterFee::where('course_code', $course->course_code)
+            ->get()
+            ->groupBy(['attendance_id', 'version']);
+        return view('registrar::fee.courseFeeStuctures')->with(['feeSstructures' => $feeStructures, 'course' => $course]);
+    }
+    public function storeSemFee(Request $request){
         $request->validate([
-
-            'course' => 'required',
-            'level' => 'required',
-            'attendance' => 'required'
-
+            'attendance' => 'required',
+            'semesterFee' => 'required'
         ]);
-
-        $levelsId = new CustomIds();
-        $courseFee = new CourseLevelMode();
-        $courseFee->course_level_mode_id = $levelsId->generateId();
-        $courseFee->course_id = $request->course;
-        $courseFee->level_id = $request->level;
-        $courseFee->attendance_id = $request->attendance;
-        $courseFee->save();
-
-        $voteheads = $request->voteheads;
-        $semester1_amount = $request->semester1;
-        $semester2_amount = $request->semester2;
-
-        for ($i = 0; $i < count($semester1_amount); $i++) {
-            $feeId = new CustomIds();
-
-            if (empty($semester1_amount[$i])) continue; // skip all the blank ones
-
-            $semester = [
-                'semester_fee_id' => $feeId->generateId(),
-                'course_level_mode_id' => $courseFee->course_level_mode_id,
-                'votehead_id'   =>  $voteheads[$i],
-                'semesterI'    =>  $semester1_amount[$i],
-                'semesterII'    =>  $semester2_amount[$i]
-            ];
-            SemesterFee::create($semester);
+//        return $request->attendance;
+        $feeStructure = json_decode($request->semesterFee, true);
+        foreach ($feeStructure as $votehead){
+            foreach ($votehead['semesters'] as $semester){
+                $feeId = new CustomIds();
+                SemesterFee::create([
+                    'semester_fee_id' => $feeId->generateId(),
+                    'course_code' => $request->course_code,
+                    'vote_id' => $votehead['votehead'],
+                    'semester' => $semester,
+                    'attendance_id' => $request->attendance,
+                    'amount' => $votehead['amount'],
+                    'version' => 'v.'.date('Y'),
+                ]);
+            }
         }
-
         return redirect()->route('courses.showSemFee')->with('success', 'Fee added successfully.');
     }
 
-    public function viewSemFee($id)
-    {
-        $course =  CourseLevelMode::where('course_level_mode_id', $id)->first();
-        $semester = SemesterFee::where('course_level_mode_id', $id)
-            ->orderBy('votehead_id', 'asc')->get();
+    public function viewSemFee($id){
+        list($course_code, $attendance, $version) = explode(':', base64_decode($id));
+        $course = Courses::where('course_code', $course_code)->first();
+        $semesterFees = SemesterFee::where('course_code', $course_code)
+            ->where('attendance_id', $attendance)
+            ->where('version', $version)
+            ->orderBy('semester', 'asc')
+            ->get()
+            ->groupBy('vote_id')
+            ->map(function ($group) {
+                return $group->groupBy('semester');
+            });
 
-        return view('registrar::fee.viewSemFee')->with(['semesterI' => $semester, 'course' => $course, 'id' => $id]);
+        $semesters = SemesterFee::where('course_code', $course_code)
+            ->where('attendance_id', $attendance)
+            ->where('version', $version)
+            ->orderBy('semester', 'asc')
+            ->get()
+            ->groupBy('semester')
+            ->map(function ($group) {
+                return $group->groupBy('vote_id');
+            });
+
+        return view('registrar::fee.viewSemFee')->with(['semesters' => $semesters, 'semesterFees' => $semesterFees, 'course' => $course]);
     }
 
     public function printFee($id)

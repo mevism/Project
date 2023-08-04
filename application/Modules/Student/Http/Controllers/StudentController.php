@@ -30,6 +30,7 @@ use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Department;
 use Modules\Registrar\Entities\Division;
 use Modules\Registrar\Entities\Intake;
+use Modules\Registrar\Entities\SemesterFee;
 use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Student\Entities\AcademicLeave;
 use Modules\Student\Entities\AcademicLeaveApproval;
@@ -42,6 +43,8 @@ use Modules\Student\Entities\ReadmissionApproval;
 use Modules\Student\Entities\StudentCourse;
 use Modules\Student\Entities\STUDENTCOURSEVIEW;
 use Modules\Student\Entities\StudentDeposit;
+use Modules\Student\Entities\StudentInfo;
+use Modules\Student\Entities\StudentLogin;
 use Modules\Student\Entities\StudentView;
 use NcJoes\OfficeConverter\OfficeConverter;
 use PhpOffice\PhpWord\Element\Table;
@@ -75,7 +78,7 @@ class StudentController extends Controller
 
     public function myProfile(){
 
-        $user = Auth::guard('student')->user();
+        $user = \auth()->guard('student')->user();
 
         return view('student::student.profile')->with('user', $user);
     }
@@ -277,7 +280,7 @@ class StudentController extends Controller
             'points' => 'required|numeric'
         ]);
 
-        if (Auth::guard('student')->user()->loggedStudent->courseStudent->course_id == $request->course) {
+        if (\auth()->guard('student')->user()->loggedStudent->courseStudent->course_id == $request->course) {
 
             return redirect()->route('student.coursetransfers')->with('error', 'You are already admitted to this course');
 
@@ -286,7 +289,7 @@ class StudentController extends Controller
             $hashedId = Crypt::decrypt($id);
 
             $transfer = CourseTransfer::find($hashedId);
-            $transfer->student_id = Auth::guard('student')->user()->student_id;
+            $transfer->student_id = \auth()->guard('student')->user()->student_id;
             $transfer->department_id = $request->dept;
             $transfer->course_id = $request->course;
             $transfer->class_id = $request->class;
@@ -313,8 +316,8 @@ class StudentController extends Controller
     //     CourseTransfer::find($hashedId)->update(['status' => 0]);
 
     //     $invoice = new TransferInvoice;
-    //     $invoice->student_id = Auth::guard('student')->user()->student_id;
-    //     $invoice->reg_number = Auth::guard('student')->user()->loggedStudent->reg_number;
+    //     $invoice->student_id = \auth()->guard('student')->user()->student_id;
+    //     $invoice->reg_number = \auth()->guard('student')->user()->loggedStudent->reg_number;
     //     $invoice->invoice_number = 'INV'.time();
     //     $invoice->amount = 500;
     //     $invoice->description = 'Invoice for Course Transfer Fee';
@@ -324,10 +327,8 @@ class StudentController extends Controller
     // }
 
     public function academicLeave(){
-
-        $leaves = AcademicLeave::where('student_id', Auth::guard('student')->user()->student_id)->get();
+        $leaves = AcademicLeave::where('student_id', \auth()->guard('student')->user()->student_id)->get();
         return view('student::academic.academicleave')->with(['leaves' => $leaves]);
-
     }
 
     public function requestLeave(){
@@ -396,7 +397,6 @@ class StudentController extends Controller
         $data = ClassPattern::where('class_code', $request->class)
                             ->where('semester', $request->stage)
                             ->first();
-
         return response()->json($data);
     }
 
@@ -469,7 +469,7 @@ class StudentController extends Controller
 
     public function readmissionRequests(){
       $student = StudentView::where('student_id', \auth()->guard('student')->user()->student_id)->first();
-      $currentStage = Nominalroll::where('student_id', Auth::guard('student')->user()->student_id)
+      $currentStage = Nominalroll::where('student_id', \auth()->guard('student')->user()->student_id)
                                     ->latest()
                                     ->first();
 
@@ -531,7 +531,6 @@ class StudentController extends Controller
 
     public function unitRegistration(){
         $studentCourses = StudentCourse::where('student_id',  auth()->guard('student')->user()->student_id)->first();
-
         $student_activation = StudentInvoice::where('student_id', auth()->guard('student')->user()->student_id)
             ->where('reg_number', $studentCourses->student_number)
             ->latest()->first();
@@ -772,22 +771,25 @@ class StudentController extends Controller
     public function registerSemester(Request $request){
         $units = $request->unit_code;
 
+//        return $request->all();
+
         if ($request->optionId == null){
             return redirect()->back()->with('error', 'Ensure you have selected an option to proceed');
         }
-
         $student = StudentCourse::where('student_id', auth()->guard('student')->user()->student_id)->first();
-
-        $fees = CourseLevelMode::where('attendance_id', $student->student_type)
-                            ->where('course_id', $student->course_id)
-                            ->where('level_id', $student->StudentsCourse->level)
-                            ->first();
+        $fees = SemesterFee::where('attendance_id', $student->student_type)
+                            ->where('course_code', $student->StudentsCourse->course_code)
+                            ->where('version', $student->version)
+                            ->where('semester', $request->semester)
+                            ->get();
+//        return $fees;
         $proformaInvoice = 0;
 
-        foreach ($fees->invoiceProforma as $item){
-
-            $proformaInvoice += $item->semesterII;
+        foreach ($fees as $item){
+            $proformaInvoice += $item->amount;
         }
+
+//        return $proformaInvoice;
 
         if (Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)
                     ->where('academic_year', $request->academicyear)
@@ -867,7 +869,7 @@ class StudentController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
 
-        $invoices = StudentDeposit::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+        $invoices = StudentDeposit::where('reg_number', \auth()->guard('student')->user()->loggedStudent->reg_number)
             ->orderBy('created_at', 'asc')
             ->get();
 
@@ -879,23 +881,18 @@ class StudentController extends Controller
 
     public function printStatement(){
 
-        $student = Student::where('id', Auth::guard('student')->user()->id)->first();
-
-        $statements = StudentInvoice::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+        $student = StudentInfo::where('student_id', \auth()->guard('student')->user()->student_id)->first();
+        $statements = StudentInvoice::where('reg_number', \auth()->guard('student')->user()->enrolledCourse->student_number)
             ->orderBy('created_at', 'desc')
             ->get();
-
-        $reg = Nominalroll::where('student_id', Auth::guard('student')->user()->loggedStudent->id)
+        $reg = Nominalroll::where('student_id', \auth()->guard('student')->user()->student_id)
             ->where('registration', 1)
             ->where('activation', 1)
             ->latest()->first();
-
-        $invoices = StudentDeposit::where('reg_number', Auth::guard('student')->user()->loggedStudent->reg_number)
+        $invoices = StudentDeposit::where('reg_number', \auth()->guard('student')->user()->enrolledCourse->student_number)
             ->orderBy('created_at', 'desc')
             ->get();
-
         $statement = ($statements)->concat($invoices)->sortBy('created_at')->values();
-
         $total = 0;
         $settled = 0;
 
@@ -920,8 +917,8 @@ class StudentController extends Controller
             \QrCode::size(200)
                 ->format('png')
                 ->generate( 'Name: '.$student->fname.' '.$student->mname.' '.$student->sname."\n".
-                    'Registration: '.$student->reg_number. "\n".
-                    'Class Code: '.$student->courseStudent->class_code."\n".
+                    'Registration: '.\auth()->guard('student')->user()->enrolledCourse->student_number. "\n".
+                    'Class Code: '.\auth()->guard('student')->user()->enrolledCourse->current_class."\n".
                     'Current Stage: '.$stage."\n".
                     'Fee Balance:  '.$balance, 'QrCodes/'.$image);
 
@@ -930,8 +927,8 @@ class StudentController extends Controller
             \QrCode::size(200)
                 ->format('png')
                 ->generate( 'Name: '.$student->fname.' '.$student->mname.' '.$student->sname."\n".
-                    'Registration: '.$student->reg_number. "\n".
-                    'Class Code: '.$student->courseStudent->class_code."\n".
+                    'Registration: '.\auth()->guard('student')->user()->enrolledCourse->student_number. "\n".
+                    'Class Code: '.\auth()->guard('student')->user()->enrolledCourse->current_class."\n".
                     'Current Stage: '.'Year '.$reg->year_study.' Semester '.$reg->patternRoll->season."\n".
                     'Fee Balance:  '.$balance, 'QrCodes/'.$image);
         }
@@ -947,11 +944,11 @@ class StudentController extends Controller
         $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 2])->addText('Printed On : '.date('d-M-Y'), ['bold' => true, 'name' => 'Book Antiqua']);
 
         $table->addRow();
-        $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 3])->addText('Registration Number : '. $student->reg_number, ['bold' => true, 'name' => 'Book Antiqua']);
-        $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 2])->addText('Class Code : '.$student->courseStudent->class_code, ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 3])->addText('Registration Number : '. \auth()->guard('student')->user()->enrolledCourse->student_number, ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 2])->addText('Class Code : '.\auth()->guard('student')->user()->enrolledCourse->current_class, ['bold' => true, 'name' => 'Book Antiqua']);
 
         $table->addRow();
-        $table->addCell(11600, ['borderSize' => 1, 'gridSpan' => 5])->addText('Course Name : '.$student->courseStudent->studentCourse->course_name, ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(11600, ['borderSize' => 1, 'gridSpan' => 5])->addText('Course Name : '.\auth()->guard('student')->user()->enrolledCourse->StudentsCourse->course_name, ['bold' => true, 'name' => 'Book Antiqua']);
 
 
         $table->addRow();
@@ -984,10 +981,10 @@ class StudentController extends Controller
 
         $my_template->setComplexBlock('{table}', $table);
         $my_template->setImageValue('qr', array('path' => 'QrCodes/'.$image, 'width' => 80, 'height' => 80, 'ratio' => true));
-        $docPath = 'Fees/'.preg_replace('~/~', '', $student->reg_number).".docx";
+        $docPath = 'Fees/'.preg_replace('~/~', '', \auth()->guard('student')->user()->enrolledCourse->student_number).".docx";
         $my_template->saveAs($docPath);
 
-        $pdfPath = 'Fees/'.preg_replace('~/~', '', $student->reg_number).".pdf";
+        $pdfPath = 'Fees/'.preg_replace('~/~', '', \auth()->guard('student')->user()->enrolledCourse->student_number).".pdf";
 
 //        $convert = new OfficeConverter('Fees/'.preg_replace('~/~', '', $student->reg_number).".docx", 'Fee/');
 //        $convert->convertTo(preg_replace('~/~', '', $student->reg_number).".pdf");

@@ -26,15 +26,15 @@
 <div class="bg-body-light">
     <div class="content content-full">
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center fs-sm">
-            <div class="h5 fw-bold mb-0">
-                <h5>SEMESTER FEE</h5>
-            </div>
+            <h6 class="h6 fw-bold mb-0">
+                SEMESTER FEE
+            </h6>
             <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-alt">
                     <li class="breadcrumb-item">
-                        <a class="link-fx" href="javascript:void(0)">Semester Fee</a>
+                        <a class="link-fx text-uppercase" href="javascript:void(0)">Semester Fee</a>
                     </li>
-                    <li class="breadcrumb-item" aria-current="page">
+                    <li class="breadcrumb-item text-uppercase" aria-current="page">
                         View Semester Fee
                     </li>
                 </ol>
@@ -49,15 +49,11 @@
           <div class="row">
             <div class="table-responsive col-12">
           <table id="example" class="table table-bordered table-striped table-sm fs-sm">
-            <span class="d-flex justify-content-end">
-                <a class="btn btn-alt-info btn-sm" href="{{ route('courses.semFee') }}">Create</a>
-            </span><br>
             <thead>
               <tr>
-              <th></th>
-                <th>COURSE</th>
-                <th>LEVEL</th>
-                <th>Mode</th>
+              <th>#</th>
+                <th>COURSE CODE</th>
+                <th>COURSE NAME</th>
                 <th>ACTION</th>
               </tr>
             </thead>
@@ -65,11 +61,10 @@
             @foreach($courses as $key => $item)
               <tr>
                 <td> {{ ++$key  }} </td>
-                <td>{{ $item->courseclm->course_name }}</td>
-                <td>{{ $item->levelclm->name }}</td>
-                <td>{{ $item->modeofstudy->attendance_code }}</td>
-                <td>
-                  <a class="btn btn-sm btn-alt-info" href="{{ route('courses.viewSemFee', $item->course_level_mode_id) }}">view</a>
+                <td>{{ $item->course_code }}</td>
+                <td>{{ $item->course_name }}</td>
+                <td nowrap="">
+                  <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.courseFeeStructure', $item->course_id) }}"><i class="fa fa-eye"></i> view</a>
                 </td>
               </tr>
             @endforeach
