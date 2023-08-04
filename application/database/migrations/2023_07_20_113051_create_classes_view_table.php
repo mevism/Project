@@ -15,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         DB::statement(
-            "CREATE VIEW classesview AS
+            "CREATE  VIEW classesview AS
             SELECT
             classes.class_id, classes.name, classes.attendance_id, classes.course_id, classes.intake_id,classes.syllabus_name, departments.department_id, departments.dept_code, courses.course_code, courses.course_name, courses.level, intakes.intake_from, intakes.intake_to, classes.created_at
             FROM classes
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('classesview');
+        DB::statement('DROP VIEW IF EXISTS classesview');
     }
 };

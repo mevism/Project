@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('semester_units', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('class_code');
-            $table->string('unit_code');
-            $table->string('unit_name');
-            $table->integer('stage');
-            $table->integer('semester');
-            $table->string('type')->nullable();
+            $table->string('class_code', 20);
+            $table->string('unit_code', 16);
+            $table->string('unit_name', 64);
+            $table->tinyInteger('stage');
+            $table->tinyInteger('semester');
+            $table->string('type', 10)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

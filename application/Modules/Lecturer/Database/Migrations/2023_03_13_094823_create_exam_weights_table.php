@@ -15,13 +15,14 @@ return new class extends Migration
     {
         Schema::create('exam_weights', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('unit_code');
-            $table->string('academic_year');
-            $table->string('academic_semester');
-            $table->integer('exam');
-            $table->integer('cat');
-            $table->integer('assignment');
-            $table->integer('practical');
+            $table->string('unit_code', 8);
+            $table->foreign('unit_code')->references('unit_code')->on('units')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('intake_id', 12);
+            $table->foreign('intake_id')->references('intake_id')->on('intakes')->onDelete('cascade')->onUpdate('cascade');            
+            $table->float('exam');
+            $table->float('cat');
+            $table->float('assignment');
+            $table->float('practical');
             $table->timestamps();
             $table->softDeletes();
         });

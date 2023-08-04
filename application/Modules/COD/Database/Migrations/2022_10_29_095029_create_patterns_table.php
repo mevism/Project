@@ -1,9 +1,10 @@
 <?php
 
+use Modules\COD\Entities\Pattern;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use Modules\COD\Entities\Pattern;
 
 return new class extends Migration
 {
@@ -15,9 +16,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('patterns', function (Blueprint $table) {
-            $table->id();
-            $table->integer('season_code');
-            $table->string('season');
+            $table->bigIncrements('id');
+            $table->tinyInteger('season_code');
+            $table->string('season', 20);
             $table->timestamps();
             $table->softDeletes();
         });

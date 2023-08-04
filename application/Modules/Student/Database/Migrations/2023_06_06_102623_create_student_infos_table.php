@@ -14,16 +14,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('student_infos', function (Blueprint $table) {
-            $table->string('student_id')->primary();
+            $table->string('student_id', 12)->primary();
             $table->foreign('student_id')->references('student_id')->on('student_logins')->onDelete('cascade')->onUpdate('cascade');            $table->string('sname');
-            $table->string('fname');
-            $table->string('mname');
-            $table->string('gender');
-            $table->string('marital_status');
-            $table->string('title');
-            $table->string('dob');
-            $table->string('disabled');
-            $table->string('id_number');
+            $table->string('first_name', 16);
+            $table->string('middle_name', 16);
+            $table->string('gender', 8);
+            $table->string('marital_status', 16);
+            $table->string('title', 8);
+            $table->string('date_of_birth', 13);
+            $table->string('disabled', 4);
+            $table->string('id_number', 10);
             $table->timestamps();
             $table->softDeletes();
         });

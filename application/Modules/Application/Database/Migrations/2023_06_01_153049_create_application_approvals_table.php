@@ -15,20 +15,18 @@ return new class extends Migration
     {
         Schema::create('application_approvals', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('applicant_id');
-            $table->foreign('applicant_id')->references('applicant_id')->on('applicant_contacts')->onUpdate('no action')->onDelete('no action');
-            $table->string('application_id');
-            $table->foreign('application_id')->references('application_id')->on('applications')->onUpdate('no action')->onDelete('no action');
-            $table->integer('finance_status')->nullable();
-            $table->string('invoice_number')->nullable();
-            $table->integer('cod_status')->nullable();
-            $table->string('cod_comments')->nullable();
-            $table->integer('dean_status')->nullable();
-            $table->string('dean_comments')->nullable();
-            $table->string('registrar_comments')->nullable();
-            $table->integer('registrar_status')->nullable();
-            $table->string('reg_number')->nullable();
-            $table->string('admission_letter')->nullable();
+            $table->string('application_id', 12);
+            $table->foreign('application_id')->references('application_id')->on('applications')->onUpdate('cascade')->onDelete('cascade');
+            $table->tinyInteger('finance_status')->nullable();
+            $table->string('transaction_number', 32)->nullable();
+            $table->tinyInteger('cod_status')->nullable();
+            $table->string('cod_comments', 64)->nullable();
+            $table->tinyInteger('dean_status')->nullable();
+            $table->string('dean_comments', 64)->nullable();
+            $table->tinyInteger('registrar_status')->nullable();
+            $table->string('registrar_comments', 64)->nullable();
+            $table->string('reg_number', 16)->nullable();
+            $table->string('admission_letter', 64)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

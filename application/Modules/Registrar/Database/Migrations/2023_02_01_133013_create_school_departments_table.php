@@ -16,9 +16,9 @@ return new class extends Migration
     {
         Schema::create('school_departments', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('school_id');
+            $table->string('school_id', 12);
             $table->foreign('school_id')->references('school_id')->on('schools')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('department_id');
+            $table->string('department_id', 12);
             $table->foreign('department_id')->references('department_id')->on('departments')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();

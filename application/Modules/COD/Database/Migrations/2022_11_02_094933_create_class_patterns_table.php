@@ -14,16 +14,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('class_patterns', function (Blueprint $table) {
-            $table->string('class_pattern_id')->primary();
-            $table->string('class_code');
-            $table->string('academic_year');
-            $table->integer('stage');
+            $table->string('class_pattern_id', 12)->primary();
             $table->unsignedBigInteger('pattern_id');
             $table->foreign('pattern_id')->references('id')->on('patterns')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('period');
+            $table->string('class_code', 20);
+            $table->string('academic_year', 10);
+            $table->tinyInteger('stage');            
+            $table->string('period', 10);
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
-            $table->string('semester');
+            $table->string('semester', 5);
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
             $table->softDeletes();

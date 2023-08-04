@@ -14,13 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('work_experiences', function (Blueprint $table) {
-            $table->id();
-            $table->string('applicant_id');
+            $table->bigIncrements('id');
+            $table->string('applicant_id', 12);
             $table->foreign('applicant_id')->references('applicant_id')->on('applicant_contacts')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('organization')->nullable();
-            $table->string('post')->nullable();
-            $table->string('start_date')->nullable();
-            $table->string('exit_date')->nullable();
+            $table->string('organization', 32)->nullable();
+            $table->string('post', 32)->nullable();
+            $table->string('start_date', 16)->nullable();
+            $table->string('exit_date', 16)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

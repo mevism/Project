@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('campuses', function (Blueprint $table) {
-            $table->string('campus_id')->primary();
-            $table->string('name');
+        Schema::create('departments', function (Blueprint $table) {
+            $table->string('department_id', 12)->primary();
+            $table->string('division_id', 12);
+            $table->foreign('division_id')->references('division_id')->on('divisions')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('dept_code', 8)->unique();
+            $table->string('name', 64)->unique();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('campuses');
+        Schema::dropIfExists('departments');
     }
 };

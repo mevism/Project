@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('unit_program_versions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('course_code');
-            $table->string('version');
+            $table->string('course_code', 8);
+            $table->string('version', 8);
             $table->timestamps();
         });
     }

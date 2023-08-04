@@ -15,23 +15,19 @@ return new class extends Migration
     {
         Schema::create('admission_approvals', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('application_id');
-            $table->foreign('application_id')->references('application_id')->on('applications')->onUpdate('no action')->onDelete('no action');
-            $table->string('applicant_id');
-            $table->foreign('applicant_id')->references('applicant_id')->on('applicant_contacts')->onUpdate('no action')->onDelete('no action');
+            $table->string('application_id', 12);
+            $table->foreign('application_id')->references('application_id')->on('applications')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('user_id', 12);
+            $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('cod_status')->default(0);
-            $table->string('cod_comments')->nullable();
+            $table->string('cod_comments', 128)->nullable();
             $table->integer('finance_status')->nullable();
-            $table->string('finance_comments')->nullable();
+            $table->string('payment', 16)->nullable();
             $table->integer('registrar_status')->nullable();
-            $table->string('registrar_comment')->nullable();
+            $table->string('registrar_comment', 128)->nullable();
             $table->integer('medical_status')->nullable();
-            $table->string('medical_comments')->nullable();
-            $table->integer('accommodation_status')->nullable();
-            $table->string('accommodation_comments')->nullable();
+            $table->string('medical_comments', 128)->nullable();
             $table->integer('status')->nullable();
-            $table->integer('id_status')->nullable();
-            $table->string('id_comments')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

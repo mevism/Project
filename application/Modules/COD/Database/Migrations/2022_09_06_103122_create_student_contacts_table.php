@@ -14,13 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('student_contacts', function (Blueprint $table) {
-            $table->string('student_id')->primary();
+            $table->string('student_id', 12)->primary();
             $table->foreign('student_id')->references('student_id')->on('student_logins')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('email');
-            $table->string('alt_email');
-            $table->string('student_email');
-            $table->string('mobile');
-            $table->string('alt_mobile');
+            $table->string('email', 32);
+            $table->string('alt_email', 32);
+            $table->string('student_email', 32);
+            $table->string('mobile', 13);
+            $table->string('alt_mobile', 13);
             $table->timestamps();
             $table->softDeletes();
         });

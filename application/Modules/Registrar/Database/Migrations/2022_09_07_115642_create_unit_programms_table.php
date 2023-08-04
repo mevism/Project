@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('unit_programms', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('course_code');
-            $table->string('course_unit_code');
-            $table->string('unit_name');
-            $table->integer('stage')->nullable();
-            $table->string('semester')->nullable();
-            $table->string('type')->nullable();
-            $table->string('version')->nullable();
+            $table->string('course_code', 8);
+            $table->string('course_unit_code', 8);
+            $table->string('unit_name', 100);
+            $table->tinyInteger('stage')->nullable();
+            $table->string('semester', 11)->nullable();
+            $table->string('type', 16)->nullable();
+            $table->string('version', 8)->nullable();
             $table->timestamps();
         });
     }

@@ -14,8 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('qualification_remarks', function (Blueprint $table) {
-            $table->string('qualification_id')->primary();
-            $table->longText('remarks');
+            $table->string('qualification_id', 12)->primary();
+            $table->foreign('qualification_id')->references('qualification_id')->on('lecturer_qualifications')->onDelete('cascade')->onUpdate('cascade');
+            $table->longText('remarks', 64);
             $table->timestamps();
             $table->softDeletes();
         });

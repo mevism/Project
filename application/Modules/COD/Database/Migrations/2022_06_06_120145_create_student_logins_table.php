@@ -14,10 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('student_logins', function (Blueprint $table) {
-            $table->string('student_id')->primary();
-            $table->string('username');
+            $table->string('student_id', 12)->primary();
+            $table->string('applicant_id', 12);
+            $table->foreign('applicant_id')->references('applicant_id')->on('applicant_contacts')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('username', 16);
             $table->rememberToken();
-            $table->string('password');
+            $table->string('password', 64);
             $table->timestamps();
             $table->softDeletes();
         });

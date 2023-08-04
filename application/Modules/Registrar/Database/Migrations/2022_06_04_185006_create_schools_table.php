@@ -15,9 +15,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('schools', function (Blueprint $table) {
-            $table->string('school_id')->primary();
-            $table->string('initials')->unique();
-            $table->string('name')->unique();
+            $table->string('school_id', 12)->primary();
+            $table->string('initials', 8)->unique();
+            $table->string('name', 40)->unique();
             $table->timestamps();
             $table->softDeletes();
         });

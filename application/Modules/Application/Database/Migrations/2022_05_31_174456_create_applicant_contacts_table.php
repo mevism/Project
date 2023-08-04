@@ -14,11 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('applicant_contacts', function (Blueprint $table) {
-            $table->string('applicant_id')->primary();
-            $table->string('email')->nullable();
-            $table->string('alt_email')->nullable();
-            $table->string('mobile')->nullable();
-            $table->string('alt_mobile')->nullable();
+            $table->string('applicant_id', 12)->primary();
+            $table->string('email', 32)->nullable();
+            $table->string('alt_email', 32)->nullable();
+            $table->string('mobile', 16)->nullable();
+            $table->string('alt_mobile', 16)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

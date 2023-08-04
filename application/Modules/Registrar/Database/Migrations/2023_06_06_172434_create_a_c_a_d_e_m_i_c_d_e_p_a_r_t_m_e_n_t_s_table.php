@@ -36,6 +36,6 @@ JOIN school_departments ON school_departments.department_id = departments.depart
      */
     public function down()
     {
-        Schema::dropIfExists('academicdepartments');
+        DB::statement('DROP VIEW IF EXISTS academicdepartments');
     }
 };

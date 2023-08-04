@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('applicant_logins', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('applicant_id');
+            $table->string('applicant_id', 12);
             $table->foreign('applicant_id')->references('applicant_id')->on('applicant_contacts')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('username');
-            $table->string('password');
+            $table->string('username', 16);
+            $table->string('password', 64);
             $table->tinyInteger('user_status')->default(0);
-            $table->integer('student_type')->nullable();
+            $table->tinyInteger('student_type')->nullable();
             $table->date('email_verified_at')->nullable();
             $table->tinyInteger('phone_verification')->nullable();
             $table->rememberToken();

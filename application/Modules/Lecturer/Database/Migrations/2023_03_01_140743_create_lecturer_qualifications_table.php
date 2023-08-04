@@ -14,13 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('lecturer_qualifications', function (Blueprint $table) {
-            $table->string('qualification_id')->primary();
-            $table->string('user_id');
+            $table->string('qualification_id', 12)->primary();
+            $table->string('user_id', 12);
             $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('institution');
-            $table->string('qualification');
-            $table->integer('level');
-            $table->integer('status');
+            $table->string('institution', 32);
+            $table->string('qualification', 16);
+            $table->tinyInteger('level');
+            $table->tinyInteger('status');
             $table->timestamps();
             $table->softDeletes();
         });

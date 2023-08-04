@@ -14,12 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('available_courses', function (Blueprint $table) {
-            $table->string('available_id')->primary();
-            $table->string('intake_id');
+            $table->string('available_id', 12)->primary();
+            $table->string('intake_id', 12);
             $table->foreign('intake_id')->references('intake_id')->on('intakes')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('course_id');
+            $table->string('course_id', 12);
             $table->foreign('course_id')->references('course_id')->on('courses')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('campus_id');
+            $table->string('campus_id', 12);
             $table->foreign('campus_id')->references('campus_id')->on('campuses')->onUpdate('cascade')->onDelete('cascade');
             $table->tinyInteger('status')->default(0);
             $table->timestamps();

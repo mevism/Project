@@ -14,10 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('syllabus_versions', function (Blueprint $table) {
-            $table->string('syllabus_id')->primary();
-            $table->string('course_id');
+            $table->string('syllabus_id', 12)->primary();
+            $table->string('course_id', 12);
             $table->foreign('course_id')->references('course_id')->on('courses')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('syllabus_name');
+            $table->string('syllabus_name', 8);
             $table->timestamps();
             $table->softDeletes();
         });
