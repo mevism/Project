@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('CACHE_DRIVER', 'file'),
+    'default' => env('CACHE_DRIVER', 'redis'),
 
     /*
     |--------------------------------------------------------------------------
@@ -30,6 +30,9 @@ return [
     |         "memcached", "redis", "dynamodb", "octane", "null"
     |
     */
+
+    'ttl' => 30, // Cache items for 60 minutes
+
 
     'stores' => [
 
@@ -75,7 +78,7 @@ return [
 
         'redis' => [
             'driver' => 'redis',
-            'connection' => 'cache',
+            'connection' => 'default',
             'lock_connection' => 'default',
         ],
 

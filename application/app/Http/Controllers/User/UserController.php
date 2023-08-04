@@ -115,8 +115,7 @@ class UserController extends Controller
 
 
             }elseif (\auth()->guard('student')->check()){
-
-                return 'looged in';
+//                return '\auth()->guard('student')->user()';
 
                 return redirect()->route('student')->with('success', 'You are now logged in');
 

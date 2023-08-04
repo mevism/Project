@@ -56,6 +56,7 @@
                 <th>#</th>
                 <th> Unit code </th>
                 <th> Unit Name </th>
+                <th> Total Mark </th>
                 <th> Grade </th>
                 <th> TYpe </th>
                 </thead>
@@ -65,8 +66,15 @@
             @foreach($results as $mark)
             <tr>
                 <td> {{ ++$i }} </td>
-                <td>{{$mark->unit_code}}</td>
-                <td>{{$mark->ModeratedUnits->unit_name}}</td>
+                <td> {{$mark->unit_code}} </td>
+                <td> {{$mark->ModeratedUnits->unit_name}} </td>
+                <td>
+                    @if($mark->total_exam == 'ABSENT')
+                        {{ $mark->total_cat }}<sup class="text-primary">*</sup>
+                    @else
+                        {{ $mark->total_exam + $mark->total_cat }}
+                    @endif
+                </td>
                 <td>
                     @if($mark->total_exam == 'ABSENT')
                         ABSENT

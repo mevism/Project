@@ -13,9 +13,7 @@ use Modules\Medical\Http\Controllers\MedicalController;
 |
 */
 
-Route::prefix('medical')
-//    ->middleware(['user', 'auth', 'medical'])
-    ->group(function() {
+Route::prefix('medical')->middleware(['web', 'user:auth', 'medical'])->group(function() {
 //    Route::get('/', 'MedicalController@index');
         Route::get('/', [MedicalController::class, 'index'])->name('medical.dashboard');
         Route::get('/admission', [MedicalController::class, 'admissions'])->name('medical.admissions');

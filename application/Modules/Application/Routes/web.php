@@ -11,8 +11,8 @@ use Modules\Application\Http\Controllers\ApplicationController;
 |
 */
     Route::prefix('application')->group(function () {
-        Route::get('/', 'ApplicationController@login')->name('application.login');
-        Route::post('/signin', 'ApplicationController@signin')->name('application.signin');
+//        Route::get('/', 'ApplicationController@login')->name('application.login');
+//        Route::post('/signin', 'ApplicationController@signin')->name('application.signin');
         Route::get('/register', 'ApplicationController@register')->name('application.register');
         Route::post('/signup', 'ApplicationController@signup')->name('application.signup');
         Route::get('/reloadCaptcha', 'ApplicationController@reloadCaptcha')->name('application.reloadCaptcha');
@@ -25,15 +25,9 @@ use Modules\Application\Http\Controllers\ApplicationController;
         Route::get('/verifyphone', 'ApplicationController@phoneverify')->name('application.phone');
         Route::any('/generateCode', [ApplicationController::class, 'getNewCode'])->name('application.getNewCode');
 
-        /**
-         * new routes
-         */
-
         Route::post('/update-personal-information', [ApplicationController::class, 'updatePersonalInfo'])->name('applicant.personalInfo');
         Route::post('/update-contact-information', [ApplicationController::class, 'updateContactInfo'])->name('applicant.contactInfo');
         Route::post('/update-address-information', [ApplicationController::class, 'updateAddressInfo'])->name('applicant.addressInfo');
-
-
 
         Route::get('/logout', [ApplicationController::class, 'signOut'])->name('application.logout');
         Route::get('/details', 'ApplicationController@details')->name('application.details');
@@ -42,7 +36,7 @@ use Modules\Application\Http\Controllers\ApplicationController;
             Route::post('/updateDetails', 'ApplicationController@makeupdate')->name('application.updateDetails');
         });
 
-        Route::group(['middleware' => ['user_updated', 'auth']], function (){
+        Route::group(['middleware' => ['web', 'auth:web', 'user_updated']], function (){
             Route::get('/applicant', 'ApplicationController@dashboard')->name('application.applicant');
             Route::get('/course', 'ApplicationController@myCourses')->name('applicant.course');
             Route::get('/courses', 'ApplicationController@allCourses')->name('applicant.courses');

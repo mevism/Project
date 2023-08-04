@@ -17,8 +17,8 @@ class Medical
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::guard('user')->check() || !Auth::guard('user')->user()->role_id === 8){
-            abort(403)->with('error', 'Only medical staff members are allowed');
+        if (!\auth()->guard('user')->check() || !\auth()->guard('user')->user()->role_id === 8){
+            return redirect()->back()->with('error', 'Only medical staff members are allowed');
         }
         return $next($request);
     }

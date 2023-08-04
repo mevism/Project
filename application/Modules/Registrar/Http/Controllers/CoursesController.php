@@ -1,21 +1,57 @@
 <?php
 
 namespace Modules\Registrar\Http\Controllers;
-
+use App\Http\Apis\AppApis;
+use App\Service\CustomIds;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Modules\Application\Entities\ApplicantAddress;
+use Modules\Application\Entities\ApplicantContact;
+use Modules\Application\Entities\ApplicantInfo;
+use Modules\Application\Entities\ApplicantLogin;
+use Modules\Application\Entities\ApplicationApproval;
+use Modules\Application\Entities\ApplicationSubject;
+use Modules\COD\Entities\AcademicLeavesView;
+use Modules\COD\Entities\AdmissionsView;
+use Modules\COD\Entities\ApplicationsView;
+use Modules\COD\Entities\CourseCluster;
+use Modules\COD\Entities\CourseSyllabus;
+use Modules\COD\Entities\Nominalroll;
+use Modules\COD\Entities\ReadmissionsView;
+use Modules\COD\Entities\Unit;
+use Modules\Registrar\Entities\academicdepartments;
+use Modules\Examination\Entities\ModeratedResults;
+use Modules\Examination\Entities\SchoolExamWorkflow;
+use Modules\Registrar\Entities\Campus;
+use Modules\Registrar\Entities\Classes;
+use Modules\Registrar\Entities\ClusterGroup;
+use Modules\Registrar\Entities\ClusterSubject;
+use Modules\Registrar\Entities\Division;
+use Modules\Registrar\Entities\Group;
+use Modules\Registrar\Entities\SchoolDepartment;
+use Modules\Student\Entities\CourseClusterGroups;
+use Modules\Student\Entities\CourseSoftDelete;
+use Modules\Student\Entities\CourseTransfersView;
+use Modules\Student\Entities\OldStudentCourse;
+use Modules\Student\Entities\StudentAddress;
+use Modules\Student\Entities\StudentContact;
+use Modules\Student\Entities\StudentCourse;
+use Modules\Student\Entities\StudentDisability;
+use Modules\Student\Entities\StudentInfo;
+use Modules\Student\Entities\StudentLogin;
+use Modules\Student\Entities\StudentView;
+use Modules\Workload\Entities\WorkloadView;
+use PhpOffice\PhpWord\PhpWord;
 use QrCode;
 use Carbon\Carbon;
 use App\Models\User;
-use App\Http\Apis\AppApis;
-use App\Service\CustomIds;
 use App\Imports\UnitImport;
 use Illuminate\Http\Request;
 use App\Imports\CourseImport;
 use App\Imports\KuccpsImport;
-use Modules\COD\Entities\Unit;
 use PhpParser\Node\Stmt\Return_;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use App\Imports\UnitProgrammsImport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -24,49 +60,31 @@ use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpWord\Element\Table;
 use App\Imports\ClusterWeightsImport;
 use Illuminate\Support\Facades\Crypt;
-use Modules\COD\Entities\Nominalroll;
 use Modules\Registrar\Entities\Event;
-use Modules\Registrar\Entities\Group;
 use Modules\Registrar\Entities\Level;
-use Modules\Registrar\Entities\Campus;
 use Modules\Registrar\Entities\Intake;
 use Modules\Registrar\Entities\School;
 use Illuminate\Support\Facades\Storage;
-use Modules\COD\Entities\CourseCluster;
-use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Student;
 use Modules\Workload\Entities\Workload;
-use Modules\COD\Entities\AdmissionsView;
-use Modules\Registrar\Entities\Division;
 use Modules\Registrar\Entities\VoteHead;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Modules\Registrar\emails\KuccpsMails;
 use Modules\Student\Entities\Readmission;
-use Modules\Student\Entities\StudentInfo;
-use Modules\Student\Entities\StudentView;
-use Modules\COD\Entities\ApplicationsView;
-use Modules\COD\Entities\ReadmissionsView;
 use Modules\Registrar\Entities\Attendance;
 use Modules\Registrar\Entities\Department;
-use Modules\Student\Entities\StudentLogin;
 use PhpOffice\PhpWord\SimpleType\TblWidth;
 use Modules\Application\Entities\Applicant;
 use Modules\Application\Entities\Education;
 use Modules\Examination\Entities\ExamMarks;
 use Modules\Registrar\Entities\SemesterFee;
 use Modules\Student\Entities\AcademicLeave;
-use Modules\Student\Entities\StudentCourse;
-use Modules\Workload\Entities\WorkloadView;
 use NcJoes\OfficeConverter\OfficeConverter;
-use Modules\COD\Entities\AcademicLeavesView;
 use Modules\Finance\Entities\StudentInvoice;
 use Modules\Registrar\Entities\AcademicYear;
-use Modules\Registrar\Entities\ClusterGroup;
 use Modules\Registrar\Entities\RegistrarLog;
 use Modules\Student\Entities\CourseTransfer;
-use Modules\Student\Entities\StudentAddress;
-use Modules\Student\Entities\StudentContact;
 use Modules\Student\Entities\StudentDeposit;
 use Modules\Application\Entities\Application;
 use Modules\Registrar\Entities\CourseHistory;
@@ -74,41 +92,25 @@ use Modules\Registrar\Entities\SchoolHistory;
 use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Application\Entities\Notification;
 use Modules\Examination\Entities\ExamWorkflow;
-use Modules\Registrar\Entities\ClusterSubject;
 use Modules\Registrar\Entities\ClusterWeights;
-use Modules\Student\Entities\CourseSoftDelete;
-use Modules\Student\Entities\OldStudentCourse;
 use Modules\Workload\Entities\ApproveWorkload;
-use Modules\Application\Entities\ApplicantInfo;
 use Modules\Registrar\emails\AcademicLeaveMail;
 use Modules\Registrar\Entities\AvailableCourse;
 use Modules\Registrar\Entities\CourseLevelMode;
 use Modules\Registrar\Entities\KuccpsApplicant;
-use Modules\Student\Entities\StudentDisability;
-use Modules\Application\Entities\ApplicantLogin;
 use Modules\Registrar\Entities\CalenderOfEvents;
-use Modules\Registrar\Entities\SchoolDepartment;
 use Modules\Registrar\emails\CourseTransferMails;
 use Modules\Registrar\Entities\CourseRequirement;
 use Modules\Registrar\Entities\DepartmentHistory;
-use Modules\Student\Entities\CourseClusterGroups;
-use Modules\Student\Entities\CourseTransfersView;
 use Modules\Student\Entities\ReadmissionApproval;
-use Modules\Application\Entities\ApplicantAddress;
-use Modules\Application\Entities\ApplicantContact;
-use Modules\Examination\Entities\ModeratedResults;
 use Modules\Registrar\emails\RejectedAcademicMail;
 use Modules\Application\Entities\AdmissionApproval;
-use Modules\Registrar\Entities\academicdepartments;
 use Modules\Student\Entities\AcademicLeaveApproval;
-use Modules\Application\Entities\ApplicationSubject;
-use Modules\Examination\Entities\SchoolExamWorkflow;
 use Modules\Student\Entities\CourseTransferApproval;
-use Modules\Application\Entities\ApplicationApproval;
 use Modules\Registrar\emails\AcceptedReadmissionsMail;
 use Modules\Registrar\emails\RejectedReadmissionsMail;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Modules\Registrar\emails\CourseTransferRejectedMails;
+use PhpOffice\PhpWord\SimpleType\TextDirection;
 
 class CoursesController extends Controller
 {
@@ -633,7 +635,7 @@ class CoursesController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Email sent successfuly.');
+        return redirect()->back()->with('success', 'Email sent successfully.');
     }
 
     public function acceptedTransfers(Request $request)
@@ -1093,146 +1095,171 @@ class CoursesController extends Controller
         $data->delete();
         return redirect()->route('courses.showEvent');
     }
-    /**
-     * voteheads
-     *
-     * @return void
-     */
-    public function voteheads()
-    {
+
+    public function getVoteheads(Request $request){
+        $query = $request->input('query');
+        $dataPayload = $this->appApi->fetchVoteheads();
+        $filteredVoteheads = array_filter($dataPayload, function ($votehead) use ($query) {
+            $nameMatch = stripos($votehead['name'], $query) !== false;
+            $idMatch = stripos($votehead['id'], $query) !== false;
+            return $nameMatch || $idMatch;
+        });
+        $filteredDataPayload = [
+            'data' => array_values($filteredVoteheads), // Reset array keys for correct JSON formatting
+        ];
+        return response()->json($filteredDataPayload);
+    }
+
+    public function voteheads(){
         return view('registrar::fee.voteheads');
     }
 
-    public function showVoteheads()
-    {
-        // $show  = VoteHead::latest()->get();
-        $dataPayload = $this->appApi->fetchVoteheads();
-        return view('registrar::fee.showVoteheads')->with(['show' => $dataPayload]);
+    public function showVoteheads(){
+        $show = VoteHead::latest()->get();
+        return view('registrar::fee.showVoteheads')->with(['show' => $show]);
     }
 
-    public function storeVoteheads(Request $request)
-    {
-        $voteID = new CustomIds();
-        $voteheads  = new VoteHead;
-        $voteheads->votehead_id = $voteID->generateId();
-        $voteheads->vote_id  =  $request->input('vote_id');
-        $voteheads->name  =  $request->input('name');
-        $voteheads->description  =  $request->input('description');
-        if($request->input('type') == 1){
-            $voteheads->type = "Fee";
-        }elseif($request->input('type') == 2){
-            $voteheads->type = "Fine";
-        }elseif($request->input('type') == 3){
-            $voteheads->type = "Accommodation";
-        }else{
-            $voteheads->type = "Graduation";
-        }
-        $voteheads->save();
+    public function storeVoteheads(Request $request){
+       $votes = json_decode($request->voteheads);
 
+        foreach ($votes as $vote){
+            $voteID = new CustomIds();
+            $voteheads  = new VoteHead;
+            $voteheads->votehead_id = $voteID->generateId();
+            $voteheads->vote_id = $vote->votehead;
+            $voteheads->vote_name = $vote->voteheadName;
+            $voteheads->vote_category = $vote->voteheadCategory;
+            $voteheads->vote_type = $vote->voteheadType;
+            $voteheads->save();
+        }
         return redirect()->route('courses.showVoteheads')->with('success', 'votehead added successfully.');
     }
 
-    public function editVotehead($id)
-    {
+    public function editVotehead($id){
         $data = VoteHead::where('votehead_id', $id)->first();
         return view('registrar::fee.editVotehead')->with(['data' => $data]);
     }
 
-    public function updateVotehead(Request $request, $id)
-    {
-        VoteHead::where('votehead_id', $id)->update(['name' => $request->name]);
+    public function updateVotehead(Request $request, $id){
+        VoteHead::where('votehead_id', $id)->update([
+            'vote_name' => $request->name,
+            'vote_id' => $request->voteID,
+            'vote_category' => $request->category,
+            'vote_type' => $request->type,]);
         return redirect()->route('courses.showVoteheads')->with('status', 'Data Updated Successfully');
     }
 
-    public function destroyVotehead($id)
-    {
+    public function destroyVotehead($id){
         VoteHead::where('votehead_id', $id)->delete();
-        return redirect()->route('courses.showVoteheads');
+        return redirect()->back()->with('success', '1 record destroyed successfully');
     }
-    /**
-     * semester fees
-     *
-     * @return void
-     */
-    public function semFee()
-    {
-        $courses  =  Courses::all();
+    public function semFee($id){
+        $course = Courses::where('course_id', $id)->first();
         $modes    =  Attendance::all();
-        $levels   =  Level::all();
-        $votes    =  VoteHead::all();
+        $syllabus = CourseSyllabus::where('course_code', $course->course_code)
+            ->get()
+            ->groupBy('stage')
+            ->map(function ($group, $stage) {
+                return $group->pluck('semester')->map(function ($semester) use ($stage) {
+                    return $stage . '.' . $semester;
+                });
+            })
+            ->flatten()
+            ->unique()
+            ->values()
+            ->toArray();
+        $votes    =  VoteHead::where('vote_category', 1)->orderBy('vote_id', 'asc')->get();
 
-        return view('registrar::fee.semFee')->with(['courses' => $courses, 'modes' => $modes, 'levels' => $levels, 'votes' => $votes]);
+        return view('registrar::fee.semFee')->with(['modes' => $modes, 'votes' => $votes, 'syllabus' => $syllabus, 'course' => $course]);
     }
-    public function showSemFee()
-    {
-        $courses  = CourseLevelMode::latest()->get();
-
+    public function showSemFee(){
+        $courses  = Courses::latest()->get();
         return view('registrar::fee.showsemFee')->with(['courses' => $courses]);
     }
-
-    public function storeSemFee(Request $request)
-    {
+    public function courseFeeStures($id){
+        $course = Courses::where('course_id', $id)->first();
+        $feeStructures = SemesterFee::where('course_code', $course->course_code)
+            ->get()
+            ->groupBy(['attendance_id', 'version']);
+        return view('registrar::fee.courseFeeStuctures')->with(['feeSstructures' => $feeStructures, 'course' => $course]);
+    }
+    public function storeSemFee(Request $request){
         $request->validate([
-
-            'course' => 'required',
-            'level' => 'required',
-            'attendance' => 'required'
-
+            'attendance' => 'required',
+            'semesterFee' => 'required'
         ]);
-
-        $levelsId = new CustomIds();
-        $courseFee = new CourseLevelMode();
-        $courseFee->course_level_mode_id = $levelsId->generateId();
-        $courseFee->course_id = $request->course;
-        $courseFee->level_id = $request->level;
-        $courseFee->attendance_id = $request->attendance;
-        $courseFee->save();
-
-        $voteheads = $request->voteheads;
-        $semester1_amount = $request->semester1;
-        $semester2_amount = $request->semester2;
-
-        for ($i = 0; $i < count($semester1_amount); $i++) {
-            $feeId = new CustomIds();
-
-            if (empty($semester1_amount[$i])) continue; // skip all the blank ones
-
-            $semester = [
-                'semester_fee_id' => $feeId->generateId(),
-                'course_level_mode_id' => $courseFee->course_level_mode_id,
-                'votehead_id'   =>  $voteheads[$i],
-                'semesterI'    =>  $semester1_amount[$i],
-                'semesterII'    =>  $semester2_amount[$i]
-            ];
-            SemesterFee::create($semester);
+//        return $request->attendance;
+        $feeStructure = json_decode($request->semesterFee, true);
+        foreach ($feeStructure as $votehead){
+            foreach ($votehead['semesters'] as $semester){
+                $feeId = new CustomIds();
+                SemesterFee::create([
+                    'semester_fee_id' => $feeId->generateId(),
+                    'course_code' => $request->course_code,
+                    'vote_id' => $votehead['votehead'],
+                    'semester' => $semester,
+                    'attendance_id' => $request->attendance,
+                    'amount' => $votehead['amount'],
+                    'version' => 'v.'.date('Y'),
+                ]);
+            }
         }
-
         return redirect()->route('courses.showSemFee')->with('success', 'Fee added successfully.');
     }
 
-    public function viewSemFee($id)
-    {
-        $course =  CourseLevelMode::where('course_level_mode_id', $id)->first();
-        $semester = SemesterFee::where('course_level_mode_id', $id)
-            ->orderBy('votehead_id', 'asc')->get();
+    public function viewSemFee($id){
+        list($course_code, $attendance, $version) = explode(':', base64_decode($id));
+        $course = Courses::where('course_code', $course_code)->first();
+        $semesterFees = SemesterFee::where('course_code', $course_code)
+            ->where('attendance_id', $attendance)
+            ->where('version', $version)
+            ->orderBy('semester', 'asc')
+            ->get()
+            ->groupBy('vote_id')
+            ->map(function ($group) {
+                return $group->groupBy('semester');
+            });
 
-        return view('registrar::fee.viewSemFee')->with(['semesterI' => $semester, 'course' => $course, 'id' => $id]);
+        $semesters = SemesterFee::where('course_code', $course_code)
+            ->where('attendance_id', $attendance)
+            ->where('version', $version)
+            ->orderBy('semester', 'asc')
+            ->get()
+            ->groupBy('semester')
+            ->map(function ($group) {
+                return $group->groupBy('vote_id');
+            });
+
+        return view('registrar::fee.viewSemFee')->with(['semesters' => $semesters, 'semesterFees' => $semesterFees, 'course' => $course, 'id' => $id]);
     }
 
-    public function printFee($id)
-    {
-        $course =  CourseLevelMode::where('course_level_mode_id', $id)->first();
-        $semester = SemesterFee::where('course_level_mode_id', $id)->orderBy('votehead_id', 'asc')->get();
+    public function printFee($id){
+        list($course_code, $attendance, $version) = explode(':', base64_decode($id));
+        $course = Courses::where('course_code', $course_code)->first();
+        $code = Attendance::where('id', $attendance)->first()->attendance_code;
+        $school_id = SchoolDepartment::where('department_id', $course->department_id)->first()->school_id;
+        $department = Department::where('department_id', $course->department_id)->first()->name;
+        $school = School::where('school_id', $school_id)->first()->name;
+        $semesterFees = SemesterFee::where('course_code', $course_code)
+            ->where('attendance_id', $attendance)
+            ->where('version', $version)
+            ->orderBy('semester', 'asc')
+            ->get()
+            ->groupBy('vote_id')
+            ->map(function ($group) {
+                return $group->groupBy('semester');
+            });
 
-        $semester1 = 0;
-        $semester2 = 0;
+        $semesters = SemesterFee::where('course_code', $course_code)
+            ->where('attendance_id', $attendance)
+            ->where('version', $version)
+            ->orderBy('semester', 'asc')
+            ->get()
+            ->groupBy('semester')
+            ->map(function ($group) {
+                return $group->groupBy('vote_id');
+            });
 
-        foreach ($semester as $fee) {
-
-            $semester1 += $fee->semesterI;
-
-            $semester2 += $fee->semesterII;
-        }
 
         $image = time() . '.png';
 
@@ -1242,46 +1269,94 @@ class CoursesController extends Controller
             ->format('png')
             ->generate($route, 'QrCodes/' . $image);
 
-        $domPdfPath = base_path('vendor/dompdf/dompdf');
-        \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
-        \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
 
-        $boldedtext = array('bold' => true, 'size' => 12);
-        $boldedtext1 = array('align' => 'right', 'size' => 12);
+        $phpWord = new PhpWord();
+        $section = $phpWord->addSection();
+        $boldedtext = array('name' => 'Book Antiqua', 'bold' => true, 'size' => 11);
+        $boldedtext1 = array('align' => 'right', 'size' => 11, 'name' => 'Book Antiqua');
+        $center= array('name' => 'Book Antiqua', 'bold' => true, 'size' => 11, 'alignment' => 'center');
 
-        $table = new Table(array('unit' => TblWidth::TWIP));
-        foreach ($semester as $detail) {
-            $table->addRow();
-            $table->addCell(5000, ['borderSize' => 2])->addText($detail->semVotehead->name,  $boldedtext1, ['name' => 'Book Antiqua', 'size' => 13]);
-            $table->addCell(2000, ['borderSize' => 2])->addText(number_format($detail->semesterI, 2), $boldedtext1, array('align' => 'right', 'size' => 12));
-            $table->addCell(2000, ['borderSize' => 2])->addText(number_format($detail->semesterII, 2), $boldedtext1, array('align' => 'right', 'size' => 12));
-        }
+        $table = $section->addTable(['unit' => \PhpOffice\PhpWord\SimpleType\TblWidth::TWIP, 'width' => 1300 * 1300, 'align' => 'center']);
         $table->addRow();
-        $table->addCell(3000, ['borderSize' => 2])->addText("TOTAL PAYABLE FEE", $boldedtext);
-        $table->addCell(3000, ['borderSize' => 2])->addText(number_format($semester1, 2), $boldedtext, array('align' => 'right', 'size' => 12));
-        $table->addCell(3000, ['borderSize' => 2])->addText(number_format($semester2, 2), $boldedtext, array('align' => 'right', 'size' => 12));
+        $table->addCell(7000, ['borderSize' => 2])->addText('DESCRIPTION', ['bold' => true, 'size' => 11, 'name' => 'Book Antiqua']);
+        foreach ($semesters as $semester => $fees) {
+            $table->addCell(800, ['borderSize' => 2])->addText("YR. " . explode('.', $semester)[0] . "<w:br/>" . "SEM. " . explode('.', $semester)[1], $center, ['name' => 'Book Antiqua', 'bold' => true, 'size' => 11, 'alignment' => 'center']);
+        }
+
+        $i = 1;
+        foreach ($semesterFees as $votes => $fees) {
+            $table->addRow();
+            $table->addCell(7000, ['borderSize' => 2])->addText(strtoupper(\Modules\Registrar\Entities\VoteHead::where('vote_id', $votes)->first()->vote_name), ['bold' => true, 'size' => 11, 'name' => 'Book Antiqua']);
+            foreach ($semesters as $semester => $_) {
+                $amount = 0;
+                if (isset($fees[$semester])) {
+                    foreach ($fees[$semester] as $fee) {
+                        $amount += $fee->amount;
+                    }
+                }
+                $table->addCell(800, ['align' => 'right', 'borderSize' => 2])->addText(number_format($amount, 2), $boldedtext1, array('align' => 'right', 'size' => 11));
+            }
+        }
+
+        $table->addRow();
+        $table->addCell(7000, ['borderSize' => 2])->addText('TOTALS', ['name' => 'Book Antiqua', 'bold' => true, 'size' => 11]);
+        foreach ($semesters as $semester => $_) {
+            $total = 0;
+            foreach ($semesterFees as $votes => $fees) {
+                if (isset($fees[$semester])) {
+                    foreach ($fees[$semester] as $fee) {
+                        $total += $fee->amount;
+                    }
+                }
+            }
+            $table->addCell(100, ['align' => 'right', 'borderSize' => 2])->addText(number_format($total, 2), $boldedtext, array('align' => 'right', 'size' => 11));
+        }
+
+
+
+//        $domPdfPath = base_path('vendor/dompdf/dompdf');
+//        \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
+//        \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+//
+
+//
+//        $table = new Table(array('unit' => TblWidth::TWIP));
+//        foreach ($semesterFees as $votehead => $detail) {
+//            $name = VoteHead::where('vote_id', $votehead)->first()->vote_name;
+//            $table->addRow();
+//            $table->addCell(5000, ['borderSize' => 2])->addText($name,  $boldedtext1, ['name' => 'Book Antiqua', 'size' => 13]);
+//            $table->addCell(2000, ['borderSize' => 2])->addText(number_format($detail->semesterI, 2), $boldedtext1, array('align' => 'right', 'size' => 12));
+//            $table->addCell(2000, ['borderSize' => 2])->addText(number_format($detail->semesterII, 2), $boldedtext1, array('align' => 'right', 'size' => 12));
+//        }
+//        $table->addRow();
+//        $table->addCell(3000, ['borderSize' => 2])->addText("TOTAL PAYABLE FEE", $boldedtext);
+//        $table->addCell(3000, ['borderSize' => 2])->addText(number_format($semester1, 2), $boldedtext, array('align' => 'right', 'size' => 12));
+//        $table->addCell(3000, ['borderSize' => 2])->addText(number_format($semester2, 2), $boldedtext, array('align' => 'right', 'size' => 12));
 
         $my_template = new TemplateProcessor(storage_path('fee_structure.docx'));
 
-        $my_template->setValue('course', strtoupper($course->courseclm->course_name));
+        $my_template->setValue('course', strtoupper($course->course_name));
         $my_template->setComplexBlock('{table}', $table);
-        $my_template->setValue('mode', $course->modeofstudy->attendance_code);
-        $docPath = 'FeeStructure/' . $course->courseclm->course_code . ".docx";
+        $my_template->setValue('mode', $code);
+        $my_template->setValue('department', $department);
+        $my_template->setValue('school', $school);
+        $docPath = 'FeeStructure/' . $course->course_code . ".docx";
         $my_template->setImageValue('qr', array('path' => 'QrCodes/' . $image, 'width' => 80, 'height' => 80, 'ratio' => true));
         $my_template->saveAs($docPath);
 
-        $pdfPath = 'FeeStructure/' . $course->courseclm->course_code . ".pdf";
+        $pdfPath = 'FeeStructure/' . $course->course_code . ".pdf";
 
-        $convert = new OfficeConverter('FeeStructure/' . $course->courseclm->course_code . ".docx", 'FeeStucture/');
-        $convert->convertTo($course->courseclm->course_code . ".pdf");
-
-        if (file_exists($docPath)) {
-            unlink($docPath);
-        }
+//        $convert = new OfficeConverter('FeeStructure/' . $course->courseclm->course_code . ".docx", 'FeeStucture/');
+//        $convert->convertTo($course->courseclm->course_code . ".pdf");
+//
+//        if (file_exists($docPath)) {
+//            unlink($docPath);
+//        }
 
         unlink('QrCodes/' . $image);
 
-        return response()->download($pdfPath)->deleteFileAfterSend(true);
+//        return response()->download($pdfPath)->deleteFileAfterSend(true);
+        return response()->download($docPath)->deleteFileAfterSend(true);
     }
 
     public function createUnits(Request $request, $id)
@@ -1656,12 +1731,12 @@ class CoursesController extends Controller
                 $my_template->setValue('reg_number', $studentNumber);
                 $my_template->setValue('ref_number', $app->ref_number);
                 $my_template->setValue('date',  date('d-M-Y'));
-                $docPath = 'AdmissionLetters/' . $app->ref_number . ".docx";
+                $docPath = "AdmissionLetters/". str_replace('/', '', $app->ref_number) . ".docx";
                 $my_template->saveAs($docPath);
 
                 $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
 
-                $pdfPath =  'AdmissionLetters/' . $app->ref_number . ".pdf";
+                $pdfPath =  'AdmissionLetters/'.str_replace('/', '', $app->ref_number).".pdf";
 
                 if (file_exists($pdfPath)) {
                     unlink($pdfPath);
@@ -1678,7 +1753,7 @@ class CoursesController extends Controller
                 $update->registrar_status = 3;
                 $update->registrar_comments = 'Admission letter generated';
                 $update->reg_number = $studentNumber;
-                $update->admission_letter = $app->ref_number . ".docx";
+                $update->admission_letter = str_replace('/', '', $app->ref_number).".docx";
                 $update->save();
 
                 $status = Application::where('application_id', $id)->first();
@@ -2300,10 +2375,32 @@ class CoursesController extends Controller
         return view('registrar::admissions.index')->with('admission', $admission);
     }
 
-    public function admitStudent($id)
-    {
+    public function admitStudent($id){
 
-         $admission = AdmissionsView::where('application_id', $id)->first();
+        $admission = AdmissionsView::where('application_id', $id)->first();
+        $course = Courses::where('course_id', $admission->course_id)->first();
+        $intake = Intake::where('intake_id', $admission->intake_id)->first();
+        if ($admission->student_type == 1){
+            $code  = 'S-FT';
+            $group = 'SSP';
+        }elseif ($admission->student_type == 2){
+            $code  = 'J-FT';
+            $group = 'KUCCPS';
+        }else{
+            $code  = 'S-PT';
+            $group = 'SSP';
+        }
+
+        $class = $course->course_code.'/'.strtoupper(Carbon::parse($intake->intake_from)->format('MY')).'/'.$code;
+        $student = [
+            'student_number' => $admission->reg_number,
+            'full_name' => $admission->fname.' '.$admission->mname.' '.$admission->sname,
+            'class_code' => $class,
+            'group_code' => $group,
+            'course_code' => $course->course_code
+        ];
+
+        $this->appApi->createStudent($student);
         $studentID = new CustomIds();
 
         $generatedStudentID  =  $studentID->generateId();
@@ -2322,7 +2419,7 @@ class CoursesController extends Controller
         $student->title = $admission->title;
         $student->marital_status = $admission->marital_status;
         $student->gender = $admission->gender;
-        $student->dob = $admission->DOB;
+        $student->dob = $admission->dob;
         $student->id_number = $admission->id_number;
         $student->disabled = $admission->disabled;
         $student->save();
@@ -2376,13 +2473,13 @@ class CoursesController extends Controller
         $approval->accommodation_status =           0;
         $approval->save();
 
-        //        $comms = new Notification;
-        //        $comms->application_id = $admission->id;
-        //        $comms->role_id = Auth::guard('user')->user()->role_id;
-        //        $comms->subject = 'Application Admission Process';
-        //        $comms->comment = 'Congratulations! Your admission was successful. You are now a bona-fied student at TUM. You can now log in as a student using your registration number as user ID and ID/PASSPORT/BIRTH certificate number.';
-        //        $comms->status = 1;
-        //        $comms->save();
+//                $comms = new Notification;
+//                $comms->application_id = $admission->id;
+//                $comms->role_id = Auth::guard('user')->user()->role_id;
+//                $comms->subject = 'Application Admission Process';
+//                $comms->comment = 'Congratulations! Your admission was successful. You are now a bona-fied student at TUM. You can now log in as a student using your registration number as user ID and ID/PASSPORT/BIRTH certificate number.';
+//                $comms->status = 1;
+//                $comms->save();
 
         return redirect()->back()->with('success', 'New student admission completed successfully');
     }

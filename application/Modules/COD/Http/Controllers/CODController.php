@@ -5,6 +5,7 @@ namespace Modules\COD\Http\Controllers;
 use App\Models\User;
 use App\Service\CustomIds;
 use Auth;
+use Illuminate\Support\Facades\Cache;
 use Modules\Administrator\Entities\Staff;
 use Modules\Application\Entities\ApplicationApproval;
 use Modules\COD\Entities\AcademicLeavesView;
@@ -293,8 +294,6 @@ class CODController extends Controller
         return redirect()->route('cod.Admissions')->with('info', 'Admission has been withheld');
     }
 
-
-
     public function submitAdmission($id)
     {
 
@@ -362,15 +361,18 @@ class CODController extends Controller
     }
 
     public function allUnits(){
-        $units = Unit::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-            ->orWhere('type', 1)
-            ->orWhere('type', 2)
-            ->latest()
-            ->get();
-
+        $cacheKey = 'all_units_' . auth()->guard('user')->id();
+        $units = Cache::remember($cacheKey, 3600, function () {
+            return Unit::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+                ->orWhere('type', 1)
+                ->orWhere('type', 2)
+                ->latest()
+                ->get();
+        });
 
         return view('cod::syllabus.index')->with(['units' => $units]);
     }
+
 
     public function addUnit(){
 
@@ -538,6 +540,7 @@ class CODController extends Controller
                     $code = Attendance::find($mode);
                     $classEx = $course->course_code.'/'.strtoupper(Carbon::parse($intakes->intake_from)->format('MY')).'/'.$code->attendance_code;
                     $syllabus = SyllabusVersion::where('course_id', $course->course_id)->latest()->first()->syllabus_name;
+                    $feeStructure = SemesterFee::where('course_code', $course->course_code)->pluck('version')->toArray();
 
                     $classId = new CustomIds();
                     // $generatedClassID  =  $classId->generateId();
@@ -551,6 +554,7 @@ class CODController extends Controller
                         $class->course_id = $selectedCourse['course'];
                         $class->intake_id = $request->intake;
                         $class->syllabus_name = $syllabus;
+                        $class->fee_version = max($feeStructure);
                         $class->points = 0;
                         $class->save();
                     }
@@ -710,27 +714,28 @@ class CODController extends Controller
 
     public function admitStudent($id){
         $student = StudentCourse::where('student_id', $id)->first();
+        $pattern = ClassPattern::where('class_code', $student->current_class)->pluck('semester')->toArray();
         $studentClass = Classes::where('name', $student->current_class)->first();
         $units = CourseSyllabus::where('course_code', $student->StudentsCourse->course_code)
-            ->where('version', $studentClass->syllabus_name)
-            ->where('stage', 1)
-            ->where('semester', 1)
-            ->get();
+                ->where('version', $studentClass->syllabus_name)
+                ->where('stage', 1)
+                ->where('semester', 1)
+                ->get();
 
-         $fees = CourseLevelMode::where('attendance_id', $student->student_type)
-            ->where('course_id', $student->course_id)
-            ->where('level_id', $student->StudentsCourse->level)
-            ->first();
-
+        $fees = SemesterFee::where('attendance_id', $student->student_type)
+                ->where('course_code', $student->StudentsCourse->course_code)
+//                ->where('version', $student->version)
+                ->where('semester', min($pattern))
+                ->get();
+//        return $fees;
         if ($fees == null) {
             return redirect()->back()->with('error', 'Oops! Course fee structure not found. Please contact the registrar');
         } else {
 
             $proformaInvoice = 0;
 
-            foreach ($fees->invoiceProforma as $votehead) {
-
-                $proformaInvoice += $votehead->semesterI;
+            foreach ($fees as $votehead) {
+                $proformaInvoice += $votehead->amount;
             }
 
             $academic = Carbon::parse($student->StudentIntake->academicYear->year_start)->format('Y') . '/' . Carbon::parse($student->StudentIntake->academicYear->year_end)->format('Y');
@@ -742,8 +747,8 @@ class CODController extends Controller
             $signed->student_id = $student->student_id;
             $signed->reg_number = $student->student_number;
             $signed->class_code = $student->current_class;
-            $signed->year_study = 1;
-            $signed->semester_study = 1;
+            $signed->year_study = explode('.', min($pattern))[0];
+            $signed->semester_study = explode('.', min($pattern))[1];
             $signed->academic_year = $academic;
             $signed->academic_semester = strtoupper($period);
             $signed->pattern_id = 1;
@@ -757,9 +762,9 @@ class CODController extends Controller
             $invoice->student_id = $student->student_id;
             $invoice->reg_number = $student->student_number;
             $invoice->invoice_number = 'INV' . time();
-            $invoice->stage = '1.1';
+            $invoice->stage = min($pattern);
             $invoice->amount = $proformaInvoice;
-            $invoice->description = 'New Student Registration Invoice for 1.1 ' . 'Academic Year ' . $academic;
+            $invoice->description = 'New Student Registration Invoice for '. min($pattern) . ' Academic Year ' . $academic;
             $invoice->save();
 
             foreach ($units as $unit){
@@ -771,12 +776,11 @@ class CODController extends Controller
                 $examinableUnit->unit_code = $unit->unit_code;
                 $examinableUnit->academic_year = $academic;
                 $examinableUnit->academic_semester = $period;
-                $examinableUnit->stage = 1;
-                $examinableUnit->semester = 1;
-                $examinableUnit->attempt = '1.1';
+                $examinableUnit->stage = explode('.', min($pattern))[0];
+                $examinableUnit->semester = explode('.', min($pattern))[1];
+                $examinableUnit->attempt = min($pattern);
                 $examinableUnit->save();
             }
-
             return redirect()->back()->with('success', 'Student admitted and invoiced successfully');
         }
     }
@@ -857,8 +861,7 @@ class CODController extends Controller
         return redirect()->back()->with('success', 'Class pattern record deleted successfully');
     }
 
-    public function examResults()
-    {
+    public function examResults(){
 
         $exams = ExamResults::latest()->get();
 

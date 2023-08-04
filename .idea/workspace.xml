@@ -2,56 +2,562 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="08195653-74ee-4c59-8ef1-51788d10d2d9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/application/Modules/Administrator/Console/SemesterRegistration.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/OmiDYe2MosjM5oHz3XauAaGZyjCcPh8udu63imcp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/beUWLUXVIlFA3IcRKRSygNRjaozoqZaFVKXeEZrR" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/03d36b370458bf262375fc1b5562ae8b5f04bf79.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/0eea2d540fe1103f2ecfbd43455925c6733a230a.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/120f73fcf9dc448c7e0d7978b52c079b48ec4819.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/QrCodes/1691129663.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/QrCodes/1691130705.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/QrCodes/1691133100.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/QrCodes/1691134028.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/QrCodes/1691134100.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/QrCodes/1691134127.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/Modules/Examination/Http/Middleware/Examination.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/Modules/Lecturer/Http/Middleware/Lecturer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/fee/courseFeeStuctures.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/cache/data/e1/2e/e12ec6855e79dfca60eb8235e8f03c3784b4091a" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/Sx8Z7JJQYA0OjEcGSeOXsYcg9KLNFpzrqfRl0yDD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/0650c6d3ce1a1f024d4f68e6ab2273a4ad436417.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/17b1c1a0518d6cc854efa0e58944fd1837108ee2.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/1d6891493c95687ce237976b1669aca95705a810.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/2cdf119037c5ffb873dd1717fe55c41dd98972fa.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/42bd0cd2e096b1dcb2f3e53e5533dc264a90caab.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/308ce373905897bda02dd7de481a8f0836058987.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/5022c5c6998b539413bc23b451566897a8f48084.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/64492a0cf20a52b9d39e9378f28563083c4edccd.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/88beea5e9b1105f0c442ac44a3694aa30d8a48c2.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/9456fa8f0ef52ce87712552832e6c3b61f7aee44.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/681995eb36e14884c8624ece7852f83c4127a4ef.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/a268ee2cb042e168d619055ce2b8713b62d493c3.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/baf4bfc229c7e052d8956e60af4ca635439c102a.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/c506d08c63687157a858c45223e529901d7d1eea.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/c0797ef360198965e8a339722bf1163f79606012.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/c86ab5ba561b7e3c26060e266b72cd62c8ffb65c.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/d5a41535bdba3e99f4e725b2fc7f539a070405d3.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/de34a38955f35f9cc89c8b089cf9a336972383ce.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/d515516a07d9c08687d2867b05810406fc0ed973.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/e5ef54c21f86eefad10e23f2a6196c2128864c17.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/e6a31f06e96a019a4899e4b3961c0a9f07fb5142.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/f592881f42fe96432554e373820156b8ce50f2a2.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/efa2b6c45e07be6bf2c77be2f6596884e14a3470.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/autoload.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/composer.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Autoloader.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Client.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/ClientConfiguration.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/ClientContextInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/ClientException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/ClientInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Cluster/ClusterStrategy.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Cluster/Distributor/DistributorInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Cluster/Distributor/EmptyRingException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Cluster/Distributor/HashRing.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Cluster/Distributor/KetamaRing.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Cluster/Hash/CRC16.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Cluster/Hash/HashGeneratorInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Cluster/Hash/PhpiredisCRC16.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Cluster/PredisStrategy.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Cluster/RedisStrategy.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Cluster/SlotMap.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Cluster/StrategyInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Collection/Iterator/CursorBasedIterator.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Collection/Iterator/HashKey.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Collection/Iterator/Keyspace.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Collection/Iterator/ListKey.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Collection/Iterator/SetKey.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Collection/Iterator/SortedSetKey.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/ArrayableArgument.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Geospatial/AbstractBy.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Geospatial/ByBox.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Geospatial/ByInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Geospatial/ByRadius.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Geospatial/FromInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Geospatial/FromLonLat.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Geospatial/FromMember.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/AggregateArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/AlterArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/CommonArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/CreateArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/CursorArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/DropArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/ExplainArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/ProfileArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/SchemaFields/AbstractField.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/SchemaFields/FieldInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/SchemaFields/GeoField.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/SchemaFields/NumericField.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/SchemaFields/TagField.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/SchemaFields/TextField.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/SchemaFields/VectorField.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/SearchArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/SpellcheckArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/SugAddArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/SugGetArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Search/SynUpdateArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Server/LimitInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Server/LimitOffsetCount.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/Server/To.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/TimeSeries/AddArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/TimeSeries/AlterArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/TimeSeries/CommonArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/TimeSeries/CreateArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/TimeSeries/DecrByArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/TimeSeries/GetArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/TimeSeries/IncrByArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/TimeSeries/InfoArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/TimeSeries/MGetArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/TimeSeries/MRangeArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Argument/TimeSeries/RangeArguments.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Command.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/CommandInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Factory.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/FactoryInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/PrefixableCommandInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Processor/KeyPrefixProcessor.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Processor/ProcessorChain.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Processor/ProcessorInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/RawCommand.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/RawFactory.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ACL.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/APPEND.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/AUTH.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/AbstractCommand/BZPOPBase.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BGREWRITEAOF.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BGSAVE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BITCOUNT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BITFIELD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BITOP.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BITPOS.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BLMOVE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BLMPOP.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BLPOP.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BRPOP.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BRPOPLPUSH.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BZMPOP.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BZPOPMAX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BZPOPMIN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BloomFilter/BFADD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BloomFilter/BFEXISTS.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BloomFilter/BFINFO.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BloomFilter/BFINSERT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BloomFilter/BFLOADCHUNK.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BloomFilter/BFMADD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BloomFilter/BFMEXISTS.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BloomFilter/BFRESERVE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/BloomFilter/BFSCANDUMP.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CLIENT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/COMMAND.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CONFIG.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/COPY.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Container/ACL.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Container/AbstractContainer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Container/ContainerFactory.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Container/ContainerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Container/FunctionContainer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Container/Json/JSONDEBUG.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Container/Search/FTCONFIG.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Container/Search/FTCURSOR.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CountMinSketch/CMSINCRBY.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CountMinSketch/CMSINFO.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CountMinSketch/CMSINITBYDIM.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CountMinSketch/CMSINITBYPROB.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CountMinSketch/CMSMERGE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CountMinSketch/CMSQUERY.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CuckooFilter/CFADD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CuckooFilter/CFADDNX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CuckooFilter/CFCOUNT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CuckooFilter/CFDEL.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CuckooFilter/CFEXISTS.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CuckooFilter/CFINFO.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CuckooFilter/CFINSERT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CuckooFilter/CFINSERTNX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CuckooFilter/CFLOADCHUNK.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CuckooFilter/CFMEXISTS.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CuckooFilter/CFRESERVE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/CuckooFilter/CFSCANDUMP.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/DBSIZE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/DECR.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/DECRBY.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/DEL.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/DISCARD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/DUMP.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ECHO_.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/EVALSHA.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/EVALSHA_RO.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/EVAL_.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/EVAL_RO.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/EXEC.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/EXISTS.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/EXPIRE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/EXPIREAT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/EXPIRETIME.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/FAILOVER.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/FCALL.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/FCALL_RO.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/FLUSHALL.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/FLUSHDB.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/FUNCTIONS.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/GEOADD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/GEODIST.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/GEOHASH.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/GEOPOS.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/GEORADIUS.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/GEORADIUSBYMEMBER.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/GEOSEARCH.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/GEOSEARCHSTORE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/GET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/GETBIT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/GETDEL.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/GETEX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/GETRANGE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/GETSET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/HDEL.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/HEXISTS.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/HGET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/HGETALL.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/HINCRBY.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/HINCRBYFLOAT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/HKEYS.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/HLEN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/HMGET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/HMSET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/HRANDFIELD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/HSCAN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/HSET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/HSETNX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/HSTRLEN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/HVALS.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/INCR.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/INCRBY.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/INCRBYFLOAT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/INFO.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONARRAPPEND.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONARRINDEX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONARRINSERT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONARRLEN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONARRPOP.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONARRTRIM.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONCLEAR.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONDEBUG.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONDEL.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONFORGET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONGET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONMERGE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONMGET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONMSET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONNUMINCRBY.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONOBJKEYS.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONOBJLEN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONRESP.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONSET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONSTRAPPEND.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONSTRLEN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONTOGGLE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Json/JSONTYPE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/KEYS.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/LASTSAVE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/LCS.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/LINDEX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/LINSERT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/LLEN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/LMOVE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/LMPOP.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/LPOP.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/LPUSH.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/LPUSHX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/LRANGE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/LREM.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/LSET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/LTRIM.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/MGET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/MIGRATE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/MONITOR.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/MOVE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/MSET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/MSETNX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/MULTI.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/OBJECT_.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/PERSIST.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/PEXPIRE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/PEXPIREAT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/PEXPIRETIME.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/PFADD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/PFCOUNT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/PFMERGE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/PING.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/PSETEX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/PSUBSCRIBE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/PTTL.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/PUBLISH.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/PUBSUB.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/PUNSUBSCRIBE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/QUIT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/RANDOMKEY.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/RENAME.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/RENAMENX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/RESTORE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/RPOP.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/RPOPLPUSH.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/RPUSH.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/RPUSHX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SADD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SAVE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SCAN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SCARD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SCRIPT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SDIFF.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SDIFFSTORE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SELECT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SENTINEL.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SETBIT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SETEX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SETNX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SETRANGE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SHUTDOWN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SINTER.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SINTERCARD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SINTERSTORE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SISMEMBER.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SLAVEOF.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SLOWLOG.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SMEMBERS.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SMISMEMBER.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SMOVE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SORT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SORT_RO.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SPOP.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SRANDMEMBER.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SREM.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SSCAN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/STRLEN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SUBSCRIBE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SUBSTR.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SUNION.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/SUNIONSTORE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTAGGREGATE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTALIASADD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTALIASDEL.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTALIASUPDATE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTALTER.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTCONFIG.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTCREATE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTCURSOR.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTDICTADD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTDICTDEL.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTDICTDUMP.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTDROPINDEX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTEXPLAIN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTINFO.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTPROFILE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTSEARCH.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTSPELLCHECK.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTSUGADD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTSUGDEL.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTSUGGET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTSUGLEN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTSYNDUMP.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTSYNUPDATE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/Search/FTTAGVALS.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TDigest/TDIGESTADD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TDigest/TDIGESTBYRANK.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TDigest/TDIGESTBYREVRANK.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TDigest/TDIGESTCDF.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TDigest/TDIGESTCREATE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TDigest/TDIGESTINFO.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TDigest/TDIGESTMAX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TDigest/TDIGESTMERGE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TDigest/TDIGESTMIN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TDigest/TDIGESTQUANTILE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TDigest/TDIGESTRANK.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TDigest/TDIGESTRESET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TDigest/TDIGESTREVRANK.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TDigest/TDIGESTTRIMMED_MEAN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TIME.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TOUCH.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TTL.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TYPE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TimeSeries/TSADD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TimeSeries/TSALTER.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TimeSeries/TSCREATE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TimeSeries/TSCREATERULE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TimeSeries/TSDECRBY.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TimeSeries/TSDEL.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TimeSeries/TSDELETERULE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TimeSeries/TSGET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TimeSeries/TSINCRBY.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TimeSeries/TSINFO.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TimeSeries/TSMADD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TimeSeries/TSMGET.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TimeSeries/TSMRANGE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TimeSeries/TSMREVRANGE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TimeSeries/TSQUERYINDEX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TimeSeries/TSRANGE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TimeSeries/TSREVRANGE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TopK/TOPKADD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TopK/TOPKINCRBY.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TopK/TOPKINFO.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TopK/TOPKLIST.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TopK/TOPKQUERY.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/TopK/TOPKRESERVE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/UNSUBSCRIBE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/UNWATCH.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/WATCH.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/XADD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/XDEL.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/XLEN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/XRANGE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/XREVRANGE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/XTRIM.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZADD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZCARD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZCOUNT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZDIFF.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZDIFFSTORE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZINCRBY.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZINTER.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZINTERCARD.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZINTERSTORE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZLEXCOUNT.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZMPOP.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZMSCORE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZPOPMAX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZPOPMIN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZRANDMEMBER.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZRANGE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZRANGEBYLEX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZRANGEBYSCORE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZRANGESTORE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZRANK.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZREM.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZREMRANGEBYLEX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZREMRANGEBYRANK.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZREMRANGEBYSCORE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZREVRANGE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZREVRANGEBYLEX.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZREVRANGEBYSCORE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZREVRANK.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZSCAN.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZSCORE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZUNION.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Redis/ZUNIONSTORE.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/RedisFactory.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/ScriptCommand.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Strategy/ContainerCommands/Functions/DeleteStrategy.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Strategy/ContainerCommands/Functions/LoadStrategy.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Strategy/StrategyResolverInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Strategy/SubcommandStrategyInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Strategy/SubcommandStrategyResolver.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/Aggregate.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/BitByte.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/BloomFilters/BucketSize.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/BloomFilters/Capacity.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/BloomFilters/Error.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/BloomFilters/Expansion.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/BloomFilters/Items.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/BloomFilters/MaxIterations.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/BloomFilters/NoCreate.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/By/ByArgument.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/By/ByLexByScore.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/By/GeoBy.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/Count.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/DB.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/Expire/ExpireOptions.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/From/GeoFrom.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/Get/Get.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/Json/Indent.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/Json/Newline.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/Json/NxXxArgument.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/Json/Space.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/Keys.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/LeftRight.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/Limit/Limit.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/Limit/LimitObject.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/MinMaxModifier.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/Replace.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/Rev.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/Sorting.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/Storedist.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/Timeout.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/To/ServerTo.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/Weights.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/With/WithCoord.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/With/WithDist.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/With/WithHash.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/With/WithScores.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Command/Traits/With/WithValues.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/CommunicationException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Configuration/Option/Aggregate.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Configuration/Option/CRC16.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Configuration/Option/Cluster.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Configuration/Option/Commands.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Configuration/Option/Connections.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Configuration/Option/Exceptions.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Configuration/Option/Prefix.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Configuration/Option/Replication.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Configuration/OptionInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Configuration/Options.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Configuration/OptionsInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/AbstractConnection.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/AggregateConnectionInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/Cluster/ClusterInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/Cluster/PredisCluster.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/Cluster/RedisCluster.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/CompositeConnectionInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/CompositeStreamConnection.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/ConnectionException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/ConnectionInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/Factory.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/FactoryInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/NodeConnectionInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/Parameters.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/ParametersInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/PhpiredisSocketConnection.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/PhpiredisStreamConnection.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/RelayConnection.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/RelayMethods.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/Replication/MasterSlaveReplication.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/Replication/ReplicationInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/Replication/SentinelReplication.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/StreamConnection.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Connection/WebdisConnection.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Monitor/Consumer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/NotSupportedException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Pipeline/Atomic.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Pipeline/ConnectionErrorProof.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Pipeline/FireAndForget.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Pipeline/Pipeline.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Pipeline/RelayAtomic.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Pipeline/RelayPipeline.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/PredisException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Protocol/ProtocolException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Protocol/ProtocolProcessorInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Protocol/RequestSerializerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Protocol/ResponseReaderInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Protocol/Text/CompositeProtocolProcessor.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Protocol/Text/Handler/BulkResponse.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Protocol/Text/Handler/ErrorResponse.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Protocol/Text/Handler/IntegerResponse.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Protocol/Text/Handler/MultiBulkResponse.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Protocol/Text/Handler/ResponseHandlerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Protocol/Text/Handler/StatusResponse.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Protocol/Text/Handler/StreamableMultiBulkResponse.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Protocol/Text/ProtocolProcessor.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Protocol/Text/RequestSerializer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Protocol/Text/ResponseReader.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/PubSub/AbstractConsumer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/PubSub/Consumer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/PubSub/DispatcherLoop.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/PubSub/RelayConsumer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Replication/MissingMasterException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Replication/ReplicationStrategy.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Replication/RoleException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Response/Error.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Response/ErrorInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Response/Iterator/MultiBulk.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Response/Iterator/MultiBulkIterator.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Response/Iterator/MultiBulkTuple.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Response/ResponseInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Response/ServerException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Response/Status.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Session/Handler.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Transaction/AbortedMultiExecException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Transaction/MultiExec.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/vendor/predis/predis/src/Transaction/MultiExecState.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/smis.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/smis.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/.env" beforeDir="false" afterPath="$PROJECT_DIR$/application/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Administrator/Providers/AdministratorServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Administrator/Providers/AdministratorServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2022_07_12_135115_create_admission_approvals_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2022_07_12_135115_create_admission_approvals_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2022_09_16_131715_create_admission_documents_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2022_09_16_131715_create_admission_documents_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2023_06_01_153049_create_application_approvals_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2023_06_01_153049_create_application_approvals_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Application/Http/Controllers/ApplicationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Database/Migrations/2022_10_28_160443_create_readmissions_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Database/Migrations/2022_10_28_160443_create_readmissions_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/COD/Database/Migrations/2023_07_08_180929_create_academic_leaves_views_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Database/Migrations/2023_07_08_180929_create_academic_leaves_views_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Http/Controllers/FinanceController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/invoices/addInvoice.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/invoices/addInvoice.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/invoices/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/invoices/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Finance/Routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Finance/Routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_11_15_083955_create_calender_of_events_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2022_11_15_083955_create_calender_of_events_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2023_06_06_172434_create_a_c_a_d_e_m_i_c_d_e_p_a_r_t_m_e_n_t_s_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Database/Migrations/2023_06_06_172434_create_a_c_a_d_e_m_i_c_d_e_p_a_r_t_m_e_n_t_s_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/layouts/backend.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/layouts/backend.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/workload/departmentalWorkload.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/workload/departmentalWorkload.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_06_114857_create_student_courses_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_06_114857_create_student_courses_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_26_155157_create_course_transfers_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_10_26_155157_create_course_transfers_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/User/Database/Migrations/2023_02_23_112508_create_user_employements_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/User/Database/Migrations/2023_02_23_112508_create_user_employements_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/Modules/User/Http/Controllers/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/User/Http/Controllers/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/app/Console/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Console/Kernel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/app/Http/Apis/AppApis.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Http/Apis/AppApis.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/app/Http/Middleware/User/Updatedprofile.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/app/Http/Middleware/User/Updatedprofile.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/config/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/config/database.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/3iXI71Z2VZGPkESPhFUDz0EITl8lGU1aTlryXHVN" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/uAwfui5TFs4l64sbutlKJbpI7ZtRmoK1jCSElgyt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +569,7 @@
     <execution />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/application" />
   </component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
@@ -221,10 +727,11 @@
       <path value="$PROJECT_DIR$/application/vendor/guzzlehttp/psr7" />
       <path value="$PROJECT_DIR$/application/vendor/symfony/polyfill-php83" />
       <path value="$PROJECT_DIR$/application/vendor/league/flysystem-local" />
+      <path value="$PROJECT_DIR$/application/vendor/predis/predis" />
     </include_path>
   </component>
   <component name="ProjectId" id="2Mlcghr9kNM3MaOnSorYHp0CwuY" />
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -334,6 +841,11 @@
       <workItem from="1690185737309" duration="8436000" />
       <workItem from="1690266954992" duration="35004000" />
       <workItem from="1690349060476" duration="2013000" />
+      <workItem from="1690357874746" duration="15040000" />
+      <workItem from="1690452673795" duration="12130000" />
+      <workItem from="1690538313256" duration="15248000" />
+      <workItem from="1690711883447" duration="45365000" />
+      <workItem from="1690885769121" duration="57753000" />
     </task>
     <servers />
   </component>

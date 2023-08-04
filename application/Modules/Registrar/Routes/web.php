@@ -14,56 +14,57 @@ use Modules\Registrar\Http\Controllers\CoursesController;
 |
 */
 
-Route::prefix('courses')->group(function() {
-
-    Route::get('/show-semester-fee', 'CoursesController@showSemFee')->name('courses.showSemFee');
-    Route::get('/semFee', 'CoursesController@semFee')->name('courses.semFee');
-    Route::post('/store-semester-fee', 'CoursesController@storeSemFee')->name('courses.storeSemFee');
-    Route::get('/view-semester-fee/{id}', 'CoursesController@viewSemFee')->name('courses.viewSemFee');
-    Route::get('/print-fee/{id}', 'CoursesController@printFee')->name('courses.printFee');
+Route::prefix('registry')->middleware(['web', 'auth:user', 'is_admin'])->group(function() {
+    Route::get('/show-semester-fee', [CoursesController::class, 'showSemFee'])->name('courses.showSemFee');
+    Route::get('/semFee/{id}', [CoursesController::class, 'semFee'])->name('courses.semFee');
+    Route::post('/store-semester-fee', [CoursesController::class, 'storeSemFee'])->name('courses.storeSemFee');
+    Route::get('/view-semester-fee/{id}', [CoursesController::class, 'viewSemFee'])->name('courses.viewSemFee');
+    Route::get('/print-fee/{id}', [CoursesController::class, 'printFee'])->name('courses.printFee');
+    Route::get('/view-course-fee-structures/{id}', [CoursesController::class, 'courseFeeStures'])->name('courses.courseFeeStructure');
 
     //routes on fee
-    Route::get('/voteheads', 'CoursesController@voteheads')->name('courses.voteheads');
-    Route::get('/show-voteheads', 'CoursesController@showVoteheads')->name('courses.showVoteheads');
-    Route::post('/store-voteheads', 'CoursesController@storeVoteheads')->name('courses.storeVoteheads');
-    Route::get('/edit-votehead/{id}', 'CoursesController@editVotehead')->name('courses.editVotehead');
-    Route::get('/destroy-votehead/{id}', 'CoursesController@destroyVotehead')->name('courses.destroyVotehead');
-    Route::put('/update-votehead/{id}', 'CoursesController@updateVotehead')->name('courses.updateVotehead');
+    Route::get('/voteheads', [CoursesController::class, 'voteheads'])->name('courses.voteheads');
+    Route::get('/get-voteheads-from-api', [CoursesController::class, 'getVoteheads'])->name('courses.getVoteheads');
+    Route::get('/show-voteheads', [CoursesController::class, 'showVoteheads'])->name('courses.showVoteheads');
+    Route::post('/store-voteheads', [CoursesController::class, 'storeVoteheads'])->name('courses.storeVoteheads');
+    Route::get('/edit-votehead/{id}', [CoursesController::class, 'editVotehead'])->name('courses.editVotehead');
+    Route::get('/destroy-votehead/{id}', [CoursesController::class, 'destroyVotehead'])->name('courses.destroyVotehead');
+    Route::put('/update-votehead/{id}', [CoursesController::class, 'updateVotehead'])->name('courses.updateVotehead');
 
-    Route::get('/export-kuccps', 'CoursesController@exportkuccps')->name('courses.exportkuccps');
-    Route::get('/import-export-view-kuccps','CoursesController@importExportViewkuccps')->name('courses.importExportViewkuccps');
-    Route::post('/import-kuccps','CoursesController@importkuccps')->name('courses.importkuccps');
-    Route::get('/preview/{id}', 'CoursesController@preview')->name('courses.preview');
-    Route::get('/view-application/{id}', 'CoursesController@viewApplication')->name('courses.viewApplication');
-    Route::get('/accept-application/{id}', 'CoursesController@acceptApplication')->name('courses.acceptApplication');
-    Route::post('/reject-application/{id}', 'CoursesController@rejectApplication')->name('courses.rejectApplication');
+    Route::get('/export-kuccps', [CoursesController::class, 'exportkuccps'])->name('courses.exportkuccps');
+    Route::get('/import-export-view-kuccps',[CoursesController::class, 'importExportViewkuccps'])->name('courses.importExportViewkuccps');
+    Route::post('/import-kuccps',[CoursesController::class, 'importkuccps'])->name('courses.importkuccps');
+    Route::get('/preview/{id}', [CoursesController::class, 'preview'])->name('courses.preview');
+    Route::get('/view-application/{id}', [CoursesController::class, 'viewApplication'])->name('courses.viewApplication');
+    Route::get('/accept-application/{id}', [CoursesController::class, 'acceptApplication'])->name('courses.acceptApplication');
+    Route::post('/reject-application/{id}', [CoursesController::class, 'rejectApplication'])->name('courses.rejectApplication');
 
-    Route::get('/import-export-cluster-weights','CoursesController@importExportclusterWeights')->name('courses.importExportclusterWeights');
-    Route::post('/import-cluster-weights','CoursesController@importclusterWeights')->name('courses.importclusterWeights');
+    Route::get('/import-export-cluster-weights',[CoursesController::class, 'importExportclusterWeights'])->name('courses.importExportclusterWeights');
+    Route::post('/import-cluster-weights',[CoursesController::class, 'importclusterWeights'])->name('courses.importclusterWeights');
 
-    Route::get('/import-unit-programms','CoursesController@importUnitProgramms')->name('courses.importUnitProgramms');
-    Route::post('/import-unit-programms','CoursesController@importUnitProg')->name('courses.importUnitProg');
+    Route::get('/import-unit-programms',[CoursesController::class, 'importUnitProgramms'])->name('courses.importUnitProgramms');
+    Route::post('/import-unit-programms',[CoursesController::class, 'importUnitProg'])->name('courses.importUnitProg');
 
-    Route::get('/import-unit','CoursesController@importUnit')->name('courses.importUnit');
-    Route::post('/import-unit','CoursesController@importUnits')->name('courses.importUnits');
+    Route::get('/import-unit',[CoursesController::class, 'importUnit'])->name('courses.importUnit');
+    Route::post('/import-unit',[CoursesController::class, 'importUnits'])->name('courses.importUnits');
 
-    Route::get('/import-export-courses','CoursesController@importExportCourses')->name('courses.importExportCourses');
-    Route::post('/import-courses','CoursesController@importCourses')->name('courses.importCourses');
+    Route::get('/import-export-courses',[CoursesController::class, 'importExportCourses'])->name('courses.importExportCourses');
+    Route::post('/import-courses',[CoursesController::class, 'importCourses'])->name('courses.importCourses');
 
-    Route::get('/create-units/{id}','CoursesController@createUnits')->name('courses.createUnits');
-    Route::post('/store-created-units', 'CoursesController@storeCreatedUnits')->name('courses.storeCreatedUnits');
+    Route::get('/create-units/{id}',[CoursesController::class, 'createUnits'])->name('courses.createUnits');
+    Route::post('/store-created-units', [CoursesController::class, 'storeCreatedUnits'])->name('courses.storeCreatedUnits');
 
-    Route::get('/archived', 'CoursesController@archived')->name('courses.archived');
-    Route::get('/applications', 'CoursesController@applications')->name('courses.applications');
-    Route::get('/show-kuccps', 'CoursesController@showKuccps')->name('courses.showKuccps');
-    Route::get('/offer', 'CoursesController@offer')->name('courses.offer');
-    Route::get('/profile', 'CoursesController@profile')->name('courses.profile');
-    Route::get('/destroy-courses-available/{id}', 'CoursesController@destroyCoursesAvailable')->name('courses.destroyCoursesAvailable');
-    Route::post('/accepted-mail', 'CoursesController@acceptedMail')->name('courses.acceptedMail');
+    Route::get('/archived', [CoursesController::class, 'archived'])->name('courses.archived');
+    Route::get('/applications', [CoursesController::class, 'applications'])->name('courses.applications');
+    Route::get('/show-kuccps', [CoursesController::class, 'showKuccps'])->name('courses.showKuccps');
+    Route::get('/offer', [CoursesController::class, 'offer'])->name('courses.offer');
+    Route::get('/profile', [CoursesController::class, 'profile'])->name('courses.profile');
+    Route::get('/destroy-courses-available/{id}', [CoursesController::class, 'destroyCoursesAvailable'])->name('courses.destroyCoursesAvailable');
+    Route::post('/accepted-mail', [CoursesController::class, 'acceptedMail'])->name('courses.acceptedMail');
 
 
     //routes on intakes
-    Route::get('/', 'CoursesController@index')->name('courses.index');
+    Route::get('/', [CoursesController::class, 'index'])->name('courses.index');
     Route::get('approve-index', [CoursesController::class, 'approveIndex'])->name('courses.approveIndex');
     Route::get('/add-intake/{id}', [CoursesController::class, 'addIntake'])->name('courses.addIntake');
     Route::post('/store-intake/{id}', [CoursesController::class, 'storeIntake'])->name('courses.storeIntake');
@@ -109,21 +110,21 @@ Route::prefix('courses')->group(function() {
     Route::put('/update-course/{id}', [CoursesController::class,'updateCourse'])->name('courses.updateCourse');
 
     //routes on attendance/ mode of study
-    Route::get('/add-attendance', 'CoursesController@addAttendance')->name('courses.addAttendance');
-    Route::post('/store-attendance', 'CoursesController@storeAttendance')->name('courses.storeAttendance');
-    Route::get('/show-attendance', 'CoursesController@showAttendance')->name('courses.showAttendance');
-    Route::get('/edit-attendance/{id}', 'CoursesController@editAttendance')->name('courses.editAttendance');
-    Route::put('/update-attendance/{id}', 'CoursesController@updateAttendance')->name('courses.updateAttendance');
-    Route::get('/destroy-attendance/{id}', 'CoursesController@destroyAttendance')->name('courses.destroyAttendance');
+    Route::get('/add-attendance', [CoursesController::class, 'addAttendance'])->name('courses.addAttendance');
+    Route::post('/store-attendance', [CoursesController::class, 'storeAttendance'])->name('courses.storeAttendance');
+    Route::get('/show-attendance', [CoursesController::class, 'showAttendance'])->name('courses.showAttendance');
+    Route::get('/edit-attendance/{id}', [CoursesController::class, 'editAttendance'])->name('courses.editAttendance');
+    Route::put('/update-attendance/{id}', [CoursesController::class, 'updateAttendance'])->name('courses.updateAttendance');
+    Route::get('/destroy-attendance/{id}', [CoursesController::class,' destroyAttendance'])->name('courses.destroyAttendance');
 
 
     //routes on classes
-    Route::get('/add-classes', 'CoursesController@addClasses')->name('courses.addClasses');
-    Route::post('/store-classes', 'CoursesController@storeClasses')->name('courses.storeClasses');
-    Route::get('/show-classes', 'CoursesController@showClasses')->name('courses.showClasses');
-    Route::get('/edit-classes/{id}', 'CoursesController@editClasses')->name('courses.editClasses');
-    Route::put('/update-classes/{id}', 'CoursesController@updateClasses')->name('courses.updateClasses');
-    Route::get('/destroy-classes/{id}', 'CoursesController@destroyClasses')->name('courses.destroyClasses');
+    Route::get('/add-classes', [CoursesController::class, 'addClasses'])->name('courses.addClasses');
+    Route::post('/store-classes', [CoursesController::class, 'storeClasses'])->name('courses.storeClasses');
+    Route::get('/show-classes', [CoursesController::class, 'showClasses'])->name('courses.showClasses');
+    Route::get('/edit-classes/{id}', [CoursesController::class, 'editClasses'])->name('courses.editClasses');
+    Route::put('/update-classes/{id}', [CoursesController::class, 'updateClasses'])->name('courses.updateClasses');
+    Route::get('/destroy-classes/{id}', [CoursesController::class, 'destroyClasses'])->name('courses.destroyClasses');
 
     //routes on admissions
     Route::get('admissions', [CoursesController::class, 'admissions'])->name('courses.admissions');
@@ -141,20 +142,20 @@ Route::prefix('courses')->group(function() {
     Route::any('/fetch-department', [CoursesController::class, 'fetchDept'])->name('courses.fetchDept');
 
     //routes on events
-    Route::get('/add-event', 'CoursesController@addEvent')->name('courses.addEvent');
-    Route::get('/show-event', 'CoursesController@showEvent')->name('courses.showEvent');
-    Route::post('/store-event', 'CoursesController@storeEvent')->name('courses.storeEvent');
-    Route::get('/destroy-event/{id}', 'CoursesController@destroyEvent')->name('courses.destroyEvent');
-    Route::put('/update-event/{id}', 'CoursesController@updateEvent')->name('courses.updateEvent');
-    Route::get('/edit-event/{id}', 'CoursesController@editEvent')->name('courses.editEvent');
+    Route::get('/add-event', [CoursesController::class, 'addEvent'])->name('courses.addEvent');
+    Route::get('/show-event', [CoursesController::class, 'showEvent'])->name('courses.showEvent');
+    Route::post('/store-event', [CoursesController::class, 'storeEvent'])->name('courses.storeEvent');
+    Route::get('/destroy-event/{id}', [CoursesController::class, 'destroyEvent'])->name('courses.destroyEvent');
+    Route::put('/update-event/{id}', [CoursesController::class, 'updateEvent'])->name('courses.updateEvent');
+    Route::get('/edit-event/{id}', [CoursesController::class, 'editEvent'])->name('courses.editEvent');
 
     //routes oncalender ofevents
-    Route::get('/add-calender-of-events', 'CoursesController@addCalenderOfEvents')->name('courses.addCalenderOfEvents');
-    Route::get('/show-calender-of-events', 'CoursesController@showCalenderOfEvents')->name('courses.showCalenderOfEvents');
-    Route::post('/store-calender-of-events', 'CoursesController@storeCalenderOfEvents')->name('courses.storeCalenderOfEvents');
-    Route::get('/destroy-calender-of-events/{id}', 'CoursesController@destroyCalenderOfEvents')->name('courses.destroyCalenderOfEvents');
-    Route::put('/update-calender-of-events/{id}', 'CoursesController@updateCalenderOfEvents')->name('courses.updateCalenderOfEvents');
-    Route::get('/edit-calender-of-events/{id}', 'CoursesController@editCalenderOfEvents')->name('courses.editCalenderOfEvents');
+    Route::get('/add-calender-of-events', [CoursesController::class, 'addCalenderOfEvents'])->name('courses.addCalenderOfEvents');
+    Route::get('/show-calender-of-events', [CoursesController::class, 'showCalenderOfEvents'])->name('courses.showCalenderOfEvents');
+    Route::post('/store-calender-of-events', [CoursesController::class, 'storeCalenderOfEvents'])->name('courses.storeCalenderOfEvents');
+    Route::get('/destroy-calender-of-events/{id}', [CoursesController::class, 'destroyCalenderOfEvents'])->name('courses.destroyCalenderOfEvents');
+    Route::put('/update-calender-of-events/{id}', [CoursesController::class, 'updateCalenderOfEvents'])->name('courses.updateCalenderOfEvents');
+    Route::get('/edit-calender-of-events/{id}', [CoursesController::class, 'editCalenderOfEvents'])->name('courses.editCalenderOfEvents');
 
 
     Route::get('/transfer', [CoursesController::class, 'transfer'])->name('courses.transfer');
@@ -164,7 +165,7 @@ Route::prefix('courses')->group(function() {
     Route::get('/course-preview/{id}', [CoursesController::class, 'coursePreview'])->name('courses.coursePreview');
 
 
-    Route::post('/accepted-transfers', 'CoursesController@acceptedTransfers')->name('courses.acceptedTransfers');
+    Route::post('/accepted-transfers', [CoursesController::class, 'acceptedTransfers'])->name('courses.acceptedTransfers');
     Route::get('/transfer-requests', [CoursesController::class, 'yearly'])->name('courses.yearly');
     Route::get('/transfer/{year}', [CoursesController::class, 'transfer'])->name('courses.transfer');
     Route::get('/generate-requests-transfer-report/{year}', [CoursesController::class, 'requestedTransfers'])->name('courses.requestedTransfers');
@@ -172,12 +173,12 @@ Route::prefix('courses')->group(function() {
     Route::get('/leave-requests', [CoursesController::class, 'leaves'])->name('courses.leaves');
     Route::get('/academic-leave/{year}', [CoursesController::class, 'academicLeave'])->name('courses.academicLeave');
     // Route::get('/generate-requests-academic-leave-report/{year}', [CoursesController::class, 'requestedAcademicLeaves'])->name('courses.requestedAcademicLeaves');
-    Route::post('/accepted-academic-leaves', 'CoursesController@acceptedAcademicLeaves')->name('courses.acceptedAcademicLeaves');
+    Route::post('/accepted-academic-leaves', [CoursesController::class, 'acceptedAcademicLeaves'])->name('courses.acceptedAcademicLeaves');
 
 
     Route::get('/readmission-requests', [CoursesController::class, 'readmissions'])->name('courses.readmissions');
     Route::get('/yearly-readmissions/{year}', [CoursesController::class, 'yearlyReadmissions'])->name('courses.yearlyReadmissions');
-    Route::post('/accepted-readmissions', 'CoursesController@acceptedReadmissions')->name('courses.acceptedReadmissions');
+    Route::post('/accepted-readmissions', [CoursesController::class, 'acceptedReadmissions'])->name('courses.acceptedReadmissions');
 
     Route::get('/workload', [CoursesController::class, 'workload'])->name('courses.workload');
     Route::get('/school-workload/{year}', [CoursesController::class, 'schoolWorkload'])->name('courses.schoolWorkload');

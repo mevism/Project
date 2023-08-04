@@ -65,7 +65,7 @@
           <ul class="nav-main">
             <li class="nav-main-item">
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
-                <i class="nav-main-link-icon si si-home"></i>
+                <i class="nav-main-link-icon fas fa-home-user"></i>
                 <span class="nav-main-link-name">
                     @if(auth()->guard('user')->user()->hasRole('Registrar'))
                         Registrar [ {{ auth()->guard('user')->user()->employmentDepartment->first()->dept_code }} ]
@@ -75,135 +75,73 @@
             </li>
             <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                <i class="nav-main-link-icon si si-graduation"></i>
-                <span class="nav-main-link-name">Academics</span>
+                <i class="nav-main-link-icon fa fa-cogs"></i>
+                <span class="nav-main-link-name">Academics Setup</span>
               </a>
-              <ul class="nav-main-submenu">
-                <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
-                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                    <i class="nav-main-link-icon si si-graduation"></i>
-                    <span class="nav-main-link-name">Schedule</span>
-                  </a>
-                    <ul class="nav-main-submenu">
-                      <li class="nav-main-item">
+                <ul class="nav-main-submenu">
+                    <li class="nav-main-item">
                         <a class="nav-main-link{{ request()->is('school/showSchool') ? ' active' : '' }}" href="{{  route('courses.showSchool') }}">
-                          <i class="nav-main-link-icon si si-graduation"></i>
                             <span class="nav-main-link-name">Schools</span>
                         </a>
-                      </li>
-                      <li class="nav-main-item">
-                        <a class="nav-main-link{{ request()->is('department/showDepartment') ? ' active' : '' }}" href="{{  route('courses.showDepartment') }}">
-                          <i class="nav-main-link-icon si si-user"></i>
+                    </li>
+                </ul>
+              <ul class="nav-main-submenu">
+                  <li class="nav-main-item">
+                      <a class="nav-main-link{{ request()->is('department/showDepartment') ? ' active' : '' }}" href="{{  route('courses.showDepartment') }}">
                           <span class="nav-main-link-name">Department</span>
-                        </a>
-                      </li>
-                      <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('courses/showCourse') ? ' active' : '' }}" href="{{  route('courses.showCourse') }}">
-                            <i class="nav-main-link-icon si si-layers"></i>
-                              <span class="nav-main-link-name">Courses</span>
-                          </a>
-                      </li>
-                      <li class="nav-main-item">
-                        <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showAttendance')}}">
-                          <i class="nav-main-link-icon si si-layers"></i>
-                          <span class="nav-main-link-name">Mode of Study</span>
-                        </a>
-                      </li>
-                    </ul>
-                </li>
-                <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
-                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                    <i class="nav-main-link-icon si si-graduation"></i>
-                    <span class="nav-main-link-name">Imports</span>
-                  </a>
-                    <ul class="nav-main-submenu">
-                        <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importUnit')}}">
-                            <i class="nav-main-link-icon si si-layers"></i>
-                            <span class="nav-main-link-name"> Units</span>
-                          </a>
-                        </li>
-                        <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importExportCourses')}}">
-                            <i class="nav-main-link-icon si si-layers"></i>
-                            <span class="nav-main-link-name">Courses</span>
-                          </a>
-                        </li>
-                        <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importExportclusterWeights')}}">
-                            <i class="nav-main-link-icon si si-layers"></i>
-                            <span class="nav-main-link-name"> Cluster Weights</span>
-                          </a>
-                        </li>
-                        <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importUnitProgramms')}}">
-                            <i class="nav-main-link-icon si si-layers"></i>
-                            <span class="nav-main-link-name"> Unit Programs</span>
-                          </a>
-                        </li>
-
-                    </ul>
-                </li>
-                <li class="nav-main-item{{ request()->is('calender/*') ? ' open' : '' }}">
-                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                    <i class="nav-main-link-icon si si-calendar"></i>
-                    <span class="nav-main-link-name">Events Calender</span>
-                  </a>
-                  <ul class="nav-main-submenu">
-                    <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showEvent')}}">
-                        <i class="nav-main-link-icon si si-layers"></i>
-                        <span class="nav-main-link-name"> Events</span>
-                      </a>
-                    </li>
-
-                    <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showCalenderOfEvents')}}">
-                        <i class="nav-main-link-icon si si-calendar"></i>
-                        <span class="nav-main-link-name"> Calender of Events</span>
-                      </a>
-                    </li>
-                    <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('courses.academicYear') }}">
-                          <i class="nav-main-link-icon si si-calendar"></i>
-                          <span class="nav-main-link-name">Academic Years</span>
                       </a>
                   </li>
-
-                  </ul>
-                </li>
-                <li class="nav-main-item{{ request()->is('semFee/*') ? ' open' : '' }}">
-                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                    <i class="nav-main-link-icon si si-user"></i>
-                    <span class="nav-main-link-name">Fee Structures</span>
-                  </a>
-                  <ul class="nav-main-submenu">
-                    <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showSemFee')}}">
-                        <i class="nav-main-link-icon si si-layers"></i>
-                        <span class="nav-main-link-name"> Course Fee Structures</span>
+              </ul>
+              <ul class="nav-main-submenu">
+                  <li class="nav-main-item">
+                      <a class="nav-main-link{{ request()->is('courses/showCourse') ? ' active' : '' }}" href="{{  route('courses.showCourse') }}">
+                          <span class="nav-main-link-name">Courses</span>
                       </a>
-                    </li>
-                    <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showVoteheads')}}">
-                        <i class="nav-main-link-icon si si-layers"></i>
-                        <span class="nav-main-link-name"> Voteheads</span>
+                  </li>
+              </ul>
+              <ul class="nav-main-submenu">
+                  <li class="nav-main-item">
+                      <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showAttendance')}}">
+                          <span class="nav-main-link-name">Mode of Study</span>
                       </a>
-                    </li>
-
-                  </ul>
-                </li>
+                  </li>
               </ul>
             </li>
+              <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
+                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                      <i class="nav-main-link-icon fa fa-clock-rotate-left"></i>
+                      <span class="nav-main-link-name">Schedules</span>
+                  </a>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('courses.academicYear') }}">
+                              <span class="nav-main-link-name">Academic Years</span>
+                          </a>
+                      </li>
+                  </ul>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showCalenderOfEvents')}}">
+                              <span class="nav-main-link-name"> Calender of Events</span>
+                          </a>
+                      </li>
+                  </ul>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showEvent')}}">
+                              <span class="nav-main-link-name"> Events</span>
+                          </a>
+                      </li>
+                  </ul>
+              </li>
             <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                <i class="nav-main-link-icon si si-user"></i>
+                <i class="nav-main-link-icon fa fa-list"></i>
                 <span class="nav-main-link-name">Applications</span>
               </a>
               <ul class="nav-main-submenu">
                 <li class="nav-main-item">
                   <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('courses.applications') }}">
-                    <i class="nav-main-link-icon si si-user"></i>
                     <span class="nav-main-link-name">
                        Self Sponsored
                     </span>
@@ -212,9 +150,8 @@
                 </li>
                 <li class="nav-main-item">
                   <a class="nav-main-link{{ request()->is('showKuccps') ? ' active' : '' }}" href="{{ route('courses.showKuccps') }}">
-                    <i class="nav-main-link-icon si si-user"></i>
                     <span class="nav-main-link-name">
-                       Government Sponsored
+                       KUCCPS Applications
                     </span>
 
                   </a>
@@ -222,37 +159,30 @@
 
                 <li class="nav-main-item">
                   <a class="nav-main-link{{ request()->is('archived') ? ' active' : '' }}" href="{{ route('courses.archived') }}">
-                    <i class="nav-main-link-icon si si-user"></i>
                     <span class="nav-main-link-name">
-                       Archived
+                       All Applications
                     </span>
 
                   </a>
                 </li>
-
-                <li class="nav-main-item">
-                  <a class="nav-main-link{{ request()->is('importExportViewkuccps') ? ' active' : '' }}" href="{{ route('courses.importExportViewkuccps') }}">
-                    <i class="nav-main-link-icon si si-user"></i>
-                    <span class="nav-main-link-name">
-                       Import File
-                    </span>
-
-                  </a>
-                </li>
-
-
               </ul>
             </li>
               <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
                   <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                      <i class="nav-main-link-icon si si-user"></i>
+                      <i class="nav-main-link-icon fa fa-list-1-2"></i>
                       <span class="nav-main-link-name">Admissions</span>
                   </a>
                   <ul class="nav-main-submenu">
                       <li class="nav-main-item">
                           <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('courses.admissions') }}">
-                              <i class="nav-main-link-icon si si-user"></i>
-                              <span class="nav-main-link-name"> View Admissions </span>
+                              <span class="nav-main-link-name"> Pending Admissions </span>
+                          </a>
+                      </li>
+                  </ul>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('courses.admissions') }}">
+                              <span class="nav-main-link-name"> Cleared Admissions </span>
                           </a>
                       </li>
                   </ul>
@@ -260,13 +190,12 @@
 
             <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                  <i class="nav-main-link-icon si si-user"></i>
+                  <i class="nav-main-link-icon fa fa-chart-line"></i>
                   <span class="nav-main-link-name"> Student Progression</span>
               </a>
               <ul class="nav-main-submenu">
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('transfer') ? ' active' : '' }}" href="{{ route('courses.yearly') }}">
-                        <i class="nav-main-link-icon si si-user"></i>
                         <span class="nav-main-link-name"> Course Transfer </span>
                     </a>
                 </li>
@@ -275,7 +204,6 @@
 
                   <li class="nav-main-item">
                       <a class="nav-main-link{{ request()->is('transfer') ? ' active' : '' }}" href="{{ route('courses.leaves') }}">
-                          <i class="nav-main-link-icon si si-user"></i>
                           <span class="nav-main-link-name"> Academic Leave</span>
                       </a>
                   </li>
@@ -284,7 +212,6 @@
 
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('transfer') ? ' active' : '' }}" href="{{ route('courses.readmissions') }}">
-                        <i class="nav-main-link-icon si si-user"></i>
                         <span class="nav-main-link-name"> Readmission</span>
                     </a>
                 </li>
@@ -292,54 +219,115 @@
           </li>
           <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
             <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                <i class="nav-main-link-icon si si-user"></i>
+                <i class="nav-main-link-icon fa fa-tasks"></i>
                 <span class="nav-main-link-name">Workloads</span>
             </a>
             <ul class="nav-main-submenu">
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('courses.workload') }}">
-                        <i class="nav-main-link-icon si si-user"></i>
-                        <span class="nav-main-link-name"> View Workload </span>
+                        <span class="nav-main-link-name"> View Workloads </span>
                     </a>
                 </li>
             </ul>
-        </li>
-
-            <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
-                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                    <i class="nav-main-link-icon si si-user"></i>
-                    <span class="nav-main-link-name">Admin</span>
-                </a>
-                <ul class="nav-main-submenu">
-                    <li class="nav-main-item">
-                        <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('admin.users') }}">
-                            <i class="nav-main-link-icon si si-user"></i>
-                            <span class="nav-main-link-name"> Users </span>
-                        </a>
-                    </li>
-                    <li class="nav-main-item">
-                        <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('admin.showDepartment') }}">
-                            <i class="nav-main-link-icon si si-user"></i>
-                            <span class="nav-main-link-name"> Departments </span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
+          </li>
+          <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                  <i class="nav-main-link-icon si si-user"></i>
+                  <i class="nav-main-link-icon fa fa-book-open-reader"></i>
                   <span class="nav-main-link-name">Examination</span>
               </a>
               <ul class="nav-main-submenu">
                   <li class="nav-main-item">
                       <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('courses.yearlyExamMarks') }}">
-                          <i class="nav-main-link-icon si si-user"></i>
                           <span class="nav-main-link-name"> View Exams </span>
                       </a>
                   </li>
               </ul>
           </li>
 
+              <li class="nav-main-item{{ request()->is('semFee/*') ? ' open' : '' }}">
+                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                      <i class="nav-main-link-icon fa fa-money-check-dollar"></i>
+                      <span class="nav-main-link-name">Student Finance</span>
+                  </a>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showSemFee')}}">
+                              <span class="nav-main-link-name">Fee Structures</span>
+                          </a>
+                      </li>
+                  </ul>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showVoteheads')}}">
+                              <span class="nav-main-link-name"> Voteheads</span>
+                          </a>
+                      </li>
+                  </ul>
+              </li>
+              <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
+                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                      <i class="nav-main-link-icon fa fa-file-import"></i>
+                      <span class="nav-main-link-name">Imports</span>
+                  </a>
+{{--                  <ul class="nav-main-submenu">--}}
+{{--                      <li class="nav-main-item">--}}
+{{--                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importUnit')}}">--}}
+{{--                              <span class="nav-main-link-name"> Units</span>--}}
+{{--                          </a>--}}
+{{--                      </li>--}}
+{{--                  </ul>--}}
+{{--                  <ul class="nav-main-submenu">--}}
+{{--                      <li class="nav-main-item">--}}
+{{--                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importExportCourses')}}">--}}
+{{--                              <span class="nav-main-link-name">Courses</span>--}}
+{{--                          </a>--}}
+{{--                      </li>--}}
+{{--                  </ul>--}}
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('importExportViewkuccps') ? ' active' : '' }}" href="{{ route('courses.importExportViewkuccps') }}">
+                    <span class="nav-main-link-name">
+                       Import Kuccps Students
+                    </span>
+
+                          </a>
+                      </li>
+                  </ul>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importExportclusterWeights')}}">
+                              <span class="nav-main-link-name"> Cluster Weights</span>
+                          </a>
+                      </li>
+                  </ul>
+{{--                  <ul class="nav-main-submenu">--}}
+{{--                      <li class="nav-main-item">--}}
+{{--                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importUnitProgramms')}}">--}}
+{{--                              <span class="nav-main-link-name"> Unit Programs</span>--}}
+{{--                          </a>--}}
+{{--                      </li>--}}
+{{--                  </ul>--}}
+              </li>
+              <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
+                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                      <i class="nav-main-link-icon fa fa-user-cog"></i>
+                      <span class="nav-main-link-name">Administrator</span>
+                  </a>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('admin.users') }}">
+                              <span class="nav-main-link-name"> Users </span>
+                          </a>
+                      </li>
+                  </ul>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('applications') ? ' active' : '' }}" href="{{ route('admin.showDepartment') }}">
+                              <span class="nav-main-link-name"> Departments </span>
+                          </a>
+                      </li>
+                  </ul>
+              </li>
           </ul>
         </div>
         <!-- END Side Navigation -->
@@ -549,7 +537,7 @@
     @section('js_after')
         <!-- jQuery (required for DataTables plugin) -->
             <script src="{{ url('js/lib/jquery.min.js') }}"></script>
- 
+
             <!-- Page JS Plugins -->
             <script src="{{ url('js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
             <script src="{{ url('js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js') }}"></script>

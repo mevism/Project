@@ -13,8 +13,7 @@ use Modules\Finance\Http\Controllers\FinanceController;
 |
 */
 
-Route::prefix('applications')
-//    ->middleware(['user', 'auth', 'finance'])
+Route::prefix('applications')->middleware(['web', 'auth:user', 'is_finance'])
     ->group(function() {
         Route::get('/finance', [FinanceController::class, 'index'])->name('finance.dashboard');
         Route::get('/finance/applications', [FinanceController::class, 'applications'])->name('finance.applications');
@@ -26,7 +25,6 @@ Route::prefix('applications')
         Route::post('/finance/rejectApplication/{id}', [FinanceController::class, 'rejectApplication'])->name('finance.rejectApplication');
 
         Route::post('/revertApplication/{id}', [FinanceController::class, 'revertApplication'])->name('finance.revertApplication');
-
 
         Route::get('/admission', [FinanceController::class, 'admissions'])->name('finance.admissions');
         Route::get('/admissionJab', [FinanceController::class, 'admissionsJab'])->name('finance.admissionsJab');
