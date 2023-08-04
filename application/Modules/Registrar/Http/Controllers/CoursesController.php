@@ -42,6 +42,7 @@ use Modules\Student\Entities\StudentInfo;
 use Modules\Student\Entities\StudentLogin;
 use Modules\Student\Entities\StudentView;
 use Modules\Workload\Entities\WorkloadView;
+use PhpOffice\PhpWord\PhpWord;
 use QrCode;
 use Carbon\Carbon;
 use App\Models\User;
@@ -109,6 +110,7 @@ use Modules\Student\Entities\CourseTransferApproval;
 use Modules\Registrar\emails\AcceptedReadmissionsMail;
 use Modules\Registrar\emails\RejectedReadmissionsMail;
 use Modules\Registrar\emails\CourseTransferRejectedMails;
+use PhpOffice\PhpWord\SimpleType\TextDirection;
 
 class CoursesController extends Controller
 {
@@ -1228,23 +1230,36 @@ class CoursesController extends Controller
                 return $group->groupBy('vote_id');
             });
 
-        return view('registrar::fee.viewSemFee')->with(['semesters' => $semesters, 'semesterFees' => $semesterFees, 'course' => $course]);
+        return view('registrar::fee.viewSemFee')->with(['semesters' => $semesters, 'semesterFees' => $semesterFees, 'course' => $course, 'id' => $id]);
     }
 
-    public function printFee($id)
-    {
-        $course =  CourseLevelMode::where('course_level_mode_id', $id)->first();
-        $semester = SemesterFee::where('course_level_mode_id', $id)->orderBy('votehead_id', 'asc')->get();
+    public function printFee($id){
+        list($course_code, $attendance, $version) = explode(':', base64_decode($id));
+        $course = Courses::where('course_code', $course_code)->first();
+        $code = Attendance::where('id', $attendance)->first()->attendance_code;
+        $school_id = SchoolDepartment::where('department_id', $course->department_id)->first()->school_id;
+        $department = Department::where('department_id', $course->department_id)->first()->name;
+        $school = School::where('school_id', $school_id)->first()->name;
+        $semesterFees = SemesterFee::where('course_code', $course_code)
+            ->where('attendance_id', $attendance)
+            ->where('version', $version)
+            ->orderBy('semester', 'asc')
+            ->get()
+            ->groupBy('vote_id')
+            ->map(function ($group) {
+                return $group->groupBy('semester');
+            });
 
-        $semester1 = 0;
-        $semester2 = 0;
+        $semesters = SemesterFee::where('course_code', $course_code)
+            ->where('attendance_id', $attendance)
+            ->where('version', $version)
+            ->orderBy('semester', 'asc')
+            ->get()
+            ->groupBy('semester')
+            ->map(function ($group) {
+                return $group->groupBy('vote_id');
+            });
 
-        foreach ($semester as $fee) {
-
-            $semester1 += $fee->semesterI;
-
-            $semester2 += $fee->semesterII;
-        }
 
         $image = time() . '.png';
 
@@ -1254,46 +1269,94 @@ class CoursesController extends Controller
             ->format('png')
             ->generate($route, 'QrCodes/' . $image);
 
-        $domPdfPath = base_path('vendor/dompdf/dompdf');
-        \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
-        \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
 
-        $boldedtext = array('bold' => true, 'size' => 12);
-        $boldedtext1 = array('align' => 'right', 'size' => 12);
+        $phpWord = new PhpWord();
+        $section = $phpWord->addSection();
+        $boldedtext = array('name' => 'Book Antiqua', 'bold' => true, 'size' => 11);
+        $boldedtext1 = array('align' => 'right', 'size' => 11, 'name' => 'Book Antiqua');
+        $center= array('name' => 'Book Antiqua', 'bold' => true, 'size' => 11, 'alignment' => 'center');
 
-        $table = new Table(array('unit' => TblWidth::TWIP));
-        foreach ($semester as $detail) {
-            $table->addRow();
-            $table->addCell(5000, ['borderSize' => 2])->addText($detail->semVotehead->name,  $boldedtext1, ['name' => 'Book Antiqua', 'size' => 13]);
-            $table->addCell(2000, ['borderSize' => 2])->addText(number_format($detail->semesterI, 2), $boldedtext1, array('align' => 'right', 'size' => 12));
-            $table->addCell(2000, ['borderSize' => 2])->addText(number_format($detail->semesterII, 2), $boldedtext1, array('align' => 'right', 'size' => 12));
-        }
+        $table = $section->addTable(['unit' => \PhpOffice\PhpWord\SimpleType\TblWidth::TWIP, 'width' => 1300 * 1300, 'align' => 'center']);
         $table->addRow();
-        $table->addCell(3000, ['borderSize' => 2])->addText("TOTAL PAYABLE FEE", $boldedtext);
-        $table->addCell(3000, ['borderSize' => 2])->addText(number_format($semester1, 2), $boldedtext, array('align' => 'right', 'size' => 12));
-        $table->addCell(3000, ['borderSize' => 2])->addText(number_format($semester2, 2), $boldedtext, array('align' => 'right', 'size' => 12));
+        $table->addCell(7000, ['borderSize' => 2])->addText('DESCRIPTION', ['bold' => true, 'size' => 11, 'name' => 'Book Antiqua']);
+        foreach ($semesters as $semester => $fees) {
+            $table->addCell(800, ['borderSize' => 2])->addText("YR. " . explode('.', $semester)[0] . "<w:br/>" . "SEM. " . explode('.', $semester)[1], $center, ['name' => 'Book Antiqua', 'bold' => true, 'size' => 11, 'alignment' => 'center']);
+        }
+
+        $i = 1;
+        foreach ($semesterFees as $votes => $fees) {
+            $table->addRow();
+            $table->addCell(7000, ['borderSize' => 2])->addText(strtoupper(\Modules\Registrar\Entities\VoteHead::where('vote_id', $votes)->first()->vote_name), ['bold' => true, 'size' => 11, 'name' => 'Book Antiqua']);
+            foreach ($semesters as $semester => $_) {
+                $amount = 0;
+                if (isset($fees[$semester])) {
+                    foreach ($fees[$semester] as $fee) {
+                        $amount += $fee->amount;
+                    }
+                }
+                $table->addCell(800, ['align' => 'right', 'borderSize' => 2])->addText(number_format($amount, 2), $boldedtext1, array('align' => 'right', 'size' => 11));
+            }
+        }
+
+        $table->addRow();
+        $table->addCell(7000, ['borderSize' => 2])->addText('TOTALS', ['name' => 'Book Antiqua', 'bold' => true, 'size' => 11]);
+        foreach ($semesters as $semester => $_) {
+            $total = 0;
+            foreach ($semesterFees as $votes => $fees) {
+                if (isset($fees[$semester])) {
+                    foreach ($fees[$semester] as $fee) {
+                        $total += $fee->amount;
+                    }
+                }
+            }
+            $table->addCell(100, ['align' => 'right', 'borderSize' => 2])->addText(number_format($total, 2), $boldedtext, array('align' => 'right', 'size' => 11));
+        }
+
+
+
+//        $domPdfPath = base_path('vendor/dompdf/dompdf');
+//        \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
+//        \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+//
+
+//
+//        $table = new Table(array('unit' => TblWidth::TWIP));
+//        foreach ($semesterFees as $votehead => $detail) {
+//            $name = VoteHead::where('vote_id', $votehead)->first()->vote_name;
+//            $table->addRow();
+//            $table->addCell(5000, ['borderSize' => 2])->addText($name,  $boldedtext1, ['name' => 'Book Antiqua', 'size' => 13]);
+//            $table->addCell(2000, ['borderSize' => 2])->addText(number_format($detail->semesterI, 2), $boldedtext1, array('align' => 'right', 'size' => 12));
+//            $table->addCell(2000, ['borderSize' => 2])->addText(number_format($detail->semesterII, 2), $boldedtext1, array('align' => 'right', 'size' => 12));
+//        }
+//        $table->addRow();
+//        $table->addCell(3000, ['borderSize' => 2])->addText("TOTAL PAYABLE FEE", $boldedtext);
+//        $table->addCell(3000, ['borderSize' => 2])->addText(number_format($semester1, 2), $boldedtext, array('align' => 'right', 'size' => 12));
+//        $table->addCell(3000, ['borderSize' => 2])->addText(number_format($semester2, 2), $boldedtext, array('align' => 'right', 'size' => 12));
 
         $my_template = new TemplateProcessor(storage_path('fee_structure.docx'));
 
-        $my_template->setValue('course', strtoupper($course->courseclm->course_name));
+        $my_template->setValue('course', strtoupper($course->course_name));
         $my_template->setComplexBlock('{table}', $table);
-        $my_template->setValue('mode', $course->modeofstudy->attendance_code);
-        $docPath = 'FeeStructure/' . $course->courseclm->course_code . ".docx";
+        $my_template->setValue('mode', $code);
+        $my_template->setValue('department', $department);
+        $my_template->setValue('school', $school);
+        $docPath = 'FeeStructure/' . $course->course_code . ".docx";
         $my_template->setImageValue('qr', array('path' => 'QrCodes/' . $image, 'width' => 80, 'height' => 80, 'ratio' => true));
         $my_template->saveAs($docPath);
 
-        $pdfPath = 'FeeStructure/' . $course->courseclm->course_code . ".pdf";
+        $pdfPath = 'FeeStructure/' . $course->course_code . ".pdf";
 
-        $convert = new OfficeConverter('FeeStructure/' . $course->courseclm->course_code . ".docx", 'FeeStucture/');
-        $convert->convertTo($course->courseclm->course_code . ".pdf");
-
-        if (file_exists($docPath)) {
-            unlink($docPath);
-        }
+//        $convert = new OfficeConverter('FeeStructure/' . $course->courseclm->course_code . ".docx", 'FeeStucture/');
+//        $convert->convertTo($course->courseclm->course_code . ".pdf");
+//
+//        if (file_exists($docPath)) {
+//            unlink($docPath);
+//        }
 
         unlink('QrCodes/' . $image);
 
-        return response()->download($pdfPath)->deleteFileAfterSend(true);
+//        return response()->download($pdfPath)->deleteFileAfterSend(true);
+        return response()->download($docPath)->deleteFileAfterSend(true);
     }
 
     public function createUnits(Request $request, $id)

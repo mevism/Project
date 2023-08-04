@@ -5,6 +5,7 @@ namespace Modules\COD\Http\Controllers;
 use App\Models\User;
 use App\Service\CustomIds;
 use Auth;
+use Illuminate\Support\Facades\Cache;
 use Modules\Administrator\Entities\Staff;
 use Modules\Application\Entities\ApplicationApproval;
 use Modules\COD\Entities\AcademicLeavesView;
@@ -293,8 +294,6 @@ class CODController extends Controller
         return redirect()->route('cod.Admissions')->with('info', 'Admission has been withheld');
     }
 
-
-
     public function submitAdmission($id)
     {
 
@@ -362,15 +361,18 @@ class CODController extends Controller
     }
 
     public function allUnits(){
-        $units = Unit::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-            ->orWhere('type', 1)
-            ->orWhere('type', 2)
-            ->latest()
-            ->get();
-
+        $cacheKey = 'all_units_' . auth()->guard('user')->id();
+        $units = Cache::remember($cacheKey, 3600, function () {
+            return Unit::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+                ->orWhere('type', 1)
+                ->orWhere('type', 2)
+                ->latest()
+                ->get();
+        });
 
         return view('cod::syllabus.index')->with(['units' => $units]);
     }
+
 
     public function addUnit(){
 
@@ -538,6 +540,7 @@ class CODController extends Controller
                     $code = Attendance::find($mode);
                     $classEx = $course->course_code.'/'.strtoupper(Carbon::parse($intakes->intake_from)->format('MY')).'/'.$code->attendance_code;
                     $syllabus = SyllabusVersion::where('course_id', $course->course_id)->latest()->first()->syllabus_name;
+                    $feeStructure = SemesterFee::where('course_code', $course->course_code)->pluck('version')->toArray();
 
                     $classId = new CustomIds();
                     // $generatedClassID  =  $classId->generateId();
@@ -551,6 +554,7 @@ class CODController extends Controller
                         $class->course_id = $selectedCourse['course'];
                         $class->intake_id = $request->intake;
                         $class->syllabus_name = $syllabus;
+                        $class->fee_version = max($feeStructure);
                         $class->points = 0;
                         $class->save();
                     }

@@ -141,6 +141,7 @@
       <path value="$PROJECT_DIR$/application/vendor/guzzlehttp/psr7" />
       <path value="$PROJECT_DIR$/application/vendor/symfony/polyfill-php83" />
       <path value="$PROJECT_DIR$/application/vendor/league/flysystem-local" />
+      <path value="$PROJECT_DIR$/application/vendor/predis/predis" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0" />

@@ -148,6 +148,7 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/guzzlehttp/psr7" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/polyfill-php83" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/league/flysystem-local" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/predis/predis" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
