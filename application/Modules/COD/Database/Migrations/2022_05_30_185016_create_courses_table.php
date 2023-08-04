@@ -14,13 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('courses', function (Blueprint $table) {
-            $table->string('course_id')->primary();
-            $table->string('department_id');
+            $table->string('course_id', 12)->primary();
+            $table->string('department_id', 12);
             $table->foreign('department_id')->references('department_id')->on('departments')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('course_code')->unique();
-            $table->string('course_name');
-            $table->string('level');
-            $table->string('cluster_group');
+            $table->string('course_code', 8)->unique();
+            $table->string('course_name', 80);
+            $table->unsignedBigInteger('level_id');
+            $table->foreign('level_id')->references('id')->on('levels')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('cluster_group', 8);
             $table->timestamps();
             $table->softDeletes();
         });

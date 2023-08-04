@@ -14,12 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('course_transfer_approvals', function (Blueprint $table) {
-            $table->string('course_transfer_id')->primary();
-            $table->integer('cod_status');
-            $table->mediumText('cod_remarks')->nullable();
-            $table->integer('dean_status')->nullable();
-            $table->mediumText('dean_remarks')->nullable();
-            $table->integer('registrar_status')->nullable();
+            $table->string('course_transfer_id', 12)->primary();
+            $table->tinyInteger('cod_status');
+            $table->mediumText('cod_remarks', 64)->nullable();
+            $table->tinyInteger('dean_status')->nullable();
+            $table->mediumText('dean_remarks', 64)->nullable();
+            $table->tinyInteger('registrar_status')->nullable();
+            $table->mediumText('registrar_remarks', 64)->nullable();
             $table->tinyInteger('status')->default(0);
             $table->timestamps();
             $table->softDeletes();

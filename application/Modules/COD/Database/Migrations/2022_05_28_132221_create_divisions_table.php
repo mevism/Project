@@ -13,11 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('school_exam_workflows', function (Blueprint $table) {
-            $table->id();
-
+        Schema::create('divisions', function (Blueprint $table) {
+            $table->string('division_id', 12)->primary();
+            $table->string('name', 16);
             $table->timestamps();
+            $table->softDeletes();
         });
+
     }
 
     /**
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('school_exam_workflows');
+        Schema::dropIfExists('divisions');
     }
 };

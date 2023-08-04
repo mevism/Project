@@ -14,20 +14,20 @@ return new class extends Migration
     public function up()
     {
             Schema::create('kuccps_applicants', function (Blueprint $table) {
-                $table->string('applicant_id')->primary();
-                $table->string('index_number');
-                $table->string('sname');
-                $table->string('fname');
-                $table->string('mname')->nullable();
-                $table->string('gender');
-                $table->string('mobile')->nullable();
-                $table->string('alt_mobile')->nullable();
-                $table->string('email')->nullable();
-                $table->string('alt_email')->nullable();
-                $table->string('BOX')->nullable();
-                $table->string('postal_code')->nullable();
-                $table->string('town')->nullable();
-                $table->string('school');
+                $table->string('applicant_id', 12)->primary();
+                $table->string('index_number', 20);
+                $table->string('surname', 16);
+                $table->string('first_name',16);
+                $table->string('middle_name', 16)->nullable();
+                $table->string('gender', 8);
+                $table->string('mobile', 13)->nullable();
+                $table->string('alt_mobile', 13)->nullable();
+                $table->string('email', 32)->nullable();
+                $table->string('alt_email', 32)->nullable();
+                $table->string('BOX', 8)->nullable();
+                $table->string('postal_code', 8)->nullable();
+                $table->string('town', 16)->nullable();
+                $table->string('school', 32);
                 $table->integer('status')->default(0);
                 $table->timestamps();
                 $table->softDeletes();

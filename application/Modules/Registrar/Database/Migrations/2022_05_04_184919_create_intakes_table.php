@@ -14,11 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('intakes', function (Blueprint $table) {
-            $table->string('intake_id')->primary();
-            $table->string('academic_year_id');
+            $table->string('intake_id', 12)->primary();
+            $table->string('academic_year_id', 12);
             $table->foreign('academic_year_id')->references('year_id')->on('academic_years')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('intake_from')->unique();
-            $table->string('intake_to')->unique();
+            $table->string('intake_from', 12)->unique();
+            $table->string('intake_to', 12)->unique();
             $table->integer('status');
             $table->timestamps();
             $table->softDeletes();

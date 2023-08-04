@@ -14,13 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('sponsors', function (Blueprint $table) {
-            $table->id();
-            $table->string('applicant_id');
+            $table->bigIncrements('id');
+            $table->string('applicant_id', 12);
             $table->foreign('applicant_id')->references('applicant_id')->on('applicant_contacts')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('sponsor_name');
-            $table->string('sponsor_mobile');
-            $table->string('sponsor_county');
-            $table->string('sponsor_town');
+            $table->string('sponsor_name', 16);
+            $table->string('sponsor_mobile', 16);
+            $table->string('sponsor_county', 16);
+            $table->string('sponsor_town', 16);
             $table->timestamps();
             $table->softDeletes();
         });

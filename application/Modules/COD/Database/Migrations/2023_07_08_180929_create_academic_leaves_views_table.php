@@ -15,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         DB::statement(
-            "CREATE VIEW academicleaves AS
+            "CREATE  VIEW academicleaves AS
                 SELECT
                 academic_leaves.leave_id, academic_leaves.student_id, student_courses.student_number, student_infos.sname, student_infos.fname, student_infos.mname, student_contacts.student_email, student_courses.department_id, academic_leaves.type, academic_leaves.current_class, academic_leaves.year_study, academic_leaves.semester_study, academic_leaves.academic_year, academic_leaves.intake_id, academic_leaves.reason, deferred_classes.differed_class, deferred_classes.differed_year, deferred_classes.differed_semester, deferred_classes.stage, academic_leave_approvals.cod_status, academic_leave_approvals.cod_remarks, academic_leave_approvals.dean_status, academic_leave_approvals.dean_remarks, academic_leave_approvals.registrar_status, academic_leave_approvals.status, academic_leave_approvals.created_at
                 FROM academic_leave_approvals
@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('academic_leaves_views');
+        DB::statement('DROP VIEW IF EXISTS academicleaves');
     }
 };

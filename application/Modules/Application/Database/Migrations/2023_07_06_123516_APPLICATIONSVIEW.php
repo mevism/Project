@@ -15,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         DB::statement(
-        "CREATE VIEW applicationsview AS
+        "CREATE  VIEW applicationsview AS
         SELECT application_approvals.finance_status, application_approvals.invoice_number, application_approvals.cod_status, application_approvals.cod_comments, application_approvals.dean_status, application_approvals.dean_comments, application_approvals.registrar_status, application_approvals.registrar_comments, application_approvals.reg_number, application_approvals.admission_letter, applications.ref_number, applications.applicant_id, applications.application_id, applications.intake_id, applications.student_type, applications.campus_id, applications.school_id, applications.department_id, applications.course_id, applications.declaration, applications.status, application_subjects.subject_1, application_subjects.subject_2, application_subjects.subject_3, application_subjects.subject_4, applicant_infos.title, applicant_infos.fname, applicant_infos.mname, applicant_infos.sname, applicant_infos.gender, applicant_addresses.town, applicant_addresses.address, applicant_addresses.postal_code, applicant_contacts.mobile, applicant_contacts.email, applications.created_at
         FROM application_approvals
         JOIN applications ON applications.application_id = application_approvals.application_id
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('applicationsview');
+        DB::statement('DROP VIEW IF EXISTS applicationsview');
     }
 };

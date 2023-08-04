@@ -14,14 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('student_invoices', function (Blueprint $table) {
-            $table->string('invoice_id')->primary();
-            $table->string('student_id');
+            $table->string('invoice_id', 12)->primary();
+            $table->string('student_id', 12);
             $table->foreign('student_id')->references('student_id')->on('student_contacts')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('reg_number');
-            $table->string('invoice_number');
-            $table->string('stage');
-            $table->string('amount');
-            $table->mediumText('description');
+            $table->string('reg_number', 16);
+            $table->string('invoice_number', 16);
+            $table->string('stage', 3);
+            $table->string('amount', 8);
+            $table->mediumText('description', 50);
             $table->timestamps();
             $table->softDeletes();
         });

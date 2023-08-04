@@ -14,13 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('academic_years', function (Blueprint $table) {
-            $table->string('year_id')->primary();
-            $table->string('year_start')->unique();
-            $table->string('year_end')->unique();
-            $table->integer('status');
+            $table->string('year_id', 12)->primary();
+            $table->string('year_start', 16)->unique();
+            $table->string('year_end', 16)->unique();
+            $table->tinyInteger('status');
             $table->timestamps();
             $table->softDeletes();
         });
+        
     }
 
     /**

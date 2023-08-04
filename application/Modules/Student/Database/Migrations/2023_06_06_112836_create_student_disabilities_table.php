@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('student_disabilities', function (Blueprint $table) {
-            $table->string('student_id')->primary();
+            $table->string('student_id', 12)->primary();
             $table->foreign('student_id')->references('student_id')->on('student_logins')->onDelete('cascade')->onUpdate('cascade');            $table->timestamps();
             $table->softDeletes();
         });

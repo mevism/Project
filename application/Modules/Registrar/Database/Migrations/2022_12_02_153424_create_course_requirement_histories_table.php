@@ -16,14 +16,14 @@ return new class extends Migration
         Schema::create('course_requirement_histories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('course_requirement_id');
-            $table->string('course_id');
-            $table->string('fee');
-            $table->string('subject1');
-            $table->string('subject2');
-            $table->string('subject3');
-            $table->string('subject4');
-            $table->string('course_duration');
-            $table->longText('course_requirements');
+            $table->string('course_id', 12);
+            $table->string('fee', 8);
+            $table->string('subject1', 16);
+            $table->string('subject2', 16);
+            $table->string('subject3', 16);
+            $table->string('subject4', 16);
+            $table->string('course_duration', 8);
+            $table->longText('course_requirements', 62);
             $table->timestamps();
         });
     }

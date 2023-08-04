@@ -15,17 +15,17 @@ return new class extends Migration
     {
         Schema::create('staff_infos', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('user_id');
+            $table->string('user_id',12);
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('staff_number')->unique();
-            $table->text('title');
-            $table->text('first_name');
-            $table->text('middle_name')->nullable();
-            $table->text('last_name');
-            $table->string('gender');
-            $table->string('phone_number')->unique();
-            $table->string('office_email')->nullable();
-            $table->string('personal_email')->unique();
+            $table->string('staff_number', 11)->unique();
+            $table->text('title', 8);
+            $table->text('first_name', 16);
+            $table->text('middle_name', 16)->nullable();
+            $table->text('last_name', 16);
+            $table->string('gender', 8);
+            $table->string('phone_number', 13)->unique();
+            $table->string('office_email', 32)->nullable();
+            $table->string('personal_email', 32)->unique();
             $table->timestamps();
         });
     }

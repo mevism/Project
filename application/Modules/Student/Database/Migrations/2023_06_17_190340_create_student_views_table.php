@@ -15,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         DB::statement(
-            "CREATE VIEW studentcourseview AS
+            "CREATE  VIEW studentcourseview AS
             SELECT student_courses.student_id, student_courses.student_number, courses.course_name, courses.level, student_courses.student_type, student_courses.entry_class, student_courses.current_class, intakes.intake_from, departments.name, student_courses.status, course_requirements.course_duration, course_requirements.course_requirements
             FROM student_courses
             JOIN courses ON courses.course_id = student_courses.course_id
@@ -32,6 +32,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('studentcourseview');
+        DB::statement('DROP VIEW IF EXISTS studentcourseview');
+        
     }
 };

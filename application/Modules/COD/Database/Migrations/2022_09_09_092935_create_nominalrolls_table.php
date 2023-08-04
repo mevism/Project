@@ -14,18 +14,18 @@ return new class extends Migration
     public function up()
     {
         Schema::create('nominalrolls', function (Blueprint $table) {
-            $table->string('nominal_id')->primary();
-            $table->string('student_id');
+            $table->string('nominal_id', 12)->primary();
+            $table->string('student_id', 12);
             $table->foreign('student_id')->references('student_id')->on('student_contacts')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('reg_number');
-            $table->string('year_study');
-            $table->string('semester_study');
-            $table->string('academic_year');
-            $table->string('academic_semester');
-            $table->integer('pattern_id');
-            $table->string('class_code');
-            $table->integer('registration')->nullable();
-            $table->integer('activation')->nullable();
+            $table->tinyInteger('pattern_id');
+            $table->string('reg_number', 16);
+            $table->tinyInteger('year_study');
+            $table->float('semester_study');
+            $table->string('academic_year', 10);
+            $table->string('academic_semester', 10);            
+            $table->string('class_code', 20);
+            $table->tinyInteger('registration')->nullable();
+            $table->tinyInteger('activation')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -14,11 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('teaching_areas', function (Blueprint $table) {
-            $table->string('teaching_area_id')->primary();
-            $table->string('user_id');
+            $table->string('teaching_area_id', 12)->primary();
+            $table->string('user_id', 12);
             $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('unit_code');
-            $table->integer('status');
+            $table->string('unit_code', 8);
+            $table->tinyInteger('status');
             $table->timestamps();
             $table->softDeletes();
         });

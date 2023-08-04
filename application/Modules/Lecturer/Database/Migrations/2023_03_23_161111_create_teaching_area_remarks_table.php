@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('teaching_area_remarks', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('teaching_area_id');
-            $table->longText('remarks');
+            $table->string('teaching_area_id', 12)->primary();
+            $table->foreign('teaching_area_id')->references('teaching_area_id')->on('teaching_areas')->onDelete('cascade')->onUpdate('cascade');
+            $table->longText('remarks', 64);
             $table->timestamps();
             $table->softDeletes();
         });

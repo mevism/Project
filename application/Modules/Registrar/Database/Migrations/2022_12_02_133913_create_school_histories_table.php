@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('school_histories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('school_id');
-            $table->string('initials');
-            $table->string('name');
+            $table->string('school_id', 12);
+            $table->string('initials', 8);
+            $table->string('name', 32);
             $table->timestamps();
 
         });

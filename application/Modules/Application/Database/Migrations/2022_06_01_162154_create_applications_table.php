@@ -14,21 +14,23 @@ return new class extends Migration
     public function up()
     {
         Schema::create('applications', function (Blueprint $table) {
-            $table->string('application_id')->primary();
-            $table->string('applicant_id');
+            $table->string('application_id', 12)->primary();
+            $table->string('applicant_id', 12);
             $table->foreign('applicant_id')->references('applicant_id')->on('applicant_contacts')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('ref_number')->nullable();
-            $table->string('intake_id');
-            $table->string('student_type');
-            $table->string('campus_id')->nullable();
-            $table->string('school_id');
-            $table->string('department_id');
-            $table->string('course_id');
+            $table->string('campus_id', 12)->nullable();
+            $table->foreign('campus_id')->references('campus_id')->on('campuses')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('intake_id', 12);
+            $table->foreign('intake_id')->references('intake_id')->on('intakes')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('course_id', 12); 
+            $table->foreign('course_id')->references('course_id')->on('courses')->onUpdate('cascade')->onDelete('cascade');           
+            $table->string('ref_number', 16)->nullable();
+            $table->string('student_type', 4);           
             $table->tinyInteger('declaration')->nullable();
-            $table->integer('status')->nullable();
+            $table->tinyInteger('status')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
+        
     }
 
     /**

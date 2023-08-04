@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('department_histories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('department_id');
-            $table->integer('school_id');
-            $table->string('dept_code');
-            $table->string('name');
+            $table->string('department_id', 12);
+            $table->string('school_id', 12);
+            $table->string('dept_code', 8);
+            $table->string('name', 32);
             $table->timestamps();
         });
     }

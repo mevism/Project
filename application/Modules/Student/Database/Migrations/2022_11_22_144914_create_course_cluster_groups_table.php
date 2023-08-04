@@ -15,8 +15,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('course_cluster_groups', function (Blueprint $table) {
-            $table->id();
-            $table->string('group');
+            $table->bigIncrements('id');
+            $table->string('group', 8);
             $table->timestamps();
         });
 

@@ -15,19 +15,19 @@ return new class extends Migration
     {
         Schema::create('applicant_infos', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('applicant_id');
+            $table->string('applicant_id', 12);
             $table->foreign('applicant_id')->references('applicant_id')->on('applicant_contacts')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('title')->nullable();
-            $table->string('fname')->nullable();
-            $table->string('mname')->nullable();
-            $table->string('sname')->nullable();
-            $table->string('gender')->nullable();
-            $table->string('marital_status')->nullable();
-            $table->date('DOB')->nullable();
-            $table->string('index_number')->unique()->nullable();
-            $table->string('id_number')->unique()->nullable();
-            $table->string('disabled')->nullable();
-            $table->string('disability')->nullable();
+            $table->string('title', 8)->nullable();
+            $table->string('first_name', 16)->nullable();
+            $table->string('middle_name', 16)->nullable();
+            $table->string('surname_name', 16)->nullable();
+            $table->string('gender', 8)->nullable();
+            $table->string('marital_status', 16)->nullable();
+            $table->date('date_of_birth', 16)->nullable();
+            $table->string('index_number', 16)->unique()->nullable();
+            $table->string('id_number', 16)->unique()->nullable();
+            $table->string('disabled', 8)->nullable();
+            $table->string('disability', 32)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

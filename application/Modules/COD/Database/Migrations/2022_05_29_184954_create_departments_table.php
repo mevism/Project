@@ -14,11 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('departments', function (Blueprint $table) {
-            $table->string('department_id')->primary();
-            $table->string('division_id');
+            $table->string('department_id', 12)->primary();
+            $table->string('division_id', 12);
             $table->foreign('division_id')->references('division_id')->on('divisions')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('dept_code')->unique();
-            $table->string('name')->unique();
+            $table->string('dept_code', 8)->unique();
+            $table->string('name', 64)->unique();
             $table->timestamps();
             $table->softDeletes();
         });

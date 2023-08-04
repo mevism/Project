@@ -14,19 +14,18 @@ return new class extends Migration
     public function up()
     {
         Schema::create('academic_leaves', function (Blueprint $table) {
-            $table->string('leave_id')->primary();
-            $table->string('student_id');
-            $table->foreign('student_id')->references('student_id')->on('student_contacts')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('type');
-            $table->string('current_class');
-            $table->integer('year_study');
-            $table->string('semester_study');
-            $table->string('academic_year');
+            $table->string('leave_id', 12)->primary();
+            $table->string('academic_year', 12);
             $table->foreign('academic_year')->references('year_id')->on('academic_years')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('intake_id');
-            $table->string('from');
-            $table->string('to');
-            $table->longText('reason');
+            $table->string('student_id', 12);
+            $table->foreign('student_id')->references('student_id')->on('student_logins')->onDelete('cascade')->onUpdate('cascade');
+            $table->tinyInteger('type');
+            $table->string('current_class', 16);
+            $table->tinyInteger('year_study');
+            $table->string('semester_study', 4);          
+            $table->string('from', 16);
+            $table->string('to', 16);
+            $table->longText('reason', 100);
             $table->timestamps();
             $table->softDeletes();
         });

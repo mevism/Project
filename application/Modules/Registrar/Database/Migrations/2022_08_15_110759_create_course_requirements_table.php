@@ -15,15 +15,15 @@ return new class extends Migration
     {
         Schema::create('course_requirements', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('course_id');
+            $table->string('course_id' , 12);
             $table->foreign('course_id')->references('course_id')->on('courses')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('application_fee');
-            $table->string('subject1');
-            $table->string('subject2');
-            $table->string('subject3');
-            $table->string('subject4');
-            $table->string('course_duration');
-            $table->longText('course_requirements');
+            $table->string('application_fee', 8);
+            $table->string('subject1', 16);
+            $table->string('subject2', 16);
+            $table->string('subject3', 16);
+            $table->string('subject4', 16);
+            $table->string('course_duration', 8);
+            $table->longText('course_requirements', 32);
             $table->timestamps();
             $table->softDeletes();
         });
