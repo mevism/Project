@@ -29,14 +29,14 @@
                   <div class="card-body">
                     <div class="table-responsive">
                         <div class="d-flex justify-content-end m-2">
-{{--                         <a class="btn btn-alt-info btn-sm m-2" href="{{ route('courses.printFee', $id) }}">Print</a>--}}
+                         <a class="btn btn-alt-secondary btn-sm m-2" href="{{ route('courses.printFee', $id) }}"><i class="fa fa-download"></i> download </a>
                       </div>
                         <table class="table table-borderless table-striped table-sm fs-sm">
-                            <thead>
+                            <thead style="background: lightgrey !important;">
                             <th>#</th>
                             <th>DESCRIPTION</th>
                             @foreach ($semesters as $semester => $fees)
-                                <th id="{{ $semester }}" class="text-end">{{ $semester }}</th>
+                                <th nowrap="" id="{{ $semester }}" style="font-size: 90% !important;" class="text-center"> YEAR {{ explode('.', $semester)[0] }} <br> SEMESTER {{ explode('.', $semester)[1] }} </th>
                             @endforeach
                             </thead>
                             <tbody>
