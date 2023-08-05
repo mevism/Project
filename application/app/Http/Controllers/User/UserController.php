@@ -61,7 +61,8 @@ class UserController extends Controller
             } elseif (\auth()->guard('user')->user()->roles->first()->id == 1){
 
                 $courses = AvailableCourse::where('status', 1)->count();
-                $applications = ApplicationsView::where('registrar_status',0)->count();
+//                $applications = ApplicationsView::where('registrar_status',0)->count();
+                $applications = 0;
                 $admissions = AdmissionApproval::where('registrar_status',0)->count();
 
                 return view('admin.index')->with(['courses'=>$courses,'applications'=>$applications,'admissions'=>$admissions]);
@@ -69,8 +70,8 @@ class UserController extends Controller
             } elseif (\auth()->guard('user')->user()->roles->first()->id == 2){
 
 //                return auth()->guard('user')->user()->employmentDepartment->first()->department_id;
-               $apps_cod = ApplicationsView::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-                   ->where('cod_status', null )
+//               $apps_cod = ApplicationsView::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+               $apps_cod = ApplicationsView::where('cod_status', null )
                    ->count();
                $classes = DB::table('classesview')
                    ->where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)

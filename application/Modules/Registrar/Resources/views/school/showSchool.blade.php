@@ -51,7 +51,7 @@
             <div class="block-content block-content-full">
                 <div class="row">
                  <div class="col-12 table-responsive">
-                    <table id="example" class="table table-bordered table-striped table-vcenter js-dataTable-responsive fs-sm">
+                    <table id="example" class="table table-bordered table-striped table-sm fs-sm">
                         <span class="d-flex justify-content-end m-2">
                             <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addSchool') }}">Create</a>
                         </span>

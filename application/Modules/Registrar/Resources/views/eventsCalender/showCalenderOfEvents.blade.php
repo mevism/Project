@@ -31,7 +31,7 @@
         <div class="block-content block-content-full">
           <div class="row">
             <div class="col-12">
-          <table id="example" class="table table-bordered table-striped table-vcenter fs-sm">
+          <table id="example" class="table table-bordered table-sm table-striped table-vcenter fs-sm">
             <span class="d-flex justify-content-end">
                 <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addCalenderOfEvents') }}">Create</a>
             </span><br>
@@ -47,8 +47,8 @@
               @foreach ($calender as $key => $item)
               <tr>
                  <td>{{ ++$key }}</td>
-                  <td>{{ $item->academic_year_id }}</td>
-                 <td>{{  $item->intake_id }}</td>
+                  <td>{{ \Carbon\Carbon::parse($item->EventsIntake->academicYear->year_start)->format('Y').'/'.\Carbon\Carbon::parse($item->EventsIntake->academicYear->year_end)->format('Y') }}</td>
+                 <td>{{ strtoupper(\Carbon\Carbon::parse($item->EventsIntake->intake_from)->format('M').'/'.\Carbon\Carbon::parse($item->EventsIntake->intake_to)->format('M')) }}</td>
                  <td>{{ $item->events->name}}</td>
                  <td>{{ Carbon\carbon::parse($item->start_date)->format('d M Y')}} - {{ Carbon\carbon::parse($item->end_date)->format('d M Y') }}</td>
                  <td>

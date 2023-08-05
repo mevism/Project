@@ -87,7 +87,7 @@
                     @php
                         $user = auth()->guard('user')->user()->staffInfos
                     @endphp
-                    @if(auth()->guard('user')->user()->hasRole('Chairperson of Department'))
+                    @if(auth()->guard('user')->user()->hasRole('CHAIRPERSON OF DEPARTMENT'))
                         COD [ {{ auth()->guard('user')->user()->employmentDepartment->first()->dept_code }} ]
                     @endif
 {{--                    @if(auth()->guard('user')->user()->role_id == 2)--}}

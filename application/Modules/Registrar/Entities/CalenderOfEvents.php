@@ -12,9 +12,9 @@ class CalenderOfEvents extends Model
     protected $fillable = [];
 
      public function EventsIntake(){
-        return $this->belongsTo(Intake::class, 'intake_id');
+        return $this->belongsTo(Intake::class, 'intake_id', 'intake_id');
      }
-    
+
     public function events(){
         return $this->belongsTo(Event::class, 'event_id');
     }
