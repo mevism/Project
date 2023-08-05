@@ -360,18 +360,24 @@ class CODController extends Controller
         return view('cod::courses.courseOptions')->with(['courses' => $courses, 'course' => $course]);
     }
 
-    public function allUnits(){
-        $cacheKey = 'all_units_' . auth()->guard('user')->id();
+    public function allUnits()
+    {
+        $cacheKey = 'all_units_' . auth()->guard('user')->user()->user_id;
         $units = Cache::remember($cacheKey, 3600, function () {
             return Unit::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-                ->orWhere('type', 1)
-                ->orWhere('type', 2)
+//                ->orWhere('type', 1)
+//                ->orWhere('type', 2)
                 ->latest()
                 ->get();
         });
 
+        // Manually store the units in cache with a different cache key and time
+        $anotherCacheKey = 'all_units_other_key';
+        Cache::put($anotherCacheKey, $units, 1800); // Cache for 1800 seconds (30 minutes)
+
         return view('cod::syllabus.index')->with(['units' => $units]);
     }
+
 
 
     public function addUnit(){
