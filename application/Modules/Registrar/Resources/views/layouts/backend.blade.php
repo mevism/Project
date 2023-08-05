@@ -67,7 +67,7 @@
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
                 <i class="nav-main-link-icon fas fa-home-user"></i>
                 <span class="nav-main-link-name">
-                    @if(auth()->guard('user')->user()->hasRole('Registrar'))
+                    @if(auth()->guard('user')->user()->hasRole('REGISTRAR'))
                         Registrar [ {{ auth()->guard('user')->user()->employmentDepartment->first()->dept_code }} ]
                     @endif
                 </span>

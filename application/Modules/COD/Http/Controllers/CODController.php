@@ -342,12 +342,11 @@ class CODController extends Controller
         $request->validate([
             'name' => 'required'
         ]);
-
         $courseOption = CourseOptions::where('option_id', $id)->first();
-        $courseOption->option_name = trim(strtoupper($request->name));
-        $courseOption->option_code = trim(strtoupper($request->option_code));
-        $courseOption->save();
-
+        CourseOptions::where('option_id', $id)->update([
+            'option_name' => trim(strtoupper($request->name)),
+            'option_code' => trim(strtoupper($request->option_code)),
+        ]);
         return redirect()->route('department.courseOptions', $courseOption->course_id)->with('success', 'Course option updated successfully');
     }
 
@@ -360,20 +359,19 @@ class CODController extends Controller
         return view('cod::courses.courseOptions')->with(['courses' => $courses, 'course' => $course]);
     }
 
-    public function allUnits()
-    {
-        $cacheKey = 'all_units_' . auth()->guard('user')->user()->user_id;
-        $units = Cache::remember($cacheKey, 3600, function () {
-            return Unit::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-//                ->orWhere('type', 1)
-//                ->orWhere('type', 2)
+    public function allUnits(){
+//        $cacheKey = 'all_units_' . auth()->guard('user')->user()->user_id;
+//        $units = Cache::remember($cacheKey, 3600, function () {
+        $units = Unit::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+                ->orWhere('type', 1)
+                ->orWhere('type', 2)
                 ->latest()
                 ->get();
-        });
+//        });
 
         // Manually store the units in cache with a different cache key and time
-        $anotherCacheKey = 'all_units_other_key';
-        Cache::put($anotherCacheKey, $units, 1800); // Cache for 1800 seconds (30 minutes)
+//        $anotherCacheKey = 'all_units_other_key';
+//        Cache::put($anotherCacheKey, $units, 1800); // Cache for 1800 seconds (30 minutes)
 
         return view('cod::syllabus.index')->with(['units' => $units]);
     }
@@ -499,7 +497,6 @@ class CODController extends Controller
 
 
     public function addAvailableCourses(Request $request){
-
         $payload = json_decode($request->input('payload'), true);
 
         // Check if JSON decoding was successful
@@ -546,7 +543,8 @@ class CODController extends Controller
                     $code = Attendance::find($mode);
                     $classEx = $course->course_code.'/'.strtoupper(Carbon::parse($intakes->intake_from)->format('MY')).'/'.$code->attendance_code;
                     $syllabus = SyllabusVersion::where('course_id', $course->course_id)->latest()->first()->syllabus_name;
-                    $feeStructure = SemesterFee::where('course_code', $course->course_code)->pluck('version')->toArray();
+//                    $feeStructure = SemesterFee::where('course_code', $course->course_code)->pluck('version')->toArray();
+                    $feeStructure = 'v.2023';
 
                     $classId = new CustomIds();
                     // $generatedClassID  =  $classId->generateId();
@@ -560,8 +558,9 @@ class CODController extends Controller
                         $class->course_id = $selectedCourse['course'];
                         $class->intake_id = $request->intake;
                         $class->syllabus_name = $syllabus;
-                        $class->fee_version = max($feeStructure);
-                        $class->points = 0;
+//                        $class->fee_version = max($feeStructure);
+                        $class->fee_version = $feeStructure;
+//                        $class->points = 0;
                         $class->save();
                     }
                 }

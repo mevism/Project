@@ -17,11 +17,11 @@ return new class extends Migration
         DB::statement(
             "CREATE VIEW workloadview AS
             SELECT
-            workloads.workload_id, approve_workloads.workload_approval_id, approve_workloads.dean_status, approve_workloads.dean_remarks, approve_workloads.registrar_status, approve_workloads.registrar_remarks, workloads.department_id, departments.name, academicdepartments.school_id, workloads.academic_year, workloads.academic_semester, workloads.user_id, workloads.unit_id, workloads.class_code, approve_workloads.status
+            workloads.workload_id, approve_workloads.workload_approval_id, approve_workloads.dean_status, approve_workloads.dean_remarks, approve_workloads.registrar_status, approve_workloads.registrar_remarks, workloads.department_id, departments.name, academicdepartments.school_id, workloads.intake_id, workloads.user_id, workloads.unit_id, workloads.class_code, approve_workloads.status
             FROM approve_workloads
             JOIN workloads ON workloads.workload_approval_id =  approve_workloads.workload_approval_id
             JOIN departments ON departments.department_id = workloads.department_id
-            JOIN academicdepartments ON academicdepartments.department_id = departments.department_id;"
+            JOIN academicdepartments ON academicdepartments.department_id = departments.department_id"
         );
     }
 

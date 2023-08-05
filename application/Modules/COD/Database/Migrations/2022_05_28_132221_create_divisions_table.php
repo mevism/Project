@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('divisions', function (Blueprint $table) {
             $table->string('division_id', 12)->primary();
-            $table->string('name', 16);
+            $table->string('name', 30);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('academic_years', function (Blueprint $table) {
             $table->string('year_id', 12)->primary();
-            $table->string('year_start', 16)->unique();
-            $table->string('year_end', 16)->unique();
+            $table->string('year_start', 20)->unique();
+            $table->string('year_end', 20)->unique();
             $table->tinyInteger('status');
             $table->timestamps();
             $table->softDeletes();
         });
-        
+
     }
 
     /**

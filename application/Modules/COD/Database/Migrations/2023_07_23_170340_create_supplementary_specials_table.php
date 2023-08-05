@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('intake_id', 12);
             $table->foreign('intake_id')->references('intake_id')->on('intakes')->onDelete('cascade')->onUpdate('cascade');
             $table->string('department_id', 12);
-            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('department_id')->references('department_id')->on('departments')->onDelete('cascade')->onUpdate('cascade');
             $table->string('unit_code', 8);
             $table->timestamps();
             $table->softDeletes();

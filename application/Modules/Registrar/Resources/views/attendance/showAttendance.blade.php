@@ -10,9 +10,9 @@
 <div class="bg-body-light">
     <div class="content content-full">
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-            <div class="h5 fw-bold mb-0">
+            <h6 class="h6 fw-bold mb-0">
                 MODES OF STUDY
-            </div>
+            </h6>
             <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-alt">
                     <li class="breadcrumb-item">
@@ -27,14 +27,13 @@
     </div>
 </div>
       <div class="block block-rounded">
-
         <div class="block-content block-content-full">
           <div class="row">
             <div class="col-12 table-responsive">
-          <table id="example" class="table table-bordered table-striped table-vcenter fs-sm">
-            <span class="d-flex justify-content-end">
-                <a class="btn btn-alt-info btn-sm" href="{{ route('courses.addAttendance') }}">Create</a>
-            </span><br>
+          <table id="example" class="table table-bordered table-striped table-sm fs-sm">
+            <div class="d-flex justify-content-end">
+                <a class="btn btn-alt-info btn-sm m-2" href="{{ route('courses.addAttendance') }}">Create</a>
+            </div>
             <thead>
                 <th>#</th>
                 <th>Code</th>

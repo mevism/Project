@@ -34,42 +34,45 @@
                     @csrf
 
                       <div class="form-floating col-12 col-xl-12">
-                        <select name="academicyear" class="form-control form-control-alt text-uppercase">
-                          <option selected disabled> Select Academic Year </option>
-                          @foreach ($academicyear as $item)
-                          <option value="{{ Carbon\carbon::parse($item->year_start)->format('Y') }}/{{ Carbon\carbon::parse($item->year_end)->format('Y') }}">{{ Carbon\carbon::parse($item->year_start)->format('Y') }}/{{ Carbon\carbon::parse($item->year_end)->format('Y') }}</option>
+                        <select name="semester" class="form-control  text-uppercase" placeholder="---">
+                          <option selected disabled> Select Academic SEMESTER </option>
+                          @foreach ($semesters as $intake)
+                              <option value="{{ $intake->intake_id }}">
+                                  @php $year = $intake->academic_year_id; @endphp
+                                  {{ Carbon\carbon::parse($intake->intake_from)->format('M') }}/{{ Carbon\carbon::parse($intake->intake_to)->format('M') }} - {{ \Carbon\Carbon::parse(\Modules\Registrar\Entities\AcademicYear::where('year_id', $year)->first()->year_start)->format('Y').'/'.\Carbon\Carbon::parse(\Modules\Registrar\Entities\AcademicYear::where('year_id', $year)->first()->year_end)->format('Y') }}
+                              </option>
                           @endforeach
-                          <label class="form-label">ACADEMIC YEAR</label>
                         </select>
+                          <label class="form-label">ACADEMIC SEMESTER</label>
                       </div>
 
-                      <div class="form-floating col-12 col-xl-12">
-                        <select name="semester" class="form-control form-control-alt text-uppercase">
-                          <option selected disabled> Select Semester </option>
-                            <option value="SEP/DEC">SEP/DEC</option>
-                            <option value="JAN/APR">JAN/APR</option>
-                            <option value="MAY/AUG">MAY/AUG</option>
-                          <label class="form-label">SEMESTER</label>
-                        </select>
-                      </div>
+{{--                      <div class="form-floating col-12 col-xl-12">--}}
+{{--                        <select name="semester" class="form-control  text-uppercase">--}}
+{{--                          <option selected disabled> Select Semester </option>--}}
+{{--                            <option value="SEP/DEC">SEP/DEC</option>--}}
+{{--                            <option value="JAN/APR">JAN/APR</option>--}}
+{{--                            <option value="MAY/AUG">MAY/AUG</option>--}}
+{{--                          <label class="form-label">SEMESTER</label>--}}
+{{--                        </select>--}}
+{{--                      </div>--}}
 
                       <div class="form-floating col-12 col-xl-12">
-                        <select name="events" class="form-control form-control-alt text-uppercase">
+                        <select name="events" class="form-control  text-uppercase">
                           <option selected disabled> Select Event </option>
                           @foreach ($events as $event)
                           <option value="{{ $event->id }}">{{ $event->name }}</option>
                           @endforeach
-                          <label class="form-label">EVENT NAME</label>
                         </select>
+                          <label class="form-label">EVENT NAME</label>
                       </div>
 
                       <div class="form-floating col-12 col-xl-12 mb-2" >
-                        <input type="date" class="form-control form-control-alt" id="start_date" name="start_date" placeholder="Start Date">
+                        <input type="date" class="form-control " id="start_date" name="start_date" placeholder="Start Date">
                         <label class="form-label">START DATE</label>
                       </div>
 
                       <div class="form-floating col-10 col-xl-12 mb-2">
-                        <input type="date" class="form-control form-control-alt" id="end_date" name="end_date" placeholder="End Date">
+                        <input type="date" class="form-control " id="end_date" name="end_date" placeholder="End Date">
                         <label class="form-label">END DATE</label>
                       </div>
 

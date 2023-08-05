@@ -985,25 +985,20 @@ class CoursesController extends Controller
      * @returnvoid
      */
 
-    public function addCalenderOfEvents()
-    {
-        $academicyear  =  AcademicYear::latest()->get();
+    public function addCalenderOfEvents(){
+//        $academicyear  =  AcademicYear::latest()->get();
+        $intakes = Intake::latest()->get();
         $events        =  Event::all();
-
-        return view('registrar::eventsCalender.addCalenderOfEvents')->with(['academicyear'  =>  $academicyear, 'events'  => $events]);
+        return view('registrar::eventsCalender.addCalenderOfEvents')->with(['semesters'  =>  $intakes, 'events'  => $events]);
     }
 
-    public function showCalenderOfEvents()
-    {
+    public function showCalenderOfEvents(){
         $calender  = CalenderOfEvents::latest()->get();
-
         return view('registrar::eventsCalender.showCalenderOfEvents')->with(['calender' => $calender]);
     }
 
-    public function storeCalenderOfEvents(Request $request)
-    {
+    public function storeCalenderOfEvents(Request $request){
         $data = new CalenderOfEvents();
-        $data->academic_year_id =  $request->input('academicyear');
         $data->intake_id =  $request->input('semester');
         $data->event_id =  $request->input('events');
         $data->start_date =  $request->input('start_date');
@@ -1808,19 +1803,16 @@ class CoursesController extends Controller
         return redirect()->back()->with('success', 'Admission letters generated and communication send');
     }
 
-    public function addYear()
-    {
+    public function addYear(){
         return view('registrar::academicYear.addAcademicYear');
     }
 
-    public function academicYear()
-    {
+    public function academicYear(){
         $years = AcademicYear::latest()->get();
         return view('registrar::academicYear.showAcademicYear')->with('years', $years);
     }
 
-    public function storeYear(Request $request)
-    {
+    public function storeYear(Request $request){
         $request->validate([
             'year_start'             =>      'required',
             'year_end'               =>      'required'
@@ -1837,32 +1829,24 @@ class CoursesController extends Controller
         return redirect()->route('courses.academicYear')->with('success', 'Academic year created successfully');
     }
 
-    public function editAcademicYear($id)
-    {
-
+    public function editAcademicYear($id){
         $academicYear = AcademicYear::where('year_id', $id)->first();
-
         return view('registrar::academicYear.editAcademicYear')->with(['academicYear' => $academicYear]);
     }
 
-    public function updateAcademicYear(Request $request, $id)
-    {
-
+    public function updateAcademicYear(Request $request, $id){
         $request->validate([
             'year_start'             =>      'required',
             'year_end'               =>      'required'
         ]);
-
         $academicYear = AcademicYear::where('year_id', $id)->first();
         $academicYear->year_start = $request->year_start;
         $academicYear->year_end = $request->year_end;
         $academicYear->save();
-
         return redirect()->route('courses.academicYear')->with('success', 'Academic year updated successfully');
     }
 
-    public function showSemester($id)
-    {
+    public function showSemester($id){
         $year = AcademicYear::where('year_id', $id)->first();
         $intakes = Intake::where('academic_year_id', $id)->latest()->get();
         return view('registrar::academicYear.showSemester')->with(['intakes' => $intakes, 'year' => $year]);
@@ -1872,23 +1856,19 @@ class CoursesController extends Controller
      * Show the form for a new Intake Information.
      *
      */
-    public function addIntake($id)
-    {
+    public function addIntake($id){
         $years = AcademicYear::where('year_id', $id)->first();
         $data = Intake::all();
         $courses = Courses::all();
-
         return view('registrar::intake.addIntake')->with(['data' => $data, 'years' => $years, 'courses' => $courses]);
     }
 
-    public function editstatusIntake($id)
-    {
+    public function editstatusIntake($id){
         $data = Intake::where('intake_id', $id)->first();
         return view('registrar::intake.editstatusIntake')->with(['data' => $data]);
     }
 
-    public function statusIntake(Request $request, $id)
-    {
+    public function statusIntake(Request $request, $id){
         $request->validate(['status' => 'required']);
 
         if ($request->status == 1) {
@@ -1912,8 +1892,7 @@ class CoursesController extends Controller
         return redirect()->route('courses.showSemester', $data->academic_year_id)->with('status', 'Semester status updated successfully');
     }
 
-    public function storeIntake(Request $request, $id)
-    {
+    public function storeIntake(Request $request, $id){
         $request->validate([
             'year'                  =>       'required',
             'intake_name_from'      =>       'required|before:intake_name_to',
@@ -1921,7 +1900,6 @@ class CoursesController extends Controller
         ]);
 
         $academicYear = AcademicYear::where('year_id', $request->year)->first();
-
         if (Carbon::parse($academicYear->year_start)->format('Y-m-d') <= Carbon::parse($request->intake_name_from)->format('Y-m-d') && Carbon::parse($academicYear->year_end)->format('Y-m-d') >= Carbon::parse($request->intake_name_to)->format('Y-m-d') && Carbon::parse($academicYear->year_end)->format('Y-m-d') > Carbon::parse($request->intake_name_from)->format('Y-m-d')) {
 
             $intakeId = new CustomIds();
@@ -2033,27 +2011,21 @@ class CoursesController extends Controller
      *
      * Information about School
      */
-    public function  addschool()
-    {
+    public function  addschool(){
         return view('registrar::school.addSchool');
     }
 
-    public function  showSchool()
-    {
-
+    public function  showSchool(){
         $data = School::latest()->get();
         return view('registrar::school.showSchool')->with('data', $data);
     }
 
-    public function editSchool($id)
-    {
-
+    public function editSchool($id){
         $data = School::where('school_id', $id)->first();
         return view('registrar::school.editSchool')->with('data', $data);
     }
 
-    public function updateSchool(Request $request, $id)
-    {
+    public function updateSchool(Request $request, $id){
         $request->validate([
             'initials'         =>       'required|unique:schools',
             'name'             =>       'required|unique:schools'
@@ -2075,8 +2047,7 @@ class CoursesController extends Controller
         return redirect()->route('courses.showSchool')->with('status', 'Data Updated Successfully');
     }
 
-    public function storeSchool(Request $request)
-    {
+    public function storeSchool(Request $request){
         $request->validate([
             'initials'         =>       'required|unique:schools',
             'name'             =>       'required|unique:schools'
@@ -2093,8 +2064,7 @@ class CoursesController extends Controller
         return redirect()->route('courses.showSchool')->with('success', 'School Created');
     }
 
-    public function schoolPreview($id)
-    {
+    public function schoolPreview($id){
         $schoolName = School::where('school_id', $id)->first();
         $data = SchoolHistory::where('school_id', $id)->latest()->get();
         return view('registrar::school.preview')->with(['data' => $data, 'schoolName' => $schoolName]);
@@ -2103,20 +2073,17 @@ class CoursesController extends Controller
      *
      * Information about departments
      */
-    public function addDepartment()
-    {
+    public function addDepartment(){
         $schools = School::all();
         return view('registrar::department.addDepartment')->with('schools', $schools);
     }
 
-    public function showDepartment()
-    {
+    public function showDepartment(){
          $data = academicdepartments::latest()->get();
         return view('registrar::department.showDepartment')->with('data', $data);
     }
 
-    public function storeDepartment(Request $request)
-    {
+    public function storeDepartment(Request $request){
         $request->validate([
             'dept_code' => 'required|unique:departments',
             'name' => 'required|unique:departments'
@@ -2140,15 +2107,13 @@ class CoursesController extends Controller
         return redirect()->route('courses.showDepartment')->with('success', 'Department Created');
     }
 
-    public function editDepartment($id)
-    {
+    public function editDepartment($id){
         $data = ACADEMICDEPARTMENTS::where('department_id', $id)->first();
         $schools = School::all();
         return view('registrar::department.editDepartment')->with(['data' => $data, 'schools' => $schools]);
     }
 
-    public function updateDepartment(Request $request, $id)
-    {
+    public function updateDepartment(Request $request, $id){
         $data = ACADEMICDEPARTMENTS::where('department_id', $id)->first();
 
         $oldDepartment  =  new DepartmentHistory;
@@ -2170,8 +2135,7 @@ class CoursesController extends Controller
         return redirect()->route('courses.showDepartment')->with('status', 'Data Updated Successfully');
     }
 
-    public function departmentPreview($id)
-    {
+    public function departmentPreview($id){
         $departmentName = Department::where('department_id', $id)->first();
         $data = DepartmentHistory::where('department_id', $id)->latest()->get();
         return view('registrar::department.preview')->with(['data' => $data, 'departmentName' => $departmentName]);
@@ -2180,8 +2144,7 @@ class CoursesController extends Controller
      *
      * Information about Course
      */
-    public function addCourse()
-    {
+    public function addCourse(){
         $departments = ACADEMICDEPARTMENTS::latest()->get();
         $group = Group::all();
         $clusters = CourseClusterGroups::all();
@@ -2189,8 +2152,7 @@ class CoursesController extends Controller
         return view('registrar::course.addCourse')->with(['departments' => $departments,  'groups' => $group, 'clusters' => $clusters, 'levels' => $levels]);
     }
 
-    public function storeCourse(Request $request)
-    {
+    public function storeCourse(Request $request){
         $request->validate([
             'department'                =>       'required',
             'course_name'               =>       'required',
@@ -2225,7 +2187,7 @@ class CoursesController extends Controller
         $courses->department_id = $request->department;
         $courses->course_name = $request->course_name;
         $courses->course_code = $request->course_code;
-        $courses->level = $request->level;
+        $courses->level_id = $request->level;
         $courses->save();
 
         $requirement  =  new CourseRequirement;
@@ -2257,14 +2219,12 @@ class CoursesController extends Controller
         return redirect()->route('courses.showCourse')->with('success', 'Course Created');
     }
 
-    public function showCourse()
-    {
+    public function showCourse(){
         $data = Courses::orderBy('course_id', 'desc')->get();
         return view('registrar::course.showCourse')->with('data', $data);
     }
 
-    public function editCourse($id)
-    {
+    public function editCourse($id){
         $departments = Department::latest()->get();
         $data = Courses::where('course_id', $id)->first();
         $group = Group::all();
@@ -2273,8 +2233,7 @@ class CoursesController extends Controller
         return view('registrar::course.editCourse')->with(['groups' => $group, 'data' => $data, 'departments' => $departments, 'levels' => $levels, 'clusters' => $clusters]);
     }
 
-    public function updateCourse(Request $request, $id)
-    {
+    public function updateCourse(Request $request, $id){
         $request->validate([
             'department' => 'required',
             'course_name' =>       'required',
@@ -2339,35 +2298,30 @@ class CoursesController extends Controller
         return redirect()->route('courses.showCourse')->with('status', 'Data Updated Successfully');
     }
 
-    public function coursePreview($id)
-    {
+    public function coursePreview($id){
         $courseName = Courses::where('course_id', $id)->first();
         $data = CourseHistory::where('course_id', $id)->latest()->get();
         return view('registrar::course.preview')->with(['data' => $data, 'courseName' => $courseName]);
     }
 
-    public function syllabus($course_id)
-    {
+    public function syllabus($course_id){
         $hashedId  =  Crypt::decrypt($course_id);
         $course   =   Courses::where('course_id', $hashedId)->first();
         $unit   =  UnitProgramms::where('course_code', $course->course_code)->get();
         return view('registrar::course.syllabus')->with(['units' => $unit, 'course' => $course]);
     }
 
-    public function archived()
-    {
+    public function archived(){
         $archived = ApplicationsView::where('registrar_status', 3)->latest()->get();
         return view('registrar::offer.archived')->with('archived', $archived);
     }
 
-    public function destroyCoursesAvailable(Request $request, $id)
-    {
+    public function destroyCoursesAvailable(Request $request, $id){
         $course = AvailableCourse::find($id)->delete();
         return redirect()->route('courses.offer');
     }
 
-    public function admissions()
-    {
+    public function admissions(){
         $admission = AdmissionsView::where('medical_status', 1)
             //            ->where('status', NULL)
             ->get();
