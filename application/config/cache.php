@@ -31,7 +31,7 @@ return [
     |
     */
 
-    'ttl' => 30, // Cache items for 60 minutes
+//    'ttl' => 30, // Cache items for 60 minutes
 
 
     'stores' => [
