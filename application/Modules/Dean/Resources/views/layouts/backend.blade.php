@@ -67,7 +67,7 @@
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
                 <i class="nav-main-link-icon si si-home"></i>
                 <span class="nav-main-link-name">
-                    @if(auth()->guard('user')->user()->hasRole('Director/Dean'))
+                    @if(auth()->guard('user')->user()->hasRole('DEAN/DIRECTOR'))
                         Director/Dean [ {{ auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->initials }} ]
                     @endif
                 </span>

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('intake_id', 12);
             $table->foreign('intake_id')->references('intake_id')->on('intakes')->onDelete('cascade')->onUpdate('cascade');
             $table->string('leave_id', 12);
-            $table->foreign('leave_id')->references('leave_id')->on('academic_leaves')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('leave_id')->references('leave_id')->on('academic_leaves')->onDelete('no action')->onUpdate('no action');
             $table->tinyInteger('status')->nullable();
             $table->timestamps();
             $table->softDeletes();

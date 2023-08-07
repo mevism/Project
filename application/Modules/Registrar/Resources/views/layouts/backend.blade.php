@@ -24,6 +24,59 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
   <link rel="stylesheet" id="css-main" href="{{ url('/css/oneui.css') }}">
 
+    <style>
+        /*.tum-logo {*/
+        /*    position: relative;*/
+        /*    bottom: 8% !important;*/
+        /*    left: 0;*/
+        /*    right: 0;*/
+        /*    text-align: center;*/
+        /*}*/
+
+        /* Styles for the parent container */
+        .sidebar-o {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Styles for the content side (menu) */
+        .content-side {
+            flex: 1;
+            overflow-y: auto; /* To enable scrolling if content overflows */
+            padding-bottom: 50px; /* To make space for the .tum-logo */
+            position: relative; /* Make the .content-side a positioning context */
+        }
+
+        /* Styles for the tum-logo */
+        .tum-logo {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            /*background-color: #f8f9fa;*/
+            padding: 10px;
+            z-index: 99; /* Ensure the logo stays on top of the content */
+        }
+
+        /* Responsive styles */
+        @media (max-height: 800px) {
+            .tum-logo {
+                padding: 8px;
+            }
+        }
+
+        @media (max-height: 600px) {
+            .tum-logo {
+                padding: 5px;
+            }
+        }
+
+        /* Add more responsive styles as needed based on your requirements */
+
+        /* Add more responsive styles as needed based on your requirements */
+    </style>
+
   <!-- You can include a specific file from public/css/themes/ folder to alter the default color theme of the template. eg: -->
   <!-- <link rel="stylesheet" id="css-theme" href="{{ mix('/css/themes/amethyst.css') }}"> -->
   @yield('css_after')
@@ -331,7 +384,13 @@
           </ul>
         </div>
         <!-- END Side Navigation -->
+
+          <div class="tum-logo">
+              <img class="mb-2" src="{{ asset('media/tum-logo/tum-logo.png') }}" alt="TUM Logo" style="height: 90px; width: 120px;"> <br>
+              <img src="{{ asset('media/tum-logo/iso.png') }}" alt="TUM Logo" style="height: 40px; width: 150px;">
+          </div>
       </div>
+
       <!-- END Sidebar Scrolling -->
     </nav>
     <!-- END Sidebar -->
@@ -385,7 +444,7 @@
                         {{ $user->title }} {{ $user->last_name }} {{ $user->first_name }} {{ $user->middle_name }}
                     @endif </p>
                 <p class="mb-0 text-muted fs-sm fw-medium">
-                    @if(auth()->guard('user')->user()->hasRole('Registrar'))
+                    @if(auth()->guard('user')->user()->hasRole('REGISTRAR'))
                         Registrar [ {{ auth()->guard('user')->user()->employmentDepartment->first()->dept_code }} ]
                   @endif
               </div>

@@ -23,9 +23,9 @@ return new class extends Migration
             $table->string('department_id', 12);
             $table->foreign('department_id')->references('department_id')->on('departments')->onUpdate('cascade')->onDelete('cascade');
             $table->string('unit_id', 12);
-            $table->foreign('unit_id')->references('unit_id')->on('units')->onUpdate('cascade')->onDelete('cascade');
+//            $table->foreign('unit_id')->references('unit_id')->on('units')->onUpdate('cascade')->onDelete('cascade');
             $table->string('class_code', 12);
-            $table->foreign('class_code')->references('name')->on('classes')->onUpdate('cascade')->onDelete('cascade');           
+//            $table->foreign('class_code')->references('name')->on('classes')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('status')->default(0);
             $table->timestamps();
             $table->softDeletes();

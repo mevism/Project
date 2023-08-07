@@ -67,8 +67,8 @@
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
                 <i class="nav-main-link-icon si si-cursor"></i>
                 <span class="nav-main-link-name">
-                    @if(auth()->guard('user')->user()->hasRole('Medical Officer'))
-                        Medical Officer
+                    @if(auth()->guard('user')->user()->hasRole('MEDICAL OFFICER'))
+                        MEDICAL OFFICER
                     @endif
                 </span>
 
@@ -145,8 +145,8 @@
                       {{ $user->title }} {{ $user->last_name }} {{ $user->first_name }} {{ $user->middle_name }}
                   @endif
                   <p class="mb-0 text-muted fs-sm fw-medium">
-                      @if(auth()->guard('user')->user()->hasRole('Medical Officer'))
-                          Medical Officer
+                      @if(auth()->guard('user')->user()->hasRole('MEDICAL OFFICER'))
+                          MEDICAL OFFICER
                       @endif
                 </p>
               </div>
