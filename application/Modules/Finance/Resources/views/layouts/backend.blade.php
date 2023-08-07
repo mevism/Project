@@ -68,7 +68,7 @@
                 <i class="nav-main-link-icon fas fa-money-check-dollar"></i>
                 <span class="nav-main-link-name">
                     @php $user = auth()->guard('user')->user(); @endphp
-                     @if($user->hasRole('Student Finance'))
+                     @if($user->hasRole('STUDENT FINANCE'))
                         Finance [ {{ $user->employmentDepartment->first()->dept_code }} ]
                     @endif
                 </span>
@@ -189,7 +189,7 @@
                   @endif
                   <hr>
                   <p class="mb-0 text-muted fs-sm fw-medium">
-                      @if(auth()->guard('user')->user()->hasRole('Student Finance'))
+                      @if(auth()->guard('user')->user()->hasRole('STUDENT FINANCE'))
                           Finance [ {{ $user->employmentDepartment->first()->dept_code }} ]
                       @endif
                 </p>

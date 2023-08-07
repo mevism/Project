@@ -44,7 +44,6 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/ramsey/collection" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/ramsey/uuid" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/spatie/backtrace" />
-      <excludeFolder url="file://$MODULE_DIR$/application/vendor/spatie/flare-client-php" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/spatie/laravel-permission" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/spatie/ignition" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/spatie/laravel-ignition" />
@@ -66,13 +65,7 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/phpunit/php-timer" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/phpunit/phpunit" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/console" />
-      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/css-selector" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/deprecation-contracts" />
-      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/error-handler" />
-      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/event-dispatcher" />
-      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/finder" />
-      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/http-foundation" />
-      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/http-kernel" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/mailer" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/polyfill-ctype" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/polyfill-intl-grapheme" />
@@ -91,7 +84,6 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/var-dumper" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/theseer/tokenizer" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/barryvdh/laravel-dompdf" />
-      <excludeFolder url="file://$MODULE_DIR$/application/vendor/phpunit/php-code-coverage" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/nwidart/laravel-modules" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/doctrine/inflector" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/doctrine/lexer" />
@@ -149,6 +141,14 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/polyfill-php83" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/league/flysystem-local" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/predis/predis" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/css-selector" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/http-foundation" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/finder" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/http-kernel" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/event-dispatcher" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/error-handler" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/spatie/flare-client-php" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/phpunit/php-code-coverage" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

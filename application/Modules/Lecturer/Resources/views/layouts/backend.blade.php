@@ -77,8 +77,8 @@
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
                 <i class="nav-main-link-icon si si-cursor"></i>
                 <span class="nav-main-link-name">
-                   @if(auth()->guard('user')->user()->hasRole('Lecturer'))
-                        Lecturer
+                   @if(auth()->guard('user')->user()->hasRole('LECTURER'))
+                        LECTURER
                     @endif
                 </span>
 
@@ -203,8 +203,8 @@
                   @endif
                   <hr>
                 <p class="mb-0 text-muted fs-sm fw-medium">
-                    @if(auth()->guard('user')->user()->hasRole('Lecturer'))
-                        Lecturer [ {{ $user->employmentDepartment->first()->dept_code }} ]
+                    @if(auth()->guard('user')->user()->hasRole('LECTURER'))
+                        LECTURER [ {{ $user->employmentDepartment->first()->dept_code }} ]
                     @endif
                 </p>
               </div>

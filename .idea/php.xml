@@ -37,7 +37,6 @@
       <path value="$PROJECT_DIR$/application/vendor/ramsey/collection" />
       <path value="$PROJECT_DIR$/application/vendor/ramsey/uuid" />
       <path value="$PROJECT_DIR$/application/vendor/spatie/backtrace" />
-      <path value="$PROJECT_DIR$/application/vendor/spatie/flare-client-php" />
       <path value="$PROJECT_DIR$/application/vendor/spatie/laravel-permission" />
       <path value="$PROJECT_DIR$/application/vendor/spatie/ignition" />
       <path value="$PROJECT_DIR$/application/vendor/spatie/laravel-ignition" />
@@ -59,13 +58,7 @@
       <path value="$PROJECT_DIR$/application/vendor/phpunit/php-timer" />
       <path value="$PROJECT_DIR$/application/vendor/phpunit/phpunit" />
       <path value="$PROJECT_DIR$/application/vendor/symfony/console" />
-      <path value="$PROJECT_DIR$/application/vendor/symfony/css-selector" />
       <path value="$PROJECT_DIR$/application/vendor/symfony/deprecation-contracts" />
-      <path value="$PROJECT_DIR$/application/vendor/symfony/error-handler" />
-      <path value="$PROJECT_DIR$/application/vendor/symfony/event-dispatcher" />
-      <path value="$PROJECT_DIR$/application/vendor/symfony/finder" />
-      <path value="$PROJECT_DIR$/application/vendor/symfony/http-foundation" />
-      <path value="$PROJECT_DIR$/application/vendor/symfony/http-kernel" />
       <path value="$PROJECT_DIR$/application/vendor/symfony/mailer" />
       <path value="$PROJECT_DIR$/application/vendor/symfony/polyfill-ctype" />
       <path value="$PROJECT_DIR$/application/vendor/symfony/polyfill-intl-grapheme" />
@@ -84,7 +77,6 @@
       <path value="$PROJECT_DIR$/application/vendor/symfony/var-dumper" />
       <path value="$PROJECT_DIR$/application/vendor/theseer/tokenizer" />
       <path value="$PROJECT_DIR$/application/vendor/barryvdh/laravel-dompdf" />
-      <path value="$PROJECT_DIR$/application/vendor/phpunit/php-code-coverage" />
       <path value="$PROJECT_DIR$/application/vendor/nwidart/laravel-modules" />
       <path value="$PROJECT_DIR$/application/vendor/doctrine/inflector" />
       <path value="$PROJECT_DIR$/application/vendor/doctrine/lexer" />
@@ -142,6 +134,14 @@
       <path value="$PROJECT_DIR$/application/vendor/symfony/polyfill-php83" />
       <path value="$PROJECT_DIR$/application/vendor/league/flysystem-local" />
       <path value="$PROJECT_DIR$/application/vendor/predis/predis" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/css-selector" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/http-foundation" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/finder" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/http-kernel" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/event-dispatcher" />
+      <path value="$PROJECT_DIR$/application/vendor/symfony/error-handler" />
+      <path value="$PROJECT_DIR$/application/vendor/spatie/flare-client-php" />
+      <path value="$PROJECT_DIR$/application/vendor/phpunit/php-code-coverage" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0" />

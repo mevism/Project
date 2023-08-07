@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create('patterns', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->tinyInteger('season_code');
-            $table->string('season', 20);
+            $table->string('season', 25);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,7 +32,6 @@ return new class extends Migration
        ];
 
         foreach ($seasons as $season){
-
             DB::table('patterns')->insert($season);
 
         }

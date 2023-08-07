@@ -351,7 +351,7 @@
                     @endif </p>
                 <p class="mb-0 text-muted fs-sm fw-medium">
                     @if(Auth::guard('user')->check())
-                        @if(auth()->guard('user')->user()->hasRole('Chairperson of Department'))
+                        @if(auth()->guard('user')->user()->hasRole('CHAIRPERSON OF DEPARTMENT'))
                             COD ( {{ auth()->guard('user')->user()->employmentDepartment->first()->dept_code }} )
                         @endif
                     @endif</p>

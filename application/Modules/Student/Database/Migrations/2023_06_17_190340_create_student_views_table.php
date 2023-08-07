@@ -32,7 +32,7 @@ return new class extends Migration
      */
     public function down()
     {
-        DB::statement('DROP VIEW IF EXISTS studentcourseview');
+        DB::statement('DROP VIEW studentcourseview');
 
     }
 };

@@ -14,7 +14,6 @@ return new class extends Migration
     public function up()
     {
         Schema::create('user_employments', function (Blueprint $table) {
-            $table->bigIncrements('id');
             $table->string('user_id', 12);
             $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->string('role_id', 4);
@@ -23,7 +22,7 @@ return new class extends Migration
             $table->string('division_id', 12);
             $table->foreign('division_id')->references('division_id')->on('divisions')->onUpdate('cascade')->onDelete('cascade');
             $table->string('department_id', 12);
-            $table->foreign('department_id')->references('department_id')->on('departments')->onUpdate('cascade')->onDelete('cascade');
+//            $table->foreign('department_id')->references('department_id')->on('departments')->onUpdate('cascade')->onDelete('cascade');
             $table->string('station_id', 12);
             $table->string('employment_terms', 4);
             $table->timestamps();
