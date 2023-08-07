@@ -36,7 +36,7 @@
                             <th>#</th>
                             <th>DESCRIPTION</th>
                             @foreach ($semesters as $semester => $fees)
-                                <th nowrap="" id="{{ $semester }}" style="font-size: 90% !important;" class="text-center"> YEAR {{ explode('.', $semester)[0] }} <br> SEMESTER {{ explode('.', $semester)[1] }} </th>
+                                <th nowrap="" id="{{ round($semester, 1)}}" style="font-size: 90% !important;" class="text-center"> YEAR {{ explode('.', $semester)[0] }} <br> SEMESTER {{ explode('.', round($semester, 1))[1] }} </th>
                             @endforeach
                             </thead>
                             <tbody>

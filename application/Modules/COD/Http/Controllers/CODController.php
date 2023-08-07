@@ -543,8 +543,8 @@ class CODController extends Controller
                     $code = Attendance::find($mode);
                     $classEx = $course->course_code.'/'.strtoupper(Carbon::parse($intakes->intake_from)->format('MY')).'/'.$code->attendance_code;
                     $syllabus = SyllabusVersion::where('course_id', $course->course_id)->latest()->first()->syllabus_name;
-//                    $feeStructure = SemesterFee::where('course_code', $course->course_code)->pluck('version')->toArray();
-                    $feeStructure = 'v.2023';
+                    $feeStructure = SemesterFee::where('course_code', $course->course_code)->pluck('version')->toArray();
+//                    $feeStructure = 'v.2023';
 
                     $classId = new CustomIds();
                     // $generatedClassID  =  $classId->generateId();
@@ -558,8 +558,8 @@ class CODController extends Controller
                         $class->course_id = $selectedCourse['course'];
                         $class->intake_id = $request->intake;
                         $class->syllabus_name = $syllabus;
-//                        $class->fee_version = max($feeStructure);
-                        $class->fee_version = $feeStructure;
+                        $class->fee_version = max($feeStructure);
+//                        $class->fee_version = $feeStructure;
 //                        $class->points = 0;
                         $class->save();
                     }
@@ -567,7 +567,7 @@ class CODController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'New courses are ready for applications');
+        return redirect()->route('department.intakes')->with('success', 'New courses are ready for applications');
     }
 
     public function viewDeptIntakeCourses($intake){

@@ -322,13 +322,13 @@
                       <i class="nav-main-link-icon fa fa-file-import"></i>
                       <span class="nav-main-link-name">Imports</span>
                   </a>
-{{--                  <ul class="nav-main-submenu">--}}
-{{--                      <li class="nav-main-item">--}}
-{{--                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importUnit')}}">--}}
-{{--                              <span class="nav-main-link-name"> Units</span>--}}
-{{--                          </a>--}}
-{{--                      </li>--}}
-{{--                  </ul>--}}
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importUnit')}}">
+                              <span class="nav-main-link-name"> Units</span>
+                          </a>
+                      </li>
+                  </ul>
 {{--                  <ul class="nav-main-submenu">--}}
 {{--                      <li class="nav-main-item">--}}
 {{--                          <a class="nav-main-link{{ request()->is('classes/index') ? ' active' : '' }}" href="{{ route('courses.importExportCourses')}}">--}}

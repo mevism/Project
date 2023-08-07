@@ -61,7 +61,6 @@
                 <div class="col-lg-12">
                     <form id="unitSelectionForm" action="{{ route('department.submitSyllabusUnits') }}" method="POST">
                         @csrf
-
                         <div class="row row-cols-sm-4 g-2">
                             @php
                                 $years = substr($syllabus->CourseSyllabusVersion->courseRequirements->course_duration, 0, 1);

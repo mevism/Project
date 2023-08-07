@@ -91,6 +91,7 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
             'trust_server_certificate' => true,
+            'strict' => false,
         ],
 
     ],
