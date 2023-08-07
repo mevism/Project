@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('vote_heads', function (Blueprint $table) {
+        Schema::create('voteheads', function (Blueprint $table) {
             $table->string('votehead_id', 12)->primary();
-            $table->string('name', 32)->unique();
+            $table->string('vote_id', 8)->unique();
+            $table->string('vote_name', 32)->unique();
+            $table->string('vote_category', 32)->unique();
+            $table->string('vote_type', 32)->unique();
             $table->timestamps();
             $table->softDeletes();
         });

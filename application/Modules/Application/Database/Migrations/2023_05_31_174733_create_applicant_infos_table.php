@@ -25,7 +25,8 @@ return new class extends Migration
             $table->string('marital_status', 16)->nullable();
             $table->date('date_of_birth', 16)->nullable();
             $table->string('index_number', 16)->unique()->nullable();
-            $table->string('id_number', 16)->unique()->nullable();
+            $table->string('type', 16)->unique()->nullable();
+            $table->string('identification', 16)->unique()->nullable();
             $table->string('disabled', 8)->nullable();
             $table->string('disability', 32)->nullable();
             $table->timestamps();

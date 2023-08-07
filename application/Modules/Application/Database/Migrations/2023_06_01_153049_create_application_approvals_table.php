@@ -25,7 +25,6 @@ return new class extends Migration
             $table->string('dean_comments', 64)->nullable();
             $table->tinyInteger('registrar_status')->nullable();
             $table->string('registrar_comments', 64)->nullable();
-            $table->string('reg_number', 16)->nullable();
             $table->string('admission_letter', 64)->nullable();
             $table->timestamps();
             $table->softDeletes();

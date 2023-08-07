@@ -22,20 +22,6 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
-       $seasons = [
-           ['season_code' => 1, 'season' => 'Semester I',],
-           ['season_code' => 2, 'season' => 'Semester II',],
-           ['season_code' => 3, 'season' => 'Long Holiday',],
-           ['season_code' => 3, 'season' => 'Internal Attachment',],
-           ['season_code' => 3, 'season' => 'Industrial Attachment' ],
-       ];
-
-        foreach ($seasons as $season){
-
-            DB::table('patterns')->insert($season);
-
-        }
     }
 
 

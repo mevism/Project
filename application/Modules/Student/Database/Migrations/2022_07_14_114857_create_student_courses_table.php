@@ -21,7 +21,6 @@ return new class extends Migration
             $table->foreign('course_id')->references('course_id')->on('courses')->onDelete('cascade')->onUpdate('cascade');
             $table->string('student_id', 12);
             $table->foreign('student_id')->references('student_id')->on('student_logins')->onDelete('cascade')->onUpdate('cascade');      
-            $table->string('student_number', 16)->unique();;
             $table->string('student_type', 2);
             $table->string('current_class', 20);
             $table->string('entry_class', 20);

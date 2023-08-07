@@ -152,6 +152,20 @@ class UserSeeder extends Seeder
          DB::table('staff_infos')->insert([
            ['user_id' => '368HZXbso22' , 'staff_number' => '122S00007', 'title' => 'Miss', 'first_name' => 'Mevis', 'middle_name' => 'Malesi', 'last_name' => 'Otaro', 'phone_number' => '0742382201', 'office_email' => 'mevismales@gmail.com', 'personal_email'=>'mevismales@gmail.com', 'gender' => 'F']
          ]);
+
+        $seasons = [
+            ['season_code' => 1, 'season' => 'Semester I',],
+            ['season_code' => 2, 'season' => 'Semester II',],
+            ['season_code' => 3, 'season' => 'Long Holiday',],
+            ['season_code' => 3, 'season' => 'Internal Attachment',],
+            ['season_code' => 3, 'season' => 'Industrial Attachment' ],
+        ];
+ 
+         foreach ($seasons as $season){
+ 
+             DB::table('patterns')->insert($season);
+ 
+         }
       
     }
 
