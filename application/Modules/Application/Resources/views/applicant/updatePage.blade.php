@@ -1,19 +1,31 @@
 @extends('application::layouts.backend')
+<style>
+    .form-floating .form-control {
+        height: 2.95rem !important;
+        padding: 0.75rem 0.75rem 0 0.75rem !important;
+        font-size: 0.875rem !important;
+    }
+
+    .form-floating label {
+        font-size: 0.875rem !important;
+    }
+
+</style>
 @section('content')
     <div class="bg-body-light">
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
                         Update your personal details
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-1 mt-sm-0 ms-sm-1" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
-                        <li class="breadcrumb-item">
+                        <li class="breadcrumb-item text-uppercase">
                             <a class="link-fx" href="javascript:void(0)">Profile</a>
                         </li>
-                        <li class="breadcrumb-item" aria-current="page">
+                        <li class="breadcrumb-item text-uppercase" aria-current="page">
                             Update profile
                         </li>
                     </ol>
@@ -108,43 +120,53 @@
                                                         <div class="space-x-2">
                                                             <div class="form-check form-check-inline">
                                                                 <input class="form-check-input" type="radio" name="gender" value="M" @if(old('gender') == 'Male') checked @endif @if($user->infoApplicant != null) {{ ($user->infoApplicant->gender == 'M') ? "checked" : "" }} @endif required>
-                                                                <label class="form-check-label">Male</label>
+                                                                <label class="form-check-label">MALE</label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
                                                                 <input class="form-check-input" type="radio" name="gender" value="F" @if(old('gender') == 'Female') checked @endif @if($user->infoApplicant != null) {{ ($user->infoApplicant->gender == 'F') ? "checked" : "" }} @endif required>
-                                                                <label class="form-check-label">Female</label>
+                                                                <label class="form-check-label">FEMALE</label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
                                                                 <input class="form-check-input" type="radio" name="gender" value="O" @if(old('gender') == 'Other') checked @endif required>
-                                                                <label class="form-check-label">Other</label>
+                                                                <label class="form-check-label">OTHER</label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 <div class="form-floating col-12">
-                                                    <input type="text" class="form-control text-uppercase" name="id_number" value="@if($user->infoApplicant != null){{ $user->infoApplicant->id_number }}@else{{ old('id_number') }}@endif" required placeholder="ID/PASSPORT/BIRTH CERT">
-                                                    <label class="form-label"><span class="text-danger">*</span> ID/ BIRTH/ PASSPORT NUMBER </label>
+                                                    <input type="text" class="form-control text-uppercase" name="index_number" value="@if($user->infoApplicant != null){{ $user->infoApplicant->index_number }}@else{{ old('index_number') }}@endif" required placeholder="INDEX">
+                                                    <label class="form-label" for="index_number"><span class="text-danger">*</span> INDEX/REGISTRATION NUMBER </label>
                                                 </div>
                                                 <div class="form-floating col-12">
-                                                        <input type="text" class="form-control text-uppercase" name="index_number" value="@if($user->infoApplicant != null){{ $user->infoApplicant->index_number }}@else{{ old('index_number') }}@endif" required placeholder="INDEX">
-                                                        <label class="form-label" for="index_number"><span class="text-danger">*</span> INDEX/REGISTRATION NUMBER </label>
+                                                    <select class="form-control" name="idType">
+                                                        <option selected disabled> -- select identification type -- </option>
+                                                        <option value="1">NATIONAL ID NUMBER</option>
+                                                        <option value="2">BIRTH CERTIFICATE</option>
+                                                        <option value="3">PASSPORT NUMBER</option>
+                                                        <option value="4">ALIEN ID NUMBER</option>
+                                                    </select>
+                                                    <label><span class="text-danger">*</span>IDENTIFICATION TYPE</label>
+                                                </div>
+                                                <div class="form-floating col-12">
+                                                    <input type="text" class="form-control text-uppercase" name="identification" value="@if($user->infoApplicant != null){{ $user->infoApplicant->identification }}@else{{ old('identification') }}@endif" required placeholder="ID/PASSPORT/BIRTH CERT">
+                                                    <label class="form-label"><span class="text-danger">*</span> IDENTIFICATION NUMBER </label>
                                                 </div>
                                                 <div class="col-12">
                                                     <label class="form-label"><span class="text-danger">*</span> ARE YOU DISABLED </label>
                                                     <div class="space-x-2">
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="disabled" value="No" @if($user->infoApplicant != null) {{ ($user->infoApplicant->disabled == 'NO') ? "checked" : "" }} @endif required>
-                                                            <label class="form-check-label">No</label>
+                                                            <input class="form-check-input" type="radio" name="disabled" value="NO" @if($user->infoApplicant != null) {{ ($user->infoApplicant->disabled == 'NO') ? "checked" : "" }} @endif required>
+                                                            <label class="form-check-label">NO</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="disabled" value="Yes" @if($user->infoApplicant != null) {{ ($user->infoApplicant->disabled == 'YES') ? "checked" : "" }} @endif required>
-                                                            <label class="form-check-label">Yes</label>
+                                                            <input class="form-check-input" type="radio" name="disabled" value="YES" @if($user->infoApplicant != null) {{ ($user->infoApplicant->disabled == 'YES') ? "checked" : "" }} @endif required>
+                                                            <label class="form-check-label">YES</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="desc form-floating col-12 mt-4">
                                                 <textarea class="form-control" name="disability" rows="4" placeholder="Describe here kind of disability" value="{{ old('disability') }}">@if($user->infoApplicant != null){{ $user->infoApplicant->disability }}@else{{ old('disability') }}@endif</textarea>
-                                                <label class="form-label" for="disability">Nature of disability</label>
+                                                <label class="form-label" for="disability">NATURE OF DISABILITY</label>
                                             </div>
                                             <div class="d-flex justify-content-center text-center mt-4">
                                                 <button class="col-md-3 btn btn-alt-success" data-toggle="ripple" type="submit"> Submit & Continue </button>
@@ -241,9 +263,9 @@
             $('input[name=disabled]').on('click', function () {
                 var selectedValue = $('input[name=disabled]:checked').val();
 
-                if(selectedValue == 'Yes') {
+                if(selectedValue == 'YES') {
                     $('div.desc').show();
-                }else if(selectedValue == 'No'){
+                }else if(selectedValue == 'NO'){
                     $('div.desc').hide();
                 }
             });

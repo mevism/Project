@@ -15,13 +15,12 @@ use App\Http\Middleware\COD\COD;
 use Modules\COD\Http\Controllers\CODController;
 
 Route::prefix('department')->middleware(['web', 'auth:user', 'is_cod'])->group( function() {
-
         Route::get('/cod', [CODController::class, 'index'])->name('cod.dashboard');
         Route::get('/applications', [CODController::class, 'applications'])->name('cod.applications');
         Route::get('/view-application/{id}', [CODController::class, 'viewApplication'])->name('cod.viewApplication');
         Route::get('/preview-application/{id}', [CODController::class, 'previewApplication'])->name('cod.previewApplication');
         Route::get('/batch', [CODController::class, 'batch'])->name('cod.batch');
-        Route::post('/batch-bubmit', [CODController::class, 'batchSubmit'])->name('cod.batchSubmit');
+        Route::post('/batch-submit', [CODController::class, 'batchSubmit'])->name('cod.batchSubmit');
         Route::get('/accept-application/{id}', [CODController::class, 'acceptApplication'])->name('cod.acceptApplication');
         Route::post('/reject-application/{id}', [CODController::class, 'rejectApplication'])->name('cod.rejectApplication');
         Route::post('/reverse-application/{id}', [CODController::class, 'reverseApplication'])->name('cod.reverseApplication');

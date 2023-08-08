@@ -29,16 +29,16 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <div class="flex-grow-1">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0">
                         INTAKES
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
-                        <li class="breadcrumb-item">
+                        <li class="breadcrumb-item text-uppercase">
                             <a class="link-fx" href="javascript:void(0)">Intakes</a>
                         </li>
-                        <li class="breadcrumb-item" aria-current="page">
+                        <li class="breadcrumb-item text-uppercase" aria-current="page">
                             View intakes
                         </li>
                     </ol>

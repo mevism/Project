@@ -1,5 +1,5 @@
 @extends('registrar::layouts.backend')
-
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 @section('content')
 <div class="bg-body-light">
         <div class="content content-full">
@@ -30,12 +30,12 @@
                     <div class="row d-flex justify-content-center">
                       <input type="hidden" name="year" value="{{ $years->year_id }}">
                       <div class="form-floating col-12 col-xl-12 mb-2" >
-                          <input type="date" class="form-control" id="intake_name_from" name="intake_name_from" placeholder="Intake From">
+                          <input type="date" class="form-control" name="intake_name_from" placeholder="Intake From">
                           <label class="form-label">SEMESTER START</label>
                         </div>
 
                         <div class="form-floating col-10 col-xl-12 mb-2">
-                          <input type="date" class="form-control" id="intake_name_to" name="intake_name_to" placeholder="Intake To">
+                          <input type="date" class="form-control" name="intake_name_to" placeholder="Intake To">
                           <label class="form-label">SEMESTER END</label>
                         </div>
                     </div>

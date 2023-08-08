@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('course_name', 80);
             $table->unsignedBigInteger('level_id');
             $table->foreign('level_id')->references('id')->on('levels')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('cluster_group', 8);
             $table->timestamps();
             $table->softDeletes();
         });

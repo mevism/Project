@@ -1067,20 +1067,15 @@ class CoursesController extends Controller
         return redirect()->route('courses.showEvent')->with('success', 'Event created successfuly.');
     }
 
-    public function editEvent($id)
-    {
-
-        $hashedId = Crypt::decrypt($id);
-        $data = Event::find($hashedId);
+    public function editEvent($id){
+        $data = Event::find($id);
         return view('registrar::events.editEvent')->with(['data' => $data]);
     }
 
-    public function updateEvent(Request $request, $id)
-    {
-        $data              =      Event::find($id);
-        $data->name        =      $request->input('name');
+    public function updateEvent(Request $request, $id){
+        $data = Event::find($id);
+        $data->name = $request->input('name');
         $data->update();
-
         return redirect()->route('courses.showEvent')->with('success', 'Event updated successfully.');
     }
 
@@ -1118,14 +1113,15 @@ class CoursesController extends Controller
        $votes = json_decode($request->voteheads);
 
         foreach ($votes as $vote){
+//            return $vote->votehead;
             $voteID = new CustomIds();
-            $voteheads  = new VoteHead;
-            $voteheads->votehead_id = $voteID->generateId();
-            $voteheads->vote_id = $vote->votehead;
-            $voteheads->vote_name = $vote->voteheadName;
-            $voteheads->vote_category = $vote->voteheadCategory;
-            $voteheads->vote_type = $vote->voteheadType;
-            $voteheads->save();
+            VoteHead::create([
+                'votehead_id' => $voteID->generateId(),
+                'vote_id' => $vote->votehead,
+                'vote_name' => $vote->voteheadName,
+                'vote_category' => $vote->voteheadCategory,
+                'vote_type' => $vote->voteheadType
+            ]);
         }
         return redirect()->route('courses.showVoteheads')->with('success', 'votehead added successfully.');
     }
@@ -1152,6 +1148,8 @@ class CoursesController extends Controller
         $course = Courses::where('course_id', $id)->first();
         $modes    =  Attendance::all();
         $syllabus = CourseSyllabus::where('course_code', $course->course_code)
+            ->orderBy('stage', 'asc')
+            ->orderBy('semester', 'asc')
             ->get()
             ->groupBy('stage')
             ->map(function ($group, $stage) {
@@ -1220,10 +1218,7 @@ class CoursesController extends Controller
             ->where('version', $version)
             ->orderBy('semester', 'asc')
             ->get()
-            ->groupBy('semester')
-            ->map(function ($group) {
-                return $group->groupBy('vote_id');
-            });
+            ->groupBy('semester');
 
         return view('registrar::fee.viewSemFee')->with(['semesters' => $semesters, 'semesterFees' => $semesterFees, 'course' => $course, 'id' => $id]);
     }
@@ -1275,7 +1270,7 @@ class CoursesController extends Controller
         $table->addRow();
         $table->addCell(7000, ['borderSize' => 2])->addText('DESCRIPTION', ['bold' => true, 'size' => 11, 'name' => 'Book Antiqua']);
         foreach ($semesters as $semester => $fees) {
-            $table->addCell(800, ['borderSize' => 2])->addText("YR. " . explode('.', $semester)[0] . "<w:br/>" . "SEM. " . explode('.', $semester)[1], $center, ['name' => 'Book Antiqua', 'bold' => true, 'size' => 11, 'alignment' => 'center']);
+            $table->addCell(800, ['borderSize' => 2])->addText("YR. " . explode('.', $semester)[0] . "<w:br/>" . "SEM. " . explode('.', round($semester, 1))[1], $center, ['name' => 'Book Antiqua', 'bold' => true, 'size' => 11, 'alignment' => 'center']);
         }
 
         $i = 1;
@@ -1598,20 +1593,17 @@ class CoursesController extends Controller
         return view('registrar::offer.unitprog')->with('up', $up);
     }
 
-    public function importUnit()
-    {
-        $units        =          Unit::all();
+    public function importUnit(){
+        $units = Unit::all();
         return view('registrar::offer.unit')->with('units', $units);
     }
 
-    public function importExportCourses()
-    {
-        $courses        =        Courses::all();
+    public function importExportCourses(){
+        $courses = Courses::all();
         return view('registrar::course.importExportCourses')->with('courses', $courses);
     }
 
-    public function importCourses(Request $request)
-    {
+    public function importCourses(Request $request){
         $request->validate([
             'excel_file' => 'required|mimes:xlsx'
         ]);
@@ -1620,15 +1612,13 @@ class CoursesController extends Controller
         return back()->with('success', 'Data Imported Successfully');
     }
 
-    public function importExportViewkuccps()
-    {
+    public function importExportViewkuccps(){
         $intakes        =        Intake::where('status', 1)->get();
         $newstudents    =         KuccpsApplicant::where('status', 0)->get();
         return view('registrar::offer.kuccps')->with(['intakes' => $intakes, 'new' => $newstudents]);
     }
 
-    public function importUnitProg(Request $request)
-    {
+    public function importUnitProg(Request $request){
         $request->validate([
             'excel_file' => 'required|mimes:xlsx'
         ]);
@@ -1638,8 +1628,7 @@ class CoursesController extends Controller
         return back()->with('success', 'Data Imported Successfully');
     }
 
-    public function importUnits(Request $request)
-    {
+    public function importUnits(Request $request){
         $request->validate([
             'excel_file' => 'required|mimes:xlsx'
         ]);
@@ -1649,8 +1638,7 @@ class CoursesController extends Controller
         return back()->with('success', 'Data Imported Successfully');
     }
 
-    public function importkuccps(Request $request)
-    {
+    public function importkuccps(Request $request){
         $request->validate([
             'excel_file'   =>    'required|mimes:xlsx'
         ]);
@@ -1661,8 +1649,7 @@ class CoursesController extends Controller
         return back()->with('success', 'Data Imported Successfully');
     }
 
-    public function applications()
-    {
+    public function applications(){
         $accepted = ApplicationsView::where('registrar_status', '>=', 0)
             ->where('registrar_status', '!=', 3)
             ->where('registrar_status', '!=', 4)
@@ -1671,14 +1658,12 @@ class CoursesController extends Controller
         return view('registrar::offer.applications')->with('accepted', $accepted);
     }
 
-    public function showKuccps()
-    {
+    public function showKuccps(){
         $kuccps = KuccpsApplicant::latest()->get();
         return view('registrar::offer.showKuccps')->with(['kuccps' => $kuccps]);
     }
 
-    public function offer()
-    {
+    public function offer(){
         $intake = Intake::where('status', 1)->first();
         $courses = DB::table('COURESONOFFERVIEW')->where('intake_id', $intake->intake_id)
             ->latest()->get();
@@ -1686,13 +1671,11 @@ class CoursesController extends Controller
         return view('registrar::offer.coursesOffer')->with(['courses' => $courses]);
     }
 
-    public function profile()
-    {
+    public function profile(){
         return view('registrar::profilepage');
     }
 
-    public function acceptedMail(Request $request)
-    {
+    public function acceptedMail(Request $request){
         $request->validate([
             'submit' => 'required'
         ]);
@@ -1894,9 +1877,9 @@ class CoursesController extends Controller
 
     public function storeIntake(Request $request, $id){
         $request->validate([
-            'year'                  =>       'required',
-            'intake_name_from'      =>       'required|before:intake_name_to',
-            'intake_name_to'        =>       'required|after:intake_name_from'
+            'year' =>  'required',
+            'intake_name_from' => 'required|before:intake_name_to',
+            'intake_name_to' => 'required|after:intake_name_from'
         ]);
 
         $academicYear = AcademicYear::where('year_id', $request->year)->first();
@@ -2085,6 +2068,7 @@ class CoursesController extends Controller
 
     public function storeDepartment(Request $request){
         $request->validate([
+            'school' => 'required',
             'dept_code' => 'required|unique:departments',
             'name' => 'required|unique:departments'
         ]);
@@ -2095,8 +2079,8 @@ class CoursesController extends Controller
         $departments = new Department;
         $departments->department_id = $id->generateId();
         $departments->division_id = $division->division_id;
-        $departments->dept_code = $request->input('dept_code');
-        $departments->name = $request->input('name');
+        $departments->dept_code = strtoupper($request->dept_code);
+        $departments->name = strtoupper($request->name);
         $departments->save();
 
         $school = new SchoolDepartment;
@@ -2119,15 +2103,15 @@ class CoursesController extends Controller
         $oldDepartment  =  new DepartmentHistory;
         $oldDepartment->department_id = $data->department_id;
         $oldDepartment->school_id  = $data->school_id;
-        $oldDepartment->name  = $data->name;
-        $oldDepartment->dept_code  =  $data->dept_code;
+        $oldDepartment->name  = strtoupper($data->name);
+        $oldDepartment->dept_code  =  strtoupper($data->dept_code);
         $oldDepartment->created_at = $data->created_at;
         $oldDepartment->updated_at = $data->updated_at;
         $oldDepartment->save();
 
         $newDepartment = Department::where('department_id', $data->department_id)->first();
-        $newDepartment->dept_code = $request->dept_code;
-        $newDepartment->name = $request->name;
+        $newDepartment->dept_code = strtoupper($request->dept_code);
+        $newDepartment->name = strtoupper($request->name);
         $newDepartment->save();
 
         SchoolDepartment::where('department_id', $data->department_id)->update(['school_id' => $request->school]);
@@ -2154,16 +2138,16 @@ class CoursesController extends Controller
 
     public function storeCourse(Request $request){
         $request->validate([
-            'department'                =>       'required',
-            'course_name'               =>       'required',
-            'course_code'               =>       'required',
-            'level'                     =>       'required',
-            'course_duration'           =>       'required',
-            'course_requirements'       =>       'required',
-            'subject1'                  =>       'required',
-            'subject2'                  =>       'required',
-            'subject3'                  =>       'required',
-            'subject'                   =>       'required'
+            'department' => 'required',
+            'course_name' => 'required',
+            'course_code' => 'required',
+            'level' => 'required',
+            'course_duration' => 'required',
+            'course_requirements' => 'required',
+            'subject1' => 'required',
+            'subject2' => 'required',
+            'subject3' => 'required',
+            'subject' => 'required'
         ]);
 
         if ($request->level == 3) {
@@ -2172,27 +2156,28 @@ class CoursesController extends Controller
             ]);
         }
 
-        $subject          =          $request->subject;
-        $subject1         =          $request->subject1;
-        $subject2         =          $request->subject2;
-        $subject3         =          $request->subject3;
-        $data             =          implode(",", $subject);
-        $data1            =          implode(",", $subject1);
-        $data2            =          implode(",", $subject2);
-        $data3            =          implode(",", $subject3);
+//        return $request->all();
+        $subject =  $request->subject;
+        $subject1 = $request->subject1;
+        $subject2 = $request->subject2;
+        $subject3 = $request->subject3;
+        $data =  implode(",", $subject);
+        $data1 = implode(",", $subject1);
+        $data2 = implode(",", $subject2);
+        $data3 = implode(",", $subject3);
 
         $courseId = new CustomIds();
         $courses = new Courses();
         $courses->course_id = $courseId->generateId();
         $courses->department_id = $request->department;
-        $courses->course_name = $request->course_name;
-        $courses->course_code = $request->course_code;
+        $courses->course_name = strtoupper($request->course_name);
+        $courses->course_code = strtoupper($request->course_code);
         $courses->level_id = $request->level;
         $courses->save();
 
         $requirement  =  new CourseRequirement;
         $requirement->course_id  = $courses->course_id;
-        $requirement->course_duration = $request->course_duration;
+        $requirement->course_duration = strtoupper($request->course_duration);
         if ($request->level  == 1) {
             $requirement->application_fee  = '500';
         } elseif ($request->level  == 2) {

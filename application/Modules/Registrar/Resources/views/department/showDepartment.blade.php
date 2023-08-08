@@ -26,15 +26,15 @@
 <div class="bg-body-light">
     <div class="content content-full">
         <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-            <div class="h5 fw-bold mb-0">
-                <h5>DEPARTMENTS</h5>
-            </div>
+            <h6 class="h6 fw-bold mb-0">
+                DEPARTMENTS
+            </h6>
             <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-alt">
-                    <li class="breadcrumb-item">
+                    <li class="breadcrumb-item text-uppercase">
                         <a class="link-fx" href="javascript:void(0)">Departments</a>
                     </li>
-                    <li class="breadcrumb-item" aria-current="page">
+                    <li class="breadcrumb-item text-uppercase" aria-current="page">
                         View departments
                     </li>
                 </ol>

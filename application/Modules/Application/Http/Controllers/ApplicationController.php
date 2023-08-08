@@ -23,6 +23,7 @@ use Modules\Application\Entities\Applicant;
 use Illuminate\Support\Facades\Hash;
 use Modules\Application\Entities\ApplicantAddress;
 use Modules\Application\Entities\ApplicantContact;
+use Modules\Application\Entities\ApplicantDisability;
 use Modules\Application\Entities\ApplicantInfo;
 use Modules\Application\Entities\ApplicantLogin;
 use Modules\Application\Entities\Application;
@@ -74,8 +75,7 @@ class ApplicationController extends Controller
         return response()->json(['captcha' => captcha_img()]);
     }
 
-    public function signup(Request $request)
-    {
+    public function signup(Request $request){
 
         $request->validate([
             'email' => 'required|email|unique:applicant_contacts',
@@ -110,13 +110,11 @@ class ApplicationController extends Controller
         return redirect(route('root'))->with(['info' => 'Account verification email was sent to verify your account']);
     }
 
-    public function phoneverify()
-    {
+    public function phoneverify(){
         return view('application::auth.phoneverification');
     }
 
-    public function phonereverification(Request $request)
-    {
+    public function phonereverification(Request $request){
         $request->validate([
             'verification_code' => 'required',
             'phone_number' => 'required'
@@ -125,7 +123,6 @@ class ApplicationController extends Controller
         $unverified = VerifyUser::where('verification_code', $request->verification_code)->first();
 
         if (!$unverified) {
-
             return redirect()->back()->with('error', 'Wrong code! Please request for a new code');
         }
 
@@ -161,11 +158,8 @@ class ApplicationController extends Controller
         return redirect()->back()->with(['info' => 'Enter the code send to your phone', 'code' => $verification_code]);
     }
 
-    public function emailVerification($verification_code)
-    {
-
+    public function emailVerification($verification_code){
         $unverified = VerifyEmail::where('verification_code', $verification_code)->first();
-
         if (isset($unverified)) {
 
             $applicant = $unverified->emailVerify;
@@ -186,17 +180,14 @@ class ApplicationController extends Controller
         }
     }
 
-    public function checkverification()
-    {
-
+    public function checkverification(){
         return view('application::auth.landing');
     }
 
-    public function dashboard()
-    {
+    public function dashboard(){
 
         $courses = [];
-        $intake = Intake::where('status', 1)->first();
+       return $intake = Intake::where('status', 1)->first();
 
         if ($intake != null) {
             $courses = CourseOnOfferView::where('intake_id', $intake->intake_id)
@@ -233,21 +224,15 @@ class ApplicationController extends Controller
     }
 
 
-    public function reverify()
-    {
+    public function reverify(){
         return view('application::auth.reverifyphone');
     }
 
-    public function openDetails()
-    {
-
-
+    public function openDetails(){
         return view('application::applicant.updatePage')->with('info', 'Update your profile to continue');
     }
 
-    public function updatePersonalInfo(Request $request)
-    {
-
+    public function updatePersonalInfo(Request $request){
         if (ApplicantInfo::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->exists()) {
             $request->validate([
                 'sname' => 'required|alpha',
@@ -255,10 +240,11 @@ class ApplicationController extends Controller
                 'mname' => 'string|nullable',
                 'dob' => 'required:date_format:Y-M-D|before:2006-05-16',
                 'disabled' => 'required',
+                'idType' => 'required',
                 'disability' => 'string|nullable',
                 'title' => 'required|string',
                 'status' => 'required|string',
-                'id_number' => 'required|alpha_num|min:7',
+                'identification' => 'required|alpha_num|min:7',
                 'index_number' => 'required|string',
                 'gender' => 'required|string',
             ]);
@@ -270,53 +256,65 @@ class ApplicationController extends Controller
                 'mname' => 'string|nullable',
                 'dob' => 'required:date_format:Y-M-D',
                 'disabled' => 'required',
+                'idType' => 'required',
                 'disability' => 'string|nullable',
                 'title' => 'required|string',
                 'status' => 'required|string',
-                'id_number' => 'required|alpha_num|min:7|unique:applicant_infos',
+                'identification' => 'required|alpha_num|min:7|unique:applicant_infos',
                 'index_number' => 'required|string',
                 'gender' => 'required|string',
             ]);
         }
 
-
         if (ApplicantInfo::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->exists()) {
             $user = ApplicantInfo::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->first();
-            $user->sname = trim(strtoupper($request->sname));
-            $user->fname = trim(strtoupper($request->fname));
-            $user->mname = trim(strtoupper($request->mname));
+            $user->sur_name = trim(strtoupper($request->sname));
+            $user->first_name = trim(strtoupper($request->fname));
+            $user->middle_name = trim(strtoupper($request->mname));
             $user->gender = trim(strtoupper($request->gender));
             $user->index_number = trim($request->index_number);
-            $user->id_number = trim($request->id_number);
-            $user->dob = trim($request->dob);
+            $user->identification = trim($request->identification);
+            $user->type = trim($request->idType);
+            $user->date_of_birth = trim($request->dob);
             $user->disabled = trim(strtoupper($request->disabled));
-            $user->disability = trim(strtoupper($request->disability));
             $user->title = trim(strtoupper($request->title));
             $user->marital_status = trim(strtoupper($request->status));
             $user->save();
-        } else {
 
+            if ($request->disabled == 'YES'){
+                $userDis = new ApplicantDisability;
+                $userDis->applicant_id = \auth()->guard('web')->user()->applicant_id;
+                $userDis->disability =  trim(strtoupper($request->disability));
+                $userDis->save();
+            }
+        } else {
             $applicant = new ApplicantInfo;
             $applicant->applicant_id = \auth()->guard('web')->user()->applicant_id;
-            $applicant->sname = trim(strtoupper($request->sname));
-            $applicant->fname = trim(strtoupper($request->fname));
-            $applicant->mname = trim(strtoupper($request->mname));
+            $applicant->sur_name = trim(strtoupper($request->sname));
+            $applicant->first_name = trim(strtoupper($request->fname));
+            $applicant->middle_name = trim(strtoupper($request->mname));
             $applicant->gender = trim(strtoupper($request->gender));
             $applicant->index_number = trim($request->index_number);
-            $applicant->id_number = trim($request->id_number);
-            $applicant->dob = trim($request->dob);
+            $applicant->identification = trim($request->identification);
+            $applicant->type = trim($request->idType);
+            $applicant->date_of_birth = trim($request->dob);
             $applicant->disabled = trim(strtoupper($request->disabled));
-            $applicant->disability = trim(strtoupper($request->disability));
             $applicant->title = trim(strtoupper($request->title));
             $applicant->marital_status = trim(strtoupper($request->status));
             $applicant->save();
+
+            if ($request->disabled == 'YES'){
+                $userDis = new ApplicantDisability;
+                $userDis->applicant_id = \auth()->guard('web')->user()->applicant_id;
+                $userDis->disability =  trim(strtoupper($request->disability));
+                $userDis->save();
+            }
         }
 
         return redirect()->back()->with('success', 'Personal information updated successfully');
     }
 
-    public function updateContactInfo(Request $request)
-    {
+    public function updateContactInfo(Request $request){
         $request->validate([
             'email' => 'required',
             'mobile' => 'required|min:10|max:13|',
@@ -334,8 +332,7 @@ class ApplicationController extends Controller
         return redirect()->back()->with('success', 'Contact information updated successfully');
     }
 
-    public function updateAddressInfo(Request $request)
-    {
+    public function updateAddressInfo(Request $request) {
 
         $request->validate([
             'address' => 'required|numeric',
@@ -372,16 +369,13 @@ class ApplicationController extends Controller
         return redirect()->back()->with('success', 'Home address information updated successfully');
     }
 
-    public function logout()
-    {
+    public function logout(){
         Session::flush();
         Auth::guard('web')->logout();
-
         return redirect(route('root'))->with('info', 'You have logged out');
     }
 
-    public function details()
-    {
+    public function details(){
 
         $userId = \auth()->guard('web')->user()->applicant_id;
         $userinfo = ApplicantInfo::where('applicant_id', $userId)->first();
@@ -455,18 +449,16 @@ class ApplicationController extends Controller
         }
     }
 
-    public function myCourses()
-    {
+    public function myCourses(){
         $mycourses = Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)
             ->latest()
             ->get();
         return view('application::applicant.mycourses')->with('courses', $mycourses);
     }
 
-    public function allCourses()
-    {
+    public function allCourses(){
         $courses = [];
-        $intake = Intake::where('status', 1)->first();
+       return $intake = Intake::where('status', 1)->first();
         if ($intake != null) {
             $courses = DB::table('coursesonofferview')->where('intake_id', $intake->intake_id)
                 ->latest()->get();

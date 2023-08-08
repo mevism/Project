@@ -10,13 +10,13 @@ class VoteHead extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = ['votehead_id', 'vote_id', 'vote_category', 'vote_type', 'vote_name'];
 
     public function feeVotehead(){
 
         return $this->hasMany(SemesterFee::class, 'id');
     }
-    
+
     protected static function newFactory()
     {
         return \Modules\Registrar\Database\factories\VoteHeadFactory::new();

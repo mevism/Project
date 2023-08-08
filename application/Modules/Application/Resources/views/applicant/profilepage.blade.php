@@ -6,7 +6,7 @@
                 <div class="my-3">
                     <img class="img-avatar img-avatar-thumb" src="{{ asset('/media/avatars/avatar14.jpg') }}" alt="">
                 </div>
-                <h1 class="h2 text-white mb-0">{{ auth()->guard('web')->user()->infoApplicant->sname }}, {{ auth()->guard('web')->user()->infoApplicant->mname }} {{ auth()->guard('web')->user()->infoApplicant->fname }}</h1>
+                <h1 class="h2 text-white mb-0">{{ auth()->guard('web')->user()->infoApplicant->sur_name }}, {{ auth()->guard('web')->user()->infoApplicant->middle_name }} {{ auth()->guard('web')->user()->infoApplicant->first_name }}</h1>
                 <span class="text-white-75"> Applicant </span>
             </div>
         </div>
@@ -34,9 +34,9 @@
                             <div class="block-content">
                                 <p class="fw-bold mb-2 text-uppercase text-center">
                                     {{ auth()->guard('web')->user()->infoApplicant->title }}
-                                    {{ auth()->guard('web')->user()->infoApplicant->sname }}
-                                    {{ auth()->guard('web')->user()->infoApplicant->mname }}
-                                    {{ auth()->guard('web')->user()->infoApplicant->fname }}
+                                    {{ auth()->guard('web')->user()->infoApplicant->sur_name }}
+                                    {{ auth()->guard('web')->user()->infoApplicant->middle_name }}
+                                    {{ auth()->guard('web')->user()->infoApplicant->first_name }}
                                 </p>
                                 <div class="row">
                                     <div class="col-4 fw-semibold">Gender </div>

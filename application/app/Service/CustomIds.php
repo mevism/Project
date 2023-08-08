@@ -4,8 +4,7 @@ namespace App\Service;
 
 class CustomIds
 {
-    public function generateId($numerical = false)
-    {
+    public function generateId($numerical = false){
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';

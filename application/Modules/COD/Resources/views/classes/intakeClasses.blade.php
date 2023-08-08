@@ -59,6 +59,7 @@
                         <th>Course Code</th>
                         <th>Study Mode</th>
                         <th>Class Syllabus</th>
+                        <th>FEES VERSION</th>
                         <th>Class Pattern</th>
                         <th>Action</th>
                         </thead>
@@ -70,6 +71,7 @@
                                   <td> {{ $class->course_name }} </td>
                                   <td> {{ $class->attendance_id }} </td>
                                   <td> {{ $class->syllabus_name }} </td>
+                                  <td> {{ $class->fee_version }} </td>
                                     <td>
                                         <a class="link-info" href="{{ route('cod.classPattern', $class->class_id) }}">
                                             Create/view pattern </a>

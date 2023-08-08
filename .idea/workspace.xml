@@ -16,17 +16,29 @@
       <change afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/fee/courseFeeStuctures.blade.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/Modules/Student/Database/Migrations/2022_07_14_114857_create_student_courses_table.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/cache/data/e1/2e/e12ec6855e79dfca60eb8235e8f03c3784b4091a" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/sessions/DSNeujOIJ6M4wXsnykh1bPpsbHOdVxdahbxPLXSD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-H7juRyZ1xyUEDPKSG57IYFvydXkRoLi2.tmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/cache/laravel-excel/laravel-excel-M7BKg134Z7eRzkLflJRqAZO4WgghFNkY.tmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/0650c6d3ce1a1f024d4f68e6ab2273a4ad436417.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/0e02c065991d92db647ecf2742fbb3c4b4106384.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/12591c0edc1067060b202e52ce10ae2b42336892.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/1d6891493c95687ce237976b1669aca95705a810.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/290b32bd4a0930c97f6756a504351ee5ea4e227a.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/2cdf119037c5ffb873dd1717fe55c41dd98972fa.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/3aa4c94eb36c6ed9d3a9e1f258ece724ca805831.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/3eee2c4ae6d133c273444dda6e14ae2a8001f39a.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/5022c5c6998b539413bc23b451566897a8f48084.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/5f9c8e734e8787856c81215df829b742114a1195.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/64492a0cf20a52b9d39e9378f28563083c4edccd.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/6f81b79797e36767b817ee3f3afa85407244b1c3.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/ac71ec500175a268b8899f5fafd2676a04ca30b7.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/8b16d5fad29b7dd847c7ea5444197f5c00c590af.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/8d8b15972f5cd916f39974f151f750b50f60f076.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/a98cecb0c2cb12faff78a32301adc27dc6f602dc.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/baf4bfc229c7e052d8956e60af4ca635439c102a.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/bd72faf81fc8e67091cd2708495af65cb8543124.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/c0797ef360198965e8a339722bf1163f79606012.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/c4fea2289f4c6969b9337d0ef864b45fb2f5c5c0.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/c86ab5ba561b7e3c26060e266b72cd62c8ffb65c.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/d1763015d94deb8000cfa6aefdb4439d72953f7a.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/cd46543664f19f427586fd32641ff17c188009ca.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/dae3df0c9bbbb8c37490f5c79b367bfc6ebefe72.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/e315e898cb03c3e4bb538cbea44fc84288f7da48.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/storage/framework/views/e3df0a6f5e8eb292dac1439c5c9b4160e93e97af.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/e5ef54c21f86eefad10e23f2a6196c2128864c17.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/storage/framework/views/e6a31f06e96a019a4899e4b3961c0a9f07fb5142.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/bin/patch-type-declarations" afterDir="false" />
@@ -2158,8 +2170,6 @@
       <change afterPath="$PROJECT_DIR$/application/vendor/symfony/var-dumper/Caster/DateCaster.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/symfony/var-dumper/Caster/DoctrineCaster.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/symfony/var-dumper/Caster/DsCaster.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/smis.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/smis.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -2449,7 +2459,7 @@
       <workItem from="1690538313256" duration="15248000" />
       <workItem from="1690711883447" duration="45365000" />
       <workItem from="1690885769121" duration="60863000" />
-      <workItem from="1691147525775" duration="25331000" />
+      <workItem from="1691147525775" duration="51617000" />
     </task>
     <servers />
   </component>

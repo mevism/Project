@@ -5,17 +5,15 @@
 <div class="bg-body-light">
   <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
-        <div class="flex-grow-1">
-            <h4 class="h3 fw-bold mb-2 block-title">
+            <h6 class="h6 fw-bold mb-0">
                 ADD COURSE
-              </h4>
-          </div>
+              </h6>
           <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
               <ol class="breadcrumb breadcrumb-alt">
-                  <li class="breadcrumb-item">
+                  <li class="breadcrumb-item text-uppercase">
                       <a class="link-fx" href="javascript:void(0)">Courses</a>
                   </li>
-                  <li class="breadcrumb-item" aria-current="page">
+                  <li class="breadcrumb-item text-uppercase" aria-current="page">
                     <a  href="showCourse">View Courses</a>
                   </li>
               </ol>

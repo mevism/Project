@@ -22,9 +22,7 @@ class Courses extends Model
 
 
     public function newCourses(){
-
         return $this->belongsToMany(Intake::class, 'available_courses', 'course_id', 'intake_id');
-
     }
 
 //    available courses vs courses
@@ -44,7 +42,6 @@ class Courses extends Model
     }
 
     public function courseRequirements(){
-
         return $this->hasOne(CourseRequirement::class, 'course_id', 'course_id');
     }
 

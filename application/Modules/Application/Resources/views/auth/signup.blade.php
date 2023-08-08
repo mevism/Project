@@ -70,13 +70,13 @@
                                         <form class="js-validation-signin" action="{{ route('application.signup') }}" method="POST">
                                             @csrf
                                             <div class="form-floating mb-4">
-                                                <input type="email" class="form-control form-control" value="{{ old('email') }}" name="email">
+                                                <input type="email" class="form-control form-control" value="{{ old('email') }}" name="email" placeholder="email">
                                                 <label class="form-label" for="email">Email Address</label>
                                             </div>
 
                                             <div class=" mb-4">
                                                 <label class="form-label" for="mobile">Mobile Number</label>
-                                                <input id="phone" type="tel" class="form-control col-md-12" value="{{ old('mobile') }}" name="mobile">
+                                                <input id="phone" type="tel" class="form-control col-md-12" value="{{ old('mobile') }}" name="mobile" placeholder="phone number">
 {{--                                                <span id="valid-msg" class="hide">✓ Valid</span>--}}
 {{--                                                <span id="error-msg" class="hide"></span>--}}
 
@@ -153,11 +153,11 @@
 
                                             </div>
                                             <div class="form-floating mb-4">
-                                                <input type="password" class="form-control form-control" id="password" name="password">
+                                                <input type="password" class="form-control form-control" id="password" name="password" placeholder="password">
                                                 <label class="form-label" for="password">Create Password</label>
                                             </div>
                                             <div class="form-floating mb-4">
-                                                <input type="password" class="form-control form-control" id="password_confirmation" name="password_confirmation">
+                                                <input type="password" class="form-control form-control" id="password_confirmation" name="password_confirmation" placeholder="confirmation">
                                                 <label class="form-label" for="username">Password Confirmation</label>
                                             </div>
                                             <div class="captcha mb-4">
