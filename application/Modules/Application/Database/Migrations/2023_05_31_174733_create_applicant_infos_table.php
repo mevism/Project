@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('title', 8)->nullable();
             $table->string('first_name', 16)->nullable();
             $table->string('middle_name', 16)->nullable();
-            $table->string('surname_name', 16)->nullable();
+            $table->string('surname', 16)->nullable();
             $table->string('gender', 8)->nullable();
             $table->string('marital_status', 16)->nullable();
             $table->date('date_of_birth', 16)->nullable();
