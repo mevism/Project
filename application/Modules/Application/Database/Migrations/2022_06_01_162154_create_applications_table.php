@@ -23,7 +23,6 @@ return new class extends Migration
             $table->foreign('intake_id')->references('intake_id')->on('intakes')->onUpdate('cascade')->onDelete('cascade');
             $table->string('course_id', 12); 
             $table->foreign('course_id')->references('course_id')->on('courses')->onUpdate('cascade')->onDelete('cascade');           
-            $table->string('ref_number', 16)->nullable();
             $table->string('student_type', 4);           
             $table->tinyInteger('declaration')->nullable();
             $table->tinyInteger('status')->nullable();

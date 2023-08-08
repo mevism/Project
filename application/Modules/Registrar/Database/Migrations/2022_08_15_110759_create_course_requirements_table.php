@@ -18,12 +18,12 @@ return new class extends Migration
             $table->string('course_id' , 12);
             $table->foreign('course_id')->references('course_id')->on('courses')->onUpdate('cascade')->onDelete('cascade');
             $table->string('application_fee', 8);
-            $table->string('subject1', 16);
-            $table->string('subject2', 16);
-            $table->string('subject3', 16);
-            $table->string('subject4', 16);
+            $table->string('subject1', 40);
+            $table->string('subject2', 40);
+            $table->string('subject3', 40);
+            $table->string('subject4', 40);
             $table->string('course_duration', 8);
-            $table->longText('course_requirements', 32);
+            $table->longText('course_requirements', 255);
             $table->timestamps();
             $table->softDeletes();
         });
