@@ -56,11 +56,11 @@
                                         <form class="js-validation-signin" action="{{ route('application.phonereverification') }}" method="POST">
                                             @csrf
                                             <div class="form-floating mb-4">
-                                                <input type="hidden" class="form-control form-control-alt" name="phone_number" value="{{ auth()->guard('web')->user()->applicantContact->mobile }}">
+                                                <input type="hidden" class="form-control form-control-alt" name="phone_number" value="{{ auth()->guard('web')->user()->applicantContact->mobile }}" >
                                             </div>
                                             <div class="form-floating mb-4">
-                                                <input type="text" class="form-control form-control-alt" name="verification_code">
-                                                <label class="form-label" for="username">Verification Code</label>
+                                                <input type="text" class="form-control form-control-alt" name="verification_code" placeholder="verification">
+                                                <label class="form-label" for="username">ENTER VERIFICATION CODE</label>
                                             </div>
                                             <div class="d-flex justify-content-center align-items-center mb-4">
                                                 <div>

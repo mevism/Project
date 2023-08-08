@@ -15,13 +15,7 @@ use Modules\COD\Entities\ApplicationsView;
 use Modules\Registrar\Entities\AvailableCourse;
 class UserController extends Controller
 {
-//    public function __construct(){
-//        \auth()->setDefaultDriver('web');
-//        $this->middleware(['auth'], ['only' => ['dashboard']]);
-//    }
-
     public function signOut(){
-
         Session::flush();
         $guards = array_keys(config('auth.guards'));
         foreach ($guards as $guard) {

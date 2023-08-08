@@ -1067,20 +1067,15 @@ class CoursesController extends Controller
         return redirect()->route('courses.showEvent')->with('success', 'Event created successfuly.');
     }
 
-    public function editEvent($id)
-    {
-
-        $hashedId = Crypt::decrypt($id);
-        $data = Event::find($hashedId);
+    public function editEvent($id){
+        $data = Event::find($id);
         return view('registrar::events.editEvent')->with(['data' => $data]);
     }
 
-    public function updateEvent(Request $request, $id)
-    {
-        $data              =      Event::find($id);
-        $data->name        =      $request->input('name');
+    public function updateEvent(Request $request, $id){
+        $data = Event::find($id);
+        $data->name = $request->input('name');
         $data->update();
-
         return redirect()->route('courses.showEvent')->with('success', 'Event updated successfully.');
     }
 

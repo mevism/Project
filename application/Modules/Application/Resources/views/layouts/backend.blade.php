@@ -181,13 +181,13 @@
           <ul class="nav-main">
             <li class="nav-main-item">
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('application.applicant') }}">
-                <i class="nav-main-link-icon si si-cursor"></i>
-                <span class="nav-main-link-name">Home </span>
+                <i class="nav-main-link-icon fa fa-house-user"></i>
+                <span class="nav-main-link-name">Applicant </span>
               </a>
             </li>
             <li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                <i class="nav-main-link-icon si si-bulb"></i>
+                <i class="nav-main-link-icon fa fa-list-numeric"></i>
                 <span class="nav-main-link-name">Applications</span>
               </a>
                 <ul class="nav-main-submenu">
@@ -208,7 +208,7 @@
 
               <li class="nav-main-item{{ request()->is('pages/*') ? ' open' : '' }}">
                   <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
-                      <i class="nav-main-link-icon si si-bulb"></i>
+                      <i class="nav-main-link-icon fa fa-list-dots"></i>
                       <span class="nav-main-link-name">Admission</span>
                   </a>
                   <ul class="nav-main-submenu">
@@ -221,7 +221,7 @@
               </li>
               <li class="nav-main-item">
                   <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('applicant.profile') }}">
-                      <i class="nav-main-link-icon si si-cursor"></i>
+                      <i class="nav-main-link-icon fa fa-user-cog"></i>
                       <span class="nav-main-link-name">My Profile </span>
                   </a>
               </li>
@@ -263,7 +263,7 @@
               <img class="rounded-circle" src="{{ asset('media/avatars/avatar14.jpg') }}" alt="Header Avatar" style="width: 21px;">
               <span class="d-none d-sm-inline-block ms-2">
                   @if(auth()->guard('web')->user()->infoApplicant != null)
-                  {{ auth()->guard('web')->user()->infoApplicant->title }} {{ auth()->guard('web')->user()->infoApplicant->sname }}
+                  {{ auth()->guard('web')->user()->infoApplicant->title }} {{ auth()->guard('web')->user()->infoApplicant->sur_name}}
                   @endif
               </span>
               <i class="fa fa-fw fa-angle-down d-none d-sm-inline-block ms-1 mt-1"></i>
@@ -273,7 +273,7 @@
                 <img class="img-avatar img-avatar48 img-avatar-thumb" src="{{ asset('media/avatars/avatar14.jpg') }}" alt="">
                 <p class="mt-2 mb-0 fw-medium">
                     @if(auth()->guard('web')->user()->infoApplicant != null)
-                    {{ auth()->guard('web')->user()->infoApplicant->fname }} {{ auth()->guard('web')->user()->infoApplicant->mname }} {{ auth()->guard('web')->user()->infoApplicant->sname }}
+                    {{ auth()->guard('web')->user()->infoApplicant->first_name}} {{ auth()->guard('web')->user()->infoApplicant->middle_name}} {{ auth()->guard('web')->user()->infoApplicant->sur_name}}
                     @endif
                 </p>
                 <p class="mb-0 text-muted fs-sm fw-medium">Applicant</p>
