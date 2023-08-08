@@ -46,18 +46,12 @@ class Courses extends Model
     }
 
     public function getCourseDept(){
-
         return $this->belongsTo(Department::class, 'department_id', 'department_id');
     }
 
     public function useDept(){
         return $this->belongsTo(Department::class);
     }
-
-    public function studentCrs(){
-        return $this->hasOne(StudentCourse::class, 'id');
-    }
-
 
     public function transferCourse(){
         return $this->hasMany(CourseTransfer::class, 'id');

@@ -20,17 +20,14 @@ return new class extends Migration
             $table->integer('cod_status')->default(0);
             $table->string('cod_comments', 128)->nullable();
             $table->string('cod_user_id', 12);
-            $table->foreign('cod_user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('finance_status')->nullable();
             $table->string('payment', 16)->nullable();
             $table->integer('registrar_status')->nullable();
             $table->string('registrar_comment', 128)->nullable();
             $table->string('registrar_user_id', 12);
-            $table->foreign('registrar_user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('medical_status')->nullable();
             $table->string('medical_comments', 128)->nullable();
             $table->string('medical_user_id', 12);
-            $table->foreign('medical_user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('status')->nullable();
             $table->timestamps();
             $table->softDeletes();

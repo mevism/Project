@@ -187,8 +187,7 @@ class ApplicationController extends Controller
     public function dashboard(){
 
         $courses = [];
-       return $intake = Intake::where('status', 1)->first();
-
+         $intake = Intake::where('status', 1)->first();
         if ($intake != null) {
             $courses = CourseOnOfferView::where('intake_id', $intake->intake_id)
                 ->latest()->get();
@@ -201,10 +200,10 @@ class ApplicationController extends Controller
             $notification = [];
         } else {
 
-            foreach ($apps as $id) {
-
-                $notification = Notification::where('application_id', $id->id)->where('status', '>', 0)->orderBy('updated_at', 'desc')->get();
-            }
+//            foreach ($apps as $id) {
+            $notification = [];
+//                $notification = Notification::where('application_id', $id->id)->where('status', '>', 0)->orderBy('updated_at', 'desc')->get();
+//            }
         }
 
         $mycourses = Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->count();
@@ -458,16 +457,15 @@ class ApplicationController extends Controller
 
     public function allCourses(){
         $courses = [];
-       return $intake = Intake::where('status', 1)->first();
+        $intake = Intake::where('status', 1)->first();
         if ($intake != null) {
-            $courses = DB::table('coursesonofferview')->where('intake_id', $intake->intake_id)
+            $courses = DB::table('COURESONOFFERVIEW')->where('intake_id', $intake->intake_id)
                 ->latest()->get();
         }
         return view('application::applicant.courses')->with(['courses' => $courses]);
     }
 
-    public function applyNow($id)
-    {
+    public function applyNow($id){
         $subject = [];
         $education = Education::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->get();
         $work = WorkExperience::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->get();
@@ -478,16 +476,12 @@ class ApplicationController extends Controller
         if ($mycourse != null) {
             $subject = ApplicationSubject::where('application_id', $mycourse->application_id)->first();
         }
-
         return view('application::applicant.application')
             ->with(['course' => $course, 'education' => $education, 'work' => $work, 'mycourse' => $mycourse, 'sponsor' => $sponsor, 'parent' => $parent, 'subject' => $subject]);
     }
 
-    public function applicationEdit($id)
-    {
-
+    public function applicationEdit($id){
         $course = Application::where('application_id', $id)->first();
-
         $id = CourseOnOfferView::where('course_id', $course->course_id)
             ->where('intake_id', $course->intake_id)
             ->where('campus_id', $course->campus_id)
@@ -497,9 +491,7 @@ class ApplicationController extends Controller
         return redirect()->route('application.apply', $id)->with(['success' => 'You can now update your application']);
     }
 
-    public function submitApp(Request $request)
-    {
-
+    public function submitApp(Request $request){
         $request->validate([
             'subject1' => 'required|string',
             'subject2' => 'string|required',
@@ -508,6 +500,15 @@ class ApplicationController extends Controller
             'campus' => 'required'
         ]);
 
+        $courseFee = Courses::where('course_id', $request->course_id)->first();
+            if ($courseFee->level_id == 1 || $courseFee->level_id == 2){
+                $fee = '500';
+            }elseif ($courseFee->level_id == 3){
+                $fee = '1000';
+            }else{
+                $fee = '1500';
+            }
+//            return $fee;
         $apps = Application::all()->count();
         $intakeApps = Application::where('intake_id', $request->intake)->get()->count();
         $customId = new CustomIds();
@@ -533,9 +534,8 @@ class ApplicationController extends Controller
             $application->student_type = 1;
             $application->intake_id = $request->intake;
             $application->course_id = $request->course_id;
-            $application->department_id = $request->dept;
-            $application->school_id = $request->school;
             $application->campus_id = $request->campus;
+            $application->application_fees = $fee;
             $application->save();
 
             $subject = new ApplicationSubject;
@@ -574,9 +574,7 @@ class ApplicationController extends Controller
     //        return redirect()->back()->with('success', 'You course payment details have been update successfully');
     //    }
 
-    public function addParent(Request $request)
-    {
-
+    public function addParent(Request $request){
         $request->validate([
             'parentname' => 'string|required',
             'parentmobile' => 'string|required|regex:/(0)[0-9]{9}/|min:10|max:10',
@@ -587,7 +585,6 @@ class ApplicationController extends Controller
             'sponsorcounty' => 'string|required',
             'sponsortown' => 'string|required',
         ]);
-
         $parent = new Guardian;
         $parent->applicant_id = \auth()->guard('web')->user()->applicant_id;
         $parent->guardian_name = $request->parentname;
@@ -603,20 +600,16 @@ class ApplicationController extends Controller
         $sponsor->sponsor_county = $request->sponsorcounty;
         $sponsor->sponsor_town = $request->sponsortown;
         $sponsor->save();
-
         return redirect()->back()->with('success', 'You course application details have been update successfully');
     }
 
-    public function addWork(Request $request)
-    {
-
+    public function addWork(Request $request){
         $request->validate([
             'org1' => 'string|required',
             'org1post' => 'string|required',
             'org1startdate' => 'string|required',
             'org1enddate' => 'string|required',
         ]);
-
         $work = new WorkExperience;
         $work->applicant_id = \auth()->guard('web')->user()->applicant_id;
         $work->organization = $request->org1;
@@ -624,19 +617,16 @@ class ApplicationController extends Controller
         $work->start_date = $request->org1startdate;
         $work->exit_date = $request->org1enddate;
         $work->save();
-
         return redirect()->back()->with('success', 'You work experience details have been update successfully');
     }
 
-    public function secSch(Request $request)
-    {
+    public function secSch(Request $request){
         $request->validate([
             'secondaryqualification' => 'string|required',
             'secstartdate' => 'string|required',
             'secenddate' => 'string|required',
             'seccert' => 'required|mimes:pdf|required|max:2048',
         ]);
-
         $education = new Education;
         $education->applicant_id = \auth()->guard('web')->user()->applicant_id;
         $education->institution = $request->secondary;
@@ -657,8 +647,7 @@ class ApplicationController extends Controller
         return redirect()->back()->with('success', 'You education history has been updated successfully');
     }
 
-    public function updateSecSch(Request $request, $id)
-    {
+    public function updateSecSch(Request $request, $id){
 
         $request->validate([
             'secondaryqualification' => 'string|required',
@@ -666,7 +655,6 @@ class ApplicationController extends Controller
             'secenddate' => 'string|required',
             'seccert' => 'mimes:pdf|max:2048',
         ]);
-
         $hashedID = Crypt::decrypt($id);
 
         $education =  Education::find($hashedID);
@@ -685,12 +673,10 @@ class ApplicationController extends Controller
         }
 
         $education->save();
-
         return redirect()->back()->with('success', 'You education history has been updated successfully');
     }
 
-    public function terSch(Request $request)
-    {
+    public function terSch(Request $request){
         $request->validate([
             'tertiary' => 'string|required',
             'teriaryqualification' => 'string|required',
@@ -719,8 +705,7 @@ class ApplicationController extends Controller
         return redirect()->back()->with('success', 'You education history added successfully');
     }
 
-    public function updateTerSch(Request $request, $id)
-    {
+    public function updateTerSch(Request $request, $id){
         $request->validate([
             'tertiary' => 'string|required',
             'teriaryqualification' => 'string|required',
@@ -751,21 +736,19 @@ class ApplicationController extends Controller
         return redirect()->back()->with('success', 'Your education history has been updated successfully');
     }
 
-    public function finish(Request $request)
-    {
+    public function finish(Request $request){
         $request->validate([
             'declare' => 'required'
         ]);
 
-        $myApplication = Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->where('course_id', $request->course_id)->where('intake_id', $request->intake_id)->first();
+        $myApplication = Application::where('course_id', $request->course_id)->where('intake_id', $request->intake_id)->first();
         $myApplication->declaration = 1;
         $myApplication->save();
 
         $approval = ApplicationApproval::where('application_id', $myApplication->application_id)->first();
         if ($approval == null) {
-            ApplicationApproval::create(['application_id' => $myApplication->application_id, 'applicant_id' => \auth()->guard('web')->user()->applicant_id]);
+            ApplicationApproval::create(['application_id' => $myApplication->application_id]);
         }
-
         return redirect()->back()->with('success', 'Your application was submitted successfully');
     }
 

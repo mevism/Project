@@ -97,11 +97,12 @@ class CODController extends Controller
 
 
     public function applications() {
-        $applications = ApplicationsView::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-           ->where('dean_status', null)
-           ->where('declaration', '!=', null)
-           ->latest()
-           ->get();
+        $courses = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->pluck('course_id');
+        $applications = ApplicationsView::whereIn('course_id', $courses)
+                       ->where('dean_status', null)
+                       ->where('declaration', '!=', null)
+                       ->latest()
+                       ->get();
 
         return view('cod::applications.index')->with('apps', $applications);
     }

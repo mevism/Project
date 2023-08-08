@@ -21,15 +21,18 @@ return new class extends Migration
             $table->foreign('campus_id')->references('campus_id')->on('campuses')->onUpdate('cascade')->onDelete('cascade');
             $table->string('intake_id', 12);
             $table->foreign('intake_id')->references('intake_id')->on('intakes')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('course_id', 12); 
-            $table->foreign('course_id')->references('course_id')->on('courses')->onUpdate('cascade')->onDelete('cascade');           
-            $table->string('student_type', 4);           
+            $table->string('course_id', 12);
+            $table->foreign('course_id')->references('course_id')->on('courses')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('student_type', 4);
+            $table->string('ref_number', 24);
+            $table->string('application_number', 8);
+            $table->string('application_fee', 5);
             $table->tinyInteger('declaration')->nullable();
             $table->tinyInteger('status')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
-        
+
     }
 
     /**

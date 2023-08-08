@@ -46,7 +46,7 @@
                             @foreach($apps as $app)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td> {{ $app->sname }} {{ $app->fname }} {{ $app->mname }} </td>
+                                <td> {{ $app->sur_name }} {{ $app->first_name }} {{ $app->middle_name }} </td>
                                 <td> {{ $app->gender }} </td>
                                 <td> {{ $app->DepartmentCourse->getCourseDept->dept_code }} </td>
                                 <td> {{ $app->DepartmentCourse->course_name }}</td>

@@ -37,7 +37,6 @@ class UserSeeder extends Seeder
            Group::create(['group_id' => $groupId->generateId(), 'name' => $group['name']]);
        }
 
-
        $campuses = [
            ['name' => 'MAIN CAMPUS'],
            ['name' => 'KWALE CAMPUS'],
@@ -78,35 +77,13 @@ class UserSeeder extends Seeder
           $group = Group::where('name', $subject['group'])->first();
            ClusterSubject::create(['group_id' => $group->group_id, 'subject' => $subject['subject']]);
        }
-//
-////        $voteheads  =  [
-////            ['name' => 'CAUTION MONEY'],
-////            ['name' =>  'STUDENT UNION'],
-////            ['name'=>'MEDICAL LEVY'],
-////            ['name' => 'TUITION FEE'],
-////            ['name'=> 'INDUSTRIAL ATTACHMENT'],
-////            ['name' => 'STUDENT ID'],
-////            ['name' => 'EXAMINATION'],
-////            ['name' => 'REGISTRATION FEE'],
-////            ['name' => 'LIBRARY LEVY'],
-////            ['name' => 'I.C.T LEVY'],
-////            ['name' => 'ACTIVITY FEE'],
-////            ['name' => 'STUDENT BENEVOLENT'],
-////            ['name' => 'KUCCPS PLACEMENT FEE'],
-////            ['name' => 'CUE LEVY']
-////        ];
-////
-////        foreach ($voteheads as $votehead){
-////            $voteheadId = new CustomIds();
-////            VoteHead::create(['votehead_id' => $voteheadId->generateId(), 'name' => $votehead['name']]);
-////        }
 
          DB::table('levels')->insert([
-             ['name' => 'CERTIFICATE'],
-             ['name' => 'DIPLOMA'],
-             ['name' => 'UNDERGRADUATE'],
-             ['name' => 'POSTGRADUATE'],
-             ['name' => 'NON STANDARD']
+             ['name' => 'CERTIFICATE', 'application_fee' => 500],
+             ['name' => 'DIPLOMA', 'application_fee' => 500],
+             ['name' => 'UNDERGRADUATE', 'application_fee' => 1000],
+             ['name' => 'POSTGRADUATE', 'application_fee' => 1500],
+             ['name' => 'NON STANDARD', 'application_fee' => 1500]
          ]);
 
          DB::table('events')->insert([
@@ -116,6 +93,7 @@ class UserSeeder extends Seeder
             ['name' => 'ACADEMIC LEAVE/DIFFERMENT'],
             ['name' => 'TRANSFER']
         ]);
+
        DB::table('attendances')->insert([
            ['attendance_code'=>'S-FT','attendance_name' => 'SELF SPONSORED FULL TIME'],
            ['attendance_code'=>'J-FT', 'attendance_name' => 'GOVERNMENT SPONSORED'],
@@ -123,18 +101,14 @@ class UserSeeder extends Seeder
            [ 'attendance_code'=>'S-EV','attendance_name' => 'SELF SPONSORED EVENING'],
 
        ]);
+
        DB::table('divisions')->insert([
            ['division_id'=>'368HZXbsoMi','name' => 'ACADEMIC DIVISION'],
            ['division_id'=>'NjvCrvr9X0W','name' => 'ADMINISTRATIVE DIVISION'],
-
-       ]);
-       DB::table('campuses')->insert([
-           ['campus_id' => '668HZXbsoM2','name' => 'MAIN CAMPUS'],
-
        ]);
 
        DB::table('departments')->insert([
-           ['department_id' => '368HZXbsoM2','division_id' =>  'NjvCrvr9X0W', 'dept_code'=> 'RAA' , 'name'  => 'REGISTRARAA'],
+           ['department_id' => '368HZXbsoM2','division_id' =>  'NjvCrvr9X0W', 'dept_code'=> 'REGA' , 'name'  => 'REGISTRAR ACADEMIC AFFAIRS'],
        ]);
 
        DB::table('users')->insert([
@@ -151,9 +125,9 @@ class UserSeeder extends Seeder
             ['name' => 'MEDICAL OFFICER','guard_name' => 'user'],
             ['name' => 'LECTURER','guard_name' => 'user'],
         ]);
-
+        $campus_id = Campus::where('name', 'MAIN CAMPUS')->first()->campus_id;
         DB::table('user_employments')->insert([
-            ['user_id' => '368HZXbso22','department_id' => '368HZXbsoM2','division_id' =>  'NjvCrvr9X0W', 'campus_id' => '668HZXbsoM2','role_id' => 1,'station_id' => '368HZXbsoM2','employment_terms' => 'FT'],
+            ['user_id' => '368HZXbso22','department_id' => '368HZXbsoM2', 'campus_id' => $campus_id, 'role_id' => 1,'station_id' => '368HZXbsoM2','employment_terms' => 'FT'],
         ]);
 
          DB::table('staff_infos')->insert([
