@@ -24,122 +24,96 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-//        $groups = [
-//            ['name' => 'GROUP I'],
-//            ['name' => 'GROUP II'],
-//            ['name' => 'GROUP III'],
-//            ['name' => 'GROUP IV'],
-//            ['name' => 'GROUP V']
-//        ];
-//
-//        foreach ($groups as $group) {
-//            $groupId = new CustomIds();
-//            Group::create(['group_id' => $groupId->generateId(), 'name' => $group['name']]);
-//        }
-//
-//
-//        $campuses = [
-//            ['name' => 'MAIN CAMPUS'],
-//            ['name' => 'KWALE CAMPUS'],
-//            ['name' => 'LAMU CAMPUS'],
-//        ];
-//
-//        foreach ($campuses as $campus){
-//            $campusId = new CustomIds();
-//            Campus::create(['campus_id' => $campusId->generateId(), 'name' => $campus['name']]);
-//        }
-//
-//        $subjects = [
-//            ['group' => 'GROUP I', 'subject' => 'MAT'],
-//            ['group' => 'GROUP I', 'subject' => 'ENG'],
-//            ['group' => 'GROUP I', 'subject' => 'KIS'],
-//            ['group' => 'GROUP II', 'subject' => 'CHEM'],
-//            ['group' => 'GROUP II', 'subject' => 'BIO'],
-//            ['group' => 'GROUP II', 'subject' => 'PHY'],
-//            ['group' => 'GROUP III', 'subject' => 'HIS'],
-//            ['group' => 'GROUP III', 'subject' => 'GEO'],
-//            ['group' => 'GROUP III', 'subject' => 'CRE'],
-//            ['group' => 'GROUP III', 'subject' => 'HRE'],
-//            ['group' => 'GROUP III', 'subject' => 'IRE'],
-//            ['group' => 'GROUP IV', 'subject' => 'HSCI'],
-//            ['group' => 'GROUP IV', 'subject' => 'AGRI'],
-//            ['group' => 'GROUP IV', 'subject' => 'WWORK'],
-//            ['group' => 'GROUP IV', 'subject' => 'COMP'],
-//            ['group' => 'GROUP IV', 'subject' => 'MWORK'],
-//            ['group' => 'GROUP V', 'subject' => 'BUS'],
-//            ['group' => 'GROUP V', 'subject' => 'FRE'],
-//            ['group' => 'GROUP V', 'subject' => 'GER'],
-//            ['group' => 'GROUP V', 'subject' => 'ARAB'],
-//            ['group' => 'GROUP V', 'subject' => 'MUSIC'],
-//            ['group' => 'GROUP V', 'subject' => 'SIGN LANG'],
-//        ];
-//
-//        foreach ($subjects as $subject){
-//           $group = Group::where('name', $subject['group'])->first();
-//            ClusterSubject::create(['group_id' => $group->group_id, 'subject' => $subject['subject']]);
-//        }
-//
-////        $voteheads  =  [
-////            ['name' => 'CAUTION MONEY'],
-////            ['name' =>  'STUDENT UNION'],
-////            ['name'=>'MEDICAL LEVY'],
-////            ['name' => 'TUITION FEE'],
-////            ['name'=> 'INDUSTRIAL ATTACHMENT'],
-////            ['name' => 'STUDENT ID'],
-////            ['name' => 'EXAMINATION'],
-////            ['name' => 'REGISTRATION FEE'],
-////            ['name' => 'LIBRARY LEVY'],
-////            ['name' => 'I.C.T LEVY'],
-////            ['name' => 'ACTIVITY FEE'],
-////            ['name' => 'STUDENT BENEVOLENT'],
-////            ['name' => 'KUCCPS PLACEMENT FEE'],
-////            ['name' => 'CUE LEVY']
-////        ];
-////
-////        foreach ($voteheads as $votehead){
-////            $voteheadId = new CustomIds();
-////            VoteHead::create(['votehead_id' => $voteheadId->generateId(), 'name' => $votehead['name']]);
-////        }
-//
-//          DB::table('levels')->insert([
-//              ['name' => 'CERTIFICATE'],
-//              ['name' => 'DIPLOMA'],
-//              ['name' => 'UNDERGRADUATE'],
-//              ['name' => 'POSTGRADUATE'],
-//              ['name' => 'NON STANDARD']
-//          ]);
-//
-//          DB::table('events')->insert([
-//             ['name' => 'SEMESTER REGISTRATION'],
-//             ['name' => 'RETAKE'],
-//             ['name' => 'READMISSION'],
-//             ['name' => 'ACADEMIC LEAVE/DIFFERMENT'],
-//             ['name' => 'TRANSFER']
-//         ]);
-//        DB::table('attendances')->insert([
-//            ['attendance_code'=>'S-FT','attendance_name' => 'SELF SPONSORED FULL TIME'],
-//            ['attendance_code'=>'J-FT', 'attendance_name' => 'GOVERNMENT SPONSORED'],
-//            ['attendance_code'=>'S-PT','attendance_name' => 'SELF SPONSORED PART TIME'],
-//            [ 'attendance_code'=>'S-EV','attendance_name' => 'SELF SPONSORED EVENING'],
-//
-//        ]);
-//        DB::table('divisions')->insert([
-//            ['division_id'=>'368HZXbsoMi','name' => 'ACADEMIC DIVISION'],
-//            ['division_id'=>'NjvCrvr9X0W','name' => 'ADMINISTRATIVE DIVISION'],
-//
-//        ]);
-//        DB::table('campuses')->insert([
-//            ['campus_id' => '668HZXbsoM2','name' => 'MAIN CAMPUS'],
-//
-//        ]);
-//
-//        DB::table('departments')->insert([
-//            ['department_id' => '368HZXbsoM2','division_id' =>  'NjvCrvr9X0W', 'dept_code'=> 'RAA' , 'name'  => 'REGISTRARAA'],
-//        ]);
-//
-//        DB::table('users')->insert([
-//            ['user_id' => '368HZXbso22','username' => 'admin', 'password'  =>  Hash::make('pass')]
-//        ]);
+       $groups = [
+           ['name' => 'GROUP I'],
+           ['name' => 'GROUP II'],
+           ['name' => 'GROUP III'],
+           ['name' => 'GROUP IV'],
+           ['name' => 'GROUP V']
+       ];
+
+       foreach ($groups as $group) {
+           $groupId = new CustomIds();
+           Group::create(['group_id' => $groupId->generateId(), 'name' => $group['name']]);
+       }
+
+       $campuses = [
+           ['name' => 'MAIN CAMPUS'],
+           ['name' => 'KWALE CAMPUS'],
+           ['name' => 'LAMU CAMPUS'],
+       ];
+
+       foreach ($campuses as $campus){
+           $campusId = new CustomIds();
+           Campus::create(['campus_id' => $campusId->generateId(), 'name' => $campus['name']]);
+       }
+
+       $subjects = [
+           ['group' => 'GROUP I', 'subject' => 'MAT'],
+           ['group' => 'GROUP I', 'subject' => 'ENG'],
+           ['group' => 'GROUP I', 'subject' => 'KIS'],
+           ['group' => 'GROUP II', 'subject' => 'CHEM'],
+           ['group' => 'GROUP II', 'subject' => 'BIO'],
+           ['group' => 'GROUP II', 'subject' => 'PHY'],
+           ['group' => 'GROUP III', 'subject' => 'HIS'],
+           ['group' => 'GROUP III', 'subject' => 'GEO'],
+           ['group' => 'GROUP III', 'subject' => 'CRE'],
+           ['group' => 'GROUP III', 'subject' => 'HRE'],
+           ['group' => 'GROUP III', 'subject' => 'IRE'],
+           ['group' => 'GROUP IV', 'subject' => 'HSCI'],
+           ['group' => 'GROUP IV', 'subject' => 'AGRI'],
+           ['group' => 'GROUP IV', 'subject' => 'WWORK'],
+           ['group' => 'GROUP IV', 'subject' => 'COMP'],
+           ['group' => 'GROUP IV', 'subject' => 'MWORK'],
+           ['group' => 'GROUP V', 'subject' => 'BUS'],
+           ['group' => 'GROUP V', 'subject' => 'FRE'],
+           ['group' => 'GROUP V', 'subject' => 'GER'],
+           ['group' => 'GROUP V', 'subject' => 'ARAB'],
+           ['group' => 'GROUP V', 'subject' => 'MUSIC'],
+           ['group' => 'GROUP V', 'subject' => 'SIGN LANG'],
+       ];
+
+       foreach ($subjects as $subject){
+          $group = Group::where('name', $subject['group'])->first();
+           ClusterSubject::create(['group_id' => $group->group_id, 'subject' => $subject['subject']]);
+       }
+
+         DB::table('levels')->insert([
+             ['name' => 'CERTIFICATE', 'application_fee' => 500],
+             ['name' => 'DIPLOMA', 'application_fee' => 500],
+             ['name' => 'UNDERGRADUATE', 'application_fee' => 1000],
+             ['name' => 'POSTGRADUATE', 'application_fee' => 1500],
+             ['name' => 'NON STANDARD', 'application_fee' => 1500]
+         ]);
+
+         DB::table('events')->insert([
+            ['name' => 'SEMESTER REGISTRATION'],
+            ['name' => 'RETAKE'],
+            ['name' => 'READMISSION'],
+            ['name' => 'ACADEMIC LEAVE/DIFFERMENT'],
+            ['name' => 'TRANSFER']
+        ]);
+
+       DB::table('attendances')->insert([
+           ['attendance_code'=>'S-FT','attendance_name' => 'SELF SPONSORED FULL TIME'],
+           ['attendance_code'=>'J-FT', 'attendance_name' => 'GOVERNMENT SPONSORED'],
+           ['attendance_code'=>'S-PT','attendance_name' => 'SELF SPONSORED PART TIME'],
+           [ 'attendance_code'=>'S-EV','attendance_name' => 'SELF SPONSORED EVENING'],
+
+       ]);
+
+       DB::table('divisions')->insert([
+           ['division_id'=>'368HZXbsoMi','name' => 'ACADEMIC DIVISION'],
+           ['division_id'=>'NjvCrvr9X0W','name' => 'ADMINISTRATIVE DIVISION'],
+       ]);
+
+       DB::table('departments')->insert([
+           ['department_id' => '368HZXbsoM2','division_id' =>  'NjvCrvr9X0W', 'dept_code'=> 'REGA' , 'name'  => 'REGISTRAR ACADEMIC AFFAIRS'],
+       ]);
+
+       DB::table('users')->insert([
+           ['user_id' => '368HZXbso22','username' => 'admin', 'password'  =>  Hash::make('pass')]
+       ]);
 
         DB::table('roles')->insert([
             ['name' => 'REGISTRAR','guard_name' => 'user'],
@@ -151,9 +125,9 @@ class UserSeeder extends Seeder
             ['name' => 'MEDICAL OFFICER','guard_name' => 'user'],
             ['name' => 'LECTURER','guard_name' => 'user'],
         ]);
-
+        $campus_id = Campus::where('name', 'MAIN CAMPUS')->first()->campus_id;
         DB::table('user_employments')->insert([
-            ['user_id' => '368HZXbso22','department_id' => '368HZXbsoM2','division_id' =>  'NjvCrvr9X0W', 'campus_id' => '668HZXbsoM2','role_id' => 1,'station_id' => '368HZXbsoM2','employment_terms' => 'FT'],
+            ['user_id' => '368HZXbso22','department_id' => '368HZXbsoM2', 'campus_id' => $campus_id, 'role_id' => 1,'station_id' => '368HZXbsoM2','employment_terms' => 'FT'],
         ]);
 
          DB::table('staff_infos')->insert([
@@ -161,6 +135,5 @@ class UserSeeder extends Seeder
          ]);
 
     }
-
 
 }

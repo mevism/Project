@@ -14,11 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('vote_heads', function (Blueprint $table) {
-            $table->string('votehead_id', 12);
-            $table->string('vote', 12)->unique();
+            $table->string('votehead_id', 12)->primary();
+            $table->string('vote_id', 12)->unique();
             $table->string('vote_name', 50)->unique();
             $table->string('vote_category', 50);
-            $table->tinyInteger('vote_type', 4);
+            $table->tinyInteger('vote_type' );
             $table->timestamps();
             $table->softDeletes();
         });

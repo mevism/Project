@@ -21,7 +21,7 @@ return new class extends Migration
             FROM classes
             JOIN courses ON courses.course_id = classes.course_id
             JOIN departments ON departments.department_id = courses.department_id
-            JOIN intakes ON intakes.intake_id = classes.intake_id;"
+            JOIN intakes ON intakes.intake_id = classes.intake_id"
         );
     }
 

@@ -21,11 +21,13 @@ return new class extends Migration
             $table->string('transaction_number', 32)->nullable();
             $table->tinyInteger('cod_status')->nullable();
             $table->string('cod_comments', 64)->nullable();
+            $table->string('cod_user_id', 12);
             $table->tinyInteger('dean_status')->nullable();
             $table->string('dean_comments', 64)->nullable();
+            $table->string('dean_user_id', 12);
             $table->tinyInteger('registrar_status')->nullable();
             $table->string('registrar_comments', 64)->nullable();
-            $table->string('reg_number', 16)->nullable();
+            $table->string('registrar_user_id', 12);
             $table->string('admission_letter', 64)->nullable();
             $table->timestamps();
             $table->softDeletes();

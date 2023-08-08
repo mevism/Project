@@ -21,7 +21,7 @@ return new class extends Migration
 //            FROM course_transfer_approvals
 //            JOIN course_transfers ON course_transfers.course_transfer_id = course_transfer_approvals.course_transfer_id
 //            JOIN student_infos ON student_infos.student_id = course_transfers.student_id
-//            JOIN student_courses ON student_courses.student_id = course_transfers.student_id;"
+//            JOIN student_courses ON student_courses.student_id = course_transfers.student_id"
 //        );
     }
 

@@ -16,22 +16,19 @@ class AvailableCourse extends Model
     protected $keyType = 'string';
 //        availablecourse vs intake
     public function openCourse(){
-
         return $this->belongsTo(Intake::class, 'intake_id');
     }
 
     // available course and department
     public function courseDept(){
-
-        return $this->belongsTo(Department::class);
+        return $this->belongsTo(Department::class, 'department_id', 'department_id');
 
     }
 
 //    available course vs courses
 
     public function mainCourses(){
-
-        return $this->belongsTo(Courses::class, 'course_id');
+        return $this->belongsTo(Courses::class, 'course_id', 'course_id');
 
     }
 

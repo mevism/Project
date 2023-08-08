@@ -15,8 +15,6 @@ return new class extends Migration
     {
         Schema::create('units', function (Blueprint $table) {
             $table->string('unit_id', 12)->primary();
-            $table->string('department_id', 12);
-            $table->foreign('department_id')->references('department_id')->on('departments')->onUpdate('cascade')->onDelete('cascade');
             $table->string('unit_code', 8)->unique();
             $table->string('unit_name', 100);
             $table->string('type', 4);

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('academic_leaves', function (Blueprint $table) {
             $table->string('leave_id', 12)->primary();
             $table->string('academic_year', 12);
-            $table->foreign('academic_year')->references('year_id')->on('academic_years')->onDelete('cascade')->onUpdate('cascade');
+            // $table->foreign('academic_year')->references('year_id')->on('academic_years')->onDelete('cascade')->onUpdate('cascade');
             $table->string('student_id', 12);
             $table->foreign('student_id')->references('student_id')->on('student_logins')->onDelete('cascade')->onUpdate('cascade');
             $table->tinyInteger('type');
