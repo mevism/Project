@@ -13,6 +13,9 @@ use Modules\Application\Entities\VerifyUser;
 use Modules\Application\Entities\Application;
 use Modules\COD\Entities\ApplicationsView;
 use Modules\Registrar\Entities\AvailableCourse;
+use Modules\Registrar\Entities\Courses;
+use Modules\Registrar\Entities\SchoolDepartment;
+
 class UserController extends Controller
 {
     public function signOut(){
@@ -80,9 +83,11 @@ class UserController extends Controller
                 return view('applications::finance.index')->with('apps', $apps_finance);
 
             }elseif (auth()->guard('user')->user()->roles->first()->id == 4){
-
-                $apps_dean = ApplicationsView::where('dean_status', 0)
-                    ->where('school_id', auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->school_id)
+                $departments = SchoolDepartment::where('school_id', auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->school_id)->pluck('department_id');
+                $courses = Courses::whereIn('department_id', $departments)->pluck('course_id');
+                $apps_dean = ApplicationsView::whereIn('course_id', $courses)
+                    ->where('dean_status', 0)
+                    ->get()
                     ->count();
                 return view('dean::dean.index')->with('apps', $apps_dean);
 

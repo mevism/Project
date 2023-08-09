@@ -2015,9 +2015,6 @@ class CoursesController extends Controller
         ]);
 
         $data = School::where('school_id', $id)->first();
-        $data->initials        =         $request->initials;
-        $data->name            =         $request->name;
-        $data->save();
 
         $oldSchool = new SchoolHistory;
         $oldSchool->school_id = $data->school_id;
@@ -2026,6 +2023,11 @@ class CoursesController extends Controller
         $oldSchool->created_at = $data->created_at;
         $oldSchool->updated_at = $data->updated_at;
         $oldSchool->save();
+
+        School::where('school_id', $id)->update([
+            'initials' => $request->initials,
+            'name' => $request->name,
+        ]);
 
         return redirect()->route('courses.showSchool')->with('status', 'Data Updated Successfully');
     }

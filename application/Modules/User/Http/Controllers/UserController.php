@@ -125,7 +125,6 @@ class UserController extends Controller
         $userDept->user_id = $generatedId;
         $userDept->role_id = $request->role;
         $userDept->campus_id = $request->campus;
-        $userDept->division_id = $request->division;
         $userDept->department_id = $request->department;
         $userDept->station_id = $request->station;
         $userDept->employment_terms = $request->contract;

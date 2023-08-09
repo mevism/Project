@@ -78,24 +78,6 @@ use Modules\Student\Entities\CourseTransferApproval;
 
 class CODController extends Controller
 {
-
-    //    public function index(){
-    //
-    //        $admissions = Application::where('cod_status', 1)
-    //            ->where('department_id',auth()->guard('user')->user()->department_id)
-    //            ->where('registrar_status',3)
-    //            ->where('status',0)
-    //            ->count();
-    //
-    //        $apps_cod = Application::where('cod_status', 0)
-    //            ->where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->id)
-    //            ->orWhere('dean_status', 3)
-    //            ->count();
-    //
-    //        return view('cod::COD.index')->with(['apps'=>$apps_cod, 'admissions'=>$admissions]);
-    //    }
-
-
     public function applications() {
         $courses = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->pluck('course_id');
         $applications = ApplicationsView::whereIn('course_id', $courses)
@@ -107,12 +89,9 @@ class CODController extends Controller
         return view('cod::applications.index')->with('apps', $applications);
     }
 
-    public function viewApplication($id)
-    {
-
+    public function viewApplication($id){
         $app = ApplicationsView::where('application_id', $id)->first();
         $school = Education::where('applicant_id', $app->applicant_id)->get();
-
         return view('cod::applications.viewApplication')->with(['app' => $app, 'school' => $school]);
     }
 
@@ -122,112 +101,71 @@ class CODController extends Controller
         return view('cod::applications.preview')->with(['app' => $app, 'school' => $school]);
     }
 
-    public function acceptApplication($id)
-    {
-
+    public function acceptApplication($id){
         $app = ApplicationApproval::where('application_id', $id)->first();
         $app->cod_status = 1;
+        $app->cod_user_id = auth()->guard('user')->user()->user_id;
         $app->cod_comments = 'Application accepted by department';
         $app->save();
-
-//        $logs = new CODLog;
-//        $logs->application_id = $app->id;
-//        $logs->user = Auth::guard('user')->user()->name;
-//        $logs->user_role = Auth::guard('user')->user()->role_id;
-//        $logs->activity = 'Application accepted';
-//        $logs->save();
-
         return redirect()->route('cod.applications')->with('success', '1 applicant approved');
     }
 
-    public function rejectApplication(Request $request, $id)
-    {
-
+    public function rejectApplication(Request $request, $id){
         $request->validate([
             'comment' => 'required|string'
         ]);
 
         $app = ApplicationApproval::where('application_id', $id)->first();
         $app->cod_status = 2;
+        $app->cod_user_id = auth()->guard('user')->user()->user_id;
         $app->cod_comments = $request->comment;
         $app->save();
-
-//        $logs = new CODLog;
-//        $logs->application_id = $app->id;
-//        $logs->user = Auth::guard('user')->user()->name;
-//        $logs->user_role = Auth::guard('user')->user()->role_id;
-//        $logs->comments = $request->comment;
-//        if ($app->dean_status == 3){
-//            $logs->activity = 'Application reviewed by COD';
-//        }
-//        $logs->activity = 'Application rejected';
-//        $logs->save();
-
         return redirect()->route('cod.applications')->with('success', 'Application declined');
     }
 
-    public function reverseApplication(Request $request, $id)
-    {
-
+    public function reverseApplication(Request $request, $id){
         $app = ApplicationApproval::where('application_id', $id)->first();
         $app->cod_status = 4;
         $app->cod_comments = $request->comment;
+        $app->cod_user_id = auth()->guard('user')->user()->user_id;
         $app->save();
 
-//        $logs = new CODLog;
-//        $logs->application_id = $app->id;
-//        $logs->user = Auth::guard('user')->user()->name;
-//        $logs->user_role = Auth::guard('user')->user()->role_id;
-//        $logs->comments = $request->comment;
-//        $logs->activity = 'Application reversed for corrections';
-//        $logs->save();
-//
         $comms = new Notification;
         $comms->application_id = $id;
         $comms->role_id = \auth()->guard('user')->user()->roles->first()->id;
         $comms->subject = 'Application Approval Process';
         $comms->comment = $request->comment;
         $comms->save();
-
         return  redirect()->route('cod.applications')->with('success', 'Application send to the student for Corrections');
     }
 
     public function batch(){
-        $apps = ApplicationsView::where('cod_status', '>', 0)
-            ->where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+        $courses = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+            ->pluck('course_id');
+        $applications = ApplicationsView::whereIn('course_id', $courses)
+            ->Where('cod_status', '>', 0)
             ->where('dean_status', null)
             ->orWhere('dean_status', 3)
             ->where('cod_status', '!=', 3)
             ->latest()
             ->get();
 
-        return view('cod::applications.batch')->with('apps', $apps);
+        return view('cod::applications.batch')->with('apps', $applications);
     }
 
-    public function batchSubmit(Request $request)
-    {
-
+    public function batchSubmit(Request $request){
         foreach ($request->submit as $item) {
-
             $app = ApplicationApproval::where('application_id', $item)->first();
-
             if ($app->cod_status == 4) {
-
                 $app = ApplicationApproval::where('application_id', $item)->first();
                 $app->cod_status = NULL;
+                $app->cod_user_id = auth()->guard('user')->user()->user_id;
                 $app->dean_status = NULL;
                 $app->save();
 
                 $revert = Application::where('application_id', $item)->first();
                 $revert->declaration = NULL;
                 $revert->save();
-
-//                $logs = new CODLog;
-//                $logs->application_id = $app->id;
-//                $logs->user = Auth::guard('user')->user()->name;
-//                $logs->user_role = Auth::guard('user')->user()->role_id;
-//                $logs->activity = "Application awaiting Dean's Verification";
-//                $logs->save();
 
                 $notify = Notification::where('application_id', $item)->latest()->first();
                 $notify->status = '1';
@@ -237,13 +175,6 @@ class CODController extends Controller
                 $app = ApplicationApproval::where('application_id', $item)->first();
                 $app->dean_status = 0;
                 $app->save();
-
-//                $logs = new CODLog;
-//                $logs->application_id = $app->id;
-//                $logs->user = Auth::guard('user')->user()->name;
-//                $logs->user_role = Auth::guard('user')->user()->role_id;
-//                $logs->activity = "Application awaiting Dean's Verification";
-//                $logs->save();
             }
         }
 
@@ -520,7 +451,6 @@ class CODController extends Controller
         $selectedCourses = array_filter($payload, function ($item) {
             return !empty($item['modes']) && !empty($item['campus']);
         });
-
 
         foreach ($selectedCourses as $selectedCourse) {
             if (AvailableCourse::where('course_id', $selectedCourse['course'])->where('intake_id', $request->intake)->exists()){

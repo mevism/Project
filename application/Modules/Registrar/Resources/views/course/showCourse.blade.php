@@ -76,7 +76,7 @@
                 <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.coursePreview', $courses->course_id)}}"> View </a>
               </td>
               <td nowrap="">
-                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editCourse', $courses->course_id ) }}">edit</a>
+{{--                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editCourse', $courses->course_id ) }}">edit</a>--}}
 {{--                <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this course ?')" href="{{ route('courses.destroyCourse', $courses->id) }}">delete</a>--}}
                 <a class="btn btn-sm btn-alt-primary" href="{{ route('courses.syllabus',['course_id'=> Crypt::encrypt($courses->course_id)]) }}">syllabus</a>
               </td>
