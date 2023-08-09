@@ -835,8 +835,8 @@
                             <div class="block-content-full">
                                     <div class="p-sm-2 p-xl-12">
                                         <div class="row mb-2 text-center">
-                                            <span class="fw-semibold mb-2"> {{ $course->name }} </span>
-                                            <span class="fw-semibold mb-2"> {{ $course->name }}</span>
+                                            <span class="fw-semibold mb-2"> {{ $course->OnofferCourse->getCourseDept->schools->first()->name }} </span>
+                                            <span class="fw-semibold mb-2"> {{ $course->OnofferCourse->getCourseDept->name }} </span>
                                             <span class="fw-semibold mb-2"> {{ $course->course_name }} </span>
                                         </div>
 
@@ -1183,7 +1183,7 @@
                                         <input type="checkbox" name="declare" required @if($mycourse != null && $mycourse->declaration== 1) disabled @endif>
                                         <input hidden name="course_id" value="@if($mycourse != null) {{ $mycourse->course_id }} @endif">
                                         <input hidden name="intake_id" value="@if($mycourse != null) {{ $mycourse->intake_id }} @endif">
-                                        I <span class="text-decoration-underline"> {{ auth()->guard('web')->user()->infoApplicant->sname }} {{ auth()->guard('web')->user()->infoApplicant->mname }} {{ auth()->guard('web')->user()->infoApplicant->fname }}</span> declare that the information given in this application form is correct. I further certify that I have read, understood and agreed to comply with the terms stipulated herein.
+                                        I <span class="text-decoration-underline"> {{ auth()->guard('web')->user()->infoApplicant->surname }} {{ auth()->guard('web')->user()->infoApplicant->middle_name }} {{ auth()->guard('web')->user()->infoApplicant->first_name }}</span> declare that the information given in this application form is correct. I further certify that I have read, understood and agreed to comply with the terms stipulated herein.
                                     </div>
                                 </div>
                                     <div class="d-flex justify-content-center mb-1 mt-4">

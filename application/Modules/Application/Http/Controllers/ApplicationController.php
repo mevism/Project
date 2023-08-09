@@ -69,9 +69,7 @@ class ApplicationController extends Controller
         return view('application::auth.signup');
     }
 
-    public function reloadCaptcha()
-    {
-
+    public function reloadCaptcha(){
         return response()->json(['captcha' => captcha_img()]);
     }
 
@@ -267,7 +265,7 @@ class ApplicationController extends Controller
 
         if (ApplicantInfo::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->exists()) {
             $user = ApplicantInfo::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->first();
-            $user->sur_name = trim(strtoupper($request->sname));
+            $user->surname = trim(strtoupper($request->sname));
             $user->first_name = trim(strtoupper($request->fname));
             $user->middle_name = trim(strtoupper($request->mname));
             $user->gender = trim(strtoupper($request->gender));
@@ -289,7 +287,7 @@ class ApplicationController extends Controller
         } else {
             $applicant = new ApplicantInfo;
             $applicant->applicant_id = \auth()->guard('web')->user()->applicant_id;
-            $applicant->sur_name = trim(strtoupper($request->sname));
+            $applicant->surname = trim(strtoupper($request->sname));
             $applicant->first_name = trim(strtoupper($request->fname));
             $applicant->middle_name = trim(strtoupper($request->mname));
             $applicant->gender = trim(strtoupper($request->gender));
@@ -459,7 +457,7 @@ class ApplicationController extends Controller
         $courses = [];
         $intake = Intake::where('status', 1)->first();
         if ($intake != null) {
-            $courses = DB::table('COURESONOFFERVIEW')->where('intake_id', $intake->intake_id)
+            $courses = CourseOnOfferView::where('intake_id', $intake->intake_id)
                 ->latest()->get();
         }
         return view('application::applicant.courses')->with(['courses' => $courses]);
@@ -535,7 +533,7 @@ class ApplicationController extends Controller
             $application->intake_id = $request->intake;
             $application->course_id = $request->course_id;
             $application->campus_id = $request->campus;
-            $application->application_fees = $fee;
+            $application->application_fee = $fee;
             $application->save();
 
             $subject = new ApplicationSubject;
@@ -741,7 +739,7 @@ class ApplicationController extends Controller
             'declare' => 'required'
         ]);
 
-        $myApplication = Application::where('course_id', $request->course_id)->where('intake_id', $request->intake_id)->first();
+        $myApplication = Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->where('course_id', $request->course_id)->where('intake_id', $request->intake_id)->first();
         $myApplication->declaration = 1;
         $myApplication->save();
 

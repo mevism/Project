@@ -9,16 +9,16 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
                         Application Submission
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
-                        <li class="breadcrumb-item">
+                        <li class="breadcrumb-item text-uppercase">
                             <a class="link-fx" href="javascript:void(0)">Application</a>
                         </li>
-                        <li class="breadcrumb-item" aria-current="page">
+                        <li class="breadcrumb-item text-uppercase" aria-current="page">
                             Batch submission
                         </li>
                     </ol>
@@ -30,10 +30,10 @@
         <div class="block-content block-content-full">
             <form action="{{ route('dean.batchSubmit') }}" method="post">
                 @csrf
-                    <table id="example" class="table table-responsive-sm table-bordered table-striped js-dataTable-responsive fs-sm">
+                    <table id="example" class="table table-sm table-bordered table-striped js-dataTable-responsive fs-sm">
                             <thead>
                             <th>✔</th>
-                                <th></th>
+                                <th>#</th>
                             <th>Applicant Name</th>
                             <th>Course Name</th>
                             <th>Department </th>
@@ -51,7 +51,7 @@
                                         @endif
                                     </td>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td> {{ $app->sname }} {{ $app->fname }} {{ $app->mname }}</td>
+                                    <td> {{ $app->surname }} {{ $app->first_name }} {{ $app->middle_name }}</td>
                                     <td> {{ $app->DepartmentCourse->getCourseDept->name }}</td>
                                     <td> {{ $app->DepartmentCourse->course_name }}</td>
                                     <td>

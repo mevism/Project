@@ -48,7 +48,7 @@
                 <td> {{ $item->attendance_name }}</td>
                 <td>
                   <a class="btn btn-sm btn-alt-info" href="{{ route('courses.editAttendance', ['id'=> Crypt::encrypt($item->id)]) }}">edit</a>
-                  <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this mode of study ?')" href="{{ route('courses.destroyAttendance', $item->id) }}">delete</a>
+{{--                  <a class="btn btn-sm btn-alt-danger" onclick="return confirm('Are you sure you want to delete this mode of study ?')" href="{{ route('courses.destroyAttendance', $item->id) }}">delete</a>--}}
                 </td>
               </tr>
               @endforeach

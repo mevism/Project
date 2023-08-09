@@ -16,7 +16,7 @@
   $(document).ready(function() {
       $('#example').DataTable( {
           responsive: true,
-          order: [[1, 'asc']],
+          order: [[0, 'asc']],
           rowGroup: {
               dataSrc: 2
           }
@@ -29,16 +29,16 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
                         APPLICATIONS
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
-                        <li class="breadcrumb-item">
+                        <li class="breadcrumb-item text-uppercase">
                             <a class="link-fx" href="javascript:void(0)">Applications</a>
                         </li>
-                        <li class="breadcrumb-item" aria-current="page">
+                        <li class="breadcrumb-item text-uppercase" aria-current="page">
                             All Applications
                         </li>
                     </ol>
@@ -53,14 +53,14 @@
                     <form action="{{ route('courses.acceptedMail') }}" method="post">
                         @csrf
 
-            <table id="example" class="table table-bordered table-striped js-dataTable-responsive fs-sm">
+            <table id="example" class="table table-sm table-bordered table-striped fs-sm">
                     <thead>
                         <th>✔</th>
-                         <th></th>
+                         <th>#</th>
                         <th>Applicant Name</th>
                         <th>Department Name</th>
                         <th>Course</th>
-                        <th>Finance</th>
+{{--                        <th>Finance</th>--}}
                         <th>Department</th>
                         <th>Registrar</th>
                         <th>Action</th>
@@ -76,18 +76,18 @@
                                     @endif
                                 </td>
                                 <td>{{ $loop->iteration }}</td>
-                                <td> {{ $item->sname }} {{ $item->fname }} {{ $item->mname }}</td>
+                                <td> {{ $item->surname }} {{ $item->first_name }} {{ $item->middle_name }}</td>
                                 <td> {{ $item->DepartmentCourse->getCourseDept->name }}</td>
                                 <td> {{ $item->DepartmentCourse->course_name }}</td>
-                                <td> @if ($item->finance_status ==1)
-                                    <a  class="badge badge bg-success" >Accepted</a>
-                                    @elseif($item->finance_status ==2)
-                                    <a  class="badge badge bg-danger" >Rejected</a>
-                                    @else
-                                    <a  class="badge badge bg-primary" >Review</a>
-                                    @endif
+{{--                                <td> @if ($item->finance_status ==1)--}}
+{{--                                    <a  class="badge badge bg-success" >Accepted</a>--}}
+{{--                                    @elseif($item->finance_status ==2)--}}
+{{--                                    <a  class="badge badge bg-danger" >Rejected</a>--}}
+{{--                                    @else--}}
+{{--                                    <a  class="badge badge bg-primary" >Review</a>--}}
+{{--                                    @endif--}}
 
-                                </td>
+{{--                                </td>--}}
                                 <td> @if ($item->cod_status ==1)
                                     <a  class="badge badge bg-success" >Accepted</a>
                                     @elseif($item->cod_status ==2)

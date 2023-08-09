@@ -1,5 +1,5 @@
 @extends('registrar::layouts.backend')
-
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 @section('content')
 <div class="bg-body-light">
   <div class="content content-full">

@@ -263,7 +263,7 @@
               <img class="rounded-circle" src="{{ asset('media/avatars/avatar14.jpg') }}" alt="Header Avatar" style="width: 21px;">
               <span class="d-none d-sm-inline-block ms-2">
                   @if(auth()->guard('web')->user()->infoApplicant != null)
-                  {{ auth()->guard('web')->user()->infoApplicant->title }} {{ auth()->guard('web')->user()->infoApplicant->sur_name}}
+                  {{ auth()->guard('web')->user()->infoApplicant->title }} {{ auth()->guard('web')->user()->infoApplicant->surname}}
                   @endif
               </span>
               <i class="fa fa-fw fa-angle-down d-none d-sm-inline-block ms-1 mt-1"></i>
@@ -273,7 +273,7 @@
                 <img class="img-avatar img-avatar48 img-avatar-thumb" src="{{ asset('media/avatars/avatar14.jpg') }}" alt="">
                 <p class="mt-2 mb-0 fw-medium">
                     @if(auth()->guard('web')->user()->infoApplicant != null)
-                    {{ auth()->guard('web')->user()->infoApplicant->first_name}} {{ auth()->guard('web')->user()->infoApplicant->middle_name}} {{ auth()->guard('web')->user()->infoApplicant->sur_name}}
+                    {{ auth()->guard('web')->user()->infoApplicant->first_name}} {{ auth()->guard('web')->user()->infoApplicant->middle_name}} {{ auth()->guard('web')->user()->infoApplicant->surname}}
                     @endif
                 </p>
                 <p class="mb-0 text-muted fs-sm fw-medium">Applicant</p>
