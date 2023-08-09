@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('intake_id', 12)->primary();
             $table->string('academic_year_id', 12);
             $table->foreign('academic_year_id')->references('year_id')->on('academic_years')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('intake_from', 20)->unique();
-            $table->string('intake_to', 20)->unique();
+            $table->string('intake_from', 40)->unique();
+            $table->string('intake_to', 40)->unique();
             $table->integer('status');
             $table->timestamps();
             $table->softDeletes();

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('applicant_id', 12);
             $table->foreign('applicant_id')->references('applicant_id')->on('applicant_contacts')->onUpdate('cascade')->onDelete('cascade');
             $table->string('institution', 64);
-            $table->string('qualification', 16);
+            $table->string('qualification', 64);
             $table->string('level', 16);
             $table->string('start_date', 10);
             $table->string('exit_date', 10);

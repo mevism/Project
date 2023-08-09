@@ -17,13 +17,13 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('applicant_id', 12);
             $table->foreign('applicant_id')->references('applicant_id')->on('applicant_contacts')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('username', 16);
-            $table->string('password', 64);
+            $table->string('username', 100);
+            $table->string('password', 150);
             $table->tinyInteger('user_status')->default(0);
             $table->tinyInteger('student_type')->nullable();
             $table->date('email_verified_at')->nullable();
             $table->tinyInteger('phone_verification')->nullable();
-            $table->rememberToken();
+            $table->rememberToken(150);
             $table->timestamps();
             $table->softDeletes();
         });
