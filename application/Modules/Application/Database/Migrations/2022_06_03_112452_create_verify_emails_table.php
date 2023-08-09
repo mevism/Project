@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('applicant_id', 12);
             $table->foreign('applicant_id')->references('applicant_id')->on('applicant_contacts')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('verification_code', 64);
+            $table->string('verification_code', 150);
             $table->timestamps();
         });
     }

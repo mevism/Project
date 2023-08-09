@@ -267,7 +267,7 @@ class ApplicationController extends Controller
 
         if (ApplicantInfo::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->exists()) {
             $user = ApplicantInfo::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->first();
-            $user->sur_name = trim(strtoupper($request->sname));
+            $user->surname = trim(strtoupper($request->sname));
             $user->first_name = trim(strtoupper($request->fname));
             $user->middle_name = trim(strtoupper($request->mname));
             $user->gender = trim(strtoupper($request->gender));
@@ -289,7 +289,7 @@ class ApplicationController extends Controller
         } else {
             $applicant = new ApplicantInfo;
             $applicant->applicant_id = \auth()->guard('web')->user()->applicant_id;
-            $applicant->sur_name = trim(strtoupper($request->sname));
+            $applicant->surname = trim(strtoupper($request->sname));
             $applicant->first_name = trim(strtoupper($request->fname));
             $applicant->middle_name = trim(strtoupper($request->mname));
             $applicant->gender = trim(strtoupper($request->gender));
