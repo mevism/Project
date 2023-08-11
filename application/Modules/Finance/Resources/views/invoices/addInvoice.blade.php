@@ -65,6 +65,8 @@
                                         <option value="{{ $code }}">{{ $code }}</option>
                                     @endforeach
                                 </select>
+                                <div id="studentsClass"></div>
+
                             </div>
                             <div class="col-md-4 form-floating mb-3">
                                 <input class="form-control"  name="type" readonly id="type" placeholder="type">
@@ -99,7 +101,6 @@
         </div>
     </div>
 
-
 @endsection
 <script>
    $(document).ready(function() {
@@ -131,7 +132,12 @@
                         if (typeof data.class_id !== 'undefined'){
                             $('#invoiceDiv').show();
                         }
-                        var className = 'CLASS CODE : '+ data.name + ' MODE OF STUDY : '+ data.attendance_id
+                        var className = 'STUDENTS : '+ data.name
+
+                        // var className = 'CLASS CODE : '+ data.name + ' MODE OF STUDY : '+ data.attendance_id
+                        // var resultsData = {!! json_encode($results) !!};
+
+                        // var studentsClass = 'STUDENTS: ' + JSON.stringify(resultsData);
                         $('#invoice').text(className)
                     } else if (typeof data.class_id === 'undefined') {
                         $('#type').val('STUDENT INVOICE');

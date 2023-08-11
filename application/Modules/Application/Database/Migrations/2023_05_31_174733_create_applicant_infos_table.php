@@ -28,7 +28,6 @@ return new class extends Migration
             $table->string('type', 16)->unique()->nullable();
             $table->string('identification', 16)->unique()->nullable();
             $table->string('disabled', 8)->nullable();
-            $table->string('disability', 32)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
