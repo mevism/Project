@@ -19,8 +19,8 @@ return new class extends Migration
             $table->foreign('exam_approval_id')->references('exam_approval_id')->on('exam_workflows')->onDelete('cascade')->onUpdate('cascade');
             $table->string('class_id', 12);
             $table->foreign('class_id')->references('class_id')->on('classes')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('student_number', 16);
-            $table->foreign('student_number')->references('student_number')->on('accepted_students')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('student_id', 12);
+            $table->foreign('student_id')->references('student_id')->on('student_courses')->onDelete('cascade')->onUpdate('cascade');
             $table->string('unit_id', 12);
             $table->foreign('unit_id')->references('unit_id')->on('units')->onDelete('no action')->onUpdate('no action');
             $table->tinyInteger('stage');

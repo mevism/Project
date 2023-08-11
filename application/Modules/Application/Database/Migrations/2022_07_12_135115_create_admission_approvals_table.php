@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('finance_status')->nullable();
             $table->string('payment', 16)->nullable();
             $table->integer('registrar_status')->nullable();
-            $table->string('registrar_comment', 128)->nullable();
+            $table->string('registrar_comments', 128)->nullable();
             $table->string('registrar_user_id', 12)->nullable();
             $table->integer('medical_status')->nullable();
             $table->string('medical_comments', 128)->nullable();

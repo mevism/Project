@@ -15,14 +15,14 @@ return new class extends Migration
     {
         Schema::create('exam_marks', function (Blueprint $table) {
             $table->string('exam_id', 12)->primary();
-            $table->string('exam_approval_id', 12);
-            $table->foreign('exam_approval_id')->references('exam_approval_id')->on('exam_workflows')->onDelete('cascade')->onUpdate('cascade');          
-            $table->string('student_number', 16);
-            $table->foreign('student_number')->references('student_number')->on('accepted_students')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('exam_approval_id', 12)->nullable();
+            $table->foreign('exam_approval_id')->references('exam_approval_id')->on('exam_workflows')->onDelete('cascade')->onUpdate('cascade'); 
+            $table->string('intake_id', 12);
+            $table->foreign('intake_id')->references('intake_id')->on('intakes')->onDelete('cascade')->onUpdate('cascade');         
+            $table->string('student_id');
+            $table->foreign('student_id')->references('student_id')->on('student_courses')->onDelete('cascade')->onUpdate('cascade');
             $table->string('class_code', 20);
-            $table->foreign('class_code')->references('name')->on('classes')->onDelete('cascade')->onUpdate('cascade');
             $table->string('unit_id', 12);
-            $table->foreign('unit_id')->references('unit_id')->on('units')->onDelete('cascade')->onUpdate('cascade');
             $table->tinyInteger('stage');
             $table->float('semester');
             $table->float('cat')->nullable();
