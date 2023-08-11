@@ -37,8 +37,10 @@ use Modules\Application\Entities\VerifyEmail;
 use Modules\Application\Entities\VerifyUser;
 use Modules\Application\Entities\WorkExperience;
 use Modules\COD\Entities\ApplicationsView;
+use Modules\COD\Entities\ClassPattern;
 use Modules\COD\Entities\CourseOnOfferView;
 use Modules\Registrar\Entities\AvailableCourse;
+use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\Intake;
 //use Session;
@@ -46,6 +48,7 @@ use Illuminate\Support\Facades\Mail;
 use Modules\COD\Entities\CODLog;
 use Modules\Dean\Entities\DeanLog;
 use Modules\Finance\Entities\FinanceLog;
+use Modules\Registrar\Entities\SemesterFee;
 
 
 class ApplicationController extends Controller
@@ -787,45 +790,32 @@ class ApplicationController extends Controller
         return response()->download('AdmissionLetters/' . $letter->admission_letter);
     }
 
-    public function uploadDocuments($id)
-    {
-
+    public function uploadDocuments($id){
         $admission = Application::where('application_id', $id)->first();
-
         return view('application::applicant.admission')->with(['admission' => $admission]);
     }
 
-    public function academicDoc(Request $request)
-    {
-
+    public function academicDoc(Request $request){
         $request->validate([
-            'academicDoc' => 'required|mimes:pdf',
+            'academicDoc' => 'required|mimes:pdf|max:1000',
             'academicDocId' => 'required',
         ]);
-
         if (AdmissionDocument::where('application_id', $request->academicDocId)->exists()) {
-
-            $name = AdmissionDocument::where('application_id', $request->academicDocId)->first()->admDocuments->reg_number;
-
+            $name = ApplicationsView::where('application_id', $request->academicDocId)->first();
             if ($request->hasFile('academicDoc')) {
                 $file = $request->academicDoc;
-                $fileName = str_replace('/', '', $name) . '-' . time() . '.' . $file->getClientOriginalExtension();
+                $fileName = str_replace('/','', $name->student_number) . '-' . time() . '.' . $file->getClientOriginalExtension();
                 $request->academicDoc->move('Admissions/Certificates', $fileName);
 
-                AdmissionDocument::where('application_id', $request->academicDocId)->update(['applicant_id' => \auth()->guard('web')->user()->applicant_id, 'certificates' => $fileName]);
+                AdmissionDocument::where('application_id', $request->academicDocId)->update(['certificates' => $fileName]);
             }
         } else {
-
-            $id = $request->academicDocId;
-
-            $name = ApplicationApproval::where('application_id', $id)->first();
-
+            $name = ApplicationsView::where('application_id', $request->academicDocId)->first();
             $academicCerts = new AdmissionDocument;
-            $academicCerts->applicant_id = \auth()->guard('web')->user()->applicant_id;
             $academicCerts->application_id = $request->academicDocId;
             if ($request->hasFile('academicDoc')) {
                 $file = $request->academicDoc;
-                $fileName = str_replace('/', '', $name->reg_number) . '-' . time() . '.' . $file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name->student_number) . '-' . time() . '.' . $file->getClientOriginalExtension();
                 $request->academicDoc->move('Admissions/Certificates', $fileName);
                 $academicCerts->certificates = $fileName;
             }
@@ -835,37 +825,26 @@ class ApplicationController extends Controller
         return redirect()->back()->with('success', 'Academic documents uploaded successfully');
     }
 
-    public function bankReceipt(Request $request)
-    {
-
+    public function bankReceipt(Request $request){
         $request->validate([
-            'bankReceipt' => 'required|mimes:pdf|max:40000',
+            'bankReceipt' => 'required|mimes:pdf|max:1000',
             'bankReceiptId' => 'required',
         ]);
-
         if (AdmissionDocument::where('application_id', $request->bankReceiptId)->exists()) {
-
-            $name = AdmissionDocument::where('application_id', $request->bankReceiptId)->first()->admDocuments->reg_number;
-
+            $name = ApplicationsView::where('application_id', $request->bankReceiptId)->first();
             if ($request->hasFile('bankReceipt')) {
                 $file = $request->bankReceipt;
-                $fileName = str_replace('/', '', $name) . '-' . time() . '.' . $file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name->student_number) . '-' . time() . '.' . $file->getClientOriginalExtension();
                 $request->bankReceipt->move('Admissions/BankReceipt', $fileName);
-
-                AdmissionDocument::where('application_id', $request->bankReceiptId)->update(['applicant_id' => \auth()->guard('web')->user()->applicant_id, 'bank_receipt' => $fileName]);
+                AdmissionDocument::where('application_id', $request->bankReceiptId)->update(['bank_receipt' => $fileName]);
             }
         } else {
-
-            $id = $request->bankReceiptId;
-
-            $name = ApplicationApproval::where('application_id', $id)->first();
-
+            $name = ApplicationsView::where('application_id', $request->bankReceiptId)->first();
             $academicCerts = new AdmissionDocument;
             $academicCerts->application_id = $request->bankReceiptId;
-            $academicCerts->applicant_id = \auth()->guard('web')->user()->applicant_id;
             if ($request->hasFile('bankReceipt')) {
                 $file = $request->bankReceipt;
-                $fileName = str_replace('/', '', $name->reg_number) . '-' . time() . '.' . $file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name->student_number) . '-' . time() . '.' . $file->getClientOriginalExtension();
                 $request->bankReceipt->move('Admissions/BankReceipt', $fileName);
                 $academicCerts->bank_receipt = $fileName;
             }
@@ -875,90 +854,62 @@ class ApplicationController extends Controller
         return redirect()->back()->with('success', 'Bank receipt uploaded successfully');
     }
 
-    public function medicalForm(Request $request)
-    {
-
+    public function medicalForm(Request $request){
         $request->validate([
-            'medicalForm' => 'required|mimes:pdf|max:40000',
+            'medicalForm' => 'required|mimes:pdf|max:1000',
             'medicalFormId' => 'required',
         ]);
-
         if (AdmissionDocument::where('application_id', $request->medicalFormId)->exists()) {
-
-            $name = AdmissionDocument::where('application_id', $request->medicalFormId)->first()->admDocuments->reg_number;
-
+            $name = ApplicationsView::where('application_id', $request->medicalFormId)->first();
             if ($request->hasFile('medicalForm')) {
                 $file = $request->medicalForm;
-                $fileName = str_replace('/', '', $name) . '-' . time() . '.' . $file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name->student_number) . '-' . time() . '.' . $file->getClientOriginalExtension();
                 $request->medicalForm->move('Admissions/MedicalForms', $fileName);
-
-                AdmissionDocument::where('application_id', $request->medicalFormId)->update(['applicant_id' => \auth()->guard('web')->user()->applicant_id, 'medical_form' => $fileName]);
+                AdmissionDocument::where('application_id', $request->medicalFormId)->update(['medical_form' => $fileName]);
             }
         } else {
-
-            $id = $request->medicalFormId;
-
-            $name = ApplicationApproval::where('application_id', $id)->first();
-
+            $name = ApplicationsView::where('application_id', $request->medicalFormId)->first();
             $academicCerts = new AdmissionDocument;
             $academicCerts->application_id = $request->medicalFormId;
-            $academicCerts->applicant_id = \auth()->guard('web')->user()->applicant_id;
             if ($request->hasFile('medicalForm')) {
                 $file = $request->medicalForm;
-                $fileName = str_replace('/', '', $name->reg_number) . '-' . time() . '.' . $file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name->student_number) . '-' . time() . '.' . $file->getClientOriginalExtension();
                 $request->medicalForm->move('Admissions/MedicalForms', $fileName);
                 $academicCerts->medical_form = $fileName;
             }
             $academicCerts->save();
         }
-
         return redirect()->back()->with('success', 'Bank receipt uploaded successfully');
     }
 
-    public function passportPhoto(Request $request)
-    {
-
+    public function passportPhoto(Request $request){
         $request->validate([
-            'passPort' => 'required|image|mimes:jpeg,png,jpg|max:40000',
+            'passPort' => 'required|image|mimes:jpeg,png,jpg|max:2000',
             'passPortId' => 'required',
         ]);
 
-
         if (AdmissionDocument::where('application_id', $request->passPortId)->exists()) {
-
-            $name = AdmissionDocument::where('application_id', $request->passPortId)->first()->admDocuments->reg_number;
-
+            $name = ApplicationsView::where('application_id', $request->passPortId)->first();
             if ($request->hasFile('passPort')) {
                 $file = $request->passPort;
-                $fileName = str_replace('/', '', $name) . '-' . time() . '.' . $file->getClientOriginalExtension();
-
+                $fileName = str_replace('/','', $name->student_number) . '-' . time() . '.' . $file->getClientOriginalExtension();
                 $thumbnailFolder = 'Thumbnails';
-
                 $passport = Image::make($file->path());
-
                 $passport->resize(100, 100, function ($contraint) {
                     $contraint->aspectRatio();
                 })->save($thumbnailFolder . '/' . $fileName);
-
                 $file->move('Admissions/PassPorts', $fileName);
-
-                AdmissionDocument::where('application_id', $request->passPortId)->update(['applicant_id' => \auth()->guard('web')->user()->applicant_id, 'passport_photo' => $fileName]);
+                AdmissionDocument::where('application_id', $request->passPortId)->update(['passport_photo' => $fileName]);
             }
         } else {
-
-            $id = $request->passPortId;
-
-            $name = Application::where('application_id', $id)->first();
-
+            $name = Application::where('application_id', $request->passPortId)->first();
             $academicCerts = new AdmissionDocument;
             $academicCerts->application_id = $request->passPortId;
             if ($request->hasFile('passPort')) {
                 $file = $request->passPort;
-                $fileName = str_replace('/', '', $name->reg_number) . '-' . time() . '.' . $file->getClientOriginalExtension();
+                $fileName = str_replace('/', '', $name->student_number) . '-' . time() . '.' . $file->getClientOriginalExtension();
                 $thumbnailFolder = 'Thumbnails';
-
                 $passport = Image::make($file->path());
-
                 $passport->resize(100, 100, function ($contraint) {
                     $contraint->aspectRatio();
                 })->save($thumbnailFolder . '/' . $fileName);
@@ -973,11 +924,55 @@ class ApplicationController extends Controller
         return redirect()->back()->with('success', 'Passport Photo uploaded successfully');
     }
 
-    public function submitDocuments($id)
-    {
-
-        AdmissionApproval::create(['applicant_id' => \auth()->guard('web')->user()->applicant_id, 'application_id' => $id, 'cod_status' => 0]);
+    public function submitDocuments($id){
+        AdmissionApproval::create(['application_id' => $id, 'cod_status' => 0]);
         AdmissionDocument::where('application_id', $id)->update(['status' => 1]);
+        $admission = ApplicationsView::where('application_id', $id)->first();
+        $course = Courses::where('course_id', $admission->course_id)->first();
+            if ($admission->student_type == 1){
+                $group = 'SSP';
+            }elseif ($admission->student_type == 2){
+                $group = 'KUCCPS';
+            }else{
+                $group = 'SSP';
+            }
+            $student = [
+                'student_number' => $admission->student_number,
+                'full_name' => $admission->first_name.' '.$admission->middle_name.' '.$admission->surname,
+                'class_code' => $admission->entry_class,
+                'group_code' => $group,
+                'course_code' => $course->course_code
+            ];
+
+        $this->appApi->createStudent($student);
+
+        $class = Classes::where('name', $admission->entry_class)->first();
+            $pattern = ClassPattern::where('class_code', $admission->entry_class)->pluck('semester')->toArray();
+            $fees = SemesterFee::where('course_code', $course->course_code)
+                ->where('version', $class->fee_version)
+                ->where('attendance_id', $admission->student_type)
+                ->where('semester', min($pattern))
+                ->get();
+
+            foreach ($fees as $key => $fee){
+                $particular [] = [
+                    'votehead_id' => $fee->vote_id,
+                    'votehead_name' => $fee->semVotehead->vote_name,
+                    'quantity'  => ++$key,
+                    'unit_price' => $fee->amount
+                ];
+            }
+
+        $invoice = [
+            'batch_description' => 'New Semester Invoices',
+            'Invoices' => [
+                ['student_number' => $admission->student_number,
+                'invoice_description' => "NEW STUDENT INVOICE",
+                'InvoiceItems' => $particular,
+                    ]
+            ]
+        ];
+        $this->appApi->invoiceStudent($invoice);
 
         return redirect()->back()->with('success', 'Your documents submitted for admission process');
     }

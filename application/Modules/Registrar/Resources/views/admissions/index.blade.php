@@ -10,12 +10,12 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h6 class="h6 fw-bold mb-0">
-                        Admissions
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
+                        NEW Admissions
                     </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="javascript:void(0)">Admissions</a>
                         </li>
@@ -31,7 +31,7 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-lg-12">
-                    <table id="example" class="table table-responsive table-sm table-striped table-borderless fs-sm">
+                    <table id="example" class="table table-sm table-striped table-borderless fs-sm">
                             <thead>
                             <th>#</th>
                             <th>Applicant Name</th>
@@ -40,14 +40,14 @@
                             <th>Stud. Type</th>
                             <th>Status</th>
 {{--                            <th style="white-space: nowrap !important;">Stud. ID</th>--}}
-                            <th style="white-space: nowrap !important;">Action</th>
+                            <th>Action</th>
                             </thead>
                             <tbody>
                             @php $i = 0; @endphp
                             @foreach($admission as $app)
                                 <tr>
                                     <td>{{ ++$i }}</td>
-                                    <td nowrap=""> {{ $app->sname }} {{ $app->fname }} {{ $app->mname }} </td>
+                                    <td nowrap=""> {{ $app->surname }} {{ $app->first_name }} {{ $app->middle_name }} </td>
                                     <td> {{ $app->admissionCourse->getCourseDept->name }}</td>
                                     <td> {{ $app->admissionCourse->course_name }}</td>
                                     <td>
@@ -68,10 +68,10 @@
                                             <span class="badge bg-danger"> <i class="fa fa-close"></i> rejected</span>
                                         @endif
                                     </td>
-                                    <td nowrap="">
+                                    <td>
                                         @if($app->registrar_status == 0)
                                             <a class="btn btn-sm btn-alt-success" data-toggle="click-ripple" onclick="return confirm('Are you sure you want to erroll this student?')" href="{{ route('courses.admitStudent', ['id' => $app->application_id]) }}"> Enroll </a>
-                                            <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->application_id }}"> Reject </a>
+                                            <a class="btn btn-sm btn-alt-danger" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->application_id }}"> Reject </a>
                                             <div class="modal fade" id="modal-block-popin-{{ $app->application_id }}" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin{{ $app->application_id }}" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-popin" role="document">
                                                     <div class="modal-content">

@@ -13,8 +13,10 @@ use Modules\Application\Entities\ApplicantLogin;
 use Modules\Application\Entities\ApplicationApproval;
 use Modules\Application\Entities\ApplicationSubject;
 use Modules\COD\Entities\AcademicLeavesView;
+use Modules\COD\Entities\AcceptedStudents;
 use Modules\COD\Entities\AdmissionsView;
 use Modules\COD\Entities\ApplicationsView;
+use Modules\COD\Entities\ClassPattern;
 use Modules\COD\Entities\CourseCluster;
 use Modules\COD\Entities\CourseSyllabus;
 use Modules\COD\Entities\Nominalroll;
@@ -1434,15 +1436,13 @@ class CoursesController extends Controller
         return redirect()->route('courses.applications')->with('success', 'Application declined');
     }
 
-    public function preview($id)
-    {
-        $app                       =        Application::find($id);
-        $school                    =        Education::where('applicant_id', $app->applicant->id)->first();
+    public function preview($id){
+        $app =  ApplicationsView::where('application_id', $id)->first();
+        $school = Education::where('applicant_id', $app->applicant_id)->first();
         return view('registrar::offer.preview')->with(['app' => $app, 'school' => $school]);
     }
 
-    public function viewApplication($id)
-    {
+    public function viewApplication($id){
         $app = ApplicationsView::where('application_id', $id)->first();
         $school = Education::where('applicant_id', $app->applicant_id)->get();
         return view('registrar::offer.viewApplication')->with(['app' => $app, 'school' => $school]);
@@ -1587,8 +1587,7 @@ class CoursesController extends Controller
         return view('registrar::approval.approveIndex');
     }
 
-    public function importUnitProgramms()
-    {
+    public function importUnitProgramms(){
         $up = UnitProgramms::all();
         return view('registrar::offer.unitprog')->with('up', $up);
     }
@@ -1613,8 +1612,8 @@ class CoursesController extends Controller
     }
 
     public function importExportViewkuccps(){
-        $intakes        =        Intake::where('status', 1)->get();
-        $newstudents    =         KuccpsApplicant::where('status', 0)->get();
+        $intakes = Intake::where('status', 1)->get();
+        $newstudents = KuccpsApplicant::where('status', 0)->get();
         return view('registrar::offer.kuccps')->with(['intakes' => $intakes, 'new' => $newstudents]);
     }
 
@@ -1676,12 +1675,11 @@ class CoursesController extends Controller
     }
 
     public function acceptedMail(Request $request){
-        $request->validate([
+       $request->validate([
             'submit' => 'required'
         ]);
         foreach ($request->submit as $id) {
-            $app = ApplicationsView::where('application_id', $id)->first();
-
+          $app = ApplicationsView::where('application_id', $id)->first();
             if ($app->registrar_status == 1 && $app->cod_status == 1) {
 
                 $regNo = ApplicationsView::where('course_id', $app->course_id)
@@ -1689,14 +1687,14 @@ class CoursesController extends Controller
                     ->where('student_type', 1)
                     ->where('registrar_status', 3)
                     ->count();
-                $studentNumber = $app->DepartmentCourse->course_code . "/" . str_pad(1 + $regNo, 4, "0", STR_PAD_LEFT) . "/" . Carbon::parse($app->ApplicationIntake->intake_from)->format('Y');
+               $studentNumber = $app->DepartmentCourse->course_code . "/" . str_pad(1 + $regNo, 4, "0", STR_PAD_LEFT) . "/" . Carbon::parse($app->ApplicationIntake->intake_from)->format('Y');
 
                 $domPdfPath        =         base_path('vendor/dompdf/dompdf');
                 \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
                 \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
 
                 $my_template = new TemplateProcessor(storage_path('adm_template.docx'));
-                $my_template->setValue('name', strtoupper($app->sname . " " . $app->mname . " " . $app->fname));
+                $my_template->setValue('name', strtoupper($app->surname . " " . $app->middle_name . " " . $app->first_name));
                 $my_template->setValue('box', strtoupper($app->address));
                 $my_template->setValue('postal_code', strtoupper($app->postal_code));
                 $my_template->setValue('town', strtoupper($app->town));
@@ -1720,17 +1718,35 @@ class CoursesController extends Controller
                     unlink($pdfPath);
                 }
 
-                //                $converter = new OfficeConverter('AdmissionLetters/'.$app->ref_number.".docx",'AdmissionLetters/');
-                //                $converter->convertTo('AdmissionLetters/'.$app->ref_number.".pdf");
+//                    $converter = new OfficeConverter('AdmissionLetters/'.str_replace('/', '', $app->ref_number).".docx",'AdmissionLetters/');
+//                    $converter->convertTo('AdmissionLetters/'.$app->ref_number.".pdf");
+//
+//                        if (file_exists($docPath)) {
+//                            unlink($docPath);
+//                           }
+                $student_id = new CustomIds();
 
-                //                if (file_exists($docPath)) {
-                //                    unlink($docPath);
-                //                }
+                $studCourse = new StudentCourse;
+                $studCourse->application_id = $app->application_id;
+                $studCourse->student_id = $student_id->generateId();
+                $studCourse->student_number = $studentNumber;
+                $studCourse->student_type = $app->student_type;
+                $studCourse->campus_id = $app->campus_id;
+                $studCourse->course_id = $app->course_id;
+                $studCourse->intake_id = $app->intake_id;
+                $studCourse->status = 1;
+                if ($app->student_type == 1) {
+                    $studCourse->current_class = strtoupper($app->DepartmentCourse->course_code . '/' . Carbon::parse($app->ApplicationIntake->intake_from)->format('MY') . '/S-FT');
+                    $studCourse->entry_class = strtoupper($app->DepartmentCourse->course_code . '/' . Carbon::parse($app->ApplicationIntake->intake_from)->format('MY') . '/S-FT');
+                } else {
+                    $studCourse->current_class = strtoupper($app->DepartmentCourse->course_code . '/' . Carbon::parse($app->ApplicationIntake->intake_from)->format('MY') . '/J-FT');
+                    $studCourse->entry_class = strtoupper($app->DepartmentCourse->course_code . '/' . Carbon::parse($app->ApplicationIntake->intake_from)->format('MY') . '/J-FT');
+                }
+                $studCourse->save();
 
                 $update = ApplicationApproval::where('application_id', $id)->first();
                 $update->registrar_status = 3;
                 $update->registrar_comments = 'Admission letter generated';
-                $update->reg_number = $studentNumber;
                 $update->admission_letter = str_replace('/', '', $app->ref_number).".docx";
                 $update->save();
 
@@ -1746,7 +1762,7 @@ class CoursesController extends Controller
                 //                $comms->status = 1;
                 //                $comms->save();
 
-                Mail::to($app->email)->send(new \App\Mail\RegistrarEmails($app));
+//                Mail::to($app->email)->send(new \App\Mail\RegistrarEmails($app));
             }
             //            if ($app->finance_status == 3 && $app->registrar_status == 1) {
             //
@@ -1835,10 +1851,6 @@ class CoursesController extends Controller
         return view('registrar::academicYear.showSemester')->with(['intakes' => $intakes, 'year' => $year]);
     }
 
-    /**
-     * Show the form for a new Intake Information.
-     *
-     */
     public function addIntake($id){
         $years = AcademicYear::where('year_id', $id)->first();
         $data = Intake::all();
@@ -2015,7 +2027,6 @@ class CoursesController extends Controller
         ]);
 
         $data = School::where('school_id', $id)->first();
-
         $oldSchool = new SchoolHistory;
         $oldSchool->school_id = $data->school_id;
         $oldSchool->initials = $data->initials;
@@ -2317,111 +2328,52 @@ class CoursesController extends Controller
     }
 
     public function admitStudent($id){
-
         $admission = AdmissionsView::where('application_id', $id)->first();
+        $studentCourse = StudentCourse::where('application_id', $admission->application_id)->first();
         $course = Courses::where('course_id', $admission->course_id)->first();
-        $intake = Intake::where('intake_id', $admission->intake_id)->first();
-        if ($admission->student_type == 1){
-            $code  = 'S-FT';
-            $group = 'SSP';
-        }elseif ($admission->student_type == 2){
-            $code  = 'J-FT';
-            $group = 'KUCCPS';
-        }else{
-            $code  = 'S-PT';
-            $group = 'SSP';
-        }
-
-        $class = $course->course_code.'/'.strtoupper(Carbon::parse($intake->intake_from)->format('MY')).'/'.$code;
-        $student = [
-            'student_number' => $admission->reg_number,
-            'full_name' => $admission->fname.' '.$admission->mname.' '.$admission->sname,
-            'class_code' => $class,
-            'group_code' => $group,
-            'course_code' => $course->course_code
-        ];
-
-        $this->appApi->createStudent($student);
-        $studentID = new CustomIds();
-
-        $generatedStudentID  =  $studentID->generateId();
+        $class = Classes::where('name', $admission->entry_class)->first();
+        $pattern = ClassPattern::where('class_code', $admission->entry_class)->pluck('semester')->toArray();
+        $units = CourseSyllabus::where('course_code', $course->course_code)->where('version', $class->syllabus_name)->where('stage', explode('.', min($pattern))[0])->where('semester', explode('.', min($pattern))[1])->get();
 
         $studLogin = new StudentLogin;
-        $studLogin->username = $admission->reg_number;
-        $studLogin->password = Hash::make($admission->id_number);
-        $studLogin->student_id = $generatedStudentID;
+        $studLogin->student_id = $studentCourse->student_id;
+        $studLogin->username = $admission->student_number;
+        $studLogin->password = Hash::make($admission->identification);
         $studLogin->save();
 
-        $student = new StudentInfo;
-        $student->student_id = $generatedStudentID;
-        $student->sname = $admission->sname;
-        $student->fname = $admission->fname;
-        $student->mname = $admission->mname;
-        $student->title = $admission->title;
-        $student->marital_status = $admission->marital_status;
-        $student->gender = $admission->gender;
-        $student->dob = $admission->dob;
-        $student->id_number = $admission->id_number;
-        $student->disabled = $admission->disabled;
-        $student->save();
+        $nominalID = new CustomIds();
+        $signed = new Nominalroll;
+        $signed->nominal_id = $nominalID->generateId();
+        $signed->student_id = $studentCourse->student_id;
+        $signed->class_code = $studentCourse->current_class;
+        $signed->year_study = explode('.', min($pattern))[0];
+        $signed->semester_study = explode('.', min($pattern))[1];
+        $signed->intake_id = $admission->intake_id;
+        $signed->pattern_id = 1;
+        $signed->registration = 1;
+        $signed->activation = 1;
+        $signed->save();
 
-        if ($admission->disabled == "YES") {
-            $studentdisability = new StudentDisability;
-            $studentdisability->student_id = $generatedStudentID;
-            $studentdisability->disability = $admission->disability;
-            $studentdisability->save();
+        foreach ($units as $unit){
+            $wID = new CustomIds();
+            $examinableUnit = new ExamMarks;
+            $examinableUnit->exam_id = $wID->generateId();
+            $examinableUnit->student_id = $studentCourse->student_id;
+            $examinableUnit->class_code = $studentCourse->current_class;
+            $examinableUnit->unit_code = $unit->unit_code;
+            $examinableUnit->intake_id = $admission->intake_id;
+            $examinableUnit->stage = explode('.', min($pattern))[0];
+            $examinableUnit->semester = explode('.', min($pattern))[1];
+            $examinableUnit->attempt = min($pattern);
+            $examinableUnit->save();
         }
 
-        $studentcontact = new StudentContact;
-        $studentcontact->student_id = $generatedStudentID;
-        $studentcontact->email = $admission->email;
-        $studentcontact->student_email = strtolower(str_replace('/', '', $admission->reg_number) . '@students.tum.ac.ke');
-        $studentcontact->mobile = $admission->mobile;
-        $studentcontact->alt_mobile = $admission->alt_mobile;
-        $studentcontact->alt_email = $admission->alt_email;
-        $studentcontact->save();
-
-        $studentAddress = new StudentAddress;
-        $studentAddress->student_id = $generatedStudentID;
-        $studentAddress->citizen = $admission->nationality;
-        $studentAddress->county = $admission->county;
-        $studentAddress->sub_county = $admission->sub_county;
-        $studentAddress->town = $admission->town;
-        $studentAddress->address = $admission->address;
-        $studentAddress->postal_code = $admission->postal_code;
-        $studentAddress->save();
-
-        $studCourse = new StudentCourse;
-        $studCourse->student_id = $generatedStudentID;
-        $studCourse->student_number = $admission->reg_number;
-        $studCourse->reference_number = $admission->ref_number;
-        $studCourse->student_type = $admission->student_type;
-        $studCourse->department_id = $admission->department_id;
-        $studCourse->course_id = $admission->course_id;
-        $studCourse->intake_id = $admission->intake_id;
-        $studCourse->status = 1;
-        if ($admission->student_type == 1) {
-            $studCourse->current_class = strtoupper($admission->admissionCourse->course_code . '/' . Carbon::parse($admission->admissionIntake->intake_from)->format('MY') . '/S-FT');
-            $studCourse->entry_class = strtoupper($admission->admissionCourse->course_code . '/' . Carbon::parse($admission->admissionIntake->intake_from)->format('MY') . '/S-FT');
-        } else {
-            $studCourse->current_class = strtoupper($admission->admissionCourse->course_code . '/' . Carbon::parse($admission->admissionIntake->intake_from)->format('MY') . '/J-FT');
-            $studCourse->entry_class = strtoupper($admission->admissionCourse->course_code . '/' . Carbon::parse($admission->admissionIntake->intake_from)->format('MY') . '/J-FT');
-        }
-        $studCourse->save();
 
         $approval = AdmissionApproval::where('application_id', $id)->first();
-        $approval->registrar_status   =             1;
-        $approval->accommodation_status =           0;
+        $approval->registrar_status = 1;
+        $approval->registrar_user_id = \auth()->guard('user')->user()->user_id;
+        $approval->registrar_comments = 'Student Admitted';
         $approval->save();
-
-//                $comms = new Notification;
-//                $comms->application_id = $admission->id;
-//                $comms->role_id = Auth::guard('user')->user()->role_id;
-//                $comms->subject = 'Application Admission Process';
-//                $comms->comment = 'Congratulations! Your admission was successful. You are now a bona-fied student at TUM. You can now log in as a student using your registration number as user ID and ID/PASSPORT/BIRTH certificate number.';
-//                $comms->status = 1;
-//                $comms->save();
-
         return redirect()->back()->with('success', 'New student admission completed successfully');
     }
 

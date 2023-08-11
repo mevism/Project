@@ -14,13 +14,7 @@ class SemesterFee extends Model
     protected $fillable = ['semester_fee_id', 'course_code', 'vote_id', 'semester', 'attendance_id', 'amount', 'version'];
 
     public function semVotehead(){
-
-        return $this->belongsTo(VoteHead::class, 'votehead_id', 'votehead_id');
-    }
-
-    public function proformaInvoice(){
-
-        return $this->belongsTo(CourseLevelMode::class, 'course_level_mode_id', 'course_level_mode_id');
+        return $this->belongsTo(VoteHead::class, 'vote_id', 'vote_id');
     }
 
     public function CourseFee(){

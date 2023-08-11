@@ -54,11 +54,24 @@ class AppApis
         }
     }
 
-    public function createStudent($student)
-    {
+    public function createStudent($student){
         try {
             $uri = "finance/student";
             $response = $this->client->request('POST', $uri, ['json' => $student]);
+            $responseBody = $response->getBody()->getContents();
+            if ($response->getStatusCode() === 200) {
+                $getMessage = json_decode($responseBody, true);
+                return $getMessage;
+            }
+        } catch (GuzzleException $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function invoiceStudent($invoice){
+        try {
+            $uri = "finance/invoice";
+            $response = $this->client->request('POST', $uri, ['json' => $invoice]);
             $responseBody = $response->getBody()->getContents();
             if ($response->getStatusCode() === 200) {
                 $getMessage = json_decode($responseBody, true);

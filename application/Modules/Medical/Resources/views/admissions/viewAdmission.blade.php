@@ -4,12 +4,12 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
                         Admissions
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="javascript:void(0)">Admissions</a>
                         </li>
@@ -29,7 +29,7 @@
                     <div class="col-lg-5 mb-0 fs-sm">
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Applicant Name </div>
-                            <div class="col-md-8"> {{ $admission->sname }} {{ $admission->fname }} {{ $admission->mname }}</div>
+                            <div class="col-md-8"> {{ $admission->surname }} {{ $admission->first_name }} {{ $admission->midle_name }}</div>
                         </div>
                         <div class="row p-1">
                             <div class="col-md-4 fw-bolder text-start">Gender</div>
@@ -41,7 +41,7 @@
                                 @if($admission->disabled == 'NO')
                                     {{ $admission->disabled }}
                                 @else
-                                    {{ $admission->disabled }}, {{ $admission->disability }}
+                                   {{ \Modules\Application\Entities\ApplicantDisability::where('applicant_id', $admission->applcant_id)->disability }}
                                 @endif
                             </div>
                         </div>

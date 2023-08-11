@@ -69,10 +69,12 @@
                     @foreach($accepted as $item)
                             <tr>
                                 <td>
-                                    @if($item->registrar_status > 0 )
+                                    @if($item->registrar_status == 1 || $item->registrar_status == 2)
                                     <input class="accepted" type="checkbox" name="submit[]" value="{{ $item->application_id }}">
-                                        @else
-
+                                    @elseif($item->registrar_status == 3)
+                                        ✔
+                                    @else
+                                        <i class="fa fa-spinner"></i>
                                     @endif
                                 </td>
                                 <td>{{ $loop->iteration }}</td>
