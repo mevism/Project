@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Registrar\Entities\Campus;
 use Modules\Registrar\Entities\Courses;
+use Modules\Registrar\Entities\Department;
 use Modules\Registrar\Entities\Intake;
 
 class ApplicationsView extends Model
@@ -17,7 +18,6 @@ class ApplicationsView extends Model
     protected $table = 'applicationsview';
 
     public function DepartmentCourse(){
-
         return $this->belongsTo(Courses::class, 'course_id', 'course_id');
     }
 
@@ -27,6 +27,10 @@ class ApplicationsView extends Model
 
     public function ApplcationCampus(){
         return $this->belongsTo(Campus::class, 'campus_id', 'campus_id');
+    }
+
+    public function ApplicationDepartment(){
+        return $this->belongsTo(Department::class, 'department_id', 'department_id');
     }
 
     protected static function newFactory()

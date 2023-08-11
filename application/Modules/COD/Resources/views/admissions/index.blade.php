@@ -10,12 +10,12 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
                         Admissions
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="javascript:void(0)">Admissions</a>
                         </li>
@@ -45,7 +45,7 @@
                             @foreach($applicant as $key => $app)
                                 <tr>
                                     <td> {{ ++$key }}</td>
-                                    <td> {{ $app->sname }} {{ $app->fname }} {{ $app->mname }} </td>
+                                    <td> {{ $app->surname }} {{ $app->first_name }} {{ $app->middle_name }} </td>
                                     <td> {{ $app->gender }} </td>
                                     <td> {{ $app->admissionCourse->course_name }}</td>
                                     <td>

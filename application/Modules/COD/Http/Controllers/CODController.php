@@ -177,62 +177,43 @@ class CODController extends Controller
                 $app->save();
             }
         }
-
         return redirect()->route('cod.batch')->with('success', '1 Batch elevated for Dean approval');
     }
 
     public function admissions(){
-
-        $applicant = AdmissionsView::where('department_id',auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+        $courses = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->pluck('course_id');
+        $applicant = AdmissionsView::whereIn('course_id', $courses)
             ->where('medical_status', null)
             ->latest()
             ->get();
-
         return view('cod::admissions.index')->with('applicant', $applicant);
     }
 
-    public function reviewAdmission($id)
-    {
-
+    public function reviewAdmission($id){
         $app = AdmissionsView::where('application_id', $id)->first();
         $documents = AdmissionDocument::where('application_id', $app->application_id)->first();
         $school = Education::where('applicant_id', $app->applicant_id)->get();
-
         return view('cod::admissions.review')->with(['app' => $app, 'documents' => $documents, 'school' => $school]);
     }
 
-    public function acceptAdmission($id)
-    {
-
-        AdmissionApproval::where('application_id', $id)->update(['cod_status' => 1, 'cod_comments' => 'Admission accepted at department level']);
-
+    public function acceptAdmission($id){
+        AdmissionApproval::where('application_id', $id)->update(['cod_status' => 1, 'cod_user_id' => auth()->guard('user')->user()->user_id, 'cod_comments' => 'Admission accepted at department level']);
         return redirect()->route('cod.Admissions')->with('success', 'New student admitted successfully');
     }
 
-    public function rejectAdmission(Request $request, $id)
-    {
-
-        AdmissionApproval::where('application_id', $id)->update(['cod_status' => 2, 'cod_comments' => $request->comment]);
-
+    public function rejectAdmission(Request $request, $id){
+        AdmissionApproval::where('application_id', $id)->update(['cod_status' => 2, 'cod_user_id' => auth()->guard('user')->user()->user_id, 'cod_comments' => $request->comment]);
         return redirect()->route('cod.Admissions')->with('danger', 'Admission request rejected');
     }
 
-
-    public function withholdAdmission(Request $request, $id)
-    {
-
-        AdmissionApproval::where('application_id', $id)->update(['cod_status' => 3, 'cod_comments' => $request->comment]);
-
+    public function withholdAdmission(Request $request, $id){
+        AdmissionApproval::where('application_id', $id)->update(['cod_status' => 3, 'cod_user_id' => auth()->guard('user')->user()->user_id, 'cod_comments' => $request->comment]);
         return redirect()->route('cod.Admissions')->with('info', 'Admission has been withheld');
     }
 
-    public function submitAdmission($id)
-    {
-
+    public function submitAdmission($id){
         AdmissionApproval::where('application_id', $id)->update(['medical_status' => 0]);
-
         Application::where('application_id', $id)->update(['status' => 1]);
-
         return redirect()->back()->with('success', 'Admission sent to medical desk for verification');
     }
 
@@ -646,79 +627,6 @@ class CODController extends Controller
             ->get();
 
         return view('cod::classes.classList')->with(['classList' => $classList, 'class' => $class]);
-    }
-
-    public function admitStudent($id){
-        $student = StudentCourse::where('student_id', $id)->first();
-        $pattern = ClassPattern::where('class_code', $student->current_class)->pluck('semester')->toArray();
-        $studentClass = Classes::where('name', $student->current_class)->first();
-        $units = CourseSyllabus::where('course_code', $student->StudentsCourse->course_code)
-                ->where('version', $studentClass->syllabus_name)
-                ->where('stage', 1)
-                ->where('semester', 1)
-                ->get();
-
-        $fees = SemesterFee::where('attendance_id', $student->student_type)
-                ->where('course_code', $student->StudentsCourse->course_code)
-//                ->where('version', $student->version)
-                ->where('semester', min($pattern))
-                ->get();
-//        return $fees;
-        if ($fees == null) {
-            return redirect()->back()->with('error', 'Oops! Course fee structure not found. Please contact the registrar');
-        } else {
-
-            $proformaInvoice = 0;
-
-            foreach ($fees as $votehead) {
-                $proformaInvoice += $votehead->amount;
-            }
-
-            $academic = Carbon::parse($student->StudentIntake->academicYear->year_start)->format('Y') . '/' . Carbon::parse($student->StudentIntake->academicYear->year_end)->format('Y');
-            $period = Carbon::parse($student->StudentIntake->intake_from)->format('M') . '/' . Carbon::parse($student->StudentIntake->intake_to)->format('M');
-
-            $nominalID = new CustomIds();
-            $signed = new Nominalroll;
-            $signed->nominal_id = $nominalID->generateId();
-            $signed->student_id = $student->student_id;
-            $signed->reg_number = $student->student_number;
-            $signed->class_code = $student->current_class;
-            $signed->year_study = explode('.', min($pattern))[0];
-            $signed->semester_study = explode('.', min($pattern))[1];
-            $signed->academic_year = $academic;
-            $signed->academic_semester = strtoupper($period);
-            $signed->pattern_id = 1;
-            $signed->registration = 1;
-            $signed->activation = 1;
-            $signed->save();
-
-            $studInvoice = new CustomIds();
-            $invoice = new StudentInvoice;
-            $invoice->invoice_id = $studInvoice->generateId();
-            $invoice->student_id = $student->student_id;
-            $invoice->reg_number = $student->student_number;
-            $invoice->invoice_number = 'INV' . time();
-            $invoice->stage = min($pattern);
-            $invoice->amount = $proformaInvoice;
-            $invoice->description = 'New Student Registration Invoice for '. min($pattern) . ' Academic Year ' . $academic;
-            $invoice->save();
-
-            foreach ($units as $unit){
-                $wID = new CustomIds();
-                $examinableUnit = new ExamMarks;
-                $examinableUnit->exam_id = $wID->generateId();
-                $examinableUnit->student_number = $student->student_number;
-                $examinableUnit->class_code = $student->current_class;
-                $examinableUnit->unit_code = $unit->unit_code;
-                $examinableUnit->academic_year = $academic;
-                $examinableUnit->academic_semester = $period;
-                $examinableUnit->stage = explode('.', min($pattern))[0];
-                $examinableUnit->semester = explode('.', min($pattern))[1];
-                $examinableUnit->attempt = min($pattern);
-                $examinableUnit->save();
-            }
-            return redirect()->back()->with('success', 'Student admitted and invoiced successfully');
-        }
     }
 
     public function classPattern($id){
