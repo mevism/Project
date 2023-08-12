@@ -32,14 +32,14 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h5 fw-bold mb-0 text-uppercase">
                         COURSE TRANSFERS
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="{{ route('student') }}">Dashboard</a>
+                            <a class="link-fx" href="{{ route('student') }}">student progress</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
                             ALL TRANSFER REQUESTS

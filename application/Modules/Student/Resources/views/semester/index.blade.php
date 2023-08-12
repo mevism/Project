@@ -32,17 +32,17 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
                         SEMESTER REGISTRATION
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="{{ route('student') }}"> Semester </a>
+                            <a class="link-fx" href="{{ route('student') }}"> student progress </a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            Registration Details
+                            Registration history
                         </li>
                     </ol>
                 </nav>
@@ -52,10 +52,10 @@
 
     <div class="block block-rounded">
         <div class="block-content block-content-full">
+            <div class="d-flex justify-content-end m-2">
+                <a class="btn btn-sm btn-alt-primary m-2" href="{{ route('student.requestRegistration') }}">Create request</a>
+            </div>
             <div class="table-responsive">
-                <div class="d-flex justify-content-end m-2">
-                    <a class="btn btn-sm btn-alt-primary m-2" href="{{ route('student.requestRegistration') }}">Create request</a>
-                </div>
                 <table id="example" class="table table-responsive-sm table-striped table-borderless fs-sm">
                     <thead>
                         <th>#</th>
@@ -71,8 +71,8 @@
                         @foreach($reg as $key => $register)
                             <tr>
                                 <td> {{ ++$key }} </td>
-                                <td> {{ $register->academic_year }} </td>
-                                <td> {{ $register->academic_semester }} </td>
+                                <td> {{ \Carbon\Carbon::parse($register->NominalIntake->academicYear->year_start)->format('Y').'/'.\Carbon\Carbon::parse($register->NominalIntake->academicYear->year_end)->format('Y') }} </td>
+                                <td> {{ strtoupper(\Carbon\Carbon::parse($register->NominalIntake->intake_from)->format('M').'/'.\Carbon\Carbon::parse($register->NominalIntake->intake_to)->format('M')) }} </td>
                                 <td> {{ $register->year_study }} </td>
                                 <td> {{ $register->semester_study }} </td>
                                 <td> {{ $register->patternRoll->season }} </td>

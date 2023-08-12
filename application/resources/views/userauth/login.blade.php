@@ -59,16 +59,16 @@
                                 <!-- jQuery Validation (.js-validation-signin class is initialized in js/pages/op_auth_signin.min.js which was auto compiled from _js/pages/op_auth_signin.js) -->
                                 <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
                                 <div class="row g-0 justify-content-center">
-                                    <div class="col-sm-8 col-xl-4">
+                                    <div class="col-sm-10 col-xl-5">
                                         <form class="js-validation-signin" action="{{ route('user.login') }}" method="POST">
                                             @csrf
                                             <div class="form-floating mb-4">
-                                                <input type="text" class="form-control form-control-alt" id="username" name="username">
-                                                <label class="form-label" for="username">User ID</label>
+                                                <input type="text" class="form-control" id="username" name="username" placeholder="user username">
+                                                <label class="form-label" for="username">USER EMAIL/USER ID/STUDENT NUMBER</label>
                                             </div>
                                             <div class="form-floating mb-4">
-                                                <input type="password" class="form-control form-control-alt" id="password" name="password">
-                                                <label class="form-label" for="username">Password</label>
+                                                <input type="password" class="form-control" id="password" name="password" placeholder="use password">
+                                                <label class="form-label" for="username">USER PASSWORD</label>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mb-4">
                                                 <div>

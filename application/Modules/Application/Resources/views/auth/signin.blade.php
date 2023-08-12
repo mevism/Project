@@ -40,13 +40,13 @@
                                         <form class="js-validation-signin" action="{{ route('application.signin') }}" method="POST">
                                             @csrf
                                             <div class="py-3">
-                                                <div class="mb-4">
-                                                    <input type="text" class="form-control form-control-alt form-control-lg" name="mobile" placeholder="Enter phone number">
+                                                <div class="mb-4 form-floating">
+                                                    <input type="text" class="form-control form-control-sm" name="mobile" placeholder="Enter phone number">
                                                 </div>
                                                 <div class="mb-4">
-                                                    <input type="password" class="form-control form-control-alt form-control-lg" id="password" name="password" placeholder="Enter ID or Birth certificate">
+                                                    <input type="password" class="form-control form-control-sm" id="password" name="password" placeholder="Enter ID or Birth certificate">
                                                 </div>
-                                                <div class="mb-4">
+                                                <div class="mb-4 form-floating">
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" value="" id="login-remember" name="login-remember">
                                                         <label class="form-check-label" for="login-remember">Remember Me</label>

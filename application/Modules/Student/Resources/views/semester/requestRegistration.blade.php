@@ -33,14 +33,14 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
                         REQUEST REGISTRATION
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="{{ route('student') }}">Dashboard</a>
+                            <a class="link-fx" href="{{ route('student') }}">STUDENT PROGRESS</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
                             Semester Details
@@ -60,7 +60,7 @@
                         <legend  class="float-none w-auto"> <h6> CURRENT DETAILS </h6></legend>
                     <div class="mb-4">
                         <span class="h5 fs-sm mb-3">STUDENT NAME : </span>
-                        <span class="h6 fs-sm fw-normal mb-3"> {{ $student->sname }} {{ $student->fname }} {{ $student->mname }} </span>
+                        <span class="h6 fs-sm fw-normal mb-3"> {{ $student->surname }} {{ $student->first_name }} {{ $student->middle_name }} </span>
                     </div>
                     <div class="mb-4">
                         <span class="h5 fs-sm mb-3">PHONE NUMBER : </span>
@@ -68,23 +68,23 @@
                     </div>
                         <div class="mb-4">
                             <span class="h5 fs-sm mb-3">STUDENT EMAIL ADDRESS : </span>
-                            <span class="h6 fs-sm fw-normal mb-3"> {{ $student->student_email }} </span>
+                            <span class="h6 fs-sm fw-normal mb-3"> {{ $student->email }} </span>
                         </div>
                     <div class="mb-4">
                         <span class="h5 fs-sm mb-3">PERSONAL EMAIL ADDRESS : </span>
                         <span class="h6 fs-sm fw-normal mb-3"> {{ $student->email }} </span>
                     </div>
+{{--                    <div class="mb-4">--}}
+{{--                        <span class="h5 fs-sm mb-3">PHYSICAL ADDRESS : </span>--}}
+{{--                        <span class="h6 fs-sm fw-normal mb-3"> P.O BOX {{ $student->address }}-{{ $student->postal_code }} {{ $student->town }}</span>--}}
+{{--                    </div>--}}
                     <div class="mb-4">
-                        <span class="h5 fs-sm mb-3">PHYSICAL ADDRESS : </span>
-                        <span class="h6 fs-sm fw-normal mb-3"> P.O BOX {{ $student->address }}-{{ $student->postal_code }} {{ $student->town }}</span>
-                    </div>
-                    <div class="mb-4">
-                        <span class="h5 fs-sm mb-3">REG. NUMBER : </span>
+                        <span class="h5 fs-sm mb-3">REGISTRATION NUMBER : </span>
                         <span class="h6 fs-sm fw-normal"> {{ $student->student_number }} </span>
                     </div>
                     <div class="mb-4">
                         <span class="h5 fs-sm mb-3">COURSE ADMITTED : </span>
-                        <span class="h6 fs-sm fw-normal"> {{ $student->course_name }} </span>
+                        <span class="h6 fs-sm fw-normal"> {{ \Modules\Registrar\Entities\Courses::where('course_id', $student->course_id)->first()->course_name }} </span>
                     </div>
 
                     <div class="mb-4">
@@ -98,7 +98,7 @@
                         <span class="h6 fs-sm fw-normal mb-3"> {{ $reg->semester_study }} ({{ $reg->patternRoll->season }})</span>
 
                         <span class="h5 fs-sm mb-3"> ACADEMIC YEAR : </span>
-                        <span class="h6 fs-sm fw-normal mb-3"> {{ $reg->academic_year }}</span>
+                        <span class="h6 fs-sm fw-normal mb-3"> {{ \DB::table('academicperiods')->where('intake_id', $reg->intake_id)->first()->academic_year }}</span>
                         @endif
                     </div>
                     </fieldset>
@@ -171,7 +171,7 @@
                                             </div>
                                         @endif
                                     @endforeach
-                                    <small class="text-danger">Number of units selected must match department requirements</small>
+                                    <small class="text-danger">NB: Number of units selected must match department requirements</small>
                                 </fieldset>
                                 @endif
                         </fieldset>
