@@ -163,7 +163,7 @@ $(document).ready( function (){
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="{{ route('student') }}">Dashboard</a>
+                            <a class="link-fx" href="{{ route('student') }}">STUDENT PROGRESS</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
                             REQUEST ACADEMIC LEAVE/DEFERMENT

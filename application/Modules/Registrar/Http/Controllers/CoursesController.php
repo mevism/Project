@@ -2321,8 +2321,8 @@ class CoursesController extends Controller
 
     public function admissions(){
         $admission = AdmissionsView::where('medical_status', 1)
-            //            ->where('status', NULL)
-            ->get();
+                     ->where('status', NULL)
+                    ->get();
 
         return view('registrar::admissions.index')->with('admission', $admission);
     }

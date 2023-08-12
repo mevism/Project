@@ -41,7 +41,7 @@
                                 @if($admission->disabled == 'NO')
                                     {{ $admission->disabled }}
                                 @else
-                                   {{ \Modules\Application\Entities\ApplicantDisability::where('applicant_id', $admission->applcant_id)->disability }}
+                                   {{ \Modules\Application\Entities\ApplicantDisability::where('applicant_id', $admission->applicant_id)->first()->disability }}
                                 @endif
                             </div>
                         </div>
