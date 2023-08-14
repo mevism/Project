@@ -37,10 +37,7 @@
                         <select name="semester" class="form-control  text-uppercase" placeholder="---">
                           <option selected disabled> Select Academic SEMESTER </option>
                           @foreach ($semesters as $intake)
-                              <option value="{{ $intake->intake_id }}">
-                                  @php $year = $intake->academic_year_id; @endphp
-                                  {{ Carbon\carbon::parse($intake->intake_from)->format('M') }}/{{ Carbon\carbon::parse($intake->intake_to)->format('M') }} - {{ \Carbon\Carbon::parse(\Modules\Registrar\Entities\AcademicYear::where('year_id', $year)->first()->year_start)->format('Y').'/'.\Carbon\Carbon::parse(\Modules\Registrar\Entities\AcademicYear::where('year_id', $year)->first()->year_end)->format('Y') }}
-                              </option>
+                              <option value="{{ $intake->intake_id }}"> {{ $intake->intake_month }} - {{ $intake->academic_year }}</option>
                           @endforeach
                         </select>
                           <label class="form-label">ACADEMIC SEMESTER</label>

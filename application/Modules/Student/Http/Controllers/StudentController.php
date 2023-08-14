@@ -326,31 +326,20 @@ class StudentController extends Controller
     // }
 
     public function academicLeave(){
-        $leaves = AcademicLeave::where('student_id', \auth()->guard('student')->user()->student_id)->get();
+        $leaves = AcademicLeavesView::where('student_id', \auth()->guard('student')->user()->student_id)->get();
         return view('student::academic.academicleave')->with(['leaves' => $leaves]);
     }
 
     public function requestLeave(){
-        $student = StudentView::where('student_id', \auth()->guard('student')->user()->student_id)
-            ->first();
-       $stage = Nominalroll::where('reg_number', $student->student_number)->latest()->first();
-        $current_date = Carbon::now()->format('Y-m-d');
+       $student = StudentView::where('student_id', \auth()->guard('student')->user()->student_id)->first();
+       $stage = Nominalroll::where('student_id', $student->student_id)->latest()->first();
+//       $current_date = Carbon::now()->format('Y-m-d');
+       $current_date = '2024-01-05';
        $dates = Intake::where('intake_from', '<=', $current_date)->where('intake_to', '>=', $current_date)->first();
-        $list = [];
-        $data = [];
-        $academicYear =  Carbon::parse($dates->academicYear->year_start)->format('Y').'/'.Carbon::parse($dates->academicYear->year_end)->format('Y');
-       $semester = Carbon::parse($dates->intake_from)->format('M').'/'.Carbon::parse($dates->intake_to)->format('M');
-
-       $event = CalenderOfEvents::where('academic_year_id', $academicYear)
-            ->where('intake_id', strtoupper($semester))
-            ->where('event_id', 4)
-            ->first();
-       if($stage == null){
-            $currentStage = [];
-       }else{
-            $currentStage = $stage->year_study.'.'.$stage->semester_study;
-            $pattern = ClassPattern::where('class_code', $stage->class_code)->get();
-
+       $intake =  DB::table('academicperiods')->where('intake_id', $dates->intake_id)->first();
+       $event = CalenderOfEvents::where('intake_id', $intake->intake_id)->where('event_id', 4)->first();
+       $currentStage = $stage->year_study.'.'.$stage->semester_study;
+       $pattern = ClassPattern::where('class_code', $stage->class_code)->get();
             foreach ($pattern as $classPattern){
                 $list[] = $classPattern->semester;
             }
@@ -360,49 +349,54 @@ class StudentController extends Controller
             $next_id = $id_collection->get($this_key);
 
             if ( (float)$currentStage > (float)'1.2'){
-                    $currently = $stage->year_study.'.'.$stage->semester_study;
-                    $classPattern =  ClassPattern::where('semester', '<',  $currently)
-                                        ->get()
-                                        ->groupBy('class_code');
-                }
-
-                if (\auth()->guard('student')->user()->enrolledCourse->student_type == 2){
-                    $mode = 'J-FT';
-                }elseif (\auth()->guard('student')->user()->enrolledCourse->student_type == 1){
-                    $mode = 'S-FT';
-                }elseif (\auth()->guard('student')->user()->enrolledCourse->student_type == 3){
-                    $mode = 'S-PT';
-                }else{
-                    $mode = 'S-EV';
-                }
-
-                foreach ($classPattern as $class => $pattern){
-                    $classes[] = Classes::where('course_id', \auth()->guard('student')->user()->enrolledCourse->course_id)
-                        ->where('name', $class)
-                        ->where('name', '!=', \auth()->guard('student')->user()->enrolledCourse->current_class)
-                        ->where('attendance_id', $mode)
-                        ->latest()
-                        ->get()
-                        ->groupBy('name');
-                }
+                $currently = $stage->year_study.'.'.$stage->semester_study;
+                $classPattern =  ClassPattern::where('semester', '<',  $currently)
+                    ->get()
+                    ->groupBy('class_code');
             }
 
-        return view('student::academic.requestleave')->with(['student' => $student, 'data' => $data, 'stage' => $stage, 'event' => $event, 'dates' => $current_date, 'list' => $list, 'classes' => $classes, 'intake' => $dates]);
+            $student = StudentView::where('student_id', \auth()->guard('student')->user()->student_id)->first();
+
+            if ($student->student_type == 2){
+                $mode = 'J-FT';
+            }elseif ($student->student_type == 1){
+                $mode = 'S-FT';
+            }elseif ($student->student_type == 3){
+                $mode = 'S-PT';
+            }else{
+                $mode = 'S-EV';
+            }
+
+            foreach ($classPattern as $pattern){
+                $classes = Classes::where('course_id', $student->course_id)
+                    ->where('name', '!=', $student->current_class)
+                    ->where('attendance_id', $mode)
+                    ->latest()
+                    ->get()
+                    ->groupBy('name');
+            }
+
+        return view('student::academic.requestleave')->with(['student' => $student, 'stage' => $stage, 'event' => $event, 'dates' => $current_date, 'list' => $list, 'classes' => $classes, 'intake' => $dates]);
 
     }
 
 
     public function leaveClasses(Request $request){
-        $data = ClassPattern::where('class_code', $request->class)
+        $data = ClassPattern::where('class_code', $request->class_code)
                             ->where('semester', $request->stage)
                             ->first();
         return response()->json($data);
     }
 
     public function defermentRequest(Request $request){
-        $deferment = Nominalroll::where('reg_number', $request->studNumber)
-            ->first();
-        return response()->json($deferment);
+        $deferment = Nominalroll::where('student_id', $request->studNumber)->first();
+        $period = DB::table('academicperiods')->where('intake_id', $deferment->intake_id)->first();
+        $combinedData = [
+            'deferment' => $deferment,
+            'period' => $period
+        ];
+
+        return response()->json($combinedData);
     }
 
     public function submitLeaveRequest(Request $request){
@@ -412,11 +406,9 @@ class StudentController extends Controller
             'end_date' => 'required',
             'reason' => 'required|string'
         ]);
-        $currentStage = Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)
-                                    ->latest()
-                                    ->first();
-        if (AcademicLeave::where('student_id', $currentStage->student_id)->where('type', $request->type)->where('year_study', $currentStage->year_study)->where('semester_study', $currentStage->semester_study)->exists()){
 
+       $currentStage = Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)->latest()->first();
+        if (AcademicLeave::where('student_id', $currentStage->student_id)->where('type', $request->type)->where('year_study', $currentStage->year_study)->where('semester_study', $currentStage->semester_study)->exists()){
             return redirect()->back()->with('info', 'You have already requested leave for this stage');
         }else {
 
@@ -425,31 +417,16 @@ class StudentController extends Controller
             $leave->student_id = auth()->guard('student')->user()->student_id;
             $leave->leave_id = $leaveId->generateId();
             $leave->type = $request->type;
-            $leave->current_class = $currentStage->class_code;
-            $leave->year_study = $currentStage->year_study;
-            $leave->semester_study = $currentStage->semester_study;
-            $leave->academic_year = $currentStage->academic_year;
-            $leave->intake_id = $request->intake;
+            $leave->current_class = $request->current_class;
+            $leave->year_study = explode('.', $request->newStage)[0];
+            $leave->semester_study = explode('.', $request->newStage)[1];
+            $leave->academic_year = $request->newAcademic;
+            $leave->academic_semester = $request->newSemester;
             $leave->from = $request->start_date;
             $leave->to = $request->end_date;
             $leave->reason = $request->reason;
+            $leave->defer_class = $request->newClass;
             $leave->save();
-
-            $differedId = new CustomIds();
-            $deferredClass = new DeferredClass;
-            $deferredClass->differed_class_id = $differedId->generateId();
-            $deferredClass->leave_id = $leave->leave_id;
-            $deferredClass->differed_class = $request->newClass;
-            $deferredClass->differed_year = $request->newAcademic;
-            $deferredClass->differed_semester = $request->newSemester;
-            $deferredClass->stage = $request->newStage;
-            $deferredClass->save();
-
-            $approvalId = new CustomIds();
-            $approvals = new AcademicLeaveApproval;
-            $approvals->leave_approval_id = $approvalId->generateId();
-            $approvals->leave_id = $leave->leave_id;
-            $approvals->save();
 
             return redirect()->route('student.requestacademicleave')->with('success', 'Leave request created successfully');
         }

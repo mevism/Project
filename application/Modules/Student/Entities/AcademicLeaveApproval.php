@@ -9,17 +9,8 @@ class AcademicLeaveApproval extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = ['leave_id', 'cod_status', 'cod_remarks', 'cod_user_id', 'leave_approval_id'];
 
-    public function leaveApproval(){
-
-        return $this->belongsTo(AcademicLeave::class, 'id');
-    }
-    // public function leaveApp(){
-
-    //     return $this->belongsTo(AcademicLeave::class, 'academic_leave_id');
-    // }
-    
     protected static function newFactory()
     {
         return \Modules\Student\Database\factories\AcademicLeaveApprovalFactory::new();

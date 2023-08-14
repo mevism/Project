@@ -5,18 +5,18 @@
   <div class="content content-full">
       <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
         <div class="flex-grow-1">
-          <h6 class="block-title">
+          <h6 class="h6 fw-bold mb-0 text-uppercase">
             EDIT CALENDER OF EVENTS
           </h6>
       </div>
           <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-              <ol class="breadcrumb breadcrumb-alt">
+              <ol class="breadcrumb breadcrumb-alt text-uppercase">
                   <li class="breadcrumb-item">
-                      <a class="link-fx" href="javascript:void(0)">Calender</a>
+                      <a class="link-fx" href="javascript:void(0)">Events Calender</a>
                   </li>
-                  {{-- <li class="breadcrumb-item" aria-current="page">
-                    <a  href="showCalenderOfEvents">View  Calender</a>
-                  </li> --}}
+                  <li class="breadcrumb-item" aria-current="page">
+                    <a  href="showCalenderOfEvents">Update Event</a>
+                  </li>
               </ol>
           </nav>
       </div>
@@ -33,27 +33,18 @@
                    <form action="{{ route('courses.updateCalenderOfEvents', ['id'=> Crypt::encrypt($data->id)]) }}" method="POST">
                     @csrf
                      @method('PUT')
-                      <div class="form-floating col-12 col-xl-12 mb-2">
-                        <select name="academicyear" class="form-control form-control-alt text-uppercase">
-                          <option selected value="{{ $data->academic_year_id }}"> {{ $data->academic_year_id }} </option>
-                          @foreach ($academicyear as $item)
-                          <option value="{{ Carbon\carbon::parse($item->year_start)->format('Y') }}/{{ Carbon\carbon::parse($item->year_end)->format('Y') }}">{{ Carbon\carbon::parse($item->year_start)->format('Y') }}/{{ Carbon\carbon::parse($item->year_end)->format('Y') }}</option>
-                          @endforeach
-                          <label class="form-label">ACADEMIC YEAR</label>
-                        </select>
-                      </div>
+                       <div class="form-floating mb-3 col-12 col-xl-12">
+                           <select name="intake" class="form-control  text-uppercase">
+                               <option selected value="{{ $data->intake_id }}">{{ \Illuminate\Support\Facades\DB::table('academicperiods')->where('intake_id', $data->intake_id)->first()->intake_month }} - {{ \Illuminate\Support\Facades\DB::table('academicperiods')->where('intake_id', $data->intake_id)->first()->academic_year }}</option>
+                               @foreach ($intakes as $intake)
+                                   <option value="{{ $intake->intake_id }}">{{ $intake->intake_month }} - {{ $intake->academic_year }}</option>
+                               @endforeach
+                           </select>
+                           <label class="form-label">ACADEMIC SEMESTER</label>
+                       </div>
 
-                      <div class="form-floating col-12 col-xl-12 mb-2">
-                        <select name="semester" class="form-control form-control-alt text-uppercase">
-                            <option @if($data->intake_id == 'SEP/DEC') selected @endif value="SEP/DEC">SEP/DEC</option>
-                            <option @if($data->intake_id == 'JAN/APR') selected @endif value="JAN/APR">JAN/APR</option>
-                            <option @if($data->intake_id == 'MAY/AUG') selected @endif value="MAY/AUG">MAY/AUG</option>
-                          <label class="form-label">SEMESTER</label>
-                        </select>
-                      </div>
-
-                      <div class="form-floating col-12 col-xl-12 mb-2">
-                        <select name="events" class="form-control form-control-alt text-uppercase">
+                      <div class="form-floating col-12 col-xl-12 mb-3">
+                        <select name="events" class="form-control text-uppercase">
                           <option selected value="{{ $data->event_id }}"> {{ $data->events->name }} </option>
                           @foreach ($events as $event)
                           <option value="{{ $event->id }}">{{ $event->name }}</option>
@@ -63,12 +54,12 @@
                       </div>
 
                       <div class="form-floating col-12 col-xl-12 mb-2" >
-                        <input type="date" class="form-control form-control-alt" value="{{ $data->start_date}}" id="start_date" name="start_date" placeholder="Start Date">
+                        <input type="date" class="form-control" value="{{ $data->start_date}}" id="start_date" name="start_date" placeholder="Start Date">
                         <label class="form-label">START DATE</label>
                       </div>
 
                       <div class="form-floating col-10 col-xl-12 mb-2">
-                        <input type="date" class="form-control form-control-alt" value="{{ $data->end_date }}" name="end_date" placeholder="End Date">
+                        <input type="date" class="form-control" value="{{ $data->end_date }}" name="end_date" placeholder="End Date">
                         <label class="form-label">END DATE</label>
                       </div>
 

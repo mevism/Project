@@ -28,12 +28,12 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h6 class="h6 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
                         VIEW REQUEST
                     </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="javascript:void(0)">Department</a>
                         </li>
@@ -58,13 +58,13 @@
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Reg. Number </div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $leave->student_number }}
+                                        {{ $leave->StudentsLeave->student_number }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Student Name</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $leave->sname.' '.$leave->fname.' '.$leave->mname }}
+                                        {{ $leave->StudentsLeave->surname.' '.$leave->StudentsLeave->first_name.' '.$leave->StudentsLeave->middle_name }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -74,16 +74,16 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-md-3 fw-bold">Current Course</div>
+                                    <div class="col-md-3 fw-bold">Course Admitted</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $student->course_name }}
+                                        {{ $leave->StudentsLeave->EnrolledStudentCourse->course_name }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
-                                    <div class="col-md-3 fw-bold">Current Department</div>
+                                    <div class="col-md-3 fw-bold">Department Admitted</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $student->name }}
+                                        {{ $leave->StudentsLeave->EnrolledStudentCourse->getCourseDept->name }}
                                     </div>
                                 </div>
 
@@ -121,14 +121,14 @@
                                 <div class="row mb-3">
                                     <div class="col-md-4 fw-bold">New Class</div>
                                     <div class="col-md-8 fs-sm">
-                                        {{ $leave->differed_class }}
+                                        {{ $leave->defer_class }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-4 fw-bold">New Stage</div>
                                     <div class="col-md-8 fs-sm">
-                                        {{ $leave->stage }}
+                                        {{ $leave->year_study.'.'.$leave->semester_study }}
                                     </div>
                                 </div>
 
@@ -156,15 +156,15 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-center m-2">
-                            @if($leave->registrar_status == 0)
+                            @if($leave->registrar_status == null && $leave->dean_status == null)
                             <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('dean.acceptLeaveRequest', $leave->leave_id) }}"> Accept Transfer </a>
                             <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Transfer</a>
                             @else
-                                @if($leave->dean_status == 1)
+                                @if($leave->registrar_status == null && $leave->dean_status == 1)
                                     <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Transfer</a>
-                                @else
+                            @elseif($leave->registrar_status == null && $leave->dean_status == 2)
                                     <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('dean.acceptLeaveRequest', $leave->leave_id) }}"> Accept Transfer </a>
-                                @endif
+                            @endif
                             @endif
                     </div>
                 </div>

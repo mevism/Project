@@ -71,7 +71,7 @@
                     @foreach($leaves as $key => $leave)
                         <tr>
                             <td>{{ ++$key }} </td>
-                            <td> {{ $leave->studentLeave->enrolledCourse->current_class }} </td>
+                            <td> {{ $leave->current_class }} </td>
                             <td> Y{{ $leave->year_study }} S{{ $leave->semester_study}} </td>
                             <td> {{ $leave->academic_year }} </td>
                             <td nowrap="">
@@ -84,12 +84,12 @@
                             <td nowrap=""> From : {{ $leave->from }} <br> To : {{ $leave->to }}</td>
                             <td> {{ $leave->reason }} </td>
                             <td nowrap="">
-                                @if($leave->approveLeave->cod_status < 1)
+                                @if($leave->cod_status < 1)
                                     <a class="btn btn-sm btn-alt-danger" href="{{ route('student.deleteleaverequest', $leave->leave_id) }}"> Withdraw </a>
                                 @else
-                                    @if($leave->approveLeave->status == 1)
+                                    @if($leave->status == 1)
                                         <span class="text-success fw-bold"> Successful </span>
-                                    @elseif($leave->approveLeave->status == 2)
+                                    @elseif($leave->status == 2)
                                         <span class="text-danger fw-bold"> Unsuccessful</span>
                                     @else
                                         <span class="text-info fw-bold"> Processing</span>
