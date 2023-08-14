@@ -25,17 +25,17 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h6 class="h6 fw-bold mb-0" >
+                    <h6 class="h6 fw-bold mb-0 text-uppercase" >
                      ACADEMIC/DEFERMENT LEAVE REQUESTS
                     </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="javascript:void(0)">Leaves</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            Academic/Differements
+                            Academic/Defferements
                         </li>
                     </ol>
                 </nav>
@@ -51,8 +51,7 @@
                     </div>
                     <form action="{{ route('courses.acceptedAcademicLeaves') }}" method="post">
                         @csrf
-                        <table id="example" class="table table-md table-striped table-bordered table-vcenter fs-sm">
-                            {{-- @if(count($leaves)>0) --}}
+                        <table id="example" class="table table-sm table-striped table-bordered table-vcenter fs-sm">
                                 <thead>
                                     <th>✔</th>
                                     <th>#</th>
@@ -74,9 +73,9 @@
                                                     @endif
                                                 </td>
                                                 <td> {{ ++$key }} </td>
-                                                <td>{{ $item->student_number }}</td>
-                                                <td>{{ $item->sname.' '. $item->fname.' '. $item->mname }} </td>
-                                                <td> {{ $item->StudentsDepartment->name }} </td>
+                                                <td>{{ $item->StudentsLeave->student_number }}</td>
+                                                <td>{{ $item->StudentsLeave->surname.' '. $item->StudentsLeave->first_name.' '. $item->StudentsLeave->middle_name }} </td>
+                                                <td> {{ $item->StudentsLeave->EnrolledStudentCourse->getCourseDept->name }} </td>
                                                 <td>
                                                     {{ $item->cod_remarks }}
                                                 </td>
@@ -91,11 +90,6 @@
 
                                 @endforeach
                                 </tbody>
-                            {{-- @else
-                                <tr>
-                                    <span class="text-muted text-center fs-sm">There are no new leaves submitted</span>
-                                </tr>
-                            @endif --}}
                         </table>
                         @if(count($leaves) > 0)
                         <div>

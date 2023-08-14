@@ -600,40 +600,38 @@ class CoursesController extends Controller
         return redirect()->back()->with('success', 'Readmission requests processed successfully.');
     }
 
-    public function leaves()
-    {
-        $leaves = AcademicLeave::all()->groupBy('intake_id');
+    public function leaves() {
+        $leaves = AcademicLeavesView::all()->groupBy('intake_id');
         return  view('registrar::leaves.yearlyLeaves')->with(['leaves' => $leaves]);
     }
 
-    public function academicLeave($id)
-    {
+    public function academicLeave($id){
         $leaves  =  AcademicLeavesView::where('intake_id', $id)->where('dean_status', '>', 0)->get();
         return view('registrar::leaves.index')->with(['leaves' => $leaves]);
     }
 
-    public function acceptedAcademicLeaves(Request $request)
-    {
+    public function acceptedAcademicLeaves(Request $request){
         $request->validate(['submit' => 'required']);
-
         foreach ($request->submit as $id) {
             $approval = AcademicLeavesView::where('leave_id', $id)->first();
             if ($approval->dean_status == 1) {
                 AcademicLeaveApproval::where('leave_id', $id)->update([
                     'registrar_status'  =>  1,
-                    'status'  =>  1
+                    'status'  =>  1,
+                    'registrar_user_id' => \auth()->guard('user')->user()->user_id
                 ]);
 
                 StudentCourse::where('student_id', $approval->student_id)->update([
-                    'status' => 3
+                    'status' => 2
                 ]);
-                Mail::to($approval->student_email)->send(new AcademicLeaveMail($approval));
+                Mail::to($approval->StudentsLeave->email)->send(new AcademicLeaveMail($approval));
             } else {
                 AcademicLeaveApproval::where('leave_id', $id)->update([
                     'registrar_status'  =>  1,
                     'status'  =>  2,
+                    'registrar_user_id' => \auth()->guard('user')->user()->user_id
                 ]);
-                Mail::to($approval->student_email)->send(new RejectedAcademicMail($approval));
+                Mail::to($approval->StudentsLeave->email)->send(new RejectedAcademicMail($approval));
             }
         }
 
@@ -988,9 +986,8 @@ class CoursesController extends Controller
      */
 
     public function addCalenderOfEvents(){
-//        $academicyear  =  AcademicYear::latest()->get();
-        $intakes = Intake::latest()->get();
-        $events        =  Event::all();
+        $intakes = DB::table('academicperiods')->get();
+        $events = Event::all();
         return view('registrar::eventsCalender.addCalenderOfEvents')->with(['semesters'  =>  $intakes, 'events'  => $events]);
     }
 
@@ -1011,27 +1008,21 @@ class CoursesController extends Controller
         return redirect()->route('courses.showCalenderOfEvents')->with('success', 'Calender created successfuly.');
     }
 
-    public function editCalenderOfEvents($id)
-    {
+    public function editCalenderOfEvents($id){
         $hashedId  =  Crypt::decrypt($id);
-        $academicyear  =  AcademicYear::latest()->get();
-        $intakes =  Intake::all();
+        $intakes = DB::table('academicperiods')->get();
         $events =  Event::all();
         $data =  CalenderOfEvents::find($hashedId);
-
-        return view('registrar::eventsCalender.editCalenderOfEvents')->with(['data' => $data, 'academicyear' => $academicyear, 'events' => $events, 'intakes' => $intakes]);
+        return view('registrar::eventsCalender.editCalenderOfEvents')->with(['data' => $data, 'events' => $events, 'intakes' => $intakes]);
     }
 
-    public function updateCalenderOfEvents(Request $request, $id)
-    {
+    public function updateCalenderOfEvents(Request $request, $id){
         $hashedId  =  Crypt::decrypt($id);
-
-        $data                 =         CalenderOfEvents::find($hashedId);
-        $data->academic_year_id =  $request->input('academicyear');
-        $data->intake_id =  $request->input('semester');
-        $data->event_id =  $request->input('events');
-        $data->start_date =  $request->input('start_date');
-        $data->end_date =  $request->input('end_date');
+        $data  =  CalenderOfEvents::find($hashedId);
+        $data->intake_id =  $request->intake;
+        $data->event_id =  $request->events;
+        $data->start_date =  $request->start_date;
+        $data->end_date =  $request->end_date;
         $data->update();
 
         return redirect()->route('courses.showCalenderOfEvents')->with('status', 'Data Updated Successfully');

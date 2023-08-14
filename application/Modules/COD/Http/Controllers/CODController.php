@@ -972,35 +972,44 @@ class CODController extends Controller
 
     public function yearlyAcademicLeave($id){
         $deptID = auth()->guard('user')->user()->employmentDepartment->first()->department_id;
-        $leaves = AcademicLeavesView::where('intake_id', $id)
-            ->where('department_id', $deptID)
-            ->latest()
-            ->get();
-
+        $courses = Courses::where('department_id', $deptID)->pluck('course_id');
+        $student = StudentCourse::whereIn('course_id', $courses)->where('status', 1)->pluck('student_id');
+        $leaves = AcademicLeavesView::whereIn('student_id', $student)->latest()->get();
         return view('cod::leaves.annualLeaves')->with(['leaves' => $leaves, 'intake' => $id]);
     }
 
     public function viewLeaveRequest($id){
         $leave = AcademicLeavesView::where('leave_id', $id)->first();
-        $student = StudentView::where('student_id', $leave->student_id)->first();
-        return view('cod::leaves.viewLeaveRequest')->with(['leave' => $leave, 'student' => $student]);
+        return view('cod::leaves.viewLeaveRequest')->with(['leave' => $leave]);
     }
 
     public function acceptLeaveRequest($id){
         $updateApproval = AcademicLeavesView::where('leave_id', $id)->first();
-        AcademicLeaveApproval::where('leave_id', $id)->update([
-            'cod_status' => 1,
-            'cod_remarks' => 'Request accepted'
+        if ( AcademicLeaveApproval::where('leave_id', $id)->exists()){
+            AcademicLeaveApproval::where('leave_id', $id)->update([
+                'cod_status' => 1,
+                'cod_remarks' => 'Request accepted'
             ]);
+        }else{
+            $approval = new CustomIds();
+            AcademicLeaveApproval::create(['leave_id' => $id, 'cod_status' => 1,'cod_remarks' => 'Request accepted', 'cod_user_id' => auth()->guard('user')->user()->user_id, 'leave_approval_id' => $approval->generateId()]);
+        }
+
         return redirect()->route('department.yearlyLeaves', $updateApproval->intake_id)->with('success', 'Deferment/Academic leave approved');
     }
 
     public function declineLeaveRequest(Request $request, $id){
-            $updateApproval = AcademicLeavesView::where('leave_id', $id)->first();
+        $updateApproval = AcademicLeavesView::where('leave_id', $id)->first();
+        if ( AcademicLeaveApproval::where('leave_id', $id)->exists()){
             AcademicLeaveApproval::where('leave_id', $id)->update([
                 'cod_status' => 2,
-                'cod_remarks' => $request->remarks
+                'cod_remarks' => 'Request declined'
             ]);
+        }else{
+            $approval = new CustomIds();
+            AcademicLeaveApproval::create(['leave_id' => $id, 'cod_status' => 2,'cod_remarks' => 'Request Declined', 'cod_user_id' => auth()->guard('user')->user()->user_id, 'leave_approval_id' => $approval->generateId()]);
+        }
+
         return redirect()->route('department.yearlyLeaves', $updateApproval->intake_id)->with('success', 'Deferment/Academic leave approved');
     }
 

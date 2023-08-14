@@ -52,11 +52,11 @@
             </tr>
             <tr>
                 <td align="auto" class="bgcolor2" style="padding: 40px 20px 40px 20px; color: #555555; font-family: Arial, sans-serif; font-size: 20px; line-height: 30px; border-bottom: 1px solid #f6f6f6;">
-                    <h5>Dear {{ $approval->sname.' '.$approval->fname.' '.$approval->mname }} , </h5>
+                    <h5>Dear {{ $approval->StudentsLeave->surname.' '.$approval->StudentsLeave->first_name.' '.$approval->StudentsLeave->middle_name }} , </h5>
                     <p>
                       Your academic leave/deferment has been declined.
                     </p>
-                    <p>Reason: {{ $approval->dean_remarks }}</p>
+                    <p> Reason: {{ $approval->dean_remarks }}</p>
                      </div>
                 </td>
             </tr>

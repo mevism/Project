@@ -10,14 +10,11 @@ $(document).ready( function (){
         $(document).on('change', '#newclass', function () {
             var class_code = $('#newclass').val();
             var stage = $('#stage').val();
-
-            console.log(stage);
-
+            console.log(class_code);
             $.ajax({
-
                 type: 'get',
                 url: '{{ route('student.getLeaveClasses') }}',
-                data: { class:class_code, stage:stage },
+                data: { class_code:class_code, stage:stage },
                 dataType: 'json',
                 success:function (data){
 
@@ -59,35 +56,33 @@ $(document).ready( function (){
         });
     }else {
 
-        var stage = {{ $stage->year_study.'.'.$stage->semester_study }}
-
-        console.log(stage)
+        var stage = {{ $stage->year_study.'.'.$stage->semester_study }};
 
         if(stage == 1.1) {
 
-            var studentNumber = '{{ $student->student_number }}'.match(/\//);
-            var studNumber = studentNumber.input;
+            var studentNumber = '{{ $student->student_id }}';
 
             $.ajax({
-
                 type: 'get',
                 url: '{{ route('student.defermentRequest') }}',
-                data: {studNumber: studNumber},
+                data: {studNumber: studentNumber},
                 dataType: 'json',
                 success: function (data) {
 
-                    var oldclass = data.class_code.split("/")
+                    var oldclass = data.deferment.class_code.split("/")
                     var edittedclass = oldclass[oldclass.length, 1].slice(-4)
-                    var newcls = data.class_code.replace(edittedclass, parseInt(edittedclass) + 1)
-                    var newyear = data.academic_year.split("/")
+                    var newcls = data.deferment.class_code.replace(edittedclass, parseInt(edittedclass) + 1)
+                    var newyear = data.period.academic_year.split("/")
                     var yearstart = parseInt(newyear[newyear.length, 0]) + 1
                     var yearend = parseInt(newyear[newyear.length, 1]) + 1
-                    var dated = data.academic_semester.slice(0, -4)
+                    var dated = data.period.intake_month.slice(0, -4)
+
+                    console.log(yearend)
 
                     $('#mynewclass').val(newcls)
                     $('#newClass').val(newcls)
-                    $('#newStage').val(data.year_study + '.' + data.semester_study)
-                    $('#newSemester').val(data.academic_semester)
+                    $('#newStage').val(data.deferment.year_study + '.' + data.deferment.semester_study)
+                    $('#newSemester').val(data.period.intake_month)
                     $('#newacademic').val(yearstart + '/' + yearend)
                     $('#enddate').val(yearstart + '-' + dated + '-01')
                 }
@@ -95,43 +90,29 @@ $(document).ready( function (){
             });
 
         }else {
-
-            console.log('hello')
-
-            var studentNumber = '{{ $student->student_number }}'.match(/\//);
-            var studNumber = studentNumber.input;
-
+            var studentNumber = '{{ $student->student_id }}';
             var semesters = ['SEP/DEC', 'JAN/APR', 'MAY/AUG'];
-
-            console.log(semesters)
-
             $.ajax({
-
                 type: 'get',
                 url: '{{ route('student.defermentRequest') }}',
-                data: {studNumber: studNumber},
+                data: {studNumber: studentNumber},
                 dataType: 'json',
                 success: function (data) {
 
-                    var oldclass = data.class_code.split("/")
+                    var oldclass = data.deferment.class_code.split("/")
                     var edittedclass = oldclass[oldclass.length, 1].slice(-4)
-                    var newcls = data.class_code.replace(edittedclass, parseInt(edittedclass) + 1)
-                    var newyear = data.academic_year.split("/")
+                    var newcls = data.deferment.class_code.replace(edittedclass, parseInt(edittedclass) + 1)
+
+                    var newyear = data.period.academic_year.split("/")
                     var yearstart = parseInt(newyear[newyear.length, 0]) + 1
                     var yearend = parseInt(newyear[newyear.length, 1]) + 1
-                    var enddates = data.academic_semester.split("/")
+                    var enddates = data.period.intake_month.split("/")
                     var dated = enddates[enddates.length, 0]
 
-                    console.log(data.academic_semester)
-
-
-                    index = semesters.indexOf(data.academic_semester);
+                    index = semesters.indexOf(data.period.intake_month);
                     if(index >= 0 && index < semesters.length - 1)
-                        nextItem = semesters[index + 1]
-
+                        nextItem = semesters[index]
                     var newsemesters = nextItem.split("/");
-
-                        console.log(nextItem);
 
                     $('#mynewclass').val(newcls)
                     $('#newClass').val(newcls)
@@ -187,7 +168,7 @@ $(document).ready( function (){
                                 <legend class="float-none w-auto"><h6 class="fw-bold text-center"> CURRENT STUDENT COURSE DETAILS</h6></legend>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">STUDENT NAME : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ $student->sname }} {{ $student->fname }} {{ $student->mname }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->surname }} {{ $student->first_name }} {{ $student->middle_name }} </span>
                             </div>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">PHONE NUMBER : </span>
@@ -202,16 +183,16 @@ $(document).ready( function (){
                                 <span class="h6 fs-sm fw-normal"> P.O BOX {{ $student->address }}-{{ $student->postal_code }} {{ $student->town }}</span>
                             </div>
                             <div class="mb-4">
-                                <span class="h5 fs-sm">REG. NUMBER : </span>
+                                <span class="h5 fs-sm">STUDENT NUMBER : </span>
                                 <span class="h6 fs-sm fw-normal"> {{ $student->student_number }} </span>
                             </div>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">COURSE ADMITTED : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ $student->course_name }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->EnrolledStudentCourse->course_name }} </span>
                             </div>
 
                             <div class="mb-4">
-                                    <span class="h5 fs-sm">COURSE ADMITTED : </span>
+                                    <span class="h5 fs-sm">CURRENT CLASS : </span>
                                     <span class="h6 fs-sm fw-normal"> {{ $student->current_class }} </span>
                             </div>
 
@@ -261,11 +242,9 @@ $(document).ready( function (){
                                             @if($stage->year_study.'.'.$stage->semester_study > 1.2)
                                             <select name="class" id="newclass" class="form-control form-select">
                                                 <option selected disabled class="text-center"> -- choose class -- </option>
-                                                @foreach($classes as $class)
-                                                    @foreach($class as $name => $newClass)
+                                                    @foreach($classes as $name => $newClass)
                                                         <option >{{ $name }}</option>
                                                     @endforeach
-                                                @endforeach
                                             </select>
                                             <input type="hidden" name="stage" id="stage" value="{{ $stage->year_study.'.'.$stage->semester_study }}">
                                             <label>UPCOMING CLASSES </label>

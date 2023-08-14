@@ -468,23 +468,17 @@ class DeanController extends Controller{
     }
 
     public function yearlyAcademicLeave($id){
-        $user = auth()->guard('user')->user();
-        $school_id = $user->employmentDepartment->first()->schools->first()->school_id;
-        $departments = ACADEMICDEPARTMENTS::where('school_id', $school_id)->get();
-        foreach ($departments as $department) {
-            $leaves[] = AcademicLeavesView::where('intake_id', $id)
-                ->where('department_id', $department->department_id)
-                ->where('cod_status', '>', 0)
-                ->latest()
-                ->get();
-        }
+        $school_id = auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->school_id;
+        $departments = ACADEMICDEPARTMENTS::where('school_id', $school_id)->pluck('department_id');
+        $courses = Courses::whereIn('department_id', $departments)->pluck('course_id');
+        $student = StudentCourse::whereIn('course_id', $courses)->where('status', 1)->pluck('student_id');
+        $leaves = AcademicLeavesView::whereIn('student_id', $student)->latest()->get();
         return view('dean::defferment.annualLeaves')->with(['leaves' => $leaves, 'intake' => $id]);
     }
 
     public function viewLeaveRequest($id){
         $leave = AcademicLeavesView::where('leave_id', $id)->first();
-        $student = StudentView::where('student_id', $leave->student_id)->first();
-        return view('dean::defferment.viewRequests')->with(['leave' => $leave, 'student' => $student]);
+        return view('dean::defferment.viewRequests')->with(['leave' => $leave]);
     }
 
     public function acceptLeaveRequest($id){

@@ -31,12 +31,12 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
                        {{ strtoupper(\Carbon\Carbon::parse(\Modules\Registrar\Entities\Intake::where('intake_id', $intake)->first()->intake_from)->format('MY')) }} ACADEMIC/DEFERMENT LEAVE REQUESTS
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="#">Leaves</a>
                         </li>
@@ -66,18 +66,17 @@
                     <th>Action</th>
                     </thead>
                     <tbody>
-                    @foreach($leaves as $key => $allleaves)
-                        @foreach($allleaves as $leave)
+                    @foreach($leaves as $key => $leave)
                             <tr>
                                 <td> {{ ++$key}} </td>
-                                <td> {{ $leave->student_number }} </td>
-                                <td> {{ $leave->sname.' '.$leave->fname.' '.$leave->mname }} </td>
+                                <td> {{ $leave->StudentsLeave->student_number }} </td>
+                                <td> {{ $leave->StudentsLeave->surname.' '.$leave->StudentsLeave->first_name.' '.$leave->StudentsLeave->middle_name }} </td>
                                 <td> {{ $leave->current_class }} </td>
                                 <td> {{ Carbon\Carbon::parse($leave->to)->diffInMonths(Carbon\Carbon::parse($leave->from)) }} Months</td>
-                                <td> {{ $leave->differed_class }} </td>
-                                <td> {{ $leave->stage }} </td>
-                                <td> {{ $leave->differed_year }} </td>
-                                <td> {{ $leave->differed_semester }} </td>
+                                <td> {{ $leave->defer_class }} </td>
+                                <td> {{ $leave->year_study.'.'.$leave->semester_study }} </td>
+                                <td> {{ $leave->academic_year }} </td>
+                                <td> {{ $leave->academic_semester }} </td>
                                 <td>
                                     <a class="btn btn-sm btn-outline-dark" href="{{ route('dean.viewLeaveRequest', $leave->leave_id) }}"> View </a>
                                     @if($leave->dean_status == 1)
@@ -95,7 +94,6 @@
                                     @endif
                                 </td>
                             </tr>
-                        @endforeach
                     @endforeach
                     </tbody>
                 </table>
