@@ -1019,19 +1019,18 @@ class CODController extends Controller
     }
 
     public function yearlyReadmissions($id){
-        $admissions = ReadmissionsView::where('intake_id', $id)
-            ->where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-            ->latest()->get();
+        $deptID = auth()->guard('user')->user()->employmentDepartment->first()->department_id;
+        $courses = Courses::where('department_id', $deptID)->pluck('course_id');
+        $student = StudentCourse::whereIn('course_id', $courses)->whereIn('status', [2, 3, 4,])->pluck('student_id');
+        $leaves = AcademicLeavesView::whereIn('student_id', $student)->latest()->pluck('leave_id');
+        $admissions = ReadmissionsView::where('intake_id', $id)->whereIn('leave_id', $leaves)->latest()->get();
         return view('cod::readmissions.intakeReadmissions')->with(['admissions' => $admissions]);
     }
 
     public function selectedReadmission($id){
-      $readmision = ReadmissionsView::where('readmision_id', $id)->first();
-      $patterns = ClassPattern::where('semester', $readmision->StudentsReadmission->stage)
-            ->get()
-            ->groupBy('class_code');
-      $studentCourse = StudentCourse::where('student_id', $readmision->student_id)->first();
-
+      $readmission = ReadmissionsView::where('readmission_id', $id)->first();
+      $patterns = ClassPattern::where('semester', $readmission->year_study.'.'.$readmission->semester_study)->get()->groupBy('class_code');
+      $studentCourse = StudentCourse::where('student_id', $readmission->student_id)->first();
       if ($studentCourse->student_type == 1){
           $mode = 'S-FT';
       }elseif ($studentCourse->student_type == 2){
@@ -1041,51 +1040,45 @@ class CODController extends Controller
       }elseif ($studentCourse->student_type == 4){
           $mode = 'S-EV';
       }
-
-        if (count($patterns) == 0) {
-            $classes = [];
-        } else {
-            foreach ($patterns as $class_code => $pattern) {
-
-                $classes[] = Classes::where('name', $class_code)
+      foreach ($patterns as $class_code => $pattern) {
+          $classes[] = Classes::where('name', $class_code)
                     ->where('course_id', $studentCourse->course_id)
                     ->where('attendance_id', $mode)
                     ->where('name', '!=',$studentCourse->current_class)
                     ->get()
                     ->groupBy('name');
-            }
-        }
-
-        return view('cod::readmissions.viewSelectedReadmission')->with(['readmision' => $readmision, 'classes' => $classes]);
+      }
+       return view('cod::readmissions.viewSelectedReadmission')->with(['readmision' => $readmission, 'classes' => $classes]);
     }
 
     public function acceptReadmission(Request $request, $id){
         $request->validate([
             'class' => 'required'
         ]);
-       $pattern = ClassPattern::where('class_code', $request->class)->where('semester', $request->stage)->first();
-        $intake = Readmission::where('readmision_id', $id)->first()->intake_id;
-        ReadmissionApproval::where('readmission_id', $id)->update([
-            'cod_status' => 1,
-            'cod_remarks' => 'Admit student to ' . $request->class . ' class.',
-        ]);
-
-        if (ReadmissionClass::where('readmission_id', $id)->exists()){
-            ReadmissionClass::where('readmission_id', $id)->update([
-                'readimission_class' => $request->class
+        $pattern = ClassPattern::where('class_code', $request->class)->where('semester', $request->stage)->first();
+        $intake = Readmission::where('readmission_id', $id)->first()->intake_id;
+        if (ReadmissionApproval::where('readmission_id', $id)->exists()){
+            ReadmissionApproval::where('readmission_id', $id)->update([
+                'cod_status' => 1,
+                'cod_user_id' => auth()->guard('user')->user()->user_id,
+                'cod_remarks' => 'Admit student to ' . $request->class . ' class.',
+                'readmission_class' => $request->class,
+                'readmission_year' => $pattern->academic_year,
+                'readmission_semester' => $pattern->period,
             ]);
         }else{
-            $readID = new CustomIds();
-            $placement = new ReadmissionClass;
-            $placement->readmission_class_id = $readID->generateId();
-            $placement->readmission_id = $id;
-            $placement->readmission_class = $request->class;
-            $placement->readmission_year = $pattern->academic_year;
-            $placement->readmission_semester = $pattern->period;
-            $placement->stage = $request->stage;
-            $placement->save();
+            $approval = new CustomIds();
+            ReadmissionApproval::create([
+                'approval_id' => $approval->generateId(),
+                'readmission_id' => $id,
+                'cod_status' => 1,
+                'cod_user_id' => auth()->guard('user')->user()->user_id,
+                'cod_remarks' => 'Admit student to ' . $request->class . ' class.',
+                'readmission_class' => $request->class,
+                'readmission_year' => $pattern->academic_year,
+                'readmission_semester' => $pattern->period,
+            ]);
         }
-
         return redirect()->route('department.yearlyReadmissions', $intake)->with('success', 'Readmission request accepted');
     }
 
@@ -1093,12 +1086,29 @@ class CODController extends Controller
         $request->validate([
             'remarks' => 'required'
         ]);
-        $intake = Readmission::where('readmision_id', $id)->first()->intake_id;
-        ReadmissionApproval::where('readmission_id', $id)->update([
-            'cod_status' => 2,
-            'cod_remarks' => $request->remarks,
-        ]);
-        ReadmissionClass::where('readmission_id', $id)->delete();
+        $intake = Readmission::where('readmission_id', $id)->first()->intake_id;
+        if (ReadmissionApproval::where('readmission_id', $id)->exists()){
+            ReadmissionApproval::where('readmission_id', $id)->update([
+                'cod_status' => 2,
+                'cod_user_id' => auth()->guard('user')->user()->user_id,
+                'cod_remarks' => $request->remarks,
+                'readmission_class' => NULL,
+                'readmission_year' => NULL,
+                'readmission_semester' => NULL,
+            ]);
+        }else{
+            $approval = new CustomIds();
+            ReadmissionApproval::create([
+                'approval_id' => $approval->generateId(),
+                'readmission_id' => $id,
+                'cod_status' => 2,
+                'cod_user_id' => auth()->guard('user')->user()->user_id,
+                'cod_remarks' => $request->remarks,
+                'readmission_class' => NULL,
+                'readmission_year' => NULL,
+                'readmission_semester' => NULL,
+            ]);
+        }
         return redirect()->route('department.yearlyReadmissions', $intake)->with('success', 'Readmission request accepted');
     }
 

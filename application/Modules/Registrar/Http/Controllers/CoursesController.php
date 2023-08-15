@@ -557,43 +557,40 @@ class CoursesController extends Controller
         return response()->download($pdfPath)->deleteFileAfterSend(true);
     }
 
-    public function readmissions()
-    {
+    public function readmissions(){
         $data = ReadmissionsView::all()->groupBy('intake_id');
         return  view('registrar::readmissions.index')->with(['data' => $data]);
     }
 
-    public function yearlyReadmissions($id)
-    {
+    public function yearlyReadmissions($id){
         $readmissions = ReadmissionsView::where('intake_id', $id)->where('dean_status', '>', 0)->get();
         return view('registrar::readmissions.yearlyReadmissions')->with(['readmissions' => $readmissions, 'intake' => $id]);
     }
 
-    public function acceptedReadmissions(Request $request)
-    {
+    public function acceptedReadmissions(Request $request){
         $request->validate(['submit' => 'required']);
         foreach ($request->submit as $id) {
-            $approval = ReadmissionsView::where('readmision_id', $id)->first();
+            $approval = ReadmissionsView::where('readmission_id', $id)->first();
             if ($approval->cod_status == 1) {
                 StudentCourse::where('student_id', $approval->student_id)->update([
-                    'current_class' => $approval->ReadmissionClass->readmission_class,
-                    'status' => 1,
-                ]);
-                ReadmissionApproval::where('readmission_id', $id)->update([
-                    'registrar_status'  =>  1
-                ]);
-                Readmission::where('readmision_id', $id)->update([
+                    'current_class' => $approval->readmission_class,
                     'status' => 1
                 ]);
-                Mail::to($approval->student_email)->send(new AcceptedReadmissionsMail($approval));
+                ReadmissionApproval::where('readmission_id', $id)->update([
+                    'registrar_status'  =>  1,
+                    'registrar_user_id' => \auth()->guard('user')->user()->user_id,
+                    'registrar_remarks' => 'Student readmission successful',
+                    'status' => 1
+                ]);
+                Mail::to($approval->StudentsReadmission->email)->send(new AcceptedReadmissionsMail($approval));
             } else {
                 ReadmissionApproval::where('readmission_id', $id)->update([
                     'registrar_status'  =>  1,
-                ]);
-                Readmission::where('readmision_id', $id)->update([
+                    'registrar_user_id' => \auth()->guard('user')->user()->user_id,
+                    'registrar_remarks' => 'Student readmission was unsuccessful',
                     'status' => 2
                 ]);
-                Mail::to($approval->student_email)->send(new RejectedReadmissionsMail($approval));
+                Mail::to($approval->StudentsReadmission->email)->send(new RejectedReadmissionsMail($approval));
             }
         }
 
@@ -638,8 +635,7 @@ class CoursesController extends Controller
         return redirect()->back()->with('success', 'Email sent successfully.');
     }
 
-    public function acceptedTransfers(Request $request)
-    {
+    public function acceptedTransfers(Request $request){
         $request->validate(['submit' => 'required']);
         foreach ($request->submit as $id) {
             $approval = CourseTransfersView::where('course_transfer_id', $id)->first();

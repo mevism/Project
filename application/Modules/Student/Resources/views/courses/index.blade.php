@@ -300,10 +300,13 @@
                                             <td>
                                     <span>
                                         <b>Status</b>
-                                        @if($reg != null)
+                                        @if(\Modules\Student\Entities\StudentCourse::where('student_id', auth()->guard('student')->user()->student_id)->first()->status == 1)
                                             <span class="text-success">Registered</span>
+                                        @elseif(\Modules\Student\Entities\StudentCourse::where('student_id', auth()->guard('student')->user()->student_id)->first()->status == 2)
+                                            <span class="text-info">On Deferment</span>
                                         @else
                                             <span class="text-danger">Not Registered</span>
+                                            {{ $reg }}
                                         @endif
                                     </span>
                                             </td>

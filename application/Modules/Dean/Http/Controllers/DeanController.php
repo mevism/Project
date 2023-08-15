@@ -390,74 +390,39 @@ class DeanController extends Controller{
     }
 
     public function intakeReadmissions($id){
-        $user = auth()->guard('user')->user();
-        $school_id = $user->employmentDepartment->first()->schools->first()->school_id;
-        $departments = ACADEMICDEPARTMENTS::where('school_id', $school_id)->get();
-        foreach ($departments as $department) {
-            $readmissions[] = ReadmissionsView::where('intake_id', $id)
-                ->where('department_id', $department->department_id)
-                ->where('cod_status', '>', 0)
-                ->latest()
-                ->get();
-        }
+        $school_id = auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->school_id;
+        $departments = ACADEMICDEPARTMENTS::where('school_id', $school_id)->pluck('department_id');
+        $courses = Courses::whereIn('department_id', $departments)->pluck('course_id');
+        $students = StudentCourse::whereIn('course_id', $courses)->pluck('student_id');
+        $leaves = AcademicLeavesView::whereIn('student_id', $students)->pluck('leave_id');
+        $readmissions = ReadmissionsView::whereIn('leave_id', $leaves)->latest()->get();
         return view('dean::readmissions.intakeReadmissions')->with(['readmissions' => $readmissions, 'intake' => $id]);
     }
 
     public function selectedReadmission($id){
-        $leave = ReadmissionsView::where('readmision_id', $id)->first();
-        $patterns = ClassPattern::where('semester', $leave->StudentsReadmission->stage)
-            ->get()
-            ->groupBy('class_code');
-        $studentCourse = StudentCourse::where('student_id', $leave->student_id)->first();
-
-        if ($studentCourse->student_type == 1){
-            $mode = 'S-FT';
-        }elseif ($studentCourse->student_type == 2){
-            $mode = 'J-FT';
-        }elseif ($studentCourse->student_type == 3){
-            $mode = 'S-PT';
-        }elseif ($studentCourse->student_type == 4){
-            $mode = 'S-EV';
-        }
-
-        if (count($patterns) == 0) {
-            $classes = [];
-        } else {
-            foreach ($patterns as $class_code => $pattern) {
-
-                $classes[] = Classes::where('name', $class_code)
-                    ->where('course_id', $studentCourse->course_id)
-                    ->where('attendance_id', $mode)
-                    ->where('name', '!=',$studentCourse->current_class)
-                    ->get()
-                    ->groupBy('name');
-            }
-        }
-
-        return view('dean::readmissions.selectedReadmission')->with(['classes' => $classes, 'leave' => $leave]);
+        $leave = ReadmissionsView::where('readmission_id', $id)->first();
+        return view('dean::readmissions.selectedReadmission')->with(['leave' => $leave]);
     }
     public function acceptReadmission(Request $request, $id){
-        $request->validate([
-            'class' => 'required'
-        ]);
-        $intake = Readmission::where('readmision_id', $id)->first()->intake_id;
+        $intake = Readmission::where('readmission_id', $id)->first()->intake_id;
         ReadmissionApproval::where('readmission_id', $id)->update([
                 'dean_status' => 1,
-                'dean_remarks' => 'Readmission request accepted'
+                'dean_remarks' => 'Readmission request accepted',
+                'dean_user_id' => auth()->guard('user')->user()->user_id,
             ]);
 
         return redirect()->route('dean.intakeReadmissions', $intake)->with('success', 'Readmission request accepted');
     }
 
     public function declineReadmission(Request $request, $id){
-
         $request->validate([
             'remarks' => 'required'
         ]);
-        $intake = Readmission::where('readmision_id', $id)->first()->intake_id;
+        $intake = Readmission::where('readmission_id', $id)->first()->intake_id;
         ReadmissionApproval::where('readmission_id', $id)->update([
             'dean_status' => 2,
             'dean_remarks' => $request->remarks,
+            'dean_user_id' => auth()->guard('user')->user()->user_id,
         ]);
         return redirect()->route('dean.intakeReadmissions', $intake)->with('success', 'Readmission request accepted');
     }

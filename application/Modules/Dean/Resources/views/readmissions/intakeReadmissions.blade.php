@@ -31,12 +31,12 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
                         READMISSION REQUESTS
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="#">Readmissions</a>
                         </li>
@@ -64,31 +64,30 @@
                     <th>Action</th>
                     </thead>
                     <tbody>
-                    @foreach($readmissions as $allreadmissions)
-                        @foreach($allreadmissions as $readmission)
+                    @foreach($readmissions as $readmission)
                             <tr>
                                 <td> {{ $loop->iteration }} </td>
-                                <td> {{ $readmission->student_number }} </td>
-                                <td> {{ $readmission->sname.' '.$readmission->fname.' '.$readmission->mname }} </td>
-                                <td> @if($readmission->StudentsReadmission->type == 1)
+                                <td> {{ $readmission->StudentsReadmission->student_number }} </td>
+                                <td> {{ $readmission->StudentsReadmission->surname.' '.$readmission->StudentsReadmission->first_name.' '.$readmission->StudentsReadmission->middle_name }} </td>
+                                <td> @if($readmission->type == 1)
                                         ACADEMIC LEAVE
-                                    @elseif($readmission->StudentsReadmission->type == 2)
+                                    @elseif($readmission->type == 2)
                                         DEFERMENT
-                                    @elseif($readmission->StudentsReadmission->type == 3)
+                                    @elseif($readmission->type == 3)
                                         SUSPENSION
                                     @else
                                         DISCONTINUATION
                                     @endif </td>
                                 <td>
-                                    Year : {{ $readmission->StudentsReadmission->year_study }} Semester : {{ $readmission->StudentsReadmission->semester_study }}
+                                    Year : {{ $readmission->year_study }} Semester : {{ $readmission->semester_study }}
                                 </td>
-                                <td> {{ $readmission->StudentsReadmission->current_class }} </td>
+                                <td> {{ $readmission->current_class }} </td>
                                 <td>
-                                   <b> From :</b> {{ $readmission->StudentsReadmission->from }} <br>
-                                    <b>To :</b> {{ $readmission->StudentsReadmission->to }} <br>
+                                   <b> From :</b> {{ $readmission->from }} <br>
+                                    <b>To :</b> {{ $readmission->to }} <br>
                                 </td>
                                 <td>
-                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('dean.selectedReadmission', $readmission->readmision_id) }}"> View </a>
+                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('dean.selectedReadmission', $readmission->readmission_id) }}"> View </a>
                                     @if($readmission->dean_status == 1)
                                             <i class="fa fa-check text-success"></i>
                                     @elseif($readmission->dean_status == 2)
@@ -98,7 +97,6 @@
                                     @endif
                                 </td>
                             </tr>
-                        @endforeach
                     @endforeach
                     </tbody>
                 </table>

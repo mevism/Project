@@ -9,7 +9,7 @@ class ReadmissionApproval extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = ['approval_id', 'readmission_id', 'cod_status', 'cod_remarks', 'cod_user_id', 'readmission_class', 'readmission_year', 'readmission_semester'];
 
     public function approvedReadmission(){
 

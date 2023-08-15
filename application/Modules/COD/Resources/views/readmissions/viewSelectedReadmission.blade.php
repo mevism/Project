@@ -4,12 +4,12 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h6 class="h6 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
                         VIEW REQUEST
                     </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="javascript:void(0)">Department</a>
                         </li>
@@ -34,39 +34,39 @@
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Student Number </div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $readmision->student_number }}
+                                        {{ $readmision->StudentsReadmission->student_number }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Student Name</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $readmision->sname.' '.$readmision->fname.' '.$readmision->mname }}
+                                        {{ $readmision->StudentsReadmission->surname.' '.$readmision->StudentsReadmission->first_name.' '.$readmision->StudentsReadmission->middle_name }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Current Class</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $readmision->StudentsReadmission->current_class }}
+                                        {{ $readmision->current_class }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-md-3 fw-bold">Current Course</div>
+                                    <div class="col-md-3 fw-bold">Course Admitted</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ $readmision->ReadmissionCourse->course_name }}
+                                        {{ $readmision->StudentsReadmission->EnrolledStudentCourse->course_name }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
-                                    <div class="col-md-3 fw-bold">Current Department</div>
+                                    <div class="col-md-3 fw-bold">Department Admitted</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{  $readmision->ReadmissionCourse->name }}
+                                        {{  $readmision->StudentsReadmission->EnrolledStudentCourse->getCourseDept->name }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-3 fw-bold">Current Stage</div>
                                     <div class="col-md-9 fs-sm">
-                                        {{ 'Year'.' '.$readmision->StudentsReadmission->year_study.' Semester '.$readmision->StudentsReadmission->semester_study }}
+                                        {{ 'Year'.' '.$readmision->year_study.' Semester '.$readmision->semester_study }}
                                     </div>
                                 </div>
                             </fieldset>
@@ -74,34 +74,32 @@
                         <div class="col-md-6 p-2">
                             <fieldset class="border p-2" style="height: 100% !important;">
                                 <legend class="float-none w-auto"><h6 class="fw-bold text-center"> DEFERMENT/ACADEMIC LEAVE DETAILS</h6></legend>
-
                                 <div class="row mb-3">
                                     <div class="col-md-4 fw-bold">Leave Type</div>
                                     <div class="col-md-8 fs-sm">
-                                        @if($readmision->StudentsReadmission->type == 1)
+                                        @if($readmision->type == 1)
                                             ACADEMIC LEAVE
                                         @else
                                             DEFERMENT
                                         @endif
-
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-4 fw-bold">Leave Dates</div>
                                     <div class="col-md-8 fs-sm">
-                                        From: {{ $readmision->StudentsReadmission->from }} - To: {{ $readmision->StudentsReadmission->to }}
+                                        From: {{ $readmision->from }} - To: {{ $readmision->to }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-4 fw-bold">New Class (Requested)</div>
                                     <div class="col-md-8 fs-sm">
-                                        {{ $readmision->StudentsReadmission->differed_class }}
+                                        {{ $readmision->defer_class }}
                                     </div>
                                 </div>
 
-                                <form method="POST" action="{{ route('department.acceptReadmission', $readmision->readmision_id) }}">
+                                <form method="POST" action="{{ route('department.acceptReadmission', $readmision->readmission_id) }}">
                                     @csrf
                                     <div class="row mb-3">
                                         <div class="col-md-4 fw-bold">New Class (Placed)</div>
@@ -115,34 +113,34 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <input type="hidden" name="stage" value="{{ $readmision->StudentsReadmission->year_study.".".$readmision->StudentsReadmission->semester_study }}">
+                                        <input type="hidden" name="stage" value="{{ $readmision->year_study.".".$readmision->semester_study }}">
                                     </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-4 fw-bold">New Stage</div>
                                     <div class="col-md-8 fs-sm">
-                                        {{ $readmision->StudentsReadmission->stage }}
+                                        {{ $readmision->stage }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-4 fw-bold">Readmission Period</div>
                                     <div class="col-md-8 fs-sm">
-                                        <b>Academic Year :</b> {{ $readmision->StudentsReadmission->differed_year }} <br> <b>Semester</b> {{ $readmision->StudentsReadmission->differed_semester }}
+                                        <b>Academic Year :</b> {{ $readmision->academic_year }} <br> <b>Semester</b> {{ $readmision->academic_semester }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-4 fw-bold">Deferment Period</div>
                                     <div class="col-md-8 fs-sm">
-                                        {{ Carbon\Carbon::parse($readmision->StudentsReadmission->to)->diffInMonths(\Carbon\Carbon::parse($readmision->StudentsReadmission->from)) }} Months
+                                        {{ Carbon\Carbon::parse($readmision->to)->diffInMonths(\Carbon\Carbon::parse($readmision->from)) }} Months
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-4 fw-bold">Reason(s)</div>
                                     <div class="col-md-8 fs-sm">
-                                        {{ $readmision->StudentsReadmission->reason }}
+                                        {{ $readmision->reason }}
                                     </div>
                                 </div>
                             </fieldset>
@@ -175,7 +173,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="{{ route('department.declineReadmission', $readmision->readmision_id) }}">
+                    <form method="POST" action="{{ route('department.declineReadmission', $readmision->readmission_id) }}">
                         @csrf
                         <div class="d-flex justify-content-center mb-4">
                             <div class="col-md-11">

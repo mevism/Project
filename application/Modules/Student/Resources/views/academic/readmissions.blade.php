@@ -72,49 +72,45 @@
                         <tr>
                             <td>{{ ++$key }} </td>
                             <td>
-                                @if($readmit->leaves->type == 1)
+                                @if($readmit->type == 1)
                                     ACADEMIC LEAVE
-                                @elseif($readmit->leaves->type == 2)
+                                @elseif($readmit->type == 2)
                                     DEFERMENT
-                                @elseif($readmit->leaves->type == 3)
+                                @elseif($readmit->type == 3)
                                     SUSPENSION
                                 @else
                                     DISCONTINUATION
                                 @endif
                             </td>
-                            <td>{{ $readmit->leaves->deferredClass->differed_class }}</td>
-                            <td>{{ $readmit->leaves->deferredClass->stage }}</td>
-                            <td>
-                                <span class="fw-semibold"> Academic Year : </span> {{ $readmit->leaves->deferredClass->differed_year }} <br>
-                                <span class="fw-semibold"> Academic Sem. : </span> {{ $readmit->leaves->deferredClass->differed_semester }}
-                            </td>
+                            <td>{{ $readmit->defer_class }}</td>
+                            <td>{{ $readmit->year_study.'.'.$readmit->semester_study }}</td>
                             <td>
                                 <span class="fw-semibold"> Academic Year : </span> {{ $readmit->academic_year }} <br>
                                 <span class="fw-semibold"> Academic Sem. : </span> {{ $readmit->academic_semester }}
                             </td>
+                            <td>
+                                <span class="fw-semibold"> Academic Year : </span> {{ \Illuminate\Support\Facades\DB::table('academicperiods')->where('intake_id', $readmit->intake_id)->first()->academic_year }} <br>
+                                <span class="fw-semibold"> Academic Sem. : </span> {{ \Illuminate\Support\Facades\DB::table('academicperiods')->where('intake_id', $readmit->intake_id)->first()->intake_month }}
+                            </td>
                             <td nowrap="">
-                                @if($readmit->status == 0)
-                                    @if($readmit->readmissionApproval == null)
+                                @if($readmit->cod_status == null)
                                         <span class="text-info">Pending</span>
-                                    @else
+                                @elseif($readmit->cod_status > 0 && $readmit->status == null )
                                         <span class="text-primary">Processing</span>
-                                    @endif
-                                @elseif($readmit->status == 1)
+                                @elseif($readmit->status == 1 && $readmit->cod_status == 1)
                                     <span class="text-success"> Successful</span>
-                                @else
+                                @elseif($readmit->status == 2)
                                     <span class="text-danger"> Unsuccessful</span>
                                 @endif
                             </td>
                             <td nowrap="">
-                                @if($readmit->status != NULL)
-                                    @if($readmit->status == 0)
-                                        <a class="btn btn-sm btn-outline-secondary" disabled=""> Processing </a>
-                                    @else
+                               @if($readmit->cod_status > 0 && $readmit->status == null )
+                                   <a class="btn btn-sm btn-outline-secondary" disabled=""> Processing </a>
+                               @elseif($readmit->status == 1 && $readmit->cod_status == 1)
                                         <a class="btn btn-sm btn-outline-success" disabled=""> Processed </a>
-                                    @endif
-                                @else
+                                @elseif($readmit->cod_status == null)
                                     <a class="btn btn-sm btn-alt-danger" href="#">Withdraw</a>
-                                @endif
+                               @endif
                             </td>
                         </tr>
                     @endforeach
