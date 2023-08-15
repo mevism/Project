@@ -18,10 +18,6 @@ class ReadmissionsView extends Model
     protected $table = 'readmissionsview';
 
     public function StudentsReadmission(){
-        return $this->belongsTo(AcademicLeavesView::class, 'leave_id', 'leave_id');
-    }
-
-    public function ReadmissionCourse(){
         return $this->belongsTo(StudentView::class, 'student_id', 'student_id');
     }
 

@@ -52,22 +52,17 @@
             </tr>
             <tr>
                 <td align="auto" class="bgcolor2" style="padding: 40px 20px 40px 20px; color: #555555; font-family: Arial, sans-serif; font-size: 20px; line-height: 30px; border-bottom: 1px solid #f6f6f6;">
-                    <h5>Dear {{ $approval->sname.' '.$approval->fname.' '.$approval->mname }}, </h5>
+                    <h5>Dear {{ $approval->StudentsReadmission->surname.' '.$approval->StudentsReadmission->first_name.' '.$approval->StudentsReadmission->middle_name }}, </h5>
                      <p>
-                       Your readmission request has been accepted. You are to join {{ $approval->ReadmissionClass->readmission_clas }} class at stage <b>{{ $approval->ReadmissionClass->stage }}</b>, academic year <b>{{ $approval->ReadmissionClass->readmission_year }}</b> academic semester <b>{{ $approval->ReadmissionClass->readmission_semester }}</b>. Please ensure you attend your classes as required.
+                       Your readmission request has been accepted. You are set to join<b> {{ $approval->readmission_class }} </b> class at stage <b>{{ $approval->year_study.'.'.$approval->semester_study }}</b>, academic year <b>{{ $approval->readmission_year }}</b> academic semester <b>{{ $approval->readmission_semester }}</b>. Please ensure you attend your classes as required.
 
                      </p>
                     <div>
                         <p>
                             <b>
-                                Kind regards,<br></b><br>
-
-                                Zablon Mwaramu <br><br>
-
-                               Admissions Department <br><br>
-
-                             Technical University of Mombasa
-
+                                Kind regards,<br></b>
+                                Registrar Academic Affairs <br>
+                                Technical University of Mombasa
                         </p>
                      </div>
                 </td>

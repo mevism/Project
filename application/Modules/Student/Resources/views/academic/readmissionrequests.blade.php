@@ -11,7 +11,7 @@
                     </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="{{ route('student') }}">Dashboard</a>
                         </li>
@@ -39,7 +39,7 @@
                                 </legend>
                             <div class="mb-2">
                                 <span class="h5 fs-sm">STUDENT NAME : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ $student->sname }} {{ $student->fname }} {{ $student->mname }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->surname }} {{ $student->first_name }} {{ $student->middle_name }} </span>
                             </div>
                             <div class="mb-2">
                                 <span class="h5 fs-sm">PHONE NUMBER : </span>
@@ -49,10 +49,10 @@
                                 <span class="h5 fs-sm">EMAIL ADDRESS : </span>
                                 <span class="h6 fs-sm fw-normal"> {{ $student->email }} </span>
                             </div>
-                                <div class="mb-2">
-                                    <span class="h5 fs-sm">STUDENT EMAIL : </span>
-                                    <span class="h6 fs-sm fw-normal"> {{ $student->student_email }} </span>
-                                </div>
+{{--                                <div class="mb-2">--}}
+{{--                                    <span class="h5 fs-sm">STUDENT EMAIL : </span>--}}
+{{--                                    <span class="h6 fs-sm fw-normal"> {{ $student->student_email }} </span>--}}
+{{--                                </div>--}}
                             <div class="mb-4">
                                 <span class="h5 fs-sm">PHYSICAL ADDRESS : </span>
                                 <span class="h6 fs-sm fw-normal"> P.O BOX {{ $student->address }}-{{ $student->postal_code }} {{ $student->town }}</span>
@@ -63,7 +63,7 @@
                             </div>
                             <div class="mb-2">
                                 <span class="h5 fs-sm">COURSE ADMITTED : </span>
-                                <span class="h6 fs-sm fw-normal"> {{ $student->course_name }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->EnrolledStudentCourse->course_name }} </span>
                             </div>
 
                                 <div class="mb-2">
@@ -135,7 +135,7 @@
                                                 <h1 class="h6 fs-sm">READMISSION CLASS</h1>
                                             </div>
                                             <div class="col-md-8 fs-sm">
-                                                {{ $admission->differed_class }}
+                                                {{ $admission->defer_class }}
                                             </div>
                                         </div>
 
@@ -144,9 +144,9 @@
                                                 <h1 class="h6 fs-sm">JOINING AT </h1>
                                             </div>
                                             <div class="col-md-8 fs-sm">
-                                                <p><b>ACADEMIC YEAR :</b> {{ $admission->differed_year }}</p>
-                                                <p><b>STAGE :</b> {{ $admission->stage }}</p>
-                                                <p><b>ACADEMIC SEMESTER :</b> {{ $admission->differed_semester }}</p>
+                                                <p><b>ACADEMIC YEAR :</b> {{ $admission->academic_year }}</p>
+                                                <p><b>STAGE :</b> {{ $admission->year_study.'.'.$admission->semester_study }}</p>
+                                                <p><b>ACADEMIC SEMESTER :</b> {{ $admission->academic_semester }}</p>
                                             </div>
                                         </div>
 

@@ -31,12 +31,12 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
                         ACADEMIC/DEFERMENT LEAVE REQUESTS
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="#">Leaves</a>
                         </li>
@@ -56,7 +56,7 @@
                     <thead>
                     <th>#</th>
                     <th>Student NUMBER</th>
-                    <th>NAME</th>
+                    <th>STUDENT NAME</th>
                     <th>LEAVE TYPE</th>
                     <th>CURRENT STAGE</th>
                     <th>CURRENT Class</th>
@@ -67,29 +67,29 @@
                     @foreach($admissions as $admission)
                             <tr>
                                 <td> {{ $loop->iteration }} </td>
-                                <td> {{ $admission->student_number }} </td>
-                                <td> {{ $admission->sname.' '.$admission->fname.' '.$admission->mname }} </td>
+                                <td> {{ $admission->StudentsReadmission->student_number }} </td>
+                                <td> {{ $admission->StudentsReadmission->surname.' '.$admission->StudentsReadmission->first_name.' '.$admission->StudentsReadmission->middle_name }} </td>
                                 <td>
-                                    @if($admission->StudentsReadmission->type == 1)
+                                    @if($admission->type == 1)
                                         ACADEMIC LEAVE
-                                    @elseif($admission->StudentsReadmission->type == 2)
+                                    @elseif($admission->type == 2)
                                         DEFERMENT
-                                    @elseif($admission->StudentsReadmission->type == 3)
+                                    @elseif($admission->type == 3)
                                         SUSPENSION
                                     @else
                                         DISCONTINUATION
                                     @endif
                                 </td>
                                 <td>
-                                    Year : {{ $admission->StudentsReadmission->year_study }} Semester : {{ $admission->StudentsReadmission->semester_study }}
+                                    Year : {{ $admission->year_study }} Semester : {{ $admission->semester_study }}
                                 </td>
                                 <td> {{ $admission->StudentsReadmission->current_class }} </td>
                                 <td>
-                                    <b>From :</b> {{ $admission->StudentsReadmission->from }} <br>
-                                    <b>To :</b> {{ $admission->StudentsReadmission->to }} <br>
+                                    <b>From :</b> {{ $admission->from }} <br>
+                                    <b>To :</b> {{ $admission->to }} <br>
                                 </td>
                                 <td>
-                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('department.selectedReadmission', $admission->readmision_id) }}"> View </a>
+                                    <a class="btn btn-sm btn-outline-dark" href="{{ route('department.selectedReadmission', $admission->readmission_id) }}"> View </a>
                                     @if($admission->cod_status == 1)
                                         <i class="fa fa-check text-success"></i>
                                     @elseif($admission->cod_status == 2)

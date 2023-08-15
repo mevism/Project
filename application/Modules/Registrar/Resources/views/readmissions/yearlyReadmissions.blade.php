@@ -25,12 +25,12 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h6 class="h6 fw-bold mb-0" >
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
                     READMISSION REQUESTS
                     </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="javascript:void(0)">Readmissions</a>
                         </li>
@@ -68,17 +68,17 @@
                                             <tr>
                                                 <td>
                                                     @if($item->registrar_status == NULL )
-                                                    <input class="readmissions" type="checkbox" name="submit[]" value="{{ $item->readmision_id }}">
+                                                    <input class="readmissions" type="checkbox" name="submit[]" value="{{ $item->readmission_id }}">
                                                         @else
                                                         ✔
                                                     @endif
                                                 </td>
                                                 <td> {{ ++$key }} </td>
-                                                 <td>{{ $item->student_number }}</td>
-                                                <td>{{ $item->sname.' '. $item->fname.' '. $item->mname }} </td>
-                                                <td>{{ $item->ReadmissionCourse->name }}</td>
-                                                <td nowrap="">{{ $item->ReadmissionCourse->current_class }}</td>
-                                                <td nowrap="">{{ $item->ReadmissionClass->readmission_class }}</td>
+                                                 <td>{{ $item->StudentsReadmission->student_number }}</td>
+                                                <td>{{ $item->StudentsReadmission->surname.' '. $item->first_name.' '. $item->middle_name }} </td>
+                                                <td>{{ $item->StudentsReadmission->EnrolledStudentCourse->course_name }}</td>
+                                                <td nowrap="">{{ $item->current_class }}</td>
+                                                <td nowrap="">{{ $item->readmission_class }}</td>
                                                <td>
                                                  {{ $item->cod_remarks }}
                                                 </td>

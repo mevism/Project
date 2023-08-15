@@ -18,6 +18,7 @@ use Modules\COD\Entities\AcademicLeavesView;
 use Modules\COD\Entities\ClassPattern;
 use Modules\COD\Entities\CourseSyllabus;
 use Modules\COD\Entities\Nominalroll;
+use Modules\COD\Entities\ReadmissionsView;
 use Modules\COD\Entities\SemesterUnit;
 use Modules\Examination\Entities\Exam;
 use Modules\Examination\Entities\ExamMarks;
@@ -308,23 +309,6 @@ class StudentController extends Controller
         return redirect()->route('student.coursetransfers')->with('success', 'Course transfer request deleted successfully');
     }
 
-    // public function storeRequest($id){
-
-    //     $hashedId = Crypt::decrypt($id);
-
-    //     CourseTransfer::find($hashedId)->update(['status' => 0]);
-
-    //     $invoice = new TransferInvoice;
-    //     $invoice->student_id = \auth()->guard('student')->user()->student_id;
-    //     $invoice->reg_number = \auth()->guard('student')->user()->loggedStudent->reg_number;
-    //     $invoice->invoice_number = 'INV'.time();
-    //     $invoice->amount = 500;
-    //     $invoice->description = 'Invoice for Course Transfer Fee';
-    //     $invoice->save();
-
-    //     return redirect()->back()->with('success', 'Your course transfer request submitted successfully');
-    // }
-
     public function academicLeave(){
         $leaves = AcademicLeavesView::where('student_id', \auth()->guard('student')->user()->student_id)->get();
         return view('student::academic.academicleave')->with(['leaves' => $leaves]);
@@ -380,7 +364,6 @@ class StudentController extends Controller
 
     }
 
-
     public function leaveClasses(Request $request){
         $data = ClassPattern::where('class_code', $request->class_code)
                             ->where('semester', $request->stage)
@@ -395,7 +378,6 @@ class StudentController extends Controller
             'deferment' => $deferment,
             'period' => $period
         ];
-
         return response()->json($combinedData);
     }
 
@@ -439,7 +421,8 @@ class StudentController extends Controller
     }
 
     public function requestReadmission(){
-        $readmit = Readmission::where('student_id', auth()->guard('student')->user()->student_id)->get();
+        $leaves = AcademicLeavesView::where('student_id', \auth()->guard('student')->user()->student_id)->pluck('leave_id');
+        $readmit = ReadmissionsView::whereIn('leave_id', $leaves)->get();
         return view('student::academic.readmissions')->with(['readmits' => $readmit]);
     }
 
@@ -448,59 +431,42 @@ class StudentController extends Controller
       $currentStage = Nominalroll::where('student_id', \auth()->guard('student')->user()->student_id)
                                     ->latest()
                                     ->first();
-
-       $readmit = AcademicLeavesView::where('student_id', auth()->guard('student')->user()->student_id)
+      $readmit = AcademicLeavesView::where('student_id', auth()->guard('student')->user()->student_id)
                         ->where('status', 1)
                         ->latest()
                         ->first();
 
-       $today = Carbon::now();
-//       $today = '2023-09-23';
+//       $today = Carbon::now();
+       $today = '2024-01-23';
 
       $intake = Intake::where('intake_from', '<=', $today)->where('intake_to', '>=', $today)->latest()->first();
       $semester = Carbon::parse($intake->intake_from)->format('M').'/'.Carbon::parse($intake->intake_to)->format('M');
       $academic_year = Carbon::parse($intake->academicYear->year_start)->format('Y').'/'. Carbon::parse($intake->academicYear->year_end)->format('Y');
 
-      $dates = CalenderOfEvents::where('academic_year_id', $academic_year)->where('intake_id', strtoupper($semester))->where('event_id', 3)->first();
+      $dates = CalenderOfEvents::where('intake_id', $intake->intake_id)->where('event_id', 3)->first();
 
-        return view('student::academic.readmissionrequests')->with(['admission' => $readmit, 'current' => $currentStage, 'dates' => $dates, 'student' => $student]);
+      return view('student::academic.readmissionrequests')->with(['admission' => $readmit, 'current' => $currentStage, 'dates' => $dates, 'student' => $student]);
 
     }
 
     public function storeReadmissionRequest($id){
-        $today = Carbon::now()->format('Y-m-d');
-//        $today = '2023-09-23';
+//        $today = Carbon::now()->format('Y-m-d');
+        $today = '2024-01-23';
         $intake = Intake::where('intake_from', '<=', $today)
                             ->where('intake_to', '>=', $today)
                             ->latest()
                             ->first();
-        $season = Carbon::parse($intake->intake_from)->format('M').'/'.Carbon::parse($intake->intake_to)->format('M');
 
-        $academicYear = Carbon::parse($intake->academicYear->year_start)->format('Y').'/'.Carbon::parse($intake->academicYear->year_end)->format('Y');
-
-       if (Readmission::where('student_id', auth()->guard('student')->user()->student_id)
-                        ->where('leave_id', $id)
-                        ->where('status', 0)->exists()){
+       if (Readmission::where('leave_id', $id)->where('intake_id', $intake->intake_id)->exists()){
            return redirect()->back()->with('info', 'You have already requested for readmission');
        }else{
 
            $readmissionID = new CustomIds();
            $readmission = new Readmission;
-           $readmission->student_id = auth()->guard('student')->user()->student_id;
-           $readmission->readmision_id = $readmissionID->generateId();
+           $readmission->readmission_id = $readmissionID->generateId();
            $readmission->leave_id = $id;
-           $readmission->academic_year = $academicYear;
-           $readmission->academic_semester = strtoupper($season);
            $readmission->intake_id = $intake->intake_id;
-           $readmission->status = 0;
            $readmission->save();
-
-           $approvalID = new CustomIds();
-           $approval = new ReadmissionApproval;
-           $approval->approval_id = $approvalID->generateId();
-           $approval->readmission_id = $readmission->readmision_id;
-           $approval->save();
-
            return redirect()->route('student.requestreadmission')->with('success', 'Readmission request created successfully');
        }
     }
@@ -828,7 +794,6 @@ class StudentController extends Controller
     }
 
     public function printStatement(){
-
         $student = StudentInfo::where('student_id', \auth()->guard('student')->user()->student_id)->first();
         $statements = StudentInvoice::where('reg_number', \auth()->guard('student')->user()->enrolledCourse->student_number)
             ->orderBy('created_at', 'desc')
@@ -965,9 +930,10 @@ class StudentController extends Controller
     }
 
     public function myCalender(){
-        $class = StudentView::where('student_number', \auth()->guard('student')->user()->enrolledCourse->student_number)
-                ->pluck('current_class');
-        $patterns = ClassPattern::where('class_code', $class)->orderBy('semester', 'asc')->get();
+        $class = StudentView::where('student_id', \auth()->guard('student')->user()->student_id)
+                ->first();
+        $reg = Nominalroll::where('student_id', \auth()->guard('student')->user()->student_id)->where('registration', 1)->where('activation', 1)->latest()->first();
+        $patterns = ClassPattern::where('class_code', $class->current_class)->where('semester', '>', $reg->year_study.'.'.$reg->semester_study)->orderBy('semester', 'asc')->get();
         return view('student::courses.myCalendar')->with(['patterns' => $patterns]);
     }
 }
