@@ -129,22 +129,22 @@
                                     </td>
                                     <td>
                                         @foreach($workload as $class)
-                                            <p>{{ $class->classWorkload->studentClass->count() }}</p>
+                                            <p>{{ $class->classWorkloadView->studentClass->count() }}</p>
                                         @endforeach
                                     </td>
                                     <td nowrap="">
                                         @foreach($workload as $class)
-                                            <p>{{ $class->workloadUnit->unit_code }}</p>
+                                            <p>{{ $class->unit_code }}</p>
                                         @endforeach
                                     </td>
                                     <td nowrap="">
                                         @foreach($workload as $class)
-                                            <p>{{ $class->workloadUnit->unit_name }}</p>
+                                            <p>{{ $class->workloadUnitView->unit_name }}</p>
                                         @endforeach
                                     </td>
                                     <td>
                                         @foreach($workload as $class)
-                                            <p>{{ $class->classWorkload->classCourse->level }}</p>
+                                            <p>{{ $class->classWorkloadView->classCourse->level_id }}</p>
                                         @endforeach
                                     </td>
                                 </tr>

@@ -29,12 +29,12 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-1">
-                    <h6 class="h6 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
                         VIEW {{ $year }} SEMESTER WORKLOADS
                     </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="javascript:void(0)">Workload</a>
                         </li>
@@ -62,87 +62,21 @@
                             <tr>
                                 <td> {{ $loop->iteration}} </td>
                                 <td>
-                                    {{ $semester }}
+                                    {{ \Illuminate\Support\Facades\DB::table('academicperiods')->where('intake_id', $semester)->first()->intake_month }}
                                 </td>
                                 <td nowrap="">
                                     @if ($workload->first()->workload_approval_id == null)
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="btn-group">
-                                                    <form class="m-0 p-0" method="post" action="{{ route('department.viewSemesterWorkload') }}">
-                                                        @csrf
-                                                        <input type="hidden" name="year" value="{{ $year }}">
-                                                        <input type="hidden" name="semester" value="{{ $semester }}">
-                                                        <button type="submit" class="btn btn-sm btn-outline-info"> View </button>
-                                                    </form>
-                                                    <span>&nbsp;</span>
-                                                    <form class="m-0 p-0" method="post" action="{{ route('department.printWorkload') }}">
-                                                        @csrf
-                                                        <input type="hidden" name="year" value="{{ $year }}">
-                                                        <input type="hidden" name="semester" value="{{ $semester }}">
-                                                        <button type="submit" class="btn btn-sm btn-outline-secondary"> Download </button>
-                                                    </form>
-                                                    <span>&nbsp;</span>
-                                                    <form class="m-0 p-0" method="post" action="{{ route('department.submitWorkload') }}">
-                                                        @csrf
-                                                        <input type="hidden" name="year" value="{{ $year }}">
-                                                        <input type="hidden" name="semester" value="{{ $semester }}">
-                                                        <button type="submit" onclick="return confirm('Are sure you want to submit this workload?')" class="btn btn-sm btn-outline-success"> Submit </button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <a class="btn btn-sm btn-alt-secondary" href="{{ route('department.viewSemesterWorkload', $semester) }}"> <i class="fa fa-eye"></i> View </a>
+                                        <a class="btn btn-sm btn-alt-info" href="{{ route('department.printWorkload', $semester) }}"><i class="fa fa-download"></i> Download </a>
+                                        <a class="btn btn-sm btn-alt-success" href="{{ route('department.submitWorkload', $semester) }}"><i class="fa fa-save"></i> Submit </a>
                                     @elseif($workload->first()->workload_approval_id != null && $workload->first()->status === 0)
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="btn-group">
-                                                    <form class="m-0 p-0" method="post" action="{{ route('department.viewSemesterWorkload') }}">
-                                                        @csrf
-                                                        <input type="hidden" name="year" value="{{ $year }}">
-                                                        <input type="hidden" name="semester" value="{{ $semester }}">
-                                                        <button type="submit" class="btn btn-sm btn-outline-info"> View </button>
-                                                    </form>
-                                                    <span>&nbsp;</span>
-                                                    <form class="m-0 p-0" method="post" action="{{ route('department.printWorkload') }}">
-                                                        @csrf
-                                                        <input type="hidden" name="year" value="{{ $year }}">
-                                                        <input type="hidden" name="semester" value="{{ $semester }}">
-                                                        <button type="submit" class="btn btn-sm btn-outline-secondary"> Download </button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-
+                                        <a class="btn btn-sm btn-alt-secondary" href="{{ route('department.viewSemesterWorkload', $semester) }}"> <i class="fa fa-eye"></i> View </a>
+                                        <a class="btn btn-sm btn-alt-info" href="{{ route('department.printWorkload', $semester) }}"><i class="fa fa-download"></i> Download </a>
                                     @elseif($workload->first()->workload_approval_id != null &&  $workload->first()->status == 2)
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="btn-group">
-                                                    <form class="m-0 p-0" method="post" action="{{ route('department.viewSemesterWorkload') }}">
-                                                        @csrf
-                                                        <input type="hidden" name="year" value="{{ $year }}">
-                                                        <input type="hidden" name="semester" value="{{ $semester }}">
-                                                        <button type="submit" class="btn btn-sm btn-outline-info"> Review </button>
-                                                    </form>
-                                                    <span>&nbsp;</span>
-                                                    <form class="m-0 p-0" method="post" action="{{ route('department.submitWorkload') }}">
-                                                        @csrf
-                                                        <input type="hidden" name="year" value="{{ $year }}">
-                                                        <input type="hidden" name="semester" value="{{ $semester }}">
-                                                        <button type="submit" onclick="return confirm('Are sure you want to resubmit this workload?')" class="btn btn-sm btn-outline-success"> Resubmit </button>
-                                                    </form>
-                                                    <span>&nbsp;</span>
-                                                    <form class="m-0 p-0" method="post" action="{{ route('department.printWorkload') }}">
-                                                        @csrf
-                                                        <input type="hidden" name="year" value="{{ $year }}">
-                                                        <input type="hidden" name="semester" value="{{ $semester }}">
-                                                        <button type="submit" class="btn btn-sm btn-outline-secondary"> Download </button>
-                                                    </form>
-                                                </div>
-                                                <span>&nbsp;</span>
-                                                <a class="btn-link link-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $workload->first()->workload_approval_id }}"> Why Rejected? </a>
-                                            </div>
-                                        </div>
-
+                                        <a class="btn btn-sm btn-alt-secondary" href="{{ route('department.viewSemesterWorkload', $semester) }}"> <i class="fa fa-eye"></i> Review </a>
+                                        <a class="btn btn-sm btn-alt-info" href="{{ route('department.printWorkload', $semester) }}"><i class="fa fa-download"></i> Download </a>
+                                        <a class="btn btn-sm btn-alt-success" href="{{ route('department.submitWorkload', $semester) }}"><i class="fa fa-save"></i> Resubmit </a>
+                                        <a class="btn-link link-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $workload->first()->workload_approval_id }}"> Why Rejected? </a>
                                         <div class="modal fade" id="staticBackdrop-{{ $workload->first()->workload_approval_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-lg modal-dialog-centered">
                                                 <div class="modal-content">
@@ -165,30 +99,14 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    @elseif($workload->first()->workload_approval_id != null &&  $workload->first()->status === 1)
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="btn-group">
-                                                    <form class="m-0 p-0" method="post" action="{{ route('department.viewSemesterWorkload') }}">
-                                                        @csrf
-                                                        <input type="hidden" name="year" value="{{ $year }}">
-                                                        <input type="hidden" name="semester" value="{{ $semester }}">
-                                                        <button type="submit" class="btn btn-sm btn-outline-info"> View </button>
-                                                    </form>
-                                                    <span>&nbsp;</span>
-                                                    <form class="m-0 p-0" method="post" action="{{ route('department.printWorkload') }}">
-                                                        @csrf
-                                                        <input type="hidden" name="year" value="{{ $year }}">
-                                                        <input type="hidden" name="semester" value="{{ $semester }}">
-                                                        <button type="submit" class="btn btn-sm btn-outline-secondary"> Download </button>
-                                                    </form>
-                                                    <span>&nbsp;</span>
-                                                    <form class="m-0 p-0">
-                                                        <a class="btn btn-outline-success btn-sm disabled" disabled> Published </a>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    @elseif($workload->first()->status == 1 && $workload->first()->workloadApproval->status == 1)
+                                        <a class="btn btn-sm btn-alt-secondary" href="{{ route('department.viewSemesterWorkload', $semester) }}"> <i class="fa fa-eye"></i> View </a>
+                                        <a class="btn btn-sm btn-alt-info" href="{{ route('department.printWorkload', $semester) }}"><i class="fa fa-download"></i> Download </a>
+                                        <a class="btn btn-sm btn-alt-success disabled" href="{{ route('department.submitWorkload', $semester) }}"><i class="fa fa-check-circle"></i> Published </a>
+                                    @elseif($workload->first()->workload_approval_id !== null &&  $workload->first()->status == 0)
+                                        <a class="btn btn-sm btn-alt-secondary" href="{{ route('department.viewSemesterWorkload', $semester) }}"> <i class="fa fa-eye"></i> View </a>
+                                        <a class="btn btn-sm btn-alt-info" href="{{ route('department.printWorkload', $semester) }}"><i class="fa fa-download"></i> Download </a>
+                                        <a class="btn btn-sm btn-alt-primary disabled" href="{{ route('department.printWorkload', $semester) }}"><i class="fa fa-spinner"></i> Under Review </a>
                                     @endif
                                 </td>
                             </tr>

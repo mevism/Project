@@ -182,14 +182,14 @@ Route::prefix('registry')->middleware(['web', 'auth:user', 'is_admin'])->group(f
 
     Route::get('/workload', [CoursesController::class, 'workload'])->name('courses.workload');
     Route::get('/school-workload/{year}', [CoursesController::class, 'schoolWorkload'])->name('courses.schoolWorkload');
-    Route::post('/departmental-workload', [CoursesController::class, 'departmentalWorkload'])->name('courses.departmentalWorkload');
+    Route::get('/departmental-workload/{id}', [CoursesController::class, 'departmentalWorkload'])->name('courses.departmentalWorkload');
     Route::get('/view-workload/{id}', [CoursesController::class, 'viewWorkload'])->name('courses.viewWorkload');
-    Route::post('/approve-workload', [CoursesController::class, 'approveWorkload'])->name('courses.approveWorkload');
-    Route::post('/decline-workload', [CoursesController::class, 'declineWorkload'])->name('courses.declineWorkload');
+    Route::get('/approve-workload/{id}', [CoursesController::class, 'approveWorkload'])->name('courses.approveWorkload');
+    Route::post('/decline-workload/{id}', [CoursesController::class, 'declineWorkload'])->name('courses.declineWorkload');
     Route::get('/view-workload/{id}', [CoursesController::class, 'viewWorkload'])->name('courses.viewWorkload');
     Route::get('/print-workload/{id}', [CoursesController::class, 'printWorkload'])->name('courses.printWorkload');
-    Route::post('/revert-workload', [CoursesController::class, 'revertWorkload'])->name('courses.revertWorkload');
-    Route::post('/submit-workload', [CoursesController::class, 'submitWorkload'])->name('courses.submitWorkload');
+    Route::get('/revert-workload/{id}', [CoursesController::class, 'revertWorkload'])->name('courses.revertWorkload');
+    Route::get('/submit-workload/{id}', [CoursesController::class, 'submitWorkload'])->name('courses.submitWorkload');
 
 
     Route::get('/exam-marks-yearly', [CoursesController::class, 'yearlyExamMarks'])->name('courses.yearlyExamMarks');

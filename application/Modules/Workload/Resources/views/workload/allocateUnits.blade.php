@@ -76,16 +76,15 @@
                                     @if(count($unitLec) < 1)
                                         No Unit Lecturer
                                     @else
-                                        @if($workloads->where('unit_id', $unit->SyllabusUnit->unit_id)->where('class_code', $class->class_code)->first())
+                                        @if($workloads->where('unit_code', $unit->unit_code)->where('class_code', $class->class_code)->first())
                                             @foreach($lecturers as $lecturer)
-                                                @if($workloads->where('unit_id', $unit->SyllabusUnit->unit_id)->where('class_code', $class->class_code)->first()->user_id == $lecturer->user_id)
+                                                @if($workloads->where('unit_code', $unit->unit_code)->where('class_code', $class->class_code)->first()->user_id == $lecturer->user_id)
                                                     <div class="row mb-1">
                                                         <div class="col col-md-6">
                                                             {{ $lecturer->staffInfos->title }} {{ $lecturer->staffInfos->last_name}} {{ $lecturer->staffInfos->first_name}} {{ $lecturer->staffInfos->middle_name}} ({{ $lecturer->employments->first()->employment_terms }})
                                                         </div>
                                                         <div class="col col-md-3">
-
-                                                            @php $loadcount = $workloads->where('user_id', $lecturer->user_id)->where('academic_year', $class->academic_year)->where('period', $class->academic_semester)->count();
+                                                            @php $loadcount = $workloads->where('user_id', $lecturer->user_id)->where('intake_id', $intake->intake_id)->count();
                                                             @endphp
                                                             @php
                                                             if($lecturer->employments->first()->employment_terms == 'FT'){
@@ -111,9 +110,8 @@
                                                             @endif
                                                         </div>
                                                         <div class="col col-md-3">
-{{--                                                            {{ $workload }}--}}
-                                                            @if( $workloads->where('unit_id', $unit->SyllabusUnit->unit_id)->where('class_code', $class->class_code)->first()->workload_approval_id == null)
-                                                                <a class="btn btn-sm btn-outline-danger ml-2" onclick="return confirm('Are you sure you want to remove allocation')" href="{{ route('department.deleteWorkload', $workloads->where('unit_id', $unit->SyllabusUnit->unit_id)->where('class_code', $class->class_code)->first()->workload_id) }}">Revoke </a>
+                                                            @if($workloads->where('unit_code', $unit->unit_code)->where('class_code', $class->class_code)->first()->status == null || $workloads->where('unit_code', $unit->unit_code)->where('class_code', $class->class_code)->first()->status == 2)
+                                                                <a class="btn btn-sm btn-outline-danger ml-2" onclick="return confirm('Are you sure you want to remove allocation')" href="{{ route('department.deleteWorkload', $workloads->where('unit_code', $unit->unit_code)->where('class_code', $class->class_code)->first()->workload_id) }}">Revoke </a>
                                                             @else
                                                                 <span class="text-success">Submitted</span>
                                                             @endif
@@ -132,7 +130,7 @@
 
                                                     </div>
                                                     <div class="col col-md-3 mt-0 mb-0">
-                                                        @php $loadcount = $workloads->where('user_id', $lecturer->user_id)->where('academic_year', $class->academic_year)->where('period', $class->academic_semester)->count();
+                                                        @php $loadcount = $workloads->where('user_id', $lecturer->user_id)->where('intake_id', $intake->intake_id)->count();
                                                         @endphp
                                                         @php
                                                             if($lecturer->employments->first()->employment_terms == 'FT'){
@@ -161,7 +159,7 @@
                                                         <form method="post" action="{{ route('department.allocateUnit') }}">
                                                             @csrf
                                                             <input type="hidden" name="staffId" value="{{ $lecturer->user_id }}">
-                                                            <input type="hidden" name="unitId" value="{{ $unit->SyllabusUnit->unit_id }}">
+                                                            <input type="hidden" name="unitId" value="{{ $unit->unit_code }}">
                                                             <input type="hidden" name="patternId" value="{{ $class->class_pattern_id }}">
                                                             <button type="submit" class="btn btn-sm btn-outline-success ml-2"> Allocate </button>
                                                         </form>

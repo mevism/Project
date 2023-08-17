@@ -28,12 +28,12 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h6 class="h6 fw-bold mb-0">
-                      DEPARTMENTAL   WORKLOADS
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
+                      SCHOOL WORKLOADS
                     </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="javascript:void(0)">Schools</a>
                         </li>
@@ -65,7 +65,7 @@
                                         <tr>
                                             <td> {{ $loop->iteration }}</td>
                                             <td> {{ \Modules\Registrar\Entities\School::where('school_id', $school)->first()->name }} </td>
-                                            <td> {{ $semester }} </td>
+                                            <td> {{ \Illuminate\Support\Facades\DB::table('academicperiods')->where('intake_id', $semester)->first()->intake_month }} </td>
                                             <td>
                                                 @if($workload->first()->WorkApprovalView->registrar_status == 0 && $workload->first()->WorkApprovalView->status == 0 || $workload->first()->WorkApprovalView->registrar_status == 1 && $workload->first()->WorkApprovalView->status == 0 || $workload->first()->WorkApprovalView->registrar_status == 2 && $workload->first()->WorkApprovalView->status == 0)
                                                     <span class="text-info">Pending</span>
@@ -78,162 +78,178 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                @php
-                                                    $academicYear = \Carbon\Carbon::parse($year->year_start)->format('Y').'/'.\Carbon\Carbon::parse($year->year_end)->format('Y');
-                                                @endphp
-                                                @if($workload->first()->registrar_status == 0 )
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="btn-group">
-                                                                <form class="m-0 p-0" method="post" action="{{ route('courses.departmentalWorkload') }}">
-                                                                    @csrf
-                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">
-                                                                    <input type="hidden" name="semester" value="{{ $semester }}">
-                                                                    <input type="hidden" name="school" value="{{ $school }}">
-                                                                    <button type="submit" class="btn btn-sm btn-outline-info"> View </button>
-                                                                </form>
-                                                                <span>&nbsp;</span>
-                                                                <form class="m-0 p-0" method="POST" action="{{ route('courses.submitWorkload') }}">
-                                                                    @csrf
-                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">
-                                                                    <input type="hidden" name="semester" value="{{ $semester }}">
-                                                                    <input type="hidden" name="school" value="{{ $school }}">
-                                                                    <button type="submit" class="btn btn-sm btn-outline-secondary"> Download </button>
-                                                                </form>
-                                                                <span>&nbsp;</span>
-                                                                <form class="m-0 p-0" method="post" action="{{ route('courses.approveWorkload') }}">
-                                                                    @csrf
-                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">
-                                                                    <input type="hidden" name="semester" value="{{ $semester }}">
-                                                                    <input type="hidden" name="school" value="{{ $school }}">
-                                                                    <button type="submit" onclick="return confirm('Are you sure you want to approve this workload?')" class="btn btn-sm btn-outline-success"> Approve </button>
-                                                                </form>
-                                                                <span>&nbsp;</span>
-                                                                <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $workload->first()->workload_approval_id }}"> Decline </a>
-                                                                <span>&nbsp;</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                <a class="btn btn-sm btn-alt-secondary" href="{{ route('courses.departmentalWorkload', base64_encode($school.':'.$semester)) }}">View</a>
+                                                <a class="btn btn-sm btn-alt-info" href="{{ route('courses.printWorkload', base64_encode($school.':'.$semester)) }}">Download</a>
+                                                @if($workload->first()->registrar_status == 0)
+                                                    <a class="btn btn-sm btn-alt-success" onclick="return confirm('Are you sure you want to approve this workload?')" href="{{ route('courses.approveWorkload', base64_encode($school.':'.$semester)) }}">Approve</a>
+                                                    <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ $school.$semester }}"> Decline </a>
                                                 @elseif($workload->first()->registrar_status == 1 && $workload->first()->status == 0)
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="btn-group">
-                                                                <form class="m-0 p-0" method="post" action="{{ route('courses.departmentalWorkload') }}">
-                                                                    @csrf
-                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">
-                                                                    <input type="hidden" name="semester" value="{{ $semester }}">
-                                                                    <input type="hidden" name="school" value="{{ $school }}">
-                                                                    <button type="submit" class="btn btn-sm btn-outline-info"> View </button>
-                                                                </form>
-                                                                <span>&nbsp;</span>
-                                                                <form class="m-0 p-0" method="POST" action="{{ route('courses.approveWorkload') }}">
-                                                                    @csrf
-                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">
-                                                                    <input type="hidden" name="semester" value="{{ $semester }}">
-                                                                    <input type="hidden" name="school" value="{{ $school }}">
-                                                                    <button type="submit" class="btn btn-sm btn-outline-secondary"> Download </button>
-                                                                </form>
-                                                                <span>&nbsp;</span>
-                                                                <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $workload->first()->workload_approval_id }}"> Decline </a>
-                                                                <span>&nbsp;</span>
-                                                                <form class="m-0 p-0" method="POST" action="{{ route('courses.submitWorkload') }}">
-                                                                    @csrf
-                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">
-                                                                    <input type="hidden" name="semester" value="{{ $semester }}">
-                                                                    <input type="hidden" name="school" value="{{ $school }}">
-                                                                    <button type="submit" class="btn btn-sm btn-outline-success"> Submit </button>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ $school.$semester }}"> Decline </a>
+                                                    <a class="btn btn-sm btn-alt-success" onclick="return confirm('Are you sure you want to submit this workload? Once submitted cannot be reversed')" href="{{ route('courses.submitWorkload', base64_encode($school.':'.$semester)) }}">Submit</a>
                                                 @elseif($workload->first()->registrar_status == 2 && $workload->first()->status == 0)
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="btn-group">
-                                                                <form class="m-0 p-0" method="post" action="{{ route('courses.departmentalWorkload') }}">
-                                                                    @csrf
-                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">
-                                                                    <input type="hidden" name="semester" value="{{ $semester }}">
-                                                                    <input type="hidden" name="school" value="{{ $school }}">
-                                                                    <button type="submit" class="btn btn-sm btn-outline-info"> View </button>
-                                                                </form>
-                                                                <span>&nbsp;</span>
-                                                                <form class="m-0 p-0" method="POST" action="{{ route('courses.approveWorkload') }}">
-                                                                    @csrf
-                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">
-                                                                    <input type="hidden" name="semester" value="{{ $semester }}">
-                                                                    <input type="hidden" name="school" value="{{ $school }}">
-                                                                    <button type="submit" class="btn btn-sm btn-outline-secondary"> Download </button>
-                                                                </form>
-                                                                <span>&nbsp;</span>
-                                                                <form class="m-0 p-0" method="post" action="{{ route('courses.approveWorkload') }}">
-                                                                    @csrf
-                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">
-                                                                    <input type="hidden" name="semester" value="{{ $semester }}">
-                                                                    <input type="hidden" name="school" value="{{ $school }}">
-                                                                    <button type="submit" onclick="return confirm('Are you sure you want to approve this workload?')" class="btn btn-sm btn-outline-success"> Approve </button>
-                                                                </form>
-                                                                <span>&nbsp;</span>
-                                                                <form class="m-0 p-0" method="POST" action="{{ route('courses.revertWorkload') }}">
-                                                                    @csrf
-                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">
-                                                                    <input type="hidden" name="semester" value="{{ $semester }}">
-                                                                    <input type="hidden" name="school" value="{{ $school }}">
-                                                                    <button type="submit" onclick="return confirm('Are you sure you want to revert this workload?')" class="btn btn-sm btn-outline-warning"> Revert </button>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @elseif($workload->first()->WorkApprovalView->registrar_status == 2 && $workload->first()->WorkApprovalView->status == 2)
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="btn-group">
-                                                                <form class="m-0 p-0" method="post" action="{{ route('courses.departmentalWorkload') }}">
-                                                                    @csrf
-                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">
-                                                                    <input type="hidden" name="semester" value="{{ $semester }}">
-                                                                    <input type="hidden" name="school" value="{{ $school }}">
-                                                                    <button type="submit" class="btn btn-sm btn-outline-info"> View </button>
-                                                                </form>
-                                                                <span>&nbsp;</span>
-                                                                <form class="m-0 p-0" method="POST" action="{{ route('courses.approveWorkload') }}">
-                                                                    @csrf
-                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">
-                                                                    <input type="hidden" name="semester" value="{{ $semester }}">
-                                                                    <input type="hidden" name="school" value="{{ $school }}">
-                                                                    <button type="submit" class="btn btn-sm btn-outline-secondary"> Download </button>
-                                                                </form>
-                                                                <span>&nbsp;</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @elseif($workload->first()->WorkApprovalView->registrar_status == 1 && $workload->first()->WorkApprovalView->status == 1)
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="btn-group">
-                                                                <form class="m-0 p-0" method="post" action="{{ route('courses.departmentalWorkload') }}">
-                                                                    @csrf
-                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">
-                                                                    <input type="hidden" name="semester" value="{{ $semester }}">
-                                                                    <input type="hidden" name="school" value="{{ $school }}">
-                                                                    <button type="submit" class="btn btn-sm btn-outline-info"> View </button>
-                                                                </form>
-                                                                <span>&nbsp;</span>
-                                                                <form class="m-0 p-0" method="POST" action="{{ route('courses.approveWorkload') }}">
-                                                                    @csrf
-                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">
-                                                                    <input type="hidden" name="semester" value="{{ $semester }}">
-                                                                    <input type="hidden" name="school" value="{{ $school }}">
-                                                                    <button type="submit" class="btn btn-sm btn-outline-secondary"> Download </button>
-                                                                </form>
-                                                                <span>&nbsp;</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <a class="btn btn-sm btn-alt-success" onclick="return confirm('Are you sure you want to approve this workload?')" href="{{ route('courses.approveWorkload', base64_encode($school.':'.$semester)) }}">Approve</a>
+                                                    <a class="btn btn-sm btn-alt-warning" onclick="return confirm('Are you sure you want to revert this workload?')" href="{{ route('courses.revertWorkload', base64_encode($school.':'.$semester)) }}">Revert </a>
+                                                @elseif($workload->first()->dean_status == 1 && $workload->first()->registrar_status == 2 && $workload->first()->status == 2)
+                                                    <a class="btn btn-sm btn-outline-info disabled">Under Dean's Review</a>
+                                                @elseif($workload->first()->dean_status == 1 && $workload->first()->registrar_status == 1 && $workload->first()->status == 1)
+                                                    <a class="btn btn-sm btn-outline-success disabled">Waiting Dean to Publish</a>
                                                 @endif
+{{--                                                @php--}}
+{{--                                                    $academicYear = \Carbon\Carbon::parse($year->year_start)->format('Y').'/'.\Carbon\Carbon::parse($year->year_end)->format('Y');--}}
+{{--                                                @endphp--}}
+{{--                                                @if($workload->first()->registrar_status == 0 )--}}
+{{--                                                    <div class="row">--}}
+{{--                                                        <div class="col-md-12">--}}
+{{--                                                            <div class="btn-group">--}}
+{{--                                                                <form class="m-0 p-0" method="post" action="{{ route('courses.departmentalWorkload') }}">--}}
+{{--                                                                    @csrf--}}
+{{--                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">--}}
+{{--                                                                    <input type="hidden" name="semester" value="{{ $semester }}">--}}
+{{--                                                                    <input type="hidden" name="school" value="{{ $school }}">--}}
+{{--                                                                    <button type="submit" class="btn btn-sm btn-outline-info"> View </button>--}}
+{{--                                                                </form>--}}
+{{--                                                                <span>&nbsp;</span>--}}
+{{--                                                                <form class="m-0 p-0" method="POST" action="{{ route('courses.submitWorkload') }}">--}}
+{{--                                                                    @csrf--}}
+{{--                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">--}}
+{{--                                                                    <input type="hidden" name="semester" value="{{ $semester }}">--}}
+{{--                                                                    <input type="hidden" name="school" value="{{ $school }}">--}}
+{{--                                                                    <button type="submit" class="btn btn-sm btn-outline-secondary"> Download </button>--}}
+{{--                                                                </form>--}}
+{{--                                                                <span>&nbsp;</span>--}}
+{{--                                                                <form class="m-0 p-0" method="post" action="{{ route('courses.approveWorkload') }}">--}}
+{{--                                                                    @csrf--}}
+{{--                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">--}}
+{{--                                                                    <input type="hidden" name="semester" value="{{ $semester }}">--}}
+{{--                                                                    <input type="hidden" name="school" value="{{ $school }}">--}}
+{{--                                                                    <button type="submit" onclick="return confirm('Are you sure you want to approve this workload?')" class="btn btn-sm btn-outline-success"> Approve </button>--}}
+{{--                                                                </form>--}}
+{{--                                                                <span>&nbsp;</span>--}}
+{{--                                                                <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ $workload->first()->workload_approval_id }}"> Decline </a>--}}
+{{--                                                                <span>&nbsp;</span>--}}
+{{--                                                            </div>--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                @elseif($workload->first()->registrar_status == 1 && $workload->first()->status == 0)--}}
+{{--                                                    <div class="row">--}}
+{{--                                                        <div class="col-md-12">--}}
+{{--                                                            <div class="btn-group">--}}
+{{--                                                                <form class="m-0 p-0" method="post" action="{{ route('courses.departmentalWorkload') }}">--}}
+{{--                                                                    @csrf--}}
+{{--                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">--}}
+{{--                                                                    <input type="hidden" name="semester" value="{{ $semester }}">--}}
+{{--                                                                    <input type="hidden" name="school" value="{{ $school }}">--}}
+{{--                                                                    <button type="submit" class="btn btn-sm btn-outline-info"> View </button>--}}
+{{--                                                                </form>--}}
+{{--                                                                <span>&nbsp;</span>--}}
+{{--                                                                <form class="m-0 p-0" method="POST" action="{{ route('courses.approveWorkload') }}">--}}
+{{--                                                                    @csrf--}}
+{{--                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">--}}
+{{--                                                                    <input type="hidden" name="semester" value="{{ $semester }}">--}}
+{{--                                                                    <input type="hidden" name="school" value="{{ $school }}">--}}
+{{--                                                                    <button type="submit" class="btn btn-sm btn-outline-secondary"> Download </button>--}}
+{{--                                                                </form>--}}
+{{--                                                                <span>&nbsp;</span>--}}
+
+{{--                                                                <span>&nbsp;</span>--}}
+{{--                                                                <form class="m-0 p-0" method="POST" action="{{ route('courses.submitWorkload') }}">--}}
+{{--                                                                    @csrf--}}
+{{--                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">--}}
+{{--                                                                    <input type="hidden" name="semester" value="{{ $semester }}">--}}
+{{--                                                                    <input type="hidden" name="school" value="{{ $school }}">--}}
+{{--                                                                    <button type="submit" class="btn btn-sm btn-outline-success"> Submit </button>--}}
+{{--                                                                </form>--}}
+{{--                                                            </div>--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                @elseif($workload->first()->registrar_status == 2 && $workload->first()->status == 0)--}}
+{{--                                                    <div class="row">--}}
+{{--                                                        <div class="col-md-12">--}}
+{{--                                                            <div class="btn-group">--}}
+{{--                                                                <form class="m-0 p-0" method="post" action="{{ route('courses.departmentalWorkload') }}">--}}
+{{--                                                                    @csrf--}}
+{{--                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">--}}
+{{--                                                                    <input type="hidden" name="semester" value="{{ $semester }}">--}}
+{{--                                                                    <input type="hidden" name="school" value="{{ $school }}">--}}
+{{--                                                                    <button type="submit" class="btn btn-sm btn-outline-info"> View </button>--}}
+{{--                                                                </form>--}}
+{{--                                                                <span>&nbsp;</span>--}}
+{{--                                                                <form class="m-0 p-0" method="POST" action="{{ route('courses.approveWorkload') }}">--}}
+{{--                                                                    @csrf--}}
+{{--                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">--}}
+{{--                                                                    <input type="hidden" name="semester" value="{{ $semester }}">--}}
+{{--                                                                    <input type="hidden" name="school" value="{{ $school }}">--}}
+{{--                                                                    <button type="submit" class="btn btn-sm btn-outline-secondary"> Download </button>--}}
+{{--                                                                </form>--}}
+{{--                                                                <span>&nbsp;</span>--}}
+{{--                                                                <form class="m-0 p-0" method="post" action="{{ route('courses.approveWorkload') }}">--}}
+{{--                                                                    @csrf--}}
+{{--                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">--}}
+{{--                                                                    <input type="hidden" name="semester" value="{{ $semester }}">--}}
+{{--                                                                    <input type="hidden" name="school" value="{{ $school }}">--}}
+{{--                                                                    <button type="submit" onclick="return confirm('Are you sure you want to approve this workload?')" class="btn btn-sm btn-outline-success"> Approve </button>--}}
+{{--                                                                </form>--}}
+{{--                                                                <span>&nbsp;</span>--}}
+{{--                                                                <form class="m-0 p-0" method="POST" action="{{ route('courses.revertWorkload') }}">--}}
+{{--                                                                    @csrf--}}
+{{--                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">--}}
+{{--                                                                    <input type="hidden" name="semester" value="{{ $semester }}">--}}
+{{--                                                                    <input type="hidden" name="school" value="{{ $school }}">--}}
+{{--                                                                    <button type="submit" onclick="return confirm('Are you sure you want to revert this workload?')" class="btn btn-sm btn-outline-warning"> Revert </button>--}}
+{{--                                                                </form>--}}
+{{--                                                            </div>--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                @elseif($workload->first()->WorkApprovalView->registrar_status == 2 && $workload->first()->WorkApprovalView->status == 2)--}}
+{{--                                                    <div class="row">--}}
+{{--                                                        <div class="col-md-12">--}}
+{{--                                                            <div class="btn-group">--}}
+{{--                                                                <form class="m-0 p-0" method="post" action="{{ route('courses.departmentalWorkload') }}">--}}
+{{--                                                                    @csrf--}}
+{{--                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">--}}
+{{--                                                                    <input type="hidden" name="semester" value="{{ $semester }}">--}}
+{{--                                                                    <input type="hidden" name="school" value="{{ $school }}">--}}
+{{--                                                                    <button type="submit" class="btn btn-sm btn-outline-info"> View </button>--}}
+{{--                                                                </form>--}}
+{{--                                                                <span>&nbsp;</span>--}}
+{{--                                                                <form class="m-0 p-0" method="POST" action="{{ route('courses.approveWorkload') }}">--}}
+{{--                                                                    @csrf--}}
+{{--                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">--}}
+{{--                                                                    <input type="hidden" name="semester" value="{{ $semester }}">--}}
+{{--                                                                    <input type="hidden" name="school" value="{{ $school }}">--}}
+{{--                                                                    <button type="submit" class="btn btn-sm btn-outline-secondary"> Download </button>--}}
+{{--                                                                </form>--}}
+{{--                                                                <span>&nbsp;</span>--}}
+{{--                                                            </div>--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                @elseif($workload->first()->WorkApprovalView->registrar_status == 1 && $workload->first()->WorkApprovalView->status == 1)--}}
+{{--                                                    <div class="row">--}}
+{{--                                                        <div class="col-md-12">--}}
+{{--                                                            <div class="btn-group">--}}
+{{--                                                                <form class="m-0 p-0" method="post" action="{{ route('courses.departmentalWorkload') }}">--}}
+{{--                                                                    @csrf--}}
+{{--                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">--}}
+{{--                                                                    <input type="hidden" name="semester" value="{{ $semester }}">--}}
+{{--                                                                    <input type="hidden" name="school" value="{{ $school }}">--}}
+{{--                                                                    <button type="submit" class="btn btn-sm btn-outline-info"> View </button>--}}
+{{--                                                                </form>--}}
+{{--                                                                <span>&nbsp;</span>--}}
+{{--                                                                <form class="m-0 p-0" method="POST" action="{{ route('courses.approveWorkload') }}">--}}
+{{--                                                                    @csrf--}}
+{{--                                                                    <input type="hidden" name="year" value="{{ $academicYear }}">--}}
+{{--                                                                    <input type="hidden" name="semester" value="{{ $semester }}">--}}
+{{--                                                                    <input type="hidden" name="school" value="{{ $school }}">--}}
+{{--                                                                    <button type="submit" class="btn btn-sm btn-outline-secondary"> Download </button>--}}
+{{--                                                                </form>--}}
+{{--                                                                <span>&nbsp;</span>--}}
+{{--                                                            </div>--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                @endif--}}
 
                                             </td>
-                                            <div class="modal fade" id="staticBackdrop-{{ $workload->first()->workload_approval_id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal fade" id="staticBackdrop{{ $school.$semester }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-lg">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -241,14 +257,11 @@
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <form method="POST" action="{{ route('courses.declineWorkload') }}">
+                                                            <form method="POST" action="{{ route('courses.declineWorkload', base64_encode($school.':'.$semester)) }}">
                                                                 @csrf
                                                                 <div class="d-flex justify-content-center mb-4">
                                                                     <div class="col-md-11">
                                                                         <textarea name="remarks" placeholder="Remarks" rows="6" class="form-control"></textarea>
-                                                                        <input type="hidden" name="year" value="{{ $academicYear }}">
-                                                                        <input type="hidden" name="semester" value="{{ $semester }}">
-                                                                        <input type="hidden" name="school" value="{{ $school }}">
                                                                     </div>
                                                                 </div>
                                                                 <div class="d-flex justify-content-center">

@@ -26,9 +26,7 @@ class UserController extends Controller
                 Auth::guard($guard)->logout();
             }
         }
-
         return redirect()->route('root')->with('success', 'You are now logged out');
-
     }
     public function login(Request $request){
         $logins = $request->only('username', 'password');
@@ -109,7 +107,7 @@ class UserController extends Controller
 
                 return view('medical::medical.index')->with('apps', $apps);
 
-            }elseif (\auth()->guard('user')->user()->roles->first()->id == 10){
+            }elseif (\auth()->guard('user')->user()->roles->first()->id == 8){
 
                 return view('lecturer::index');
 

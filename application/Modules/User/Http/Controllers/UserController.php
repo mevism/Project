@@ -85,51 +85,41 @@ class UserController extends Controller
         $staffNumber = $request->input('staffNumber');
         $data = $this->appApi->fetchStaff($staffNumber, $userId);
 
-        $userID = new CustomIds();
+        if (StaffInfo::where('staff_number', $data['dataPayload']['data']['staff_number'])->exists()){
+            return redirect()->back()->with('info', 'User already exists in the system. You can add the user new role');
+        }else{
 
-        $generatedId = $userID->generateId();
+            $userID = new CustomIds();
+            $generatedId = $userID->generateId();
 
-        $user = new User;
-        $user->user_id = $generatedId;
-        $user->username = $data['dataPayload']['data']['staff_number'];
-        $user->password = Hash::make($data['dataPayload']['data']['id_number']);
-        $user->save();
+            $user = new User;
+            $user->user_id = $generatedId;
+            $user->username = $data['dataPayload']['data']['staff_number'];
+            $user->password = Hash::make($data['dataPayload']['data']['id_number']);
+            $user->save();
 
-        $staffInfo = new StaffInfo;
-        $staffInfo->user_id = $generatedId;
-        $staffInfo->staff_number = $data['dataPayload']['data']['staff_number'];
-        $staffInfo->title = $data['dataPayload']['data']['salutation'];
-        $staffInfo->first_name = $data['dataPayload']['data']['first_name'];
-        $staffInfo->middle_name =$data['dataPayload']['data']['middle_name'];
-        $staffInfo->last_name = $data['dataPayload']['data']['last_name'];
-        $staffInfo->personal_email = $data['dataPayload']['data']['personal_email'];
-        $staffInfo->office_email = $data['dataPayload']['data']['work_email'];
-        $staffInfo->gender = $data['dataPayload']['data']['gender'];
-        $staffInfo->phone_number = $data['dataPayload']['data']['mobile_number'];
-        $staffInfo->save();
+            $staffInfo = new StaffInfo;
+            $staffInfo->user_id = $generatedId;
+            $staffInfo->staff_number = $data['dataPayload']['data']['staff_number'];
+            $staffInfo->title = $data['dataPayload']['data']['salutation'];
+            $staffInfo->first_name = $data['dataPayload']['data']['first_name'];
+            $staffInfo->middle_name =$data['dataPayload']['data']['middle_name'];
+            $staffInfo->last_name = $data['dataPayload']['data']['last_name'];
+            $staffInfo->personal_email = $data['dataPayload']['data']['personal_email'];
+            $staffInfo->office_email = $data['dataPayload']['data']['work_email'];
+            $staffInfo->gender = $data['dataPayload']['data']['gender'];
+            $staffInfo->phone_number = $data['dataPayload']['data']['mobile_number'];
+            $staffInfo->save();
 
-        // StaffInfo::create([
-        //     'user_id'  => $user->user_id,
-        //     'staff_number'  => $data['dataPayload']['data']['staff_number'],
-        //     'title'  => 'Miss',
-        //     'first_name'  => $data['dataPayload']['data']['first_name'],
-        //     'middle_name'  => $data['dataPayload']['data']['middle_name'],
-        //     'last_name'  => $data['dataPayload']['data']['last_name'],
-        //     'personal_email'  => $data['dataPayload']['data']['personal_email'],
-        //     'office_email'  => $data['dataPayload']['data']['work_email'],
-        //     'gender'  => $data['dataPayload']['data']['gender'],
-        //     'phone_number'  => $data['dataPayload']['data']['mobile_number'],
-        // ]);
-
-        $userDept = new UserEmployment;
-        $userDept->user_id = $generatedId;
-        $userDept->role_id = $request->role;
-        $userDept->campus_id = $request->campus;
-        $userDept->department_id = $request->department;
-        $userDept->station_id = $request->station;
-        $userDept->employment_terms = $request->contract;
-        $userDept->save();
-
+            $userDept = new UserEmployment;
+            $userDept->user_id = $generatedId;
+            $userDept->role_id = $request->role;
+            $userDept->campus_id = $request->campus;
+            $userDept->department_id = $request->department;
+            $userDept->station_id = $request->station;
+            $userDept->employment_terms = $request->contract;
+            $userDept->save();
+        }
         return redirect()->route('admin.users')->with('success', 'User added successfully');
 
     }

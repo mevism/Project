@@ -1,15 +1,4 @@
 @extends('registrar::layouts.backend')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
-
-<link rel="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css">
-<link rel="https://cdn.datatables.net/rowgroup/1.2.0/css/rowGroup.dataTables.min.css">
-
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-
-<script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
-<script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script>
 @section('content')
     <div class="bg-body-light">
         <div class="content content-full">
@@ -20,7 +9,7 @@
                     </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="javascript:void(0)">Schools</a>
                         </li>
@@ -154,7 +143,7 @@
                                     </td>
                                     <td>
                                         @foreach($workload as $class)
-                                            <p>{{ $class->WorkloadApprovalView->classWorkload->classCourse->level }}</p>
+                                            <p>{{ $class->WorkloadApprovalView->classWorkload->classCourse->level_id }}</p>
                                         @endforeach
                                     </td>
                                 </tr>
