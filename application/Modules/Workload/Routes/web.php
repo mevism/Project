@@ -25,11 +25,11 @@ Route::prefix('workload')->middleware(['web', 'auth:user', 'is_cod'])->group(fun
     Route::post('/allocate-unit', [WorkloadController::class, 'allocateUnit'])->name('department.allocateUnit');
     Route::get('/view-workloads', [WorkloadController::class, 'viewWorkload'])->name('department.viewWorkload');
     Route::get('/view-workloads-per-year/{id}', [WorkloadController::class, 'viewYearWorkload'])->name('department.viewYearWorkload');
-    Route::post('/view-workloads-per-semester', [WorkloadController::class, 'viewSemesterWorkload'])->name('department.viewSemesterWorkload');
+    Route::get('/view-workloads-per-semester/{id}', [WorkloadController::class, 'viewSemesterWorkload'])->name('department.viewSemesterWorkload');
 
     Route::get('/delete-workload/{id}', [WorkloadController::class,'deleteWorkload'])->name('department.deleteWorkload');
-    Route::post('/submit-workload', [WorkloadController::class,'submitWorkload'])->name('department.submitWorkload');
+    Route::get('/submit-workload/{id}', [WorkloadController::class,'submitWorkload'])->name('department.submitWorkload');
     Route::post('/resubmit-workload', [WorkloadController::class,'resubmitWorkload'])->name('department.resubmitWorkload');
-    Route::post('/print-workload', [WorkloadController::class,'printWorkload'])->name('department.printWorkload');
+    Route::get('/print-workload/{id}', [WorkloadController::class,'printWorkload'])->name('department.printWorkload');
 
 });

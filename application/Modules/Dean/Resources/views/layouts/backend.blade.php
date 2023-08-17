@@ -65,39 +65,29 @@
           <ul class="nav-main">
             <li class="nav-main-item">
               <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
-                <i class="nav-main-link-icon si si-home"></i>
-                <span class="nav-main-link-name">
+                <i class="nav-main-link-icon fa fa-home"></i>
+                <span class="nav-main-link-name fs-7">
                     @if(auth()->guard('user')->user()->hasRole('DEAN/DIRECTOR'))
-                        Director/Dean [ {{ auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->initials }} ]
+                        DIRECTOR/DEAN [ {{ auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->initials }} ]
                     @endif
                 </span>
 
               </a>
             </li>
-{{--            <li class="nav-main-item">--}}
-{{--              <i class="nav-main-link-icon"></i>--}}
-{{--              <a class="nav-main-link {{ request()->is('approve/approveIndex') ? ' active' : '' }}" href="{{ route('courses.approveIndex') }}">--}}
-{{--                <i class="nav-main-link-icon si si-user"></i>--}}
-{{--                <span class="nav-main-link-name">Review</span>--}}
-
-{{--              </a>--}}
-{{--            </li>--}}
             <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="{{ route('dean.applications') }}">
-                <i class="nav-main-link-icon si si-graduation"></i>
-                <span class="nav-main-link-name">Applications</span>
+                <i class="nav-main-link-icon fa fa-list-1-2"></i>
+                <span class="nav-main-link-name fs-7">Applications</span>
               </a>
               <ul class="nav-main-submenu">
                   <li class="nav-main-item">
                       <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('dean.applications') }}">
-                          <i class="nav-main-link-icon si si-calendar"></i>
                           <span class="nav-main-link-name">All applications</span>
                       </a>
                   </li>
 
                     <li class="nav-main-item">
                           <a class="nav-main-link{{ request()->is('school/showSchool') ? ' active' : '' }}" href="{{  route('dean.batch') }}">
-                            <i class="nav-main-link-icon si si-graduation"></i>
                               <span class="nav-main-link-name">Submit batch</span>
                           </a>
                       </li>
@@ -106,13 +96,12 @@
 
             <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="{{ route('dean.applications') }}">
-                  <i class="nav-main-link-icon si si-graduation"></i>
-                  <span class="nav-main-link-name">Student Progression</span>
+                  <i class="nav-main-link-icon fa fa-chart-line"></i>
+                  <span class="nav-main-link-name fs-7">Student Progression</span>
               </a>
               <ul class="nav-main-submenu">
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('dean.yearly') }}">
-                        <i class="nav-main-link-icon si si-calendar"></i>
                         <span class="nav-main-link-name">Course Transfers</span>
                     </a>
                 </li>
@@ -120,7 +109,6 @@
               <ul class="nav-main-submenu">
                   <li class="nav-main-item">
                       <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('dean.academicLeave') }}">
-                          <i class="nav-main-link-icon si si-calendar"></i>
                           <span class="nav-main-link-name">Academic Leave</span>
                       </a>
                   </li>
@@ -128,21 +116,19 @@
               <ul class="nav-main-submenu">
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('dean.readmissions') }}">
-                        <i class="nav-main-link-icon si si-calendar"></i>
                         <span class="nav-main-link-name">Readmission</span>
                     </a>
                 </li>
             </ul>
             <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="{{ route('dean.applications') }}">
-                <i class="nav-main-link-icon si si-graduation"></i>
-                <span class="nav-main-link-name">Workload</span>
+                <i class="nav-main-link-icon fa fa-tasks"></i>
+                <span class="nav-main-link-name fs-7">Workload</span>
               </a>
               <ul class="nav-main-submenu">
                   <li class="nav-main-item">
-                      <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('dean.workload') }}">
-                          <i class="nav-main-link-icon si si-calendar"></i>
-                          <span class="nav-main-link-name">All Workloads</span>
+                      <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('dean.viewWorkloads') }}">
+                          <span class="nav-main-link-name">View Workloads</span>
                       </a>
                   </li>
 
@@ -152,13 +138,12 @@
 
             <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
               <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="{{ route('dean.applications') }}">
-                <i class="nav-main-link-icon si si-graduation"></i>
-                <span class="nav-main-link-name">Examination</span>
+                <i class="nav-main-link-icon fa fa-pen-alt"></i>
+                <span class="nav-main-link-name fs-7">Examination</span>
               </a>
               <ul class="nav-main-submenu">
                   <li class="nav-main-item">
                       <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('dean.yearlyExams') }}">
-                          <i class="nav-main-link-icon si si-calendar"></i>
                           <span class="nav-main-link-name">View Exam</span>
                       </a>
                   </li>

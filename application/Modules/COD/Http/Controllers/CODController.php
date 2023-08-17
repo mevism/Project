@@ -1113,15 +1113,14 @@ class CODController extends Controller
     }
 
     public function departmentLectures(){
-        $lectures = Staff::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+       $lectures = Staff::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
                         ->get();
         return view('cod::lecturers.index')->with(['lecturers' => $lectures]);
     }
 
-    public function lecturesQualification()
-    {
+    public function lecturesQualification(){
         $lectures = Staff::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-            ->whereIn('role_id', [10, 2, 4])
+            ->whereIn('role_id', [8, 2, 4])
             ->get();
         return view('cod::lecturers.departmentalLecturers')->with(['lecturers' => $lectures]);
     }

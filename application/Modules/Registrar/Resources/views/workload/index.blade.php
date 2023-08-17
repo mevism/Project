@@ -61,9 +61,9 @@
                                 @foreach($years as $year)
                                     <tr>
                                         <td> {{ $loop->iteration }} </td>
-                                        <td> {{ Carbon\Carbon::parse($year->year_start)->format('Y').'/'.\Carbon\Carbon::parse($year->year_end)->format('Y') }} </td>
+                                        <td> {{ $year->academic_year }} </td>
                                         <td>
-                                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.schoolWorkload', $year->year_id) }}">view </a>
+                                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('courses.schoolWorkload', base64_encode($year->academic_year)) }}">view </a>
                                         </td>
                                     </tr>
                                 @endforeach

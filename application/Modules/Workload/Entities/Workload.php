@@ -9,6 +9,7 @@ use Modules\COD\Entities\Unit;
 use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\Department;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Registrar\Entities\SchoolDepartment;
 use Modules\Registrar\Entities\StudentCourse;
 
 class Workload extends Model
@@ -27,7 +28,7 @@ class Workload extends Model
     }
 
     public function workloadUnit(){
-        return $this->belongsTo(Unit::class, 'unit_id', 'unit_id');
+        return $this->belongsTo(Unit::class, 'unit_code', 'unit_code');
     }
 
     public function workloadApproval(){

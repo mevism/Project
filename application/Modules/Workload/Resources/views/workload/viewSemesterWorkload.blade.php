@@ -29,12 +29,12 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-1">
-                    <h5 class="h6 fw-bold mb-0">
-                        {{ $semester }}-{{ $year }} WORKLOAD
+                    <h5 class="h6 fw-bold mb-0 text-uppercase">
+                        {{ \Illuminate\Support\Facades\DB::table('academicperiods')->where('intake_id', $semester)->first()->intake_month }} - {{ \Illuminate\Support\Facades\DB::table('academicperiods')->where('intake_id', $semester)->first()-> academic_year }} WORKLOAD
                     </h5>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="javascript:void(0)">Workload</a>
                         </li>
@@ -68,7 +68,6 @@
                         </thead>
                         <tbody>
                         @foreach ($workloads as $lec => $workload)
-
                             <tr>
                                 <td> {{ $loop->iteration }} </td>
                                 <td>
@@ -163,7 +162,7 @@
                                 </td>
                                 <td>
                                     @foreach($workload as $class)
-                                        <p>{{ $class->classWorkload->classCourse->level }}</p>
+                                        <p>{{ $class->classWorkload->classCourse->level_id }}</p>
                                     @endforeach
                                 </td>
                             </tr>
