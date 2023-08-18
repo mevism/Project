@@ -68,7 +68,7 @@
                                             <span class="badge bg-danger"> <i class="fa fa-close"></i> rejected</span>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td nowrap="">
                                         @if($app->registrar_status == 0)
                                             <a class="btn btn-sm btn-alt-success" data-toggle="click-ripple" onclick="return confirm('Are you sure you want to erroll this student?')" href="{{ route('courses.admitStudent', ['id' => $app->application_id]) }}"> Enroll </a>
                                             <a class="btn btn-sm btn-alt-danger" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin-{{ $app->application_id }}"> Reject </a>

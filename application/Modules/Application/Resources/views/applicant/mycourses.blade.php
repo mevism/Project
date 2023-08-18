@@ -51,6 +51,10 @@
                             <td>{{ $course->courses->getCourseDept->name }}</td>
                             <td>{{ $course->courses->course_name }}</td>
                             <td nowrap="">
+                                @if($course->student_type == 2)
+                                    <a class="btn btn-sm btn-alt-success" target="_top" href="{{ route('application.download', $course->application_id) }}"><i class="fa fa-file-pdf"></i> download</a>
+                                    <a class="btn btn-sm btn-alt-info" data-toggle="click-ripple" href="{{ route('application.uploadDocuments', $course->application_id) }}"><i class="fa fa-file-upload"></i> upload docs</a>
+                                @else
                                 @if($course->applicationApproval == null)
                                     <a class="btn btn-sm btn-alt-info" href="{{ route('application.edit', $course->application_id) }}">
                                         <i class="fa fa-pen-to-square"></i> update</a>
@@ -65,6 +69,7 @@
                                     @elseif($course->applicationApproval->cod_status == null || $course->applicationApproval->cod_status != null)
                                         <a class="btn btn-sm btn-alt-secondary disabled" href="#"> <i class="fa fa-spinner"></i> in progress </a>
                                     @endif
+                                @endif
                                 @endif
                             </td>
                         </tr>

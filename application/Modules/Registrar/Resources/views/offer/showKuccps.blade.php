@@ -29,12 +29,12 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
                         GOVERNMENT SPONSORED
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="javascript:void(0)">Government Sponsored</a>
                         </li>
@@ -52,30 +52,28 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="col-lg-12">
-
                 <table id="example" class="table table-bordered table-striped js-dataTable-responsive fs-sm">
-
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>Name</th>
                             <th>Sex</th>
-                            <th>Code</th>
+                            <th>INDEX NUMBER</th>
                             <th>Course</th>
                             <th>Phone</th>
                             <th>Email</th>
-                            <th>Alternative Email</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($kuccps as $item)
                         <tr>
-                            <td>{{ $item->sname }} {{ $item->fname }} {{ $item->mname }}</td>
+                            <td> {{ $loop->iteration }} </td>
+                            <td>{{ $item->surname }} {{ $item->first_name }} {{ $item->middle_name }}</td>
                             <td>{{ $item->gender }}</td>
-                            <td>{{ $item->kuccpsApplication->course_code }}</td>
-                            <td>{{ $item->kuccpsApplication->course_name }}</td>
+                            <td>{{ $item->index_number }}</td>
+                            <td>{{ $item->course_name }}</td>
                             <td>{{ $item->mobile }}</td>
                             <td>{{ $item->email }}</td>
-                            <td>{{ $item->alt_email }}</td>
                         </tr>
                         @endforeach
                     </tbody>

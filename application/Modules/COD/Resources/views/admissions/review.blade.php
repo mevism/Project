@@ -55,19 +55,19 @@
                                     <tbody>
                                     <tr>
                                         <td>{{ $app->admissionCourse->courseRequirements->subject1 }}</td>
-                                        <td>{{ $app->subject_1 }}</td>
+                                        <td>@if($app->student_type == 2) KUCCPS ENTRY @else {{ $app->subject_1 }}@endif</td>
                                     </tr>
                                     <tr>
                                         <td>{{ $app->admissionCourse->courseRequirements->subject2 }}</td>
-                                        <td>{{ $app->subject_2 }}</td>
+                                        <td>@if($app->student_type == 2) KUCCPS ENTRY @else {{ $app->subject_2 }}@endif</td>
                                     </tr>
                                     <tr>
                                         <td>{{ $app->admissionCourse->courseRequirements->subject3 }}</td>
-                                        <td>{{ $app->subject_3 }}</td>
+                                        <td>@if($app->student_type == 2) KUCCPS ENTRY @else {{ $app->subject_3 }}@endif</td>
                                     </tr>
                                     <tr>
                                         <td>{{ $app->admissionCourse->courseRequirements->subject4 }}</td>
-                                        <td>{{ $app->subject_4 }}</td>
+                                        <td>@if($app->student_type == 2) KUCCPS ENTRY @else {{ $app->subject_4 }}@endif</td>
                                     </tr>
                                     </tbody>
                                 </table>

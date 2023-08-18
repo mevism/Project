@@ -29,11 +29,11 @@
             .bgcolor3{
                 background-color: #dddddd;
             }
-          
+
         </style>
     </head>
     <body  class="bgcolor" style="margin: 0; padding: 0;" yahoo="fix">
-       
+
         <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%; max-width: 600px;  " class="content">
             <tr>
                 <td style="padding: 15px 10px 15px 10px;">
@@ -53,11 +53,11 @@
             </tr>
             <tr>
                 <td align="auto" class="bgcolor2" style="padding: 40px 20px 40px 20px; color: #555555; font-family: Arial, sans-serif; font-size: 20px; line-height: 30px; border-bottom: 1px solid #f6f6f6;">
-                    <h5>Dear {{ $kuccpsApplicant->fname }} {{ $kuccpsApplicant->mname }} {{ $kuccpsApplicant->sname }}, </h5>
+                    <h5>Dear {{ $kuccpsApplicant->first_name }} {{ $kuccpsApplicant->middle_name }} {{ $kuccpsApplicant->surname }}, </h5>
                     <p>
-                        Congratulations for being approved as successfull applicant of Technical Univerisity of Mombasa. Please visit the <a href="{{ route('root') }}"> TUM Course Application Portal </a>to download your admission documents. For any queries reach use via our email tumsupport@tum.ac.ke
-                      
- 
+                        Congratulations for being approved as successful applicant of Technical University of Mombasa. Please visit the <a href="{{ route('root') }}"> TUM Course Application Portal </a>to download your admission documents. For any queries reach use via our email tumsupport@tum.ac.ke
+
+
                      </p>
                     <div>
                         <p>
@@ -69,12 +69,12 @@
                                Admissions Department <br><br>
 
                              Technical University of Mombasa
-                            
+
                         </p>
                      </div>
                 </td>
             </tr>
-            
+
             <tr>
                 <td align="center" class="bgcolor3" style="padding: 15px 10px 15px 10px; color: #555555; font-family: Arial, sans-serif; font-size: 12px; line-height: 18px;">
                     <b>Technical University of Mombasa.</b><br/>Tom Mboya street, Tudor &bull; Mombasa &bull; Kenya

@@ -63,14 +63,9 @@ class UserController extends Controller
                 return view('admin.index')->with(['courses'=>$courses,'applications'=>$applications,'admissions'=>$admissions]);
 
             } elseif (\auth()->guard('user')->user()->roles->first()->id == 2){
-
-//                return auth()->guard('user')->user()->employmentDepartment->first()->department_id;
-//               $apps_cod = ApplicationsView::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-               $apps_cod = ApplicationsView::where('cod_status', null )
-                   ->count();
-               $classes = DB::table('classesview')
-                   ->where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-                   ->count();
+                $courseIDs = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->pluck('course_id');
+               $apps_cod = ApplicationsView::where('cod_status', null )->whereIn('course_id', $courseIDs)->where('student_type', 1)->count();
+               $classes = DB::table('classesview')->where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->count();
                 $admissions = 0;
 
                 return view('cod::COD.index')->with(['apps'=>$apps_cod, 'admissions'=>$admissions, 'classes' => $classes]);

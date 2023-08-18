@@ -32,17 +32,17 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
                         FEE INVOICES
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="{{ route('student') }}">Dashboard</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">
-                            Print Statement
+                            STUDENT FEES Statement
                         </li>
                     </ol>
                 </nav>
@@ -56,7 +56,7 @@
                 <div class="d-flex justify-content-end mb-4">
                     <a class="btn btn-sm btn-alt-primary m-2" href="{{ route('student.printStatement') }}"><i class="fa fa-print"></i> Print</a>
                 </div>
-                <table id="example" class="table table-responsive-sm table-striped table-borderless fs-sm">
+                <table id="example" class="table table-sm table-striped table-borderless fs-sm">
                     <thead>
                     <th>#</th>
                     <th>Date</th>
@@ -66,14 +66,14 @@
                     <th>Payments</th>
                     </thead>
                     <tbody>
-                        @foreach($statement as $key => $record)
+                        @foreach($statements as $key => $record)
                             <tr>
                                 <td>{{ ++$key }}</td>
-                                <td>{{ \Carbon\Carbon::parse($record->created_at)->format('d M Y') }}</td>
-                                <td>{{ $record->description }}</td>
-                                <td>{{ $record->invoice_number }}</td>
-                                <td>{{ number_format($record->amount, 2)  }}</td>
-                                <td>{{ number_format($record->deposit, 2) }}</td>
+                                <td>{{ $record['date'] }}</td>
+                                <td>{{ $record['description'] }}</td>
+                                <td>{{ $record['reference'] }}</td>
+                                <td>{{ $record['debit'] }}</td>
+                                <td>{{ $record['credit'] }}</td>
                             </tr>
                         @endforeach
                     </tbody>

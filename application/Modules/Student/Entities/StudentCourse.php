@@ -16,7 +16,7 @@ class StudentCourse extends Model
 //    protected $dates = 'deleted_at';
         protected $table = 'student_courses';
 
-    protected $fillable = [];
+    protected $fillable = ['student_id', 'application_id', 'student_number', 'course_id', 'campus_id', 'student_type', 'intake_id', 'current_class', 'entry_class', 'status'];
 
     public function StudentsCourse(){
         return $this->belongsTo(Courses::class, 'course_id', 'course_id');
