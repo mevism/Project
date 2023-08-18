@@ -778,72 +778,46 @@ class StudentController extends Controller
     }
 
     public function feesStatement(){
+        $studentNumber = str_replace('/', '', \auth()->guard('student')->user()->enrolledCourse->student_number);
+        $statement =  $this->appApi->StudentStatement($studentNumber);
+        $data = collect($statement, true);
+        $statements = $statement['dataPayload']['data']['Transactions'];
 
-        $statements = StudentInvoice::where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
-            ->orderBy('created_at', 'asc')
-            ->get();
-
-        $invoices = StudentDeposit::where('reg_number', \auth()->guard('student')->user()->loggedStudent->reg_number)
-            ->orderBy('created_at', 'asc')
-            ->get();
-
-        $statement = ($statements)->concat($invoices)->sortBy('created_at')->values();
-
-
-        return view('student::invoice.statement')->with(['statement' => $statement]);
+        return view('student::invoice.statement')->with(['statements' => $statements]);
     }
 
     public function printStatement(){
-        $student = StudentInfo::where('student_id', \auth()->guard('student')->user()->student_id)->first();
-        $statements = StudentInvoice::where('reg_number', \auth()->guard('student')->user()->enrolledCourse->student_number)
-            ->orderBy('created_at', 'desc')
-            ->get();
-        $reg = Nominalroll::where('student_id', \auth()->guard('student')->user()->student_id)
-            ->where('registration', 1)
-            ->where('activation', 1)
-            ->latest()->first();
-        $invoices = StudentDeposit::where('reg_number', \auth()->guard('student')->user()->enrolledCourse->student_number)
-            ->orderBy('created_at', 'desc')
-            ->get();
-        $statement = ($statements)->concat($invoices)->sortBy('created_at')->values();
-        $total = 0;
-        $settled = 0;
-
-        foreach ($statement as $paid){
-
-            $total += $paid->amount;
-        }
-
-        foreach ($invoices as $invoice){
-
-            $settled += $invoice->deposit;
-        }
-
-        $balance = $settled - $total;
+        $reg = Nominalroll::where('student_id', \auth()->guard('student')->user()->student_id)->where('registration', 1)->where('activation', 1)->latest()->first();
+        $studentNumber = str_replace('/', '', \auth()->guard('student')->user()->enrolledCourse->student_number);
+        $statement =  $this->appApi->StudentStatement($studentNumber);
+        $data = collect($statement, true);
+        $statements = $statement['dataPayload']['data']['Transactions'];
+        $student = $statement['dataPayload']['data']['StudentDetails'];
+        $summary = $statement['dataPayload']['data']['StatementSummary'];
+        $course  = Courses::where('course_code', $student['course_code'])->first();
 
         $image = time().'.png';
 
         if ($reg == null){
-
             $stage = 'Not registered';
 
             \QrCode::size(200)
                 ->format('png')
-                ->generate( 'Name: '.$student->fname.' '.$student->mname.' '.$student->sname."\n".
-                    'Registration: '.\auth()->guard('student')->user()->enrolledCourse->student_number. "\n".
-                    'Class Code: '.\auth()->guard('student')->user()->enrolledCourse->current_class."\n".
+                ->generate( 'Name: '.$student['full_name']."\n".
+                    'Registration: '.$student['student_number']. "\n".
+                    'Class Code: '.$student['class_code']."\n".
                     'Current Stage: '.$stage."\n".
-                    'Fee Balance:  '.$balance, 'QrCodes/'.$image);
+                    'Fee Balance:  '.$summary['fee_balances'], 'QrCodes/'.$image);
 
         }else{
 
             \QrCode::size(200)
                 ->format('png')
-                ->generate( 'Name: '.$student->fname.' '.$student->mname.' '.$student->sname."\n".
-                    'Registration: '.\auth()->guard('student')->user()->enrolledCourse->student_number. "\n".
-                    'Class Code: '.\auth()->guard('student')->user()->enrolledCourse->current_class."\n".
+                ->generate( 'Name: '.$student['full_name']."\n".
+                    'Registration: '.$student['student_number']. "\n".
+                    'Class Code: '.$student['class_code']."\n".
                     'Current Stage: '.'Year '.$reg->year_study.' Semester '.$reg->patternRoll->season."\n".
-                    'Fee Balance:  '.$balance, 'QrCodes/'.$image);
+                    'Fee Balance:  '.$summary['fee_balances'], "QrCodes/".$image);
         }
 
         $domPdfPath = base_path('vendor/dompdf/dompdf');
@@ -853,15 +827,15 @@ class StudentController extends Controller
         $table = new Table(array('unit' => TblWidth::TWIP));
 
         $table->addRow();
-        $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 3])->addText('Student Name : '.strtoupper($student->sname." ".$student->mname." ".$student->fname), ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 3])->addText('Student Name : '.strtoupper($student['full_name']), ['bold' => true, 'name' => 'Book Antiqua']);
         $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 2])->addText('Printed On : '.date('d-M-Y'), ['bold' => true, 'name' => 'Book Antiqua']);
 
         $table->addRow();
-        $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 3])->addText('Registration Number : '. \auth()->guard('student')->user()->enrolledCourse->student_number, ['bold' => true, 'name' => 'Book Antiqua']);
-        $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 2])->addText('Class Code : '.\auth()->guard('student')->user()->enrolledCourse->current_class, ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 3])->addText('Registration Number : '. $student['student_number'], ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 2])->addText('Class Code : '. $student['class_code'], ['bold' => true, 'name' => 'Book Antiqua']);
 
         $table->addRow();
-        $table->addCell(11600, ['borderSize' => 1, 'gridSpan' => 5])->addText('Course Name : '.\auth()->guard('student')->user()->enrolledCourse->StudentsCourse->course_name, ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(11600, ['borderSize' => 1, 'gridSpan' => 5])->addText('Course Name : '. $course->course_name, ['bold' => true, 'name' => 'Book Antiqua']);
 
 
         $table->addRow();
@@ -871,33 +845,32 @@ class StudentController extends Controller
         $table->addCell(1500, ['borderSize' => 1])->addText('Debit', ['bold' => true, 'name' => 'Book Antiqua']);
         $table->addCell(1500, ['borderSize' => 1])->addText('Credit', ['bold' => true, 'name' => 'Book Antiqua']);
 
-        foreach ($statement as $detail) {
+        foreach ($statements as $detail) {
             $table->addRow();
-            $table->addCell(1600, ['borderSize' => 1])->addText(Carbon::parse($detail->created_at)->format('d-M-Y'));
-            $table->addCell(5000, ['borderSize' => 1])->addText($detail->description, ['name' => 'Book Antiqua']);
-            $table->addCell(2000, ['borderSize' => 1])->addText($detail->invoice_number);
-            $table->addCell(1500, ['borderSize' => 1])->addText(number_format($detail->amount, 2));
-            $table->addCell(1500, ['borderSize' => 1])->addText(number_format($detail->deposit, 2));
+            $table->addCell(1600, ['borderSize' => 1])->addText($detail['date']);
+            $table->addCell(5000, ['borderSize' => 1])->addText($detail['description'], ['name' => 'Book Antiqua']);
+            $table->addCell(2000, ['borderSize' => 1])->addText($detail['reference']);
+            $table->addCell(1500, ['borderSize' => 1])->addText($detail['debit']);
+            $table->addCell(1500, ['borderSize' => 1])->addText($detail['credit']);
         }
 
         $table->addRow();
         $table->addCell(7600, ['gridSpan' => 3])->addText();
-        $table->addCell(1500)->addText( number_format($total, 2), ['underline' => 'single', 'bold' => true]);
-        $table->addCell(1500)->addText( number_format($settled, 2), ['underline' => 'single', 'bold' => true]);
+        $table->addCell(1500)->addText($summary['total_invoices'], ['underline' => 'single', 'bold' => true]);
+        $table->addCell(1500)->addText($summary['total_payments'], ['underline' => 'single', 'bold' => true]);
 
         $table->addRow();
         $table->addCell(7600, ['gridSpan' => 3])->addText();
-        $table->addCell(3000, ['gridSpan' => 2])->addText('Balance : '.number_format($balance, 2), ['underline' => 'single', 'bold' => true]);
-
+        $table->addCell(3000, ['gridSpan' => 2])->addText('Balance : '. $summary['fee_balances'], ['underline' => 'single', 'bold' => true]);
 
         $my_template = new TemplateProcessor(storage_path('fee_statement.docx'));
 
         $my_template->setComplexBlock('{table}', $table);
         $my_template->setImageValue('qr', array('path' => 'QrCodes/'.$image, 'width' => 80, 'height' => 80, 'ratio' => true));
-        $docPath = 'Fees/'.preg_replace('~/~', '', \auth()->guard('student')->user()->enrolledCourse->student_number).".docx";
+        $docPath = 'Fees/'.preg_replace('~/~', '', $student['student_number']).".docx";
         $my_template->saveAs($docPath);
 
-        $pdfPath = 'Fees/'.preg_replace('~/~', '', \auth()->guard('student')->user()->enrolledCourse->student_number).".pdf";
+        $pdfPath = 'Fees/'.preg_replace('~/~', '', $student['student_number']).".pdf";
 
 //        $convert = new OfficeConverter('Fees/'.preg_replace('~/~', '', $student->reg_number).".docx", 'Fee/');
 //        $convert->convertTo(preg_replace('~/~', '', $student->reg_number).".pdf");

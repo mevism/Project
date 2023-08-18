@@ -86,15 +86,15 @@
                                                     <label class="form-label" for="title"><span class="text-danger">*</span> TITTLE </label>
                                                 </div>
                                                 <div class="form-floating col-12">
-                                                    <input type="text" class="form-control text-uppercase" name="fname" required value="@if($user->infoApplicant != null){{ $user->infoApplicant->fname }}@else{{ old('fname') }}@endif" placeholder="FIRST NAME">
+                                                    <input type="text" class="form-control text-uppercase" name="fname" required value="@if($user->infoApplicant != null){{ $user->infoApplicant->first_name }}@else{{ old('fname') }}@endif" placeholder="FIRST NAME">
                                                     <label class="form-label" for="fname"><span class="text-danger">*</span> FIRST NAME </label>
                                                 </div>
                                                 <div class="form-floating col-12">
-                                                    <input type="text" class="form-control text-uppercase" name="mname" value="@if($user->infoApplicant != null){{ $user->infoApplicant->mname }}@else{{ old('mname') }}@endif" placeholder="MIDDLE NAME">
+                                                    <input type="text" class="form-control text-uppercase" name="mname" value="@if($user->infoApplicant != null){{ $user->infoApplicant->middle_name }}@else{{ old('mname') }}@endif" placeholder="MIDDLE NAME">
                                                     <label class="form-label" for="mname">MIDDLE NAME</label>
                                                 </div>
                                                 <div class="form-floating col-12">
-                                                    <input type="text" class="form-control" name="sname" value="@if($user->infoApplicant != null){{ $user->infoApplicant->sname }}@else{{ old('sname') }}@endif" required placeholder="SUR NAME">
+                                                    <input type="text" class="form-control" name="sname" value="@if($user->infoApplicant != null){{ $user->infoApplicant->surname }}@else{{ old('sname') }}@endif" required placeholder="SUR NAME">
                                                     <label class="form-label" for="sname"><span class="text-danger">*</span> SUR NAME </label>
                                                 </div>
                                                 <div class="form-floating col-12">
@@ -112,7 +112,7 @@
                                                     <label class="form-label" for="status"><span class="text-danger">*</span> MARITAL STATUS </label>
                                                 </div>
                                                 <div class="form-floating col-12">
-                                                    <input type="date" class="form-control" name="dob" value="@if($user->infoApplicant != null){{ Carbon\Carbon::parse($user->infoApplicant->DOB)->format('Y-m-d') }}@else {{ old('dob') }}@endif" required placeholder="">
+                                                    <input type="date" class="form-control" name="dob" value="@if($user->infoApplicant != null){{ Carbon\Carbon::parse($user->infoApplicant->dob)->format('Y-m-d') }}@else {{ old('dob') }}@endif" required placeholder="">
                                                     <label class="form-label"><span class="text-danger">*</span> DATE OF BIRTH </label>
                                                 </div>
                                                 <div class="col-12 mb-4">

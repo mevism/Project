@@ -9,7 +9,7 @@ class ApplicantInfo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['applicant_id', 'fname', 'mname', 'sname', 'gender', 'index_number'];
+    protected $fillable = ['applicant_id', 'first_name', 'middle_name', 'surname', 'gender', 'index_number'];
 
     public function applicantInfo(){
 

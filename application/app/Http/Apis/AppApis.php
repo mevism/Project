@@ -83,7 +83,7 @@ class AppApis
     }
     public function fetchVoteheads(){
         try{
-            $uri = "finance/voteheads";
+            $uri = "finance/votehead";
             $allVoteheads = []; // Initialize as an empty array
 
             $currentPage = 1;
@@ -101,6 +101,19 @@ class AppApis
             } while ($currentPage <= $totalPages);
             return $allVoteheads;
         }catch(GuzzleException $e){
+            return $e->getMessage();
+        }
+    }
+
+    public function StudentStatement($studentNumber){
+        try {
+            $uri = "finance/statement/{$studentNumber}";
+            $response = $this->client->request('GET', $uri);
+            if ($response->getStatusCode() === 200) {
+                $statement = json_decode($response->getBody(), true);
+                return $statement;
+            }
+        }catch (GuzzleException $e){
             return $e->getMessage();
         }
     }

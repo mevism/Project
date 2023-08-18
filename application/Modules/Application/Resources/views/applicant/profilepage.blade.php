@@ -45,7 +45,7 @@
 
                                 <div class="row">
                                     <div class="col-4 fw-semibold">ID/Birth/Passport No.</div>
-                                    <div class="col-8 text-capitalize"> <p>: {{ auth()->guard('web')->user()->infoApplicant->id_number }}</p></div>
+                                    <div class="col-8 text-capitalize"> <p>: {{ auth()->guard('web')->user()->infoApplicant->identification }}</p></div>
                                 </div>
 
                                 <div class="row">

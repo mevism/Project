@@ -84,16 +84,20 @@
                         <td>{{ $course->DepartmentCourse->getCourseDept->name }}</td>
                         <td>{{ $course->DepartmentCourse->course_name }}</td>
                         <td nowrap="">
-                            @if($course->registrar_status == 3 && $course->cod_status == 1)
+                            @if($course->student_type == 2)
                                 <a class="btn btn-sm btn-alt-info" data-toggle="click-ripple" href="{{ route('application.uploadDocuments', $course->application_id) }}"><i class="fa fa-file-upload"></i> upload docs</a>
-                            @elseif($course->registrar_status == NULL && $course->finance_status == NULL)
-                                <a class="btn btn-sm btn-alt-info" href="{{ route('application.edit', ['id' => Crypt::encrypt($course->id)]) }}">
-                                    <i class="fa fa-pen-to-square"></i> update</a>
-                            @elseif($course->registrar_status == 1 && $course->cod_status == 2)
-                                <a class="btn btn-sm btn-alt-danger" href="#">
-                                    <i class="fa fa-ban"></i> rejected</a>
                             @else
-                                <a class="btn btn-sm btn-alt-secondary disabled" href="{{ route('application.progress', ['id' => Crypt::encrypt($course->id)]) }}"> <i class="fa fa-spinner"></i> in progress</a>
+                                @if($course->registrar_status == 3 && $course->cod_status == 1)
+                                    <a class="btn btn-sm btn-alt-info" data-toggle="click-ripple" href="{{ route('application.uploadDocuments', $course->application_id) }}"><i class="fa fa-file-upload"></i> upload docs</a>
+                                @elseif($course->registrar_status == NULL && $course->finance_status == NULL)
+                                    <a class="btn btn-sm btn-alt-info" href="{{ route('application.edit', ['id' => Crypt::encrypt($course->id)]) }}">
+                                        <i class="fa fa-pen-to-square"></i> update</a>
+                                @elseif($course->registrar_status == 1 && $course->cod_status == 2)
+                                    <a class="btn btn-sm btn-alt-danger" href="#">
+                                        <i class="fa fa-ban"></i> rejected</a>
+                                @else
+                                    <a class="btn btn-sm btn-alt-secondary disabled" href="{{ route('application.progress', ['id' => Crypt::encrypt($course->id)]) }}"> <i class="fa fa-spinner"></i> in progress</a>
+                                @endif
                             @endif
                         </td>
                     </tr>

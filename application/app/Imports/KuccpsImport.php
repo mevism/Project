@@ -28,22 +28,21 @@ class KuccpsImport implements ToCollection
     {
 
         foreach($collection as $row){
-
             $names = preg_replace('/\s+/', ' ',$row[2]);
             $name = explode(' ', $names);
 
-            $sname = "";
-            $fname = "";
-            $mname = " ";
+            $fname = ""; // Initialize first name
+            $mname = ""; // Initialize middle name
+            $sname = ""; // Initialize last name
 
-            if(count($name) > 0){
-                $sname = $name[0];
+            if (count($name) > 0) {
+                $sname = array_pop($name); // Last chunk is always last name
             }
-            if(count($name) > 1){
-                $fname = $name[1];
+            if (count($name) > 0) {
+                $fname = array_shift($name); // First remaining chunk is first name
             }
-            if(count($name) > 2){
-                $mname = $name[2];
+            if (count($name) > 0) {
+                $mname = implode(' ', $name); // Any remaining chunks are middle name
             }
 
             $id = new CustomIds();
@@ -54,32 +53,23 @@ class KuccpsImport implements ToCollection
             KuccpsApplicant::create([
                 'applicant_id' => $applcant_id,
                 'index_number' => preg_replace('/&/', 'AND', $row[1]),
-                'sname' => preg_replace('/&/', 'AND', $sname),
-                'fname' => preg_replace('/&/', 'AND', $fname) ,
-                'mname' => preg_replace('/&/', 'AND', $mname) ,
+                'surname' => preg_replace('/&/', 'AND', $sname),
+                'first_name' => preg_replace('/&/', 'AND', $fname) ,
+                'middle_name' => preg_replace('/&/', 'AND', $mname) ,
                 'gender' => preg_replace('/&/', 'AND', $row[3]),
                 'mobile' => preg_replace('/&/', 'AND', $row[4]),
                 'alt_mobile' => preg_replace('/&/', 'AND', $row[5]),
                 'email' => preg_replace('/&/', 'AND', $row[6]),
                 'alt_email' => preg_replace('/&/', 'AND', $row[7]),
-                'BOX' => preg_replace('/&/', 'AND', $row[8]),
+                'box' => preg_replace('/&/', 'AND', $row[8]),
                 'postal_code' => preg_replace('/&/', 'AND', $row[9]),
                 'town' => preg_replace('/&/', 'AND', $row[10]),
-                'school' => preg_replace('/&/', 'AND', $row[13]),
-            ]);
-
-            KuccpsApplication::create([
-                'applicant_id' => $applcant_id,
                 'intake_id' => $this->intake_id,
                 'course_code' => preg_replace('/&/', 'AND', $row[11]) ,
-                'course_name' => preg_replace('/&/', 'AND', $row[12])
-            ]);
-
-            KuccpsEducation::create([
-                'applicant_id' => $applcant_id,
+                'course_name' => preg_replace('/&/', 'AND', $row[12]),
                 'institution' => preg_replace('/&/', 'AND', $row[13]),
                 'level' => 'SECONDARY',
-                'qualification' => 'KUCCPS',
+                'qualification' => 'KUCCPS ENTRY',
                 'exit_date' => $exit_date,
                 'start_date' => $exit_date - 3,
             ]);

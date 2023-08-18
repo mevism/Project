@@ -551,30 +551,6 @@ class ApplicationController extends Controller
         return redirect()->back()->with('success', 'You course application details have been update successfully');
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     * add payment function commented here
-     */
-
-    //    public function appPayment(Request $request){
-    //            $request->validate([
-    //            'receipt' => 'string|required|unique:applications',
-    //            'receipt_file' => 'required|mimes:pdf|required|max:2048'
-    //                ]);
-    //
-    //        if ($request->hasFile('receipt_file')){
-    //            $file = $request->receipt_file;
-    //            $fileName = 'receipt'.time().'.'.$file->getClientOriginalExtension();
-    //            $request->receipt_file->move('receipts', $fileName);
-    //        }
-    //
-    //            Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)
-    //                ->where('course_id', $request->course_id)->update(['receipt' => $request->receipt, 'receipt_file' => $fileName ]);
-    //
-    //        return redirect()->back()->with('success', 'You course payment details have been update successfully');
-    //    }
-
     public function addParent(Request $request){
         $request->validate([
             'parentname' => 'string|required',
@@ -753,41 +729,25 @@ class ApplicationController extends Controller
         return redirect()->back()->with('success', 'Your application was submitted successfully');
     }
 
-    public function viewCourse($id)
-    {
-
+    public function viewCourse($id){
         $course = CourseOnOfferView::where('available_id', $id)->first();
-
         return view('application::applicant.viewcourse')->with('course', $course);
     }
 
-    public function applicationProgress($id)
-    {
-
-        $hashedId = Crypt::decrypt($id);
-
-        $course = Application::find($hashedId);
-
-        $finance = FinanceLog::where('application_id', $hashedId)->orderBy('created_at', 'desc')->get();
-        $cod = CODLog::where('application_id', $hashedId)->orderBy('created_at', 'desc')->get();
-        $dean = DeanLog::where('application_id', $hashedId)->orderBy('created_at', 'desc')->get();
-
-        $logs = $cod->concat($finance)->concat($dean)->sortByDesc('created_at');
-
-        return view('application::applicant.progress')->with(['logs' => $logs, 'course' => $course]);
-    }
-    public function myProfile()
-    {
+    public function myProfile(){
         $apps = Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->get();
         return view('application::applicant.profilepage')->with('apps', $apps);
     }
 
-    public function downloadLetter($id)
-    {
-
-        $letter = ApplicationApproval::where('application_id', $id)->first();
-
-        return response()->download('AdmissionLetters/' . $letter->admission_letter);
+    public function downloadLetter($id){
+        $application = ApplicationApproval::where('application_id', $id)->first();
+        if ($application == null){
+            $application = Application::where('application_id', $id)->first();
+            $letter = str_replace('/', '', $application->ref_number).'.docx';
+        }else{
+            $letter = $application->admission_letter;
+        }
+        return response()->download('AdmissionLetters/' . $letter);
     }
 
     public function uploadDocuments($id){
@@ -954,11 +914,11 @@ class ApplicationController extends Controller
                 ->where('semester', min($pattern))
                 ->get();
 
-            foreach ($fees as $key => $fee){
+            foreach ($fees as $fee){
                 $particular [] = [
                     'votehead_id' => $fee->vote_id,
                     'votehead_name' => $fee->semVotehead->vote_name,
-                    'quantity'  => ++$key,
+                    'quantity'  => '1',
                     'unit_price' => $fee->amount
                 ];
             }
@@ -977,8 +937,7 @@ class ApplicationController extends Controller
         return redirect()->back()->with('success', 'Your documents submitted for admission process');
     }
 
-    public function inbox()
-    {
+    public function inbox(){
 
         $apps  = Application::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->get();
 
@@ -996,20 +955,8 @@ class ApplicationController extends Controller
         return view('application::applicant.inbox')->with(['notification' => $notification]);
     }
 
-    public function myAdmission()
-    {
-
-        $myadmission = ApplicationsView::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->where('cod_status', 1)->where('registrar_status', 3)->get();
-
+    public function myAdmission(){
+        $myadmission = ApplicationsView::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->get();
         return view('application::applicant.myadmissions')->with('courses', $myadmission);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
-    {
-        return view('application::create');
     }
 }

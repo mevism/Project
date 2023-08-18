@@ -19,7 +19,7 @@ class Application extends Model
 
     protected $primaryKey = 'application_id';
     protected $keyType = 'string';
-    protected $fillable = ['application_id', 'applicant_id', 'ref_number', 'intake_id', 'student_type', 'campus_id', 'school_id', 'department_id', 'course_id', 'declaration', 'status'];
+    protected $fillable = ['application_id', 'applicant_id', 'ref_number', 'intake_id', 'student_type', 'campus_id', 'course_id', 'declaration', 'status', 'application_number', 'application_fee', ];
 
 //    relationship between an applicant and a course
 

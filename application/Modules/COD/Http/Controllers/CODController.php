@@ -83,6 +83,7 @@ class CODController extends Controller
         $applications = ApplicationsView::whereIn('course_id', $courses)
                        ->where('dean_status', null)
                        ->where('declaration', '!=', null)
+                       ->where('student_type', 1)
                        ->latest()
                        ->get();
 
