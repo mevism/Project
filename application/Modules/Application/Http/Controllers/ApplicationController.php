@@ -956,7 +956,7 @@ class ApplicationController extends Controller
     }
 
     public function myAdmission(){
-        $myadmission = ApplicationsView::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->get();
+        $myadmission = ApplicationsView::where('applicant_id', \auth()->guard('web')->user()->applicant_id)->where('status', '!=', null)->get();
         return view('application::applicant.myadmissions')->with('courses', $myadmission);
     }
 }

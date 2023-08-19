@@ -16,7 +16,7 @@ class Unit extends Model
 
     protected $fillable = ['unit_id','department_id', 'unit_code', 'unit_name', 'type', 'total_exam', 'total_cat', 'cat', 'assignment', 'practical'];
 
-    public function DepartmentUnit(){
+    public function departmentUnit(){
         return $this->belongsTo(Department::class, 'department_id', 'department_id');
     }
 

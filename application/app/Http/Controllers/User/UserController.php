@@ -78,10 +78,7 @@ class UserController extends Controller
             }elseif (auth()->guard('user')->user()->roles->first()->id == 4){
                 $departments = SchoolDepartment::where('school_id', auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->school_id)->pluck('department_id');
                 $courses = Courses::whereIn('department_id', $departments)->pluck('course_id');
-                $apps_dean = ApplicationsView::whereIn('course_id', $courses)
-                    ->where('dean_status', 0)
-                    ->get()
-                    ->count();
+                $apps_dean = ApplicationsView::whereIn('course_id', $courses)->where('dean_status', 0)->get()->count();
                 return view('dean::dean.index')->with('apps', $apps_dean);
 
             }elseif (auth()->guard('user')->user()->roles->first()->id == 5){

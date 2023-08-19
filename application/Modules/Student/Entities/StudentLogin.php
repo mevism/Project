@@ -31,21 +31,8 @@ class StudentLogin extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    public function loggedStudent(){
-        return $this->belongsTo(StudentInfo::class, 'student_id', 'student_id');
-    }
-
     public function enrolledCourse(){
         return $this->belongsTo(StudentCourse::class, 'student_id', 'student_id');
-    }
-
-    public function StudentAddresses(){
-        return $this->belongsTo(StudentAddress::class, 'student_id', 'student_id');
-    }
-
-    public function StudentsContact(){
-        return $this->belongsTo(StudentContact::class, 'student_id', 'student_id');
     }
 
     public function StudentsNominalRoll(){

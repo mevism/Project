@@ -13,6 +13,7 @@
 <script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script>
 
 <script>
+
     $(document).ready(function() {
         $('#example').DataTable( {
             responsive: true,
@@ -22,6 +23,78 @@
             }
         } );
     } );
+
+    {{--$(document).ready(function() {--}}
+    {{--    $('#example').DataTable({--}}
+    {{--        responsive: true,--}}
+    {{--        serverSide: true,--}}
+    {{--        ajax: "{{ route('department.jsonUnits') }}",--}}
+    {{--        columns: [--}}
+    {{--            { data: 'number', name: 'number'},--}}
+    {{--            { data: 'unit_id', name: 'unit_id', visible: false }, // Hide the original ID column--}}
+    {{--            { data: 'unit_code', name: 'unit_code' },--}}
+    {{--            { data: 'unit_name', name: 'unit_name' },--}}
+    {{--            { data: 'type', name: 'type' },--}}
+    {{--            { data: 'department_name', name: 'department_name' }, // Use dot notation for related data--}}
+    {{--            { data: 'total_exam', name: 'total_exam' },--}}
+    {{--            { data: 'cat', name: 'cat'},--}}
+    {{--            // { data: 'actions', name: 'actions', orderable: false, searchable: false }, // Action buttons--}}
+    {{--            {--}}
+    {{--                data: 'actions',--}}
+    {{--                name: 'actions',--}}
+    {{--                orderable: false,--}}
+    {{--                searchable: false,--}}
+    {{--                render: function(data, type, row) {--}}
+    {{--                    var editUnitUrl = "{{ route('department.editUnit', ['unit' => ':unit_id']) }}";--}}
+    {{--                    editUnitUrl = editUnitUrl.replace(':unit_id', row.unit_id);--}}
+    {{--                    return '<a href="' + editUnitUrl + '" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i> Edit</a>';--}}
+    {{--                }--}}
+    {{--            }--}}
+    {{--        ],--}}
+    {{--        createdRow: function(row, data, dataIndex) {--}}
+    {{--            // Get DataTable instance--}}
+    {{--            var api = this.api();--}}
+
+    {{--            // Set auto-incrementing numbering in the first column--}}
+    {{--            var number = api.row(row).index() + 1;--}}
+    {{--            $('td:eq(0)', row).html(number);--}}
+    {{--        }--}}
+    {{--    });--}}
+    {{--});--}}
+    {{--$(document).ready(function() {--}}
+    {{--    $('#example').DataTable({--}}
+    {{--        responsive: true,--}}
+    {{--        serverSide: true,--}}
+    {{--        ajax: "{{ route('department.jsonUnits') }}",--}}
+    {{--        columns: [--}}
+    {{--            // { data: 'unit_id', name: 'unit_id', visible: false }, // Hide the original ID column--}}
+    {{--            { data: 'number', name: 'number'},--}}
+    {{--            { data: 'unit_code', name: 'unit_code' },--}}
+    {{--            { data: 'unit_name', name: 'unit_name' },--}}
+    {{--            { data: 'type', name: 'type' },--}}
+    {{--            { data: 'department_name', name: 'department_name' },--}}
+    {{--            { data: 'total_exam', name: 'total_exam' },--}}
+    {{--            { data: 'cat', name: 'cat'},--}}
+    {{--            {--}}
+    {{--                data: 'actions',--}}
+    {{--                name: 'actions',--}}
+    {{--                orderable: false,--}}
+    {{--                searchable: false,--}}
+    {{--                render: function(data, type, row) {--}}
+    {{--                    var editUnitUrl = "{{ route('department.editUnit', ['id' => ':unit_id']) }}";--}}
+    {{--                    editUnitUrl = editUnitUrl.replace(':unit_id', row.unit_id);--}}
+    {{--                    return '<a href="' + editUnitUrl + '" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i> Edit</a>';--}}
+    {{--                }--}}
+    {{--            }--}}
+    {{--        ],--}}
+    {{--        createdRow: function(row, data, dataIndex) {--}}
+    {{--            var api = this.api();--}}
+    {{--            var number = api.row(row).index() + 1;--}}
+    {{--            $('td:eq(0)', row).html(number);--}}
+    {{--        }--}}
+    {{--    });--}}
+    {{--});--}}
+
 </script>
 
 @section('content')
@@ -48,10 +121,9 @@
     </div>
 
     <div class="block block-rounded">
-
         <div class="block-content block-content-full">
             <div class="row">
-                <div class="table-responsive col-12">
+                <div class="col-12">
                     <div class="d-flex justify-content-end">
                         <a class="btn btn-sm btn-alt-primary m-2" href="{{ route('department.addUnit') }}"> <i class="fa fa-plus-circle"></i> add unit</a>
                     </div>
@@ -61,7 +133,7 @@
                         <th>Unit code</th>
                         <th>unit name</th>
                         <th>unit type</th>
-                        <th>MOTHER DEPARTMENT</th>
+                        <th>DEPARTMENT offering</th>
                         <th>WEIGHT </th>
                         <th>cat composition</th>
                         <th>Action</th>
@@ -91,6 +163,7 @@
                             @endforeach
                         </tbody>
                     </table>
+{{--                    {{ $units->links('pagination::bootstrap-5') }}--}}
                 </div>
             </div>
         </div>
