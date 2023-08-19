@@ -6,12 +6,12 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-1">
                 <div class="flex-grow-1">
-                    <h5 class="h5 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
                         Course Transfer
-                    </h5>
+                    </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-0 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="{{ route('student') }}">Dashboard</a>
                         </li>
@@ -37,23 +37,23 @@
                                 <legend class="float-none w-auto"><h6 class="fw-bold text-center"> CURRENT COURSE DETAILS</h6></legend>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">STUDENT NAME : </span>
-                                <span class="h6 fs-sm fw-normal"> {{\auth()->guard('student')->user()->loggedStudent->sname }} {{\auth()->guard('student')->user()->loggedStudent->fname }} {{\auth()->guard('student')->user()->loggedStudent->mname }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->surname.' '.$student->first_name.' '.$student->middle_name }} </span>
                             </div>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">PHONE NUMBER : </span>
-                                <span class="h6 fs-sm fw-normal"> {{\auth()->guard('student')->user()->StudentsContact->mobile }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->mobile }} </span>
                             </div>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">EMAIL ADDRESS : </span>
-                                <span class="h6 fs-sm fw-normal"> {{\auth()->guard('student')->user()->StudentsContact->email }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->email }} </span>
                             </div>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">PHYSICAL ADDRESS : </span>
-                                <span class="h6 fs-sm fw-normal"> P.O BOX {{\auth()->guard('student')->user()->StudentAddresses->address }}-{{\auth()->guard('student')->user()->StudentAddresses->postal_code }} {{\auth()->guard('student')->user()->StudentAddresses->town }}</span>
+                                <span class="h6 fs-sm fw-normal"> P.O BOX {{ $student->address }}-{{ $student->postal_code }} {{ $student->town }}</span>
                             </div>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">REG. NUMBER : </span>
-                                <span class="h6 fs-sm fw-normal"> {{\auth()->guard('student')->user()->enrolledCourse->student_number }} </span>
+                                <span class="h6 fs-sm fw-normal"> {{ $student->student_number }} </span>
                             </div>
                             <div class="mb-4">
                                 <span class="h5 fs-sm">COURSE ADMITTED : </span>

@@ -149,6 +149,13 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/error-handler" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/spatie/flare-client-php" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/phpunit/php-code-coverage" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/league/fractal" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/yajra/laravel-datatables-editor" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/yajra/laravel-datatables-fractal" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/yajra/laravel-datatables-html" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/yajra/laravel-datatables-oracle" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/yajra/laravel-datatables" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/yajra/laravel-datatables-buttons" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

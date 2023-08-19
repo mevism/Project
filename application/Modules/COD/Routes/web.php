@@ -59,6 +59,8 @@ Route::prefix('department')->middleware(['web', 'auth:user', 'is_cod'])->group( 
         Route::get('/edit-exam-results/{id}', [CODController::class, 'editResults'])->name('department.editResults');
         Route::post('/update-exam-results/{id}', [CODController::class, 'updateResults'])->name('department.updateResults');
 
+        Route::get('/course-transfers-set-up', [CODController::class, 'setupTransfers'])->name('department.courseTransferSetup');
+        Route::get('/add-course-transfers-set-up', [CODController::class, 'addCourseTransfer'])->name('department.addCourseTransfer');
         Route::get('/all-course-transfer-requests', [CODController::class, 'transferRequests'])->name('department.courseTransfers');
         Route::get('/view-student-transfer-request/{id}', [CODController::class, 'viewTransferRequest'])->name('department.viewTransferRequest');
         Route::get('/view-student-uploaded-document/{id}', [CODController::class, 'viewUploadedDocument'])->name('department.viewUploadedDocument');
@@ -112,6 +114,7 @@ Route::prefix('department')->middleware(['web', 'auth:user', 'is_cod'])->group( 
     Route::post('/store-units', [CODController::class, 'storeUnit'])->name('department.storeUnit');
     Route::get('/edit-units/{id}', [CODController::class, 'editUnit'])->name('department.editUnit');
     Route::post('/update-units/{id}', [CODController::class, 'updateUnit'])->name('department.updateUnit');
+    Route::get('/get-units-in-json', [CODController::class, 'JsonUnits'])->name('department.jsonUnits');
 
     Route::get('/department-syllabi', [CODController::class, 'syllabi'])->name('department.syllabi');
     Route::get('/course-syllabus/{id}', [CODController::class, 'courseSyllabus'])->name('department.courseSyllabus');

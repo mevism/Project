@@ -84,114 +84,44 @@ class StudentController extends Controller
     }
 
     public function courseTransfers(){
-       $student = auth()->guard('student')->user()->loggedStudent;
-       $transfers = CourseTransfer::where('student_id', auth()->guard('student')->user()->student_id)->latest()->get();
-        $current = Carbon::now()->format('Y-m-d');
-        $sem_date = Intake::where('intake_from', '<=', $current )
-        ->where('intake_to', '>=', $current)
-        ->first();
-
-        if ($sem_date != null){
-            $academicYear =  Carbon::parse($sem_date->academicYear->year_start)->format('Y').'/'.Carbon::parse($sem_date->academicYear->year_end)->format('Y');
-            $semester = Carbon::parse($sem_date->intake_from)->format('M').'/'.Carbon::parse($sem_date->intake_to)->format('M');
-
-            $event = CalenderOfEvents::where('academic_year_id', $academicYear)
-                ->where('intake_id', strtoupper($semester))
-                ->where('event_id', 5)
-                ->first();
-
-            if ($event != null){
-
-                if ($event->start_date <= $current && $current <= $event->end_date){
-
-                    $invoices = StudentInvoice::where('student_id', $student->id)
-                        ->where('reg_number', $student->reg_number)
-                        ->latest()
-                        ->get();
-                    $deposits = StudentDeposit::where('reg_number', $student->reg_number)
-                        ->latest()
-                        ->get();
-
-                    $invoice = 0;
-                    $deposit = 0;
-
-                    foreach ($invoices as $record){
-
-                        $invoice += $record->amount;
-                    }
-
-                    foreach ($deposits as $record){
-
-                        $deposit += $record->deposit;
-                    }
-
-                    if ($deposit >= $invoice){
-
-                        foreach ($transfers as $transfer){
-
-                            if (!$transfer->status){
-
-                                $transfer->status = 1;
-                                $transfer->save();
-                            }
-                        }
-                    }
-
-                }
-
-            }
-        }
-
+        $transfers = [];
         return view('student::courses.transfers')->with(['transfers' => $transfers]);
     }
 
     public function requestTransfer(){
         $division = Division::where('name', 'ACADEMIC DIVISION')->first()->division_id;
         $departments = Department::where('division_id', $division)->latest()->get();
-        $stage = Nominalroll::where('reg_number', auth()->guard('student')->user()->student_id)
-            ->latest()
-            ->first();
+        $stage = Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)->latest()->first();
         $registration = \auth()->guard('student')->user()->StudentsNominalRoll;
-        $current = Carbon::now()->format('Y-m-d');
-//        $current = '2023-09-23';
+//        $current = Carbon::now()->format('Y-m-d');
+        $current = '2023-09-23';
         $event = [];
         $academicYear = 'null';
+        $student = StudentView::where('student_id', \auth()->guard('student')->user()->student_id)->first();
 
-       $sem_date = Intake::where('intake_from', '<=', $current, )
-            ->where('intake_to', '>=', $current)
-            ->first();
+       $sem_date = Intake::where('intake_from', '<=', $current)->where('intake_to', '>=', $current)->first();
         if ($sem_date != null){
             $academicYear =  Carbon::parse($sem_date->academicYear->year_start)->format('Y').'/'.Carbon::parse($sem_date->academicYear->year_end)->format('Y');
             $semester = Carbon::parse($sem_date->intake_from)->format('M').'/'.Carbon::parse($sem_date->intake_to)->format('M');
-
-          $event = CalenderOfEvents::where('academic_year_id', $academicYear)
-                ->where('intake_id', strtoupper($semester))
-                ->where('event_id', 5)
-                ->first();
+          $event = CalenderOfEvents::where('intake_id', $sem_date->intake_id)->where('event_id', 5)->first();
         }
-
-        return view('student::courses.coursetransfer')->with(['departments' => $departments, 'stage' => $stage, 'event' => $event, 'academic_year' => $academicYear, 'intake' => $sem_date->intake_id, 'registration' => $registration]);
+        return view('student::courses.coursetransfer')->with(['departments' => $departments, 'stage' => $stage, 'event' => $event, 'academic_year' => $academicYear, 'intake' => $sem_date->intake_id, 'registration' => $registration, 'student' => $student]);
     }
 
     public function getDeptCourses(Request $request){
-        $data = Courses::where('department_id', $request->id)
-            ->where('level', auth()->guard('student')->user()->enrolledCourse->StudentsCourse->level)
-            ->latest()
-            ->get();
+        $data = Courses::where('department_id', $request->id)->where('level_id', auth()->guard('student')->user()->enrolledCourse->StudentsCourse->level_id)->latest()->get();
         return response()->json($data);
     }
 
     public function getCourseClasses(Request $request){
-        $student = auth()->guard('student')->user()->loggedStudent;
         $group = Courses::where('course_id', $request->id)->first();
-        if ($group->level == 2){
+        if ($group->level_id == 2){
             $classes = Classes::where('course_id', $request->id)
                 ->where('attendance_id', 'J-FT')
-                ->select('class_id','name', 'points')
+                ->select('class_id','name')
                 ->latest()
                 ->first();
            $cluster = [$classes->class_id, $classes->name, $group->courseRequirements->subject1, $group->courseRequirements->subject2, $group->courseRequirements->subject3, $group->courseRequirements->subject4, $group->courseRequirements->course_requirements, $group->level];
-
             return response()->json($cluster);
         }else{
             $points = ClusterWeights::where('student_name', $student->sname.' '.$student->fname.' '.$student->mname)
@@ -472,145 +402,8 @@ class StudentController extends Controller
     }
 
     public function unitRegistration(){
-//        $studentCourses = StudentCourse::where('student_id',  auth()->guard('student')->user()->student_id)->first();
-//        return$student_activation = StudentInvoice::where('student_id', auth()->guard('student')->user()->student_id)
-//            ->where('reg_number', $studentCourses->student_number)
-//            ->latest()->first();
-//
-//        if ($student_activation == null){
-//            $reg = [];
-//            $balance = [];
-//            $fee = [];
-//            return view('student::semester.index')->with([
-//                'reg' => $reg,
-//                'balance' => $balance,
-//                'fee' => $fee
-//            ]);
-//        }else{
-//
-//        $semester = Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)
-//            ->where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
-//            ->latest()
-//            ->first();
-//
-//        $previousStage = Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)
-//            ->where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
-//            ->where('activation', 1)
-//            ->latest()
-//            ->first();
-//
-//        $invoices = StudentInvoice::where('student_id', auth()->guard('student')->user()->student_id)
-//            ->where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
-//            ->where('stage', '<', $student_activation->stage)->get();
-//
-//        $results = ModeratedResults::where('student_number', auth()->guard('student')->user()->enrolledCourse->student_number)
-//           ->where('stage', $previousStage->year_study)
-//           ->latest()
-//           ->first();
-//
-//            $invoice = 0;
-//
-//            foreach ($invoices as $payment){
-//
-//                $invoice += $payment->amount;
-//            }
-//
-//            $paid = StudentDeposit::where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
-//                ->get();
-//
-//            $payed = 0;
-//
-//            foreach ($paid as $invoiced){
-//
-//                $payed += $invoiced->deposit;
-//            }
-//
-//            $balance = $payed - $invoice;
-//
-//            if ($semester->semester_study == 1 && $results != null){
-//                if ($balance >= $student_activation->amount*0.5 && $results->status == 1){
-//
-//                    $sign = Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)
-//                        ->where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
-//                        ->latest()
-//                        ->first();
-//                    if (!$sign->activation){
-//
-//                        $sign->activation = 1;
-//                        $sign->save();
-//                    }
-//                }
-//            }
-//
-//            if ($semester->semester_study == 2){
-//                if ($balance >= $student_activation->amount*0.5){
-//
-//                    $sign = Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)
-//                        ->where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
-//                        ->latest()
-//                        ->first();
-//                    if (!$sign->activation){
-//
-//                        $sign->activation = 1;
-//                        $sign->save();
-//                    }
-//                }
-//            }
-//
-//            if ($semester->pattern_id == 3){
-//
-//                $sign = Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)
-//                    ->where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
-//                    ->latest()
-//                    ->first();
-//
-//                if (!$sign->activation){
-//
-//                    $sign->activation = 1;
-//                    $sign->save();
-//                }
-//            }
-//
-//            $inv = StudentInvoice::where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)->get();
-//            $dep = StudentDeposit::where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)->get();
-//
-//            $invo = 0;
-//            $depo = 0;
-//
-//            foreach ($inv as $i){
-//
-//                $invo += $i->amount;
-//            }
-//
-//            foreach ($dep as $d){
-//
-//                $depo += $d->deposit;
-//            }
-//
-//            $bal = $depo - $invo;
-//
-//            if (in_array($semester->pattern_id, [4, 5], true) && $bal >= 0){
-//                $sign = Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)
-//                    ->where('reg_number', auth()->guard('student')->user()->enrolledCourse->student_number)
-//                    ->latest()
-//                    ->first();
-//
-//                if (!$sign->activation){
-//
-//                    $sign->activation = 1;
-//                    $sign->save();
-//                }
-//            }
-//
-
             $reg = Nominalroll::where('student_id', \auth()->guard('student')->user()->student_id)->latest()->get();
-
-            return view('student::semester.index')->with([
-                'reg' => $reg,
-//                'balance' => $balance,
-//                'fee' => $student_activation->amount
-            ]);
-//        }
+            return view('student::semester.index')->with(['reg' => $reg,]);
     }
 
     public function requestSemesterRegistration(){

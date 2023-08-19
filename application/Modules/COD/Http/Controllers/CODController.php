@@ -75,6 +75,7 @@ use Modules\Application\Entities\AdmissionApproval;
 use Modules\Application\Entities\AdmissionDocument;
 use Modules\Student\Entities\AcademicLeaveApproval;
 use Modules\Student\Entities\CourseTransferApproval;
+use Yajra\DataTables\DataTables;
 
 class CODController extends Controller
 {
@@ -103,11 +104,11 @@ class CODController extends Controller
     }
 
     public function acceptApplication($id){
-        $app = ApplicationApproval::where('application_id', $id)->first();
-        $app->cod_status = 1;
-        $app->cod_user_id = auth()->guard('user')->user()->user_id;
-        $app->cod_comments = 'Application accepted by department';
-        $app->save();
+       ApplicationApproval::where('application_id', $id)->update([
+           'cod_status' => 1,
+           'cod_user_id' => auth()->guard('user')->user()->user_id,
+           'cod_comments' => 'Application accepted by department'
+       ]);
         return redirect()->route('cod.applications')->with('success', '1 applicant approved');
     }
 
@@ -116,20 +117,21 @@ class CODController extends Controller
             'comment' => 'required|string'
         ]);
 
-        $app = ApplicationApproval::where('application_id', $id)->first();
-        $app->cod_status = 2;
-        $app->cod_user_id = auth()->guard('user')->user()->user_id;
-        $app->cod_comments = $request->comment;
-        $app->save();
+        ApplicationApproval::where('application_id', $id)->update([
+            'cod_status' => 2,
+            'cod_user_id' => auth()->guard('user')->user()->user_id,
+            'cod_comments' => $request->comment,
+        ]);
+
         return redirect()->route('cod.applications')->with('success', 'Application declined');
     }
 
     public function reverseApplication(Request $request, $id){
-        $app = ApplicationApproval::where('application_id', $id)->first();
-        $app->cod_status = 4;
-        $app->cod_comments = $request->comment;
-        $app->cod_user_id = auth()->guard('user')->user()->user_id;
-        $app->save();
+        ApplicationApproval::where('application_id', $id)->update([
+            'cod_status' => 4,
+            'cod_comments' => $request->comment,
+            'cod_user_id' => auth()->guard('user')->user()->user_id
+        ]);
 
         $comms = new Notification;
         $comms->application_id = $id;
@@ -158,24 +160,17 @@ class CODController extends Controller
         foreach ($request->submit as $item) {
             $app = ApplicationApproval::where('application_id', $item)->first();
             if ($app->cod_status == 4) {
-                $app = ApplicationApproval::where('application_id', $item)->first();
-                $app->cod_status = NULL;
-                $app->cod_user_id = auth()->guard('user')->user()->user_id;
-                $app->dean_status = NULL;
-                $app->save();
+                ApplicationApproval::where('application_id', $item)->update([
+                    'cod_status' => NULL,
+                    'cod_user_id' => auth()->guard('user')->user()->user_id,
+                    'dean_status' => NULL
+                ]);
 
-                $revert = Application::where('application_id', $item)->first();
-                $revert->declaration = NULL;
-                $revert->save();
+                Application::where('application_id', $item)->update(['declaration' => NULL]);
 
-                $notify = Notification::where('application_id', $item)->latest()->first();
-                $notify->status = '1';
-                $notify->save();
-
+                Notification::where('application_id', $item)->latest()->update(['status' => '1']);
             }else{
-                $app = ApplicationApproval::where('application_id', $item)->first();
-                $app->dean_status = 0;
-                $app->save();
+                ApplicationApproval::where('application_id', $item)->update(['dean_status' => 0]);
             }
         }
         return redirect()->route('cod.batch')->with('success', '1 Batch elevated for Dean approval');
@@ -265,31 +260,55 @@ class CODController extends Controller
     }
 
     public function courseOptions($id){
-
         $course = Courses::where('course_id', $id)->first();
-
         $courses = CourseOptions::where('course_id', $id)->latest()->get();
-
         return view('cod::courses.courseOptions')->with(['courses' => $courses, 'course' => $course]);
     }
 
     public function allUnits(){
-//        $cacheKey = 'all_units_' . auth()->guard('user')->user()->user_id;
-//        $units = Cache::remember($cacheKey, 3600, function () {
         $units = Unit::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
                 ->orWhere('type', 1)
                 ->orWhere('type', 2)
                 ->latest()
-                ->get();
-//        });
-
-        // Manually store the units in cache with a different cache key and time
-//        $anotherCacheKey = 'all_units_other_key';
-//        Cache::put($anotherCacheKey, $units, 1800); // Cache for 1800 seconds (30 minutes)
-
+                ->paginate(20);
+//        ->get();
         return view('cod::syllabus.index')->with(['units' => $units]);
     }
 
+    public function JsonUnits(){
+        $data = Unit::with('DepartmentUnit')->select('units.*')->orWhere('type', 1)->orWhere('type', 2)->latest()->get();
+
+        $number = 0;
+        $units = $data->map(function ($unit) use (&$number) {
+            $number++;
+            if ($unit->type == 1){
+                $type = 'UNIVERSITY UNIT';
+            }elseif ($unit->type == 2){
+                $type = 'FACULTY/SCHOOL UNIT';
+            }elseif ($unit->type == 3){
+                $type = 'DEPARTMENT UNIT';
+            }else{
+                $type = 'OTHERS';
+            }
+            $cat = 'CAT : '.$unit->cat.' ASSIGN : '.$unit->assignment.' PRACTICAL : '.$unit->practical;
+            return [
+                'number' => $number,
+                'unit_id' => $unit->unit_id,
+                'unit_code' => strtoupper($unit->unit_code),
+                'unit_name' => strtoupper($unit->unit_name),
+                'type' => $type,
+                'cat' => $cat,
+                'department_name' => $unit->departmentUnit->name,
+                'total_exam' => $unit->total_exam,
+                'edit' => '<a href="' . route('department.editUnit', $unit['unit_id']) . '" class="btn btn-sm btn-secondary"><i class="fa fa-pencil"></i> Edit</a>',
+            ];
+        });
+
+        return DataTables::of($units)
+            ->addColumn('actions', '{{ $edit }}') // Use the 'edit' column as the template for actions
+            ->rawColumns(['actions']) // Declare 'actions' as a raw column to render HTML
+            ->toJson();
+    }
 
 
     public function addUnit(){
@@ -772,6 +791,21 @@ class CODController extends Controller
         $exam->save();
 
         return redirect()->route('department.examResults')->with('success', 'Exam result updated successfully');
+    }
+
+    public function setupTransfers(){
+        $intakes = [];
+
+        return view('cod::transfers.intakes')->with(['intakes' => $intakes]);
+    }
+
+    public function addCourseTransfer(){
+//        $today = Carbon::now();
+        $today = '2023-09-09';
+
+        $intake = Intake::where('intake_from', '<=', $today)->where('intake_to', '>=', $today)->first();
+        $classes = Classes::where('intake_id', $intake->intake_id)->where('attendance_id', 'J-FT')->orderBy('name', 'asc')->get();
+        return view('cod::transfers.intakeClasses')->with(['classes' => $classes, 'intake' => $intake]);
     }
 
     public function transferRequests(){

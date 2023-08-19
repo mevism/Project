@@ -176,13 +176,6 @@
                   </a>
                   <ul class="nav-main-submenu">
                       <li class="nav-main-item">
-                          <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('department.courseTransfers') }}">
-                              <span class="nav-main-link-name">Course Transfers</span>
-                          </a>
-                      </li>
-                  </ul>
-                  <ul class="nav-main-submenu">
-                      <li class="nav-main-item">
                           <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('department.academicLeave') }}">
                               <span class="nav-main-link-name">Academic Leaves </span>
                           </a>
@@ -210,7 +203,26 @@
                       </li>
                   </ul>
               </li>
-
+              <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
+                  <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="{{ route('cod.applications') }}">
+                      <i class="nav-main-link-icon fa fa-arrow-alt-circle-right"></i>
+                      <span class="nav-main-link-name">Course Transfers</span>
+                  </a>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('department.courseTransferSetup') }}">
+                              <span class="nav-main-link-name">Course Transfer Setup</span>
+                          </a>
+                      </li>
+                  </ul>
+                  <ul class="nav-main-submenu">
+                      <li class="nav-main-item">
+                          <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('department.courseTransfers') }}">
+                              <span class="nav-main-link-name">Course Transfers</span>
+                          </a>
+                      </li>
+                  </ul>
+              </li>
               <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
                   <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="{{ route('cod.applications') }}">
                       <i class="nav-main-link-icon fa fa-tasks"></i>
