@@ -11,9 +11,16 @@
 <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
 <script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script>
 <style>
-    .form-class {
-        /*min-height: 100vh !important;*/
+    .form-floating .form-control {
+        height: 2.95rem !important;
+        padding: 0.75rem 0.75rem 0 0.75rem !important;
+        font-size: 0.875rem !important;
     }
+
+    .form-floating label {
+        font-size: 0.875rem !important;
+    }
+
 </style>
 <script>
     $(document).ready(function() {
@@ -54,16 +61,25 @@
         <div class="block-content block-content-full">
             <div class="row">
                 <div class="d-flex justify-content-center h-50">
-                    <div class="col-md-6">
-                        <form class="form-class" method="POST" action="#">
+                    <div class="col-md-6 mt-5">
+                        <form class="form-class" method="POST" action="{{ route('department.storeCourseTransferSetup') }}">
+                            @csrf
                             @foreach($classes as $class)
                                 <div class="row mb-4">
                                     <div class="col-md-4">
                                         <label>{{ $class->name }}</label>
                                     </div>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control col-md-12" name="points[]">
-                                    </div>
+                                    @if($class->classCourse->level_id == 3)
+                                        <div class="form-floating col-md-8 text-uppercase">
+                                            <input type="number" class="form-control col-md-12" name="points[{{ $class->name }}]" placeholder="..." step="0.01" @if($class->CutOffPoints !== null) value="{{ $class->CutOffPoints->points }}" @else value="{{ old('points.' . $class->name) }}" @endif>
+                                            <label class="mx-3">Class Cutoff Points</label>
+                                        </div>
+                                    @elseif($class->classCourse->level_id == 2)
+                                        <div class="form-floating col-md-8 text-uppercase">
+                                            <input type="text" class="form-control col-md-12" name="points[{{ $class->name }}]" placeholder="..." value="{{ old('points.') }}">
+                                            <label class="mx-3">Class Cutoff Grade</label>
+                                        </div>
+                                    @endif
                                 </div>
                             @endforeach
                             <div class="d-flex justify-content-center">
@@ -77,4 +93,3 @@
         <!-- Dynamic Table Responsive -->
     </div>
 @endsection
-

@@ -9,6 +9,7 @@ use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Modules\Application\Entities\AdmissionDocument;
 use Modules\Application\Entities\ApplicationApproval;
 use Modules\COD\Entities\AcademicLeavesView;
 use Modules\COD\Entities\ApplicationsView;
@@ -505,7 +506,7 @@ class DeanController extends Controller{
 
         $center = ['bold' => true];
 
-        $table = new Table(array('unit' => TblWidth::TWIP));
+        $table = new Table(array('unit' => TblWidth::TWIP, 'align' => 'center'));
 
         foreach ($transfers as $transfered) {
             foreach ($transfered as $course_id => $transfer) {
@@ -519,22 +520,21 @@ class DeanController extends Controller{
                 $headers = ['bold' => true, 'space' => ['before' => 2000, 'after' => 2000, 'rule' => 'exact']];
 
                 $table->addRow(600);
-                $table->addCell(5000, ['gridSpan' => 9,])->addText($courseName . ' ' . '(' . $courseCode . ')', $headers, ['spaceAfter' => 300, 'spaceBefore' => 300]);
+                $table->addCell(10000, ['gridSpan' => 9,])->addText($courseName . ' ' . '(' . $courseCode . ')', $headers, ['spaceAfter' => 300, 'spaceBefore' => 300]);
                 $table->addRow();
-                $table->addCell(400, ['borderSize' => 1])->addText('#');
-                $table->addCell(2700, ['borderSize' => 1])->addText('Student Name/ Reg. Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
-                $table->addCell(1900, ['borderSize' => 1])->addText('Programme/ Course Admitted', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-                $table->addCell(1900, ['borderSize' => 1])->addText('Programme/ Course Transferring', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-                $table->addCell(1750, ['borderSize' => 1])->addText('Programme/ Course Cut-off Points', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-                $table->addCell(1000, ['borderSize' => 1])->addText('Student Cut-off Points', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-                $table->addCell(2600, ['borderSize' => 1])->addText('COD Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-                $table->addCell(1500, ['borderSize' => 1])->addText('Dean Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-                $table->addCell(1750, ['borderSize' => 1])->addText('Deans Committee Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+                $table->addCell(200, ['borderSize' => 1])->addText('#');
+                $table->addCell(2500, ['borderSize' => 1])->addText('Student Name/ Reg. Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+                $table->addCell(1850, ['borderSize' => 1])->addText('Course Admitted', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+                $table->addCell(1850, ['borderSize' => 1])->addText('Course Transferring to', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+                $table->addCell(2500, ['borderSize' => 1])->addText('Course Cutoff Grade/Points', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+                $table->addCell(1500, ['borderSize' => 1])->addText('Student Points/Grade', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+                $table->addCell(2500, ['borderSize' => 1])->addText('COD Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+                $table->addCell(2500, ['borderSize' => 1])->addText('Dean Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+                $table->addCell(2500, ['borderSize' => 1])->addText('Deans Committee Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
 
                 foreach ($transfer as $key => $list) {
-                    $name = $list->student_number . "<w:br/>\n" . $list->sname . ' ' . $list->fname . ' ' . $list->mname;
-                    $student_id = CourseTransfersView::where('student_id', $list->student_id)
-                        ->first()->student_id;
+                    $name = $list->student_number . "<w:br/>\n" . $list->surname . ' ' . $list->first_name . ' ' . $list->middle_name;
+                    $student_id = CourseTransfersView::where('student_id', $list->student_id)->first()->student_id;
                     $student = StudentView::where('student_id', $student_id)->first();
                     if ($list->cod_status == null) {
                         $remarks = 'Missed Deadline';
@@ -546,15 +546,15 @@ class DeanController extends Controller{
 
 //                    return $list;
                     $table->addRow();
-                    $table->addCell(400, ['borderSize' => 1])->addText(++$key);
-                    $table->addCell(2700, ['borderSize' => 1])->addText($name);
-                    $table->addCell(1900, ['borderSize' => 1])->addText($student->course_code);
-                    $table->addCell(1900, ['borderSize' => 1])->addText($list->course_code);
-                    $table->addCell(1750, ['borderSize' => 1])->addText($list->class_points);
-                    $table->addCell(1000, ['borderSize' => 1])->addText($list->student_points);
-                    $table->addCell(2600, ['borderSize' => 1])->addText($remarks);
-                    $table->addCell(1500, ['borderSize' => 1])->addText($deanRemark);
-                    $table->addCell(1750, ['borderSize' => 1])->addText();
+                    $table->addCell(200, ['borderSize' => 1])->addText(++$key);
+                    $table->addCell(2500, ['borderSize' => 1])->addText($name, ['name' => 'Book Antiqua', 'size' => 10, ]);
+                    $table->addCell(1850, ['borderSize' => 1])->addText($list->StudentsTransferCourse->StudentsCourse->course_code, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
+                    $table->addCell(1850, ['borderSize' => 1])->addText($list->course_code, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
+                    $table->addCell(2500, ['borderSize' => 1])->addText(strtoupper($list->class_points), ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
+                    $table->addCell(1500, ['borderSize' => 1])->addText($list->student_points, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
+                    $table->addCell(2500, ['borderSize' => 1])->addText($remarks, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
+                    $table->addCell(2500, ['borderSize' => 1])->addText($deanRemark, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
+                    $table->addCell(2500, ['borderSize' => 1])->addText();
                 }
             }
         }
@@ -572,9 +572,9 @@ class DeanController extends Controller{
                 }
 
                 $summary->addRow();
-                $summary->addCell(5000, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
-                $summary->addCell(1250, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
-                $summary->addCell(1250, ['borderSize' => 1])->addText($transfer->count());
+                $summary->addCell(800, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
+                $summary->addCell(2500, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
+                $summary->addCell(2500, ['borderSize' => 1])->addText($transfer->count());
 
                 $total += $transfer->count();
             }
@@ -614,14 +614,8 @@ class DeanController extends Controller{
     public function yearly(){
         $user = auth()->guard('user')->user();
         $school_id = $user->employmentDepartment->first()->schools->first()->school_id;
-        $departments = ACADEMICDEPARTMENTS::where('school_id', $school_id)->get();
-
-        foreach ($departments as $deptmentTransfer) {
-            $data[] = CourseTransfer::where('department_id', $deptmentTransfer->department_id)
-                ->latest()
-                ->get()
-                ->groupBy('intake_id');
-        }
+        $departments = ACADEMICDEPARTMENTS::where('school_id', $school_id)->pluck('department_id');
+        $data = CourseTransfersView::whereIn('department_id', $departments)->latest()->get()->groupBy('intake_id');
         return  view('dean::transfers.yearly')->with(['data' => $data, 'departments' => $departments]);
     }
 
@@ -630,6 +624,7 @@ class DeanController extends Controller{
         CourseTransferApproval::where('course_transfer_id', $id)->update([
             'dean_status' => 2,
             'dean_remarks' => $request->remarks,
+            'dean_user_id' => auth()->guard('user')->user()->user_id
         ]);
         return redirect()->route('dean.transfer', $intake)->with('success', 'Course transfer request accepted');
     }
@@ -638,36 +633,29 @@ class DeanController extends Controller{
         $intake = CourseTransfersView::where('course_transfer_id', $id)->first()->intake_id;
         CourseTransferApproval::where('course_transfer_id', $id)->update([
             'dean_status' => 1,
-            'dean_remarks' => 'Admit Student'
+            'dean_remarks' => 'Admission approved',
+            'dean_user_id' => auth()->guard('user')->user()->user_id
         ]);
         return redirect()->route('dean.transfer', $intake)->with('success', 'Course transfer request accepted');
     }
 
     public function viewUploadedDocument($id){
-        $course = CourseTransfer::where('course_transfer_id', $id)->first();
-        $document = ApplicationApproval::where('reg_number', $course->studentTransfer->enrolledCourse->student_number)->first()->ApplicationsDocments;
+        $course = CourseTransfersView::where('course_transfer_id', $id)->first();
+        $document = AdmissionDocument::where('application_id', $course->application_id)->first();
         return response()->file('Admissions/Certificates/' . $document->certificates);
     }
 
     public function transfer($id) {
         $user = auth()->guard('user')->user();
         $school_id = $user->employmentDepartment->first()->schools->first()->school_id;
-        $departments = ACADEMICDEPARTMENTS::where('school_id', $school_id)->get();
-
-        foreach ($departments as $deptmentTransfer) {
-            $data[] = CourseTransfersView::where('department_id', $deptmentTransfer->department_id)
-                ->where('cod_status', '!=', null)
-//                ->latest()
-                ->get();
-        }
+        $departments = ACADEMICDEPARTMENTS::where('school_id', $school_id)->pluck('department_id');
+        $data = CourseTransfersView::whereIn('department_id', $departments)->where('cod_status', '!=', null)->orderBy('department_id', 'asc')->get();
         return view('dean::transfers.index')->with(['transfer' => $data, 'departments' => $departments, 'intake' => $id]);
     }
 
     public function viewTransfer($id) {
-        $data =  CourseTransfersView::where('course_transfer_id', $id)->first();
-        $student_id = CourseTransfer::where('course_transfer_id', $id)->first()->student_id;
-        $student = StudentView::where('student_id', $student_id)->first();
-        return view('dean::transfers.viewTransfer')->with(['data' => $data, 'student' => $student]);
+        $student =  CourseTransfersView::where('course_transfer_id', $id)->first();
+        return view('dean::transfers.viewTransfer')->with(['student' => $student]);
     }
 
     public function applications() {

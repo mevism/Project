@@ -28,12 +28,12 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center py-0">
                 <div class="flex-grow-0">
-                    <h6 class="h6 fw-bold mb-0">
+                    <h6 class="h6 fw-bold mb-0 text-uppercase">
                         VIEW REQUEST
                     </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="javascript:void(0)">Department</a>
                         </li>
@@ -56,41 +56,40 @@
                             <fieldset class="border p-2" style="height: 100% !important;">
                                 <legend class="float-none w-auto"><h6 class="fw-bold text-center"> STUDENT'S CURRENT COURSE</h6></legend>
                                 <div class="row mb-3">
-                                    <div class="col-md-3 fw-bold">Student Number </div>
-                                    <div class="col-md-9 fs-sm">
-                                        {{ $transfer->studentTransfer->enrolledCourse->student_number }}
+                                    <div class="col-md-5 fs-sm fw-bold">STUDENT NUMBER </div>
+                                    <div class="col-md-7 fs-sm">
+                                        {{ $transfer->student_number }}
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-md-3 fw-bold">Student Name</div>
-                                    <div class="col-md-9 fs-sm">
-                                        {{ $transfer->studentTransfer->loggedStudent->sname.' '.$transfer->studentTransfer->loggedStudent->fname.' '.$transfer->studentTransfer->loggedStudent->mname }}
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-md-3 fw-bold">Current Class</div>
-                                    <div class="col-md-9 fs-sm">
-                                        {{ $transfer->studentTransfer->enrolledCourse->entry_class }}
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-md-3 fw-bold">Current Course</div>
-                                    <div class="col-md-9 fs-sm">
-                                        {{ $transfer->studentTransfer->enrolledCourse->StudentSCourse->course_name }}
+                                    <div class="col-md-5 fs-sm fw-bold">STUDENT NAME</div>
+                                    <div class="col-md-7 fs-sm">
+                                        {{ $transfer->surname.' '.$transfer->first_name.' '.$transfer->middle_name }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
-                                    <div class="col-md-3 fw-bold">Current Department</div>
-                                    <div class="col-md-9 fs-sm">
-                                        {{ $transfer->studentTransfer->enrolledCourse->StudentsDepartment->name }}
+                                    <div class="col-md-5 fs-sm fw-bold">STUDENT DEPARTMENT</div>
+                                    <div class="col-md-7 fs-sm">
+                                        {{ $transfer->StudentsTransferCourse->StudentsCourse->getCourseDept->name }}
                                     </div>
                                 </div>
-
-                                @if($transfer->courseTransfer->level == 2)
                                 <div class="row mb-3">
-                                    <div class="col-md-3 fw-bold">KCSE Results</div>
-                                    <div class="col-md-9 fs-sm">
+                                    <div class="col-md-5 fs-sm fw-bold">COURSE ENROLLED</div>
+                                    <div class="col-md-7 fs-sm">
+                                        {{ $transfer->StudentsTransferCourse->StudentsCourse->course_name }}
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-5 fs-sm fw-bold">CLASS ADMITTED</div>
+                                    <div class="col-md-7 fs-sm">
+                                        {{ $transfer->StudentsTransferCourse->current_class }}
+                                    </div>
+                                </div>
+                                @if($transfer->level_id == 2)
+                                <div class="row mb-3">
+                                    <div class="col-md-5 fs-sm fw-bold">ACADEMIC DOCUMENTS</div>
+                                    <div class="col-md-7 fs-sm">
                                         <a class="btn btn-sm btn-outline-primary col-md-6" target="_blank" href="{{ route('department.viewUploadedDocument', $transfer->course_transfer_id) }}">View Document</a>
                                     </div>
                                 </div>
@@ -101,44 +100,44 @@
                             <fieldset class="border p-2" style="height: 100% !important;">
                                 <legend class="float-none w-auto"><h6 class="fw-bold text-center"> TRANSFER REQUEST DETAILS</h6></legend>
                                 <div class="row mb-3">
-                                    <div class="col-md-4 fw-bold">New Department</div>
-                                    <div class="col-md-8 fs-sm">
-                                        {{ $transfer->deptTransfer->name }}
+                                    <div class="col-md-5 fs-sm fw-bold">DEPARTMENT TRANSFERRING TO</div>
+                                    <div class="col-md-7 fs-sm">
+                                        {{ $transfer->CourseTransferDept->name }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
-                                    <div class="col-md-4 fw-bold">New Course</div>
-                                    <div class="col-md-8 fs-sm">
-                                        {{ $transfer->courseTransfer->course_name }}
+                                    <div class="col-md-5 fs-sm fw-bold">COURSE TRANSFERRING TO</div>
+                                    <div class="col-md-7 fs-sm">
+                                        {{ $transfer->course_name }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
-                                    <div class="col-md-4 fw-bold">New Class</div>
-                                    <div class="col-md-8 fs-sm">
-                                        {{ $transfer->classTransfer->name }}
+                                    <div class="col-md-5 fs-sm fw-bold">CLASS TRANSFERRING TO</div>
+                                    <div class="col-md-7 fs-sm">
+                                        {{ $transfer->name }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
-                                    <div class="col-md-4 fw-bold">Course Requirement</div>
-                                    <div class="col-md-8 fs-sm">
-                                        {{ $transfer->class_points }}
+                                    <div class="col-md-5 fs-sm fw-bold">CLASS CUTOFF POINTS/GRADE</div>
+                                    <div class="col-md-7 fs-sm">
+                                        {{ strtoupper($transfer->class_points) }}
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
-                                    <div class="col-md-4 fw-bold">Student Points/Grade</div>
-                                    <div class="col-md-8 fs-sm">
-                                        {{ $transfer->student_points}}
+                                    <div class="col-md-5 fs-sm fw-bold">STUDENT'S POINTS/GRADE</div>
+                                    <div class="col-md-7 fs-sm">
+                                        {{ strtoupper($transfer->student_points)  }}
                                     </div>
                                 </div>
 
-                                @if($transfer->courseTransfer->level == 3)
+                                @if($transfer->level_id == 3)
                                     <div class="row mb-3">
-                                        <div class="col-md-4 fw-bold">Recommendation</div>
-                                        <div class="col-md-8 fs-sm">
+                                        <div class="col-md-5 fs-sm fw-bold">RECOMMENDATIONS </div>
+                                        <div class="col-md-7 fs-sm">
                                             @if($transfer->student_points >= $transfer->class_points)
                                                 <span class="badge bg-success"> Meets minimum cluster points requirements </span>
                                             @else
@@ -149,15 +148,15 @@
                                     </div>
                                 @endif
 
-                                @if($transfer->courseTransfer->level == 2)
+                                @if($transfer->level_id == 2)
 
                                 <div class="row mb-3">
-                                    <div class="col-md-4 fw-bold">Subject Requirements</div>
-                                    <div class="col-md-8 fs-sm">
-                                        {{ $transfer->courseTransfer->courseRequirements->subject1 }} <br>
-                                        {{ $transfer->courseTransfer->courseRequirements->subject2 }} <br>
-                                        {{ $transfer->courseTransfer->courseRequirements->subject3 }} <br>
-                                        {{ $transfer->courseTransfer->courseRequirements->subject4 }}
+                                    <div class="col-md-5 fs-sm fw-bold">COURSE SUBJECT REQUIREMENT </div>
+                                    <div class="col-md-7 fs-sm">
+                                        {{ $transfer->TransferCourse->courseRequirements->subject1 }} <br>
+                                        {{ $transfer->TransferCourse->courseRequirements->subject2 }} <br>
+                                        {{ $transfer->TransferCourse->courseRequirements->subject3 }} <br>
+                                        {{ $transfer->TransferCourse->courseRequirements->subject4 }}
 
                                     </div>
 
@@ -167,13 +166,13 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-center m-2">
-                        @if($transfer->approvedTransfer == null)
+                        @if($transfer->cod_status == null)
                             <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('department.acceptTransferRequest', $transfer->course_transfer_id) }}"> Accept Transfer </a>
                             <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Transfer</a>
                         @else
-                            @if($transfer->approvedTransfer->cod_status == 1 && $transfer->approvedTransfer->dean_status == null)
+                            @if($transfer->cod_status == 1 && $transfer->dean_status == null)
                                 <a class="btn btn-outline-danger col-md-2 m-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> Decline Transfer</a>
-                            @elseif($transfer->approvedTransfer->cod_status == 2 && $transfer->approvedTransfer->dean_status == null)
+                            @elseif($transfer->cod_status == 2 && $transfer->dean_status == null)
                                 <a class="btn btn-outline-success col-md-2 m-2" href="{{ route('department.acceptTransferRequest', $transfer->course_transfer_id) }}"> Accept Transfer </a>
                             @endif
                         @endif

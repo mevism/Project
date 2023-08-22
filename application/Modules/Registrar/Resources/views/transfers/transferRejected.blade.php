@@ -52,19 +52,15 @@
             </tr>
             <tr>
                 <td align="auto" class="bgcolor2" style="padding: 40px 20px 40px 20px; color: #555555; font-family: Arial, sans-serif; font-size: 20px; line-height: 30px; border-bottom: 1px solid #f6f6f6;">
-                    <h5>Dear {{ $oldStudent->sname. ' '. $oldStudent->fname .' '. $oldStudent->mname }}, </h5>
+                    <h5>Dear {{ $student->surname. ' '. $student->first_name .' '. $student->middle_name }}, </h5>
                      <p>
-                       Your course transfer was not successful. You are advised to continue with your current course <b>{{ $oldStudent->course_name }}</b>.
+                       Your course transfer request to <b> {{ $student->course_name }} </b> was not successful. You are advised to continue with your current course <b>{{ $student->StudentsTransferCourse->StudentsCourse->course_name }}</b>.
                      </p>
                     <div>
                         <p>
                             <b>
-                                Kind regards,<br></b><br>
-
-                                Zablon Mwaramu <br><br>
-
-                               Admissions Department <br><br>
-
+                                Kind regards,<br></b>
+                               Admissions Department <br>
                              Technical University of Mombasa
 
                         </p>

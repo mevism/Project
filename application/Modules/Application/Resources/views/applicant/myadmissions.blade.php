@@ -80,6 +80,7 @@
                     </thead>
                     <tbody>
                     @foreach($courses as $course)
+                        @if($course->student_type == 1 && $course->cod_status == 1 && $course->dean_status == 1 && $course->registrar_status >= 3 || $course->student_type == 2)
                         <tr>
                             <td> {{ $loop->iteration }} </td>
                             <td>{{ $course->DepartmentCourse->getCourseDept->name }}</td>
@@ -102,6 +103,7 @@
                                 @endif
                             </td>
                         </tr>
+                        @endif
                     @endforeach
                     </tbody>
                 </table>

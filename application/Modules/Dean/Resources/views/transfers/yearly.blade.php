@@ -59,17 +59,15 @@
                                 <th>Action</th>
                             </thead>
                             <tbody>
-                                @foreach($data as $transfer)
-                                    @foreach($transfer as $intake => $transfer)
-                                        <tr>
-                                            <td> {{ $loop->iteration }} </td>
-                                            <td class="text-uppercase"> {{ Carbon\Carbon::parse(\Modules\Registrar\Entities\Intake::where('intake_id', $intake)->first()->intake_from)->format('MY') }} </td>
-                                            <td> {{ $transfer->count() }}</td>
-                                            <td>
-                                                <a class="btn btn-sm btn-outline-secondary" href="{{ route('dean.transfer', $intake) }}">view requests</a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                @foreach($data as $intake => $transfer)
+                                  <tr>
+                                      <td> {{ $loop->iteration }} </td>
+                                      <td class="text-uppercase"> {{ Carbon\Carbon::parse(\Modules\Registrar\Entities\Intake::where('intake_id', $intake)->first()->intake_from)->format('MY') }} </td>
+                                      <td> {{ $transfer->count() }}</td>
+                                      <td>
+                                        <a class="btn btn-sm btn-outline-secondary" href="{{ route('dean.transfer', $intake) }}">view requests</a>
+                                      </td>
+                                  </tr>
                                 @endforeach
                             </tbody>
                         </table>

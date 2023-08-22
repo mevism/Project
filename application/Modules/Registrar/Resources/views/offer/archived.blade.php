@@ -56,7 +56,7 @@
                         <tr>
                             <td> {{ $loop->iteration }} </td>
                             <td> {{ $item->ref_number }}</td>
-                            <td> {{ $item->sname }} {{ $item->fname }} {{ $item->mname }}</td>
+                            <td> {{ $item->surname }} {{ $item->first_name }} {{ $item->middle_name }}</td>
                              <td> {{ $item->DepartmentCourse->getCourseDept->dept_code }}</td>
                              <td> {{ $item->DepartmentCourse->course_name }}</td>
                             <td> @if ($item->cod_status == 1)

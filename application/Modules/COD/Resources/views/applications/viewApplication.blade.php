@@ -122,8 +122,8 @@
                 </div>
             </div>
         <div class="d-flex justify-content-center py-1">
-            @if($app->cod_status == 0 || 3)
-            <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('cod.acceptApplication', $app->application_id) }}">Accept</a>
+            @if($app->cod_status == 0 || $app->cod_status == 3)
+            <a class="btn btn-sm btn-alt-success m-2" data-toggle="click-ripple" href="{{ route('cod.acceptApplication', $app->application_id) }}">Accept</a> {{ $app->cod_status }}
             <a class="btn btn-sm btn-alt-danger m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin"> Reject</a>
             <a class="btn btn-sm btn-alt-info m-2" href="#" data-bs-toggle="modal" data-bs-target="#modal-block-popin1"> Revert</a>
             <a class="btn btn-sm btn-alt-secondary m-2" data-toggle="click-ripple" href="{{ route('cod.applications') }}">Close</a>

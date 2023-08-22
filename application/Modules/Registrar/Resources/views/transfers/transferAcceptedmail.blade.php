@@ -52,9 +52,9 @@
             </tr>
             <tr>
                 <td align="auto" class="bgcolor2" style="padding: 40px 20px 40px 20px; color: #555555; font-family: Arial, sans-serif; font-size: 20px; line-height: 30px; border-bottom: 1px solid #f6f6f6;">
-                    <h5>Dear {{ $student->sname .' '.$student->fname.' '. $student->mname }}, </h5>
+                    <h5>Dear {{ $student->surname .' '.$student->first_name.' '. $student->middle_name }}, </h5>
                      <p>
-                       Your course transfer to <b> {{ $approval->course_name }}</b> was successful. Login to your new student account using your new student number <b>{{ $regNumber }}</b>  and your <b>ID/birth certificate/passport number</b> as your password.
+                       Your course transfer to <b> {{ $student->course_name }}</b> was successful. Login to your new student account using your new student number <b> {{ $regNumber }} </b>  and your <b> ID/birth certificate/passport number </b> as your password.
                      </p>
                     <div>
                         <p>

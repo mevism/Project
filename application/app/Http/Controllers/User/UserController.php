@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Modules\Application\Entities\ApplicationApproval;
 use Modules\Application\Entities\VerifyUser;
 use Modules\Application\Entities\Application;
+use Modules\COD\Entities\AdmissionsView;
 use Modules\COD\Entities\ApplicationsView;
 use Modules\Registrar\Entities\AvailableCourse;
 use Modules\Registrar\Entities\Courses;
@@ -66,15 +67,13 @@ class UserController extends Controller
                 $courseIDs = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->pluck('course_id');
                $apps_cod = ApplicationsView::where('cod_status', null )->whereIn('course_id', $courseIDs)->where('student_type', 1)->count();
                $classes = DB::table('classesview')->where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->count();
-                $admissions = 0;
+                $admissions = AdmissionsView::whereIn('course_id', $courseIDs)->where('cod_status', 0)->get()->count();
 
                 return view('cod::COD.index')->with(['apps'=>$apps_cod, 'admissions'=>$admissions, 'classes' => $classes]);
 
             }elseif (\auth()->guard('user')->user()->roles->first()->id == 3){
                 $apps_finance = Application::all()->count();
-
                 return view('applications::finance.index')->with('apps', $apps_finance);
-
             }elseif (auth()->guard('user')->user()->roles->first()->id == 4){
                 $departments = SchoolDepartment::where('school_id', auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->school_id)->pluck('department_id');
                 $courses = Courses::whereIn('department_id', $departments)->pluck('course_id');
@@ -93,12 +92,8 @@ class UserController extends Controller
 
 
             }elseif (\auth()->guard('user')->user()->roles->first()->id == 7){
-
-                $apps = AdmissionApproval::where('registrar_status', null)
-                    ->where('finance_status', 1)->count();
-
+                $apps = AdmissionsView::where('registrar_status', null)->count();
                 return view('medical::medical.index')->with('apps', $apps);
-
             }elseif (\auth()->guard('user')->user()->roles->first()->id == 8){
 
                 return view('lecturer::index');

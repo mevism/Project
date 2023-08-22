@@ -14,7 +14,7 @@ class Nominalroll extends Model
 {
     use HasFactory, softDeletes;
 
-    protected $fillable = ['nominal_id', 'student_id', 'reg_number', 'year_study', 'semester_study', 'academic_year','academic_semester', 'pattern_id', 'class_code', 'registration', 'activation'];
+    protected $fillable = ['nominal_id', 'student_id', 'year_study', 'semester_study', 'intake_id', 'pattern_id', 'class_code', 'registration', 'activation'];
 
     public function NominalIntake(){
         return $this->belongsTo(Intake::class, 'intake_id', 'intake_id');

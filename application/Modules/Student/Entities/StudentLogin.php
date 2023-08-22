@@ -14,8 +14,7 @@ class StudentLogin extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $table = 'student_logins';
-    protected $fillable = [];
+    protected $fillable = ['student_id', 'username', 'password'];
     protected $primaryKey = 'student_id';
     protected $keyType = 'string';
     protected $hidden = [

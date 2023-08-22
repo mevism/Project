@@ -12,19 +12,19 @@ class CourseTransferMails extends Mailable
 
     use Queueable, SerializesModels;
     public $student;
-    public $approval;
     public $regNumber;
+    public $document;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($student, $approval, $regNumber)
+    public function __construct($student, $regNumber, $document)
     {
          $this->student =  $student;
-         $this->approval =  $approval;
          $this->regNumber =  $regNumber;
+         $this->document = $document;
     }
 
     /**
@@ -32,8 +32,12 @@ class CourseTransferMails extends Mailable
      *
      * @return $this
      */
-    public function build()
-    {
-        return $this->subject(' Course Transfer')->view('registrar::transfers.transferAcceptedmail');
+    public function build(){
+        return $this->subject('Course Transfer Request')->view('registrar::transfers.transferAcceptedmail')
+            /*->attach('AdmissionLetters/' . $this->document, [
+                'as' => $this->document,
+                'mime' => 'application/pdf',
+            ])*/;
     }
+
 }

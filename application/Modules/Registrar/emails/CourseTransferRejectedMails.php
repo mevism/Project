@@ -16,11 +16,10 @@ class CourseTransferRejectedMails extends Mailable
      *
      * @return void
      */
-    public $oldStudent;
+    public $student;
 
-    public function __construct($oldStudent)
-    {
-        $this->oldStudent  =  $oldStudent;
+    public function __construct($student){
+        $this->student  =  $student;
     }
 
     /**

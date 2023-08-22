@@ -55,12 +55,11 @@
                                 <thead>
                                     <th>✔</th>
                                     <th>#</th>
-                                    <th nowrap="">Old Stud. Number</th>
+                                    <th nowrap="">Student Number</th>
                                     <th nowrap="">Student name</th>
-                                    <th nowrap="">New  Dept.</th>
-                                    <th nowrap="">New Course</th>
-                                    <th>COD Remarks</th>
-                                    <th>DEAN STATUS</th>
+                                    <th nowrap="">Current course</th>
+                                    <th nowrap="">Course transferring to</th>
+                                    <th>STATUS</th>
                                 </thead>
                                 <tbody>
                                 @foreach($transfer as $key => $item)
@@ -73,11 +72,10 @@
                                                     @endif
                                                 </td>
                                                 <td> {{ ++$key }} </td>
-                                                <td> {{  $item->StudentsTransferCourse->student_number }} </td>
-                                                <td> {{  $item->StudentsTransferInfo->sname.' '.$item->StudentsTransferInfo->fname.' '.$item->StudentsTransferInfo->mname }} </td>
-                                                <td> {{  $item->dept_code }} </td>
+                                                <td> {{  $item->student_number }} </td>
+                                                <td> {{  $item->surname.' '.$item->first_name.' '.$item->middle_name }} </td>
+                                                <td> {{  $item->StudentsTransferCourse->StudentsCourse->course_name }} </td>
                                                 <td> {{  $item->course_name }} </td>
-                                                <td> {{  $item->cod_remarks }} </td>
                                                 <td>
                                                     @if($item->dean_status == 1)
                                                         <span class="badge bg-success">Accepted</span>
