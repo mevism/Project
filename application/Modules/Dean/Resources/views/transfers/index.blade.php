@@ -58,46 +58,30 @@
                             <th>Course</th>
                             <th>Department</th>
                             <th>COD Remarks</th>
-                            <th>DEAN Remarks</th>
                             <th nowrap="">Action</th>
                         </thead>
                         <tbody>
-                        @foreach($transfer as $key => $items)
-                            @foreach($items as $item )
-                        <tr>
-                            <td>{{ ++$key }}</td>
-                            <td> {{ $item->StudentsTransferCourse->student_number }} </td>
-                            <td>
-                                {{ $item->StudentsTransferInfo->sname.' '.$item->StudentsTransferInfo->fname.' '.$item->StudentsTransferInfo->mname }}
-                            </td>
-                            <td> {{ $item->course_code }} </td>
-                            <td> {{ $item->dept_code }} </td>
-                             <td> {{ $item->cod_remarks }}</td>
-                            <td>
-                                @if($item->dean_remarks == null)
-                                    <span class="badge bg-primary">Waiting approval</span>
-                                    {{ $item->dean_remarks }}
-                                @else
-                                    @if($item->dean_status == 1)
-                                        <p class="text-success">{{ $item->dean_remarks }}</p>
-                                    @else
-                                        <p class="text-danger">{{ $item->dean_remarks }}</p>
+                        @foreach($transfer as $key =>  $item )
+                            <tr>
+                                <td>{{ ++$key }}</td>
+                                <td> {{ $item->student_number }} </td>
+                                <td>
+                                {{ $item->surname.' '.$item->first_name.' '.$item->middle_name }}
+                                 </td>
+                                <td> {{ $item->course_code }} </td>
+                                <td> {{ $item->dept_code }} </td>
+                                 <td> {{ $item->cod_remarks }}</td>
+                                <td nowrap="">
+                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('dean.viewTransfer', $item->course_transfer_id) }}"> View </a>
+                                    @if($item->dean_status != null)
+                                        @if($item->dean_status == 1)
+                                            <i class="fa fa-check text-success"></i>
+                                        @else
+                                            <i class="fa fa-times text-danger"></i>
+                                        @endif
                                     @endif
-                                @endif
-                            </td>
-
-                            <td nowrap="">
-                                <a class="btn btn-sm btn-outline-secondary" href="{{ route('dean.viewTransfer', $item->course_transfer_id) }}"> View </a>
-                                @if($item->dean_status != null)
-                                    @if($item->dean_status == 1)
-                                        <i class="fa fa-check text-success"></i>
-                                    @else
-                                        <i class="fa fa-times text-danger"></i>
-                                    @endif
-                                @endif
-                            </td>
-                        </tr>
-                        @endforeach
+                                </td>
+                            </tr>
                         @endforeach
                         </tbody>
                 </table>

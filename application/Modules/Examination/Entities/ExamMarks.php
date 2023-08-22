@@ -16,7 +16,7 @@ class ExamMarks extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = ['exam_id', 'student_id', 'class_code', 'unit_code', 'stage', 'semester', 'intake_id', 'attempt'];
 
     protected $primaryKey = 'exam_id';
     protected $keyType = 'string';

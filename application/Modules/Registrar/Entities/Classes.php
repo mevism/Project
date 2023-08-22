@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\COD\Entities\ClassPattern;
+use Modules\COD\Entities\ClassPoints;
 use Modules\COD\Entities\Progression;
 use Modules\Student\Entities\CourseTransfer;
 use Modules\Student\Entities\StudentCourse;
@@ -21,7 +22,6 @@ class Classes extends Model
     protected $dates = ['deleted_at'];
 
     public function classCourse(){
-
         return $this->belongsTo(Courses::class, 'course_id', 'course_id');
     }
 
@@ -40,6 +40,10 @@ class Classes extends Model
 
     public function studentClass(){
         return $this->hasMany(StudentCourse::class, 'current_class', 'name');
+    }
+
+    public function CutOffPoints(){
+        return $this->hasOne(ClassPoints::class, 'class_code', 'name');
     }
 
     protected static function newFactory()

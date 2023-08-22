@@ -70,9 +70,9 @@
                     @foreach($transfers as $key => $transfer)
                         <tr>
                             <td>{{ ++$key }} </td>
-                            <td> {{ $transfer->deptTransfer->name }}</td>
-                            <td> {{ $transfer->courseTransfer->course_name }}</td>
-                            <td nowrap=""> {{ $transfer->classTransfer->name }}</td>
+                            <td> {{ $transfer->CourseTransferDept->name }}</td>
+                            <td> {{ $transfer->course_name }}</td>
+                            <td nowrap=""> {{ $transfer->name }}</td>
                             <td> {{ $transfer->class_points }} </td>
                             <td> {{ $transfer->student_points }} </td>
                             <td nowrap="">

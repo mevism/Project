@@ -118,8 +118,7 @@ use PhpOffice\PhpWord\SimpleType\TextDirection;
 class CoursesController extends Controller
 {
     public $appApi;
-    public function __construct(AppApis $appApi)
-    {
+    public function __construct(AppApis $appApi){
         $this->appApi  =  $appApi;
     }
     public function  yearlyExamMarks(){
@@ -597,20 +596,17 @@ class CoursesController extends Controller
     public function acceptedTransfers(Request $request){
         $request->validate(['submit' => 'required']);
         foreach ($request->submit as $id) {
-            $approval = CourseTransfersView::where('course_transfer_id', $id)->first();
+             $approval = CourseTransfersView::where('course_transfer_id', $id)->first();
             if ($approval->dean_status == 1) {
+                $newStudent = CourseTransfersView::where('student_id', $approval->student_id)->first();
                 $intake = Intake::where('intake_id', $approval->intake_id)->first();
-                $registered = StudentCourse::where('intake_id', $approval->intake_id)
-                    ->where('course_id', $approval->course_id)
-                    ->count();
-                $course = Courses::where('course_id', $approval->course_id)->first();
-
-                $regNumber = $course->course_code . '/' . str_pad($registered + 1, 3, "0", STR_PAD_LEFT) . "J/" . Carbon::parse($intake->academicYear->year_start)->format('Y');
-
-                $refNumber = 'TRANSFER' . time();
-                $student = StudentView::where('student_id', $approval->student_id)->first();
-
-                StudentInfo::where('student_id', $student->student_id)->first()->id_number;
+                $campus = CourseOnOfferView::where('course_id', $newStudent->course_id)->where('intake_id', $intake->intake_id)->first();
+                $registered = StudentCourse::withTrashed()->where('intake_id', $newStudent->intake_id)->where('course_id', $approval->course_id)->count();
+                $regNumber = $newStudent->course_code . '/' . str_pad($registered + 1, 3, "0", STR_PAD_LEFT) . "J/" . Carbon::parse($intake->academicYear->year_start)->format('Y');
+                $apps = Application::all()->count();
+                $refNumber = 'TRFR/'.str_pad( $apps,8, '0', STR_PAD_LEFT).'/'.date('Y');
+                $syllabus = CourseSyllabus::where('course_code', $newStudent->course_code)->where('version', $newStudent->syllabus_name)->where('stage', 1)->where('semester', 1)->get();
+                $fees = SemesterFee::where('course_code', $newStudent->course_code)->where('semester', '1.1')->where('version', $newStudent->fee_version)->where('attendance_id', 2)->get();
 
                 $domPdfPath = base_path('vendor/dompdf/dompdf');
                 \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
@@ -618,226 +614,147 @@ class CoursesController extends Controller
 
                 $my_template         =        new TemplateProcessor(storage_path('adm_template.docx'));
 
-                $my_template->setValue('name', strtoupper($student->sname . ' ' . $student->fname . ' ' . $student->mname));
+                $my_template->setValue('name', strtoupper($newStudent->surname . ' ' . $newStudent->first_name . ' ' . $newStudent->middle_name));
                 $my_template->setValue('reg_number', strtoupper($regNumber));
                 $my_template->setValue('date',  date('d-M-Y'));
                 $my_template->setValue('ref_number', $refNumber);
-                $my_template->setValue('course', strtoupper($course->course_name));
-                $my_template->setValue('box', strtoupper($student->address));
-                $my_template->setValue('postal_code', strtoupper($student->postal_code));
-                $my_template->setValue('town', strtoupper($student->town));
-                $my_template->setValue('duration', strtoupper($course->courseRequirements->course_duration));
-                $my_template->setValue('department', strtoupper($course->getCourseDept->name));
-                $my_template->setValue('campus', 'MAIN');
+                $my_template->setValue('course', strtoupper($newStudent->course_name));
+                $my_template->setValue('box', strtoupper($newStudent->address));
+                $my_template->setValue('postal_code', strtoupper($newStudent->postal_code));
+                $my_template->setValue('town', strtoupper($newStudent->town));
+                $my_template->setValue('duration', strtoupper($newStudent->StudentsTransferCourse->StudentsCourse->courseRequirements->course_duration));
+                $my_template->setValue('department', strtoupper($newStudent->StudentsTransferCourse->StudentsCourse->getCourseDept->name));
+                $my_template->setValue('campus', $campus->name);
                 $my_template->setValue('from', Carbon::parse($intake->intake_from)->format('D, d-m-Y'));
                 $my_template->setValue('to', Carbon::parse($intake->intake_from)->addDays(4)->format('D, d-m-Y'));
 
-                $docPath = 'AdmissionLetters/' . $refNumber . ".docx";
-
+                $docPath = 'AdmissionLetters/'.str_replace('/', '', $refNumber).".docx";
                 $my_template->saveAs($docPath);
 
-                $contents = \PhpOffice\PhpWord\IOFactory::load('AdmissionLetters/' . $refNumber . ".docx");
+                $contents = \PhpOffice\PhpWord\IOFactory::load('AdmissionLetters/'.str_replace('/', '', $refNumber).".docx");
 
-                $pdfPath = 'AdmissionLetters/' . $refNumber . ".pdf";
+                $pdfPath = 'AdmissionLetters/'.str_replace('/', '', $refNumber).".pdf";
 
-                if (file_exists($pdfPath)) {
-                    unlink($pdfPath);
-                }
+                    if (file_exists($pdfPath)) {
+                        unlink($pdfPath);
+                    }
+                $converter     =     new OfficeConverter($docPath, storage_path());
+                $converter->convertTo(str_replace('/', '_', $refNumber).".pdf");
+                        if(file_exists($docPath)){
+                            unlink($docPath);
+                        }
 
-                //                    $converter     =     new OfficeConverter($docPath, storage_path());
-                //                    $converter->convertTo(str_replace('/', '_', $refNumber).".pdf");
-                //
-                //                    if(file_exists($docPath)){
-                //                        unlink($docPath);
-                //                    }
+                $document = str_replace('/', '_', $refNumber).".pdf";
 
-                $currentCourse = StudentCourse::where('student_id', $student->student_id)->first();
-
-                $oldStudentCourse = new OldStudentCourse;
-                $oldStudentCourse->student_id  = $currentCourse->student_id;
-                $oldStudentCourse->student_number  = $currentCourse->student_number;
-                $oldStudentCourse->reference_number  = $currentCourse->reference_number;
-                $oldStudentCourse->student_type  = $currentCourse->student_type;
-                $oldStudentCourse->course_id  = $currentCourse->course_id;
-                $oldStudentCourse->department_id  = $currentCourse->department_id;
-                $oldStudentCourse->intake_id  = $currentCourse->intake_id;
-                $oldStudentCourse->current_class  = $currentCourse->current_class;
-                $oldStudentCourse->entry_class  = $currentCourse->entry_class;
-                $oldStudentCourse->status  = 10;
-                $oldStudentCourse->save();
-
-                $invoices  =  StudentInvoice::where('reg_number', $currentCourse->student_number)->get();
-
-                $deposits  =  StudentDeposit::where('reg_number', $currentCourse->student_number)->get();
-
-                DB::beginTransaction();
-
-                try {
-                    foreach ($invoices as $invoice) {
-                        $invoiceId = new CustomIds();
-                        $newDeposit  =  new StudentDeposit;
-                        $newDeposit->invoice_id = $invoiceId->generateId();
-                        $newDeposit->reg_number  =  $invoice->reg_number;
-                        $newDeposit->deposit = $invoice->amount;
-                        $newDeposit->description = $invoice->description;
-                        $newDeposit->invoice_number = $invoice->invoice_number;
-                        $newDeposit->save();
+                StudentCourse::where('student_id', $newStudent->student_id)->delete();
+                $studentLogin = StudentLogin::where('student_id', $newStudent->student_id);
+                    if ($studentLogin->exists()) {
+                        $studentLogin->delete();
                     }
 
-                    foreach ($deposits as $deposit) {
-                        $newInvoice  =  new StudentInvoice;
-                        $newInvoice->student_id  =  $student->student_id;
-                        $newInvoice->reg_number  =  $deposit->reg_number;
-                        $newInvoice->invoice_number = $deposit->invoice_number;
-                        $newInvoice->stage = '1.1';
-                        $newInvoice->amount = $deposit->deposit;
-                        $newInvoice->description = $deposit->description;
-                        $newInvoice->save();
-                    }
-
-                    foreach ($deposits as $invoice) {
-                        $newDeposit = new StudentDeposit;
-                        $newDeposit->reg_number = $regNumber;
-                        $newDeposit->deposit = $invoice->deposit;
-                        $newDeposit->description = $invoice->description;
-                        $newDeposit->invoice_number = $invoice->invoice_number;
-                        $newDeposit->save();
-                    }
-
-                    foreach ($invoices as $deposit) {
-                        $newInvoice  =  new StudentInvoice;
-                        $newInvoice->student_id  =  $deposit->student_id;
-                        $newInvoice->reg_number  =  $regNumber;
-                        $newInvoice->invoice_number = $deposit->invoice_number;
-                        $newInvoice->stage = '1.1';
-                        $newInvoice->amount = $deposit->amount;
-                        $newInvoice->description = $deposit->description;
-                        $newInvoice->save();
-                    }
-                    DB::commit();
-                } catch (ModelNotFoundException $e) {
-                    // Model not found, handle the exception (e.g., log or display a message)
-                    // ...
-
-                    // Roll back the transaction
-                    DB::rollBack();
-                } catch (\Exception $e) {
-                    // An error occurred, handle the exception (e.g., log or display a message)
-                    // ...
-
-                    // Roll back the transaction
-                    DB::rollBack();
-                }
-
-                $class = Classes::where('class_id', $approval->class_id)->first();
+                $studID = new CustomIds();
                 $newStudCourse = new StudentCourse;
-                $newStudCourse->student_id = $student->student_id;
+                $newStudCourse->student_id = $studID->generateId();
+                $newStudCourse->application_id = $newStudent->application_id;
                 $newStudCourse->student_number = $regNumber;
-                $newStudCourse->reference_number = $refNumber;
                 $newStudCourse->student_type = 2;
-                $newStudCourse->department_id = $approval->department_id;
-                $newStudCourse->course_id = $approval->course_id;
+                $newStudCourse->course_id = $newStudent->course_id;
                 $newStudCourse->intake_id = $intake->intake_id;
-                $newStudCourse->current_class = strtoupper($class->name);
-                $newStudCourse->entry_class = strtoupper($class->name);
+                $newStudCourse->current_class = strtoupper($newStudent->name);
+                $newStudCourse->entry_class = strtoupper($newStudent->name);
+                $newStudCourse->campus_id = $campus->campus_id;
                 $newStudCourse->status = 1;
                 $newStudCourse->save();
 
                 $newStudLogin = new StudentLogin;
-                $newStudLogin->student_id = $student->student_id;
+                $newStudLogin->student_id = $newStudCourse->student_id;
                 $newStudLogin->username = $regNumber;
-                $newStudLogin->password = Hash::make(StudentInfo::where('student_id', $student->student_id)->first()->id_number);
+                $newStudLogin->password = Hash::make($newStudent->identification);
                 $newStudLogin->save();
 
-                Mail::to($student->email)->send(new CourseTransferMails($student, $approval, $regNumber));
-
-                $studentNumber = $student->student_number;
-                StudentLogin::where('username', $studentNumber)->delete();
-                StudentCourse::where('student_number', $studentNumber)->delete();
+                Mail::to($newStudent->email)->send(new CourseTransferMails($newStudent, $regNumber, $document));
 
                 $nominalId = new CustomIds();
-                $registration = [
-                    'nominal_id' => $nominalId->generateId(),
-                    'student_id' => $student->student_id,
-                    'reg_number' => $regNumber,
-                    'year_study' => 1,
-                    'semester_study' => 1,
-                    'academic_year' =>  Carbon::parse($intake->academicYear->year_start)->format('Y') . '/' . Carbon::parse($intake->academicYear->year_end)->format('Y'),
-                    'academic_semester' => strtoupper(Carbon::parse($intake->intake_from)->format('MY')),
-                    'pattern_id' => 1,
-                    'class_code' => $newStudCourse->current_class,
-                    'registration' => 1,
-                    'activation' => 1
-                ];
+                $registration = ['nominal_id' => $nominalId->generateId(), 'student_id' => $newStudCourse->student_id, 'year_study' => 1,
+                    'semester_study' => 1, 'intake_id' => $intake->intake_id, 'pattern_id' => 1, 'class_code' => $newStudCourse->current_class,
+                    'registration' => 1, 'activation' => 1];
+
                 Nominalroll::create($registration);
-                CourseTransferApproval::where('course_transfer_id', $approval->course_transfer_id)
-                    ->update([
-                        'registrar_status'  =>  1,
-                        'status' => 1
-                    ]);
+                foreach ($syllabus as $unit){
+                    $examID = new CustomIds();
+                    $marks[] = ['exam_id' => $examID->generateId(), 'student_id' => $newStudCourse->student_id, 'class_code' => $newStudent->name, 'unit_code' => $unit->unit_code, 'stage' => 1, 'semester' => 1, 'intake_id' => $newStudent->intake_id, 'attempt' => '1.1'];
+                }
 
-                CourseTransfer::where('course_transfer_id', $approval->course_transfer_id)
-                    ->update([
-                        'status' => 1
-                    ]);
+                foreach ($marks as $mark){ ExamMarks::create($mark); }
+
+                $student = [
+                    'student_number' => $regNumber,
+                    'full_name' => $newStudent->first_name.' '.$newStudent->middle_name.' '.$newStudent->surname,
+                    'class_code' => $newStudent->name,
+                    'group_code' => 'KUCCPS',
+                    'course_code' => $newStudent->course_code
+                ];
+
+                $this->appApi->createStudent($student);
+
+                foreach ($fees as $fee){
+                    $particular [] = [
+                        'votehead_id' => $fee->vote_id,
+                        'votehead_name' => $fee->semVotehead->vote_name,
+                        'quantity'  => '1',
+                        'unit_price' => $fee->amount
+                    ];
+                }
+
+                $invoice = [
+                    'batch_description' => 'New Semester Invoices',
+                    'Invoices' => [
+                        ['student_number' => $regNumber,
+                            'invoice_description' => "NEW STUDENT INVOICE",
+                            'InvoiceItems' => $particular,
+                        ]
+                    ]
+                ];
+
+                $this->appApi->invoiceStudent($invoice);
+
+                CourseTransferApproval::where('course_transfer_id', $approval->course_transfer_id)->update([ 'registrar_status'  =>  1, 'status' => 1, 'registrar_user_id' => \auth()->guard('user')->user()->user_id ]);
             } else {
-
                 $transfer = CourseTransfersView::where('course_transfer_id', $id)->first();
-
-                $oldStudent = StudentView::where('student_id', $transfer->student_id)->first();
-
-                Mail::to($oldStudent->email)->send(new CourseTransferRejectedMails($oldStudent));
-
-                CourseTransferApproval::where('course_transfer_id', $approval->course_transfer_id)
-                    ->update([
-                        'registrar_status'  =>  1,
-                        'status' => 1
-                    ]);
-
-                CourseTransfer::where('course_transfer_id', $approval->course_transfer_id)
-                    ->update([
-                        'status' => 3
-                    ]);
+                $student = CourseTransfersView::where('student_id', $transfer->student_id)->first();
+                Mail::to($student->email)->send(new CourseTransferRejectedMails($student));
+                CourseTransferApproval::where('course_transfer_id', $approval->course_transfer_id)->update([ 'registrar_status'  =>  1, 'status' => 2, 'registrar_user_id' => \auth()->guard('user')->user()->user_id ]);
             }
         }
 
         return redirect()->back()->with('success', 'Course Transfer Letters Generated');
     }
 
-    public function transfer($id)
-    {
-        $transfers  =  CourseTransfersView::where('intake_id', $id)
-            ->where('dean_status', '!=', null)
-            ->get();
+    public function transfer($id){
+        $transfers  =  CourseTransfersView::where('intake_id', $id)->where('dean_status', '!=', null)->get();
         return view('registrar::transfers.index')->with(['transfer' => $transfers, 'intake' => $id]);
     }
 
-    public function yearly()
-    {
-        $data = CourseTransfer::get()->groupBy('intake_id');
+    public function yearly(){
+        $data = CourseTransfersView::get()->groupBy('intake_id');
         return  view('registrar::transfers.yearlyTransfers')->with(['data' => $data]);
     }
 
-    public function requestedTransfers($id)
-    {
+    public function requestedTransfers($id){
         $user = auth()->guard('user')->user();
         $by = $user->staffInfos->title . " " . $user->staffInfos->last_name . " " . $user->staffInfos->first_name . " " . $user->staffInfos->miidle_name;
         $role = $user->roles->first()->name;
         $school  =  "UNIVERSITY INTER/INTRA FACULTY COURSE TRANSFERS";
         $dept = 'ACADEMIC AFFAIRS';
 
-        $transfers = DB::table('coursetransfersview')->where('intake_id', $id)
-            ->where('dean_status', '>=', 1)
-            ->get()
-            ->groupBy('course_id');
-
+        $transfers = CourseTransfersView::where('intake_id', $id)->where('dean_status', '>=', 1)->get()->groupBy('course_id');
         $courses = Courses::all();
         $domPdfPath = base_path('vendor/dompdf/dompdf');
         \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
         \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
 
         $center = ['bold' => true];
-        $table = new Table(array('unit' => TblWidth::TWIP));
+        $table = new Table(array('unit' => TblWidth::TWIP, 'align' => 'center'));
 
         foreach ($transfers as $course => $transfer) {
             foreach ($courses as $listed) {
@@ -849,22 +766,21 @@ class CoursesController extends Controller
 
             $headers = ['bold' => true, 'space' => ['before' => 2000, 'after' => 2000, 'rule' => 'exact']];
             $table->addRow(600);
-            $table->addCell(5000, ['gridSpan' => 9,])->addText($courseName . ' ' . '(' . $courseCode . ')', $headers, ['spaceAfter' => 300, 'spaceBefore' => 300]);
+            $table->addCell(10000, ['gridSpan' => 9,])->addText($courseName . ' ' . '(' . $courseCode . ')', $headers, ['spaceAfter' => 300, 'spaceBefore' => 300]);
             $table->addRow();
             $table->addCell(200, ['borderSize' => 1])->addText('#');
-            $table->addCell(2800, ['borderSize' => 1])->addText('Student Name/ Reg. Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
-            $table->addCell(1900, ['borderSize' => 1])->addText('Programme/ Course Admitted', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1900, ['borderSize' => 1])->addText('Programme/ Course Transferring', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1750, ['borderSize' => 1])->addText('Programme/ Course Cut-off Points', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1000, ['borderSize' => 1])->addText('Student Cut-off Points', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(2600, ['borderSize' => 1])->addText('COD Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1500, ['borderSize' => 1])->addText('Dean Remarks',  $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1750, ['borderSize' => 1])->addText('Deans Committee Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(2500, ['borderSize' => 1])->addText('Student Name/ Reg. Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+            $table->addCell(1850, ['borderSize' => 1])->addText('Course Admitted', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1850, ['borderSize' => 1])->addText('Course Transferring', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(2500, ['borderSize' => 1])->addText('Course Cut-off Points/Grade', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1500, ['borderSize' => 1])->addText('Student Points/Grade', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(2500, ['borderSize' => 1])->addText('COD Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(2500, ['borderSize' => 1])->addText('Dean Remarks',  $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(2500, ['borderSize' => 1])->addText('Deans Committee Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
 
             foreach ($transfer as $key => $list) {
-                $name = $list->student_number . "<w:br/>\n" . $list->sname . ' ' . $list->fname . ' ' . $list->mname;
-                $student_id = DB::table('coursetransfersview')->where('student_id', $list->student_id)
-                    ->first()->student_id;
+                $name = $list->student_number . "<w:br/>\n" . $list->surname . ' ' . $list->first_name . ' ' . $list->middle_name;
+                $student_id = CourseTransfersView::where('student_id', $list->student_id)->first()->student_id;
                 $student = StudentView::where('student_id', $student_id)->first();
                 if ($list->cod_status == null) {
                     $remarks = 'Missed Deadline';
@@ -875,14 +791,14 @@ class CoursesController extends Controller
                 }
                 $table->addRow();
                 $table->addCell(200, ['borderSize' => 1])->addText(++$key);
-                $table->addCell(2800, ['borderSize' => 1])->addText($name);
-                $table->addCell(1900, ['borderSize' => 1])->addText($student->course_code);
-                $table->addCell(1900, ['borderSize' => 1])->addText($list->course_code);
-                $table->addCell(1750, ['borderSize' => 1])->addText($list->class_points);
-                $table->addCell(1000, ['borderSize' => 1])->addText($list->student_points);
-                $table->addCell(2600, ['borderSize' => 1])->addText($remarks);
-                $table->addCell(1500, ['borderSize' => 1])->addText($deanRemark);
-                $table->addCell(1750, ['borderSize' => 1])->addText();
+                $table->addCell(2500, ['borderSize' => 1])->addText($name, ['name' => 'Book Antiqua', 'size' => 10]);
+                $table->addCell(1850, ['borderSize' => 1])->addText($list->StudentsTransferCourse->StudentsCourse->course_code, ['name' => 'Book Antiqua', 'size' => 10,'align' => 'center']);
+                $table->addCell(1850, ['borderSize' => 1])->addText($list->course_code, ['name' => 'Book Antiqua', 'size' => 10,'align' => 'center']);
+                $table->addCell(2500, ['borderSize' => 1])->addText(strtoupper($list->class_points), ['name' => 'Book Antiqua', 'size' => 11,'align' => 'center']);
+                $table->addCell(1500, ['borderSize' => 1])->addText($list->student_points, ['name' => 'Book Antiqua', 'size' => 10,'align' => 'center']);
+                $table->addCell(2500, ['borderSize' => 1])->addText($remarks, ['name' => 'Book Antiqua', 'size' => 10,'align' => 'center']);
+                $table->addCell(2500, ['borderSize' => 1])->addText($deanRemark, ['name' => 'Book Antiqua', 'size' => 10,'align' => 'center']);
+                $table->addCell(2500, ['borderSize' => 1])->addText();
             }
         }
 
@@ -897,16 +813,16 @@ class CoursesController extends Controller
             }
 
             $summary->addRow();
-            $summary->addCell(5000, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
-            $summary->addCell(1250, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
-            $summary->addCell(1250, ['borderSize' => 1])->addText($transfer->count());
+            $summary->addCell(8000, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
+            $summary->addCell(2500, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
+            $summary->addCell(2500, ['borderSize' => 1])->addText($transfer->count());
 
             $total += $transfer->count();
         }
         $summary->addRow();
-        $summary->addCell(6250, ['borderSize' => 1])->addText('Totals', ['bold' => true]);
-        $summary->addCell(1250, ['borderSize' => 1])->addText($transfers->count(), ['bold' => true]);
-        $summary->addCell(1250, ['borderSize' => 1])->addText($total, ['bold' => true]);
+        $summary->addCell(8000, ['borderSize' => 1])->addText('Totals', ['bold' => true]);
+        $summary->addCell(2500, ['borderSize' => 1])->addText($transfers->count(), ['bold' => true]);
+        $summary->addCell(2500, ['borderSize' => 1])->addText($total, ['bold' => true]);
 
         $my_template = new TemplateProcessor(storage_path('course_transfers.docx'));
 
@@ -1332,20 +1248,17 @@ class CoursesController extends Controller
         return redirect()->back()->with('success', 'Good');
     }
 
-    public function importExportclusterWeights()
-    {
-        $clusters        =        ClusterWeights::all();
+    public function importExportclusterWeights(){
+        $clusters = ClusterWeights::all();
         return view('registrar::offer.clusterweights')->with('clusters', $clusters);
     }
 
-    public function importclusterWeights(Request $request)
-    {
-        $vz        =          $request->validate([
-            'excel_file'   =>    'required|mimes:xlsx,csv'
+    public function importclusterWeights(Request $request){
+        $request->validate([
+            'excel_file' => 'required|mimes:xlsx,csv'
         ]);
         $excel_file         =         $request->excel_file;
         Excel::import(new ClusterWeightsImport(), $excel_file);
-
         return back()->with('success', 'Data Imported Successfully');
     }
 
@@ -1397,6 +1310,7 @@ class CoursesController extends Controller
     public function accepted(){
         $kuccps = KuccpsApplicant::where('status', 0)->get();
         foreach ($kuccps as $applicant) {
+//            return ;
             $course = Courses::where('course_code', $applicant->course_code)->first();
             $application = AvailableCourse::where('intake_id', $applicant->intake_id)->where('course_id', $course->course_id)->first();
             $regNumber = Application::where('course_id', $course->course_id)->where('intake_id', $applicant->intake_id)->where('student_type', 2)
@@ -1446,7 +1360,7 @@ class CoursesController extends Controller
                 'qualification' => $applicant->qualification,
                 'start_date' => $applicant->start_date,
                 'exit_date' => $applicant->exit_date,
-                'institution' => $applicant->inistitution
+                'institution' => $applicant->institution
             ]);
 
             $app = new CustomIds();
@@ -1480,7 +1394,7 @@ class CoursesController extends Controller
                 'status' => 1,
             ]);
 
-            $domPdfPath     =    base_path('vendor/dompdf/dompdf');
+            $domPdfPath = base_path('vendor/dompdf/dompdf');
             \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
             \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
 
@@ -1518,7 +1432,8 @@ class CoursesController extends Controller
 
             KuccpsApplicant::where('applicant_id', $applicant->applicant_id)->update(['status' => 1]);
             if ($applicant->email != null) {
-                Mail::to($applicant->email)->send(new KuccpsMails($applicant));
+                sleep(3);
+//                Mail::to($applicant->email)->send(new KuccpsMails($applicant));
             }
         }
         return redirect()->back()->with('success', 'Admission letters generated and emails send');
@@ -1579,7 +1494,7 @@ class CoursesController extends Controller
             'excel_file' => 'required|mimes:xlsx'
         ]);
 
-        $excel_file         =         $request->excel_file;
+        $excel_file = $request->excel_file;
         Excel::import(new UnitImport(), $excel_file);
         return back()->with('success', 'Data Imported Successfully');
     }
@@ -1819,8 +1734,8 @@ class CoursesController extends Controller
             AvailableCourse::where('intake_id', $id)->update(['status' => 1]);
         } else {
 
-            $data             =       Intake::where('intake_id', $id)->first();
-            $data->status     =       $request->input('status');
+            $data = Intake::where('intake_id', $id)->first();
+            $data->status = $request->input('status');
             $data->save();
 
             AvailableCourse::where('intake_id', $id)->update(['status' => 0]);
@@ -2240,7 +2155,7 @@ class CoursesController extends Controller
     }
 
     public function admissions(){
-        $admission = AdmissionsView::where('medical_status', 1)->where('status', NULL)->get();
+        $admission = AdmissionsView::where('medical_status', 1)->where('status', NULL)->orderBy('registrar_status', 'asc')->get();
         return view('registrar::admissions.index')->with('admission', $admission);
     }
 
@@ -2290,42 +2205,38 @@ class CoursesController extends Controller
         $approval->registrar_user_id = \auth()->guard('user')->user()->user_id;
         $approval->registrar_comments = 'Student Admitted';
         $approval->save();
+
+//        Mail::to($admission->email)->send()
         return redirect()->back()->with('success', 'New student admission completed successfully');
     }
 
-    public function rejectAdmission(Request $request, $id)
-    {
+    public function rejectAdmission(Request $request, $id){
         AdmissionApproval::where('id', $id)->update(['registrar_status' => 2, 'registrar_comments' => $request->comment]);
         return redirect()->route('medical.admissions')->with('error', 'Admission request rejected');
     }
 
-    public function studentID($id)
-    {
-        $studentID          =          AdmissionApproval::find($id);
+    public function studentID($id){
+        $studentID = AdmissionApproval::find($id);
         return view('registrar::admissions.studentID')->with('app', $studentID);
     }
 
-    public function storeStudentID(Request $request, $id)
-    {
+    public function storeStudentID(Request $request, $id){
         $request->validate([
-            'image'             =>          'required'
+            'image' => 'required'
         ]);
-        $studID =           AdmissionApproval::find($id);
-        $img                   =           $request->image;
-        $folderPath            =           "studentID/";
-        $image_parts           =           explode(";base64,", $img);
-        $image_type_aux        =           explode("image/", $image_parts[0]);
-        $image_type            =           $image_type_aux[1];
-        $image_base64          =           base64_decode($image_parts[1]);
-        $fileName              =           strtoupper(str_replace('/', '', $studID->appApprovals->reg_number)) . '.png';
-        $file                  =           $folderPath . $fileName;
+        $studID = AdmissionApproval::find($id);
+        $img = $request->image;
+        $folderPath = "studentID/";
+        $image_parts = explode(";base64,", $img);
+        $image_type_aux = explode("image/", $image_parts[0]);
+        $image_type = $image_type_aux[1];
+        $image_base64 = base64_decode($image_parts[1]);
+        $fileName = strtoupper(str_replace('/', '', $studID->appApprovals->reg_number)) . '.png';
+        $file = $folderPath . $fileName;
 
         Storage::put($file, $image_base64);
 
         AdmissionApproval::where('id', $id)->update(['id_status' => 1]);
-
-        Student::where('reg_number', $studID->appApprovals->reg_number)->update(['ID_photo' => $fileName]);
-
         return redirect()->route('courses.admissions')->with('success', 'ID photo uploaded successfully');
     }
 

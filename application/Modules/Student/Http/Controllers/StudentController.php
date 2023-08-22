@@ -37,16 +37,13 @@ use Modules\Registrar\Entities\UnitProgramms;
 use Modules\Student\Entities\AcademicLeave;
 use Modules\Student\Entities\AcademicLeaveApproval;
 use Modules\Student\Entities\CourseTransfer;
+use Modules\Student\Entities\CourseTransfersView;
 use Modules\Student\Entities\DeferredClass;
 use Modules\Student\Entities\ExamResults;
 use Modules\Student\Entities\OldStudentCourse;
 use Modules\Student\Entities\Readmission;
-use Modules\Student\Entities\ReadmissionApproval;
 use Modules\Student\Entities\StudentCourse;
 use Modules\Student\Entities\STUDENTCOURSEVIEW;
-use Modules\Student\Entities\StudentDeposit;
-use Modules\Student\Entities\StudentInfo;
-use Modules\Student\Entities\StudentLogin;
 use Modules\Student\Entities\StudentView;
 use NcJoes\OfficeConverter\OfficeConverter;
 use PhpOffice\PhpWord\Element\Table;
@@ -84,7 +81,7 @@ class StudentController extends Controller
     }
 
     public function courseTransfers(){
-        $transfers = [];
+        $transfers = CourseTransfersView::where('student_id', \auth()->guard('student')->user()->student_id)->get();
         return view('student::courses.transfers')->with(['transfers' => $transfers]);
     }
 
@@ -121,13 +118,11 @@ class StudentController extends Controller
                 ->select('class_id','name')
                 ->latest()
                 ->first();
-           $cluster = [$classes->class_id, $classes->name, $group->courseRequirements->subject1, $group->courseRequirements->subject2, $group->courseRequirements->subject3, $group->courseRequirements->subject4, $group->courseRequirements->course_requirements, $group->level];
+           $cluster = [$classes->class_id, $classes->name, $group->courseRequirements->subject1, $group->courseRequirements->subject2, $group->courseRequirements->subject3, $group->courseRequirements->subject4, $group->courseRequirements->course_requirements, $group->level_id];
             return response()->json($cluster);
         }else{
-            $points = ClusterWeights::where('student_name', $student->sname.' '.$student->fname.' '.$student->mname)
-                ->select($group->CourseClusters->cluster)
-                ->first();
-            $classes = Classes::where('course_id', $request->id)
+            $points = ClusterWeights::where('applicant_id', \auth()->guard('student')->user()->enrolledCourse->StudentApplication->applicant_id)->first();
+            $classes = DB::table('coursetransferclasses')->where('course_id', $request->id)
                 ->where('attendance_id', 'J-FT')
                 ->select('class_id','name', 'points')
                 ->latest()
@@ -146,23 +141,16 @@ class StudentController extends Controller
         ]);
 
         if (auth()->guard('student')->user()->enrolledCourse->course_id == $request->course){
-
-            return redirect()->back()->with('error', 'You are already admitted to this course');
-
+            return redirect()->back()->with('info', 'You are already admitted to this course');
         }else{
-            if (CourseTransfer::where('course_id', $request->course)->where('student_id', auth()->guard('student')->user()->student_id)->first()){
-
+            if (CourseTransfer::where('class_id', $request->class)->where('student_id', auth()->guard('student')->user()->student_id)->first()){
                 return redirect()->route('student.coursetransfers')->with('warning', 'You have already requested course transfer for this course');
-
             }else{
                 $transferID = new CustomIds();
                 $transfer = new CourseTransfer;
                 $transfer->course_transfer_id = $transferID->generateId();
                 $transfer->student_id = auth()->guard('student')->user()->student_id;
-                $transfer->department_id = $request->dept;
-                $transfer->course_id = $request->course;
                 $transfer->class_id = $request->class;
-                $transfer->intake_id = $request->intake;
                 if ($request->mingrade == null){
                     $transfer->class_points = $request->points;
                     $transfer->student_points = $request->mypoints;
@@ -172,17 +160,24 @@ class StudentController extends Controller
                 }
                 $transfer->save();
 
-                $invoiceID = new CustomIds();
-                $invoice = new StudentInvoice;
-                $invoice->invoice_id = $invoiceID->generateId();
-                $invoice->student_id = auth()->guard('student')->user()->student_id;
-                $invoice->reg_number = auth()->guard('student')->user()->enrolledCourse->student_number;
-                $invoice->invoice_number = 'INV'.time();
-                $invoice->description = 'New Student Inter/Intra Faculty Course Transfer Fee';
-                $invoice->amount = 500;
-                $invoice->stage = 1;
-                $invoice->save();
+                $particular [] = [
+                    'votehead_id' => 'IT689',
+                    'votehead_name' => 'Change of Course',
+                    'quantity'  => '1',
+                    'unit_price' => 500
+                ];
 
+                $invoice = [
+                    'batch_description' => 'New Student Inter/Intra Faculty Course Transfer Fee',
+                    'Invoices' => [
+                        ['student_number' => \auth()->guard('student')->user()->enrolledCourse->student_number,
+                            'invoice_description' => "New Student Inter/Intra Faculty Course Transfer Fee",
+                            'InvoiceItems' => $particular,
+                        ]
+                    ]
+                ];
+
+                $this->appApi->invoiceStudent($invoice);
                 return redirect()->route('student.coursetransfers')->with('success', 'Course transfer request created successfully');
             }
         }
@@ -538,16 +533,16 @@ class StudentController extends Controller
                 $particular [] = [
                     'votehead_id' => $fee->vote_id,
                     'votehead_name' => $fee->semVotehead->vote_name,
-                    'quantity'  => ++$key,
+                    'quantity'  => '1',
                     'unit_price' => $fee->amount
                 ];
             }
 
             $invoice = [
-                'batch_description' => 'New Semester Invoices',
+                'batch_description' => 'SUBSEQUENT SEMESTER REGISTRATION',
                 'Invoices' => [
                     ['student_number' => $student->student_number,
-                        'invoice_description' => "NEW STUDENT INVOICE",
+                        'invoice_description' => "Semester Registration Invoice for Stage ".$request->yearstudy.'.'.$request->semesterstudy.' '.$intake->academic_year." Academic Year",
                         'InvoiceItems' => $particular,
                     ]
                 ]

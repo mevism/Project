@@ -33,7 +33,7 @@
                     </h6>
                 </div>
                 <nav class="flex-shrink-0 mt-3 mt-sm-0 ms-sm-3" aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-alt">
+                    <ol class="breadcrumb breadcrumb-alt text-uppercase">
                         <li class="breadcrumb-item">
                             <a class="link-fx" href="javascript:void(0)">Department</a>
                         </li>
@@ -56,9 +56,8 @@
                     <table id="example" class="table table-bordered table-striped table-sm fs-sm">
                         <thead>
                             <th>#</th>
-                            <th>Reg. Number</th>
+                            <th>STUDENT Number</th>
                             <th>Student Name</th>
-                            <th>Current Course</th>
                             <th>Transfer To</th>
                             <th>Course Pts/Grade</th>
                             <th>Student Pts/Grade</th>
@@ -68,22 +67,21 @@
                             @foreach ($transfers as $key => $transfer)
                                 <tr>
                                     <td> {{ ++$key }} </td>
-                                    <td> {{ $transfer->studentTransfer->enrolledCourse->student_number }}</td>
+                                    <td> {{ $transfer->student_number }}</td>
                                     <td class="text-uppercase">
-                                    {{ $transfer->studentTransfer->loggedStudent->sname.' '.$transfer->studentTransfer->loggedStudent->fname.' '.$transfer->studentTransfer->loggedStudent->mname }}
+                                    {{ $transfer->surname.' '.$transfer->first_name.' '.$transfer->middle_name }}
                                     </td>
-                                    <td> {{ $transfer->studentTransfer->enrolledCourse->StudentSCourse->course_code }} </td>
-                                    <td> {{ $transfer->courseTransfer->course_code }} </td>
+                                    <td> {{ $transfer->course_name }} </td>
                                     <td> {{ $transfer->class_points }} </td>
                                     <td> {{ $transfer->student_points }} </td>
                                     <td nowrap="">
                                     <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewTransferRequest', $transfer->course_transfer_id) }}">View </a>
-                                        @if($transfer->approvedTransfer != null)
-                                            @if($transfer->approvedTransfer->cod_status == 1)
-                                             <i class="fa fa-check text-success m-2"></i>
-                                            @else
+                                        @if($transfer->cod_status == 1)
+                                            <i class="fa fa-check text-success m-2"></i>
+                                        @elseif($transfer->cod_status == 2)
                                             <i class="fa fa-times text-danger m-2"></i>
-                                            @endif
+                                        @else
+                                            <i class="fa fa-spinner text-primary"></i>
                                         @endif
                                     </td>
                                 </tr>

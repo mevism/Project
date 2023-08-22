@@ -11,6 +11,7 @@ use Modules\Application\Entities\ApplicationApproval;
 use Modules\COD\Entities\AcademicLeavesView;
 use Modules\COD\Entities\AdmissionsView;
 use Modules\COD\Entities\ApplicationsView;
+use Modules\COD\Entities\ClassPoints;
 use Modules\COD\Entities\CourseOnOfferView;
 use Modules\COD\Entities\CourseOptions;
 use Modules\COD\Entities\CourseSyllabus;
@@ -24,6 +25,7 @@ use Modules\Lecturer\Entities\QualificationRemarks;
 use Modules\Lecturer\Entities\TeachingArea;
 use Modules\Lecturer\Entities\TeachingAreaRemarks;
 use Modules\Registrar\Entities\AcademicYear;
+use Modules\Student\Entities\CourseTransfersView;
 use Modules\Student\Entities\StudentCourse;
 use Modules\Student\Entities\STUDENTCOURSEVIEW;
 use Modules\Student\Entities\StudentView;
@@ -794,8 +796,8 @@ class CODController extends Controller
     }
 
     public function setupTransfers(){
-        $intakes = [];
-
+        $courseIDs = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->where('level_id', 3)->pluck('course_id');
+        $intakes =  DB::table('coursetransferclasses')->whereIn('course_id', $courseIDs)->latest()->get();
         return view('cod::transfers.intakes')->with(['intakes' => $intakes]);
     }
 
@@ -803,13 +805,30 @@ class CODController extends Controller
 //        $today = Carbon::now();
         $today = '2023-09-09';
 
+        $courseIDs = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->where('level_id', 3)->pluck('course_id');
         $intake = Intake::where('intake_from', '<=', $today)->where('intake_to', '>=', $today)->first();
-        $classes = Classes::where('intake_id', $intake->intake_id)->where('attendance_id', 'J-FT')->orderBy('name', 'asc')->get();
+        $classes = Classes::whereIn('course_id', $courseIDs)->where('intake_id', $intake->intake_id)->where('attendance_id', 'J-FT')->orderBy('name', 'asc')->get();
         return view('cod::transfers.intakeClasses')->with(['classes' => $classes, 'intake' => $intake]);
     }
 
+    public function storeCourseTransferSetup(Request $request){
+        $request->validate([
+           'points.*' => 'required|numeric'
+        ]);
+
+        foreach ($request->points as $class => $point){
+            if (ClassPoints::where('class_code', $class)->exists()){
+                ClassPoints::where('class_code', $class)->update(['points' => $point]);
+            }else{
+                ClassPoints::create(['class_code' => $class, 'points' => $point]);
+            }
+        }
+
+        return redirect()->route('department.courseTransferSetup')->with('success', 'Class cutoff points updated successfully');
+    }
+
     public function transferRequests(){
-        $transfers = CourseTransfer::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
+        $transfers = CourseTransfersView::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
             ->latest()
             ->get()
             ->groupBy('intake_id');
@@ -818,41 +837,37 @@ class CODController extends Controller
     }
 
     public function viewYearRequests($id){
-
-     $transfers = CourseTransfer::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-            ->where('intake_id', $id)
-            ->latest()
-            ->get();
-
+     $transfers = CourseTransfersView::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->where('intake_id', $id)->latest()->get();
         return view('cod::transfers.annualTransfers')->with(['transfers' => $transfers, 'intake' => $id]);
     }
 
     public function viewTransferRequest($id){
-        $transfer = CourseTransfer::where('course_transfer_id', $id)->first();
+        $transfer = CourseTransfersView::where('course_transfer_id', $id)->first();
         return view('cod::transfers.viewRequest')->with(['transfer' => $transfer]);
     }
 
     public function viewUploadedDocument($id){
-        $course = CourseTransfer::where('course_transfer_id', $id)->first();
-        $document = ApplicationApproval::where('reg_number', $course->studentTransfer->enrolledCourse->student_number)->first()->ApplicationsDocments;
-
+        $course = CourseTransfersView::where('course_transfer_id', $id)->first();
+        $document = AdmissionDocument::where('application_id', $course->application_id)->first();
         return response()->file('Admissions/Certificates/' . $document->certificates);
     }
 
     public function acceptTransferRequest($id){
-        $intake = CourseTransfer::where('course_transfer_id', $id)->first()->intake_id;
+        $intake = CourseTransfersView::where('course_transfer_id', $id)->first()->intake_id;
         $class = CourseTransfer::where('course_transfer_id', $id)->first()->classTransfer->name;
 
         if (CourseTransferApproval::where('course_transfer_id', $id)->exists()) {
             CourseTransferApproval::where('course_transfer_id', $id)->update([
                 'cod_status' => 1,
-                'cod_remarks' => 'Student to be admitted to ' . $class . ' class.'
+                'cod_remarks' => 'Student be admitted to ' . $class . ' class.',
+                'cod_user_id' => auth()->guard('user')->user()->user_id
             ]);
         } else {
             $approval = new CourseTransferApproval;
             $approval->course_transfer_id = $id;
             $approval->cod_status = 1;
-            $approval->cod_remarks = 'Student to be admitted to ' . $class . ' class.';
+            $approval->cod_remarks = 'Student be admitted to ' . $class . ' class.';
+            $approval->cod_user_id = auth()->guard('user')->user()->user_id;
             $approval->save();
         }
 
@@ -860,12 +875,12 @@ class CODController extends Controller
     }
 
     public function declineTransferRequest(Request $request, $id){
-        $intake = CourseTransfer::where('course_transfer_id', $id)->first()->intake_id;
-
+        $intake = CourseTransfersView::where('course_transfer_id', $id)->first()->intake_id;
         if (CourseTransferApproval::where('course_transfer_id', $id)->exists()) {
            CourseTransferApproval::where('course_transfer_id', $id)->update([
                'cod_status' => 2,
-               'cod_remarks' => $request->remarks
+               'cod_remarks' => $request->remarks,
+               'cod_user_id' => auth()->guard('user')->user()->user_id
            ]);
 
         } else {
@@ -873,6 +888,7 @@ class CODController extends Controller
             $approval->course_transfer_id = $id;
             $approval->cod_status = 2;
             $approval->cod_remarks = $request->remarks;
+            $approval->cod_user_id = auth()->guard('user')->user()->user_id;
             $approval->save();
         }
 
@@ -880,31 +896,21 @@ class CODController extends Controller
     }
 
     public function requestedTransfers($id){
-
         $user = auth()->guard('user')->user();
         $by = $user->staffInfos->title." ".$user->staffInfos->last_name." ".$user->staffInfos->first_name." ".$user->staffInfos->miidle_name;
         $dept = DB::table('staffview')->where('user_id', $user->user_id)->first()->name;
         $role = $user->roles->first()->name;
 
-        $transfers = CourseTransfer::where('department_id', $user->employmentDepartment->first()->department_id)
-//            ->where('status', '>=', 1)
-            ->where('intake_id', $id)
-            ->latest()
-
-            ->get()
-            ->groupBy('course_id');
-
-        $school = $user->employmentDepartment->first()->schools->first()->name;
-
-        $courses = Courses::all();
-
+        $transfers = CourseTransfersView::where('department_id', $user->employmentDepartment->first()->department_id)->where('intake_id', $id)->latest()->get()->groupBy('course_id');
+       $school = $user->employmentDepartment->first()->schools->first()->name;
+       $courses = Courses::all();
         $domPdfPath = base_path('vendor/dompdf/dompdf');
         \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
         \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
 
         $center = ['bold' => true];
 
-        $table = new Table(array('unit' => TblWidth::TWIP));
+        $table = new Table(['unit' => TblWidth::TWIP, 'align' => 'center']);
         foreach ($transfers as $course => $transfer) {
             foreach ($courses as $listed) {
                 if ($listed->course_id == $course) {
@@ -916,35 +922,35 @@ class CODController extends Controller
             $headers = ['bold' => true, 'space' => ['before' => 2000, 'after' => 2000, 'rule' => 'exact']];
 
             $table->addRow(600);
-            $table->addCell(5000, ['gridSpan' => 9,])->addText($courseName . ' ' . '(' . $courseCode . ')', $headers, ['spaceAfter' => 300, 'spaceBefore' => 300]);
+            $table->addCell(10000, ['gridSpan' => 9,])->addText($courseName . ' ' . '(' . $courseCode . ')', $headers, ['spaceAfter' => 300, 'spaceBefore' => 300]);
             $table->addRow();
-            $table->addCell(400, ['borderSize' => 1])->addText('#');
-            $table->addCell(2700, ['borderSize' => 1])->addText('Student Name/ Reg. Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
-            $table->addCell(1900, ['borderSize' => 1])->addText('Programme/ Course Admitted', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1900, ['borderSize' => 1])->addText('Programme/ Course Transferring', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1750, ['borderSize' => 1])->addText('Programme/ Course Cut-off Points', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1000, ['borderSize' => 1])->addText('Student Cut-off Points', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(2600, ['borderSize' => 1])->addText('COD Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1500, ['borderSize' => 1])->addText('Dean Remarks',  $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1750, ['borderSize' => 1])->addText('Deans Committee Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(200, ['borderSize' => 1])->addText('#');
+            $table->addCell(2500, ['borderSize' => 1])->addText('Student Name/ Reg. Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+            $table->addCell(1850, ['borderSize' => 1])->addText('Course Admitted', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1850, ['borderSize' => 1])->addText('Course Transferring to', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(2200, ['borderSize' => 1])->addText('Course Cut-off Points/Grade', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1500, ['borderSize' => 1])->addText('Student Points/Grade', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(2500, ['borderSize' => 1])->addText('COD Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(2500, ['borderSize' => 1])->addText('Dean Remarks',  $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(2500, ['borderSize' => 1])->addText('Deans Committee Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
 
             foreach ($transfer as $key => $list) {
-                $name = $list->studentTransfer->enrolledCourse->student_number . "<w:br/>\n" . $list->studentTransfer->loggedStudent->sname . ' ' . $list->studentTransfer->loggedStudent->fname . ' ' . $list->studentTransfer->loggedStudent->mname;
-                if ($list->approvedTransfer == null) {
+                $name = $list->student_number ."<w:br/>\n". $list->surname . ' ' . $list->first_name . ' ' . $list->middle_name;
+                if ($list->cod_status == null) {
                     $remarks = 'Missed Deadline';
                 } else {
-                    $remarks = $list->approvedTransfer->cod_remarks;
+                    $remarks = $list->cod_remarks;
                 }
                 $table->addRow();
-                $table->addCell(400, ['borderSize' => 1])->addText(++$key);
-                $table->addCell(2700, ['borderSize' => 1])->addText($name);
-                $table->addCell(1900, ['borderSize' => 1])->addText($list->studentTransfer->enrolledCourse->StudentsCourse->course_code);
-                $table->addCell(1900, ['borderSize' => 1])->addText($list->courseTransfer->course_code);
-                $table->addCell(1750, ['borderSize' => 1])->addText($list->class_points);
-                $table->addCell(1000, ['borderSize' => 1])->addText($list->student_points);
-                $table->addCell(2600, ['borderSize' => 1])->addText($remarks);
-                $table->addCell(1500, ['borderSize' => 1])->addText();
-                $table->addCell(1750, ['borderSize' => 1])->addText();
+                $table->addCell(200, ['borderSize' => 1])->addText(++$key);
+                $table->addCell(2500, ['borderSize' => 1])->addText($name, ['name' => 'Book Antiqua', 'size' => 10]);
+                $table->addCell(1850, ['borderSize' => 1])->addText($list->StudentsTransferCourse->StudentsCourse->course_code, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
+                $table->addCell(1850, ['borderSize' => 1])->addText($list->course_code, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
+                $table->addCell(2500, ['borderSize' => 1])->addText(strtoupper($list->class_points), ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
+                $table->addCell(1500, ['borderSize' => 1])->addText(strtoupper($list->student_points), ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
+                $table->addCell(2500, ['borderSize' => 1])->addText($remarks, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
+                $table->addCell(2500, ['borderSize' => 1])->addText();
+                $table->addCell(2500, ['borderSize' => 1])->addText();
             }
         }
 
@@ -959,9 +965,9 @@ class CODController extends Controller
             }
 
             $summary->addRow();
-            $summary->addCell(5000, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
-            $summary->addCell(1250, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
-            $summary->addCell(1250, ['borderSize' => 1])->addText($transfer->count());
+            $summary->addCell(8000, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
+            $summary->addCell(2500, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
+            $summary->addCell(2500, ['borderSize' => 1])->addText($transfer->count());
 
             $total += $transfer->count();
         }

@@ -49,7 +49,7 @@
     <div class="block block-rounded">
         <div class="block-content block-content-full">
             <div class="d-flex justify-content-end ">
-                <a class="btn btn-sm btn-alt-primary m-2" href="{{ route('department.addCourseTransfer') }}"><i class="fa fa-plus-circle"></i> add transfer courses</a>
+                <a class="btn btn-sm btn-alt-primary m-2" href="{{ route('department.addCourseTransfer') }}"><i class="fa fa-plus-circle"></i> add/edit transfer courses</a>
             </div>
             <div class="row">
                 <div class="col-12">
@@ -57,7 +57,8 @@
                         <thead>
                         <th>#</th>
                         <th>INTAKE</th>
-                        <th>Total Request</th>
+                        <th>class</th>
+                        <th>CUTOFF POINTS</th>
                         <th>Action</th>
                         </thead>
                         <tbody>
@@ -65,12 +66,12 @@
                             <tr>
                                 <td> {{ $loop->iteration }} </td>
                                 <td class="text-uppercase">
-{{--                                    {{ \Carbon\Carbon::parse(\Modules\Registrar\Entities\Intake::where('intake_id', $intake)->first()->intake_from)->format('MY') }}--}}
+                                    {{ \Carbon\Carbon::parse(\Modules\Registrar\Entities\Intake::where('intake_id', $intake->intake_id)->first()->intake_from)->format('MY') }}
                                 </td>
-                                <td></td>
-{{--                                <td> {{ $transfer->count() }}</td>--}}
+                                <td> {{ $intake->name }} </td>
+                                <td> {{ $intake->points }}</td>
                                 <td>
-{{--                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.viewYearRequests', $intake) }}">view requests</a>--}}
+                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('department.addCourseTransfer') }}"> <i class="fa fa-pen-fancy"></i> edit </a>
                                 </td>
                             </tr>
                         @endforeach
