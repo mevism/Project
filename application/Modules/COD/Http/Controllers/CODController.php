@@ -1,7 +1,6 @@
 <?php
 
 namespace Modules\COD\Http\Controllers;
-
 use App\Models\User;
 use App\Service\CustomIds;
 use Auth;
@@ -79,17 +78,10 @@ use Modules\Student\Entities\AcademicLeaveApproval;
 use Modules\Student\Entities\CourseTransferApproval;
 use Yajra\DataTables\DataTables;
 
-class CODController extends Controller
-{
+class CODController extends Controller{
     public function applications() {
         $courses = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->pluck('course_id');
-        $applications = ApplicationsView::whereIn('course_id', $courses)
-                       ->where('dean_status', null)
-                       ->where('declaration', '!=', null)
-                       ->where('student_type', 1)
-                       ->latest()
-                       ->get();
-
+        $applications = ApplicationsView::whereIn('course_id', $courses)->where('dean_status', null)->where('declaration', '!=', null)->where('student_type', 1)->latest()->get();
         return view('cod::applications.index')->with('apps', $applications);
     }
 
@@ -147,14 +139,7 @@ class CODController extends Controller
     public function batch(){
         $courses = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
             ->pluck('course_id');
-        $applications = ApplicationsView::whereIn('course_id', $courses)
-            ->Where('cod_status', '>', 0)
-            ->where('dean_status', null)
-            ->orWhere('dean_status', 3)
-            ->where('cod_status', '!=', 3)
-            ->latest()
-            ->get();
-
+        $applications = ApplicationsView::whereIn('course_id', $courses)->Where('cod_status', '>', 0)->where('dean_status', null)->orWhere('dean_status', 3)->where('cod_status', '!=', 3)->latest()->get();
         return view('cod::applications.batch')->with('apps', $applications);
     }
 
@@ -180,10 +165,7 @@ class CODController extends Controller
 
     public function admissions(){
         $courses = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->pluck('course_id');
-        $applicant = AdmissionsView::whereIn('course_id', $courses)
-            ->where('medical_status', null)
-            ->latest()
-            ->get();
+        $applicant = AdmissionsView::whereIn('course_id', $courses)->where('medical_status', null)->latest()->get();
         return view('cod::admissions.index')->with('applicant', $applicant);
     }
 
@@ -216,8 +198,7 @@ class CODController extends Controller
     }
 
     public function courses(){
-         $courses = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-             ->get();
+         $courses = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->get();
         return view('cod::courses.index')->with('courses', $courses);
     }
 
@@ -268,12 +249,7 @@ class CODController extends Controller
     }
 
     public function allUnits(){
-        $units = Unit::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-                ->orWhere('type', 1)
-                ->orWhere('type', 2)
-                ->latest()
-                ->paginate(20);
-//        ->get();
+        $units = Unit::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->orWhere('type', 1)->orWhere('type', 2)->latest()->get();
         return view('cod::syllabus.index')->with(['units' => $units]);
     }
 
@@ -426,7 +402,6 @@ class CODController extends Controller
             $campuses = Campus::all();
             $intake = Intake::where('intake_id', $id)->first();
             $courses = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->latest()->get();
-
             return view('cod::intakes.addCourses')->with(['intake' => $intake, 'courses' => $courses, 'modes' => $modes, 'campuses' => $campuses]);
     }
 
@@ -505,39 +480,24 @@ class CODController extends Controller
     }
 
     public function viewDeptIntakeCourses($intake){
-
-       $courses = CourseOnOfferView::where('intake_id', $intake)
-           ->where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-           ->latest()
-           ->get();
-
+       $courses = CourseOnOfferView::where('intake_id', $intake)->where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->latest()->get();
         return view('cod::intakes.intakeCourses')->with(['courses' => $courses]);
     }
 
     public function deptClasses(){
         $intakes = Intake::all();
-        $classes = DB::table('classesview')
-                ->where('department_id',  auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-                ->latest()->get()->groupBy('intake_id');
+        $classes = DB::table('classesview')->where('department_id',  auth()->guard('user')->user()->employmentDepartment->first()->department_id)->latest()->get()->groupBy('intake_id');
             return view('cod::classes.index')->with(['intakes' => $intakes, 'classes' => $classes]);
-
     }
 
-    public function viewIntakeClasses($intake)
-    {
-
+    public function viewIntakeClasses($intake){
         $intakes = Intake::where('intake_id', $intake)->first();
-          $classes = DB::table('classesview')
-            ->where('department_id',  auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-            ->where('intake_id', $intake)
-            ->latest()->get();
-
+          $classes = DB::table('classesview')->where('department_id',  auth()->guard('user')->user()->employmentDepartment->first()->department_id)->where('intake_id', $intake)->latest()->get();
             return view('cod::classes.intakeClasses')->with(['intake' => $intakes, 'classes' => $classes]);
     }
 
     public function syllabi(){
-        $courses = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-            ->get();
+        $courses = Courses::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->get();
         return view('cod::syllabus.syllabi')->with('courses', $courses);
     }
 
@@ -571,11 +531,7 @@ class CODController extends Controller
     public function completeSyllabus($course, $version){
        $course = Courses::where('course_id', $course)->first();
        $versions = SyllabusVersion::where('syllabus_id', $version)->first();
-       $stages = CourseSyllabus::where('course_code', $course->course_code)
-          ->where('version', $versions->syllabus_name)
-          ->orderBy('stage', 'asc')
-          ->orderBy('semester', 'asc')
-          ->get()
+       $stages = CourseSyllabus::where('course_code', $course->course_code)->where('version', $versions->syllabus_name)->orderBy('stage', 'asc')->orderBy('semester', 'asc')->get()
           ->groupBy(function ($item) {
               return $item->stage . '.' . $item->semester;
           });
@@ -585,7 +541,6 @@ class CODController extends Controller
 
     public function searchUnit(Request $request) {
         $query = $request->search;
-
         $units = Unit::where(function ($queryBuilder) use ($query) {
             $queryBuilder->where('unit_code', 'like', $query.'%')
                         ->orWhere('unit_name', 'like', $query.'%');
@@ -630,40 +585,24 @@ class CODController extends Controller
     public function viewSemesterUnits($id){
       $pattern = ClassPattern::where('class_pattern_id', $id)->first();
       $class = DB::table('classesview')->where('name', $pattern->class_code)->first();
-      $semesterUnits = CourseSyllabus::where('course_code', $class->course_code)
-          ->where('version', $class->syllabus_name)
-          ->where('stage', $pattern->stage)
-          ->where('semester', $pattern->pattern_id)
-          ->orderBy('unit_code', 'asc')
-          ->get();
-
+      $semesterUnits = CourseSyllabus::where('course_code', $class->course_code)->where('version', $class->syllabus_name)->where('stage', $pattern->stage)->where('semester', $pattern->pattern_id)->orderBy('unit_code', 'asc')->get();
         return view('cod::classes.semesterUnits')->with(['class' => $class, 'pattern' => $pattern, 'semesterUnits' => $semesterUnits]);
     }
 
     public function classList($id){
-
         $class = Classes::where('class_id', $id)->first();
-
-        $classList = StudentView::where('current_class', $class->name)
-            ->orderBy('student_number', 'asc')
-            ->get();
-
+        $classList = StudentView::where('current_class', $class->name)->orderBy('student_number', 'asc')->get();
         return view('cod::classes.classList')->with(['classList' => $classList, 'class' => $class]);
     }
 
     public function classPattern($id){
-
         $class = Classes::where('class_id', $id)->first();
-
         $seasons = Pattern::all();
-
         $patterns = ClassPattern::where('class_code', $class->name)->latest()->get();
-
         return view('cod::classes.classPattern')->with(['class' => $class, 'patterns' => $patterns, 'seasons' => $seasons]);
     }
 
-    public function storeClassPattern(Request $request)
-    {
+    public function storeClassPattern(Request $request){
 
         $request->validate([
             'code' => 'required',
@@ -690,8 +629,7 @@ class CODController extends Controller
         return redirect()->back()->with('success', 'Class pattern record created successfully');
     }
 
-    public function updateClassPattern(Request $request, $id)
-    {
+    public function updateClassPattern(Request $request, $id){
 
         $request->validate([
             'code' => 'required',
@@ -717,33 +655,23 @@ class CODController extends Controller
         return redirect()->back()->with('success', 'Class pattern record updated successfully');
     }
 
-    public function deleteClassPattern($id)
-    {
-
+    public function deleteClassPattern($id){
         $hashedId = Crypt::decrypt($id);
-
         ClassPattern::find($hashedId)->delete();
-
         return redirect()->back()->with('success', 'Class pattern record deleted successfully');
     }
 
     public function examResults(){
-
         $exams = ExamResults::latest()->get();
-
         return view('cod::exams.index')->with(['exams' => $exams]);
     }
 
-    public function addResults()
-    {
-
+    public function addResults(){
         $students = Student::latest()->get();
-
         return view('cod::exams.addExam')->with(['students' => $students]);
     }
 
-    public function submitResults(Request $request)
-    {
+    public function submitResults(Request $request){
         $request->validate([
             'student' => 'required',
             'stage' => 'required',
@@ -762,29 +690,20 @@ class CODController extends Controller
         return redirect()->route('department.examResults')->with('success', 'Exam result submitted successfully');
     }
 
-    public function editResults($id)
-    {
-
+    public function editResults($id){
         $hashedId = Crypt::decrypt($id);
-
         $result = ExamResults::find($hashedId);
-
         return view('cod::exams.editExam')->with(['result' => $result]);
     }
 
-    public function updateResults(Request $request, $id)
-    {
-
+    public function updateResults(Request $request, $id){
         $request->validate([
             'student' => 'required',
             'stage' => 'required',
             'status' => 'required'
         ]);
-
         $hashedId = Crypt::decrypt($id);
-
         $students = Student::find($request->student);
-
         $exam = ExamResults::find($hashedId);
         $exam->student_id = $request->student;
         $exam->reg_number = $students->reg_number;
@@ -828,11 +747,7 @@ class CODController extends Controller
     }
 
     public function transferRequests(){
-        $transfers = CourseTransfersView::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-            ->latest()
-            ->get()
-            ->groupBy('intake_id');
-
+        $transfers = CourseTransfersView::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->latest()->get()->groupBy('intake_id');
         return view('cod::transfers.index')->with(['transfers' => $transfers]);
     }
 
@@ -877,11 +792,7 @@ class CODController extends Controller
     public function declineTransferRequest(Request $request, $id){
         $intake = CourseTransfersView::where('course_transfer_id', $id)->first()->intake_id;
         if (CourseTransferApproval::where('course_transfer_id', $id)->exists()) {
-           CourseTransferApproval::where('course_transfer_id', $id)->update([
-               'cod_status' => 2,
-               'cod_remarks' => $request->remarks,
-               'cod_user_id' => auth()->guard('user')->user()->user_id
-           ]);
+           CourseTransferApproval::where('course_transfer_id', $id)->update(['cod_status' => 2, 'cod_remarks' => $request->remarks, 'cod_user_id' => auth()->guard('user')->user()->user_id]);
 
         } else {
             $approval = new CourseTransferApproval;
@@ -992,22 +903,20 @@ class CODController extends Controller
 
         $pdfPath = 'Fees/' . 'Transfers' . time() . ".pdf";
 
-//        $converter =  new OfficeConverter($docPath, 'Fees/');
-//        $converter->convertTo('Transfers' . time() . ".pdf");
+        $converter =  new OfficeConverter($docPath, 'Fees/');
+        $converter->convertTo('Transfers' . time() . ".pdf");
 
-//        if (file_exists($docPath)) {
-//            unlink($docPath);
-//        }
-        //
-                return response()->download($docPath)->deleteFileAfterSend(true);
-//        return response()->download($pdfPath)->deleteFileAfterSend(true);
+        if (file_exists($docPath)) {
+            unlink($docPath);
+        }
+
+//                return response()->download($docPath)->deleteFileAfterSend(true);
+        return response()->download($pdfPath)->deleteFileAfterSend(true);
     }
 
 
     public function academicLeave(){
-        $requests = AcademicLeave::latest()
-            ->get()
-            ->groupBy('intake_id');
+        $requests = AcademicLeave::latest()->get()->groupBy('intake_id');
         return view('cod::leaves.index')->with(['leaves' => $requests]);
     }
 
@@ -1035,22 +944,17 @@ class CODController extends Controller
             $approval = new CustomIds();
             AcademicLeaveApproval::create(['leave_id' => $id, 'cod_status' => 1,'cod_remarks' => 'Request accepted', 'cod_user_id' => auth()->guard('user')->user()->user_id, 'leave_approval_id' => $approval->generateId()]);
         }
-
         return redirect()->route('department.yearlyLeaves', $updateApproval->intake_id)->with('success', 'Deferment/Academic leave approved');
     }
 
     public function declineLeaveRequest(Request $request, $id){
         $updateApproval = AcademicLeavesView::where('leave_id', $id)->first();
         if ( AcademicLeaveApproval::where('leave_id', $id)->exists()){
-            AcademicLeaveApproval::where('leave_id', $id)->update([
-                'cod_status' => 2,
-                'cod_remarks' => 'Request declined'
-            ]);
+            AcademicLeaveApproval::where('leave_id', $id)->update(['cod_status' => 2, 'cod_remarks' => 'Request declined']);
         }else{
             $approval = new CustomIds();
             AcademicLeaveApproval::create(['leave_id' => $id, 'cod_status' => 2,'cod_remarks' => 'Request Declined', 'cod_user_id' => auth()->guard('user')->user()->user_id, 'leave_approval_id' => $approval->generateId()]);
         }
-
         return redirect()->route('department.yearlyLeaves', $updateApproval->intake_id)->with('success', 'Deferment/Academic leave approved');
     }
 
@@ -1072,15 +976,15 @@ class CODController extends Controller
       $readmission = ReadmissionsView::where('readmission_id', $id)->first();
       $patterns = ClassPattern::where('semester', $readmission->year_study.'.'.$readmission->semester_study)->get()->groupBy('class_code');
       $studentCourse = StudentCourse::where('student_id', $readmission->student_id)->first();
-      if ($studentCourse->student_type == 1){
-          $mode = 'S-FT';
-      }elseif ($studentCourse->student_type == 2){
-          $mode = 'J-FT';
-      }elseif ($studentCourse->student_type == 3){
-          $mode = 'S-PT';
-      }elseif ($studentCourse->student_type == 4){
-          $mode = 'S-EV';
-      }
+          if ($studentCourse->student_type == 1){
+              $mode = 'S-FT';
+          }elseif ($studentCourse->student_type == 2){
+              $mode = 'J-FT';
+          }elseif ($studentCourse->student_type == 3){
+              $mode = 'S-PT';
+          }elseif ($studentCourse->student_type == 4){
+              $mode = 'S-EV';
+          }
       foreach ($patterns as $class_code => $pattern) {
           $classes[] = Classes::where('name', $class_code)
                     ->where('course_id', $studentCourse->course_id)
@@ -1154,15 +1058,12 @@ class CODController extends Controller
     }
 
     public function departmentLectures(){
-       $lectures = Staff::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-                        ->get();
+       $lectures = Staff::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->get();
         return view('cod::lecturers.index')->with(['lecturers' => $lectures]);
     }
 
     public function lecturesQualification(){
-        $lectures = Staff::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-            ->whereIn('role_id', [8, 2, 4])
-            ->get();
+        $lectures = Staff::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->whereIn('role_id', [8, 2, 4])->get();
         return view('cod::lecturers.departmentalLecturers')->with(['lecturers' => $lectures]);
     }
 
@@ -1222,10 +1123,7 @@ class CODController extends Controller
     }
 
     public function viewStudentResults($id){
-       $results =  ModeratedResults::where('exam_approval_id', $id)
-            ->orderBy('class_code', 'asc')
-            ->get()
-            ->groupBy(['class_code', 'unit_code', 'student_number']);
+       $results =  ModeratedResults::where('exam_approval_id', $id)->orderBy('class_code', 'asc')->get()->groupBy(['class_code', 'unit_code', 'student_number']);
         return view('cod::exams.viewExamResults')->with(['results' => $results]);
     }
     public function declineResults(Request $request, $id){
@@ -1233,18 +1131,11 @@ class CODController extends Controller
             'remarks' => 'required|string'
         ]);
 
-        ExamWorkflow::where('exam_approval_id', $id)->update([
-            'cod_status' => 2,
-            'cod_remarks' => $request->remarks
-        ]);
+        ExamWorkflow::where('exam_approval_id', $id)->update(['cod_status' => 2, 'cod_remarks' => $request->remarks]);
         return redirect()->back()->with('success', 'Exam rejected Successfully');
     }
     public function approveExamResults($id){
-        ExamWorkflow::where('exam_approval_id', $id)->update([
-            'cod_status' => 1,
-            'cod_remarks' => 'Exam results accepted',
-            'dean_status' => NULL
-        ]);
+        ExamWorkflow::where('exam_approval_id', $id)->update([ 'cod_status' => 1, 'cod_remarks' => 'Exam results accepted', 'dean_status' => NULL        ]);
         return redirect()->back()->with('success', 'Exam Accepted Successfully');
     }
     public function revertExamResults($id){
@@ -1252,21 +1143,16 @@ class CODController extends Controller
         ExamWorkflow::where('exam_approval_id', $id)->update(['cod_status' => 2]);
         $examResults = ExamMarks::where('exam_approval_id', $id)->where('academic_year', $deptResults->academic_year)->where('academic_semester', $deptResults->academic_semester)->get();
         foreach ($examResults as $result){
-            ExamMarks::where('exam_approval_id', $id)->where('academic_year', $deptResults->academic_year)->where('academic_semester', $deptResults->academic_semester)->where('student_number', $result->student_number)->update([
-                'exam_approval_id' => NULL
-            ]);
+            ExamMarks::where('exam_approval_id', $id)->where('academic_year', $deptResults->academic_year)->where('academic_semester', $deptResults->academic_semester)->where('student_number', $result->student_number)->update(['exam_approval_id' => NULL]);
         }
         return redirect()->back()->with('success', 'Exam results reversed successfully');
     }
     public function submitExamResults($id){
-           ExamWorkflow::where('exam_approval_id', $id)->update([
-            'dean_status' => 0,
-           ]);
+           ExamWorkflow::where('exam_approval_id', $id)->update(['dean_status' => 0 ]);
         return redirect()->back()->with('success', 'Examination Results Submitted For Dean Approval');
     }
 
-    public function downloadResults($sem, $year)
-    {
+    public function downloadResults($sem, $year){
         $hashedSem = Crypt::decrypt($sem);
 
         $hashedYear = Crypt::decrypt($year);
@@ -1376,9 +1262,7 @@ class CODController extends Controller
     }
 
     public function supSpecials(){
-        $units = SupplementarySpecial::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-            ->get()
-            ->groupBY(['academic_year', 'academic_semester']);
+        $units = SupplementarySpecial::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->get()->groupBY(['academic_year', 'academic_semester']);
         return view('cod::supSpecial.index')->with(['units' => $units]);
     }
 
@@ -1416,10 +1300,7 @@ class CODController extends Controller
 
     public function viewSupSpecial($id){
         list($year, $semester) = explode(':', base64_decode($id));
-        $units = SupplementarySpecial::where('academic_year', $year)->where('academic_semester', $semester)
-            ->where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)
-            ->orderBy('unit_code', 'asc')
-            ->get();
+        $units = SupplementarySpecial::where('academic_year', $year)->where('academic_semester', $semester)->where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->orderBy('unit_code', 'asc')->get();
         return view('cod::supSpecial.viewSupSpecial')->with(['units' => $units, 'year' => $year, 'semester' => $semester]);
     }
 
