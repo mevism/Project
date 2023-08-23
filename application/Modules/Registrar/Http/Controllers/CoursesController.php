@@ -498,12 +498,12 @@ class CoursesController extends Controller
         $workload->setValue('academic_year', $session->academic_year);
         $workload->setValue('academic_semester', $session->intake_month);
         $workload->setComplexBlock('{table}', $table);
-        $docPath = 'Workloads/' . 'Workload' . time() . ".docx";
+        $docPath = 'Workloads/' . 'Workload' . time() . ".pdf";
         $workload->saveAs($docPath);
 
         $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
 
-        $pdfPath = 'Results/' . 'Workload' . time() . ".pdf";
+        $pdfPath = 'Workloads/' . 'Workload' . time() . ".pdf";
 
         $converter =  new OfficeConverter($docPath, 'Results/');
         $converter->convertTo('Workload' . time() . ".pdf");
