@@ -503,16 +503,17 @@ class CoursesController extends Controller
 
         $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
 
-//        $pdfPath = 'Results/' . 'Workload' . time() . ".pdf";
-//
-//        $converter =  new OfficeConverter($docPath, 'Results/');
-//        $converter->convertTo('Workload' . time() . ".pdf");
-//
-//        if (file_exists($docPath)) {
-//            unlink($docPath);
-//        }
+        $pdfPath = 'Results/' . 'Workload' . time() . ".pdf";
 
-        return response()->download($docPath)->deleteFileAfterSend(true);
+        $converter =  new OfficeConverter($docPath, 'Results/');
+        $converter->convertTo('Workload' . time() . ".pdf");
+
+        if (file_exists($docPath)) {
+            unlink($docPath);
+        }
+
+//        return response()->download($docPath)->deleteFileAfterSend(true);
+        return response()->download($pdfPath)->deleteFileAfterSend(true);
     }
 
     public function readmissions(){
@@ -837,17 +838,17 @@ class CoursesController extends Controller
 
         $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
 
-        //        $pdfPath = 'Fees/' . 'Transfers' . time() . ".pdf";
-        //
-        //        $converter =  new OfficeConverter($docPath, 'Fees/');
-        //        $converter->convertTo('Transfers' . time() . ".pdf");
-        //
-        //        if (file_exists($docPath)) {
-        //            unlink($docPath);
-        //        }
+                $pdfPath = 'Fees/' . 'Transfers' . time() . ".pdf";
 
-        return response()->download($docPath)->deleteFileAfterSend(true);
-        //        return response()->download($pdfPath)->deleteFileAfterSend(true);
+                $converter =  new OfficeConverter($docPath, 'Fees/');
+                $converter->convertTo('Transfers' . time() . ".pdf");
+
+                if (file_exists($docPath)) {
+                    unlink($docPath);
+                }
+
+//        return response()->download($docPath)->deleteFileAfterSend(true);
+                return response()->download($pdfPath)->deleteFileAfterSend(true);
     }
 
     /**
@@ -1166,27 +1167,6 @@ class CoursesController extends Controller
             $table->addCell(100, ['align' => 'right', 'borderSize' => 2])->addText(number_format($total, 2), $boldedtext, array('align' => 'right', 'size' => 11));
         }
 
-
-
-//        $domPdfPath = base_path('vendor/dompdf/dompdf');
-//        \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
-//        \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
-//
-
-//
-//        $table = new Table(array('unit' => TblWidth::TWIP));
-//        foreach ($semesterFees as $votehead => $detail) {
-//            $name = VoteHead::where('vote_id', $votehead)->first()->vote_name;
-//            $table->addRow();
-//            $table->addCell(5000, ['borderSize' => 2])->addText($name,  $boldedtext1, ['name' => 'Book Antiqua', 'size' => 13]);
-//            $table->addCell(2000, ['borderSize' => 2])->addText(number_format($detail->semesterI, 2), $boldedtext1, array('align' => 'right', 'size' => 12));
-//            $table->addCell(2000, ['borderSize' => 2])->addText(number_format($detail->semesterII, 2), $boldedtext1, array('align' => 'right', 'size' => 12));
-//        }
-//        $table->addRow();
-//        $table->addCell(3000, ['borderSize' => 2])->addText("TOTAL PAYABLE FEE", $boldedtext);
-//        $table->addCell(3000, ['borderSize' => 2])->addText(number_format($semester1, 2), $boldedtext, array('align' => 'right', 'size' => 12));
-//        $table->addCell(3000, ['borderSize' => 2])->addText(number_format($semester2, 2), $boldedtext, array('align' => 'right', 'size' => 12));
-
         $my_template = new TemplateProcessor(storage_path('fee_structure.docx'));
 
         $my_template->setValue('course', strtoupper($course->course_name));
@@ -1200,17 +1180,17 @@ class CoursesController extends Controller
 
         $pdfPath = 'FeeStructure/' . $course->course_code . ".pdf";
 
-//        $convert = new OfficeConverter('FeeStructure/' . $course->courseclm->course_code . ".docx", 'FeeStucture/');
-//        $convert->convertTo($course->courseclm->course_code . ".pdf");
-//
-//        if (file_exists($docPath)) {
-//            unlink($docPath);
-//        }
+        $convert = new OfficeConverter('FeeStructure/' . $course->courseclm->course_code . ".docx", 'FeeStucture/');
+        $convert->convertTo($course->courseclm->course_code . ".pdf");
+
+        if (file_exists($docPath)) {
+            unlink($docPath);
+        }
 
         unlink('QrCodes/' . $image);
 
-//        return response()->download($pdfPath)->deleteFileAfterSend(true);
-        return response()->download($docPath)->deleteFileAfterSend(true);
+        return response()->download($pdfPath)->deleteFileAfterSend(true);
+//        return response()->download($docPath)->deleteFileAfterSend(true);
     }
 
     public function createUnits(Request $request, $id)
@@ -1423,17 +1403,17 @@ class CoursesController extends Controller
                 unlink($pdfPath);
             }
 
-            //            $converter = new OfficeConverter('AdmissionLetters/'. ".docx", 'AdmissionLetters/');
-            //            $converter->convertTo($application_No.".pdf");
+                $converter = new OfficeConverter('AdmissionLetters/'. ".docx", 'AdmissionLetters/');
+                $converter->convertTo(str_replace('/', '', $reference ).".pdf");
 
-            //            if (file_exists($docPath)) {
-            //                unlink($docPath);
-            //            }
+                    if (file_exists($docPath)) {
+                        unlink($docPath);
+                    }
 
             KuccpsApplicant::where('applicant_id', $applicant->applicant_id)->update(['status' => 1]);
             if ($applicant->email != null) {
                 sleep(3);
-//                Mail::to($applicant->email)->send(new KuccpsMails($applicant));
+                Mail::to($applicant->email)->send(new KuccpsMails($applicant));
             }
         }
         return redirect()->back()->with('success', 'Admission letters generated and emails send');
@@ -1575,12 +1555,12 @@ class CoursesController extends Controller
                     unlink($pdfPath);
                 }
 
-//                    $converter = new OfficeConverter('AdmissionLetters/'.str_replace('/', '', $app->ref_number).".docx",'AdmissionLetters/');
-//                    $converter->convertTo('AdmissionLetters/'.$app->ref_number.".pdf");
-//
-//                        if (file_exists($docPath)) {
-//                            unlink($docPath);
-//                           }
+                $converter = new OfficeConverter('AdmissionLetters/'.str_replace('/', '', $app->ref_number).".docx",'AdmissionLetters/');
+                $converter->convertTo('AdmissionLetters/'.$app->ref_number.".pdf");
+
+                    if (file_exists($docPath)) {
+                        unlink($docPath);
+                    }
                 $student_id = new CustomIds();
 
                 $studCourse = new StudentCourse;
@@ -1604,7 +1584,7 @@ class CoursesController extends Controller
                 $update = ApplicationApproval::where('application_id', $id)->first();
                 $update->registrar_status = 3;
                 $update->registrar_comments = 'Admission letter generated';
-                $update->admission_letter = str_replace('/', '', $app->ref_number).".docx";
+                $update->admission_letter = str_replace('/', '', $app->ref_number).".pdf";
                 $update->save();
 
                 $status = Application::where('application_id', $id)->first();
@@ -1785,12 +1765,11 @@ class CoursesController extends Controller
     }
 
 
-    public function updateIntake(Request $request, $id)
-    {
-        $request->validate([
-            'intake_name_from'      =>       'required|before:intake_name_to',
-            'intake_name_to'        =>       'required|after:intake_name_from'
-        ]);
+    public function updateIntake(Request $request, $id){
+            $request->validate([
+                'intake_name_from' => 'required|before:intake_name_to',
+                'intake_name_to' => 'required|after:intake_name_from'
+            ]);
 
         $academicYear = Intake::where('intake_id', $id)->first()->academicYear;
 

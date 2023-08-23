@@ -1,7 +1,6 @@
 <?php
 
 namespace Modules\Student\Http\Controllers;
-
 use App\Http\Apis\AppApis;
 use App\Service\CustomIds;
 use BaconQrCode\Encoder\QrCode;
@@ -486,6 +485,7 @@ class StudentController extends Controller
         if ($request->optionId == null){
             return redirect()->back()->with('error', 'Ensure you have selected an option to proceed');
         }
+
         $intake = DB::table('academicperiods')->where('academic_year', $request->academicyear)->where('intake_month', $request->period)->first();
 
         if (Nominalroll::where('student_id', auth()->guard('student')->user()->student_id)
@@ -529,6 +529,8 @@ class StudentController extends Controller
                 $examinableUnit->save();
             }
 
+        $naration = "Semester Invoice For Stage ".$request->yearstudy.".".$request->semesterstudy." Academic Year ".$intake->academic_year;
+
             foreach ($fees as $key => $fee){
                 $particular [] = [
                     'votehead_id' => $fee->vote_id,
@@ -539,10 +541,10 @@ class StudentController extends Controller
             }
 
             $invoice = [
-                'batch_description' => 'SUBSEQUENT SEMESTER REGISTRATION',
+                'batch_description' => "SUBSEQUENT SEMESTER REGISTRATION",
                 'Invoices' => [
                     ['student_number' => $student->student_number,
-                        'invoice_description' => "Semester Registration Invoice for Stage ".$request->yearstudy.'.'.$request->semesterstudy.' '.$intake->academic_year." Academic Year",
+                        'invoice_description' => $naration,
                         'InvoiceItems' => $particular,
                     ]
                 ]
@@ -660,16 +662,17 @@ class StudentController extends Controller
 
         $pdfPath = 'Fees/'.preg_replace('~/~', '', $student['student_number']).".pdf";
 
-//        $convert = new OfficeConverter('Fees/'.preg_replace('~/~', '', $student->reg_number).".docx", 'Fee/');
-//        $convert->convertTo(preg_replace('~/~', '', $student->reg_number).".pdf");
+            $convert = new OfficeConverter('Fees/'.preg_replace('~/~', '', $student->reg_number).".docx", 'Fee/');
+            $convert->convertTo(preg_replace('~/~', '', $student->reg_number).".pdf");
 
-//        if(file_exists($docPath)){
-//            unlink($docPath);
-//        }
+            if(file_exists($docPath)){
+                unlink($docPath);
+            }
 
         unlink('QrCodes/'.$image);
 
-         return response()->download($docPath)->deleteFileAfterSend(true);
+//         return response()->download($docPath)->deleteFileAfterSend(true);
+         return response()->download($pdfPath)->deleteFileAfterSend(true);
     }
 
     public function viewExamResults(){

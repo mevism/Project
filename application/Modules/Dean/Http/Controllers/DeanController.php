@@ -70,29 +70,18 @@ class DeanController extends Controller{
 
     public function exams($id){
         $approval = ExamWorkflow::where('exam_approval_id', $id)->first();
-        $results =  ModeratedResults::where('exam_approval_id', $id)
-            ->orderBy('class_code', 'asc')
-            ->get()
-            ->groupBy(['class_code', 'unit_code', 'student_number']);
+        $results =  ModeratedResults::where('exam_approval_id', $id)->orderBy('class_code', 'asc')->get()->groupBy(['class_code', 'unit_code', 'student_number']);
         return view('dean::exams.index')->with(['results' => $results, 'approval' => $approval]);
     }
 
-    public function viewClasses( $id, $sem, $year)
-    {
+    public function viewClasses( $id, $sem, $year){
         $hashedId = Crypt::decrypt($id);
 
         $hashedSem = Crypt::decrypt($sem);
 
         $hashedYear = Crypt::decrypt($year);
 
-        $exams = ExamMarks::where('workflow_id', $hashedId)
-            ->where('academic_year', $hashedYear)
-            ->where('academic_semester', $hashedSem)
-            ->latest()
-            ->get()
-            ->groupBy('class_code');
-
-
+        $exams = ExamMarks::where('workflow_id', $hashedId)->where('academic_year', $hashedYear)->where('academic_semester', $hashedSem)->latest()->get()->groupBy('class_code');
         return  view('dean::exams.viewClasses')->with(['exams'  =>  $exams, 'id'  =>  $hashedId, 'sem'  =>  $hashedSem, 'year'  =>  $hashedYear]);
     }
 
@@ -107,14 +96,7 @@ class DeanController extends Controller{
         $hashedYear = Crypt::decrypt($year);
 
 
-        $exams = ExamMarks::where('class_code', $hashedClass)
-            ->where('workflow_id', $hashedId)
-            ->where('academic_year', $hashedYear)
-            ->where('academic_semester', $hashedSem)
-            ->latest()
-            ->get()
-            ->groupBy('reg_number');
-
+        $exams = ExamMarks::where('class_code', $hashedClass)->where('workflow_id', $hashedId)->where('academic_year', $hashedYear)->where('academic_semester', $hashedSem)->latest()->get()->groupBy('reg_number');
         $regs = [];
         foreach ($exams as $regNumber => $examMarks) {
             $regs[$regNumber] = $examMarks;
@@ -127,38 +109,27 @@ class DeanController extends Controller{
                 $studentDetails[]  =  $student;
             }
         }
-
         return view('dean::exams.viewStudents')->with(['studentDetails'  =>  $studentDetails, 'regs'  =>  $regs]);
     }
 
     public function approveExamMarks($id){
-        ExamWorkflow::where('exam_approval_id', $id)->update([
-            'dean_status' => 1,
-            'dean_remarks' => 'Exam Marks Approved',
-        ]);
-      return redirect()->back()->with('success', 'Exam Marks Approved Successfully');
+        ExamWorkflow::where('exam_approval_id', $id)->update([ 'dean_status' => 1, 'dean_remarks' => 'Exam Marks Approved',]);
+        return redirect()->back()->with('success', 'Exam Marks Approved Successfully');
     }
 
     public function submitExamMarks($id){
-        ExamWorkflow::where('exam_approval_id', $id)->update([
-            'registrar_status' => 0
-            ]);
+        ExamWorkflow::where('exam_approval_id', $id)->update([ 'registrar_status' => 0 ]);
         return redirect()->back()->with('success', 'Exam Marks submitted Successfully');
       }
 
     public function declineExams(Request $request, $id){
-        ExamWorkflow::where('exam_approval_id', $id)->update([
-            'dean_status' => 2,
-            'dean_remarks' => $request->remarks
-        ]);
+        ExamWorkflow::where('exam_approval_id', $id)->update([ 'dean_status' => 2, 'dean_remarks' => $request->remarks ]);
         return redirect()->back()->with('success', 'Exam Marks Declined');
       }
 
       public function revertExamMarks($id){
-          ExamWorkflow::where('exam_approval_id', $id)->update([
-              'cod_status' => 3,
-          ]);
-        return redirect()->back()->with('success', 'Exam Marks Reverted to COD Successfully.');
+          ExamWorkflow::where('exam_approval_id', $id)->update([ 'cod_status' => 3, ]);
+          return redirect()->back()->with('success', 'Exam Marks Reverted to COD Successfully.');
     }
 
     public function publishResults($id){
@@ -176,7 +147,6 @@ class DeanController extends Controller{
         $academicYear = DB::table('academicperiods')->where('academic_year', base64_decode($id))->pluck('intake_id');
         $departments = ACADEMICDEPARTMENTS::where('school_id', auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->school_id)->pluck('department_id');
         $workloads =  WorkloadView::whereIn('department_id', $departments)->whereIn('intake_id', $academicYear)->get()->groupBy(['department_id', 'intake_id']);
-
         return view('dean::workload.workloadPerSemester')->with(['workloads' => $workloads, 'year'=> $id]);
     }
 
@@ -187,9 +157,7 @@ class DeanController extends Controller{
         $departments = ACADEMICDEPARTMENTS::where('school_id', $schoolId)->get();
         $year = ApproveWorkload::where('workload_approval_id', $id)->first();
         foreach ($departments as $department) {
-            $workloads[] = WorkloadView::where('department_id', $department->department_id)
-                ->where('workload_approval_id', $id)
-                ->get();
+            $workloads[] = WorkloadView::where('department_id', $department->department_id)->where('workload_approval_id', $id)->get();
         }
         return view('dean::workload.semestersWorkload')->with(['workloads' => $workloads, 'year' => $year]);
     }
@@ -209,22 +177,14 @@ class DeanController extends Controller{
     public function approveWorkload($id){
         list($department, $semester) = explode(':', base64_decode($id));
         $workload = WorkloadView::where('department_id', $department)->where('intake_id', $semester)->first();
-        ApproveWorkload::where('workload_approval_id', $workload->workload_approval_id)->update([
-            'dean_status' => 1,
-            'dean_remarks' => 'Workload Approved',
-            'dean_user_id' => auth()->guard('user')->user()->user_id,
-        ]);
+        ApproveWorkload::where('workload_approval_id', $workload->workload_approval_id)->update(['dean_status' => 1, 'dean_remarks' => 'Workload Approved', 'dean_user_id' => auth()->guard('user')->user()->user_id ]);
         return redirect()->back()->with('success', 'Workload Approved Successfully');
     }
 
     public function declineWorkload(Request $request, $id){
         list($department, $semester) = explode(':', base64_decode($id));
         $workload = WorkloadView::where('department_id', $department)->where('intake_id', $semester)->first();
-        ApproveWorkload::where('workload_approval_id', $workload->workload_approval_id)->update([
-            'dean_status' => 2,
-            'dean_remarks' => $request->remarks,
-            'dean_user_id' => auth()->guard('user')->user()->user_id,
-        ]);
+        ApproveWorkload::where('workload_approval_id', $workload->workload_approval_id)->update([ 'dean_status' => 2, 'dean_remarks' => $request->remarks, 'dean_user_id' => auth()->guard('user')->user()->user_id,]);
         return redirect()->back()->with('success', 'Workload Declined');
     }
 
@@ -390,17 +350,15 @@ class DeanController extends Controller{
 
         $pdfPath = 'Fees/' . 'Workload' . time() . ".pdf";
 
-        //            $converter =  new OfficeConverter($docPath, 'Fees/');
-        //            $converter->convertTo('Workload' . time() . ".pdf");
+           $converter =  new OfficeConverter($docPath, 'Fees/');
+           $converter->convertTo('Workload' . time() . ".pdf");
 
-        //            if (file_exists($docPath)) {
-        //                unlink($docPath);
-        //            }
+            if (file_exists($docPath)) {
+                unlink($docPath);
+            }
+            return response()->download($pdfPath)->deleteFileAfterSend(true);
 
-
-        //        return response()->download($pdfPath)->deleteFileAfterSend(true);
-
-        return response()->download($docPath)->deleteFileAfterSend(true);
+//        return response()->download($docPath)->deleteFileAfterSend(true);
     }
 
 
@@ -425,12 +383,7 @@ class DeanController extends Controller{
     }
     public function acceptReadmission(Request $request, $id){
         $intake = Readmission::where('readmission_id', $id)->first()->intake_id;
-        ReadmissionApproval::where('readmission_id', $id)->update([
-                'dean_status' => 1,
-                'dean_remarks' => 'Readmission request accepted',
-                'dean_user_id' => auth()->guard('user')->user()->user_id,
-            ]);
-
+        ReadmissionApproval::where('readmission_id', $id)->update(['dean_status' => 1, 'dean_remarks' => 'Readmission request accepted', 'dean_user_id' => auth()->guard('user')->user()->user_id,]);
         return redirect()->route('dean.intakeReadmissions', $intake)->with('success', 'Readmission request accepted');
     }
 
@@ -439,11 +392,7 @@ class DeanController extends Controller{
             'remarks' => 'required'
         ]);
         $intake = Readmission::where('readmission_id', $id)->first()->intake_id;
-        ReadmissionApproval::where('readmission_id', $id)->update([
-            'dean_status' => 2,
-            'dean_remarks' => $request->remarks,
-            'dean_user_id' => auth()->guard('user')->user()->user_id,
-        ]);
+        ReadmissionApproval::where('readmission_id', $id)->update([ 'dean_status' => 2, 'dean_remarks' => $request->remarks, 'dean_user_id' => auth()->guard('user')->user()->user_id, ]);
         return redirect()->route('dean.intakeReadmissions', $intake)->with('success', 'Readmission request accepted');
     }
 
@@ -468,19 +417,13 @@ class DeanController extends Controller{
 
     public function acceptLeaveRequest($id){
         $leave = AcademicLeavesView::where('leave_id', $id)->first();
-            AcademicLeaveApproval::where('leave_id', $id)->update([
-                'dean_status' => 1,
-                'dean_remarks' => 'Request Accepted'
-            ]);
+            AcademicLeaveApproval::where('leave_id', $id)->update([ 'dean_status' => 1, 'dean_remarks' => 'Request Accepted' ]);
         return redirect()->route('dean.yearlyLeaves', $leave->intake_id)->with('success', 'Deferment/Academic leave approved');
     }
 
     public function declineLeaveRequest(Request $request, $id){
         $leave = AcademicLeavesView::where('leave_id', $id)->first();
-        AcademicLeaveApproval::where('leave_id', $id)->update([
-            'dean_status' => 2,
-            'dean_remarks' => $request->remarks
-        ]);
+        AcademicLeaveApproval::where('leave_id', $id)->update([ 'dean_status' => 2, 'dean_remarks' => $request->remarks ]);
         return redirect()->route('dean.yearlyLeaves', $leave->intake_id)->with('success', 'Deferment/Academic leave declined.');
     }
 
@@ -492,12 +435,8 @@ class DeanController extends Controller{
         $role = $user->roles->first()->name;
        $departments = ACADEMICDEPARTMENTS::where('school_id', $school->school_id)->get();
         foreach ($departments as $department) {
-           $transfers[] = CourseTransfersView::where('department_id', $department->department_id)
-                ->where('intake_id', $id)
-                ->get()
-                ->groupBy('course_id');
+           $transfers[] = CourseTransfersView::where('department_id', $department->department_id) ->where('intake_id', $id)->get()->groupBy('course_id');
         }
-
         $courses = Courses::all();
 
         $domPdfPath = base_path('vendor/dompdf/dompdf');
@@ -597,17 +536,17 @@ class DeanController extends Controller{
 
         $contents = \PhpOffice\PhpWord\IOFactory::load($docPath);
 
-//        $pdfPath = 'Fees/' . 'Transfers' . time() . ".pdf";
-//
-//        $converter =  new OfficeConverter($docPath, 'Fees/');
-//        $converter->convertTo('Transfers' . time() . ".pdf");
-//
-//        if (file_exists($docPath)) {
-//            unlink($docPath);
-//        }
+        $pdfPath = 'Fees/' . 'Transfers' . time() . ".pdf";
 
-                return response()->download($docPath)->deleteFileAfterSend(true);
-//        return response()->download($pdfPath)->deleteFileAfterSend(true);
+        $converter =  new OfficeConverter($docPath, 'Fees/');
+        $converter->convertTo('Transfers' . time() . ".pdf");
+
+        if (file_exists($docPath)) {
+            unlink($docPath);
+        }
+
+//                return response()->download($docPath)->deleteFileAfterSend(true);
+        return response()->download($pdfPath)->deleteFileAfterSend(true);
     }
 
 
@@ -621,21 +560,13 @@ class DeanController extends Controller{
 
     public function declineTransferRequest(Request $request, $id){
         $intake = CourseTransfersView::where('course_transfer_id', $id)->first()->intake_id;
-        CourseTransferApproval::where('course_transfer_id', $id)->update([
-            'dean_status' => 2,
-            'dean_remarks' => $request->remarks,
-            'dean_user_id' => auth()->guard('user')->user()->user_id
-        ]);
+        CourseTransferApproval::where('course_transfer_id', $id)->update(['dean_status' => 2, 'dean_remarks' => $request->remarks, 'dean_user_id' => auth()->guard('user')->user()->user_id ]);
         return redirect()->route('dean.transfer', $intake)->with('success', 'Course transfer request accepted');
     }
 
     public function acceptTransferRequest($id){
         $intake = CourseTransfersView::where('course_transfer_id', $id)->first()->intake_id;
-        CourseTransferApproval::where('course_transfer_id', $id)->update([
-            'dean_status' => 1,
-            'dean_remarks' => 'Admission approved',
-            'dean_user_id' => auth()->guard('user')->user()->user_id
-        ]);
+        CourseTransferApproval::where('course_transfer_id', $id)->update([ 'dean_status' => 1, 'dean_remarks' => 'Admission approved', 'dean_user_id' => auth()->guard('user')->user()->user_id ]);
         return redirect()->route('dean.transfer', $intake)->with('success', 'Course transfer request accepted');
     }
 
@@ -661,13 +592,7 @@ class DeanController extends Controller{
     public function applications() {
         $departments = SchoolDepartment::where('school_id', auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->school_id)->pluck('department_id');
         $courses = Courses::whereIn('department_id', $departments)->pluck('course_id');
-        $applications = ApplicationsView::whereIn('course_id', $courses)
-            ->where('dean_status', '!=', 3)
-            ->where('registrar_status', null)
-            ->orWhere('registrar_status', 4)
-            ->latest()
-            ->get();
-
+        $applications = ApplicationsView::whereIn('course_id', $courses)->where('dean_status', '!=', 3)->where('registrar_status', null)->orWhere('registrar_status', 4)->latest()->get();
         return view('dean::applications.index')->with('apps', $applications);
     }
 
@@ -711,12 +636,7 @@ class DeanController extends Controller{
     public function batch(){
         $departments = SchoolDepartment::where('school_id', auth()->guard('user')->user()->employmentDepartment->first()->schools->first()->school_id)->pluck('department_id');
         $courses = Courses::whereIn('department_id', $departments)->pluck('course_id');
-        $applications = ApplicationsView::whereIn('course_id', $courses)
-            ->where('registrar_status', null)
-            ->where('dean_status', '<=', 3)
-            ->where('cod_status', '<=', 2)
-            ->latest()
-            ->get();
+        $applications = ApplicationsView::whereIn('course_id', $courses)->where('registrar_status', null)->where('dean_status', '<=', 3)->where('cod_status', '<=', 2)->latest()->get();
         return view('dean::applications.batch')->with('apps', $applications);
     }
 

@@ -1,8 +1,6 @@
 <?php
 
 namespace Modules\Application\Http\Controllers;
-
-use AfricasTalking\SDK\AfricasTalking;
 use App\Http\Apis\AppApis;
 use App\Notifications\Sms;
 use App\Service\CustomIds;
@@ -50,11 +48,9 @@ use Modules\Dean\Entities\DeanLog;
 use Modules\Finance\Entities\FinanceLog;
 use Modules\Registrar\Entities\SemesterFee;
 
-
 class ApplicationController extends Controller
 {
     protected $appApi;
-
     public function __construct(AppApis $appApi){
         $this->appApi = $appApi;
     }
@@ -743,7 +739,7 @@ class ApplicationController extends Controller
         $application = ApplicationApproval::where('application_id', $id)->first();
         if ($application == null){
             $application = Application::where('application_id', $id)->first();
-            $letter = str_replace('/', '', $application->ref_number).'.docx';
+            $letter = str_replace('/', '', $application->ref_number).'.pdf';
         }else{
             $letter = $application->admission_letter;
         }

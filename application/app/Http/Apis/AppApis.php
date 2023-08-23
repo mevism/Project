@@ -73,7 +73,7 @@ class AppApis
             $uri = "finance/invoice";
             $response = $this->client->request('POST', $uri, ['json' => $invoice]);
             $responseBody = $response->getBody()->getContents();
-            if ($response->getStatusCode() === 200) {
+            if ($response->getStatusCode() === 201) {
                 $getMessage = json_decode($responseBody, true);
                 return $getMessage;
             }

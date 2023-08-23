@@ -58,7 +58,7 @@ class UserController extends Controller
 
                 $courses = AvailableCourse::where('status', 1)->count();
 //                $applications = ApplicationsView::where('registrar_status',0)->count();
-                $applications = 0;
+                $applications = ApplicationsView::where('registrar_status', 0 )->where('dean_status', '!=', null)->where('student_type', 1)->count();
                 $admissions = AdmissionApproval::where('registrar_status',0)->count();
 
                 return view('admin.index')->with(['courses'=>$courses,'applications'=>$applications,'admissions'=>$admissions]);
