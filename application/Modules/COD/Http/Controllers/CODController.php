@@ -820,6 +820,7 @@ class CODController extends Controller{
         \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
 
         $center = ['bold' => true];
+        $centered = ['align' => 'center'];
 
         $table = new Table(['unit' => TblWidth::TWIP, 'align' => 'center']);
         foreach ($transfers as $course => $transfer) {
@@ -843,7 +844,7 @@ class CODController extends Controller{
             $table->addCell(1600, ['borderSize' => 1])->addText('Student Points/Grade', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
             $table->addCell(2700, ['borderSize' => 1])->addText('COD Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
             $table->addCell(1800, ['borderSize' => 1])->addText('Dean Remarks',  $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(2000, ['borderSize' => 1])->addText('Deans Committee Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1800, ['borderSize' => 1])->addText('Deans Committee Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
 
             foreach ($transfer as $key => $list) {
                 $name = $list->student_number ."<w:br/>\n". $list->surname . ' ' . $list->first_name . ' ' . $list->middle_name;
@@ -853,12 +854,12 @@ class CODController extends Controller{
                     $remarks = $list->cod_remarks;
                 }
                 $table->addRow();
-                $table->addCell(400, ['borderSize' => 1])->addText(++$key);
+                $table->addCell(400, ['borderSize' => 1])->addText(++$key, $centered);
                 $table->addCell(2600, ['borderSize' => 1])->addText($name, ['name' => 'Book Antiqua', 'size' => 10]);
                 $table->addCell(1500, ['borderSize' => 1])->addText($list->StudentsTransferCourse->StudentsCourse->course_code, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
-                $table->addCell(1600, ['borderSize' => 1])->addText($list->course_code, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
-                $table->addCell(1600, ['borderSize' => 1])->addText(strtoupper($list->class_points), ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
-                $table->addCell(1600, ['borderSize' => 1])->addText(strtoupper($list->student_points), ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
+                $table->addCell(1600, ['borderSize' => 1])->addText($list->course_code, $centered, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
+                $table->addCell(1600, ['borderSize' => 1])->addText(strtoupper($list->class_points), $centered, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
+                $table->addCell(1600, ['borderSize' => 1])->addText(strtoupper($list->student_points), $centered, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
                 $table->addCell(2700, ['borderSize' => 1])->addText($remarks, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
                 $table->addCell(1800, ['borderSize' => 1])->addText();
                 $table->addCell(2000, ['borderSize' => 1])->addText();
