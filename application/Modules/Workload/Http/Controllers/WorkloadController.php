@@ -15,6 +15,7 @@ use Modules\Registrar\Entities\ACADEMICDEPARTMENTS;
 use Modules\Registrar\Entities\Classes;
 use Modules\Registrar\Entities\Division;
 use Modules\User\Entities\StaffInfo;
+use NcJoes\OfficeConverter\OfficeConverter;
 use PhpOffice\PhpWord\Element\Table;
 use Illuminate\Support\Facades\Crypt;
 use Modules\COD\Entities\ClassPattern;
