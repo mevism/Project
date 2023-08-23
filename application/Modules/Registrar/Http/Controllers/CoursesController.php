@@ -1403,7 +1403,7 @@ class CoursesController extends Controller
                 unlink($pdfPath);
             }
 
-                $converter = new OfficeConverter('AdmissionLetters/'. ".docx", 'AdmissionLetters/');
+                $converter = new OfficeConverter('AdmissionLetters/'.str_replace('/', '', $reference ).".docx", 'AdmissionLetters/');
                 $converter->convertTo(str_replace('/', '', $reference ).".pdf");
 
                     if (file_exists($docPath)) {
