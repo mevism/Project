@@ -835,8 +835,8 @@ class CODController extends Controller{
             $table->addRow(600);
             $table->addCell(10000, ['gridSpan' => 9,])->addText($courseName . ' ' . '(' . $courseCode . ')', $headers, ['spaceAfter' => 300, 'spaceBefore' => 300]);
             $table->addRow();
-            $table->addCell(200, ['borderSize' => 1])->addText('#');
-            $table->addCell(1500, ['borderSize' => 1])->addText('Student Name/ Reg. Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+            $table->addCell(400, ['borderSize' => 1])->addText('#');
+            $table->addCell(2100, ['borderSize' => 1])->addText('Student Name/ Reg. Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
             $table->addCell(850, ['borderSize' => 1])->addText('Course Admitted', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
             $table->addCell(850, ['borderSize' => 1])->addText('Course Transferring to', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
             $table->addCell(1200, ['borderSize' => 1])->addText('Course Cut-off Points/Grade', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
@@ -853,8 +853,8 @@ class CODController extends Controller{
                     $remarks = $list->cod_remarks;
                 }
                 $table->addRow();
-                $table->addCell(200, ['borderSize' => 1])->addText(++$key);
-                $table->addCell(1500, ['borderSize' => 1])->addText($name, ['name' => 'Book Antiqua', 'size' => 10]);
+                $table->addCell(400, ['borderSize' => 1])->addText(++$key);
+                $table->addCell(2100, ['borderSize' => 1])->addText($name, ['name' => 'Book Antiqua', 'size' => 10]);
                 $table->addCell(850, ['borderSize' => 1])->addText($list->StudentsTransferCourse->StudentsCourse->course_code, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
                 $table->addCell(850, ['borderSize' => 1])->addText($list->course_code, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
                 $table->addCell(1200, ['borderSize' => 1])->addText(strtoupper($list->class_points), ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
