@@ -315,16 +315,16 @@ class WorkloadController extends Controller
 
         $pdfPath = 'Fees/' . 'Workload' . time() . ".pdf";
 
-        //            $converter =  new OfficeConverter($docPath, 'Fees/');
-        //            $converter->convertTo('Workload' . time() . ".pdf");
+                    $converter =  new OfficeConverter($docPath, 'Fees/');
+                    $converter->convertTo('Workload' . time() . ".pdf");
 
-        //            if (file_exists($docPath)) {
-        //                unlink($docPath);
-        //            }
+                    if (file_exists($docPath)) {
+                        unlink($docPath);
+                    }
 
 
-        //        return response()->download($pdfPath)->deleteFileAfterSend(true);
+                return response()->download($pdfPath)->deleteFileAfterSend(true);
 
-        return response()->download($docPath)->deleteFileAfterSend(true);
+//        return response()->download($docPath)->deleteFileAfterSend(true);
     }
 }

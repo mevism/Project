@@ -856,7 +856,7 @@ class CODController extends Controller{
                 $table->addRow();
                 $table->addCell(400, ['borderSize' => 1])->addText(++$key, $centered);
                 $table->addCell(2600, ['borderSize' => 1])->addText($name, ['name' => 'Book Antiqua', 'size' => 10]);
-                $table->addCell(1500, ['borderSize' => 1])->addText($list->StudentsTransferCourse->StudentsCourse->course_code, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
+                $table->addCell(1500, ['borderSize' => 1])->addText($list->StudentsTransferCourse->StudentsCourse->course_code, $centered, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
                 $table->addCell(1600, ['borderSize' => 1])->addText($list->course_code, $centered, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
                 $table->addCell(1600, ['borderSize' => 1])->addText(strtoupper($list->class_points), $centered, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
                 $table->addCell(1600, ['borderSize' => 1])->addText(strtoupper($list->student_points), $centered, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'center']);
@@ -885,9 +885,9 @@ class CODController extends Controller{
         }
 
         $summary->addRow();
-        $summary->addCell(3250, ['borderSize' => 1])->addText('Totals', ['bold' => true]);
-        $summary->addCell(750, ['borderSize' => 1])->addText($transfers->count(), ['bold' => true]);
-        $summary->addCell(750, ['borderSize' => 1])->addText($total, ['bold' => true]);
+        $summary->addCell(3250, ['borderSize' => 1])->addText('Totals', ['bold' => true, 'size' => 10]);
+        $summary->addCell(750, ['borderSize' => 1])->addText($transfers->count(), ['bold' => true, 'size' => 10]);
+        $summary->addCell(750, ['borderSize' => 1])->addText($total, ['bold' => true, 'size' => 10]);
 
         $my_template = new TemplateProcessor(storage_path('course_transfers.docx'));
 
