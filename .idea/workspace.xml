@@ -9758,7 +9758,7 @@
       <change beforePath="$PROJECT_DIR$/application/storage/framework/sessions/yxyDwUumTLlvalZ8oJuYeW6hqNOUcZwCN3YT5Fud" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/01c8f4e88e483a93187c759a7de763de493d7ac1.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/03d36b370458bf262375fc1b5562ae8b5f04bf79.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/workload/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/0650c6d3ce1a1f024d4f68e6ab2273a4ad436417.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/views/0650c6d3ce1a1f024d4f68e6ab2273a4ad436417.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/0650c6d3ce1a1f024d4f68e6ab2273a4ad436417.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/0b6efba95b72d1bd73755105cfc5add7b4ae5f6d.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/0cfb7e7239cbe3030b2cb9b39fccc69907e9e49b.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/0e02c065991d92db647ecf2742fbb3c4b4106384.php" beforeDir="false" />
@@ -9780,13 +9780,14 @@
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/1a972b062522d808bd1a2b42a93bad7c98ab9d91.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/1b91eda14137e887b10f284eefec1ffbe40ce015.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/1d2cc24a6945cd7310fbc80c41d50fe2310b20fa.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/1d6891493c95687ce237976b1669aca95705a810.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/storage/framework/views/1d6891493c95687ce237976b1669aca95705a810.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/1d6891493c95687ce237976b1669aca95705a810.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/2483032fea0e2a474966c4303100790af2895e3a.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/25c68cdd55e32b6dffd1b798bcb22ba9410fe944.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/26d5d936a5fb509b0da6a6811307d0ea9b5959cb.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/eventsCalender/showCalenderOfEvents.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/27292ded85ae13c492b4636a8ca3ecb695c88e86.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/290b32bd4a0930c97f6756a504351ee5ea4e227a.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/2acbb4d7ec64c4a266ac1d48d3ed07926c3226f3.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/2cdf119037c5ffb873dd1717fe55c41dd98972fa.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/2fb58ab2d85a821dd4b2a7595262e9009ac3af6e.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/readmissions/index.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/308ce373905897bda02dd7de481a8f0836058987.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/35e1149d9cf16df53c01ec9764440b4ca345ea82.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/offer/showKuccps.blade.php" afterDir="false" />
@@ -9809,6 +9810,7 @@
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/628ed2a52df17fce5d9f120ef92f1b2be9fd264f.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Examination/Resources/views/semester/registration.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/630d276e56aaf2fbf4ddda89808c486a00362067.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/marks/schoolExamMarks.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/63a899c21abbe194990cf5910464e25777197135.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/64492a0cf20a52b9d39e9378f28563083c4edccd.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/681995eb36e14884c8624ece7852f83c4127a4ef.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/6f81b79797e36767b817ee3f3afa85407244b1c3.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/7641399be1f7a00f1228fb86457dfc25e17613aa.php" beforeDir="false" />
@@ -9836,13 +9838,16 @@
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/b494aa268e655e127d1d8ecb89f7485e964acd74.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/b6be467a4b31e4dd2475f204b0f4b4a7cd4149b3.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/b7b8e00f6d4ce45a2bf25aff981363d1843e4391.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/baf4bfc229c7e052d8956e60af4ca635439c102a.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/bd72faf81fc8e67091cd2708495af65cb8543124.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Administrator/Resources/views/department/showDepartment.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/c0797ef360198965e8a339722bf1163f79606012.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/c13960bdba41825083123b3157e069871d49d1e0.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/marks/index.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/c170e0138b24f4e1cecebd931cd91a13e1dd61a7.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/c47ebb9c7159131b9130433070da16716c7cc57f.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/c4fea2289f4c6969b9337d0ef864b45fb2f5c5c0.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/Registrar/Resources/views/events/showEvent.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/c506d08c63687157a858c45223e529901d7d1eea.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/c6f3f24bbe90b11d0de14e25be7e24cd99ce7954.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/storage/framework/views/c86ab5ba561b7e3c26060e266b72cd62c8ffb65c.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/ca3312063690ad697b6326ea67046b8878837c2f.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/cc5547a67d5c8780b557830557b1ce128841c6d8.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/storage/framework/views/cc853ecc2b4a04b960b23ed7064696fc43e299bc.php" beforeDir="false" />
@@ -10198,7 +10203,7 @@
       <workItem from="1692422172872" duration="36036000" />
       <workItem from="1692612502580" duration="54711000" />
       <workItem from="1692811339393" duration="587000" />
-      <workItem from="1692884194912" duration="676000" />
+      <workItem from="1692884194912" duration="1151000" />
     </task>
     <servers />
   </component>
