@@ -156,6 +156,12 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/yajra/laravel-datatables-oracle" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/yajra/laravel-datatables" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/yajra/laravel-datatables-buttons" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/anourvalar/office" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/myclabs/php-enum" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/mpdf/mpdf" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/mpdf/psr-log-aware-trait" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/setasign/fpdi" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/paragonie/random_compat" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
