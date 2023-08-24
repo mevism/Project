@@ -185,7 +185,8 @@ class WorkloadController extends Controller
     }
 
     public function printWorkload($id){
-        $users = User::all();
+        $userID = Workload::where('department_id', auth()->guard('user')->user()->employmentDepartment->first()->department_id)->where('intake_id', $id)->distinct()->pluck('user_id');
+        $users = User::whereIn('user_id', $userID)->get();
         foreach ($users as $user) {
             if ($user->hasRole('LECTURER')) {
                 $lecturers[] = $user;
@@ -243,11 +244,12 @@ class WorkloadController extends Controller
             }
 
             $table->addRow();
-            $table->addCell(400, ['borderSize' => 1])->addText(++$sn, $left, ['name' => 'Book Antiqua', 'size' => 9]);
-            $table->addCell(1300, ['borderSize' => 1])->addText($staff->StaffInfos->staff_number, $left, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
-            $table->addCell(1300, ['borderSize' => 1])->addText($staff->StaffInfos->title . '. ' . $staff->StaffInfos->last_name . ' ' . $staff->StaffInfos->first_name, $left, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
-            $table->addCell(1550, ['borderSize' => 1])->addText(implode(', ', $qualifications), $left, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
-            $table->addCell(1400, ['borderSize' => 1])->addText(implode(', ', $roles), $left, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
+            $table->addCell(200, ['borderSize' => 1])->addText(++$sn, $left, ['name' => 'Book Antiqua', 'size' => 10]);
+            $table->addCell(800, ['borderSize' => 1])->addText($staff->staffInfos->staff_number, $left, ['name' => 'Book Antiqua', 'size' => 10]);
+            $table->addCell(1000, ['borderSize' => 1])->addText($staff->staffInfos->title . '. ' . $staff->staffInfos->last_name . ' ' . $staff->staffInfos->first_name, $left, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
+            $table->addCell(700, ['borderSize' => 1])->addText(implode(', ', $qualifications), $left, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
+            $table->addCell(800, ['borderSize' => 1])->addText(implode(', ', $roles), $left, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
+
 
             $class = $table->addCell(2100, ['borderSize' => 1]);
             $staffLoad = $table->addCell(800, ['borderSize' => 1]);
@@ -257,49 +259,51 @@ class WorkloadController extends Controller
             $levels = $table->addCell(800, ['borderSize' => 1]);
             $signature = $table->addCell(500, ['borderSize' => 1]);
 
-           $userLoad = $workload->count();
-
-            foreach ($lecturers as $lecturer) {
-                if ($lecturer->user_id === $user_id) {
-                    $staff = $lecturer;
-                    if ($staff->employments->first()->employment_terms == 'FT' && $staff->hasRole('LECTURER')) {
-                        for ($i = 0; $i < $userLoad; ++$i) {
-                            if ($i < 3) {
-                                $load = 'FT';
-                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
-                            } else {
-                                $load = 'PT';
-                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
-                            }
-                        }
-                    } elseif ($staff->employments->first()->employment_terms == 'FT' && $staff->hasRole('CHAIRPERSON OF DEPARTMENT') || $staff->employments->first()->employment_terms == 'FT' && $staff->hasRole('DIRECTOR/DEAN')) {
-                        for ($i = 0; $i < $userLoad; ++$i) {
-                            if ($i < 2) {
-                                $load = 'FT';
-                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
-                            } else {
-                                $load = 'PT';
-                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
-                            }
-                        }
-                    }else{
-                        for ($i = 0; $i < $userLoad; ++$i) {
-                            if ($i < $userLoad) {
-                                $load = 'PT';
-                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
-                            }
-                        }
-                    }
-                }
-            }
+//           $userLoad = $workload->count();
+//
+//            foreach ($lecturers as $lecturer) {
+//                if ($lecturer->user_id === $user_id) {
+//                    $staff = $lecturer;
+//                    if ($staff->employments->first()->employment_terms == 'FT' && $staff->hasRole('LECTURER')) {
+//                        for ($i = 0; $i < $userLoad; ++$i) {
+//                            if ($i < 3) {
+//                                $load = 'FT';
+//                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
+//                            } else {
+//                                $load = 'PT';
+//                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
+//                            }
+//                        }
+//                    } elseif ($staff->employments->first()->employment_terms == 'FT' && $staff->hasRole('CHAIRPERSON OF DEPARTMENT') || $staff->employments->first()->employment_terms == 'FT' && $staff->hasRole('DIRECTOR/DEAN')) {
+//                        for ($i = 0; $i < $userLoad; ++$i) {
+//                            if ($i < 2) {
+//                                $load = 'FT';
+//                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
+//                            } else {
+//                                $load = 'PT';
+//                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
+//                            }
+//                        }
+//                    }else{
+//                        for ($i = 0; $i < $userLoad; ++$i) {
+//                            if ($i < $userLoad) {
+//                                $load = 'PT';
+//                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
 
             foreach ($workload as $unit) {
-                $class->addText($unit->class_code, $left, ['name' => 'Book Antiqua', 'size' => 9]);
-                $students->addText($unit->classWorkload->studentClass->count(), $right, ['name' => 'Book Antiqua', 'size' => 9]);
-                $unit_code->addText($unit->workloadUnit->unit_code, $left, ['name' => 'Book Antiqua', 'size' => 9]);
-                $unit_name->addText(substr($unit->workloadUnit->unit_name, 0, 25), $left, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
-                $levels->addText($unit->classWorkload->classCourse->level_id, $left, ['name' => 'Book Antiqua', 'size' => 9]);
+                $class->addText($unit->class_code, $left, ['name' => 'Book Antiqua', 'size' => 10]);
+                $students->addText($unit->classWorkload->studentClass->count(), $left, ['name' => 'Book Antiqua', 'size' => 10]);
+                $unit_code->addText($unit->workloadUnit->unit_code, $left, ['name' => 'Book Antiqua', 'size' => 10]);
+                $unit_name->addText(substr($unit->workloadUnit->unit_name, 0, 31), $left, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'left']);
+                $levels->addText($unit->classWorkload->classCourse->level_id, $left, ['name' => 'Book Antiqua', 'size' => 10]);
                 $signature->addText();
+//                $table = $table->addRow();
+
             }
         }
         $workload = new TemplateProcessor(storage_path('workload_template.docx'));
@@ -326,7 +330,7 @@ class WorkloadController extends Controller
 
 
                 return response()->download($pdfPath)->deleteFileAfterSend(true);
-
+//
 //        return response()->download($docPath)->deleteFileAfterSend(true);
     }
 }
