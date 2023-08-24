@@ -297,10 +297,10 @@ class WorkloadController extends Controller
 
             foreach ($workload as $unit) {
                 $class->addText($unit->class_code, $left, ['name' => 'Book Antiqua', 'size' => 10]);
-                $students->addText($unit->classWorkload->studentClass->count(), $left, ['name' => 'Book Antiqua', 'size' => 10]);
+                $students->addText($unit->classWorkload->studentClass->count(), $right, ['name' => 'Book Antiqua', 'size' => 10]);
                 $unit_code->addText($unit->workloadUnit->unit_code, $left, ['name' => 'Book Antiqua', 'size' => 10]);
                 $unit_name->addText(substr($unit->workloadUnit->unit_name, 0, 25), $left, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'left']);
-                $levels->addText($unit->classWorkload->classCourse->level_id, $left, ['name' => 'Book Antiqua', 'size' => 10]);
+                $levels->addText($unit->classWorkload->classCourse->level_id, $right, ['name' => 'Book Antiqua', 'size' => 10]);
                 $signature->addText();
 //                $table = $table->addRow();
 
