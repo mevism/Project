@@ -204,6 +204,7 @@ class WorkloadController extends Controller
         $table = new Table(['unit' => \PhpOffice\PhpWord\SimpleType\TblWidth::TWIP, 'width' => 1400 * 1400, 'align' => 'center']);
         $headers = ['bold' => true, 'space' => ['before' => 2000, 'after' => 2000, 'rule' => 'exact']];
         $left = array('align' => 'left', 'size' => 10, 'name' => 'Book Antiqua');
+        $right = array('align' => 'right', 'size' => 10, 'name' => 'Book Antiqua');
 
         $table->addRow();
         $table->addCell(400, ['borderSize' => 1, 'vMerge' => 'restart'])->addText('#', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
@@ -224,7 +225,7 @@ class WorkloadController extends Controller
         $table->addCell(1000, ['borderSize' => 1])->addText('Unit Code', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
         $table->addCell(3500, ['borderSize' => 1])->addText('Unit Name', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
         $table->addCell(800, ['borderSize' => 1])->addText('Level', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-        $table->addCell(500, ['borderSize' => 1])->addText('Signature', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+        $table->addCell(500, ['borderSize' => 1])->addText('Sign', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
         $sn = 0;
         foreach ($workloads as $user_id => $workload) {
             $qualifications = [];
@@ -242,8 +243,8 @@ class WorkloadController extends Controller
             }
 
             $table->addRow();
-            $table->addCell(400, ['borderSize' => 1])->addText(++$sn, $left, ['name' => 'Book Antiqua', 'size' => 10]);
-            $table->addCell(1300, ['borderSize' => 1])->addText($staff->StaffInfos->staff_number, $left, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'left']);
+            $table->addCell(400, ['borderSize' => 1])->addText(++$sn, $left, ['name' => 'Book Antiqua', 'size' => 9]);
+            $table->addCell(1300, ['borderSize' => 1])->addText($staff->StaffInfos->staff_number, $left, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
             $table->addCell(1300, ['borderSize' => 1])->addText($staff->StaffInfos->title . '. ' . $staff->StaffInfos->last_name . ' ' . $staff->StaffInfos->first_name, $left, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
             $table->addCell(1550, ['borderSize' => 1])->addText(implode(', ', $qualifications), $left, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
             $table->addCell(1400, ['borderSize' => 1])->addText(implode(', ', $roles), $left, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
@@ -265,27 +266,27 @@ class WorkloadController extends Controller
                         for ($i = 0; $i < $userLoad; ++$i) {
                             if ($i < 3) {
                                 $load = 'FT';
-                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 10]);
+                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
                             } else {
                                 $load = 'PT';
-                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 10]);
+                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
                             }
                         }
                     } elseif ($staff->employments->first()->employment_terms == 'FT' && $staff->hasRole('CHAIRPERSON OF DEPARTMENT') || $staff->employments->first()->employment_terms == 'FT' && $staff->hasRole('DIRECTOR/DEAN')) {
                         for ($i = 0; $i < $userLoad; ++$i) {
                             if ($i < 2) {
                                 $load = 'FT';
-                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 10]);
+                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
                             } else {
                                 $load = 'PT';
-                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 10]);
+                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
                             }
                         }
                     }else{
                         for ($i = 0; $i < $userLoad; ++$i) {
                             if ($i < $userLoad) {
                                 $load = 'PT';
-                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 10]);
+                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
                             }
                         }
                     }
@@ -293,11 +294,11 @@ class WorkloadController extends Controller
             }
 
             foreach ($workload as $unit) {
-                $class->addText($unit->class_code, $left, ['name' => 'Book Antiqua', 'size' => 10]);
-                $students->addText($unit->classWorkload->studentClass->count(), $left, ['name' => 'Book Antiqua', 'size' => 10]);
-                $unit_code->addText($unit->workloadUnit->unit_code, $left, ['name' => 'Book Antiqua', 'size' => 10]);
-                $unit_name->addText(substr($unit->workloadUnit->unit_name, 0, 31), $left, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'left']);
-                $levels->addText($unit->classWorkload->classCourse->level_id, $left, ['name' => 'Book Antiqua', 'size' => 10]);
+                $class->addText($unit->class_code, $left, ['name' => 'Book Antiqua', 'size' => 9]);
+                $students->addText($unit->classWorkload->studentClass->count(), $right, ['name' => 'Book Antiqua', 'size' => 9]);
+                $unit_code->addText($unit->workloadUnit->unit_code, $left, ['name' => 'Book Antiqua', 'size' => 9]);
+                $unit_name->addText(substr($unit->workloadUnit->unit_name, 0, 25), $left, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
+                $levels->addText($unit->classWorkload->classCourse->level_id, $left, ['name' => 'Book Antiqua', 'size' => 9]);
                 $signature->addText();
             }
         }
