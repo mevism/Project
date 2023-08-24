@@ -211,7 +211,7 @@ class WorkloadController extends Controller
         $table->addCell(400, ['borderSize' => 1, 'vMerge' => 'restart'])->addText('#', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
         $table->addCell(5650, ['borderSize' => 1, 'gridSpan' => 4])->addText('STAFF', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
         $table->addCell(3600, ['borderSize' => 1, 'gridSpan' => 3])->addText('CLASS', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
-        $table->addCell(5300, ['borderSize' => 1, 'gridSpan' => 3])->addText('UNIT', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+        $table->addCell(5500, ['borderSize' => 1, 'gridSpan' => 3])->addText('UNIT', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
         $table->addCell(800, ['borderSize' => 1])->addText();
 
         $table->addRow();
@@ -220,10 +220,10 @@ class WorkloadController extends Controller
         $table->addCell(1300, ['borderSize' => 1])->addText('Staff Name', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
         $table->addCell(1550, ['borderSize' => 1])->addText('Qualification', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
         $table->addCell(1400, ['borderSize' => 1])->addText('Roles', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-        $table->addCell(2100, ['borderSize' => 1])->addText('Class Code', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+        $table->addCell(2200, ['borderSize' => 1])->addText('Class Code', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
         $table->addCell(800, ['borderSize' => 1])->addText('Work' . "\n" . 'load', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
         $table->addCell(700, ['borderSize' => 1])->addText('Stds',  $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-        $table->addCell(1000, ['borderSize' => 1])->addText('Unit Code', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+        $table->addCell(1100, ['borderSize' => 1])->addText('Unit Code', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
         $table->addCell(3500, ['borderSize' => 1])->addText('Unit Name', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
         $table->addCell(800, ['borderSize' => 1])->addText('Level', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
         $table->addCell(500, ['borderSize' => 1])->addText('Sign', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
@@ -235,7 +235,7 @@ class WorkloadController extends Controller
                 if ($lecturer->user_id == $user_id) {
                     $staff = $lecturer;
                     foreach ($staff->lecturerQualfs()->where('status', 1)->get() as $qualification) {
-                        $qualifications[] = substr($qualification->qualification, 0 , 20);
+                        $qualifications[] = substr($qualification->qualification, 0 , 25);
                     }
                     foreach ($staff->roles as $role) {
                         $roles[] = $role->name;
@@ -251,10 +251,10 @@ class WorkloadController extends Controller
             $table->addCell(800, ['borderSize' => 1])->addText(implode(', ', $roles), $left, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
 
 
-            $class = $table->addCell(2100, ['borderSize' => 1]);
+            $class = $table->addCell(2200, ['borderSize' => 1]);
             $staffLoad = $table->addCell(800, ['borderSize' => 1]);
             $students = $table->addCell(700, ['borderSize' => 1]);
-            $unit_code = $table->addCell(1000, ['borderSize' => 1]);
+            $unit_code = $table->addCell(1100, ['borderSize' => 1]);
             $unit_name = $table->addCell(3500, ['borderSize' => 1]);
             $levels = $table->addCell(800, ['borderSize' => 1]);
             $signature = $table->addCell(500, ['borderSize' => 1]);
