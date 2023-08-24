@@ -259,47 +259,47 @@ class WorkloadController extends Controller
             $levels = $table->addCell(800, ['borderSize' => 1]);
             $signature = $table->addCell(500, ['borderSize' => 1]);
 
-//           $userLoad = $workload->count();
-//
-//            foreach ($lecturers as $lecturer) {
-//                if ($lecturer->user_id === $user_id) {
-//                    $staff = $lecturer;
-//                    if ($staff->employments->first()->employment_terms == 'FT' && $staff->hasRole('LECTURER')) {
-//                        for ($i = 0; $i < $userLoad; ++$i) {
-//                            if ($i < 3) {
-//                                $load = 'FT';
-//                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
-//                            } else {
-//                                $load = 'PT';
-//                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
-//                            }
-//                        }
-//                    } elseif ($staff->employments->first()->employment_terms == 'FT' && $staff->hasRole('CHAIRPERSON OF DEPARTMENT') || $staff->employments->first()->employment_terms == 'FT' && $staff->hasRole('DIRECTOR/DEAN')) {
-//                        for ($i = 0; $i < $userLoad; ++$i) {
-//                            if ($i < 2) {
-//                                $load = 'FT';
-//                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
-//                            } else {
-//                                $load = 'PT';
-//                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
-//                            }
-//                        }
-//                    }else{
-//                        for ($i = 0; $i < $userLoad; ++$i) {
-//                            if ($i < $userLoad) {
-//                                $load = 'PT';
-//                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
-//                            }
-//                        }
-//                    }
-//                }
-//            }
+           $userLoad = $workload->count();
+
+            foreach ($lecturers as $lecturer) {
+                if ($lecturer->user_id === $user_id) {
+                    $staff = $lecturer;
+                    if ($staff->employments->first()->employment_terms == 'FT' && $staff->hasRole('LECTURER')) {
+                        for ($i = 0; $i < $userLoad; ++$i) {
+                            if ($i < 3) {
+                                $load = 'FT';
+                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
+                            } else {
+                                $load = 'PT';
+                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
+                            }
+                        }
+                    } elseif ($staff->employments->first()->employment_terms == 'FT' && $staff->hasRole('CHAIRPERSON OF DEPARTMENT') || $staff->employments->first()->employment_terms == 'FT' && $staff->hasRole('DIRECTOR/DEAN')) {
+                        for ($i = 0; $i < $userLoad; ++$i) {
+                            if ($i < 2) {
+                                $load = 'FT';
+                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
+                            } else {
+                                $load = 'PT';
+                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
+                            }
+                        }
+                    }else{
+                        for ($i = 0; $i < $userLoad; ++$i) {
+                            if ($i < $userLoad) {
+                                $load = 'PT';
+                                $staffLoad->addText($load, $left, ['name' => 'Book Antiqua', 'size' => 9]);
+                            }
+                        }
+                    }
+                }
+            }
 
             foreach ($workload as $unit) {
                 $class->addText($unit->class_code, $left, ['name' => 'Book Antiqua', 'size' => 10]);
                 $students->addText($unit->classWorkload->studentClass->count(), $left, ['name' => 'Book Antiqua', 'size' => 10]);
                 $unit_code->addText($unit->workloadUnit->unit_code, $left, ['name' => 'Book Antiqua', 'size' => 10]);
-                $unit_name->addText(substr($unit->workloadUnit->unit_name, 0, 31), $left, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'left']);
+                $unit_name->addText(substr($unit->workloadUnit->unit_name, 0, 20), $left, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'left']);
                 $levels->addText($unit->classWorkload->classCourse->level_id, $left, ['name' => 'Book Antiqua', 'size' => 10]);
                 $signature->addText();
 //                $table = $table->addRow();
