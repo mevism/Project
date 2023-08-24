@@ -662,8 +662,8 @@ class StudentController extends Controller
 
         $pdfPath = 'Fees/'.preg_replace('~/~', '', $student['student_number']).".pdf";
 
-            $convert = new OfficeConverter('Fees/'.preg_replace('~/~', '', $student->reg_number).".docx", 'Fee/');
-            $convert->convertTo(preg_replace('~/~', '', $student->reg_number).".pdf");
+            $convert = new OfficeConverter('Fees/'.preg_replace('~/~', '', $student['student_number']).".docx", 'Fee/');
+            $convert->convertTo(preg_replace('~/~', '', $student['student_number']).".pdf");
 
             if(file_exists($docPath)){
                 unlink($docPath);

@@ -206,16 +206,16 @@ class WorkloadController extends Controller
         $left = array('align' => 'left', 'size' => 10, 'name' => 'Book Antiqua');
 
         $table->addRow();
-        $table->addCell(200, ['borderSize' => 1, 'vMerge' => 'restart'])->addText('#', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
-        $table->addCell(3600, ['borderSize' => 1, 'gridSpan' => 4])->addText('STAFF', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
+        $table->addCell(400, ['borderSize' => 1, 'vMerge' => 'restart'])->addText('#', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
+        $table->addCell(4200, ['borderSize' => 1, 'gridSpan' => 4])->addText('STAFF', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 13, 'bold' => true]);
         $table->addCell(3400, ['borderSize' => 1, 'gridSpan' => 3])->addText('CLASS', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
         $table->addCell(7200, ['borderSize' => 1, 'gridSpan' => 3])->addText('UNIT', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
         $table->addCell(800, ['borderSize' => 1])->addText();
 
         $table->addRow();
-        $table->addCell(200, ['borderSize' => 1, 'vMerge' => 'continue'])->addText('#');
-        $table->addCell(800, ['borderSize' => 1])->addText('Staff Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
-        $table->addCell(1000, ['borderSize' => 1])->addText('Staff Name', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+        $table->addCell(400, ['borderSize' => 1, 'vMerge' => 'continue'])->addText('#');
+        $table->addCell(1300, ['borderSize' => 1])->addText('Staff Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+        $table->addCell(1300, ['borderSize' => 1])->addText('Staff Name', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
         $table->addCell(800, ['borderSize' => 1])->addText('Qualification', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
         $table->addCell(700, ['borderSize' => 1])->addText('Roles', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
         $table->addCell(2400, ['borderSize' => 1])->addText('Class Code', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
@@ -242,9 +242,9 @@ class WorkloadController extends Controller
             }
 
             $table->addRow();
-            $table->addCell(200, ['borderSize' => 1])->addText(++$sn, $left, ['name' => 'Book Antiqua', 'size' => 10]);
-            $table->addCell(800, ['borderSize' => 1])->addText($staff->StaffInfos->staff_number, $left, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'left']);
-            $table->addCell(1000, ['borderSize' => 1])->addText($staff->StaffInfos->title . '. ' . $staff->StaffInfos->last_name . ' ' . $staff->StaffInfos->first_name, $left, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
+            $table->addCell(400, ['borderSize' => 1])->addText(++$sn, $left, ['name' => 'Book Antiqua', 'size' => 10]);
+            $table->addCell(1300, ['borderSize' => 1])->addText($staff->StaffInfos->staff_number, $left, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'left']);
+            $table->addCell(1300, ['borderSize' => 1])->addText($staff->StaffInfos->title . '. ' . $staff->StaffInfos->last_name . ' ' . $staff->StaffInfos->first_name, $left, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
             $table->addCell(800, ['borderSize' => 1])->addText(implode(', ', $qualifications), $left, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
             $table->addCell(700, ['borderSize' => 1])->addText(implode(', ', $roles), $left, ['name' => 'Book Antiqua', 'size' => 9, 'align' => 'left']);
 
