@@ -299,7 +299,7 @@ class WorkloadController extends Controller
                 $class->addText($unit->class_code, $left, ['name' => 'Book Antiqua', 'size' => 10]);
                 $students->addText(str_pad($unit->classWorkload->studentClass->count(), 2, 0, STR_PAD_LEFT), $right, ['name' => 'Book Antiqua', 'size' => 10]);
                 $unit_code->addText($unit->workloadUnit->unit_code, $left, ['name' => 'Book Antiqua', 'size' => 10]);
-                $unit_name->addText(substr($unit->workloadUnit->unit_name, 0, 30), $left, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'left']);
+                $unit_name->addText(substr($unit->workloadUnit->unit_name, 0, 27), $left, ['name' => 'Book Antiqua', 'size' => 10, 'align' => 'left']);
                 $levels->addText($unit->classWorkload->classCourse->level_id, $right, ['name' => 'Book Antiqua', 'size' => 10]);
                 $signature->addText();
             }
