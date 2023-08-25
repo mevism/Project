@@ -10319,6 +10319,7 @@
       <change afterPath="$PROJECT_DIR$/application/vendor/yajra/laravel-datatables/README.md" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/vendor/yajra/laravel-datatables/composer.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/application/webpack.mix.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/.env" beforeDir="false" afterPath="$PROJECT_DIR$/application/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/Application/Database/Migrations/2023_07_06_123516_APPLICATIONSVIEW.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/Modules/COD/Database/Migrations/2022_05_30_185016_create_courses_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/Modules/COD/Database/Migrations/2022_05_30_185016_create_courses_table.php" afterDir="false" />
@@ -10827,7 +10828,7 @@
       <workItem from="1692422172872" duration="36036000" />
       <workItem from="1692612502580" duration="54711000" />
       <workItem from="1692811339393" duration="587000" />
-      <workItem from="1692884194912" duration="22242000" />
+      <workItem from="1692884194912" duration="22467000" />
     </task>
     <servers />
   </component>
