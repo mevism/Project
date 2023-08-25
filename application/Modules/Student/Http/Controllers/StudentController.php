@@ -617,41 +617,41 @@ class StudentController extends Controller
         $table = new Table(array('unit' => TblWidth::TWIP));
 
         $table->addRow();
-        $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 3])->addText('Student Name : '.strtoupper($student['full_name']), ['bold' => true, 'name' => 'Book Antiqua']);
-        $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 2])->addText('Printed On : '.date('d-M-Y'), ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 3])->addText('Student Name : '.strtoupper($student['full_name']), ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
+        $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 2])->addText('Printed On : '.date('d-M-Y'), ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
 
         $table->addRow();
-        $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 3])->addText('Registration Number : '. $student['student_number'], ['bold' => true, 'name' => 'Book Antiqua']);
-        $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 2])->addText('Class Code : '. $student['class_code'], ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 3])->addText('Registration Number : '. $student['student_number'], ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
+        $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 2])->addText('Class Code : '. $student['class_code'], ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
 
         $table->addRow();
-        $table->addCell(11600, ['borderSize' => 1, 'gridSpan' => 5])->addText('Course Name : '. $course->course_name, ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(11600, ['borderSize' => 1, 'gridSpan' => 5])->addText('Course Name : '. $course->course_name, ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
 
 
         $table->addRow();
-        $table->addCell(1600, ['borderSize' => 1])->addText('Date', ['bold' => true, 'name' => 'Book Antiqua']);
-        $table->addCell(5000, ['borderSize' => 1])->addText('Description', ['bold' => true, 'name' => 'Book Antiqua']);
-        $table->addCell(2000, ['borderSize' => 1])->addText('Invoice Number', ['bold' => true, 'name' => 'Book Antiqua']);
-        $table->addCell(1500, ['borderSize' => 1])->addText('Debit', ['bold' => true, 'name' => 'Book Antiqua']);
-        $table->addCell(1500, ['borderSize' => 1])->addText('Credit', ['bold' => true, 'name' => 'Book Antiqua']);
+        $table->addCell(1600, ['borderSize' => 1])->addText('Date', ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
+        $table->addCell(5000, ['borderSize' => 1])->addText('Description', ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
+        $table->addCell(2000, ['borderSize' => 1])->addText('Invoice Number', ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
+        $table->addCell(1500, ['borderSize' => 1])->addText('Debit', ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
+        $table->addCell(1500, ['borderSize' => 1])->addText('Credit', ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
 
         foreach ($statements as $detail) {
             $table->addRow();
-            $table->addCell(1600, ['borderSize' => 1])->addText($detail['date']);
-            $table->addCell(5000, ['borderSize' => 1])->addText($detail['description'], ['name' => 'Book Antiqua']);
-            $table->addCell(2000, ['borderSize' => 1])->addText($detail['reference']);
-            $table->addCell(1500, ['borderSize' => 1])->addText($detail['debit']);
-            $table->addCell(1500, ['borderSize' => 1])->addText($detail['credit']);
+            $table->addCell(1600, ['borderSize' => 1])->addText($detail['date'], ['name' => 'Book Antiqua', 'size' => 10]);
+            $table->addCell(5000, ['borderSize' => 1])->addText($detail['description'], ['name' => 'Book Antiqua', 'size' => 10]);
+            $table->addCell(2000, ['borderSize' => 1])->addText($detail['reference'], ['name' => 'Book Antiqua', 'size' => 10]);
+            $table->addCell(1500, ['borderSize' => 1])->addText($detail['debit'], ['name' => 'Book Antiqua', 'size' => 10]);
+            $table->addCell(1500, ['borderSize' => 1])->addText($detail['credit'], ['name' => 'Book Antiqua', 'size' => 10]);
         }
 
         $table->addRow();
         $table->addCell(7600, ['gridSpan' => 3])->addText();
-        $table->addCell(1500)->addText($summary['total_invoices'], ['underline' => 'single', 'bold' => true]);
-        $table->addCell(1500)->addText($summary['total_payments'], ['underline' => 'single', 'bold' => true]);
+        $table->addCell(1500)->addText($summary['total_invoices'], ['underline' => 'single', 'bold' => true, 'size' => 10]);
+        $table->addCell(1500)->addText($summary['total_payments'], ['underline' => 'single', 'bold' => true, 'size' => 10]);
 
         $table->addRow();
         $table->addCell(7600, ['gridSpan' => 3])->addText();
-        $table->addCell(3000, ['gridSpan' => 2])->addText('Balance : '. $summary['fee_balances'], ['underline' => 'single', 'bold' => true]);
+        $table->addCell(3000, ['gridSpan' => 2])->addText('Balance : '. $summary['fee_balances'], ['underline' => 'single', 'bold' => true, 'size' => 10]);
 
         $my_template = new TemplateProcessor(storage_path('fee_statement.docx'));
 
