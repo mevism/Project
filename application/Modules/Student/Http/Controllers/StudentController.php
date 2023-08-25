@@ -617,7 +617,7 @@ class StudentController extends Controller
         $table = new Table(array('unit' => TblWidth::TWIP));
 
         $table->addRow();
-        $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 3])->addText('Student Name : '.strtoupper($student['full_name']), ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
+        $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 2])->addText('Student Name : '.strtoupper($student['full_name']), ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
         $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 2])->addText('Printed On : '.date('d-M-Y'), ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
 
         $table->addRow();
