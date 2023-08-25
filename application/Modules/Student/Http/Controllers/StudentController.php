@@ -618,11 +618,11 @@ class StudentController extends Controller
 
         $table->addRow();
         $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 2])->addText('Student Name : '.strtoupper($student['full_name']), ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
-        $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 1])->addText('Printed On : '.date('d-M-Y'), ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
+        $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 3])->addText('Printed On : '.date('d-M-Y'), ['bold' => true, 'name' => 'Book Antiqua', 'size' => 9]);
 
         $table->addRow();
-        $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 2])->addText('Registration Number : '. $student['student_number'], ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
-        $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 1])->addText('Class Code : '. $student['class_code'], ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
+        $table->addCell(7600, ['borderSize' => 1, 'gridSpan' => 2])->addText('Registration Number : '. $student['student_number'], ['bold' => true, 'name' => 'Book Antiqua', 'size' => 9]);
+        $table->addCell(4000, ['borderSize' => 1, 'gridSpan' => 3])->addText('Class Code : '. $student['class_code'], ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
 
         $table->addRow();
         $table->addCell(11600, ['borderSize' => 1, 'gridSpan' => 5])->addText('Course Name : '. $course->course_name, ['bold' => true, 'name' => 'Book Antiqua', 'size' => 10]);
