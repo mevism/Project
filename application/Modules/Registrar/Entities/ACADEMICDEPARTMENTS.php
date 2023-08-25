@@ -5,7 +5,7 @@ namespace Modules\Registrar\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class academicdepartments extends Model
+class ACADEMICDEPARTMENTS extends Model
 {
     use HasFactory;
 

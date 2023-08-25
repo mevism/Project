@@ -386,8 +386,8 @@
         <!-- END Side Navigation -->
 
           <div class="tum-logo">
-              <img class="mb-2" src="{{ asset('media/tum-logo/tum-logo.png') }}" alt="TUM Logo" style="height: 90px; width: 120px;"> <br>
-              <img src="{{ asset('media/tum-logo/iso.png') }}" alt="TUM Logo" style="height: 40px; width: 150px;">
+              {{-- <img class="mb-2" src="{{ asset('media/tum-logo/tum-logo.png') }}" alt="TUM Logo" style="height: 90px; width: 120px;"> <br> --}}
+              {{-- <img src="{{ asset('media/tum-logo/iso.png') }}" alt="TUM Logo" style="height: 40px; width: 150px;"> --}}
           </div>
       </div>
 
