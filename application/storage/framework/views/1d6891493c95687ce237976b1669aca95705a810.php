@@ -1,6 +1,4 @@
-@extends('layouts.simple')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
    <div id="page-container">
         <!-- Main Container -->
         <main id="main-container">
@@ -13,7 +11,7 @@
                             <div class="w-100">
                                 <a class="link-fx fw-semibold fs-2 text-white" target="_blank" href="https://www.tum.ac.ke/">
                                     <span class="d-flex justify-content-center">
-                                        <img src="{{ url('media/tum-logo/tum-logo.png') }}" alt="logo" style="width: 50% !important; height: 50% !important;">
+                                        <img src="<?php echo e(url('media/tum-logo/tum-logo.png')); ?>" alt="logo" style="width: 50% !important; height: 50% !important;">
                                     </span>
                                     <div class="h3 p-3">
                                         Technical University of Mombasa
@@ -29,7 +27,7 @@
                                 <strong>TUM</strong> &copy; <span data-toggle="year-copy"></span>
                             </p>
                             <ul class="list list-inline mb-0 py-2">
-                                <img src="{{ url('media/tum-logo/iso.png') }}" alt="iso image" style="height: 50px !important; width: 200px !important;">
+                                <img src="<?php echo e(url('media/tum-logo/iso.png')); ?>" alt="iso image" style="height: 50px !important; width: 200px !important;">
                             </ul>
                         </div>
                     </div>
@@ -39,7 +37,7 @@
                     <div class="hero-static col-lg-8 d-flex flex-column align-items-center bg-body-light">
                         <div class="p-3 w-100 d-lg-none text-center">
                             <a class="link-fx fw-semibold fs-3 text-dark" href="https://www.tum.ac.ke/">
-                                <img src="{{ url('media/tum-logo/tum-logo.png') }}" alt="logo">
+                                <img src="<?php echo e(url('media/tum-logo/tum-logo.png')); ?>" alt="logo">
                             </a>
                         </div>
                         <div class="p-4 w-100 flex-grow-1 d-flex align-items-center">
@@ -47,11 +45,12 @@
                                 <!-- Header -->
                                 <div class="text-center mb-5">
                                     <h5 class="fw-bold mb-2 text-uppercase">
-                                        Sign In | {{ config('app.name') }}
+                                        Sign In | <?php echo e(config('app.name')); ?>
+
                                     </h5>
                                     <p class="fw-medium text-muted">
-                                        Welcome, please login or <a href="{{ route('application.register') }}"> register </a> for a new account.<br>
-                                         <a href="{{ route('payment.pullStudent') }}"> Epay </a>
+                                        Welcome, please login or <a href="<?php echo e(route('application.register')); ?>"> register </a> for a new account.<br>
+                                         <a href="<?php echo e(route('payment.pullStudent')); ?>"> Epay </a>
                                     </p>
                                 </div>
                                 <!-- END Header -->
@@ -61,8 +60,8 @@
                                 <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
                                 <div class="row g-0 justify-content-center">
                                     <div class="col-sm-10 col-xl-5">
-                                        <form class="js-validation-signin" action="{{ route('user.login') }}" method="POST">
-                                            @csrf
+                                        <form class="js-validation-signin" action="<?php echo e(route('user.login')); ?>" method="POST">
+                                            <?php echo csrf_field(); ?>
                                             <div class="form-floating mb-4">
                                                 <input type="text" class="form-control" id="username" name="username" placeholder="user username">
                                                 <label class="form-label" for="username">EMAIL/USER ID/STUDENT NUMBER</label>
@@ -94,7 +93,7 @@
                                 <strong>TUM</strong> &copy; <span data-toggle="year-copy"></span>
                             </p>
                             <ul class="list list-inline mb-0 py-2">
-                                <img src="{{ url('media/tum-logo/iso.png') }}" alt="iso image" style="height: 50px !important; width: 200px !important;">
+                                <img src="<?php echo e(url('media/tum-logo/iso.png')); ?>" alt="iso image" style="height: 50px !important; width: 200px !important;">
                             </ul>
                         </div>
                     </div>
@@ -105,4 +104,6 @@
         </main>
         <!-- END Main Container -->
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.simple', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\smis\application\resources\views/userauth/login.blade.php ENDPATH**/ ?>

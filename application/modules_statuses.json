@@ -16,5 +16,6 @@
     "Lecturer": true,
     "User": true,
     "Administrator": true,
-    "Aricha": true
+    "Aricha": true,
+    "Epayment": true
 }

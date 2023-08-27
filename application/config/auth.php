@@ -52,6 +52,11 @@ return [
             'driver' => 'session',
             'provider' => 'student_logins',
         ],
+
+        'epayments' => [
+            'driver' => 'session',
+            'provider' => 'epayments',
+        ],
     ],
 
     /*
@@ -86,6 +91,11 @@ return [
             'driver' => 'eloquent',
             'model' => \Modules\Student\Entities\StudentLogin::class,
         ],
+
+        'epayments' => [
+            'driver' => 'eloquent',
+            'model' => \Modules\Epayment\Entities\Epayment::class,
+        ]
 
 //         'users' => [
 //             'driver' => 'database',
@@ -125,6 +135,13 @@ return [
 
         'students' => [
             'provider' => 'student_logins',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'epayments' => [
+            'provider' => 'epayments',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
