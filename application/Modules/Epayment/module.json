@@ -1,0 +1,11 @@
+{
+    "name": "Epayment",
+    "alias": "epayment",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Epayment\\Providers\\EpaymentServiceProvider"
+    ],
+    "files": []
+}
