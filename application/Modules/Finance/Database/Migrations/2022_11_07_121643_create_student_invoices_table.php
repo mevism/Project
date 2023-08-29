@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('student_invoices', function (Blueprint $table) {
             $table->string('invoice_id', 12)->primary();
             $table->string('student_id', 12);
-            $table->foreign('student_id')->references('student_id')->on('student_contacts')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('student_id')->references('student_id')->on('student_courses')->onDelete('cascade')->onUpdate('cascade');
             $table->string('reg_number', 16);
             $table->string('invoice_number', 16);
             $table->string('stage', 3);

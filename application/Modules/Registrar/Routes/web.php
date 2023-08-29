@@ -21,6 +21,12 @@ Route::prefix('registry')->middleware(['web', 'auth:user', 'is_admin'])->group(f
     Route::get('/view-semester-fee/{id}', [CoursesController::class, 'viewSemFee'])->name('courses.viewSemFee');
     Route::get('/print-fee/{id}', [CoursesController::class, 'printFee'])->name('courses.printFee');
     Route::get('/view-course-fee-structures/{id}', [CoursesController::class, 'courseFeeStures'])->name('courses.courseFeeStructure');
+    //chargeable voteheads
+    Route::get('/add-chargeable-voteheads', [CoursesController::class,'addChargeableVotehead'])->name('courses.addChargeableVotehead');
+    Route::get('/chargeable-voteheads', [CoursesController::class,'showChargeableVoteheads'])->name('courses.showChargeableVoteheads');
+    Route::get('get-chargeable-voteheads', [CoursesController::class,'getChargeableVoteheads'])->name('courses.getChargeableVoteheads');
+    Route::post('/stores-voteheads', [CoursesController::class,'storeChargeableVoteheads'])->name('courses.storeChargeableVoteheads');
+    Route::get('/delete-chargeable-voteheads/{id}', [CoursesController::class,'destroyChargeableVotehead'])->name('courses.destroyChargeableVotehead');
 
     //routes on fee
     Route::get('/voteheads', [CoursesController::class, 'voteheads'])->name('courses.voteheads');

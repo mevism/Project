@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('course_transfers', function (Blueprint $table) {
             $table->string('course_transfer_id', 12)->primary();
             $table->string('student_id', 12);
-            $table->foreign('student_id')->references('student_id')->on('student_logins')->onDelete('cascade')->onUpdate('cascade');            
+            // $table->foreign('student_id')->references('student_id')->on('student_courses')->onDelete('cascade')->onUpdate('cascade');            
             $table->string('intake_id', 12);
             $table->string('class_id', 12);
             $table->foreign('class_id')->references('class_id')->on('classes')->onUpdate('cascade')->onDelete('cascade');

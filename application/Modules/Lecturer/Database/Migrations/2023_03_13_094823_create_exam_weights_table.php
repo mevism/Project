@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('unit_code', 8);
             $table->foreign('unit_code')->references('unit_code')->on('units')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('intake_id', 12);
+            $table->string('intake_id', 32);
             $table->foreign('intake_id')->references('intake_id')->on('intakes')->onDelete('cascade')->onUpdate('cascade');            
             $table->float('exam');
             $table->float('cat');

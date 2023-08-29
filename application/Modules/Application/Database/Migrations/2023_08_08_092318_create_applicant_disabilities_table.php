@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('applicant_disabilities', function (Blueprint $table) {
             $table->id();
-            $table->string('applicant_id', 12)->charset('utf8');
+            $table->string('applicant_id', 32)->charset('utf8');
             $table->longText('disability', 255)->charset('utf8');
             $table->timestamps();
             $table->softDeletes();

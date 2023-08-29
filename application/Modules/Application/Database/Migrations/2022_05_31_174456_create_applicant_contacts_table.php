@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('applicant_contacts', function (Blueprint $table) {
-            $table->string('applicant_id', 12)->primary();
+            $table->string('applicant_id', 32)->primary();
             $table->string('email', 100)->nullable();
             $table->string('alt_email', 100)->nullable();
             $table->string('mobile', 16)->nullable();

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('cluster_weights', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('student_id', 12);
-            $table->foreign('student_id')->references('student_id')->on('student_contacts')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('student_id')->references('student_id')->on('student_courses')->onUpdate('cascade')->onDelete('cascade');
             $table->string('student_name', 64);
             $table->string('gender', 8);
             $table->string('citizenship', 16);

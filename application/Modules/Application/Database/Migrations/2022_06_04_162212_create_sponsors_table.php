@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('sponsors', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('applicant_id', 12);
+            $table->string('applicant_id', 32);
             $table->foreign('applicant_id')->references('applicant_id')->on('applicant_contacts')->onUpdate('cascade')->onDelete('cascade');
             $table->string('sponsor_name', 16);
             $table->string('sponsor_mobile', 16);

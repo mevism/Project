@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('calender_of_events', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('intake_id' ,12);
+            $table->string('intake_id' ,32);
             $table->foreign('intake_id')->references('intake_id')->on('intakes')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('event_id');
             $table->foreign('event_id')->references('id')->on('events')->onUpdate('cascade')->onDelete('cascade');

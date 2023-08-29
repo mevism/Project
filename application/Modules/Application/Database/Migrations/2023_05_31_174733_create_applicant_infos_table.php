@@ -15,18 +15,18 @@ return new class extends Migration
     {
         Schema::create('applicant_infos', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('applicant_id', 12);
+            $table->string('applicant_id', 32);
             $table->foreign('applicant_id')->references('applicant_id')->on('applicant_contacts')->onUpdate('cascade')->onDelete('cascade');
             $table->string('title', 8)->nullable();
-            $table->string('first_name', 16)->nullable();
-            $table->string('middle_name', 16)->nullable();
-            $table->string('surname', 16)->nullable();
+            $table->string('first_name')->nullable();
+            $table->string('middle_name')->nullable();
+            $table->string('surname')->nullable();
             $table->string('gender', 8)->nullable();
-            $table->string('marital_status', 16)->nullable();
-            $table->date('date_of_birth', 16)->nullable();
-            $table->string('index_number', 16)->unique()->nullable();
-            $table->string('type', 16)->unique()->nullable();
-            $table->string('identification', 16)->unique()->nullable();
+            $table->string('marital_status')->nullable();
+            $table->date('date_of_birth')->nullable();
+            $table->string('index_number')->nullable();
+            $table->string('type')->unique()->nullable();
+            $table->string('identification')->unique()->nullable();
             $table->string('disabled', 8)->nullable();
             $table->timestamps();
             $table->softDeletes();

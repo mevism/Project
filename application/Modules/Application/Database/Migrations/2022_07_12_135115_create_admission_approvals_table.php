@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('admission_approvals', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('application_id', 12);
+            $table->string('application_id', 32);
             $table->foreign('application_id')->references('application_id')->on('applications')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('cod_status')->default(0);
             $table->string('cod_comments', 128)->nullable();

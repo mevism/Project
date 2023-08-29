@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('kuccps_educations', function (Blueprint $table) {
-            $table->string('applicant_id',12);
+            $table->string('applicant_id',32);
             $table->foreign('applicant_id')->references('applicant_id')->on('kuccps_applicants')->onUpdate('cascade')->onDelete('cascade');
             $table->string('institution', 64);
             $table->string('qualification', 16);

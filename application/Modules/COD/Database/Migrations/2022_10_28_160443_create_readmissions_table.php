@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('readmissions', function (Blueprint $table) {
             $table->string('readmission_id', 12)->primary();
-            $table->string('intake_id', 12);
+            $table->string('intake_id', 32);
             $table->foreign('intake_id')->references('intake_id')->on('intakes')->onDelete('cascade')->onUpdate('cascade');
             $table->string('leave_id', 12);
             $table->foreign('leave_id')->references('leave_id')->on('academic_leaves')->onDelete('no action')->onUpdate('no action');

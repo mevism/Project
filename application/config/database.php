@@ -94,6 +94,21 @@ return [
             'strict' => false,
         ],
 
+        'EREGISTRAR_MAIN' => [
+            'driver' => 'sqlsrv', 
+            'host' => '41.89.128.66', 
+            'port' => 1433, 
+            'database' => 'EREGISTRAR_MAIN', 
+            'username' => 'smstest', 
+            'password' => 'smstest@2021', 
+            'charset' => 'utf8',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
+    
     ],
 
     /*

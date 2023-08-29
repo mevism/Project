@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('course_options', function (Blueprint $table) {
             $table->string('option_id', 12)->primary();
-            $table->string('course_id', 12);
+            $table->string('course_id', 64);
             $table->foreign('course_id')->references('course_id')->on('courses')->onDelete('cascade')->onUpdate('cascade');
             $table->string('option_name', 64);
             $table->string('option_code', 8)->nullable();

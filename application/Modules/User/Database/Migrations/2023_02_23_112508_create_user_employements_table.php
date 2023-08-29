@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('user_id', 12);
             $table->foreign('user_id')->references('user_id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->string('role_id', 4);
-            $table->string('campus_id', 12);
+            $table->string('campus_id', 32);
             $table->foreign('campus_id')->references('campus_id')->on('campuses')->onUpdate('cascade')->onDelete('cascade');
             $table->string('department_id', 12);
 //            $table->foreign('department_id')->references('department_id')->on('departments')->onUpdate('cascade')->onDelete('cascade');

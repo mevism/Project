@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('campuses', function (Blueprint $table) {
-            $table->string('campus_id', 12)->primary();
+            $table->string('campus_id', 32)->primary();
             $table->string('name', 12);
             $table->timestamps();
             $table->softDeletes();

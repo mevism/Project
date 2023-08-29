@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('course_level_modes', function (Blueprint $table) {
             $table->string('course_level_mode_id', 12)->primary();
-            $table->string('course_id', 12);
+            $table->string('course_id', 64);
             $table->foreign('course_id')->references('course_id')->on('courses')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('attendance_id');
 //            $table->foreign('attendance_id')->references('id')->on('attendances')->onUpdate('cascade')->onDelete('cascade');

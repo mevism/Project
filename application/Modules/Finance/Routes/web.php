@@ -41,4 +41,7 @@ Route::prefix('applications')->middleware(['web', 'auth:user', 'is_finance'])
         Route::post('/submit-student-invoice', [FinanceController::class, 'submitInvoice'])->name('finance.submitInvoice');
 
         Route::get('get-students-by-class', [FinanceController::class,'getStudentsByClass'])->name('finance.getStudentsByClass');
+        Route::get('/voteheads', [FinanceController::class,'showVoteheads'])->name('finance.showVoteheads');
+        Route::get('/destroy-votehead/{chargeable_vote_id}', [FinanceController::class,'destroyVotehead'])->name('finance.destroyVotehead');
+
     });

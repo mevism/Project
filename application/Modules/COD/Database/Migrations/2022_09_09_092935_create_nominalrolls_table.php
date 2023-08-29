@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('student_id', 12);
             $table->foreign('student_id')->references('student_id')->on('student_courses')->onUpdate('cascade')->onDelete('cascade');
             $table->string('intake_id');
-            $table->foreign('intake_id')->references('intake_id')->on('intakes')->onUpdate('cascade')->onDelete('cascade');
+            // $table->foreign('intake_id')->references('intake_id')->on('intakes')->onUpdate('cascade')->onDelete('cascade');
             $table->tinyInteger('pattern_id');
             $table->tinyInteger('year_study');
             $table->float('semester_study');            

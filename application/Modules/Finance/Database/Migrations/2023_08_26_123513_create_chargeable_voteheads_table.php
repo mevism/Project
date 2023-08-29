@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('syllabus_versions', function (Blueprint $table) {
-            $table->string('syllabus_id', 12)->primary();
-            $table->string('course_id', 64);
-            $table->foreign('course_id')->references('course_id')->on('courses')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('syllabus_name', 8);
+        Schema::create('chargeable_voteheads', function (Blueprint $table) {
+            $table->string('chargeable_vote_id');
+            $table->string('vote_id');
+            $table->string('amount');
+            $table->string('level');
+            $table->string('version');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('syllabus_versions');
+        Schema::dropIfExists('chargeable_voteheads');
     }
 };

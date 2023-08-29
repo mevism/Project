@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('supplementary_specials', function (Blueprint $table) {
             $table->string('sup_special_id', 12)->primary();
-            $table->string('intake_id', 12);
+            $table->string('intake_id', 32);
             $table->foreign('intake_id')->references('intake_id')->on('intakes')->onDelete('cascade')->onUpdate('cascade');
             $table->string('department_id', 12);
             $table->foreign('department_id')->references('department_id')->on('departments')->onDelete('cascade')->onUpdate('cascade');

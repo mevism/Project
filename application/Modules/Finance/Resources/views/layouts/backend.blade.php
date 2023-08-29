@@ -135,6 +135,19 @@
                       </li>
                   </ul>
               </li>
+              <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
+                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="{{ route('finance.applications') }}">
+                    <i class="nav-main-link-icon fa fa-coins"></i>
+                    <span class="nav-main-link-name">Voteheads</span>
+                </a>
+                <ul class="nav-main-submenu">
+                    <li class="nav-main-item">
+                        <a class="nav-main-link{{ request()->is('intake/showIntake') ? ' active' : '' }}" href="{{ route('finance.showVoteheads') }}">
+                            <span class="nav-main-link-name">Chargeable Voteheads</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
           </ul>
         </div>
         <!-- END Side Navigation -->

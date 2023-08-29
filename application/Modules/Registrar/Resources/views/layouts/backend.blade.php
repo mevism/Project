@@ -316,6 +316,13 @@
                           </a>
                       </li>
                   </ul>
+                  <ul class="nav-main-submenu">
+                    <li class="nav-main-item">
+                        <a class="nav-main-link{{ request()->is('attendance/index') ? ' active' : '' }}" href="{{ route('courses.showChargeableVoteheads')}}">
+                            <span class="nav-main-link-name"> Chargeable Voteheads</span>
+                        </a>
+                    </li>
+                </ul>
               </li>
               <li class="nav-main-item{{ request()->is('intakes/*') ? ' open' : '' }}">
                   <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">

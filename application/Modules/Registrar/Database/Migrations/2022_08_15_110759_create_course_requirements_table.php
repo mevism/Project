@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('course_requirements', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('course_id' , 12);
+            $table->string('course_id' , 64);
             $table->foreign('course_id')->references('course_id')->on('courses')->onUpdate('cascade')->onDelete('cascade');
             $table->string('application_fee', 8);
             $table->string('subject1', 40);

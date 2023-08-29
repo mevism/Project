@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
             Schema::create('kuccps_applicants', function (Blueprint $table) {
-                $table->string('applicant_id', 12)->primary();
+                $table->string('applicant_id', 32)->primary();
                 $table->string('index_number', 20);
                 $table->string('surname', 16);
                 $table->string('first_name',16);
