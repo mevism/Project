@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Http\Apis\AppApis;
 use Illuminate\Support\Facades\Session;
 use Modules\Application\Entities\AdmissionApproval;
 use Illuminate\Http\Request;
@@ -13,12 +14,17 @@ use Modules\Application\Entities\VerifyUser;
 use Modules\Application\Entities\Application;
 use Modules\COD\Entities\AdmissionsView;
 use Modules\COD\Entities\ApplicationsView;
+use Modules\Epayment\Entities\Epayment;
 use Modules\Registrar\Entities\AvailableCourse;
 use Modules\Registrar\Entities\Courses;
 use Modules\Registrar\Entities\SchoolDepartment;
 
-class UserController extends Controller
-{
+class UserController extends Controller{
+    protected $appApi;
+
+    public function __construct(AppApis $appApi){
+        $this->appApi = $appApi;
+    }
     public function signOut(){
         Session::flush();
         $guards = array_keys(config('auth.guards'));
@@ -40,6 +46,15 @@ class UserController extends Controller
         }elseif (\auth()->guard('student')->attempt($logins, true)) {
             if (\auth()->guard('student')) {
                 return redirect()->route('student')->with('success', 'You have logged in');
+            }
+        }elseif (\auth()->guard('epayments')->attempt($logins, true)){
+            if (\auth()->guard('epayments')) {
+                $verification_code = rand(1, 999999);
+                Epayment::where('student_id', auth()->guard('epayments')->user()->student_id)->update(['verification' => $verification_code]);
+                $phoneNumber =  auth()->guard('epayments')->user()->phone_number;
+                $message = 'Welcome to Ecitizen Payment Platform. Your verification code is '. $verification_code;
+                $this->appApi->sendSMS($phoneNumber, $message);
+                return redirect()->route('payment.estudent')->with('success', 'Verify your phone number to continue to pay');
             }
         } else {
             return redirect('/')->with('error', 'Your details did not match to any record in the database');

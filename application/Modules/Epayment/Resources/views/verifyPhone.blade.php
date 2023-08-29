@@ -1,11 +1,11 @@
-@extends('layouts.simple')
-
+@extends('epayment::layouts.simple')
 @section('content')
-   <div id="page-container">
+
+    <div id="page-container">
         <!-- Main Container -->
         <main id="main-container">
             <!-- Page Content -->
-            <div class="bg-image" style="background-image: url('media/photos/photo28@2xjpg');">
+            <div class="bg-image">
                 <div class="row g-0 bg-primary-dark-op">
                     <!-- Meta Info Section -->
                     <div class="hero-static col-lg-4 d-none d-lg-flex flex-column justify-content-center">
@@ -47,41 +47,30 @@
                                 <!-- Header -->
                                 <div class="text-center mb-5">
                                     <h5 class="fw-bold mb-2 text-uppercase">
-                                        Sign In | {{ config('app.name') }}
+                                        Phone Verification | {{ auth()->guard('epayments')->user()->phone_number }}
                                     </h5>
-                                    <p class="fw-medium text-muted">
-                                        Welcome, please login or <a href="{{ route('application.register') }}"> register </a> for a new account.<br>
-                                         <a href="{{ route('payment.pullStudent') }}"> Epay </a>
-                                    </p>
                                 </div>
                                 <!-- END Header -->
-
-                                <!-- Sign In Form -->
-                                <!-- jQuery Validation (.js-validation-signin class is initialized in js/pages/op_auth_signin.min.js which was auto compiled from _js/pages/op_auth_signin.js) -->
-                                <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
                                 <div class="row g-0 justify-content-center">
-                                    <div class="col-sm-10 col-xl-5">
-                                        <form class="js-validation-signin" action="{{ route('user.login') }}" method="POST">
+                                    <div class="col-sm-8 col-xl-4">
+                                        <form class="js-validation-signin" action="{{ route('payment.verification') }}" method="POST">
                                             @csrf
                                             <div class="form-floating mb-4">
-                                                <input type="text" class="form-control" id="username" name="username" placeholder="user username">
-                                                <label class="form-label" for="username">EMAIL/USER ID/STUDENT NUMBER</label>
+                                                <input type="hidden" class="form-control form-control-alt" name="phone_number" value="{{ auth()->guard('epayments')->user()->phone_number }}" >
                                             </div>
                                             <div class="form-floating mb-4">
-                                                <input type="password" class="form-control" id="password" name="password" placeholder="use password">
-                                                <label class="form-label" for="username">USER PASSWORD</label>
+                                                <input type="text" class="form-control form-control-alt" name="verification_code" placeholder="verification">
+                                                <label class="form-label" for="username">ENTER VERIFICATION CODE</label>
                                             </div>
-                                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                                <div>
-                                                    <a class="text-muted fs-sm fw-medium d-block d-lg-inline-block mb-1" href="#">
-                                                        Forgot Password?
-                                                    </a>
-                                                </div>
+                                            <div class="d-flex justify-content-center align-items-center mb-4">
                                                 <div>
                                                     <button type="submit" class="btn btn-alt-success" data-toggle="click-ripple">
-                                                        Sign In
+                                                        Verify Phone Number
                                                     </button>
                                                 </div>
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <a class="link link-primary" href="{{ route('payment.getNewCode') }}" data-toggle="click-ripple">Get new code</a>
                                             </div>
                                         </form>
                                     </div>

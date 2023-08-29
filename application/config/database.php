@@ -17,6 +17,7 @@ return [
 
 //    'default' => env('DB_CONNECTION', 'mysql'),
     'default' => env('DB_CONNECTION', 'sqlsrv'),
+    'default1' => env('DB_CONNECTION1', 'sqlsrv1'),
 
     /*
     |--------------------------------------------------------------------------
@@ -94,6 +95,7 @@ return [
             'strict' => false,
         ],
 
+
         'EREGISTRAR_MAIN' => [
             'driver' => 'sqlsrv', 
             'host' => '41.89.128.66', 
@@ -108,7 +110,23 @@ return [
             'engine' => null,
         ],
 
-    
+
+        'sqlsrv1' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DATABASE_URL1'),
+            'host' => env('DB_HOST1', '41.89.128.66'),
+            'port' => env('DB_PORT1', '1433'),
+            'database' => env('DB_DATABASE1', 'forge'),
+            'username' => env('DB_USERNAME1', 'forge'),
+            'password' => env('DB_PASSWORD1', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'trust_server_certificate' => true,
+            'strict' => false,
+        ],
+
+
     ],
 
     /*
