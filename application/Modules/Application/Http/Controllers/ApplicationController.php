@@ -743,7 +743,7 @@ class ApplicationController extends Controller
         }else{
             $letter = $application->admission_letter;
         }
-        return response()->download('AdmissionLetters/' . $letter);
+        return response()->download('AdmissionLetters/AdmissionLetters/' . $letter);
     }
 
     public function uploadDocuments($id){

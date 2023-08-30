@@ -1620,8 +1620,8 @@ class CoursesController extends Controller
                     unlink($pdfPath);
                 }
 
-                $converter = new OfficeConverter('AdmissionLetters/'.str_replace('/', '', $app->ref_number).".docx",'AdmissionLetters/');
-                $converter->convertTo('AdmissionLetters/'.$app->ref_number.".pdf");
+                $converter = new OfficeConverter(docPath,'AdmissionLetters/');
+                $converter->convertTo('AdmissionLetters/'.str_replace('/', '', $app->ref_number).".pdf");
 
                     if (file_exists($docPath)) {
                         unlink($docPath);
@@ -2104,7 +2104,8 @@ class CoursesController extends Controller
     }
 
     public function showCourse(){
-        $data = Courses::orderBy('course_id', 'desc')->get();
+        //$data = Courses::orderBy('course_id', 'desc')->get();
+        $data = Courses::latest()->get();
         return view('registrar::course.showCourse')->with('data', $data);
     }
 
