@@ -770,15 +770,15 @@ class CoursesController extends Controller
             $table->addRow(600);
             $table->addCell(10000, ['gridSpan' => 9,])->addText($courseName . ' ' . '(' . $courseCode . ')', $headers, ['spaceAfter' => 300, 'spaceBefore' => 300]);
             $table->addRow();
-            $table->addCell(200, ['borderSize' => 1])->addText('#');
-            $table->addCell(2500, ['borderSize' => 1])->addText('Student Name/ Reg. Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
-            $table->addCell(1850, ['borderSize' => 1])->addText('Course Admitted', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1850, ['borderSize' => 1])->addText('Course Transferring', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(2500, ['borderSize' => 1])->addText('Course Cut-off Points/Grade', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(1500, ['borderSize' => 1])->addText('Student Points/Grade', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(2500, ['borderSize' => 1])->addText('COD Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(2500, ['borderSize' => 1])->addText('Dean Remarks',  $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
-            $table->addCell(2500, ['borderSize' => 1])->addText('Deans Committee Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(400, ['borderSize' => 1])->addText('#');
+            $table->addCell(2600, ['borderSize' => 1])->addText('Student Name/ Reg. Number', $center, ['align' => 'center', 'name' => 'Book Antiqua', 'size' => 11, 'bold' => true]);
+            $table->addCell(1500, ['borderSize' => 1])->addText('Course Admitted', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1600, ['borderSize' => 1])->addText('Course Transferring', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1600, ['borderSize' => 1])->addText('Course Cut-off Points/Grade', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1600, ['borderSize' => 1])->addText('Student Points/Grade', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(2600, ['borderSize' => 1])->addText('COD Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1500, ['borderSize' => 1])->addText('Dean Remarks',  $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
+            $table->addCell(1900, ['borderSize' => 1])->addText('Deans Committee Remarks', $center, ['name' => 'Book Antiqua', 'size' => 11, 'bold' => true, 'align' => 'center']);
 
             foreach ($transfer as $key => $list) {
                 $name = $list->student_number . "<w:br/>\n" . $list->surname . ' ' . $list->first_name . ' ' . $list->middle_name;
@@ -792,15 +792,15 @@ class CoursesController extends Controller
                     $deanRemark = $list->dean_remarks;
                 }
                 $table->addRow();
-                $table->addCell(200, ['borderSize' => 1])->addText(++$key);
-                $table->addCell(2500, ['borderSize' => 1])->addText($name, ['name' => 'Book Antiqua', 'size' => 10]);
-                $table->addCell(1850, ['borderSize' => 1])->addText($list->StudentsTransferCourse->StudentsCourse->course_code, ['name' => 'Book Antiqua', 'size' => 10,'align' => 'center']);
-                $table->addCell(1850, ['borderSize' => 1])->addText($list->course_code, ['name' => 'Book Antiqua', 'size' => 10,'align' => 'center']);
-                $table->addCell(2500, ['borderSize' => 1])->addText(strtoupper($list->class_points), ['name' => 'Book Antiqua', 'size' => 11,'align' => 'center']);
-                $table->addCell(1500, ['borderSize' => 1])->addText($list->student_points, ['name' => 'Book Antiqua', 'size' => 10,'align' => 'center']);
-                $table->addCell(2500, ['borderSize' => 1])->addText($remarks, ['name' => 'Book Antiqua', 'size' => 10,'align' => 'center']);
-                $table->addCell(2500, ['borderSize' => 1])->addText($deanRemark, ['name' => 'Book Antiqua', 'size' => 10,'align' => 'center']);
-                $table->addCell(2500, ['borderSize' => 1])->addText();
+                $table->addCell(400, ['borderSize' => 1])->addText(++$key);
+                $table->addCell(2600, ['borderSize' => 1])->addText($name, ['name' => 'Book Antiqua', 'size' => 10]);
+                $table->addCell(1500, ['borderSize' => 1])->addText($list->StudentsTransferCourse->StudentsCourse->course_code, ['name' => 'Book Antiqua', 'size' => 10,'align' => 'center']);
+                $table->addCell(1600, ['borderSize' => 1])->addText($list->course_code, ['name' => 'Book Antiqua', 'size' => 10,'align' => 'center']);
+                $table->addCell(1600, ['borderSize' => 1])->addText(strtoupper($list->class_points), ['name' => 'Book Antiqua', 'size' => 11,'align' => 'center']);
+                $table->addCell(1600, ['borderSize' => 1])->addText($list->student_points, ['name' => 'Book Antiqua', 'size' => 10,'align' => 'center']);
+                $table->addCell(2600, ['borderSize' => 1])->addText($remarks, ['name' => 'Book Antiqua', 'size' => 10,'align' => 'center']);
+                $table->addCell(1500, ['borderSize' => 1])->addText($deanRemark, ['name' => 'Book Antiqua', 'size' => 10,'align' => 'center']);
+                $table->addCell(1900, ['borderSize' => 1])->addText();
             }
         }
 
@@ -815,16 +815,16 @@ class CoursesController extends Controller
             }
 
             $summary->addRow();
-            $summary->addCell(8000, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
-            $summary->addCell(2500, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
-            $summary->addCell(2500, ['borderSize' => 1])->addText($transfer->count());
+            $summary->addCell(5000, ['borderSize' => 1])->addText($courseName, ['bold' => true]);
+            $summary->addCell(1500, ['borderSize' => 1])->addText($courseCode, ['bold' => true]);
+            $summary->addCell(1500, ['borderSize' => 1])->addText($transfer->count());
 
             $total += $transfer->count();
         }
         $summary->addRow();
-        $summary->addCell(8000, ['borderSize' => 1])->addText('Totals', ['bold' => true]);
-        $summary->addCell(2500, ['borderSize' => 1])->addText($transfers->count(), ['bold' => true]);
-        $summary->addCell(2500, ['borderSize' => 1])->addText($total, ['bold' => true]);
+        $summary->addCell(3250, ['borderSize' => 1])->addText('Totals', ['bold' => true]);
+        $summary->addCell(750, ['borderSize' => 1])->addText($transfers->count(), ['bold' => true]);
+        $summary->addCell(750, ['borderSize' => 1])->addText($total, ['bold' => true]);
 
         $my_template = new TemplateProcessor(storage_path('course_transfers.docx'));
 
@@ -1192,21 +1192,21 @@ class CoursesController extends Controller
 
         $phpWord = new PhpWord();
         $section = $phpWord->addSection();
-        $boldedtext = array('name' => 'Book Antiqua', 'bold' => true, 'size' => 11);
-        $boldedtext1 = array('align' => 'right', 'size' => 11, 'name' => 'Book Antiqua');
-        $center= array('name' => 'Book Antiqua', 'bold' => true, 'size' => 11, 'alignment' => 'center');
+        $boldedtext = array('name' => 'Book Antiqua', 'bold' => true, 'size' => 10);
+        $boldedtext1 = array('align' => 'right', 'size' => 10, 'name' => 'Book Antiqua');
+        $center= array('name' => 'Book Antiqua', 'bold' => true, 'size' => 10, 'alignment' => 'center');
 
         $table = $section->addTable(['unit' => \PhpOffice\PhpWord\SimpleType\TblWidth::TWIP, 'width' => 1300 * 1300, 'align' => 'center']);
         $table->addRow();
-        $table->addCell(7000, ['borderSize' => 2])->addText('DESCRIPTION', ['bold' => true, 'size' => 11, 'name' => 'Book Antiqua']);
+        $table->addCell(4000, ['borderSize' => 2])->addText('DESCRIPTION', ['bold' => true, 'size' => 11, 'name' => 'Book Antiqua']);
         foreach ($semesters as $semester => $fees) {
-            $table->addCell(800, ['borderSize' => 2])->addText("YR. " . explode('.', $semester)[0] . "<w:br/>" . "SEM. " . explode('.', round($semester, 1))[1], $center, ['name' => 'Book Antiqua', 'bold' => true, 'size' => 11, 'alignment' => 'center']);
+            $table->addCell(1150, ['borderSize' => 2])->addText("YR. " . explode('.', $semester)[0] . "<w:br/>" . "SEM. " . explode('.', round($semester, 1))[1], $center, ['name' => 'Book Antiqua', 'bold' => true, 'size' => 10, 'alignment' => 'center']);
         }
 
         $i = 1;
         foreach ($semesterFees as $votes => $fees) {
             $table->addRow();
-            $table->addCell(7000, ['borderSize' => 2])->addText(strtoupper(\Modules\Registrar\Entities\VoteHead::where('vote_id', $votes)->first()->vote_name), ['bold' => true, 'size' => 11, 'name' => 'Book Antiqua']);
+            $table->addCell(4000, ['borderSize' => 2])->addText(strtoupper(\Modules\Registrar\Entities\VoteHead::where('vote_id', $votes)->first()->vote_name), ['bold' => true, 'size' => 10, 'name' => 'Book Antiqua']);
             foreach ($semesters as $semester => $_) {
                 $amount = 0;
                 if (isset($fees[$semester])) {
@@ -1214,12 +1214,12 @@ class CoursesController extends Controller
                         $amount += $fee->amount;
                     }
                 }
-                $table->addCell(800, ['align' => 'right', 'borderSize' => 2])->addText(number_format($amount, 2), $boldedtext1, array('align' => 'right', 'size' => 11));
+                $table->addCell(1150, ['align' => 'right', 'borderSize' => 2])->addText(number_format($amount, 2), $boldedtext1, array('align' => 'right', 'size' => 10));
             }
         }
 
         $table->addRow();
-        $table->addCell(7000, ['borderSize' => 2])->addText('TOTALS', ['name' => 'Book Antiqua', 'bold' => true, 'size' => 11]);
+        $table->addCell(4000, ['borderSize' => 2])->addText('TOTALS', ['name' => 'Book Antiqua', 'bold' => true, 'size' => 10]);
         foreach ($semesters as $semester => $_) {
             $total = 0;
             foreach ($semesterFees as $votes => $fees) {
@@ -1229,7 +1229,7 @@ class CoursesController extends Controller
                     }
                 }
             }
-            $table->addCell(100, ['align' => 'right', 'borderSize' => 2])->addText(number_format($total, 2), $boldedtext, array('align' => 'right', 'size' => 11));
+            $table->addCell(1150, ['align' => 'right', 'borderSize' => 2])->addText(number_format($total, 2), $boldedtext, array('align' => 'right', 'size' => 10));
         }
 
         $my_template = new TemplateProcessor(storage_path('fee_structure.docx'));
@@ -1245,8 +1245,8 @@ class CoursesController extends Controller
 
         $pdfPath = 'FeeStructure/' . $course->course_code . ".pdf";
 
-        $convert = new OfficeConverter('FeeStructure/' . $course->courseclm->course_code . ".docx", 'FeeStucture/');
-        $convert->convertTo($course->courseclm->course_code . ".pdf");
+        $convert = new OfficeConverter('FeeStructure/' . $course->course_code . ".docx", 'FeeStucture/');
+        $convert->convertTo($course->course_code . ".pdf");
 
         if (file_exists($docPath)) {
             unlink($docPath);
